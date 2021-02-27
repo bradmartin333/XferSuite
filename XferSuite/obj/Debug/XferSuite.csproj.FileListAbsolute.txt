@@ -140,3 +140,4 @@ C:\XferSuite\XferSuite\bin\Debug\ru\FSharp.Core.resources.dll
 C:\XferSuite\XferSuite\bin\Debug\tr\FSharp.Core.resources.dll
 C:\XferSuite\XferSuite\bin\Debug\zh-Hans\FSharp.Core.resources.dll
 C:\XferSuite\XferSuite\bin\Debug\zh-Hant\FSharp.Core.resources.dll
+C:\XferSuite\XferSuite\obj\Debug\XferSuite.MainMenu.resources
