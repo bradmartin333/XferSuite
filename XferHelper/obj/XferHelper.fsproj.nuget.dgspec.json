@@ -1,0 +1,54 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\XferSuite\\XferHelper\\XferHelper.fsproj": {}
+  },
+  "projects": {
+    "C:\\XferSuite\\XferHelper\\XferHelper.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\XferSuite\\XferHelper\\XferHelper.fsproj",
+        "projectName": "XferHelper",
+        "projectPath": "C:\\XferSuite\\XferHelper\\XferHelper.fsproj",
+        "packagesPath": "C:\\Users\\brad.martin\\.nuget\\packages\\",
+        "outputPath": "C:\\XferSuite\\XferHelper\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\brad.martin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net462"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net462": {
+            "targetAlias": "net462",
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net462": {
+          "targetAlias": "net462",
+          "dependencies": {
+            "FSharp.Core": {
+              "target": "Package",
+              "version": "[5.0.0, )",
+              "generatePathProperty": true
+            },
+            "System.ValueTuple": {
+              "target": "Package",
+              "version": "[4.4.0, )",
+              "generatePathProperty": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
