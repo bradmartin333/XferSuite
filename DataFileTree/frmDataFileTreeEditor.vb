@@ -2,10 +2,13 @@
 
 Public Class frmDataFileTreeEditor
     Private Dir
+    Private fileExt As String
 
-    Public Sub New(ByVal numSub, ByVal numVar)
+    Public Sub New(ByVal numSub As Integer, ByVal numVar As Integer, ByVal fileExt As String)
         ' This call is required by the designer.
         InitializeComponent()
+
+        Me.fileExt = fileExt
 
         ' Add any initialization after the InitializeComponent() call.
         For i As Integer = 0 To numSub - 1
@@ -37,15 +40,11 @@ Public Class frmDataFileTreeEditor
                     thisRep = ""
                 End If
                 For Each subject As DataGridViewRow In dgSub.Rows
-                    Dim path = Dir & thisVar & "/" & subject.Cells(0).Value.ToString() & thisRep & ".png"
+                    Dim path = Dir & thisVar & "/" & subject.Cells(0).Value.ToString() & thisRep & fileExt
                     Dim fs As FileStream = File.Create(path)
                 Next
             Next
         Next
         MsgBox("File Tree Generated")
-    End Sub
-
-    Private Sub frmData_Closed(sender As Object, e As EventArgs) Handles Me.FormClosing
-        frmDataFileTreeMain.Show()
     End Sub
 End Class

@@ -95,6 +95,7 @@ namespace XferSuite
             this.btnSettings.TabIndex = 11;
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // btnMapFlip
             // 
@@ -111,6 +112,7 @@ namespace XferSuite
             this.btnMapFlip.Name = "btnMapFlip";
             this.btnMapFlip.Size = new System.Drawing.Size(116, 95);
             this.btnMapFlip.TabIndex = 10;
+            this.btnMapFlip.Tag = "8";
             this.btnMapFlip.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnMapFlip.UseVisualStyleBackColor = true;
             // 
@@ -129,6 +131,7 @@ namespace XferSuite
             this.btnTaskList.Name = "btnTaskList";
             this.btnTaskList.Size = new System.Drawing.Size(116, 95);
             this.btnTaskList.TabIndex = 9;
+            this.btnTaskList.Tag = "7";
             this.btnTaskList.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnTaskList.UseVisualStyleBackColor = true;
             // 
@@ -147,6 +150,7 @@ namespace XferSuite
             this.btnDataFileTree.Name = "btnDataFileTree";
             this.btnDataFileTree.Size = new System.Drawing.Size(116, 95);
             this.btnDataFileTree.TabIndex = 8;
+            this.btnDataFileTree.Tag = "6";
             this.btnDataFileTree.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnDataFileTree.UseVisualStyleBackColor = true;
             this.btnDataFileTree.Click += new System.EventHandler(this.btnDataFileTree_Click);
@@ -166,6 +170,7 @@ namespace XferSuite
             this.btnFileParse.Name = "btnFileParse";
             this.btnFileParse.Size = new System.Drawing.Size(116, 95);
             this.btnFileParse.TabIndex = 7;
+            this.btnFileParse.Tag = "5";
             this.btnFileParse.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnFileParse.UseVisualStyleBackColor = true;
             // 
@@ -184,6 +189,7 @@ namespace XferSuite
             this.btnPrintCycle.Name = "btnPrintCycle";
             this.btnPrintCycle.Size = new System.Drawing.Size(116, 95);
             this.btnPrintCycle.TabIndex = 6;
+            this.btnPrintCycle.Tag = "4";
             this.btnPrintCycle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnPrintCycle.UseVisualStyleBackColor = true;
             // 
@@ -202,6 +208,7 @@ namespace XferSuite
             this.btnFingerprint.Name = "btnFingerprint";
             this.btnFingerprint.Size = new System.Drawing.Size(116, 95);
             this.btnFingerprint.TabIndex = 5;
+            this.btnFingerprint.Tag = "3";
             this.btnFingerprint.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnFingerprint.UseVisualStyleBackColor = true;
             // 
@@ -220,6 +227,7 @@ namespace XferSuite
             this.btnZreg.Name = "btnZreg";
             this.btnZreg.Size = new System.Drawing.Size(116, 95);
             this.btnZreg.TabIndex = 4;
+            this.btnZreg.Tag = "2";
             this.btnZreg.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnZreg.UseVisualStyleBackColor = true;
             // 
@@ -238,6 +246,7 @@ namespace XferSuite
             this.btnXYZMetro.Name = "btnXYZMetro";
             this.btnXYZMetro.Size = new System.Drawing.Size(116, 95);
             this.btnXYZMetro.TabIndex = 3;
+            this.btnXYZMetro.Tag = "1";
             this.btnXYZMetro.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnXYZMetro.UseVisualStyleBackColor = true;
             // 
@@ -280,6 +289,7 @@ namespace XferSuite
             this.btnInlinepositions.Name = "btnInlinepositions";
             this.btnInlinepositions.Size = new System.Drawing.Size(116, 95);
             this.btnInlinepositions.TabIndex = 2;
+            this.btnInlinepositions.Tag = "0";
             this.btnInlinepositions.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnInlinepositions.UseVisualStyleBackColor = true;
             // 
@@ -291,8 +301,8 @@ namespace XferSuite
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainMenu";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XferSuite";
-            this.Load += new System.EventHandler(this.MainMenu_Load);
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             this.statusStrip1.ResumeLayout(false);

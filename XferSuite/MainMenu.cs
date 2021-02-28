@@ -16,23 +16,49 @@ namespace XferSuite
         public MainMenu()
         {
             InitializeComponent();
-
             foreach (Button b in tableLayoutPanel.Controls.OfType<Button>())
             {
-                ToolTip tip = new ToolTip { InitialDelay = 0 };
+                ToolTip tip = new ToolTip 
+                { 
+                    InitialDelay = 0 
+                };
                 tip.SetToolTip(b, b.AccessibleName);
             }
         }
 
-        private void MainMenu_Load(object sender, EventArgs e)
-        {
-            
-        }
+        private Settings settings = new Settings();
 
         private void btnDataFileTree_Click(object sender, EventArgs e)
         {
-            DataFileTree.frmDataFileTreeMain DFT = new DataFileTree.frmDataFileTreeMain();
-            DFT.Show();
+            Button btn = (Button)sender;
+            int idx = int.Parse(btn.Tag.ToString());
+
+            if (settings.controlsArr[idx] == null || ((Form)settings.controlsArr[idx]).IsDisposed == true)
+            {
+                DataFileTree.frmDataFileTreeMain DFT = new DataFileTree.frmDataFileTreeMain()
+                {
+                    Location = PointToScreen(btn.Location)
+                };
+                DFT.FormClosed += new FormClosedEventHandler(controlClosed);
+                settings.controlsArr[idx] = DFT;
+            }
+            
+            ((Form)settings.controlsArr[idx]).Show();
+            ((Form)settings.controlsArr[idx]).BringToFront();
+            settings.LoadButtons();
+        }
+
+        private void controlClosed(object sender, FormClosedEventArgs e)
+        {
+            Form thisForm = (Form)sender;
+            thisForm.Dispose();
+            settings.LoadButtons();
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            settings.Show();
+            settings.BringToFront();
         }
     }
 }
