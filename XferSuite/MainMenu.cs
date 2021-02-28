@@ -4,10 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using XferHelper;
 
 namespace XferSuite
 {
@@ -32,6 +34,7 @@ namespace XferSuite
         {
             Button btn = (Button)sender;
             int idx = int.Parse(btn.Tag.ToString());
+            string path = null;
 
             if (settings.controlsArr[idx] == null || ((Form)settings.controlsArr[idx]).IsDisposed == true)
             {
@@ -42,7 +45,7 @@ namespace XferSuite
                     case 1:
                         break;
                     case 2:
-                        string path = OpenFile("Open a HeightSensorLog File");
+                        path = OpenFile("Open a HeightSensorLog File");
                         if (path == null)
                         {
                             break;
@@ -56,6 +59,21 @@ namespace XferSuite
                     case 4:
                         break;
                     case 5:
+                        path = OpenFile("Open an EventLog File");
+                        if (path == null)
+                        {
+                            break;
+                        }
+                        string[] readText = File.ReadAllLines(path);
+                        Parser.Event[] prints = Parser.main(readText);
+                        toolStripProgressBar.Value = 0;
+                        EventLogParsing ELP = new EventLogParsing { Location = PointToScreen(btn.Location) };
+                        foreach (Parser.Event p in prints)
+                        {
+                            ELP.richTextBox.Text += p.Time + Environment.NewLine;
+                        }
+                        ELP.FormClosed += new FormClosedEventHandler(controlClosed);
+                        settings.controlsArr[idx] = ELP;
                         break;
                     case 6:
                         DataFileTree.frmDataFileTreeMain DFT = new DataFileTree.frmDataFileTreeMain() { Location = PointToScreen(btn.Location) };
@@ -65,16 +83,23 @@ namespace XferSuite
                     case 7:
                         break;
                     case 8:
-                        MapFlip.frmMapFlipMain MF = new MapFlip.frmMapFlipMain() { Location = PointToScreen(btn.Location) };
+                        MapFlip.frmMapFlipMain MF = new MapFlip.frmMapFlipMain();
                         MF.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = MF;
                         break;
                 }
             }
 
-            ((Form)settings.controlsArr[idx]).Show();
-            ((Form)settings.controlsArr[idx]).BringToFront();
-            settings.LoadButtons();
+            if (settings.controlsArr[idx] != null)
+            {
+                ((Form)settings.controlsArr[idx]).Show();
+                ((Form)settings.controlsArr[idx]).BringToFront();
+                settings.LoadButtons();
+            }
+            else
+            {
+                MessageBox.Show("Coming Soon!");
+            }
         }
 
         private void controlClosed(object sender, FormClosedEventArgs e)

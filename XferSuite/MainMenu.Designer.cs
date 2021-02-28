@@ -31,9 +31,6 @@ namespace XferSuite
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnMapFlip = new System.Windows.Forms.Button();
             this.btnTaskList = new System.Windows.Forms.Button();
@@ -43,6 +40,9 @@ namespace XferSuite
             this.btnFingerprint = new System.Windows.Forms.Button();
             this.btnZreg = new System.Windows.Forms.Button();
             this.btnXYZMetro = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnInlinepositions = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -78,30 +78,6 @@ namespace XferSuite
             this.tableLayoutPanel.Size = new System.Drawing.Size(680, 257);
             this.tableLayoutPanel.TabIndex = 0;
             // 
-            // statusStrip1
-            // 
-            this.tableLayoutPanel.SetColumnSpan(this.statusStrip1, 5);
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBar,
-            this.toolStripStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 231);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(680, 26);
-            this.statusStrip1.TabIndex = 0;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripProgressBar
-            // 
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 18);
-            // 
-            // toolStripStatusLabel
-            // 
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(35, 20);
-            this.toolStripStatusLabel.Text = "v1.0";
-            // 
             // btnSettings
             // 
             this.btnSettings.AccessibleName = "Settings";
@@ -112,10 +88,10 @@ namespace XferSuite
             this.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
             this.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettings.Location = new System.Drawing.Point(554, 125);
+            this.btnSettings.Location = new System.Drawing.Point(554, 126);
             this.btnSettings.Margin = new System.Windows.Forms.Padding(10);
             this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(116, 95);
+            this.btnSettings.Size = new System.Drawing.Size(116, 96);
             this.btnSettings.TabIndex = 11;
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSettings.UseVisualStyleBackColor = true;
@@ -131,10 +107,10 @@ namespace XferSuite
             this.btnMapFlip.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
             this.btnMapFlip.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnMapFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMapFlip.Location = new System.Drawing.Point(418, 125);
+            this.btnMapFlip.Location = new System.Drawing.Point(418, 126);
             this.btnMapFlip.Margin = new System.Windows.Forms.Padding(10);
             this.btnMapFlip.Name = "btnMapFlip";
-            this.btnMapFlip.Size = new System.Drawing.Size(116, 95);
+            this.btnMapFlip.Size = new System.Drawing.Size(116, 96);
             this.btnMapFlip.TabIndex = 10;
             this.btnMapFlip.Tag = "8";
             this.btnMapFlip.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -151,14 +127,15 @@ namespace XferSuite
             this.btnTaskList.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
             this.btnTaskList.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnTaskList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTaskList.Location = new System.Drawing.Point(282, 125);
+            this.btnTaskList.Location = new System.Drawing.Point(282, 126);
             this.btnTaskList.Margin = new System.Windows.Forms.Padding(10);
             this.btnTaskList.Name = "btnTaskList";
-            this.btnTaskList.Size = new System.Drawing.Size(116, 95);
+            this.btnTaskList.Size = new System.Drawing.Size(116, 96);
             this.btnTaskList.TabIndex = 9;
             this.btnTaskList.Tag = "7";
             this.btnTaskList.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnTaskList.UseVisualStyleBackColor = true;
+            this.btnTaskList.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnDataFileTree
             // 
@@ -170,10 +147,10 @@ namespace XferSuite
             this.btnDataFileTree.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
             this.btnDataFileTree.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnDataFileTree.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDataFileTree.Location = new System.Drawing.Point(146, 125);
+            this.btnDataFileTree.Location = new System.Drawing.Point(146, 126);
             this.btnDataFileTree.Margin = new System.Windows.Forms.Padding(10);
             this.btnDataFileTree.Name = "btnDataFileTree";
-            this.btnDataFileTree.Size = new System.Drawing.Size(116, 95);
+            this.btnDataFileTree.Size = new System.Drawing.Size(116, 96);
             this.btnDataFileTree.TabIndex = 8;
             this.btnDataFileTree.Tag = "6";
             this.btnDataFileTree.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -182,7 +159,7 @@ namespace XferSuite
             // 
             // btnFileParse
             // 
-            this.btnFileParse.AccessibleName = "File Parsing";
+            this.btnFileParse.AccessibleName = "Event Log Parsing";
             this.btnFileParse.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_file_37_240;
             this.btnFileParse.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnFileParse.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -190,14 +167,15 @@ namespace XferSuite
             this.btnFileParse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
             this.btnFileParse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnFileParse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFileParse.Location = new System.Drawing.Point(10, 125);
+            this.btnFileParse.Location = new System.Drawing.Point(10, 126);
             this.btnFileParse.Margin = new System.Windows.Forms.Padding(10);
             this.btnFileParse.Name = "btnFileParse";
-            this.btnFileParse.Size = new System.Drawing.Size(116, 95);
+            this.btnFileParse.Size = new System.Drawing.Size(116, 96);
             this.btnFileParse.TabIndex = 7;
             this.btnFileParse.Tag = "5";
             this.btnFileParse.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnFileParse.UseVisualStyleBackColor = true;
+            this.btnFileParse.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnPrintCycle
             // 
@@ -212,11 +190,12 @@ namespace XferSuite
             this.btnPrintCycle.Location = new System.Drawing.Point(554, 10);
             this.btnPrintCycle.Margin = new System.Windows.Forms.Padding(10);
             this.btnPrintCycle.Name = "btnPrintCycle";
-            this.btnPrintCycle.Size = new System.Drawing.Size(116, 95);
+            this.btnPrintCycle.Size = new System.Drawing.Size(116, 96);
             this.btnPrintCycle.TabIndex = 6;
             this.btnPrintCycle.Tag = "4";
             this.btnPrintCycle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnPrintCycle.UseVisualStyleBackColor = true;
+            this.btnPrintCycle.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnFingerprint
             // 
@@ -231,11 +210,12 @@ namespace XferSuite
             this.btnFingerprint.Location = new System.Drawing.Point(418, 10);
             this.btnFingerprint.Margin = new System.Windows.Forms.Padding(10);
             this.btnFingerprint.Name = "btnFingerprint";
-            this.btnFingerprint.Size = new System.Drawing.Size(116, 95);
+            this.btnFingerprint.Size = new System.Drawing.Size(116, 96);
             this.btnFingerprint.TabIndex = 5;
             this.btnFingerprint.Tag = "3";
             this.btnFingerprint.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnFingerprint.UseVisualStyleBackColor = true;
+            this.btnFingerprint.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnZreg
             // 
@@ -250,7 +230,7 @@ namespace XferSuite
             this.btnZreg.Location = new System.Drawing.Point(282, 10);
             this.btnZreg.Margin = new System.Windows.Forms.Padding(10);
             this.btnZreg.Name = "btnZreg";
-            this.btnZreg.Size = new System.Drawing.Size(116, 95);
+            this.btnZreg.Size = new System.Drawing.Size(116, 96);
             this.btnZreg.TabIndex = 4;
             this.btnZreg.Tag = "2";
             this.btnZreg.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -270,11 +250,36 @@ namespace XferSuite
             this.btnXYZMetro.Location = new System.Drawing.Point(146, 10);
             this.btnXYZMetro.Margin = new System.Windows.Forms.Padding(10);
             this.btnXYZMetro.Name = "btnXYZMetro";
-            this.btnXYZMetro.Size = new System.Drawing.Size(116, 95);
+            this.btnXYZMetro.Size = new System.Drawing.Size(116, 96);
             this.btnXYZMetro.TabIndex = 3;
             this.btnXYZMetro.Tag = "1";
             this.btnXYZMetro.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnXYZMetro.UseVisualStyleBackColor = true;
+            this.btnXYZMetro.Click += new System.EventHandler(this.btn_Click);
+            // 
+            // statusStrip1
+            // 
+            this.tableLayoutPanel.SetColumnSpan(this.statusStrip1, 5);
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripProgressBar,
+            this.toolStripStatusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 233);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(680, 24);
+            this.statusStrip1.TabIndex = 0;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 18);
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(28, 19);
+            this.toolStripStatusLabel.Text = "v1.0";
             // 
             // btnInlinepositions
             // 
@@ -289,11 +294,12 @@ namespace XferSuite
             this.btnInlinepositions.Location = new System.Drawing.Point(10, 10);
             this.btnInlinepositions.Margin = new System.Windows.Forms.Padding(10);
             this.btnInlinepositions.Name = "btnInlinepositions";
-            this.btnInlinepositions.Size = new System.Drawing.Size(116, 95);
+            this.btnInlinepositions.Size = new System.Drawing.Size(116, 96);
             this.btnInlinepositions.TabIndex = 2;
             this.btnInlinepositions.Tag = "0";
             this.btnInlinepositions.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnInlinepositions.UseVisualStyleBackColor = true;
+            this.btnInlinepositions.Click += new System.EventHandler(this.btn_Click);
             // 
             // MainMenu
             // 
@@ -319,7 +325,6 @@ namespace XferSuite
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.Button btnInlinepositions;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnMapFlip;
@@ -330,6 +335,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnFingerprint;
         private System.Windows.Forms.Button btnZreg;
         private System.Windows.Forms.Button btnXYZMetro;
+        public System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
     }
 }
 

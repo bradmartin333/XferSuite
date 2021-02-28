@@ -1,6 +1,8 @@
 ﻿namespace XferHelper
 
 open MathNet.Numerics.Statistics
+open System.IO
+open System
 
 module Stats =
     let median (data:float[]) =
@@ -65,3 +67,37 @@ module Zed =
         |> Set.toList
         |> List.max);
         ]
+
+
+module Parser = 
+    type Event = {Time:DateTime; Msg:string}
+
+    let mutable lastTime = DateTime.Today
+
+    let toEvent (csvData:string) =
+        let columns = csvData.Split('\t')
+        if columns.Length <= 1 then
+            {Time = lastTime; Msg = columns.[0..] |> String.concat "\t"}
+        else
+            try
+               let Time = DateTime.Parse(columns.[0])
+               lastTime <- Time
+               let Msg = columns.[2..] |> String.concat "\t"
+               {Time = Time; Msg = Msg}
+            with
+               | :? System.IndexOutOfRangeException -> {Time = lastTime; Msg = columns.[1..] |> String.concat "\t"}
+               | :? System.FormatException -> {Time = lastTime; Msg = columns.[0..] |> String.concat "\t"}
+
+    let reader (data:string[]) =
+        data
+        |> Array.filter(fun x -> x <> "")
+        |> Array.map toEvent
+
+    let getRuns (data:Event[]) = 
+        data 
+        |> Array.filter(fun x -> x.Msg.Contains "EVENT:  Program Started")
+
+    let main (data:string[]) : Event[] =
+        let d = reader data
+        getRuns d
+   
