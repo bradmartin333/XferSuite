@@ -83,9 +83,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="XferHelper">
-      <HintPath>..\XferHelper\bin\Release\net462\XferHelper.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainMenu.cs">
@@ -126,7 +123,27 @@
   <ItemGroup>
     <None Include="Resources\topography.png" />
     <None Include="Resources\metrology.png" />
+    <None Include="Resources\iconmonstr-cube-6-240.png" />
+    <None Include="Resources\iconmonstr-cube-18-240.png" />
+    <None Include="Resources\iconmonstr-cube-11-240.png" />
+    <None Include="Resources\iconmonstr-note-37-240.png" />
+    <None Include="Resources\iconmonstr-file-7-240.png" />
+    <None Include="Resources\iconmonstr-delivery-10-240.png" />
+    <None Include="Resources\iconmonstr-map-10-240.png" />
+    <None Include="Resources\iconmonstr-power-on-off-10-240.png" />
+    <None Include="Resources\iconmonstr-fingerprint-5-240.png" />
+    <None Include="Resources\iconmonstr-gear-11-240.png" />
     <Content Include="XferSuite.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataFileTree\DataFileTree.vbproj">
+      <Project>{20dd8969-2ab2-408f-8097-6d7443d12b0f}</Project>
+      <Name>DataFileTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XferHelper\XferHelper.fsproj">
+      <Project>{ee2ad740-dece-4dec-8400-3f6c0d8700bf}</Project>
+      <Name>XferHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

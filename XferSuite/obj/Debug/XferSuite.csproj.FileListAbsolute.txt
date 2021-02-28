@@ -141,3 +141,7 @@ C:\XferSuite\XferSuite\bin\Debug\tr\FSharp.Core.resources.dll
 C:\XferSuite\XferSuite\bin\Debug\zh-Hans\FSharp.Core.resources.dll
 C:\XferSuite\XferSuite\bin\Debug\zh-Hant\FSharp.Core.resources.dll
 C:\XferSuite\XferSuite\obj\Debug\XferSuite.MainMenu.resources
+C:\XferSuite\XferSuite\bin\Debug\DataFileTree.exe
+C:\XferSuite\XferSuite\bin\Debug\DataFileTree.pdb
+C:\XferSuite\XferSuite\bin\Debug\DataFileTree.xml
+C:\XferSuite\XferSuite\bin\Debug\DataFileTree.exe.config

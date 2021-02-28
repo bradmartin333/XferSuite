@@ -30,190 +30,227 @@ namespace XferSuite
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.btnSettings = new System.Windows.Forms.Button();
+            this.btnMapFlip = new System.Windows.Forms.Button();
+            this.btnTaskList = new System.Windows.Forms.Button();
+            this.btnDataFileTree = new System.Windows.Forms.Button();
+            this.btnFileParse = new System.Windows.Forms.Button();
+            this.btnPrintCycle = new System.Windows.Forms.Button();
+            this.btnFingerprint = new System.Windows.Forms.Button();
+            this.btnZreg = new System.Windows.Forms.Button();
+            this.btnXYZMetro = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.btnInlinepositions = new System.Windows.Forms.Button();
+            this.tableLayoutPanel.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // tableLayoutPanel
             // 
-            this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.button10, 4, 1);
-            this.tableLayoutPanel1.Controls.Add(this.button9, 3, 1);
-            this.tableLayoutPanel1.Controls.Add(this.button8, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.button7, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.button6, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.button5, 4, 0);
-            this.tableLayoutPanel1.Controls.Add(this.button4, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.button3, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.button2, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.statusStrip1, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.button1, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(683, 257);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanel.ColumnCount = 5;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel.Controls.Add(this.btnSettings, 4, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnMapFlip, 3, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnTaskList, 2, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnDataFileTree, 1, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnFileParse, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnPrintCycle, 4, 0);
+            this.tableLayoutPanel.Controls.Add(this.btnFingerprint, 3, 0);
+            this.tableLayoutPanel.Controls.Add(this.btnZreg, 2, 0);
+            this.tableLayoutPanel.Controls.Add(this.btnXYZMetro, 1, 0);
+            this.tableLayoutPanel.Controls.Add(this.statusStrip1, 0, 2);
+            this.tableLayoutPanel.Controls.Add(this.btnInlinepositions, 0, 0);
+            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel.Name = "tableLayoutPanel";
+            this.tableLayoutPanel.RowCount = 3;
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel.Size = new System.Drawing.Size(680, 257);
+            this.tableLayoutPanel.TabIndex = 0;
             // 
-            // button10
+            // btnSettings
             // 
-            this.button10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button10.FlatAppearance.BorderSize = 0;
-            this.button10.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button10.Location = new System.Drawing.Point(554, 125);
-            this.button10.Margin = new System.Windows.Forms.Padding(10);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(119, 95);
-            this.button10.TabIndex = 11;
-            this.button10.UseVisualStyleBackColor = true;
+            this.btnSettings.AccessibleName = "Settings";
+            this.btnSettings.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_gear_11_240;
+            this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSettings.FlatAppearance.BorderSize = 0;
+            this.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSettings.Location = new System.Drawing.Point(554, 125);
+            this.btnSettings.Margin = new System.Windows.Forms.Padding(10);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(116, 95);
+            this.btnSettings.TabIndex = 11;
+            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnSettings.UseVisualStyleBackColor = true;
             // 
-            // button9
+            // btnMapFlip
             // 
-            this.button9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button9.FlatAppearance.BorderSize = 0;
-            this.button9.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button9.Location = new System.Drawing.Point(418, 125);
-            this.button9.Margin = new System.Windows.Forms.Padding(10);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(116, 95);
-            this.button9.TabIndex = 10;
-            this.button9.UseVisualStyleBackColor = true;
+            this.btnMapFlip.AccessibleName = "Map Flip";
+            this.btnMapFlip.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_map_10_240;
+            this.btnMapFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnMapFlip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnMapFlip.FlatAppearance.BorderSize = 0;
+            this.btnMapFlip.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnMapFlip.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnMapFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMapFlip.Location = new System.Drawing.Point(418, 125);
+            this.btnMapFlip.Margin = new System.Windows.Forms.Padding(10);
+            this.btnMapFlip.Name = "btnMapFlip";
+            this.btnMapFlip.Size = new System.Drawing.Size(116, 95);
+            this.btnMapFlip.TabIndex = 10;
+            this.btnMapFlip.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnMapFlip.UseVisualStyleBackColor = true;
             // 
-            // button8
+            // btnTaskList
             // 
-            this.button8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button8.FlatAppearance.BorderSize = 0;
-            this.button8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Location = new System.Drawing.Point(282, 125);
-            this.button8.Margin = new System.Windows.Forms.Padding(10);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(116, 95);
-            this.button8.TabIndex = 9;
-            this.button8.UseVisualStyleBackColor = true;
+            this.btnTaskList.AccessibleName = "Task List";
+            this.btnTaskList.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_delivery_10_240;
+            this.btnTaskList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnTaskList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTaskList.FlatAppearance.BorderSize = 0;
+            this.btnTaskList.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnTaskList.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnTaskList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTaskList.Location = new System.Drawing.Point(282, 125);
+            this.btnTaskList.Margin = new System.Windows.Forms.Padding(10);
+            this.btnTaskList.Name = "btnTaskList";
+            this.btnTaskList.Size = new System.Drawing.Size(116, 95);
+            this.btnTaskList.TabIndex = 9;
+            this.btnTaskList.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnTaskList.UseVisualStyleBackColor = true;
             // 
-            // button7
+            // btnDataFileTree
             // 
-            this.button7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button7.FlatAppearance.BorderSize = 0;
-            this.button7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Location = new System.Drawing.Point(146, 125);
-            this.button7.Margin = new System.Windows.Forms.Padding(10);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(116, 95);
-            this.button7.TabIndex = 8;
-            this.button7.UseVisualStyleBackColor = true;
+            this.btnDataFileTree.AccessibleName = "Data File Tree";
+            this.btnDataFileTree.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_file_7_240;
+            this.btnDataFileTree.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnDataFileTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnDataFileTree.FlatAppearance.BorderSize = 0;
+            this.btnDataFileTree.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnDataFileTree.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnDataFileTree.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDataFileTree.Location = new System.Drawing.Point(146, 125);
+            this.btnDataFileTree.Margin = new System.Windows.Forms.Padding(10);
+            this.btnDataFileTree.Name = "btnDataFileTree";
+            this.btnDataFileTree.Size = new System.Drawing.Size(116, 95);
+            this.btnDataFileTree.TabIndex = 8;
+            this.btnDataFileTree.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnDataFileTree.UseVisualStyleBackColor = true;
+            this.btnDataFileTree.Click += new System.EventHandler(this.btnDataFileTree_Click);
             // 
-            // button6
+            // btnFileParse
             // 
-            this.button6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button6.FlatAppearance.BorderSize = 0;
-            this.button6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Location = new System.Drawing.Point(10, 125);
-            this.button6.Margin = new System.Windows.Forms.Padding(10);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(116, 95);
-            this.button6.TabIndex = 7;
-            this.button6.UseVisualStyleBackColor = true;
+            this.btnFileParse.AccessibleName = "File Parsing";
+            this.btnFileParse.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_note_37_240;
+            this.btnFileParse.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnFileParse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnFileParse.FlatAppearance.BorderSize = 0;
+            this.btnFileParse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnFileParse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnFileParse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFileParse.Location = new System.Drawing.Point(10, 125);
+            this.btnFileParse.Margin = new System.Windows.Forms.Padding(10);
+            this.btnFileParse.Name = "btnFileParse";
+            this.btnFileParse.Size = new System.Drawing.Size(116, 95);
+            this.btnFileParse.TabIndex = 7;
+            this.btnFileParse.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnFileParse.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // btnPrintCycle
             // 
-            this.button5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button5.FlatAppearance.BorderSize = 0;
-            this.button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Location = new System.Drawing.Point(554, 10);
-            this.button5.Margin = new System.Windows.Forms.Padding(10);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(119, 95);
-            this.button5.TabIndex = 6;
-            this.button5.UseVisualStyleBackColor = true;
+            this.btnPrintCycle.AccessibleName = "Print Cycle Simulation";
+            this.btnPrintCycle.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_power_on_off_10_240;
+            this.btnPrintCycle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPrintCycle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnPrintCycle.FlatAppearance.BorderSize = 0;
+            this.btnPrintCycle.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnPrintCycle.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnPrintCycle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPrintCycle.Location = new System.Drawing.Point(554, 10);
+            this.btnPrintCycle.Margin = new System.Windows.Forms.Padding(10);
+            this.btnPrintCycle.Name = "btnPrintCycle";
+            this.btnPrintCycle.Size = new System.Drawing.Size(116, 95);
+            this.btnPrintCycle.TabIndex = 6;
+            this.btnPrintCycle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnPrintCycle.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // btnFingerprint
             // 
-            this.button4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button4.FlatAppearance.BorderSize = 0;
-            this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Location = new System.Drawing.Point(418, 10);
-            this.button4.Margin = new System.Windows.Forms.Padding(10);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(116, 95);
-            this.button4.TabIndex = 5;
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnFingerprint.AccessibleName = "Fingerprinting";
+            this.btnFingerprint.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_fingerprint_5_240;
+            this.btnFingerprint.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnFingerprint.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnFingerprint.FlatAppearance.BorderSize = 0;
+            this.btnFingerprint.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnFingerprint.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnFingerprint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFingerprint.Location = new System.Drawing.Point(418, 10);
+            this.btnFingerprint.Margin = new System.Windows.Forms.Padding(10);
+            this.btnFingerprint.Name = "btnFingerprint";
+            this.btnFingerprint.Size = new System.Drawing.Size(116, 95);
+            this.btnFingerprint.TabIndex = 5;
+            this.btnFingerprint.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnFingerprint.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btnZreg
             // 
-            this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button3.FlatAppearance.BorderSize = 0;
-            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Location = new System.Drawing.Point(282, 10);
-            this.button3.Margin = new System.Windows.Forms.Padding(10);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(116, 95);
-            this.button3.TabIndex = 4;
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnZreg.AccessibleName = "Z Registration";
+            this.btnZreg.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_cube_11_240;
+            this.btnZreg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnZreg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnZreg.FlatAppearance.BorderSize = 0;
+            this.btnZreg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnZreg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnZreg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnZreg.Location = new System.Drawing.Point(282, 10);
+            this.btnZreg.Margin = new System.Windows.Forms.Padding(10);
+            this.btnZreg.Name = "btnZreg";
+            this.btnZreg.Size = new System.Drawing.Size(116, 95);
+            this.btnZreg.TabIndex = 4;
+            this.btnZreg.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnZreg.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnXYZMetro
             // 
-            this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(146, 10);
-            this.button2.Margin = new System.Windows.Forms.Padding(10);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(116, 95);
-            this.button2.TabIndex = 3;
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnXYZMetro.AccessibleName = "XYZ Metrology";
+            this.btnXYZMetro.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_cube_18_240;
+            this.btnXYZMetro.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnXYZMetro.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnXYZMetro.FlatAppearance.BorderSize = 0;
+            this.btnXYZMetro.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnXYZMetro.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnXYZMetro.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXYZMetro.Location = new System.Drawing.Point(146, 10);
+            this.btnXYZMetro.Margin = new System.Windows.Forms.Padding(10);
+            this.btnXYZMetro.Name = "btnXYZMetro";
+            this.btnXYZMetro.Size = new System.Drawing.Size(116, 95);
+            this.btnXYZMetro.TabIndex = 3;
+            this.btnXYZMetro.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnXYZMetro.UseVisualStyleBackColor = true;
             // 
             // statusStrip1
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.statusStrip1, 5);
+            this.tableLayoutPanel.SetColumnSpan(this.statusStrip1, 5);
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar,
             this.toolStripStatusLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 231);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(683, 26);
+            this.statusStrip1.Size = new System.Drawing.Size(680, 26);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -225,35 +262,39 @@ namespace XferSuite
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(151, 20);
-            this.toolStripStatusLabel.Text = "toolStripStatusLabel1";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(35, 20);
+            this.toolStripStatusLabel.Text = "v1.0";
             // 
-            // button1
+            // btnInlinepositions
             // 
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(10, 10);
-            this.button1.Margin = new System.Windows.Forms.Padding(10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(116, 95);
-            this.button1.TabIndex = 2;
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnInlinepositions.AccessibleName = "Inlinepositions";
+            this.btnInlinepositions.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_cube_6_240;
+            this.btnInlinepositions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnInlinepositions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnInlinepositions.FlatAppearance.BorderSize = 0;
+            this.btnInlinepositions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnInlinepositions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnInlinepositions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInlinepositions.Location = new System.Drawing.Point(10, 10);
+            this.btnInlinepositions.Margin = new System.Windows.Forms.Padding(10);
+            this.btnInlinepositions.Name = "btnInlinepositions";
+            this.btnInlinepositions.Size = new System.Drawing.Size(116, 95);
+            this.btnInlinepositions.TabIndex = 2;
+            this.btnInlinepositions.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnInlinepositions.UseVisualStyleBackColor = true;
             // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(680, 257);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainMenu";
             this.Text = "XferSuite";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.Load += new System.EventHandler(this.MainMenu_Load);
+            this.tableLayoutPanel.ResumeLayout(false);
+            this.tableLayoutPanel.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -262,20 +303,20 @@ namespace XferSuite
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnInlinepositions;
+        private System.Windows.Forms.Button btnSettings;
+        private System.Windows.Forms.Button btnMapFlip;
+        private System.Windows.Forms.Button btnTaskList;
+        private System.Windows.Forms.Button btnDataFileTree;
+        private System.Windows.Forms.Button btnFileParse;
+        private System.Windows.Forms.Button btnPrintCycle;
+        private System.Windows.Forms.Button btnFingerprint;
+        private System.Windows.Forms.Button btnZreg;
+        private System.Windows.Forms.Button btnXYZMetro;
     }
 }
 
