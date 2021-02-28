@@ -17,6 +17,7 @@ namespace XferSuite
         {
             InitializeComponent();
             buttons = tableLayoutPanel.Controls.OfType<Button>();
+            propertyGrid.BrowsableAttributes = new AttributeCollection(new CategoryAttribute("User Parameters"));
         }
 
         public object[] controlsArr = new object[9];
@@ -45,6 +46,7 @@ namespace XferSuite
                     btn.Visible = !(((Form)controlsArr[idx]).IsDisposed == true);
                 }
             }
+            propertyGrid.SelectedObject = null;
         }
     }
 }

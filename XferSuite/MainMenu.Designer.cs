@@ -115,6 +115,7 @@ namespace XferSuite
             this.btnMapFlip.Tag = "8";
             this.btnMapFlip.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnMapFlip.UseVisualStyleBackColor = true;
+            this.btnMapFlip.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnTaskList
             // 
@@ -153,7 +154,7 @@ namespace XferSuite
             this.btnDataFileTree.Tag = "6";
             this.btnDataFileTree.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnDataFileTree.UseVisualStyleBackColor = true;
-            this.btnDataFileTree.Click += new System.EventHandler(this.btnDataFileTree_Click);
+            this.btnDataFileTree.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnFileParse
             // 

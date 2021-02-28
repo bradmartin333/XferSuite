@@ -18,9 +18,9 @@ namespace XferSuite
             InitializeComponent();
             foreach (Button b in tableLayoutPanel.Controls.OfType<Button>())
             {
-                ToolTip tip = new ToolTip 
-                { 
-                    InitialDelay = 0 
+                ToolTip tip = new ToolTip
+                {
+                    InitialDelay = 0
                 };
                 tip.SetToolTip(b, b.AccessibleName);
             }
@@ -28,19 +28,40 @@ namespace XferSuite
 
         private Settings settings = new Settings();
 
-        private void btnDataFileTree_Click(object sender, EventArgs e)
+        private void btn_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
             int idx = int.Parse(btn.Tag.ToString());
 
             if (settings.controlsArr[idx] == null || ((Form)settings.controlsArr[idx]).IsDisposed == true)
             {
-                DataFileTree.frmDataFileTreeMain DFT = new DataFileTree.frmDataFileTreeMain()
+                switch (idx)
                 {
-                    Location = PointToScreen(btn.Location)
-                };
-                DFT.FormClosed += new FormClosedEventHandler(controlClosed);
-                settings.controlsArr[idx] = DFT;
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        DataFileTree.frmDataFileTreeMain DFT = new DataFileTree.frmDataFileTreeMain() { Location = PointToScreen(btn.Location) };
+                        DFT.FormClosed += new FormClosedEventHandler(controlClosed);
+                        settings.controlsArr[idx] = DFT;
+                        break;
+                    case 7:
+                        break;
+                    case 8:
+                        MapFlip.frmMapFlipMain MF = new MapFlip.frmMapFlipMain() { Location = PointToScreen(btn.Location) };
+                        MF.FormClosed += new FormClosedEventHandler(controlClosed);
+                        settings.controlsArr[idx] =  MF;
+                        break;
+                }
             }
             
             ((Form)settings.controlsArr[idx]).Show();

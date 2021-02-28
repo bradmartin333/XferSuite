@@ -149,6 +149,10 @@
       <Project>{20dd8969-2ab2-408f-8097-6d7443d12b0f}</Project>
       <Name>DataFileTree</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MapFlip\MapFlip.csproj">
+      <Project>{aea2c935-bc5f-4ac1-8cf4-eb89370803fc}</Project>
+      <Name>MapFlip</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XferHelper\XferHelper.fsproj">
       <Project>{ee2ad740-dece-4dec-8400-3f6c0d8700bf}</Project>
       <Name>XferHelper</Name>

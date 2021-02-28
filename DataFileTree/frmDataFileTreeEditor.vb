@@ -40,7 +40,7 @@ Public Class frmDataFileTreeEditor
                     thisRep = ""
                 End If
                 For Each subject As DataGridViewRow In dgSub.Rows
-                    Dim path = Dir & thisVar & "/" & subject.Cells(0).Value.ToString() & thisRep & fileExt
+                    Dim path = Dir & thisVar & "/" & subject.Cells(0).Value.ToString() & thisRep & "." & fileExt
                     Dim fs As FileStream = File.Create(path)
                 Next
             Next
