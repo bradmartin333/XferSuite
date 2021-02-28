@@ -135,7 +135,7 @@ namespace XferSuite
             // 
             // button3
             // 
-            this.button3.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_cube_11_240;
+            this.button3.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_layer_21_240;
             this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button3.FlatAppearance.BorderSize = 0;
@@ -169,7 +169,7 @@ namespace XferSuite
             // 
             // button5
             // 
-            this.button5.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_power_on_off_10_240;
+            this.button5.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_party_9_240;
             this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button5.FlatAppearance.BorderSize = 0;
@@ -186,7 +186,7 @@ namespace XferSuite
             // 
             // button6
             // 
-            this.button6.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_note_37_240;
+            this.button6.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_file_37_240;
             this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button6.FlatAppearance.BorderSize = 0;
@@ -203,7 +203,7 @@ namespace XferSuite
             // 
             // button7
             // 
-            this.button7.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_file_7_240;
+            this.button7.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_tree_4_240;
             this.button7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button7.FlatAppearance.BorderSize = 0;

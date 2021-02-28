@@ -31,6 +31,9 @@ namespace XferSuite
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnMapFlip = new System.Windows.Forms.Button();
             this.btnTaskList = new System.Windows.Forms.Button();
@@ -40,9 +43,6 @@ namespace XferSuite
             this.btnFingerprint = new System.Windows.Forms.Button();
             this.btnZreg = new System.Windows.Forms.Button();
             this.btnXYZMetro = new System.Windows.Forms.Button();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnInlinepositions = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -78,10 +78,34 @@ namespace XferSuite
             this.tableLayoutPanel.Size = new System.Drawing.Size(680, 257);
             this.tableLayoutPanel.TabIndex = 0;
             // 
+            // statusStrip1
+            // 
+            this.tableLayoutPanel.SetColumnSpan(this.statusStrip1, 5);
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripProgressBar,
+            this.toolStripStatusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 231);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(680, 26);
+            this.statusStrip1.TabIndex = 0;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 18);
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(35, 20);
+            this.toolStripStatusLabel.Text = "v1.0";
+            // 
             // btnSettings
             // 
             this.btnSettings.AccessibleName = "Settings";
-            this.btnSettings.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_gear_11_240;
+            this.btnSettings.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_wrench_10_240;
             this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSettings.FlatAppearance.BorderSize = 0;
@@ -139,7 +163,7 @@ namespace XferSuite
             // btnDataFileTree
             // 
             this.btnDataFileTree.AccessibleName = "Data File Tree";
-            this.btnDataFileTree.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_file_7_240;
+            this.btnDataFileTree.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_tree_4_240;
             this.btnDataFileTree.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnDataFileTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDataFileTree.FlatAppearance.BorderSize = 0;
@@ -159,7 +183,7 @@ namespace XferSuite
             // btnFileParse
             // 
             this.btnFileParse.AccessibleName = "File Parsing";
-            this.btnFileParse.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_note_37_240;
+            this.btnFileParse.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_file_37_240;
             this.btnFileParse.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnFileParse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnFileParse.FlatAppearance.BorderSize = 0;
@@ -178,7 +202,7 @@ namespace XferSuite
             // btnPrintCycle
             // 
             this.btnPrintCycle.AccessibleName = "Print Cycle Simulation";
-            this.btnPrintCycle.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_power_on_off_10_240;
+            this.btnPrintCycle.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_party_9_240;
             this.btnPrintCycle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnPrintCycle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnPrintCycle.FlatAppearance.BorderSize = 0;
@@ -216,7 +240,7 @@ namespace XferSuite
             // btnZreg
             // 
             this.btnZreg.AccessibleName = "Z Registration";
-            this.btnZreg.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_cube_11_240;
+            this.btnZreg.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_layer_21_240;
             this.btnZreg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnZreg.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnZreg.FlatAppearance.BorderSize = 0;
@@ -252,30 +276,6 @@ namespace XferSuite
             this.btnXYZMetro.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnXYZMetro.UseVisualStyleBackColor = true;
             // 
-            // statusStrip1
-            // 
-            this.tableLayoutPanel.SetColumnSpan(this.statusStrip1, 5);
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBar,
-            this.toolStripStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 231);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(680, 26);
-            this.statusStrip1.TabIndex = 0;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripProgressBar
-            // 
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 18);
-            // 
-            // toolStripStatusLabel
-            // 
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(35, 20);
-            this.toolStripStatusLabel.Text = "v1.0";
-            // 
             // btnInlinepositions
             // 
             this.btnInlinepositions.AccessibleName = "Inlinepositions";
@@ -301,6 +301,7 @@ namespace XferSuite
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(680, 257);
             this.Controls.Add(this.tableLayoutPanel);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

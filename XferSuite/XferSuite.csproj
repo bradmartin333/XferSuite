@@ -108,6 +108,11 @@
     <None Include="Resources\iconmonstr-power-on-off-10-240.png" />
     <None Include="Resources\iconmonstr-fingerprint-5-240.png" />
     <None Include="Resources\iconmonstr-gear-11-240.png" />
+    <None Include="Resources\iconmonstr-layer-21-240.png" />
+    <None Include="Resources\iconmonstr-file-37-240.png" />
+    <None Include="Resources\iconmonstr-tree-4-240.png" />
+    <None Include="Resources\iconmonstr-wrench-10-240.png" />
+    <None Include="Resources\iconmonstr-party-9-240.png" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>
