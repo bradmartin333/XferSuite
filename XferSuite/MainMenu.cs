@@ -42,6 +42,14 @@ namespace XferSuite
                     case 1:
                         break;
                     case 2:
+                        string path = OpenFile("Open a HeightSensorLog File");
+                        if (path == null)
+                        {
+                            break;
+                        }
+                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect(path) { Location = PointToScreen(btn.Location) };
+                        ZS.FormClosed += new FormClosedEventHandler(controlClosed);
+                        settings.controlsArr[idx] = ZS;
                         break;
                     case 3:
                         break;
@@ -59,11 +67,11 @@ namespace XferSuite
                     case 8:
                         MapFlip.frmMapFlipMain MF = new MapFlip.frmMapFlipMain() { Location = PointToScreen(btn.Location) };
                         MF.FormClosed += new FormClosedEventHandler(controlClosed);
-                        settings.controlsArr[idx] =  MF;
+                        settings.controlsArr[idx] = MF;
                         break;
                 }
             }
-            
+
             ((Form)settings.controlsArr[idx]).Show();
             ((Form)settings.controlsArr[idx]).BringToFront();
             settings.LoadButtons();
@@ -80,6 +88,24 @@ namespace XferSuite
         {
             settings.Show();
             settings.BringToFront();
+        }
+
+        private string OpenFile(string title)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Title = title;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return openFileDialog.FileName;
+                }
+            }
+            return null;
         }
     }
 }

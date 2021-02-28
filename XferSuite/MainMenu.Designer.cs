@@ -231,6 +231,7 @@ namespace XferSuite
             this.btnZreg.Tag = "2";
             this.btnZreg.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnZreg.UseVisualStyleBackColor = true;
+            this.btnZreg.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnXYZMetro
             // 

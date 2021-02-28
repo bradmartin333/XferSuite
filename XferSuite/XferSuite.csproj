@@ -123,6 +123,10 @@
       <Project>{ee2ad740-dece-4dec-8400-3f6c0d8700bf}</Project>
       <Name>XferHelper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ZRegistration\ZRegistration.vbproj">
+      <Project>{8db48105-b268-42af-a320-3a8ee0c42413}</Project>
+      <Name>ZRegistration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
