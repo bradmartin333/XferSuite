@@ -16,7 +16,7 @@ namespace Inlinepositions
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMetroGraphs());
+            Application.Run(new Form1());
         }
     }
 }

@@ -41,14 +41,10 @@ namespace XferSuite
                 switch (idx)
                 {
                     case 0:
-                        path = OpenFile("Open an Inlinepositions File");
-                        if (path == null)
+                        if (!InitMetroGraphs(idx))
                         {
                             break;
                         }
-                        Inlinepositions.frmMetroGraphs MG = new Inlinepositions.frmMetroGraphs();
-                        MG.FormClosed += new FormClosedEventHandler(controlClosed);
-                        settings.controlsArr[idx] = MG;
                         break;
                     case 1:
                         path = OpenFile("Open a HeightSensorLog File");
@@ -118,18 +114,47 @@ namespace XferSuite
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Title = title;
-
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     return openFileDialog.FileName;
                 }
             }
             return null;
+        }
+
+        private bool InitMetroGraphs(int idx)
+        {
+            string path = OpenFile("Open an Inlinepositions File");
+            if (path == null)
+            {
+                return false;
+            }
+
+            int fileType = Metro.verify(path);
+            Metro.Position[] data;
+
+            switch (fileType)
+            {
+                case 0:
+                    MessageBox.Show("Insufficient data in file", "XferSuite Inlinepositions");
+                    return false;
+                case 1:
+                    data = Metro.data(path);
+                    break;
+                case 2:
+                    data = Metro.data(path);
+                    break;
+                default:
+                    MessageBox.Show("Invalid file", "XferSuite Inlinepositions");
+                    return false;
+            }
+
+            Inlinepositions.frmMetroGraphs MG = new Inlinepositions.frmMetroGraphs(data);
+            MG.FormClosed += new FormClosedEventHandler(controlClosed);
+            settings.controlsArr[idx] = MG;
+            return true;
         }
     }
 }
