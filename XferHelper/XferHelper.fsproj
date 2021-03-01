@@ -9,4 +9,8 @@
     <Compile Include="Functions.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics.FSharp" Version="4.15.0" />
+  </ItemGroup>
 </Project>

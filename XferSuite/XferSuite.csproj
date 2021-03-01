@@ -40,6 +40,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,6 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventLogParsing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EventLogParsing.Designer.cs">
+      <DependentUpon>EventLogParsing.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +75,9 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="EventLogParsing.resx">
+      <DependentUpon>EventLogParsing.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
@@ -82,6 +94,7 @@
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -108,6 +121,11 @@
     <None Include="Resources\iconmonstr-power-on-off-10-240.png" />
     <None Include="Resources\iconmonstr-fingerprint-5-240.png" />
     <None Include="Resources\iconmonstr-gear-11-240.png" />
+    <None Include="Resources\iconmonstr-layer-21-240.png" />
+    <None Include="Resources\iconmonstr-file-37-240.png" />
+    <None Include="Resources\iconmonstr-tree-4-240.png" />
+    <None Include="Resources\iconmonstr-wrench-10-240.png" />
+    <None Include="Resources\iconmonstr-party-9-240.png" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +140,10 @@
     <ProjectReference Include="..\XferHelper\XferHelper.fsproj">
       <Project>{ee2ad740-dece-4dec-8400-3f6c0d8700bf}</Project>
       <Name>XferHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZRegistration\ZRegistration.vbproj">
+      <Project>{8db48105-b268-42af-a320-3a8ee0c42413}</Project>
+      <Name>ZRegistration</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
