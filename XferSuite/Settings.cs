@@ -20,8 +20,8 @@ namespace XferSuite
             propertyGrid.BrowsableAttributes = new AttributeCollection(new CategoryAttribute("User Parameters"));
         }
 
-        public object[] controlsArr = new object[9];
-        private IEnumerable<Button> buttons = new Button[9];
+        public object[] controlsArr = new object[7];
+        private IEnumerable<Button> buttons = new Button[7];
 
         private void button_Click(object sender, EventArgs e)
         {

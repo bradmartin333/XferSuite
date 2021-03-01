@@ -43,8 +43,6 @@ namespace XferSuite
                     case 0:
                         break;
                     case 1:
-                        break;
-                    case 2:
                         path = OpenFile("Open a HeightSensorLog File");
                         if (path == null)
                         {
@@ -54,11 +52,11 @@ namespace XferSuite
                         ZS.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = ZS;
                         break;
+                    case 2:
+                        break;
                     case 3:
                         break;
                     case 4:
-                        break;
-                    case 5:
                         path = OpenFile("Open an EventLog File");
                         if (path == null)
                         {
@@ -66,7 +64,6 @@ namespace XferSuite
                         }
                         string[] readText = File.ReadAllLines(path);
                         Parser.Event[] prints = Parser.main(readText);
-                        toolStripProgressBar.Value = 0;
                         EventLogParsing ELP = new EventLogParsing { Location = PointToScreen(btn.Location) };
                         foreach (Parser.Event p in prints)
                         {
@@ -75,14 +72,12 @@ namespace XferSuite
                         ELP.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = ELP;
                         break;
-                    case 6:
+                    case 5:
                         DataFileTree.frmDataFileTreeMain DFT = new DataFileTree.frmDataFileTreeMain() { Location = PointToScreen(btn.Location) };
                         DFT.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = DFT;
                         break;
-                    case 7:
-                        break;
-                    case 8:
+                    case 6:
                         MapFlip.frmMapFlipMain MF = new MapFlip.frmMapFlipMain();
                         MF.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = MF;
