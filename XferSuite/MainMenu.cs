@@ -41,6 +41,14 @@ namespace XferSuite
                 switch (idx)
                 {
                     case 0:
+                        path = OpenFile("Open an Inlinepositions File");
+                        if (path == null)
+                        {
+                            break;
+                        }
+                        Inlinepositions.frmMetroGraphs MG = new Inlinepositions.frmMetroGraphs();
+                        MG.FormClosed += new FormClosedEventHandler(controlClosed);
+                        settings.controlsArr[idx] = MG;
                         break;
                     case 1:
                         path = OpenFile("Open a HeightSensorLog File");
@@ -90,10 +98,6 @@ namespace XferSuite
                 ((Form)settings.controlsArr[idx]).Show();
                 ((Form)settings.controlsArr[idx]).BringToFront();
                 settings.LoadButtons();
-            }
-            else
-            {
-                MessageBox.Show("Coming Soon!");
             }
         }
 

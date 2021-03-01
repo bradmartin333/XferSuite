@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>XferSuite</RootNamespace>
     <AssemblyName>XferSuite</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,7 +42,7 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -132,6 +133,10 @@
     <ProjectReference Include="..\DataFileTree\DataFileTree.vbproj">
       <Project>{20dd8969-2ab2-408f-8097-6d7443d12b0f}</Project>
       <Name>DataFileTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Inlinepositions\Inlinepositions.csproj">
+      <Project>{6e6db175-1c1f-46a3-ae9c-e93254e8f728}</Project>
+      <Name>Inlinepositions</Name>
     </ProjectReference>
     <ProjectReference Include="..\MapFlip\MapFlip.csproj">
       <Project>{aea2c935-bc5f-4ac1-8cf4-eb89370803fc}</Project>
