@@ -32,6 +32,10 @@ namespace Inlinepositions
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMetroGraphs));
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.XYScatter = new System.Windows.Forms.TabPage();
+            this.XYScatterPlot = new ScottPlot.FormsPlot();
+            this.XYDist = new System.Windows.Forms.TabPage();
+            this.XYDistPlot = new ScottPlot.FormsPlot();
             this.Combo = new System.Windows.Forms.TabPage();
             this.ComboPlot = new ScottPlot.FormsPlot();
             this.XError = new System.Windows.Forms.TabPage();
@@ -42,18 +46,14 @@ namespace Inlinepositions
             this.XStdDevPlot = new ScottPlot.FormsPlot();
             this.YStdDev = new System.Windows.Forms.TabPage();
             this.YStdDevPlot = new ScottPlot.FormsPlot();
-            this.XYScatter = new System.Windows.Forms.TabPage();
-            this.XYDist = new System.Windows.Forms.TabPage();
-            this.XYScatterPlot = new ScottPlot.FormsPlot();
-            this.XYDistPlot = new ScottPlot.FormsPlot();
             this.tabControl.SuspendLayout();
+            this.XYScatter.SuspendLayout();
+            this.XYDist.SuspendLayout();
             this.Combo.SuspendLayout();
             this.XError.SuspendLayout();
             this.YError.SuspendLayout();
             this.XStdDev.SuspendLayout();
             this.YStdDev.SuspendLayout();
-            this.XYScatter.SuspendLayout();
-            this.XYDist.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -71,6 +71,42 @@ namespace Inlinepositions
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(800, 450);
             this.tabControl.TabIndex = 0;
+            // 
+            // XYScatter
+            // 
+            this.XYScatter.Controls.Add(this.XYScatterPlot);
+            this.XYScatter.Location = new System.Drawing.Point(4, 22);
+            this.XYScatter.Name = "XYScatter";
+            this.XYScatter.Size = new System.Drawing.Size(792, 424);
+            this.XYScatter.TabIndex = 7;
+            this.XYScatter.Text = "XY Scatter";
+            this.XYScatter.UseVisualStyleBackColor = true;
+            // 
+            // XYScatterPlot
+            // 
+            this.XYScatterPlot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.XYScatterPlot.Location = new System.Drawing.Point(0, 0);
+            this.XYScatterPlot.Name = "XYScatterPlot";
+            this.XYScatterPlot.Size = new System.Drawing.Size(792, 424);
+            this.XYScatterPlot.TabIndex = 0;
+            // 
+            // XYDist
+            // 
+            this.XYDist.Controls.Add(this.XYDistPlot);
+            this.XYDist.Location = new System.Drawing.Point(4, 22);
+            this.XYDist.Name = "XYDist";
+            this.XYDist.Size = new System.Drawing.Size(792, 424);
+            this.XYDist.TabIndex = 8;
+            this.XYDist.Text = "XY Distribution";
+            this.XYDist.UseVisualStyleBackColor = true;
+            // 
+            // XYDistPlot
+            // 
+            this.XYDistPlot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.XYDistPlot.Location = new System.Drawing.Point(0, 0);
+            this.XYDistPlot.Name = "XYDistPlot";
+            this.XYDistPlot.Size = new System.Drawing.Size(792, 424);
+            this.XYDistPlot.TabIndex = 0;
             // 
             // Combo
             // 
@@ -162,42 +198,6 @@ namespace Inlinepositions
             this.YStdDevPlot.Size = new System.Drawing.Size(792, 424);
             this.YStdDevPlot.TabIndex = 0;
             // 
-            // XYScatter
-            // 
-            this.XYScatter.Controls.Add(this.XYScatterPlot);
-            this.XYScatter.Location = new System.Drawing.Point(4, 22);
-            this.XYScatter.Name = "XYScatter";
-            this.XYScatter.Size = new System.Drawing.Size(792, 424);
-            this.XYScatter.TabIndex = 7;
-            this.XYScatter.Text = "XY Scatter";
-            this.XYScatter.UseVisualStyleBackColor = true;
-            // 
-            // XYDist
-            // 
-            this.XYDist.Controls.Add(this.XYDistPlot);
-            this.XYDist.Location = new System.Drawing.Point(4, 22);
-            this.XYDist.Name = "XYDist";
-            this.XYDist.Size = new System.Drawing.Size(792, 424);
-            this.XYDist.TabIndex = 8;
-            this.XYDist.Text = "XY Distribution";
-            this.XYDist.UseVisualStyleBackColor = true;
-            // 
-            // XYScatterPlot
-            // 
-            this.XYScatterPlot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.XYScatterPlot.Location = new System.Drawing.Point(0, 0);
-            this.XYScatterPlot.Name = "XYScatterPlot";
-            this.XYScatterPlot.Size = new System.Drawing.Size(792, 424);
-            this.XYScatterPlot.TabIndex = 0;
-            // 
-            // XYDistPlot
-            // 
-            this.XYDistPlot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.XYDistPlot.Location = new System.Drawing.Point(0, 0);
-            this.XYDistPlot.Name = "XYDistPlot";
-            this.XYDistPlot.Size = new System.Drawing.Size(792, 424);
-            this.XYDistPlot.TabIndex = 0;
-            // 
             // frmMetroGraphs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -207,15 +207,14 @@ namespace Inlinepositions
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmMetroGraphs";
             this.Text = "File Name";
-            this.Load += new System.EventHandler(this.frmMetroGraphs_Load);
             this.tabControl.ResumeLayout(false);
+            this.XYScatter.ResumeLayout(false);
+            this.XYDist.ResumeLayout(false);
             this.Combo.ResumeLayout(false);
             this.XError.ResumeLayout(false);
             this.YError.ResumeLayout(false);
             this.XStdDev.ResumeLayout(false);
             this.YStdDev.ResumeLayout(false);
-            this.XYScatter.ResumeLayout(false);
-            this.XYDist.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

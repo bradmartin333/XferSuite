@@ -110,6 +110,20 @@ module Metro =
 
     let data (path:string) = reader path
 
+    let prints (data:Position[]) =
+        data
+        |> Array.map (fun x -> x.RR, x.RC, x.R, x.C)
+        |> Array.map (fun x -> string x)
+
+    let getPrint (index:string, data:Position[]) =
+        let info = index.[1..index.Length-2].Split(',')
+        let RR = int info.[0]
+        let RC = int info.[1]
+        let R = int info.[2]
+        let C = int info.[3]
+        data
+        |> Array.filter(fun x -> x.RR = RR && x.RC = RC && x.R = R && x.C = C)
+
     let XPos (data:Position[]) =
         data
         |> Array.map(fun x -> x.X)

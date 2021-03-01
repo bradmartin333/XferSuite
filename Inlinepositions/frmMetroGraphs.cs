@@ -66,10 +66,17 @@ namespace Inlinepositions
         {
             InitializeComponent();
             _data = data;
-        }
 
-        private void frmMetroGraphs_Load(object sender, EventArgs e)
-        {
+            string[] indices = Metro.prints(data);
+            prints.Add("FILLER"); // Make this list 1 index, not 0 index
+            foreach (string index in indices)
+            {
+                if (!prints.Contains(index))
+                {
+                    prints.Add(index);
+                }
+            }
+
             MakeXYScatter();
             MakeXYDist();
             MakeCombo();
@@ -77,10 +84,10 @@ namespace Inlinepositions
             MakeYError();
             MakeXStdDev();
             MakeYStdDev();
-            Refresh();
         }
 
         private Metro.Position[] _data;
+        List<string> prints = new List<string>();
 
         private void MakeXYScatter()
         {
