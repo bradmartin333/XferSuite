@@ -151,7 +151,7 @@ namespace XferSuite
                     return false;
             }
 
-            Inlinepositions.frmMetroGraphs MG = new Inlinepositions.frmMetroGraphs(data);
+            Inlinepositions.frmMetroGraphs MG = new Inlinepositions.frmMetroGraphs(data) { Text = new FileInfo(path).Name };
             MG.FormClosed += new FormClosedEventHandler(controlClosed);
             settings.controlsArr[idx] = MG;
             return true;

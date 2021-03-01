@@ -15,6 +15,53 @@ namespace Inlinepositions
 {
     public partial class frmMetroGraphs : Form
     {
+        private float _TargetSigma = 1.5F;
+        [
+            Category("User Parameters"),
+            Description("Print 3 Sigma values above this will be marked red"),
+            DisplayName("Target 3 Sigma")
+        ]
+        public float TargetSigma
+        {
+            get => _TargetSigma;
+            set => _TargetSigma = value;
+        }
+
+        private float _TargetYield = 1.5F;
+        [
+            Category("User Parameters"),
+            Description("Print %Yield below this will be marked red"),
+            DisplayName("Target %Yield")
+        ]
+        public float TargetYield
+        {
+            get => _TargetYield;
+            set => _TargetYield = value;
+        }
+
+        private float _Outliers = 1.5F;
+        [
+            Category("User Parameters"), 
+            Description("Positions within this range of the Threshold will be plotted, but not incorporated into the calculated statistics"), 
+            DisplayName("Outliers Filter")
+        ]
+        public float Outliers
+        {
+            get => _Outliers;
+            set => _Outliers = value;
+        }
+
+        private float _Threshold = 1.5F;
+        [
+            Category("User Parameters"),
+            Description("Positions with placement error greater than this value will be filtered out of the plotted data")
+        ]
+        public float Threshold
+        {
+            get => _Threshold;
+            set => _Threshold = value;
+        }
+
         public frmMetroGraphs(Metro.Position[] data)
         {
             InitializeComponent();
