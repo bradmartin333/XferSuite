@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapFlip", "..\MapFlip\MapFl
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ZRegistration", "..\ZRegistration\ZRegistration.vbproj", "{8DB48105-B268-42AF-A320-3A8EE0C42413}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inlinepositions", "..\Inlinepositions\Inlinepositions.csproj", "{6E6DB175-1C1F-46A3-AE9C-E93254E8F728}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8DB48105-B268-42AF-A320-3A8EE0C42413}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DB48105-B268-42AF-A320-3A8EE0C42413}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DB48105-B268-42AF-A320-3A8EE0C42413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E6DB175-1C1F-46A3-AE9C-E93254E8F728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E6DB175-1C1F-46A3-AE9C-E93254E8F728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E6DB175-1C1F-46A3-AE9C-E93254E8F728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E6DB175-1C1F-46A3-AE9C-E93254E8F728}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
