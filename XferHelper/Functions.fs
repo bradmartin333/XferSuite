@@ -11,6 +11,9 @@ module Stats =
     let stdDev (data:float[]) =
         Statistics.PopulationStandardDeviation(data)
 
+    let threeSig (data:float[]) =
+        Statistics.PopulationStandardDeviation(data) * 3.0
+
 module Metro =
     [<Literal>] 
     let CSVschema = "Inline_Trial\tImage_Number\tX_Position\tY_Position\tTarget_RR\tTarget_RC\tTarget_R\tTarget_C\tStamp_R\tStamp_C\tX_error\tY_error\tYield_Measure\tAlignment_Measure\tAngle_error"
@@ -135,12 +138,26 @@ module Metro =
     let XError (data:Position[]) =
         data
         |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
-        |> Array.map(fun x -> x.XE)
+        |> Array.map(fun x -> x.XE * 1e3)
 
     let YError (data:Position[]) =
         data
         |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
-        |> Array.map(fun x -> x.YE)
+        |> Array.map(fun x -> x.YE * 1e3)
+
+    let X3Sig (data:Position[]) =
+        data
+        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
+        |> Array.map(fun x -> x.XE * 1e3)
+        |> Statistics.StandardDeviation
+        |> fun x -> x * 3.0
+
+    let Y3Sig (data:Position[]) =
+        data
+        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
+        |> Array.map(fun x -> x.YE * 1e3)
+        |> Statistics.StandardDeviation
+        |> fun x -> x * 3.0
 
 module Zed =
     type Position = {Time:System.DateTime; X:float; Y:float; H:float}

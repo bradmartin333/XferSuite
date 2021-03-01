@@ -42,18 +42,18 @@ namespace Inlinepositions
             this.XErrorPlot = new ScottPlot.FormsPlot();
             this.YError = new System.Windows.Forms.TabPage();
             this.YErrorPlot = new ScottPlot.FormsPlot();
-            this.XStdDev = new System.Windows.Forms.TabPage();
-            this.XStdDevPlot = new ScottPlot.FormsPlot();
-            this.YStdDev = new System.Windows.Forms.TabPage();
-            this.YStdDevPlot = new ScottPlot.FormsPlot();
+            this.X3Sig = new System.Windows.Forms.TabPage();
+            this.X3SigPlot = new ScottPlot.FormsPlot();
+            this.Y3Sig = new System.Windows.Forms.TabPage();
+            this.Y3SigPlot = new ScottPlot.FormsPlot();
             this.tabControl.SuspendLayout();
             this.XYScatter.SuspendLayout();
             this.XYDist.SuspendLayout();
             this.Combo.SuspendLayout();
             this.XError.SuspendLayout();
             this.YError.SuspendLayout();
-            this.XStdDev.SuspendLayout();
-            this.YStdDev.SuspendLayout();
+            this.X3Sig.SuspendLayout();
+            this.Y3Sig.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -63,8 +63,8 @@ namespace Inlinepositions
             this.tabControl.Controls.Add(this.Combo);
             this.tabControl.Controls.Add(this.XError);
             this.tabControl.Controls.Add(this.YError);
-            this.tabControl.Controls.Add(this.XStdDev);
-            this.tabControl.Controls.Add(this.YStdDev);
+            this.tabControl.Controls.Add(this.X3Sig);
+            this.tabControl.Controls.Add(this.Y3Sig);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
@@ -95,7 +95,7 @@ namespace Inlinepositions
             this.XYDist.Controls.Add(this.XYDistPlot);
             this.XYDist.Location = new System.Drawing.Point(4, 22);
             this.XYDist.Name = "XYDist";
-            this.XYDist.Size = new System.Drawing.Size(792, 424);
+            this.XYDist.Size = new System.Drawing.Size(792, 287);
             this.XYDist.TabIndex = 8;
             this.XYDist.Text = "XY Distribution";
             this.XYDist.UseVisualStyleBackColor = true;
@@ -105,7 +105,7 @@ namespace Inlinepositions
             this.XYDistPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.XYDistPlot.Location = new System.Drawing.Point(0, 0);
             this.XYDistPlot.Name = "XYDistPlot";
-            this.XYDistPlot.Size = new System.Drawing.Size(792, 424);
+            this.XYDistPlot.Size = new System.Drawing.Size(792, 287);
             this.XYDistPlot.TabIndex = 0;
             // 
             // Combo
@@ -113,7 +113,7 @@ namespace Inlinepositions
             this.Combo.Controls.Add(this.ComboPlot);
             this.Combo.Location = new System.Drawing.Point(4, 22);
             this.Combo.Name = "Combo";
-            this.Combo.Size = new System.Drawing.Size(792, 424);
+            this.Combo.Size = new System.Drawing.Size(792, 287);
             this.Combo.TabIndex = 2;
             this.Combo.Text = "Combo";
             this.Combo.UseVisualStyleBackColor = true;
@@ -123,7 +123,7 @@ namespace Inlinepositions
             this.ComboPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ComboPlot.Location = new System.Drawing.Point(0, 0);
             this.ComboPlot.Name = "ComboPlot";
-            this.ComboPlot.Size = new System.Drawing.Size(792, 424);
+            this.ComboPlot.Size = new System.Drawing.Size(792, 287);
             this.ComboPlot.TabIndex = 0;
             // 
             // XError
@@ -131,7 +131,7 @@ namespace Inlinepositions
             this.XError.Controls.Add(this.XErrorPlot);
             this.XError.Location = new System.Drawing.Point(4, 22);
             this.XError.Name = "XError";
-            this.XError.Size = new System.Drawing.Size(792, 424);
+            this.XError.Size = new System.Drawing.Size(792, 287);
             this.XError.TabIndex = 3;
             this.XError.Text = "X Error";
             this.XError.UseVisualStyleBackColor = true;
@@ -141,7 +141,7 @@ namespace Inlinepositions
             this.XErrorPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.XErrorPlot.Location = new System.Drawing.Point(0, 0);
             this.XErrorPlot.Name = "XErrorPlot";
-            this.XErrorPlot.Size = new System.Drawing.Size(792, 424);
+            this.XErrorPlot.Size = new System.Drawing.Size(792, 287);
             this.XErrorPlot.TabIndex = 0;
             // 
             // YError
@@ -149,7 +149,7 @@ namespace Inlinepositions
             this.YError.Controls.Add(this.YErrorPlot);
             this.YError.Location = new System.Drawing.Point(4, 22);
             this.YError.Name = "YError";
-            this.YError.Size = new System.Drawing.Size(792, 424);
+            this.YError.Size = new System.Drawing.Size(792, 287);
             this.YError.TabIndex = 4;
             this.YError.Text = "Y Error";
             this.YError.UseVisualStyleBackColor = true;
@@ -159,44 +159,44 @@ namespace Inlinepositions
             this.YErrorPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.YErrorPlot.Location = new System.Drawing.Point(0, 0);
             this.YErrorPlot.Name = "YErrorPlot";
-            this.YErrorPlot.Size = new System.Drawing.Size(792, 424);
+            this.YErrorPlot.Size = new System.Drawing.Size(792, 287);
             this.YErrorPlot.TabIndex = 0;
             // 
-            // XStdDev
+            // X3Sig
             // 
-            this.XStdDev.Controls.Add(this.XStdDevPlot);
-            this.XStdDev.Location = new System.Drawing.Point(4, 22);
-            this.XStdDev.Name = "XStdDev";
-            this.XStdDev.Size = new System.Drawing.Size(792, 424);
-            this.XStdDev.TabIndex = 5;
-            this.XStdDev.Text = "X StdDev";
-            this.XStdDev.UseVisualStyleBackColor = true;
+            this.X3Sig.Controls.Add(this.X3SigPlot);
+            this.X3Sig.Location = new System.Drawing.Point(4, 22);
+            this.X3Sig.Name = "X3Sig";
+            this.X3Sig.Size = new System.Drawing.Size(792, 287);
+            this.X3Sig.TabIndex = 5;
+            this.X3Sig.Text = "X 3Sigma";
+            this.X3Sig.UseVisualStyleBackColor = true;
             // 
-            // XStdDevPlot
+            // X3SigPlot
             // 
-            this.XStdDevPlot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.XStdDevPlot.Location = new System.Drawing.Point(0, 0);
-            this.XStdDevPlot.Name = "XStdDevPlot";
-            this.XStdDevPlot.Size = new System.Drawing.Size(792, 424);
-            this.XStdDevPlot.TabIndex = 0;
+            this.X3SigPlot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.X3SigPlot.Location = new System.Drawing.Point(0, 0);
+            this.X3SigPlot.Name = "X3SigPlot";
+            this.X3SigPlot.Size = new System.Drawing.Size(792, 287);
+            this.X3SigPlot.TabIndex = 0;
             // 
-            // YStdDev
+            // Y3Sig
             // 
-            this.YStdDev.Controls.Add(this.YStdDevPlot);
-            this.YStdDev.Location = new System.Drawing.Point(4, 22);
-            this.YStdDev.Name = "YStdDev";
-            this.YStdDev.Size = new System.Drawing.Size(792, 424);
-            this.YStdDev.TabIndex = 6;
-            this.YStdDev.Text = "Y StdDev";
-            this.YStdDev.UseVisualStyleBackColor = true;
+            this.Y3Sig.Controls.Add(this.Y3SigPlot);
+            this.Y3Sig.Location = new System.Drawing.Point(4, 22);
+            this.Y3Sig.Name = "Y3Sig";
+            this.Y3Sig.Size = new System.Drawing.Size(792, 287);
+            this.Y3Sig.TabIndex = 6;
+            this.Y3Sig.Text = "Y 3Sigma";
+            this.Y3Sig.UseVisualStyleBackColor = true;
             // 
-            // YStdDevPlot
+            // Y3SigPlot
             // 
-            this.YStdDevPlot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.YStdDevPlot.Location = new System.Drawing.Point(0, 0);
-            this.YStdDevPlot.Name = "YStdDevPlot";
-            this.YStdDevPlot.Size = new System.Drawing.Size(792, 424);
-            this.YStdDevPlot.TabIndex = 0;
+            this.Y3SigPlot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Y3SigPlot.Location = new System.Drawing.Point(0, 0);
+            this.Y3SigPlot.Name = "Y3SigPlot";
+            this.Y3SigPlot.Size = new System.Drawing.Size(792, 287);
+            this.Y3SigPlot.TabIndex = 0;
             // 
             // frmMetroGraphs
             // 
@@ -213,8 +213,8 @@ namespace Inlinepositions
             this.Combo.ResumeLayout(false);
             this.XError.ResumeLayout(false);
             this.YError.ResumeLayout(false);
-            this.XStdDev.ResumeLayout(false);
-            this.YStdDev.ResumeLayout(false);
+            this.X3Sig.ResumeLayout(false);
+            this.Y3Sig.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -228,10 +228,10 @@ namespace Inlinepositions
         private ScottPlot.FormsPlot XErrorPlot;
         private System.Windows.Forms.TabPage YError;
         private ScottPlot.FormsPlot YErrorPlot;
-        private System.Windows.Forms.TabPage XStdDev;
-        private ScottPlot.FormsPlot XStdDevPlot;
-        private System.Windows.Forms.TabPage YStdDev;
-        private ScottPlot.FormsPlot YStdDevPlot;
+        private System.Windows.Forms.TabPage X3Sig;
+        private ScottPlot.FormsPlot X3SigPlot;
+        private System.Windows.Forms.TabPage Y3Sig;
+        private ScottPlot.FormsPlot Y3SigPlot;
         private System.Windows.Forms.TabPage XYScatter;
         private ScottPlot.FormsPlot XYScatterPlot;
         private System.Windows.Forms.TabPage XYDist;
