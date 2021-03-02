@@ -116,7 +116,7 @@ namespace XferSuite
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(792, 424);
+            this.tabPage2.Size = new System.Drawing.Size(1002, 355);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Histogram";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -127,7 +127,7 @@ namespace XferSuite
             this.histogramPlotX.Location = new System.Drawing.Point(3, 3);
             this.histogramPlotX.Name = "histogramPlotX";
             this.histogramPlotX.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.histogramPlotX.Size = new System.Drawing.Size(387, 412);
+            this.histogramPlotX.Size = new System.Drawing.Size(492, 343);
             this.histogramPlotX.TabIndex = 0;
             this.histogramPlotX.Text = "plotView1";
             this.histogramPlotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -232,16 +232,16 @@ namespace XferSuite
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(786, 418);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(996, 349);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // histogramPlotY
             // 
             this.histogramPlotY.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.histogramPlotY.Location = new System.Drawing.Point(396, 3);
+            this.histogramPlotY.Location = new System.Drawing.Point(501, 3);
             this.histogramPlotY.Name = "histogramPlotY";
             this.histogramPlotY.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.histogramPlotY.Size = new System.Drawing.Size(387, 412);
+            this.histogramPlotY.Size = new System.Drawing.Size(492, 343);
             this.histogramPlotY.TabIndex = 1;
             this.histogramPlotY.Text = "plotView1";
             this.histogramPlotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;

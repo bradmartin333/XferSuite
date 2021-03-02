@@ -64,6 +64,22 @@ namespace XferSuite
             }
         }
 
+        private int _NumBins = 50;
+        [
+            Category("User Parameters"),
+            Description("Number of bins in histogram plots"),
+            DisplayName("Histogram Bin Count")
+        ]
+        public int NumBins
+        {
+            get => _NumBins;
+            set
+            {
+                _NumBins = value;
+                MakePlots();
+            }
+        }
+
         public MetroGraphs(Metro.Position[] data)
         {
             InitializeComponent();
@@ -90,8 +106,8 @@ namespace XferSuite
             MakePlots();
         }
 
-        private Metro.Position[] _raw;
-        private Metro.Position[] _data;
+        private Metro.Position[] _raw; // gets split into data and missing
+        private Metro.Position[] _data; // gets split into pass and fail
         private Metro.Position[] _missing;
         private Metro.Position[] _pass;
         private Metro.Position[] _fail;
@@ -102,6 +118,10 @@ namespace XferSuite
             Metro.Rescore(_data, Threshold);
             makeScatterPlot();
             makeErrorScatterPlot();
+            makeHistograms();
+            makeBoxPlots();
+            makeSigmaPlots();
+            makeComboPlot();
         }
 
         private void makeScatterPlot()
@@ -198,6 +218,36 @@ namespace XferSuite
             float PYld = (_pass.Length + _fail.Length) / (float) _raw.Length;
             errorScatter.Title = string.Format("Func. Yield: {0}   Print Yield: {1}", FYld.ToString("p"), PYld.ToString("p"));
             errorScatterPlot.Model = errorScatter;
+        }
+
+        private void makeHistograms()
+        {
+            PlotModel histogramX = new PlotModel() { TitleFontSize = 15 };
+            histogramPlotX.Model = histogramX;
+            PlotModel histogramY = new PlotModel() { TitleFontSize = 15 };
+            histogramPlotY.Model = histogramY;
+        }
+
+        private void makeBoxPlots()
+        {
+            PlotModel boxplotX = new PlotModel() { TitleFontSize = 15 };
+            errorBoxplotX.Model = boxplotX;
+            PlotModel boxplotY = new PlotModel() { TitleFontSize = 15 };
+            errorBoxplotY.Model = boxplotY;
+        }
+
+        private void makeSigmaPlots()
+        {
+            PlotModel sigmaX = new PlotModel() { TitleFontSize = 15 };
+            sigmaPlotX.Model = sigmaX;
+            PlotModel sigmaY = new PlotModel() { TitleFontSize = 15 };
+            sigmaPlotY.Model = sigmaY;
+        }
+
+        private void makeComboPlot()
+        {
+            PlotModel combo= new PlotModel() { TitleFontSize = 15 };
+            comboPlot.Model = combo;
         }
     }
 }
