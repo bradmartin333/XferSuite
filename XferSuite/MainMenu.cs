@@ -52,7 +52,7 @@ namespace XferSuite
                         {
                             break;
                         }
-                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect(path) { Location = PointToScreen(btn.Location) };
+                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect() { Path = path, Location = PointToScreen(btn.Location) };
                         ZS.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = ZS;
                         break;
@@ -82,7 +82,7 @@ namespace XferSuite
                         settings.controlsArr[idx] = DFT;
                         break;
                     case 6:
-                        MapFlip.frmMapFlipMain MF = new MapFlip.frmMapFlipMain();
+                        MapFlip MF = new MapFlip();
                         MF.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = MF;
                         break;
@@ -151,7 +151,7 @@ namespace XferSuite
                     return false;
             }
 
-            Inlinepositions.frmMetroGraphs MG = new Inlinepositions.frmMetroGraphs(data) { Text = new FileInfo(path).Name };
+            MetroGraphs MG = new MetroGraphs(data) { Text = new FileInfo(path).Name };
             MG.FormClosed += new FormClosedEventHandler(controlClosed);
             settings.controlsArr[idx] = MG;
             return true;

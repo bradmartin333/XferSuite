@@ -10,9 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MapFlip
+namespace XferSuite
 {
-    public partial class frmMapFlipMain : Form
+    public partial class MapFlip : Form
     {
         List<Panel> Panels = new List<Panel>();
         Color[] PnlColors = new Color[4];
@@ -25,7 +25,12 @@ namespace MapFlip
         public bool WordWrapping
         {
             get => _WordWrapping;
-            set => _WordWrapping = value;
+            set
+            {
+                _WordWrapping = value;
+                rtbIn.WordWrap = _WordWrapping;
+                rtbOut.WordWrap = _WordWrapping;
+            }
         }
 
         private float _Zoom;
@@ -33,10 +38,15 @@ namespace MapFlip
         public float Zoom
         {
             get => _Zoom;
-            set => _Zoom = value;
+            set
+            {
+                _Zoom = value;
+                rtbIn.ZoomFactor = _Zoom;
+                rtbOut.ZoomFactor = _Zoom;
+            }
         }
 
-        public frmMapFlipMain()
+        public MapFlip()
         {
             InitializeComponent();
 
@@ -261,14 +271,6 @@ namespace MapFlip
                 text += i.ToString();
             }
             File.WriteAllText("last.txt", text);
-        }
-
-        private void btnLoadSettings_Click(object sender, EventArgs e)
-        {
-            rtbIn.WordWrap = _WordWrapping;
-            rtbOut.WordWrap = _WordWrapping;
-            rtbIn.ZoomFactor = _Zoom;
-            rtbOut.ZoomFactor = _Zoom;
         }
     }
 }
