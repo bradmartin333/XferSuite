@@ -1,4 +1,5 @@
 ﻿using OxyPlot;
+using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
@@ -48,26 +49,10 @@ namespace XferSuite
             }
         }
 
-        private float _Outliers = 0F;
-        [
-            Category("User Parameters"),
-            Description("Positions within this range of the Threshold will be plotted, but not incorporated into the calculated statistics"),
-            DisplayName("Outliers Filter")
-        ]
-        public float Outliers
-        {
-            get => _Outliers;
-            set
-            {
-                _Outliers = value;
-                MakePlots();
-            }
-        }
-
         private float _Threshold = 1.5F;
         [
             Category("User Parameters"),
-            Description("Positions with placement error greater than this value will be filtered out of the plotted data")
+            Description("Positions with placement error greater than this micron value will be filtered out of the plotted data")
         ]
         public float Threshold
         {
@@ -79,63 +64,140 @@ namespace XferSuite
             }
         }
 
-        private bool _UseParams = false;
-        [
-            Category("User Parameters"),
-            Description("Use the Threshold and Outliers values entered here"),
-            DisplayName("Use Custom Parameters")
-        ]
-        public bool UseParams
-        {
-            get => _UseParams;
-            set
-            {
-                _UseParams = value;
-                MakePlots();
-            }
-        }
-
         public MetroGraphs(Metro.Position[] data)
         {
             InitializeComponent();
+            _raw = data;
             _data = data;
             Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_data);
             _data = _splitData.Item2;
             _missing = _splitData.Item1;
 
-            string[] indices = Metro.prints(data);
+            string[] indices = Metro.prints(_data);
+            int printIdx = 1;
+            int posIdx = 0;
             foreach (string index in indices)
             {
                 if (!prints.Contains(index))
                 {
                     prints.Add(index);
+                    printIdx += 1;
                 }
+                _data[posIdx].PrintNum = printIdx;
+                posIdx += 1;
             }
 
             MakePlots();
         }
 
+        private Metro.Position[] _raw;
         private Metro.Position[] _data;
         private Metro.Position[] _missing;
+        private Metro.Position[] _pass;
+        private Metro.Position[] _fail;
         List<string> prints = new List<string>();
 
         private void MakePlots()
         {
+            Metro.Rescore(_data, Threshold);
             makeScatterPlot();
+            makeErrorScatterPlot();
         }
 
         private void makeScatterPlot()
         {
-            double[] testX = Metro.XPos(_data);
-            double[] testY = Metro.YPos(_data);
-            PlotModel testModel = new PlotModel();
-            ScatterSeries testSeries = new ScatterSeries();
-            for (int i = 0; i < _data.Length; i++)
+            Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
+            _pass = _scoredData.Item2;
+            _fail = _scoredData.Item1;
+
+            PlotModel scatter = new PlotModel() { TitleFontSize = 15 }; 
+            
+            double[] passX = Metro.XPos(_pass);
+            double[] passY = Metro.YPos(_pass);
+            ScatterSeries passSeries = new ScatterSeries() { MarkerFill = OxyColors.Green, MarkerSize = 2 };
+            for (int i = 0; i < _pass.Length; i++)
             {
-                testSeries.Points.Add(new ScatterPoint(testX[i], testY[i]));
+                passSeries.Points.Add(new ScatterPoint(passX[i], passY[i]));
             }
-            testModel.Series.Add(testSeries);
-            scatterPlot.Model = testModel;
+            scatter.Series.Add(passSeries);
+
+            double[] failX = Metro.XPos(_fail);
+            double[] failY = Metro.YPos(_fail);
+            ScatterSeries failSeries = new ScatterSeries() { MarkerFill = OxyColors.Gold, MarkerSize = 1 };
+            for (int i = 0; i < _fail.Length; i++)
+            {
+                failSeries.Points.Add(new ScatterPoint(failX[i], failY[i]));
+            }
+            scatter.Series.Add(failSeries);
+
+            double[] missingX = Metro.XPos(_missing);
+            double[] missingY = Metro.YPos(_missing);
+            ScatterSeries missingSeries = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = 1 };
+            for (int i = 0; i < _missing.Length; i++)
+            {
+                missingSeries.Points.Add(new ScatterPoint(missingX[i], missingY[i]));
+            }
+            scatter.Series.Add(missingSeries);
+
+            LinearAxis myXaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                IsAxisVisible = true,
+                StartPosition = 1,
+                EndPosition = 0,
+                IsZoomEnabled = true,
+                IsPanEnabled = true,
+                Title = "X Position (mm)"
+            };
+
+            LinearAxis myYaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                IsAxisVisible = true,
+                StartPosition = 1,
+                EndPosition = 0,
+                IsZoomEnabled = true,
+                IsPanEnabled = true,
+                Title = "Y Position (mm)"
+            };
+
+            scatter.Axes.Add(myXaxis);
+            scatter.Axes.Add(myYaxis);
+            scatter.Title = string.Format("{0} Pass   {1} Fail   {2} Missing", _scoredData.Item2.Length, _scoredData.Item1.Length, _missing.Length);
+            scatterPlot.Model = scatter;
+        }
+
+        private void makeErrorScatterPlot()
+        {
+            PlotModel errorScatter = new PlotModel() { TitleFontSize = 15 };
+            double[] errorX = Metro.XError(_pass);
+            double[] errorY = Metro.YError(_pass);
+            ScatterSeries errorScatterSeries = new ScatterSeries() { MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Blue, MarkerSize = 1 };
+            for (int i = 0; i < _pass.Length; i++)
+            {
+                errorScatterSeries.Points.Add(new ScatterPoint(errorX[i], errorY[i]));
+            }
+            errorScatter.Series.Add(errorScatterSeries);
+
+            LinearAxis myXaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "X Error Distance (microns)"
+            };
+
+            LinearAxis myYaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "Y Error Distance (microns)"
+            };
+
+            errorScatter.Axes.Add(myXaxis);
+            errorScatter.Axes.Add(myYaxis);
+
+            float FYld = _pass.Length / (float) _raw.Length;
+            float PYld = (_pass.Length + _fail.Length) / (float) _raw.Length;
+            errorScatter.Title = string.Format("Func. Yield: {0}   Print Yield: {1}", FYld.ToString("p"), PYld.ToString("p"));
+            errorScatterPlot.Model = errorScatter;
         }
     }
 }

@@ -37,7 +37,8 @@ module Metro =
             else
                 3 //Fail
 
-    type Position = {Num:int;
+    type Position = {mutable PrintNum:int;
+                    Num:int;
                     X:float;
                     Y:float;
                     RR:int;
@@ -49,7 +50,7 @@ module Metro =
                     XE:float;
                     YE:float;
                     Yld:string;
-                    Aln:string;
+                    mutable Aln:string;
                     AE:float}
 
     let toPosition (csvData:string) =
@@ -90,7 +91,8 @@ module Metro =
         let AE = 
             if single then float columns.[10]
             else float columns.[14]
-        {Num = Num;
+        {PrintNum = 0;
+        Num = Num;
         X = X;
         Y = Y;
         RR = RR;
@@ -117,9 +119,9 @@ module Metro =
         data
         |> Array.partition(fun x -> x.Yld = " FAIL " && x.Aln = " NA ")
 
-    let failData (data:Position[], threshold:float) =
+    let failData (data:Position[]) =
         data
-        |> Array.partition(fun x -> x.XE > threshold && x.YE > threshold)
+        |> Array.partition(fun x -> x.Yld = " PASS " && x.Aln = " FAIL ")
 
     let prints (data:Position[]) =
         data
@@ -143,29 +145,33 @@ module Metro =
         data
         |> Array.map(fun x -> x.Y)
 
-    let XError (data:Position[], threshold:float) =
+    let XError (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.XE <= threshold && x.YE <= threshold)
         |> Array.map(fun x -> x.XE * 1e3)
 
-    let YError (data:Position[], threshold:float) =
+    let YError (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.XE <= threshold && x.YE <= threshold)
         |> Array.map(fun x -> x.YE * 1e3)
 
-    let X3Sig (data:Position[], threshold:float) =
+    let X3Sig (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.XE <= threshold && x.YE <= threshold)
         |> Array.map(fun x -> x.XE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
 
-    let Y3Sig (data:Position[], threshold:float) =
+    let Y3Sig (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.XE <= threshold && x.YE <= threshold)
         |> Array.map(fun x -> x.YE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
+
+    let Rescore (data:Position[], threshold:float) =
+        for x in data do
+            if (Math.Abs(x.XE) > threshold / 1e3 && Math.Abs(x.YE) > threshold / 1e3) then
+                x.Aln <- " FAIL "
+            else
+                x.Aln <- " PASS "
+        data
 
 module Zed =
     type Position = {Time:System.DateTime; X:float; Y:float; H:float}
