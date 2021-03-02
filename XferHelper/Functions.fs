@@ -113,6 +113,14 @@ module Metro =
 
     let data (path:string) = reader path
 
+    let missingData (data:Position[]) =
+        data
+        |> Array.partition(fun x -> x.Yld = " FAIL " && x.Aln = " NA ")
+
+    let failData (data:Position[], threshold:float) =
+        data
+        |> Array.partition(fun x -> x.XE > threshold && x.YE > threshold)
+
     let prints (data:Position[]) =
         data
         |> Array.map (fun x -> x.RR, x.RC, x.R, x.C)
@@ -135,26 +143,26 @@ module Metro =
         data
         |> Array.map(fun x -> x.Y)
 
-    let XError (data:Position[]) =
+    let XError (data:Position[], threshold:float) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
+        |> Array.filter(fun x -> x.XE <= threshold && x.YE <= threshold)
         |> Array.map(fun x -> x.XE * 1e3)
 
-    let YError (data:Position[]) =
+    let YError (data:Position[], threshold:float) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
+        |> Array.filter(fun x -> x.XE <= threshold && x.YE <= threshold)
         |> Array.map(fun x -> x.YE * 1e3)
 
-    let X3Sig (data:Position[]) =
+    let X3Sig (data:Position[], threshold:float) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
+        |> Array.filter(fun x -> x.XE <= threshold && x.YE <= threshold)
         |> Array.map(fun x -> x.XE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
 
-    let Y3Sig (data:Position[]) =
+    let Y3Sig (data:Position[], threshold:float) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
+        |> Array.filter(fun x -> x.XE <= threshold && x.YE <= threshold)
         |> Array.map(fun x -> x.YE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0

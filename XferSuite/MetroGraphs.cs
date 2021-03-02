@@ -1,8 +1,11 @@
-﻿using System;
+﻿using OxyPlot;
+using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -96,6 +99,9 @@ namespace XferSuite
         {
             InitializeComponent();
             _data = data;
+            Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_data);
+            _data = _splitData.Item2;
+            _missing = _splitData.Item1;
 
             string[] indices = Metro.prints(data);
             foreach (string index in indices)
@@ -110,51 +116,26 @@ namespace XferSuite
         }
 
         private Metro.Position[] _data;
+        private Metro.Position[] _missing;
         List<string> prints = new List<string>();
 
         private void MakePlots()
         {
-
+            makeScatterPlot();
         }
 
-        private void MakeXYScatter()
+        private void makeScatterPlot()
         {
-
-        }
-
-        private void MakeXYDist()
-        {
-
-        }
-
-        private void MakeYield()
-        {
-
-        }
-
-        private void MakeXError(int i, Color color)
-        {
-
-        }
-
-        private void MakeYError(int i, Color color)
-        {
-
-        }
-
-        private void MakeX3Sig()
-        {
-
-        }
-
-        private void MakeY3Sig()
-        {
-
-        }
-
-        private void FillArray(ref double[] arr, int num)
-        {
-
+            double[] testX = Metro.XPos(_data);
+            double[] testY = Metro.YPos(_data);
+            PlotModel testModel = new PlotModel();
+            ScatterSeries testSeries = new ScatterSeries();
+            for (int i = 0; i < _data.Length; i++)
+            {
+                testSeries.Points.Add(new ScatterPoint(testX[i], testY[i]));
+            }
+            testModel.Series.Add(testSeries);
+            scatterPlot.Model = testModel;
         }
     }
 }
