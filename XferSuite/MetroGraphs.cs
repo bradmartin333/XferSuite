@@ -223,9 +223,23 @@ namespace XferSuite
         private void makeHistograms()
         {
             PlotModel histogramX = new PlotModel() { TitleFontSize = 15 };
+            double[] dataX = Metro.XError(_pass);
+            histogramX.Series.Add(makeHistogram(dataX));
             histogramPlotX.Model = histogramX;
+
             PlotModel histogramY = new PlotModel() { TitleFontSize = 15 };
+            double[] dataY = Metro.YError(_pass);
+            histogramY.Series.Add(makeHistogram(dataY));
             histogramPlotY.Model = histogramY;
+        }
+
+        private HistogramSeries makeHistogram(double[] data)
+        {
+            HistogramSeries histogramSeries = new HistogramSeries() { FillColor = OxyColors.DarkBlue };
+            BinningOptions binningOptions = new BinningOptions(BinningOutlierMode.CountOutliers, BinningIntervalType.InclusiveUpperBound, BinningExtremeValueMode.IncludeExtremeValues);
+            var binBreaks = HistogramHelpers.CreateUniformBins(data.Min(), data.Max(), NumBins);
+            histogramSeries.Items.AddRange(HistogramHelpers.Collect(data, binBreaks, binningOptions));
+            return histogramSeries;
         }
 
         private void makeBoxPlots()
