@@ -57,8 +57,9 @@ namespace XferSuite
             // 
             this.propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGrid.Location = new System.Drawing.Point(5, 3);
-            this.propertyGrid.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.propertyGrid.Margin = new System.Windows.Forms.Padding(2);
             this.propertyGrid.Name = "propertyGrid";
+            this.propertyGrid.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
             this.tableLayoutPanel.SetRowSpan(this.propertyGrid, 7);
             this.propertyGrid.Size = new System.Drawing.Size(296, 423);
             this.propertyGrid.TabIndex = 0;
@@ -80,7 +81,7 @@ namespace XferSuite
             this.tableLayoutPanel.Controls.Add(this.button9, 2, 7);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 9;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 0.295858F));
@@ -107,7 +108,7 @@ namespace XferSuite
             this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Location = new System.Drawing.Point(305, 3);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(51, 57);
             this.button1.TabIndex = 1;
@@ -125,7 +126,7 @@ namespace XferSuite
             this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Location = new System.Drawing.Point(305, 64);
-            this.button3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(51, 57);
             this.button3.TabIndex = 3;
@@ -143,7 +144,7 @@ namespace XferSuite
             this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.Location = new System.Drawing.Point(305, 125);
-            this.button4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(51, 57);
             this.button4.TabIndex = 4;
@@ -161,7 +162,7 @@ namespace XferSuite
             this.button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button5.Location = new System.Drawing.Point(305, 186);
-            this.button5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button5.Margin = new System.Windows.Forms.Padding(2);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(51, 57);
             this.button5.TabIndex = 5;
@@ -179,7 +180,7 @@ namespace XferSuite
             this.button6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.Location = new System.Drawing.Point(305, 247);
-            this.button6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button6.Margin = new System.Windows.Forms.Padding(2);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(51, 57);
             this.button6.TabIndex = 6;
@@ -197,7 +198,7 @@ namespace XferSuite
             this.button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Location = new System.Drawing.Point(305, 308);
-            this.button7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button7.Margin = new System.Windows.Forms.Padding(2);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(51, 57);
             this.button7.TabIndex = 7;
@@ -215,7 +216,7 @@ namespace XferSuite
             this.button9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button9.Location = new System.Drawing.Point(305, 369);
-            this.button9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button9.Margin = new System.Windows.Forms.Padding(2);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(51, 57);
             this.button9.TabIndex = 9;
@@ -230,7 +231,7 @@ namespace XferSuite
             this.ClientSize = new System.Drawing.Size(362, 431);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Settings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";

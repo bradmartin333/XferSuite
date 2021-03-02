@@ -60,7 +60,7 @@ namespace XferSuite
             this.tableLayoutPanel.Controls.Add(this.btnInlinepositions, 0, 0);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 3;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -76,11 +76,11 @@ namespace XferSuite
             this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSettings.FlatAppearance.BorderSize = 0;
-            this.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PowderBlue;
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSettings.Location = new System.Drawing.Point(323, 103);
-            this.btnSettings.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnSettings.Margin = new System.Windows.Forms.Padding(8);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(92, 79);
             this.btnSettings.TabIndex = 11;
@@ -99,7 +99,7 @@ namespace XferSuite
             this.btnMapFlip.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnMapFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMapFlip.Location = new System.Drawing.Point(218, 103);
-            this.btnMapFlip.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnMapFlip.Margin = new System.Windows.Forms.Padding(8);
             this.btnMapFlip.Name = "btnMapFlip";
             this.btnMapFlip.Size = new System.Drawing.Size(89, 79);
             this.btnMapFlip.TabIndex = 10;
@@ -119,7 +119,7 @@ namespace XferSuite
             this.btnDataFileTree.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnDataFileTree.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDataFileTree.Location = new System.Drawing.Point(113, 103);
-            this.btnDataFileTree.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnDataFileTree.Margin = new System.Windows.Forms.Padding(8);
             this.btnDataFileTree.Name = "btnDataFileTree";
             this.btnDataFileTree.Size = new System.Drawing.Size(89, 79);
             this.btnDataFileTree.TabIndex = 8;
@@ -139,7 +139,7 @@ namespace XferSuite
             this.btnFileParse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnFileParse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFileParse.Location = new System.Drawing.Point(8, 103);
-            this.btnFileParse.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnFileParse.Margin = new System.Windows.Forms.Padding(8);
             this.btnFileParse.Name = "btnFileParse";
             this.btnFileParse.Size = new System.Drawing.Size(89, 79);
             this.btnFileParse.TabIndex = 7;
@@ -159,7 +159,7 @@ namespace XferSuite
             this.btnPrintCycle.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnPrintCycle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPrintCycle.Location = new System.Drawing.Point(323, 8);
-            this.btnPrintCycle.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnPrintCycle.Margin = new System.Windows.Forms.Padding(8);
             this.btnPrintCycle.Name = "btnPrintCycle";
             this.btnPrintCycle.Size = new System.Drawing.Size(92, 79);
             this.btnPrintCycle.TabIndex = 6;
@@ -179,7 +179,7 @@ namespace XferSuite
             this.btnFingerprint.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnFingerprint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFingerprint.Location = new System.Drawing.Point(218, 8);
-            this.btnFingerprint.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnFingerprint.Margin = new System.Windows.Forms.Padding(8);
             this.btnFingerprint.Name = "btnFingerprint";
             this.btnFingerprint.Size = new System.Drawing.Size(89, 79);
             this.btnFingerprint.TabIndex = 5;
@@ -199,7 +199,7 @@ namespace XferSuite
             this.btnZreg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnZreg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnZreg.Location = new System.Drawing.Point(113, 8);
-            this.btnZreg.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnZreg.Margin = new System.Windows.Forms.Padding(8);
             this.btnZreg.Name = "btnZreg";
             this.btnZreg.Size = new System.Drawing.Size(89, 79);
             this.btnZreg.TabIndex = 4;
@@ -219,7 +219,7 @@ namespace XferSuite
             this.btnInlinepositions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnInlinepositions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInlinepositions.Location = new System.Drawing.Point(8, 8);
-            this.btnInlinepositions.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnInlinepositions.Margin = new System.Windows.Forms.Padding(8);
             this.btnInlinepositions.Name = "btnInlinepositions";
             this.btnInlinepositions.Size = new System.Drawing.Size(89, 79);
             this.btnInlinepositions.TabIndex = 2;
@@ -234,9 +234,10 @@ namespace XferSuite
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(423, 190);
             this.Controls.Add(this.tableLayoutPanel);
+            this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XferSuite";

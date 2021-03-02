@@ -36,11 +36,15 @@ namespace XferSuite
             int idx = int.Parse(btn.Tag.ToString());
             string path = null;
 
-            if (settings.controlsArr[idx] == null || ((Form)settings.controlsArr[idx]).IsDisposed == true)
+            if (settings.controlsArr[idx] == null || ((Form)settings.controlsArr[idx]).IsDisposed == true || idx == 0)
             {
                 switch (idx)
                 {
                     case 0:
+                        if (!InitMetroGraphs(idx))
+                        {
+                            break;
+                        }
                         break;
                     case 1:
                         path = OpenFile("Open a HeightSensorLog File");
@@ -48,7 +52,7 @@ namespace XferSuite
                         {
                             break;
                         }
-                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect(path) { Location = PointToScreen(btn.Location) };
+                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect() { Path = path, Location = PointToScreen(btn.Location) };
                         ZS.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = ZS;
                         break;
@@ -78,7 +82,7 @@ namespace XferSuite
                         settings.controlsArr[idx] = DFT;
                         break;
                     case 6:
-                        MapFlip.frmMapFlipMain MF = new MapFlip.frmMapFlipMain();
+                        MapFlip MF = new MapFlip();
                         MF.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = MF;
                         break;
@@ -90,10 +94,6 @@ namespace XferSuite
                 ((Form)settings.controlsArr[idx]).Show();
                 ((Form)settings.controlsArr[idx]).BringToFront();
                 settings.LoadButtons();
-            }
-            else
-            {
-                MessageBox.Show("Coming Soon!");
             }
         }
 
@@ -114,18 +114,47 @@ namespace XferSuite
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Title = title;
-
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     return openFileDialog.FileName;
                 }
             }
             return null;
+        }
+
+        private bool InitMetroGraphs(int idx)
+        {
+            string path = OpenFile("Open an Inlinepositions File");
+            if (path == null)
+            {
+                return false;
+            }
+
+            int fileType = Metro.verify(path);
+            Metro.Position[] data;
+
+            switch (fileType)
+            {
+                case 0:
+                    MessageBox.Show("Insufficient data in file", "XferSuite Inlinepositions");
+                    return false;
+                case 1:
+                    data = Metro.data(path);
+                    break;
+                case 2:
+                    data = Metro.data(path);
+                    break;
+                default:
+                    MessageBox.Show("Invalid file", "XferSuite Inlinepositions");
+                    return false;
+            }
+
+            MetroGraphs MG = new MetroGraphs(data) { Text = new FileInfo(path).Name };
+            MG.FormClosed += new FormClosedEventHandler(controlClosed);
+            settings.controlsArr[idx] = MG;
+            return true;
         }
     }
 }

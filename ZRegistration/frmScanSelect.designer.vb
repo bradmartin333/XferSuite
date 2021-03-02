@@ -33,11 +33,9 @@ Partial Class frmScanSelect
         '
         Me.ScanList.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ScanList.FormattingEnabled = True
-        Me.ScanList.ItemHeight = 16
-        Me.ScanList.Location = New System.Drawing.Point(4, 45)
-        Me.ScanList.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ScanList.Location = New System.Drawing.Point(3, 36)
         Me.ScanList.Name = "ScanList"
-        Me.ScanList.Size = New System.Drawing.Size(304, 272)
+        Me.ScanList.Size = New System.Drawing.Size(228, 222)
         Me.ScanList.TabIndex = 0
         '
         'TableLayoutPanel1
@@ -48,36 +46,33 @@ Partial Class frmScanSelect
         Me.TableLayoutPanel1.Controls.Add(Me.btnReload, 0, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(312, 321)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(234, 261)
         Me.TableLayoutPanel1.TabIndex = 1
         '
         'btnReload
         '
         Me.btnReload.AutoSize = True
         Me.btnReload.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btnReload.Location = New System.Drawing.Point(4, 4)
-        Me.btnReload.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnReload.Location = New System.Drawing.Point(3, 3)
         Me.btnReload.Name = "btnReload"
-        Me.btnReload.Size = New System.Drawing.Size(304, 33)
+        Me.btnReload.Size = New System.Drawing.Size(228, 27)
         Me.btnReload.TabIndex = 1
         Me.btnReload.Text = "Reload File"
         Me.btnReload.UseVisualStyleBackColor = True
         '
         'frmScanSelect
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(312, 321)
+        Me.ClientSize = New System.Drawing.Size(234, 261)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "frmScanSelect"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Click to choose a scan"
