@@ -12,7 +12,7 @@ module Stats =
         Statistics.PopulationStandardDeviation(data)
 
     let threeSig (data:float[]) =
-        Statistics.PopulationStandardDeviation(data) * 3.0
+        Math.Round(Statistics.PopulationStandardDeviation(data) * 3.0, 3)
 
 module Metro =
     [<Literal>] 

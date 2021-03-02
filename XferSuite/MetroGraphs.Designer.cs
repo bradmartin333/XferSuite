@@ -73,7 +73,7 @@ namespace XferSuite
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1010, 381);
+            this.tabControl1.Size = new System.Drawing.Size(802, 381);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -83,7 +83,7 @@ namespace XferSuite
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1002, 355);
+            this.tabPage1.Size = new System.Drawing.Size(794, 355);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Scatter";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -94,7 +94,7 @@ namespace XferSuite
             this.scatterPlot.Location = new System.Drawing.Point(3, 3);
             this.scatterPlot.Name = "scatterPlot";
             this.scatterPlot.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.scatterPlot.Size = new System.Drawing.Size(492, 343);
+            this.scatterPlot.Size = new System.Drawing.Size(388, 343);
             this.scatterPlot.TabIndex = 1;
             this.scatterPlot.Text = "plotView1";
             this.scatterPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -107,7 +107,7 @@ namespace XferSuite
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(996, 349);
+            this.webBrowser1.Size = new System.Drawing.Size(788, 349);
             this.webBrowser1.TabIndex = 0;
             // 
             // tabPage2
@@ -203,16 +203,16 @@ namespace XferSuite
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(996, 349);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(788, 349);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // errorScatterPlot
             // 
             this.errorScatterPlot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.errorScatterPlot.Location = new System.Drawing.Point(501, 3);
+            this.errorScatterPlot.Location = new System.Drawing.Point(397, 3);
             this.errorScatterPlot.Name = "errorScatterPlot";
             this.errorScatterPlot.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.errorScatterPlot.Size = new System.Drawing.Size(492, 343);
+            this.errorScatterPlot.Size = new System.Drawing.Size(388, 343);
             this.errorScatterPlot.TabIndex = 2;
             this.errorScatterPlot.Text = "plotView1";
             this.errorScatterPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -323,7 +323,7 @@ namespace XferSuite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1010, 381);
+            this.ClientSize = new System.Drawing.Size(802, 381);
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MetroGraphs";

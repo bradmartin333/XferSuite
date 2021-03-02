@@ -225,11 +225,13 @@ namespace XferSuite
             PlotModel histogramX = new PlotModel() { TitleFontSize = 15 };
             double[] dataX = Metro.XError(_pass);
             histogramX.Series.Add(makeHistogram(dataX));
+            histogramX.Title = string.Format("Median: {0} micron   3Sigma: {1}", Stats.median(dataX), Stats.threeSig(dataX));
             histogramPlotX.Model = histogramX;
 
             PlotModel histogramY = new PlotModel() { TitleFontSize = 15 };
             double[] dataY = Metro.YError(_pass);
             histogramY.Series.Add(makeHistogram(dataY));
+            histogramY.Title = string.Format("Median: {0} micron   3Sigma: {1}", Stats.median(dataY), Stats.threeSig(dataY));
             histogramPlotY.Model = histogramY;
         }
 
