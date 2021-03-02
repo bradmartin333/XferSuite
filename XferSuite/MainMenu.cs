@@ -36,7 +36,7 @@ namespace XferSuite
             int idx = int.Parse(btn.Tag.ToString());
             string path = null;
 
-            if (settings.controlsArr[idx] == null || ((Form)settings.controlsArr[idx]).IsDisposed == true)
+            if (settings.controlsArr[idx] == null || ((Form)settings.controlsArr[idx]).IsDisposed == true || idx == 0)
             {
                 switch (idx)
                 {

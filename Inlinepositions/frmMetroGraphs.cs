@@ -78,6 +78,22 @@ namespace Inlinepositions
             }
         }
 
+        private bool _UseParams = false;
+        [
+            Category("User Parameters"),
+            Description("Use the Threshold and Outliers values entered here"),
+            DisplayName("Use Custom Parameters")
+        ]
+        public bool UseParams
+        {
+            get => _UseParams;
+            set
+            {
+                _UseParams = value;
+                MakePlots();
+            }
+        }
+
         public frmMetroGraphs(Metro.Position[] data)
         {
             InitializeComponent();
@@ -101,21 +117,22 @@ namespace Inlinepositions
         private void MakePlots()
         {
             XYScatterPlot.plt.Clear();
-            MakeXYScatter();
             XYDistPlot.plt.Clear();
-            MakeXYDist();
-            ComboPlot.plt.Clear();
-            MakeCombo();
+            YieldPlot.plt.Clear();
             XErrorPlot.plt.Clear();
-            MakeXError();
             YErrorPlot.plt.Clear();
-            MakeYError();
             X3SigPlot.plt.Clear();
-            MakeX3Sig();
             Y3SigPlot.plt.Clear();
+            MakeXYScatter();
+            MakeXYDist();
+            MakeYield();
+            MakeX3Sig();
             MakeY3Sig();
             // Secret trick to force refresh plot & save time by only doing the selected plot
-            ((FormsPlot)tabControl.SelectedTab.Controls[0]).ScrollWheelProcessor();
+            foreach (TabPage page in tabControl.TabPages)
+            {
+                ((FormsPlot)page.Controls[0]).ScrollWheelProcessor();
+            }
         }
 
         private void MakeXYScatter()
@@ -128,8 +145,8 @@ namespace Inlinepositions
 
         private void MakeXYDist()
         {
-            var seriesA = new PopulationSeries(new Population[] { new Population(Metro.XError(_data)) }, "X Error");
-            var seriesB = new PopulationSeries(new Population[] { new Population(Metro.YError(_data)) }, "Y Error");
+            var seriesA = new PopulationSeries(new Population[] { new Population(Metro.XError(_data)) }, "X Error", Color.BlueViolet);
+            var seriesB = new PopulationSeries(new Population[] { new Population(Metro.YError(_data)) }, "Y Error", Color.LawnGreen);
             var multiSeries = new PopulationMultiSeries(new PopulationSeries[] { seriesA, seriesB });
             XYDistPlot.plt.PlotPopulations(multiSeries);
             XYDistPlot.plt.Ticks(displayTicksX: false);
@@ -138,33 +155,27 @@ namespace Inlinepositions
             XYDistPlot.plt.YLabel("Position Error (um)");
         }
 
-        private void MakeCombo()
+        private void MakeYield()
         {
 
         }
 
-        private void MakeXError()
+        private void MakeXError(int i, Color color)
         {
-            foreach (string print in prints)
-            {
-                double[] error = Metro.XError(Metro.getPrint(print, _data));
-                if (error.Length == 0) { continue; };
-                double[] x = new double[error.Length];
-                FillArray(ref x, prints.IndexOf(print) + 1);
-                XErrorPlot.plt.PlotScatter(x, error, lineStyle: LineStyle.None);
-            }
+            double[] error = Metro.XError(Metro.getPrint(prints[i], _data));
+            if (error.Length == 0) { return; };
+            double[] x = new double[error.Length];
+            FillArray(ref x, i + 1);
+            XErrorPlot.plt.PlotScatter(x, error, color, lineStyle: LineStyle.None);
         }
 
-        private void MakeYError()
+        private void MakeYError(int i, Color color)
         {
-            foreach (string print in prints)
-            {
-                double[] error = Metro.YError(Metro.getPrint(print, _data));
-                if (error.Length == 0) { continue; };
-                double[] x = new double[error.Length];
-                FillArray(ref x, prints.IndexOf(print) + 1);
-                YErrorPlot.plt.PlotScatter(x, error, lineStyle: LineStyle.None);
-            }
+            double[] error = Metro.YError(Metro.getPrint(prints[i], _data));
+            if (error.Length == 0) { return; };
+            double[] x = new double[error.Length];
+            FillArray(ref x, i + 1);
+            YErrorPlot.plt.PlotScatter(x, error, color, lineStyle: LineStyle.None);
         }
 
         private void MakeX3Sig()
@@ -172,14 +183,17 @@ namespace Inlinepositions
             for (int i = 0; i < prints.Count; i++)
             {
                 double sig = Metro.X3Sig(Metro.getPrint(prints[i], _data));
+                Color color;
                 if (sig > TargetSigma)
                 {
-                    X3SigPlot.plt.PlotPoint(i + 1, sig, Color.Red, 10);
+                    color = Color.Red;
                 }
                 else
                 {
-                    X3SigPlot.plt.PlotPoint(i + 1, sig, Color.Green, 10);
+                    color = Color.Green;
                 }
+                X3SigPlot.plt.PlotPoint(i + 1, sig, color, 10);
+                MakeXError(i, color);
             }
         }
 
@@ -188,14 +202,17 @@ namespace Inlinepositions
             for (int i = 0; i < prints.Count; i++)
             {
                 double sig = Metro.Y3Sig(Metro.getPrint(prints[i], _data));
+                Color color;
                 if (sig > TargetSigma)
                 {
-                    Y3SigPlot.plt.PlotPoint(i + 1, sig, Color.Red, 10);
+                    color = Color.Red;
                 }
                 else
                 {
-                    Y3SigPlot.plt.PlotPoint(i + 1, sig, Color.Green, 10);
-                } 
+                    color = Color.Green;
+                }
+                Y3SigPlot.plt.PlotPoint(i + 1, sig, color, 10);
+                MakeYError(i, color);
             }
         }
 
