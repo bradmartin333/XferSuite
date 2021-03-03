@@ -106,6 +106,7 @@ namespace XferSuite
             // 
             // scatterPlot
             // 
+            this.scatterPlot.AccessibleName = "Position Scatter Plot";
             this.scatterPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scatterPlot.Location = new System.Drawing.Point(3, 3);
             this.scatterPlot.Name = "scatterPlot";
@@ -116,9 +117,11 @@ namespace XferSuite
             this.scatterPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.scatterPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.scatterPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.scatterPlot.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // errorScatterPlot
             // 
+            this.errorScatterPlot.AccessibleName = "Error Scatter Plot";
             this.errorScatterPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorScatterPlot.Location = new System.Drawing.Point(397, 3);
             this.errorScatterPlot.Name = "errorScatterPlot";
@@ -129,15 +132,7 @@ namespace XferSuite
             this.errorScatterPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.errorScatterPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.errorScatterPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            // 
-            // webBrowser1
-            // 
-            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser1.Location = new System.Drawing.Point(3, 3);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(788, 349);
-            this.webBrowser1.TabIndex = 0;
+            this.errorScatterPlot.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // tabPage2
             // 
@@ -168,6 +163,7 @@ namespace XferSuite
             // 
             // histogramPlotX
             // 
+            this.histogramPlotX.AccessibleName = "X Error Histogram";
             this.histogramPlotX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.histogramPlotX.Location = new System.Drawing.Point(3, 3);
             this.histogramPlotX.Name = "histogramPlotX";
@@ -178,9 +174,11 @@ namespace XferSuite
             this.histogramPlotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.histogramPlotX.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.histogramPlotX.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.histogramPlotX.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // histogramPlotY
             // 
+            this.histogramPlotY.AccessibleName = "Y Error Histogram";
             this.histogramPlotY.Dock = System.Windows.Forms.DockStyle.Fill;
             this.histogramPlotY.Location = new System.Drawing.Point(397, 3);
             this.histogramPlotY.Name = "histogramPlotY";
@@ -191,6 +189,7 @@ namespace XferSuite
             this.histogramPlotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.histogramPlotY.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.histogramPlotY.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.histogramPlotY.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // tabPage3
             // 
@@ -214,12 +213,13 @@ namespace XferSuite
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 424F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 355F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(794, 355);
             this.tableLayoutPanel3.TabIndex = 1;
             // 
             // errorBoxplotX
             // 
+            this.errorBoxplotX.AccessibleName = "X Error Boxplot";
             this.errorBoxplotX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorBoxplotX.Location = new System.Drawing.Point(3, 3);
             this.errorBoxplotX.Name = "errorBoxplotX";
@@ -230,9 +230,11 @@ namespace XferSuite
             this.errorBoxplotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.errorBoxplotX.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.errorBoxplotX.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.errorBoxplotX.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // errorBoxplotY
             // 
+            this.errorBoxplotY.AccessibleName = "Y Error Boxplot";
             this.errorBoxplotY.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorBoxplotY.Location = new System.Drawing.Point(400, 3);
             this.errorBoxplotY.Name = "errorBoxplotY";
@@ -243,6 +245,7 @@ namespace XferSuite
             this.errorBoxplotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.errorBoxplotY.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.errorBoxplotY.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.errorBoxplotY.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // tabPage4
             // 
@@ -266,12 +269,13 @@ namespace XferSuite
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 424F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 355F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(794, 355);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // sigmaPlotX
             // 
+            this.sigmaPlotX.AccessibleName = "X 3Sigma Plot";
             this.sigmaPlotX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sigmaPlotX.Location = new System.Drawing.Point(3, 3);
             this.sigmaPlotX.Name = "sigmaPlotX";
@@ -282,9 +286,11 @@ namespace XferSuite
             this.sigmaPlotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.sigmaPlotX.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.sigmaPlotX.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.sigmaPlotX.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // sigmaPlotY
             // 
+            this.sigmaPlotY.AccessibleName = "Y 3Sigma Plot";
             this.sigmaPlotY.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sigmaPlotY.Location = new System.Drawing.Point(400, 3);
             this.sigmaPlotY.Name = "sigmaPlotY";
@@ -295,6 +301,7 @@ namespace XferSuite
             this.sigmaPlotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.sigmaPlotY.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.sigmaPlotY.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.sigmaPlotY.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // tabPage5
             // 
@@ -308,6 +315,7 @@ namespace XferSuite
             // 
             // yieldPlot
             // 
+            this.yieldPlot.AccessibleName = "Yield Plot";
             this.yieldPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.yieldPlot.Location = new System.Drawing.Point(0, 0);
             this.yieldPlot.Name = "yieldPlot";
@@ -318,6 +326,7 @@ namespace XferSuite
             this.yieldPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.yieldPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.yieldPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.yieldPlot.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // MetroGraphs
             // 

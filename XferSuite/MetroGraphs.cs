@@ -1,6 +1,7 @@
 ﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using OxyPlot.WindowsForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -512,8 +513,8 @@ namespace XferSuite
             {
                 Position = AxisPosition.Left,
                 Title = "Functional Yield (%)",
-                Minimum = yieldList.Min() - 1,
-                Maximum = 101,
+                Minimum = yieldList.Min() - 0.25,
+                Maximum = 100.25,
                 MajorStep = 1,
                 MinorStep = 1
             };
@@ -522,6 +523,24 @@ namespace XferSuite
             yield.Axes.Add(myYaxis);
 
             yieldPlot.Model = yield;
+        }
+
+        private void Plot_Click(object sender, EventArgs e)
+        {
+            PlotView thisPlot = (PlotView)sender;
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.Title = "Export " + thisPlot.AccessibleName;
+                saveFileDialog.DefaultExt = ".png";
+                saveFileDialog.Filter = "png file (*.png)|*.png";
+                saveFileDialog.RestoreDirectory = true;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var pngExporter = new PngExporter { Width = thisPlot.Width, Height = thisPlot.Height, Background = OxyColors.White };
+                    pngExporter.ExportToFile(thisPlot.Model, saveFileDialog.FileName);
+                }
+            }
         }
     }
 }
