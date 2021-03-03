@@ -94,9 +94,9 @@ namespace XferSuite
             int posIdx = 0;
             foreach (string index in indices)
             {
-                if (!prints.Contains(index))
+                if (!_prints.Contains(index))
                 {
-                    prints.Add(index);
+                    _prints.Add(index);
                     printIdx += 1;
                 }
                 _data[posIdx].PrintNum = printIdx;
@@ -111,7 +111,7 @@ namespace XferSuite
         private Metro.Position[] _missing;
         private Metro.Position[] _pass;
         private Metro.Position[] _fail;
-        List<string> prints = new List<string>();
+        List<string> _prints = new List<string>();
 
         private void MakePlots()
         {
@@ -119,9 +119,9 @@ namespace XferSuite
             makeScatterPlot();
             makeErrorScatterPlot();
             makeHistograms();
-            makeBoxPlots();
+            makeErrorPlots();
             makeSigmaPlots();
-            makeComboPlot();
+            makeYieldPlot();
         }
 
         private void makeScatterPlot()
@@ -300,26 +300,228 @@ namespace XferSuite
             return lineSeries;
         }
 
-        private void makeBoxPlots()
+        private void makeErrorPlots()
         {
             PlotModel boxplotX = new PlotModel() { TitleFontSize = 15 };
-            errorBoxplotX.Model = boxplotX;
+            BoxPlotSeries[] plotsX = makeBoxPlot("X");
+            boxplotX.Series.Add(plotsX[0]);
+            boxplotX.Series.Add(plotsX[1]);
+
             PlotModel boxplotY = new PlotModel() { TitleFontSize = 15 };
+            BoxPlotSeries[] plotsY = makeBoxPlot("Y");
+            boxplotY.Series.Add(plotsY[0]);
+            boxplotY.Series.Add(plotsY[1]);
+
+            LinearAxis myXaxis1 = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Print Number",
+                Minimum = 0.5,
+                Maximum = _prints.Count + 0.5,
+                MajorStep = 1,
+                MinorStep = 1
+            };
+            LinearAxis myXaxis2 = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Print Number",
+                Minimum = 0.5,
+                Maximum = _prints.Count + 0.5,
+                MajorStep = 1,
+                MinorStep = 1
+            };
+            LinearAxis myYaxis1 = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "X Error (microns)",
+                Minimum = -3,
+                Maximum = 3
+            };
+            LinearAxis myYaxis2 = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "Y Error (microns)",
+                Minimum = -3,
+                Maximum = 3
+            };
+
+            boxplotX.Axes.Add(myXaxis1);
+            boxplotY.Axes.Add(myXaxis2);
+            boxplotX.Axes.Add(myYaxis1);
+            boxplotY.Axes.Add(myYaxis2);
+
+            errorBoxplotX.Model = boxplotX;
             errorBoxplotY.Model = boxplotY;
+        }
+
+        private BoxPlotSeries[] makeBoxPlot(string axis)
+        {
+            BoxPlotSeries Red = new BoxPlotSeries() { Fill = OxyColors.Red };
+            BoxPlotSeries Green = new BoxPlotSeries() { Fill = OxyColors.Green };
+            foreach (string print in _prints)
+            {
+                double[] data = new double[_pass.Length];
+                if (axis == "X")
+                {
+                    data = Metro.XError(Metro.getPrint(print, _pass));
+                }
+                else if (axis == "Y")
+                {
+                    data = Metro.YError(Metro.getPrint(print, _pass));
+                }
+
+                double[] summary = Stats.summary(data);
+                double sig = Stats.threeSig(data);
+                if (sig > TargetSigma)
+                {
+                    Red.Items.Add(new BoxPlotItem(_prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]));
+                }
+                else
+                {
+                    Green.Items.Add(new BoxPlotItem(_prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]));
+                }
+            }
+            return new BoxPlotSeries[] { Red, Green };
         }
 
         private void makeSigmaPlots()
         {
             PlotModel sigmaX = new PlotModel() { TitleFontSize = 15 };
-            sigmaPlotX.Model = sigmaX;
+            ScatterSeries[] sigmaScattersX = makeSigmaScatter("X");
+            sigmaX.Series.Add(sigmaScattersX[0]);
+            sigmaX.Series.Add(sigmaScattersX[1]);
+            sigmaX.Series.Add(sigmaScattersX[2]);
+
             PlotModel sigmaY = new PlotModel() { TitleFontSize = 15 };
+            ScatterSeries[] sigmaScattersY = makeSigmaScatter("Y");
+            sigmaY.Series.Add(sigmaScattersY[0]);
+            sigmaY.Series.Add(sigmaScattersY[1]);
+            sigmaY.Series.Add(sigmaScattersY[2]);
+
+            LinearAxis myXaxis1 = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Print Number",
+                Minimum = 0.5,
+                Maximum = _prints.Count + 0.5,
+                MajorStep = 1,
+                MinorStep = 1
+            };
+            LinearAxis myXaxis2 = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Print Number",
+                Minimum = 0.5,
+                Maximum = _prints.Count + 0.5,
+                MajorStep = 1,
+                MinorStep = 1
+            };
+            LinearAxis myYaxis1 = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "X 3Sigma (microns)",
+                Minimum = 0,
+                Maximum = TargetSigma + 0.6
+            };
+            LinearAxis myYaxis2 = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title =  "Y 3Sigma (microns)",
+                Minimum = 0,
+                Maximum = TargetSigma + 0.6
+            };
+
+            sigmaX.Axes.Add(myXaxis1);
+            sigmaY.Axes.Add(myXaxis2);
+            sigmaX.Axes.Add(myYaxis1);
+            sigmaY.Axes.Add(myYaxis2);
+
+            sigmaPlotX.Model = sigmaX;
             sigmaPlotY.Model = sigmaY;
         }
 
-        private void makeComboPlot()
+        private ScatterSeries[] makeSigmaScatter(string axis)
         {
-            PlotModel combo= new PlotModel() { TitleFontSize = 15 };
-            comboPlot.Model = combo;
+            ScatterSeries Green = new ScatterSeries() {MarkerSize = 3, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Green };
+            ScatterSeries Red = new ScatterSeries() {MarkerSize = 3, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Red };
+            ScatterSeries RedOut = new ScatterSeries() {MarkerSize = 3, MarkerType = MarkerType.Cross, MarkerStroke = OxyColors.Red };
+
+            foreach (string print in _prints)
+            {
+                double[] data = new double[_pass.Length];
+                if (axis == "X")
+                {
+                    data = Metro.XError(Metro.getPrint(print, _pass));
+                }
+                else if (axis == "Y")
+                {
+                    data = Metro.YError(Metro.getPrint(print, _pass));
+                }
+
+                double sig = Stats.threeSig(data);
+                if (sig > TargetSigma + 0.5)
+                {
+                    RedOut.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, TargetSigma + 0.5));
+                }
+                else if (sig > TargetSigma)
+                {
+                    Red.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, sig));
+                }
+                else
+                {
+                    Green.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, sig));
+                }
+            }
+            return new ScatterSeries[] { RedOut, Red, Green };
+        }
+
+        private void makeYieldPlot()
+        {
+            PlotModel yield = new PlotModel() { TitleFontSize = 15 };
+
+            List<double> yieldList = new List<double>();
+            ScatterSeries Green = new ScatterSeries() { MarkerSize = 5, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Green };
+            ScatterSeries Red = new ScatterSeries() { MarkerSize = 5, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Red };
+            foreach (string print in _prints)
+            {
+                double yld = (Metro.getPrint(print, _pass).Length / (float) Metro.getPrint(print, _raw).Length) * 100;
+                yieldList.Add(yld);
+                if (yld < TargetYield)
+                {
+                    Red.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, yld));
+                }
+                else
+                {
+                    Green.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, yld));
+                }
+            }
+
+            yield.Series.Add(Green);
+            yield.Series.Add(Red);
+
+            LinearAxis myXaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Print Number",
+                Minimum = 0.5,
+                Maximum = _prints.Count + 0.5,
+                MajorStep = 1,
+                MinorStep = 1
+            };
+            LinearAxis myYaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "Functional Yield (%)",
+                Minimum = yieldList.Min() - 1,
+                Maximum = 101,
+                MajorStep = 1,
+                MinorStep = 1
+            };
+
+            yield.Axes.Add(myXaxis);
+            yield.Axes.Add(myYaxis);
+
+            yieldPlot.Model = yield;
         }
     }
 }

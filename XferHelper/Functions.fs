@@ -22,6 +22,9 @@ module Stats =
         let norm = Normal.WithMeanStdDev(mean(data), stdDev(data))
         norm.Density(i)
 
+    let summary (data:float[]) =
+        Statistics.FiveNumberSummary(data)
+
 module Metro =
     [<Literal>] 
     let CSVschema = "Inline_Trial\tImage_Number\tX_Position\tY_Position\tTarget_RR\tTarget_RC\tTarget_R\tTarget_C\tStamp_R\tStamp_C\tX_error\tY_error\tYield_Measure\tAlignment_Measure\tAngle_error"
