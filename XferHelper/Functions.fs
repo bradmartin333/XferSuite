@@ -1,10 +1,14 @@
 ﻿namespace XferHelper
 
 open MathNet.Numerics.Statistics
+open MathNet.Numerics.Distributions
 open System.IO
 open System
 
 module Stats =
+    let mean (data:float[]) =
+        Statistics.Mean(data)
+
     let median (data:float[]) =
         Statistics.Median(data)
 
@@ -12,7 +16,11 @@ module Stats =
         Statistics.PopulationStandardDeviation(data)
 
     let threeSig (data:float[]) =
-        Math.Round(Statistics.PopulationStandardDeviation(data) * 3.0, 3)
+        Math.Round(stdDev(data) * 3.0, 3)
+
+    let normVal (data:float[], i:float) : float =
+        let norm = Normal.WithMeanStdDev(mean(data), stdDev(data))
+        norm.Density(i)
 
 module Metro =
     [<Literal>] 

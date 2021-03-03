@@ -204,7 +204,6 @@ namespace XferSuite
                 Position = AxisPosition.Bottom,
                 Title = "X Error Distance (microns)"
             };
-
             LinearAxis myYaxis = new LinearAxis()
             {
                 Position = AxisPosition.Left,
@@ -225,13 +224,50 @@ namespace XferSuite
             PlotModel histogramX = new PlotModel() { TitleFontSize = 15 };
             double[] dataX = Metro.XError(_pass);
             histogramX.Series.Add(makeHistogram(dataX));
+            histogramX.Series.Add(makeHistStatBars(dataX));
+            histogramX.Series.Add(makeNormDistribution(dataX));
             histogramX.Title = string.Format("Median: {0} micron   3Sigma: {1}", Stats.median(dataX), Stats.threeSig(dataX));
-            histogramPlotX.Model = histogramX;
-
+            
             PlotModel histogramY = new PlotModel() { TitleFontSize = 15 };
             double[] dataY = Metro.YError(_pass);
             histogramY.Series.Add(makeHistogram(dataY));
+            histogramY.Series.Add(makeHistStatBars(dataY));
+            histogramY.Series.Add(makeNormDistribution(dataY));
             histogramY.Title = string.Format("Median: {0} micron   3Sigma: {1}", Stats.median(dataY), Stats.threeSig(dataY));
+
+            LinearAxis myXaxis1 = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "X Error Distance (microns)",
+                Minimum = -Threshold,
+                Maximum = Threshold
+            };
+            LinearAxis myXaxis2 = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "X Error Distance (microns)",
+                Minimum = -Threshold,
+                Maximum = Threshold
+            };
+            LinearAxis myYaxis1 = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "Relative Frequency",
+                Maximum = 5
+            };
+            LinearAxis myYaxis2 = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "Relative Frequency",
+                Maximum = 5
+            };
+
+            histogramX.Axes.Add(myXaxis1);
+            histogramY.Axes.Add(myXaxis2);
+            histogramX.Axes.Add(myYaxis1);
+            histogramY.Axes.Add(myYaxis2);
+
+            histogramPlotX.Model = histogramX;
             histogramPlotY.Model = histogramY;
         }
 
@@ -242,6 +278,26 @@ namespace XferSuite
             var binBreaks = HistogramHelpers.CreateUniformBins(data.Min(), data.Max(), NumBins);
             histogramSeries.Items.AddRange(HistogramHelpers.Collect(data, binBreaks, binningOptions));
             return histogramSeries;
+        }
+
+        private RectangleBarSeries makeHistStatBars(double[] data)
+        {
+            RectangleBarSeries barSeries = new RectangleBarSeries() { StrokeThickness = 3, StrokeColor = OxyColors.LightSeaGreen };
+            double threeSig = Stats.threeSig(data);
+            double median = Stats.median(data);
+            barSeries.Items.Add(new RectangleBarItem((-threeSig / 2) + median, 0, (-threeSig / 2) + median, 1e6));
+            barSeries.Items.Add(new RectangleBarItem(threeSig / 2 + median, 0, threeSig / 2 + median, 1e6));
+            return barSeries;
+        }
+
+        private LineSeries makeNormDistribution(double[] data)
+        {
+            LineSeries lineSeries = new LineSeries() { StrokeThickness = 3, Color = OxyColors.LightGreen };
+            for (double i = data.Min(); i < data.Max(); i+=0.01)
+            {
+                lineSeries.Points.Add(new DataPoint(i, Stats.normVal(data, i)));
+            }
+            return lineSeries;
         }
 
         private void makeBoxPlots()
