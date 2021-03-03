@@ -90,7 +90,7 @@ namespace XferSuite
             _data = _splitData.Item2;
             _missing = _splitData.Item1;
 
-            string[] indices = Metro.prints(_data);
+            string[] indices = Metro.prints(_raw);
             int printIdx = 1;
             int posIdx = 0;
             foreach (string index in indices)
@@ -100,7 +100,7 @@ namespace XferSuite
                     _prints.Add(index);
                     printIdx += 1;
                 }
-                _data[posIdx].PrintNum = printIdx;
+                _raw[posIdx].PrintNum = printIdx;
                 posIdx += 1;
             }
 
@@ -361,14 +361,18 @@ namespace XferSuite
             BoxPlotSeries Green = new BoxPlotSeries() { Fill = OxyColors.Green };
             foreach (string print in _prints)
             {
-                double[] data = new double[_pass.Length];
+                double[] data = new double[_raw.Length];
                 if (axis == "X")
                 {
-                    data = Metro.XError(Metro.getPrint(print, _pass));
+                    data = Metro.XError(Metro.getPrint(print, _raw));
                 }
                 else if (axis == "Y")
                 {
-                    data = Metro.YError(Metro.getPrint(print, _pass));
+                    data = Metro.YError(Metro.getPrint(print, _raw));
+                }
+                if (data.Length == 0)
+                {
+                    continue;
                 }
 
                 double[] summary = Stats.summary(data);
@@ -449,14 +453,18 @@ namespace XferSuite
 
             foreach (string print in _prints)
             {
-                double[] data = new double[_pass.Length];
+                double[] data = new double[_raw.Length];
                 if (axis == "X")
                 {
-                    data = Metro.XError(Metro.getPrint(print, _pass));
+                    data = Metro.XError(Metro.getPrint(print, _raw));
                 }
                 else if (axis == "Y")
                 {
-                    data = Metro.YError(Metro.getPrint(print, _pass));
+                    data = Metro.YError(Metro.getPrint(print, _raw));
+                }
+                if (data.Length == 0)
+                {
+                    continue;
                 }
 
                 double sig = Stats.threeSig(data);
@@ -485,7 +493,13 @@ namespace XferSuite
             ScatterSeries Red = new ScatterSeries() { MarkerSize = 5, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Red };
             foreach (string print in _prints)
             {
-                double yld = (Metro.getPrint(print, _pass).Length / (float) Metro.getPrint(print, _raw).Length) * 100;
+                int FYld = Metro.getPrint(print, _pass).Length;
+                if (FYld == 0)
+                {
+                    continue;
+                }
+
+                double yld = (FYld / (float) Metro.getPrint(print, _raw).Length) * 100;
                 yieldList.Add(yld);
                 if (yld < TargetYield)
                 {
