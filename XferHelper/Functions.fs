@@ -178,7 +178,7 @@ module Metro =
 
     let Rescore (data:Position[], threshold:float) =
         for x in data do
-            if (Math.Abs(x.XE) > threshold / 1e3 && Math.Abs(x.YE) > threshold / 1e3) then
+            if (Math.Abs(x.XE) > threshold / 1e3 || Math.Abs(x.YE) > threshold / 1e3) then
                 x.Aln <- " FAIL "
             else
                 x.Aln <- " PASS "

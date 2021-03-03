@@ -135,7 +135,7 @@ namespace XferSuite
             
             double[] passX = Metro.XPos(_pass);
             double[] passY = Metro.YPos(_pass);
-            ScatterSeries passSeries = new ScatterSeries() { MarkerFill = OxyColors.Green, MarkerSize = 2 };
+            ScatterSeries passSeries = new ScatterSeries() { MarkerFill = OxyColors.Green, MarkerSize = 1 };
             for (int i = 0; i < _pass.Length; i++)
             {
                 passSeries.Points.Add(new ScatterPoint(passX[i], passY[i]));
