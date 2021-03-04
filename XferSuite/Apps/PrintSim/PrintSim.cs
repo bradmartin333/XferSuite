@@ -1,4 +1,8 @@
-﻿using System;
+﻿using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using OxyPlot.WindowsForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,7 +12,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static XferSuite.Parameters;
-using static XferSuite.RenderObject;
 
 namespace XferSuite
 {
@@ -92,7 +95,49 @@ namespace XferSuite
 
         private void MakePlot()
         {
+            PlotModel map = new PlotModel();
+            ScatterSeries scatter = new ScatterSeries();
+            foreach (RenderObject renderObject in _Devices)
+            {
+                scatter.Points.Add(new ScatterPoint(renderObject.X, renderObject.Y,
+                    (renderObject.Width * renderObject.Height) / 1e3)
+                { Tag = string.Format("{0},{1},{2},{3},{4}", renderObject.RR, renderObject.RC, renderObject.R, renderObject.C, renderObject.IDX) });
+            }
+            foreach (RenderObject renderObject in _Sites)
+            {
+                scatter.Points.Add(new ScatterPoint(renderObject.X, renderObject.Y, 
+                    (renderObject.Width * renderObject.Height) / 1e3)
+                { Tag = string.Format("{0},{1},{2},{3}", renderObject.RR, renderObject.RC, renderObject.R, renderObject.C) });
+            }
+            map.Series.Add(scatter);
 
+            LinearAxis myXaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                IsAxisVisible = true,
+                StartPosition = 1,
+                EndPosition = 0,
+                IsZoomEnabled = true,
+                IsPanEnabled = true,
+                Title = "X Position (mm)"
+            };
+
+            LinearAxis myYaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                IsAxisVisible = true,
+                StartPosition = 1,
+                EndPosition = 0,
+                IsZoomEnabled = true,
+                IsPanEnabled = true,
+                Title = "Y Position (mm)"
+            };
+
+            scatter.TrackerFormatString = scatter.TrackerFormatString + Environment.NewLine + "{Tag}";
+            map.Axes.Add(myXaxis);
+            map.Axes.Add(myYaxis);
+
+            plot.Model = map;
         }
 
         private void CreateSourceFeatures()
