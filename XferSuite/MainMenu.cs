@@ -68,7 +68,7 @@ namespace XferSuite
                         {
                             break;
                         }
-                        PrintSim PS = new PrintSim();
+                        PrintSim PS = new PrintSim(path);
                         PS.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = PS;
                         break;
