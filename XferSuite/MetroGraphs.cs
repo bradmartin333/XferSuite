@@ -356,6 +356,7 @@ namespace XferSuite
         {
             BoxPlotSeries Red = new BoxPlotSeries() { Fill = OxyColors.Red };
             BoxPlotSeries Green = new BoxPlotSeries() { Fill = OxyColors.Green };
+
             foreach (string print in _prints)
             {
                 double[] data = new double[_raw.Length];
@@ -376,13 +377,17 @@ namespace XferSuite
                 double sig = Stats.threeSig(data);
                 if (sig > TargetSigma)
                 {
-                    Red.Items.Add(new BoxPlotItem(_prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]));
+                    Red.Items.Add(new BoxPlotItem(_prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]) { Tag = print });
                 }
                 else
                 {
-                    Green.Items.Add(new BoxPlotItem(_prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]));
+                    Green.Items.Add(new BoxPlotItem(_prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]) { Tag = print });
                 }
             }
+
+            Red.TrackerFormatString = Red.TrackerFormatString + Environment.NewLine + "{Tag}";
+            Green.TrackerFormatString = Green.TrackerFormatString + Environment.NewLine + "{Tag}";
+
             return new BoxPlotSeries[] { Red, Green };
         }
 
@@ -463,17 +468,22 @@ namespace XferSuite
                 double sig = Stats.threeSig(data);
                 if (sig > TargetSigma + 0.5)
                 {
-                    RedOut.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, TargetSigma + 0.5));
+                    RedOut.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, TargetSigma + 0.5) { Tag = print });
                 }
                 else if (sig > TargetSigma)
                 {
-                    Red.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, sig));
+                    Red.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, sig) { Tag = print });
                 }
                 else
                 {
-                    Green.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, sig));
+                    Green.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, sig) { Tag = print });
                 }
             }
+
+            Green.TrackerFormatString = Green.TrackerFormatString + Environment.NewLine + "{Tag}";
+            Red.TrackerFormatString = Red.TrackerFormatString + Environment.NewLine + "{Tag}";
+            RedOut.TrackerFormatString = RedOut.TrackerFormatString + Environment.NewLine + "{Tag}";
+
             return new ScatterSeries[] { RedOut, Red, Green };
         }
 
@@ -484,6 +494,7 @@ namespace XferSuite
             List<double> yieldList = new List<double>();
             ScatterSeries Green = new ScatterSeries() { MarkerSize = 5, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Green };
             ScatterSeries Red = new ScatterSeries() { MarkerSize = 5, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Red };
+
             foreach (string print in _prints)
             {
                 int FYld = Metro.getPrint(print, _pass).Length;
@@ -496,13 +507,16 @@ namespace XferSuite
                 yieldList.Add(yld);
                 if (yld < TargetYield)
                 {
-                    Red.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, yld));
+                    Red.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, yld) { Tag = print });
                 }
                 else
                 {
-                    Green.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, yld));
+                    Green.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, yld) { Tag = print });
                 }
             }
+
+            Green.TrackerFormatString = Green.TrackerFormatString + Environment.NewLine + "{Tag}";
+            Red.TrackerFormatString = Red.TrackerFormatString + Environment.NewLine + "{Tag}";
 
             yield.Series.Add(Green);
             yield.Series.Add(Red);
