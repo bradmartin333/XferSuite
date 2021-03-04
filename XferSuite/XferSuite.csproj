@@ -72,6 +72,12 @@
     <Compile Include="EventLogParsing.Designer.cs">
       <DependentUpon>EventLogParsing.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fingerprinting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fingerprinting.Designer.cs">
+      <DependentUpon>Fingerprinting.cs</DependentUpon>
+    </Compile>
     <Compile Include="MapFlip.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +106,9 @@
     </Compile>
     <EmbeddedResource Include="EventLogParsing.resx">
       <DependentUpon>EventLogParsing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fingerprinting.resx">
+      <DependentUpon>Fingerprinting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MapFlip.resx">
       <DependentUpon>MapFlip.cs</DependentUpon>
