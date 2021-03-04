@@ -39,8 +39,8 @@ namespace XferSuite
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 125F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.PrintList, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.plot, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -57,17 +57,17 @@ namespace XferSuite
             this.PrintList.FormattingEnabled = true;
             this.PrintList.Location = new System.Drawing.Point(3, 3);
             this.PrintList.Name = "PrintList";
-            this.PrintList.Size = new System.Drawing.Size(102, 418);
+            this.PrintList.Size = new System.Drawing.Size(119, 418);
             this.PrintList.TabIndex = 0;
             this.PrintList.SelectedIndexChanged += new System.EventHandler(this.PrintList_SelectedIndexChanged);
             // 
             // plot
             // 
             this.plot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plot.Location = new System.Drawing.Point(111, 3);
+            this.plot.Location = new System.Drawing.Point(128, 3);
             this.plot.Name = "plot";
             this.plot.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plot.Size = new System.Drawing.Size(429, 418);
+            this.plot.Size = new System.Drawing.Size(412, 418);
             this.plot.TabIndex = 1;
             this.plot.Text = "plotView1";
             this.plot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;

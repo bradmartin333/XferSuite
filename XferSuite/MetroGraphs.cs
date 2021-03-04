@@ -86,8 +86,7 @@ namespace XferSuite
         {
             InitializeComponent();
             _raw = data;
-            _data = data;
-            Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_data);
+            Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_raw);
             _data = _splitData.Item2;
             _missing = _splitData.Item1;
 

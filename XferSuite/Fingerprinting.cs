@@ -17,10 +17,27 @@ namespace XferSuite
 {
     public partial class Fingerprinting : Form
     {
+        private float _VectorMagnitude = 150F;
+        [
+            Category("User Parameters"),
+            Description("Value to multiply position error by")
+        ]
+        public float VectorMagnitude
+        {
+            get => _VectorMagnitude;
+            set
+            {
+                _VectorMagnitude = value;
+                MakePlot();
+            }
+        }
+
         public Fingerprinting(Metro.Position[] data)
         {
             InitializeComponent();
             _raw = data;
+            Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_raw);
+            _data = _splitData.Item2;
 
             string[] indices = Metro.prints(_raw);
             int printIdx = 1;
@@ -38,12 +55,82 @@ namespace XferSuite
             }
         }
 
-        private Metro.Position[] _raw;
+        private Metro.Position[] _raw; // gets split into data and missing
+        private Metro.Position[] _data; // gets split into pass and fail
         List<string> _prints = new List<string>();
 
         private void PrintList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            plot.BackColor = Color.Green;
+            MakePlot();
+        }
+
+        private void MakePlot()
+        {
+            Metro.Position[] plotData = Metro.getPrint(_prints[PrintList.SelectedIndex], _data);
+
+            PlotModel vectorPlot = new PlotModel() { TitleFontSize = 15 };
+
+            for (int i = 0; i < plotData.Length; i++)
+            {
+                vectorPlot.Series.Add(PlotVector(plotData[i]));
+            }
+
+            LinearAxis myXaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                IsAxisVisible = true,
+                StartPosition = 1,
+                EndPosition = 0,
+                IsZoomEnabled = true,
+                IsPanEnabled = true,
+                Title = "X Position (mm)"
+            };
+
+            LinearAxis myYaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                IsAxisVisible = true,
+                StartPosition = 1,
+                EndPosition = 0,
+                IsZoomEnabled = true,
+                IsPanEnabled = true,
+                Title = "Y Position (mm)"
+            };
+
+            vectorPlot.Axes.Add(myXaxis);
+            vectorPlot.Axes.Add(myYaxis);
+            plot.Model = vectorPlot;
+        }
+
+        private LineSeries PlotVector(Metro.Position vector)
+        {
+            var fromP = new DataPoint(vector.X, vector.Y);
+            var toP = new DataPoint(vector.X + vector.XE, vector.Y + vector.YE);
+
+            var dx = fromP.X - toP.X;
+            var dy = fromP.Y - toP.Y;
+
+            var norm = Math.Sqrt(dx * dx + dy * dy);
+
+            var udx = dx / norm;
+            var udy = dy / norm;
+
+            var ax = udx * Math.Sqrt(3) / 2 - udy * 1 / 2;
+            var ay = udx * 1 / 2 + udy * Math.Sqrt(3) / 2;
+            var bx = udx * Math.Sqrt(3) / 2 + udy * 1 / 2;
+            var by = -udx * 1 / 2 + udy * Math.Sqrt(3) / 2;
+
+            DataPoint arrowheadA = new DataPoint(toP.X + Math.Abs(toP.X - fromP.X) * ax * VectorMagnitude, toP.Y + Math.Abs(toP.Y - fromP.Y) * ay * VectorMagnitude);
+            DataPoint arrowheadB = new DataPoint(toP.X + Math.Abs(toP.X - fromP.X) * bx * VectorMagnitude, toP.Y + Math.Abs(toP.Y - fromP.Y) * by * VectorMagnitude);
+
+            LineSeries post = new LineSeries() { Color = OxyColors.Black, LineStyle = LineStyle.Solid, StrokeThickness = 0.5 };
+            post.Points.Add(fromP);
+            post.Points.Add(toP);
+            post.Points.Add(arrowheadA);
+            post.Points.Add(toP);
+            post.Points.Add(arrowheadB);
+
+            return post;
         }
     }
 }
