@@ -31,6 +31,7 @@ namespace XferSuite
             set
             {
                 _WatchFile = value;
+                UpdateAll();
             }
         }
 
