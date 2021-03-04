@@ -63,6 +63,14 @@ namespace XferSuite
                         }
                         break;
                     case 3:
+                        path = OpenFile("Open a XferPrint recipe");
+                        if (path == null)
+                        {
+                            break;
+                        }
+                        PrintSim PS = new PrintSim();
+                        PS.FormClosed += new FormClosedEventHandler(controlClosed);
+                        settings.controlsArr[idx] = PS;
                         break;
                     case 4:
                         path = OpenFile("Open an EventLog File");
