@@ -117,7 +117,7 @@ namespace XferSuite
             this.scatterPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.scatterPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.scatterPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.scatterPlot.DoubleClick += new System.EventHandler(this.Plot_Click);
+            this.scatterPlot.DoubleClick += new System.EventHandler(this.Plot_DoubleClick);
             // 
             // errorScatterPlot
             // 
@@ -132,7 +132,7 @@ namespace XferSuite
             this.errorScatterPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.errorScatterPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.errorScatterPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.errorScatterPlot.DoubleClick += new System.EventHandler(this.Plot_Click);
+            this.errorScatterPlot.DoubleClick += new System.EventHandler(this.Plot_DoubleClick);
             // 
             // tabPage2
             // 
@@ -174,7 +174,7 @@ namespace XferSuite
             this.histogramPlotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.histogramPlotX.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.histogramPlotX.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.histogramPlotX.DoubleClick += new System.EventHandler(this.Plot_Click);
+            this.histogramPlotX.DoubleClick += new System.EventHandler(this.Plot_DoubleClick);
             // 
             // histogramPlotY
             // 
@@ -189,7 +189,7 @@ namespace XferSuite
             this.histogramPlotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.histogramPlotY.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.histogramPlotY.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.histogramPlotY.DoubleClick += new System.EventHandler(this.Plot_Click);
+            this.histogramPlotY.DoubleClick += new System.EventHandler(this.Plot_DoubleClick);
             // 
             // tabPage3
             // 
@@ -230,7 +230,6 @@ namespace XferSuite
             this.errorBoxplotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.errorBoxplotX.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.errorBoxplotX.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.errorBoxplotX.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // errorBoxplotY
             // 
@@ -245,7 +244,6 @@ namespace XferSuite
             this.errorBoxplotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.errorBoxplotY.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.errorBoxplotY.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.errorBoxplotY.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // tabPage4
             // 
@@ -286,7 +284,6 @@ namespace XferSuite
             this.sigmaPlotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.sigmaPlotX.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.sigmaPlotX.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.sigmaPlotX.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // sigmaPlotY
             // 
@@ -301,7 +298,6 @@ namespace XferSuite
             this.sigmaPlotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.sigmaPlotY.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.sigmaPlotY.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.sigmaPlotY.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // tabPage5
             // 
@@ -326,7 +322,6 @@ namespace XferSuite
             this.yieldPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.yieldPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.yieldPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.yieldPlot.DoubleClick += new System.EventHandler(this.Plot_Click);
             // 
             // MetroGraphs
             // 

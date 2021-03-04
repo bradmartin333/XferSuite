@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -318,18 +319,14 @@ namespace XferSuite
                 Position = AxisPosition.Bottom,
                 Title = "Print Number",
                 Minimum = 0.5,
-                Maximum = _prints.Count + 0.5,
-                MajorStep = 1,
-                MinorStep = 1
+                Maximum = _prints.Count + 0.5
             };
             LinearAxis myXaxis2 = new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
                 Title = "Print Number",
                 Minimum = 0.5,
-                Maximum = _prints.Count + 0.5,
-                MajorStep = 1,
-                MinorStep = 1
+                Maximum = _prints.Count + 0.5
             };
             LinearAxis myYaxis1 = new LinearAxis()
             {
@@ -408,18 +405,14 @@ namespace XferSuite
                 Position = AxisPosition.Bottom,
                 Title = "Print Number",
                 Minimum = 0.5,
-                Maximum = _prints.Count + 0.5,
-                MajorStep = 1,
-                MinorStep = 1
+                Maximum = _prints.Count + 0.5
             };
             LinearAxis myXaxis2 = new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
                 Title = "Print Number",
                 Minimum = 0.5,
-                Maximum = _prints.Count + 0.5,
-                MajorStep = 1,
-                MinorStep = 1
+                Maximum = _prints.Count + 0.5
             };
             LinearAxis myYaxis1 = new LinearAxis()
             {
@@ -519,18 +512,14 @@ namespace XferSuite
                 Position = AxisPosition.Bottom,
                 Title = "Print Number",
                 Minimum = 0.5,
-                Maximum = _prints.Count + 0.5,
-                MajorStep = 1,
-                MinorStep = 1
+                Maximum = _prints.Count + 0.5
             };
             LinearAxis myYaxis = new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 Title = "Functional Yield (%)",
                 Minimum = yieldList.Min() - 0.25,
-                Maximum = 100.25,
-                MajorStep = 1,
-                MinorStep = 1
+                Maximum = 100.25
             };
 
             yield.Axes.Add(myXaxis);
@@ -539,22 +528,63 @@ namespace XferSuite
             yieldPlot.Model = yield;
         }
 
-        private void Plot_Click(object sender, EventArgs e)
+        private void Plot_DoubleClick(object sender, EventArgs e)
         {
-            PlotView thisPlot = (PlotView)sender;
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.Title = "Export " + thisPlot.AccessibleName;
+                saveFileDialog.Title = "Export 4 Graph Summary";
                 saveFileDialog.DefaultExt = ".png";
                 saveFileDialog.Filter = "png file (*.png)|*.png";
                 saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.FileName = Text.Replace(".txt", "");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    var pngExporter = new PngExporter { Width = thisPlot.Width, Height = thisPlot.Height, Background = OxyColors.White };
-                    pngExporter.ExportToFile(thisPlot.Model, saveFileDialog.FileName);
+                    PlotView thisPlot = (PlotView)sender;
+                    Bitmap output = ComposeMosaic(thisPlot.Size);
+                    output.Save(saveFileDialog.FileName);
                 }
             }
+        }
+
+        private Bitmap ComposeMosaic(Size size)
+        {
+            Bitmap bmp = new Bitmap(size.Width * 2, size.Height * 2); // First 2 pages
+
+            int i = 0;
+            int j = 0;
+
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, size.Width * 2, size.Height * 2));
+
+                foreach (TabPage page in tabControl1.TabPages)
+                {
+                    if (j == 2)
+                    {
+                        continue; // Only save first 2 pages for now
+                    }
+
+                    foreach (TableLayoutPanel tlp in page.Controls.OfType<TableLayoutPanel>())
+                    {
+                        foreach (PlotView plot in tlp.Controls.OfType<PlotView>())
+                        {
+                            var pngExporter = new PngExporter { Width = size.Width, Height = size.Width, Background = OxyColors.White };
+                            g.DrawImage(pngExporter.ExportToBitmap(plot.Model), new Rectangle(i * size.Width, j * size.Height, size.Width, size.Height), 
+                                new Rectangle(0, 0, size.Width, size.Height), GraphicsUnit.Pixel);
+
+                            i += 1;
+                            if (i == 2)
+                            {
+                                i = 0;
+                                j += 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return bmp;
         }
     }
 }
