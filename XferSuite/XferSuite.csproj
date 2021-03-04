@@ -66,22 +66,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventLogParsing.cs">
+    <Compile Include="Apps\EventLogParsing.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EventLogParsing.Designer.cs">
+    <Compile Include="Apps\EventLogParsing.Designer.cs">
       <DependentUpon>EventLogParsing.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fingerprinting.cs">
+    <Compile Include="Apps\Fingerprinting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fingerprinting.Designer.cs">
+    <Compile Include="Apps\Fingerprinting.Designer.cs">
       <DependentUpon>Fingerprinting.cs</DependentUpon>
     </Compile>
-    <Compile Include="MapFlip.cs">
+    <Compile Include="Apps\MapFlip.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MapFlip.designer.cs">
+    <Compile Include="Apps\MapFlip.designer.cs">
       <DependentUpon>MapFlip.cs</DependentUpon>
     </Compile>
     <Compile Include="MainMenu.cs">
@@ -90,17 +90,17 @@
     <Compile Include="MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="MetroGraphs.cs">
+    <Compile Include="Apps\MetroGraphs.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MetroGraphs.Designer.cs">
+    <Compile Include="Apps\MetroGraphs.Designer.cs">
       <DependentUpon>MetroGraphs.cs</DependentUpon>
     </Compile>
-    <Compile Include="PrintSim\Parameters.cs" />
-    <Compile Include="PrintSim\PrintSim.cs">
+    <Compile Include="Apps\PrintSim\Parameters.cs" />
+    <Compile Include="Apps\PrintSim\PrintSim.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PrintSim\PrintSim.Designer.cs">
+    <Compile Include="Apps\PrintSim\PrintSim.Designer.cs">
       <DependentUpon>PrintSim.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -111,22 +111,22 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="EventLogParsing.resx">
+    <EmbeddedResource Include="Apps\EventLogParsing.resx">
       <DependentUpon>EventLogParsing.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fingerprinting.resx">
+    <EmbeddedResource Include="Apps\Fingerprinting.resx">
       <DependentUpon>Fingerprinting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MapFlip.resx">
+    <EmbeddedResource Include="Apps\MapFlip.resx">
       <DependentUpon>MapFlip.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MetroGraphs.resx">
+    <EmbeddedResource Include="Apps\MetroGraphs.resx">
       <DependentUpon>MetroGraphs.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PrintSim\PrintSim.resx">
+    <EmbeddedResource Include="Apps\PrintSim\PrintSim.resx">
       <DependentUpon>PrintSim.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
