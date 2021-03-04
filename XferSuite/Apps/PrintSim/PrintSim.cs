@@ -6,11 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using XferHelper;
 using static XferSuite.Parameters;
 
 namespace XferSuite
@@ -68,10 +70,8 @@ namespace XferSuite
             MakePlot();
         }
 
-        private List<RenderObject> _Devices = new List<RenderObject>();
-        private List<RenderObject> _Sites = new List<RenderObject>();
-        private List<PointF> _SourceBuilder = new List<PointF>();
-        private List<PointF> _TargetBuilder = new List<PointF>();
+        private List<Sim.ID> _Devices = new List<Sim.ID>();
+        private List<Sim.ID> _Sites = new List<Sim.ID>();
 
         private void btnOpenMap_Click(object sender, EventArgs e)
         {
@@ -97,17 +97,14 @@ namespace XferSuite
         {
             PlotModel map = new PlotModel();
             ScatterSeries scatter = new ScatterSeries();
-            foreach (RenderObject renderObject in _Devices)
+            foreach (Sim.ID device in _Devices)
             {
-                scatter.Points.Add(new ScatterPoint(renderObject.X, renderObject.Y,
-                    (renderObject.Width * renderObject.Height) / 1e3)
-                { Tag = string.Format("{0},{1},{2},{3},{4}", renderObject.RR, renderObject.RC, renderObject.R, renderObject.C, renderObject.IDX) });
+                scatter.Points.Add(new ScatterPoint(device.X, device.Y, (device.Width * device.Height) / 1e3) { Tag = device.ToString() });
             }
-            foreach (RenderObject renderObject in _Sites)
+            foreach (Sim.ID site in _Sites)
             {
-                scatter.Points.Add(new ScatterPoint(renderObject.X, renderObject.Y, 
-                    (renderObject.Width * renderObject.Height) / 1e3)
-                { Tag = string.Format("{0},{1},{2},{3}", renderObject.RR, renderObject.RC, renderObject.R, renderObject.C) });
+                scatter.Points.Add(new ScatterPoint(site.X, site.Y, (site.Width * site.Height) / 1e3) { Tag = site.ToString() });
+
             }
             map.Series.Add(scatter);
 
@@ -141,6 +138,7 @@ namespace XferSuite
 
         private void CreateSourceFeatures()
         {
+            List<PointF> _SourceBuilder = new List<PointF>();
             for (int j = 0; j < SourceChiplets.Y; j++)
             {
                 for (int i = (int)SourceChiplets.X - 1; i >= 0; i--)
@@ -164,13 +162,9 @@ namespace XferSuite
                             int idx = 0;
                             foreach (PointF pos in _SourceBuilder)
                             {
-                                RenderObject renderObject = new RenderObject(pos.X + k * SourceClusterPitch.X + m * SourceRegionPitch.X, pos.Y + l * SourceClusterPitch.Y + n * SourceRegionPitch.Y, _DeviceSizeX, _DeviceSizeY, Color.DarkBlue);
-                                renderObject.RR = rr + 1;
-                                renderObject.RC = rc + 1;
-                                renderObject.R = r + 1;
-                                renderObject.C = c + 1;
-                                renderObject.IDX = idx + 1;
-                                _Devices.Add(renderObject);
+                                _Devices.Add(new Sim.ID(pos.X + k * SourceClusterPitch.X + m * SourceRegionPitch.X, 
+                                                        pos.Y + l * SourceClusterPitch.Y + n * SourceRegionPitch.Y, 
+                                                        _DeviceSizeX, _DeviceSizeY, rr, rc, r, c, 0));
                                 idx++;
                             }
                             c++;
@@ -185,6 +179,7 @@ namespace XferSuite
 
         private void CreateTargetFeatures()
         {
+            List<PointF> _TargetBuilder = new List<PointF>();
             for (int j = 0; j < StampPosts.Y; j++)
             {
                 for (int i = (int)StampPosts.X - 1; i >= 0; i--)
@@ -207,12 +202,9 @@ namespace XferSuite
                         {
                             foreach (PointF pos in _TargetBuilder)
                             {
-                                RenderObject renderObject = new RenderObject(pos.X + k * TargetPrintPitch.X + m * TargetClusterPitch.X, pos.Y + l * TargetPrintPitch.Y + n * TargetClusterPitch.Y, _DeviceSizeX, _DeviceSizeY, Color.DarkGreen);
-                                renderObject.RR = rr + 1;
-                                renderObject.RC = rc + 1;
-                                renderObject.R = r + 1;
-                                renderObject.C = c + 1;
-                                _Sites.Add(renderObject);
+                                _Sites.Add(new Sim.ID(pos.X + k * TargetPrintPitch.X + m * TargetClusterPitch.X, 
+                                                      pos.Y + l * TargetPrintPitch.Y + n * TargetClusterPitch.Y, 
+                                                      _DeviceSizeX, _DeviceSizeY, rr, rc, r, c, 0));
                             }
                             c++;
                         }
