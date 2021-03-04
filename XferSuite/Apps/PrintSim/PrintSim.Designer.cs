@@ -29,6 +29,7 @@ namespace XferSuite
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrintSim));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnOpenMap = new System.Windows.Forms.Button();
@@ -36,7 +37,10 @@ namespace XferSuite
             this.btnNext = new System.Windows.Forms.Button();
             this.btnFinish = new System.Windows.Forms.Button();
             this.plot = new OxyPlot.WindowsForms.PlotView();
+            this.fileSystemWatcher = new System.IO.FileSystemWatcher();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -119,6 +123,17 @@ namespace XferSuite
             this.plot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             this.plot.DoubleClick += new System.EventHandler(this.plot_DoubleClick);
             // 
+            // fileSystemWatcher
+            // 
+            this.fileSystemWatcher.EnableRaisingEvents = true;
+            this.fileSystemWatcher.Filter = "*.xrec";
+            this.fileSystemWatcher.NotifyFilter = System.IO.NotifyFilters.LastWrite;
+            this.fileSystemWatcher.SynchronizingObject = this;
+            // 
+            // timer
+            // 
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
             // PrintSim
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -130,6 +145,7 @@ namespace XferSuite
             this.Text = "Print Cycle Simulation";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -142,5 +158,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnFinish;
         private OxyPlot.WindowsForms.PlotView plot;
+        private System.IO.FileSystemWatcher fileSystemWatcher;
+        private System.Windows.Forms.Timer timer;
     }
 }

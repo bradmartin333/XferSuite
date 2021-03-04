@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,14 +65,33 @@ namespace XferSuite
         public PrintSim(string path)
         {
             InitializeComponent();
-            LoadRecipe(path);
+
+            _Path = path;
+            fileSystemWatcher.Path = Path.GetDirectoryName(path);
+            fileSystemWatcher.Changed += UpdateFile;
+
+            UpdateAll();
+        }
+
+        private string _Path;
+        private List<Sim.ID> _Devices = new List<Sim.ID>();
+        private List<Sim.ID> _Sites = new List<Sim.ID>();
+
+        private void UpdateAll()
+        {
+            timer.Start(); // Need a delay so fileSystemWatcher and XML reader don't overlap
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            _Devices.Clear();
+            _Sites.Clear();
+            LoadRecipe(_Path);
             CreateSourceFeatures();
             CreateTargetFeatures();
             MakePlot();
+            timer.Stop();
         }
-
-        private List<Sim.ID> _Devices = new List<Sim.ID>();
-        private List<Sim.ID> _Sites = new List<Sim.ID>();
 
         private void btnOpenMap_Click(object sender, EventArgs e)
         {
@@ -91,6 +111,14 @@ namespace XferSuite
         private void plot_DoubleClick(object sender, EventArgs e)
         {
 
+        }
+
+        private void UpdateFile(object sender, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Changed && _WatchFile)
+            {
+                UpdateAll();
+            }
         }
 
         private void MakePlot()
@@ -134,6 +162,7 @@ namespace XferSuite
             map.Axes.Add(myXaxis);
             map.Axes.Add(myYaxis);
             plot.Model = map;
+            Refresh();
         }
 
         private void CreateSourceFeatures()
