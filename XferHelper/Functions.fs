@@ -182,7 +182,6 @@ module Metro =
                 x.Aln <- " FAIL "
             else
                 x.Aln <- " PASS "
-        data
 
 module Zed =
     type Position = {Time:System.DateTime; X:float; Y:float; H:float}

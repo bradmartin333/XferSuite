@@ -57,6 +57,7 @@ namespace XferSuite
             this.PrintList.FormattingEnabled = true;
             this.PrintList.Location = new System.Drawing.Point(3, 3);
             this.PrintList.Name = "PrintList";
+            this.PrintList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.PrintList.Size = new System.Drawing.Size(119, 418);
             this.PrintList.TabIndex = 0;
             this.PrintList.SelectedIndexChanged += new System.EventHandler(this.PrintList_SelectedIndexChanged);

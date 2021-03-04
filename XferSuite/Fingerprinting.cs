@@ -32,6 +32,21 @@ namespace XferSuite
             }
         }
 
+        private float _Threshold = 1.5F;
+        [
+            Category("User Parameters"),
+            Description("Positions with placement error greater than this micron value will be filtered out of the plotted data")
+        ]
+        public float Threshold
+        {
+            get => _Threshold;
+            set
+            {
+                _Threshold = value;
+                MakePlot();
+            }
+        }
+
         public Fingerprinting(Metro.Position[] data)
         {
             InitializeComponent();
@@ -66,13 +81,19 @@ namespace XferSuite
 
         private void MakePlot()
         {
-            Metro.Position[] plotData = Metro.getPrint(_prints[PrintList.SelectedIndex], _data);
+            Metro.Rescore(_data, Threshold);
+            Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
+            Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
             PlotModel vectorPlot = new PlotModel() { TitleFontSize = 15 };
 
-            for (int i = 0; i < plotData.Length; i++)
+            foreach (int idx in PrintList.SelectedIndices)
             {
-                vectorPlot.Series.Add(PlotVector(plotData[i]));
+                Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
+                for (int i = 0; i < printData.Length; i++)
+                {
+                    vectorPlot.Series.Add(PlotVector(printData[i]));
+                }
             }
 
             LinearAxis myXaxis = new LinearAxis()
