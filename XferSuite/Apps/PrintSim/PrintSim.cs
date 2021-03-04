@@ -136,7 +136,6 @@ namespace XferSuite
             scatter.TrackerFormatString = scatter.TrackerFormatString + Environment.NewLine + "{Tag}";
             map.Axes.Add(myXaxis);
             map.Axes.Add(myYaxis);
-
             plot.Model = map;
         }
 
