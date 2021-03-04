@@ -41,7 +41,7 @@ namespace XferSuite
                 switch (idx)
                 {
                     case 0:
-                        if (!InitMetroGraphs(idx))
+                        if (!ReadMetro(idx))
                         {
                             break;
                         }
@@ -57,6 +57,10 @@ namespace XferSuite
                         settings.controlsArr[idx] = ZS;
                         break;
                     case 2:
+                        if (!ReadMetro(idx))
+                        {
+                            break;
+                        }
                         break;
                     case 3:
                         break;
@@ -124,7 +128,7 @@ namespace XferSuite
             return null;
         }
 
-        private bool InitMetroGraphs(int idx)
+        private bool ReadMetro(int idx)
         {
             string path = OpenFile("Open an Inlinepositions File");
             if (path == null)
@@ -138,7 +142,7 @@ namespace XferSuite
             switch (fileType)
             {
                 case 0:
-                    MessageBox.Show("Insufficient data in file", "XferSuite Inlinepositions");
+                    MessageBox.Show("Insufficient data in file", "XferSuite");
                     return false;
                 case 1:
                     data = Metro.data(path);
@@ -147,13 +151,24 @@ namespace XferSuite
                     data = Metro.data(path);
                     break;
                 default:
-                    MessageBox.Show("Invalid file", "XferSuite Inlinepositions");
+                    MessageBox.Show("Invalid file", "XferSuite");
                     return false;
             }
 
-            MetroGraphs MG = new MetroGraphs(data) { Text = new FileInfo(path).Name };
-            MG.FormClosed += new FormClosedEventHandler(controlClosed);
-            settings.controlsArr[idx] = MG;
+            switch (idx)
+            {
+                case 0:
+                    MetroGraphs MG = new MetroGraphs(data) { Text = new FileInfo(path).Name };
+                    MG.FormClosed += new FormClosedEventHandler(controlClosed);
+                    settings.controlsArr[idx] = MG;
+                    break;
+                case 2:
+                    Fingerprinting FP = new Fingerprinting(data) { Text = new FileInfo(path).Name };
+                    FP.FormClosed += new FormClosedEventHandler(controlClosed);
+                    settings.controlsArr[idx] = FP;
+                    break;
+            }
+
             return true;
         }
     }
