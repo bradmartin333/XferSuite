@@ -1,10 +1,14 @@
 ﻿namespace XferHelper
 
 open MathNet.Numerics.Statistics
+open MathNet.Numerics.Distributions
 open System.IO
 open System
 
 module Stats =
+    let mean (data:float[]) =
+        Statistics.Mean(data)
+
     let median (data:float[]) =
         Statistics.Median(data)
 
@@ -12,7 +16,14 @@ module Stats =
         Statistics.PopulationStandardDeviation(data)
 
     let threeSig (data:float[]) =
-        Statistics.PopulationStandardDeviation(data) * 3.0
+        Math.Round(stdDev(data) * 3.0, 3)
+
+    let normVal (data:float[], i:float) : float =
+        let norm = Normal.WithMeanStdDev(mean(data), stdDev(data))
+        norm.Density(i)
+
+    let summary (data:float[]) =
+        Statistics.FiveNumberSummary(data)
 
 module Metro =
     [<Literal>] 
@@ -37,7 +48,8 @@ module Metro =
             else
                 3 //Fail
 
-    type Position = {Num:int;
+    type Position = {mutable PrintNum:int;
+                    Num:int;
                     X:float;
                     Y:float;
                     RR:int;
@@ -49,7 +61,7 @@ module Metro =
                     XE:float;
                     YE:float;
                     Yld:string;
-                    Aln:string;
+                    mutable Aln:string;
                     AE:float}
 
     let toPosition (csvData:string) =
@@ -90,7 +102,8 @@ module Metro =
         let AE = 
             if single then float columns.[10]
             else float columns.[14]
-        {Num = Num;
+        {PrintNum = 0;
+        Num = Num;
         X = X;
         Y = Y;
         RR = RR;
@@ -112,6 +125,14 @@ module Metro =
         |> Array.map toPosition
 
     let data (path:string) = reader path
+
+    let missingData (data:Position[]) =
+        data
+        |> Array.partition(fun x -> x.Yld = " FAIL " && x.Aln = " NA ")
+
+    let failData (data:Position[]) =
+        data
+        |> Array.partition(fun x -> x.Yld = " PASS " && x.Aln = " FAIL ")
 
     let prints (data:Position[]) =
         data
@@ -137,27 +158,31 @@ module Metro =
 
     let XError (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
         |> Array.map(fun x -> x.XE * 1e3)
 
     let YError (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
         |> Array.map(fun x -> x.YE * 1e3)
 
     let X3Sig (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
         |> Array.map(fun x -> x.XE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
 
     let Y3Sig (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
         |> Array.map(fun x -> x.YE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
+
+    let Rescore (data:Position[], threshold:float) =
+        for x in data do
+            if (Math.Abs(x.XE) > threshold / 1e3 || Math.Abs(x.YE) > threshold / 1e3) then
+                x.Aln <- " FAIL "
+            else
+                x.Aln <- " PASS "
+        data
 
 module Zed =
     type Position = {Time:System.DateTime; X:float; Y:float; H:float}
