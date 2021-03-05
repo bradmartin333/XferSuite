@@ -276,7 +276,7 @@ module Sim =
     type ID = {X:float
                Y:float
                Width:float
-               Height: float
+               Height:float
                RR:int
                RC:int
                R:int
@@ -287,6 +287,27 @@ module Sim =
                 override this.ToString() =
                     string this.RR + "," + string this.RC + "," + string this.R + "," + string this.C + "," + string this.IDX
 
+    let toID (x:float,
+              y:float,
+              width:float,
+              height:float,
+              rr:int,
+              rc:int,
+              r:int,
+              c:int,
+              idx:int,
+              selected:bool) =
+        {X = x;
+         Y = y;
+         Width = width;
+         Height = height;
+         RR = rr;
+         RC = rc;
+         R = r;
+         C = c;
+         IDX = idx;
+         Selected = selected}
+
     let SelectDevice (rr:int, rc:int, idx:int, ids:ID[]) =
         for x in ids do
             if x.RR = rr && x.RC = rc && x.IDX = idx then
@@ -296,3 +317,30 @@ module Sim =
         for x in ids do
             if x.RR = rr && x.RC = rc && x.R = r && x.C = c then
                 x.Selected <- true
+
+    let MakeIDs (ax:float, ay:float, 
+                 bx:float, by:float, 
+                 cx:float, cy:float, 
+                 apx:float, apy:float, 
+                 bpx:float, bpy:float,
+                 cpx:float, cpy:float,
+                 ox:float, oy:float,
+                 device:bool) : ID[] =
+        [|
+        for n in 0. .. cy-1. do
+            for m in 0. .. cx-1. do
+                for l in 0. .. by-1. do
+                    for k in 0. .. bx-1. do
+                        let mutable idx = 1
+                        if device then
+                            idx <- int (ax*ay)
+                        for j in 0. .. ay-1. do
+                            for i in 0. .. ax-1. do
+                            yield toID(float (i*apx+k*bpx+m*cpx+ox),
+                                       float (j*apy+l*bpy+n*cpy+oy),
+                                       1., 1.,
+                                       int (cx-m), int (cy-n), int (bx-k), int (by-l), 
+                                       idx, false)
+                            if device then
+                                idx <- idx - 1
+        |]

@@ -141,12 +141,15 @@ namespace XferSuite
 
             ScatterSeries availableDevices = new ScatterSeries() { MarkerFill = OxyColors.DarkSeaGreen };
             ScatterSeries pickedDevices = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.LightSeaGreen, MarkerStrokeThickness = 1 };
-            ScatterSeries availableSites = new ScatterSeries() { MarkerFill = OxyColors.BlueViolet };
-            ScatterSeries printedSites = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.DarkBlue, MarkerStrokeThickness = 1 };
+            ScatterSeries availableSites = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.DarkBlue, MarkerStrokeThickness = 1 };
+            ScatterSeries printedSites = new ScatterSeries() { MarkerFill = OxyColors.BlueViolet };
+
+            Sim.SelectDevice(1, 1, 1, _Devices.ToArray());
+            Sim.SelectSite(1, 1, 1, 1, _Sites.ToArray());
 
             foreach (Sim.ID device in _Devices)
             {
-                ScatterPoint thisDevice = new ScatterPoint(device.X, device.Y, (device.Width * device.Height) / 1e3) { Tag = device.ToString() };
+                ScatterPoint thisDevice = new ScatterPoint(device.X, device.Y) { Tag = device.ToString() };
                 if (device.Selected)
                 {
                     pickedDevices.Points.Add(thisDevice);
@@ -158,7 +161,7 @@ namespace XferSuite
             }
             foreach (Sim.ID site in _Sites)
             {
-                ScatterPoint thisSite = new ScatterPoint(site.X, site.Y, (site.Width * site.Height) / 1e3) { Tag = site.ToString() };
+                ScatterPoint thisSite = new ScatterPoint(site.X, site.Y) { Tag = site.ToString() };
                 if (site.Selected)
                 {
                     printedSites.Points.Add(thisSite);
@@ -209,82 +212,26 @@ namespace XferSuite
 
         private void CreateSourceFeatures()
         {
-            //List<PointF> _SourceBuilder = new List<PointF>();
-            //for (int j = (int)SourceChiplets.Y; j >= 0; j--)
-            //{
-            //    for (int i = (int)SourceChiplets.X - 1; i >= 0; i--)
-            //    {
-            //        _SourceBuilder.Add(new PointF(SourceOrigin.X + i * SourceChipletPitch.X, SourceOrigin.Y + j * SourceChipletPitch.Y));
-            //    }
-            //}
-
-            //int rr = 0;
-            //for (int n = (int)SourceRegions.Y; n >= 0; n--)
-            //{
-            //    int rc = 0;
-            //    for (int m = (int)SourceRegions.X - 1; m >= 0; m--)
-            //    {
-            //        int r = 0;
-            //        for (int l = (int)SourceClusters.Y; l >= 0; l--)
-            //        {
-            //            int c = 0;
-            //            for (int k = (int)SourceClusters.X - 1; k >= 0; k--)
-            //            {
-            //                int idx = 0;
-            //                foreach (PointF pos in _SourceBuilder)
-            //                {
-            //                    _Devices.Add(new Sim.ID(pos.X + k * SourceClusterPitch.X + m * SourceRegionPitch.X, 
-            //                                            pos.Y + l * SourceClusterPitch.Y + n * SourceRegionPitch.Y, 
-            //                                            _DeviceSizeX, _DeviceSizeY, rr+1, rc+1, r+1, c+1, idx+1, false));
-            //                    idx++;
-            //                }
-            //                c++;
-            //            }
-            //            r++;
-            //        }
-            //        rc++;
-            //    }
-            //    rr++;
-            //}
+            _Devices.AddRange(Sim.MakeIDs(SourceChiplets.X, SourceChiplets.Y,
+                                          SourceClusters.X, SourceClusters.Y,
+                                          SourceRegions.X, SourceRegions.Y,
+                                          SourceChipletPitch.X, SourceChipletPitch.Y,
+                                          SourceClusterPitch.X, SourceClusterPitch.Y,
+                                          SourceRegionPitch.X, SourceRegionPitch.Y,
+                                          SourceOrigin.X, SourceOrigin.Y,
+                                          true));
         }
 
         private void CreateTargetFeatures()
         {
-            //List<PointF> _TargetBuilder = new List<PointF>();
-            //for (int j = 0; j < StampPosts.Y; j++)
-            //{
-            //    for (int i = (int)StampPosts.X - 1; i >= 0; i--)
-            //    {
-            //        _TargetBuilder.Add(new PointF(TargetOrigin.X + i * StampPostPitch.X, TargetOrigin.Y + j * StampPostPitch.Y));
-            //    }
-            //}
-
-            //int rr = 0;
-            //for (int n = 0; n < TargetClusters.Y; n++)
-            //{
-            //    int rc = 0;
-            //    for (int m = (int)TargetClusters.X - 1; m >= 0; m--)
-            //    {
-            //        int r = 0;
-            //        for (int l = 0; l < TargetPrints.Y; l++)
-            //        {
-            //            int c = 0;
-            //            for (int k = (int)TargetPrints.X - 1; k >= 0; k--)
-            //            {
-            //                foreach (PointF pos in _TargetBuilder)
-            //                {
-            //                    _Sites.Add(new Sim.ID(pos.X + k * TargetPrintPitch.X + m * TargetClusterPitch.X, 
-            //                                          pos.Y + l * TargetPrintPitch.Y + n * TargetClusterPitch.Y, 
-            //                                          _DeviceSizeX, _DeviceSizeY, rr+1, rc+1, r+1, c+1, 0, false));
-            //                }
-            //                c++;
-            //            }
-            //            r++;
-            //        }
-            //        rc++;
-            //    }
-            //    rr++;
-            //}
+            _Sites.AddRange(Sim.MakeIDs(StampPosts.X, StampPosts.Y,
+                                        TargetPrints.X, TargetPrints.Y,
+                                        TargetClusters.X, TargetClusters.Y,
+                                        StampPostPitch.X, StampPostPitch.Y,
+                                        TargetPrintPitch.X, TargetPrintPitch.Y,
+                                        TargetClusterPitch.X, TargetClusterPitch.Y,
+                                        TargetOrigin.X, TargetOrigin.Y,
+                                        false));
         }
     }
 }
