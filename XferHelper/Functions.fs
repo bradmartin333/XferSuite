@@ -273,29 +273,26 @@ module Parser =
         getRuns d
   
 module Sim =
-    type ID =
-        struct
-            val X:float
-            val Y:float
-            val Width:float
-            val Height: float
-            val RR:int
-            val RC:int
-            val R:int
-            val C:int
-            val IDX:int
-            new(x, y, width, height, rr, rc, r, c, idx) = 
-                {X = x; 
-                Y = y; 
-                Width = width; 
-                Height = height; 
-                RR = r+1; 
-                RC = rc+1;
-                R = r+1; 
-                C = c+1; 
-                IDX = idx+1}
+    type ID = {X:float
+               Y:float
+               Width:float
+               Height: float
+               RR:int
+               RC:int
+               R:int
+               C:int
+               IDX:int
+               mutable Selected:bool}
+               
+                override this.ToString() =
+                    string this.RR + "," + string this.RC + "," + string this.R + "," + string this.C + "," + string this.IDX
 
-            override this.ToString() =
-                string this.RR + "," + string this.RC + "," + string this.R + "," + string this.C + "," + string this.IDX
-        end
-    
+    let SelectDevice (rr:int, rc:int, idx:int, ids:ID[]) =
+        for x in ids do
+            if x.RR = rr && x.RC = rc && x.IDX = idx then
+                x.Selected <- true
+
+    let SelectSite (rr:int, rc:int, r:int, c:int, ids:ID[]) =
+        for x in ids do
+            if x.RR = rr && x.RC = rc && x.R = r && x.C = c then
+                x.Selected <- true
