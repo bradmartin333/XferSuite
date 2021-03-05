@@ -144,9 +144,6 @@ namespace XferSuite
             ScatterSeries availableSites = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.DarkBlue, MarkerStrokeThickness = 1 };
             ScatterSeries printedSites = new ScatterSeries() { MarkerFill = OxyColors.BlueViolet };
 
-            Sim.SelectDevice(1, 1, 1, _Devices.ToArray());
-            Sim.SelectSite(1, 1, 1, 1, _Sites.ToArray());
-
             foreach (Sim.ID device in _Devices)
             {
                 ScatterPoint thisDevice = new ScatterPoint(device.X, device.Y) { Tag = device.ToString() };
