@@ -275,8 +275,6 @@ module Parser =
 module Sim =
     type ID = {X:float
                Y:float
-               Width:float
-               Height:float
                RR:int
                RC:int
                R:int
@@ -289,8 +287,6 @@ module Sim =
 
     let toID (x:float,
               y:float,
-              width:float,
-              height:float,
               rr:int,
               rc:int,
               r:int,
@@ -299,8 +295,6 @@ module Sim =
               selected:bool) =
         {X = x;
          Y = y;
-         Width = width;
-         Height = height;
          RR = rr;
          RC = rc;
          R = r;
@@ -338,7 +332,6 @@ module Sim =
                             for i in 0. .. ax-1. do
                             yield toID(float (i*apx+k*bpx+m*cpx+ox),
                                        float (j*apy+l*bpy+n*cpy+oy),
-                                       1., 1.,
                                        int (cx-m), int (cy-n), int (bx-k), int (by-l), 
                                        idx, false)
                             if device then

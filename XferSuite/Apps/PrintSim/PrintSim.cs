@@ -35,34 +35,6 @@ namespace XferSuite
             }
         }
 
-        private float _DeviceSizeX = 40F;
-        [
-            Category("User Parameters"),
-            Description("Width of device in microns")
-        ]
-        public float DeviceSizeX
-        {
-            get => _DeviceSizeX;
-            set
-            {
-                _DeviceSizeX = value;
-            }
-        }
-
-        private float _DeviceSizeY = 40F;
-        [
-            Category("User Parameters"),
-            Description("Height of device in microns")
-        ]
-        public float DeviceSizeY
-        {
-            get => _DeviceSizeY;
-            set
-            {
-                _DeviceSizeY = value;
-            }
-        }
-
         public PrintSim(string path)
         {
             InitializeComponent();
