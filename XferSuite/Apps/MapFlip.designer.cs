@@ -172,7 +172,7 @@ namespace XferSuite
             // 
             // pnlOutA
             // 
-            this.pnlOutA.BackColor = System.Drawing.Color.Red;
+            this.pnlOutA.BackColor = System.Drawing.Color.Green;
             this.pnlOutA.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlOutA.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlOutA.Location = new System.Drawing.Point(187, 95);
@@ -183,7 +183,7 @@ namespace XferSuite
             // 
             // pnlOutB
             // 
-            this.pnlOutB.BackColor = System.Drawing.Color.Green;
+            this.pnlOutB.BackColor = System.Drawing.Color.Red;
             this.pnlOutB.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlOutB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlOutB.Location = new System.Drawing.Point(237, 95);
@@ -193,7 +193,7 @@ namespace XferSuite
             // 
             // pnlOutC
             // 
-            this.pnlOutC.BackColor = System.Drawing.Color.Blue;
+            this.pnlOutC.BackColor = System.Drawing.Color.Yellow;
             this.pnlOutC.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlOutC.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlOutC.Location = new System.Drawing.Point(187, 141);
@@ -203,7 +203,7 @@ namespace XferSuite
             // 
             // pnlOutD
             // 
-            this.pnlOutD.BackColor = System.Drawing.Color.Yellow;
+            this.pnlOutD.BackColor = System.Drawing.Color.Blue;
             this.pnlOutD.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlOutD.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlOutD.Location = new System.Drawing.Point(237, 141);
