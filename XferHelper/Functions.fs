@@ -13,7 +13,7 @@ module Stats =
         Statistics.Median(data)
 
     let stdDev (data:float[]) =
-        Statistics.PopulationStandardDeviation(data)
+        Statistics.StandardDeviation(data)
 
     let threeSig (data:float[]) =
         Math.Round(stdDev(data) * 3.0, 3)

@@ -86,6 +86,13 @@ namespace XferSuite
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
             PlotModel vectorPlot = new PlotModel() { TitleFontSize = 15 };
+            vectorPlot.MouseDown += (s, e) =>
+            {
+                if (e.IsShiftDown)
+                {
+                    SavePlot();
+                }
+            };
 
             foreach (int idx in PrintList.SelectedIndices)
             {
@@ -154,7 +161,7 @@ namespace XferSuite
             return post;
         }
 
-        private void plot_DoubleClick(object sender, EventArgs e)
+        private void SavePlot()
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
@@ -162,11 +169,9 @@ namespace XferSuite
                 saveFileDialog.Title = "Export Fingerprint Plot";
                 saveFileDialog.DefaultExt = ".png";
                 saveFileDialog.Filter = "png file (*.png)|*.png";
-                saveFileDialog.RestoreDirectory = true;
                 saveFileDialog.FileName = Text.Replace(".txt", "Fingerprint");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    PlotView plot = (PlotView)sender;
                     var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width, Background = OxyColors.White };
                     pngExporter.ExportToFile(plot.Model, saveFileDialog.FileName);
                 }

@@ -81,7 +81,7 @@ namespace XferSuite
 
         }
 
-        private void plot_DoubleClick(object sender, EventArgs e)
+        private void SavePlot()
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
@@ -89,10 +89,8 @@ namespace XferSuite
                 saveFileDialog.Title = "Export Print Sim Map";
                 saveFileDialog.DefaultExt = ".png";
                 saveFileDialog.Filter = "png file (*.png)|*.png";
-                saveFileDialog.RestoreDirectory = true;
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    PlotView plot = (PlotView)sender;
                     var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width, Background = OxyColors.White };
                     pngExporter.ExportToFile(plot.Model, saveFileDialog.FileName);
                 }
@@ -110,6 +108,13 @@ namespace XferSuite
         private void MakePlot()
         {
             PlotModel map = new PlotModel();
+            map.MouseDown += (s, e) =>
+            {
+                if (e.IsShiftDown)
+                {
+                    SavePlot();
+                }
+            };
 
             ScatterSeries availableDevices = new ScatterSeries() { MarkerFill = OxyColors.DarkSeaGreen };
             ScatterSeries pickedDevices = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.LightSeaGreen, MarkerStrokeThickness = 1 };

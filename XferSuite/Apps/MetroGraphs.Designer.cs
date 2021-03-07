@@ -106,33 +106,38 @@ namespace XferSuite
             // 
             // scatterPlot
             // 
-            this.scatterPlot.AccessibleName = "Position Scatter Plot";
             this.scatterPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scatterPlot.Location = new System.Drawing.Point(3, 3);
             this.scatterPlot.Name = "scatterPlot";
             this.scatterPlot.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.scatterPlot.Size = new System.Drawing.Size(388, 343);
             this.scatterPlot.TabIndex = 1;
-            this.scatterPlot.Text = "plotView1";
+            this.scatterPlot.Tag = "1";
+            this.scatterPlot.Text = "Position Scatter Plot";
             this.scatterPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.scatterPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.scatterPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.scatterPlot.DoubleClick += new System.EventHandler(this.Plot_DoubleClick);
             // 
             // errorScatterPlot
             // 
-            this.errorScatterPlot.AccessibleName = "Error Scatter Plot";
             this.errorScatterPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorScatterPlot.Location = new System.Drawing.Point(397, 3);
             this.errorScatterPlot.Name = "errorScatterPlot";
             this.errorScatterPlot.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.errorScatterPlot.Size = new System.Drawing.Size(388, 343);
             this.errorScatterPlot.TabIndex = 2;
-            this.errorScatterPlot.Text = "plotView1";
+            this.errorScatterPlot.Tag = "1";
+            this.errorScatterPlot.Text = "Error Scatter Plot";
             this.errorScatterPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.errorScatterPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.errorScatterPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.errorScatterPlot.DoubleClick += new System.EventHandler(this.Plot_DoubleClick);
+            // 
+            // webBrowser1
+            // 
+            this.webBrowser1.Location = new System.Drawing.Point(0, 0);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(250, 250);
+            this.webBrowser1.TabIndex = 3;
             // 
             // tabPage2
             // 
@@ -163,33 +168,31 @@ namespace XferSuite
             // 
             // histogramPlotX
             // 
-            this.histogramPlotX.AccessibleName = "X Error Histogram";
             this.histogramPlotX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.histogramPlotX.Location = new System.Drawing.Point(3, 3);
             this.histogramPlotX.Name = "histogramPlotX";
             this.histogramPlotX.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.histogramPlotX.Size = new System.Drawing.Size(388, 343);
             this.histogramPlotX.TabIndex = 0;
-            this.histogramPlotX.Text = "plotView1";
+            this.histogramPlotX.Tag = "1";
+            this.histogramPlotX.Text = "X Error Histogram";
             this.histogramPlotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.histogramPlotX.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.histogramPlotX.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.histogramPlotX.DoubleClick += new System.EventHandler(this.Plot_DoubleClick);
             // 
             // histogramPlotY
             // 
-            this.histogramPlotY.AccessibleName = "Y Error Histogram";
             this.histogramPlotY.Dock = System.Windows.Forms.DockStyle.Fill;
             this.histogramPlotY.Location = new System.Drawing.Point(397, 3);
             this.histogramPlotY.Name = "histogramPlotY";
             this.histogramPlotY.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.histogramPlotY.Size = new System.Drawing.Size(388, 343);
             this.histogramPlotY.TabIndex = 1;
-            this.histogramPlotY.Text = "plotView1";
+            this.histogramPlotY.Tag = "1";
+            this.histogramPlotY.Text = "Y Error Histogram";
             this.histogramPlotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.histogramPlotY.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.histogramPlotY.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.histogramPlotY.DoubleClick += new System.EventHandler(this.Plot_DoubleClick);
             // 
             // tabPage3
             // 
@@ -219,28 +222,26 @@ namespace XferSuite
             // 
             // errorBoxplotX
             // 
-            this.errorBoxplotX.AccessibleName = "X Error Boxplot";
             this.errorBoxplotX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorBoxplotX.Location = new System.Drawing.Point(3, 3);
             this.errorBoxplotX.Name = "errorBoxplotX";
             this.errorBoxplotX.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.errorBoxplotX.Size = new System.Drawing.Size(391, 349);
             this.errorBoxplotX.TabIndex = 0;
-            this.errorBoxplotX.Text = "plotView1";
+            this.errorBoxplotX.Text = "X Error Boxplot";
             this.errorBoxplotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.errorBoxplotX.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.errorBoxplotX.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // errorBoxplotY
             // 
-            this.errorBoxplotY.AccessibleName = "Y Error Boxplot";
             this.errorBoxplotY.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorBoxplotY.Location = new System.Drawing.Point(400, 3);
             this.errorBoxplotY.Name = "errorBoxplotY";
             this.errorBoxplotY.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.errorBoxplotY.Size = new System.Drawing.Size(391, 349);
             this.errorBoxplotY.TabIndex = 1;
-            this.errorBoxplotY.Text = "plotView1";
+            this.errorBoxplotY.Text = "Y Error Boxplot";
             this.errorBoxplotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.errorBoxplotY.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.errorBoxplotY.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
@@ -273,28 +274,26 @@ namespace XferSuite
             // 
             // sigmaPlotX
             // 
-            this.sigmaPlotX.AccessibleName = "X 3Sigma Plot";
             this.sigmaPlotX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sigmaPlotX.Location = new System.Drawing.Point(3, 3);
             this.sigmaPlotX.Name = "sigmaPlotX";
             this.sigmaPlotX.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.sigmaPlotX.Size = new System.Drawing.Size(391, 349);
             this.sigmaPlotX.TabIndex = 0;
-            this.sigmaPlotX.Text = "plotView1";
+            this.sigmaPlotX.Text = "X 3Sigma Plot";
             this.sigmaPlotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.sigmaPlotX.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.sigmaPlotX.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // sigmaPlotY
             // 
-            this.sigmaPlotY.AccessibleName = "Y 3Sigma Plot";
             this.sigmaPlotY.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sigmaPlotY.Location = new System.Drawing.Point(400, 3);
             this.sigmaPlotY.Name = "sigmaPlotY";
             this.sigmaPlotY.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.sigmaPlotY.Size = new System.Drawing.Size(391, 349);
             this.sigmaPlotY.TabIndex = 1;
-            this.sigmaPlotY.Text = "plotView1";
+            this.sigmaPlotY.Text = "Y 3Sigma Plot";
             this.sigmaPlotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.sigmaPlotY.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.sigmaPlotY.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
@@ -311,14 +310,13 @@ namespace XferSuite
             // 
             // yieldPlot
             // 
-            this.yieldPlot.AccessibleName = "Yield Plot";
             this.yieldPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.yieldPlot.Location = new System.Drawing.Point(0, 0);
             this.yieldPlot.Name = "yieldPlot";
             this.yieldPlot.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.yieldPlot.Size = new System.Drawing.Size(794, 355);
             this.yieldPlot.TabIndex = 0;
-            this.yieldPlot.Text = "plotView1";
+            this.yieldPlot.Text = "Yield Plot";
             this.yieldPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.yieldPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.yieldPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
