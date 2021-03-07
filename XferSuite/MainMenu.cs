@@ -52,7 +52,7 @@ namespace XferSuite
                         {
                             break;
                         }
-                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect() { Path = path, Location = PointToScreen(btn.Location) };
+                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect() { Path = path };
                         ZS.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = ZS;
                         break;
@@ -78,13 +78,7 @@ namespace XferSuite
                         {
                             break;
                         }
-                        string[] readText = File.ReadAllLines(path);
-                        Parser.Event[] prints = Parser.main(readText);
-                        EventLogParsing ELP = new EventLogParsing { Location = PointToScreen(btn.Location) };
-                        foreach (Parser.Event p in prints)
-                        {
-                            ELP.richTextBox.Text += p.Time + Environment.NewLine;
-                        }
+                        EventLogParsing ELP = new EventLogParsing(path);
                         ELP.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = ELP;
                         break;

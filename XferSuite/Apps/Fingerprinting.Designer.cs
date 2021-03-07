@@ -74,7 +74,6 @@ namespace XferSuite
             this.plot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            this.plot.DoubleClick += new System.EventHandler(this.plot_DoubleClick);
             // 
             // Fingerprinting
             // 
