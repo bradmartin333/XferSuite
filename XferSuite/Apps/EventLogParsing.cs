@@ -93,7 +93,7 @@ namespace XferSuite
             print.Axes.Add(myXaxis);
             print.Axes.Add(myYaxis);
             print.Series.Add(timeSeries);
-            print.Title = string.Format("Median: {0} s   3Sigma: {1}", Stats.median(times), Stats.threeSig(times));
+            print.Title = string.Format("Median: {0} s   Mean: {1} s", Stats.median(times), Stats.mean(times));
             print.Subtitle = string.Format("Max Filter = {0} s", _MaxTime.ToString());
             plot.Model = print;
         }

@@ -7,7 +7,7 @@ open System
 
 module Stats =
     let mean (data:float[]) =
-        Statistics.Mean(data)
+        Math.Round(Statistics.Mean(data), 3)
 
     let median (data:float[]) =
         Math.Round(Statistics.Median(data), 3)
