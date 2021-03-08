@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using XferHelper;
 using static XferSuite.Parameters;
+using static XferSuite.TransferMap;
 
 namespace XferSuite
 {
@@ -47,6 +48,7 @@ namespace XferSuite
         }
 
         private string _Path;
+        private string _MapPath;
         private List<Sim.ID> _Devices = new List<Sim.ID>();
         private List<Sim.ID> _Sites = new List<Sim.ID>();
 
@@ -60,6 +62,10 @@ namespace XferSuite
             _Devices.Clear();
             _Sites.Clear();
             LoadRecipe(_Path);
+            if (!(_MapPath == null))
+            {
+                LoadMap(_MapPath);
+            }
             CreateSourceFeatures();
             CreateTargetFeatures();
             MakePlot();
@@ -68,7 +74,18 @@ namespace XferSuite
 
         private void btnOpenMap_Click(object sender, EventArgs e)
         {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Title = "Open a Transfer Map";
+                openFileDialog.Filter = "xmap file (*.xmap)|*.xmap";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _MapPath = openFileDialog.FileName;
+                }
+            }
 
+            UpdateAll();
         }
 
         private void btnNext_Click(object sender, EventArgs e)
