@@ -41,38 +41,44 @@ namespace XferSuite
                 switch (idx)
                 {
                     case 0:
-                        if (!InitMetroGraphs(idx))
+                        if (!ReadMetro(idx))
                         {
                             break;
                         }
                         break;
                     case 1:
-                        path = OpenFile("Open a HeightSensorLog File");
+                        path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
                         if (path == null)
                         {
                             break;
                         }
-                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect() { Path = path, Location = PointToScreen(btn.Location) };
+                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect() { Path = path };
                         ZS.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = ZS;
                         break;
                     case 2:
+                        if (!ReadMetro(idx))
+                        {
+                            break;
+                        }
                         break;
                     case 3:
-                        break;
-                    case 4:
-                        path = OpenFile("Open an EventLog File");
+                        path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
                         if (path == null)
                         {
                             break;
                         }
-                        string[] readText = File.ReadAllLines(path);
-                        Parser.Event[] prints = Parser.main(readText);
-                        EventLogParsing ELP = new EventLogParsing { Location = PointToScreen(btn.Location) };
-                        foreach (Parser.Event p in prints)
+                        PrintSim PS = new PrintSim(path);
+                        PS.FormClosed += new FormClosedEventHandler(controlClosed);
+                        settings.controlsArr[idx] = PS;
+                        break;
+                    case 4:
+                        path = OpenFile("Open an EventLog File", "txt file (*.txt)|*.txt");
+                        if (path == null)
                         {
-                            ELP.richTextBox.Text += p.Time + Environment.NewLine;
+                            break;
                         }
+                        EventLogParsing ELP = new EventLogParsing(path);
                         ELP.FormClosed += new FormClosedEventHandler(controlClosed);
                         settings.controlsArr[idx] = ELP;
                         break;
@@ -110,12 +116,13 @@ namespace XferSuite
             settings.BringToFront();
         }
 
-        private string OpenFile(string title)
+        private string OpenFile(string title, string filter)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Title = title;
+                openFileDialog.Filter = filter;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     return openFileDialog.FileName;
@@ -124,9 +131,9 @@ namespace XferSuite
             return null;
         }
 
-        private bool InitMetroGraphs(int idx)
+        private bool ReadMetro(int idx)
         {
-            string path = OpenFile("Open an Inlinepositions File");
+            string path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
             if (path == null)
             {
                 return false;
@@ -138,7 +145,7 @@ namespace XferSuite
             switch (fileType)
             {
                 case 0:
-                    MessageBox.Show("Insufficient data in file", "XferSuite Inlinepositions");
+                    MessageBox.Show("Insufficient data in file", "XferSuite");
                     return false;
                 case 1:
                     data = Metro.data(path);
@@ -147,13 +154,24 @@ namespace XferSuite
                     data = Metro.data(path);
                     break;
                 default:
-                    MessageBox.Show("Invalid file", "XferSuite Inlinepositions");
+                    MessageBox.Show("Invalid file", "XferSuite");
                     return false;
             }
 
-            MetroGraphs MG = new MetroGraphs(data) { Text = new FileInfo(path).Name };
-            MG.FormClosed += new FormClosedEventHandler(controlClosed);
-            settings.controlsArr[idx] = MG;
+            switch (idx)
+            {
+                case 0:
+                    MetroGraphs MG = new MetroGraphs(data) { Text = new FileInfo(path).Name };
+                    MG.FormClosed += new FormClosedEventHandler(controlClosed);
+                    settings.controlsArr[idx] = MG;
+                    break;
+                case 2:
+                    Fingerprinting FP = new Fingerprinting(data) { Text = new FileInfo(path).Name };
+                    FP.FormClosed += new FormClosedEventHandler(controlClosed);
+                    settings.controlsArr[idx] = FP;
+                    break;
+            }
+
             return true;
         }
     }

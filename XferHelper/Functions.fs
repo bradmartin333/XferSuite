@@ -1,18 +1,29 @@
 ﻿namespace XferHelper
 
 open MathNet.Numerics.Statistics
+open MathNet.Numerics.Distributions
 open System.IO
 open System
 
 module Stats =
+    let mean (data:float[]) =
+        Math.Round(Statistics.Mean(data), 3)
+
     let median (data:float[]) =
-        Statistics.Median(data)
+        Math.Round(Statistics.Median(data), 3)
 
     let stdDev (data:float[]) =
-        Statistics.PopulationStandardDeviation(data)
+        Statistics.StandardDeviation(data)
 
     let threeSig (data:float[]) =
-        Statistics.PopulationStandardDeviation(data) * 3.0
+        Math.Round(stdDev(data) * 3.0, 3)
+
+    let normVal (data:float[], i:float) : float =
+        let norm = Normal.WithMeanStdDev(mean(data), stdDev(data))
+        norm.Density(i)
+
+    let summary (data:float[]) =
+        Statistics.FiveNumberSummary(data)
 
 module Metro =
     [<Literal>] 
@@ -37,7 +48,8 @@ module Metro =
             else
                 3 //Fail
 
-    type Position = {Num:int;
+    type Position = {mutable PrintNum:int;
+                    Num:int;
                     X:float;
                     Y:float;
                     RR:int;
@@ -49,7 +61,7 @@ module Metro =
                     XE:float;
                     YE:float;
                     Yld:string;
-                    Aln:string;
+                    mutable Aln:string;
                     AE:float}
 
     let toPosition (csvData:string) =
@@ -90,7 +102,8 @@ module Metro =
         let AE = 
             if single then float columns.[10]
             else float columns.[14]
-        {Num = Num;
+        {PrintNum = 0;
+        Num = Num;
         X = X;
         Y = Y;
         RR = RR;
@@ -112,6 +125,14 @@ module Metro =
         |> Array.map toPosition
 
     let data (path:string) = reader path
+
+    let missingData (data:Position[]) =
+        data
+        |> Array.partition(fun x -> x.Yld = " FAIL " && x.Aln = " NA ")
+
+    let failData (data:Position[]) =
+        data
+        |> Array.partition(fun x -> x.Yld = " PASS " && x.Aln = " FAIL ")
 
     let prints (data:Position[]) =
         data
@@ -137,27 +158,30 @@ module Metro =
 
     let XError (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
         |> Array.map(fun x -> x.XE * 1e3)
 
     let YError (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
         |> Array.map(fun x -> x.YE * 1e3)
 
     let X3Sig (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
         |> Array.map(fun x -> x.XE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
 
     let Y3Sig (data:Position[]) =
         data
-        |> Array.filter(fun x -> x.Yld = " PASS " && x.Aln = " PASS ")
         |> Array.map(fun x -> x.YE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
+
+    let Rescore (data:Position[], threshold:float) =
+        for x in data do
+            if (Math.Abs(x.XE) > threshold / 1e3 || Math.Abs(x.YE) > threshold / 1e3) then
+                x.Aln <- " FAIL "
+            else
+                x.Aln <- " PASS "
 
 module Zed =
     type Position = {Time:System.DateTime; X:float; Y:float; H:float}
@@ -240,11 +264,97 @@ module Parser =
         |> Array.filter(fun x -> x <> "")
         |> Array.map toEvent
 
-    let getRuns (data:Event[]) = 
-        data 
-        |> Array.filter(fun x -> x.Msg.Contains "EVENT:  Program Started")
+    let getPrints (recipe:string, data:Event[]) = 
+        let timeStamps = Array.create data.Length DateTime.MinValue
+        let mutable idx = 0
+        for i in 0 .. data.Length - 1 do
+            if data.[i].Msg.Contains("EVENT: RestartProgram") then
+                timeStamps.[idx] <- data.[i].Time
+                idx <- idx + 1
+        
+        let times, nulls = 
+            timeStamps
+            |> Array.splitAt idx
 
-    let main (data:string[]) : Event[] =
-        let d = reader data
-        getRuns d
-   
+        let timeSpans = Array.create times.Length 0.
+        for i in 0 .. times.Length - 2 do
+            timeSpans.[i] <- times.[i+1].Subtract(times.[i]).TotalSeconds
+        
+        timeSpans
+        |> Array.filter(fun x -> x > 0.)
+
+    let filterPrints (times:float[], max:float) =
+        times
+        |> Array.filter(fun x -> x < max)
+
+    let getRecipes (data:Event[]) =
+        data
+        |> Array.filter(fun x -> x.Msg.Contains "EVENT: Recipe opened")
+        |> Array.map(fun x -> Array.rev(x.Msg.Split('\t')).[0])
+        |> Array.distinct
+  
+module Sim =
+    type ID = {X:float
+               Y:float
+               RR:int
+               RC:int
+               R:int
+               C:int
+               IDX:int
+               mutable Selected:bool}
+               
+                override this.ToString() =
+                    string this.RR + "," + string this.RC + "," + string this.R + "," + string this.C + "," + string this.IDX
+
+    let toID (x:float,
+              y:float,
+              rr:int,
+              rc:int,
+              r:int,
+              c:int,
+              idx:int,
+              selected:bool) =
+        {X = x;
+         Y = y;
+         RR = rr;
+         RC = rc;
+         R = r;
+         C = c;
+         IDX = idx;
+         Selected = selected}
+
+    let SelectDevice (vals:int[], ids:ID[], sel:bool) =
+        for x in ids do
+            if x.RR = vals.[0] && x.RC = vals.[1] && x.IDX = vals.[2] then
+                x.Selected <- sel
+
+    let SelectSite (vals:int[], ids:ID[], sel:bool) =
+        for x in ids do
+            if x.RR = vals.[0] && x.RC = vals.[1] && x.R = vals.[2] && x.C = vals.[3] then
+                x.Selected <- sel
+
+    let MakeIDs (ax:float, ay:float, 
+                 bx:float, by:float, 
+                 cx:float, cy:float, 
+                 apx:float, apy:float, 
+                 bpx:float, bpy:float,
+                 cpx:float, cpy:float,
+                 ox:float, oy:float,
+                 device:bool) : ID[] =
+        [|
+        for n in 0. .. cy-1. do
+            for m in 0. .. cx-1. do
+                for l in 0. .. by-1. do
+                    for k in 0. .. bx-1. do
+                        let mutable idx = 1
+                        if device then
+                            idx <- int (ax*ay)
+                        for j in 0. .. ay-1. do
+                            for i in 0. .. ax-1. do
+                            yield toID(float (i*apx+k*bpx+m*cpx+ox),
+                                       float (j*apy+l*bpy+n*cpy+oy),
+                                       int (cx-m), int (cy-n), int (bx-k), int (by-l), 
+                                       idx, false)
+                            if device then
+                                idx <- idx - 1
+        |]

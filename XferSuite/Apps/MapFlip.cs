@@ -245,10 +245,10 @@ namespace XferSuite
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            Panels[0].BackColor = Color.Red;
-            Panels[1].BackColor = Color.Green;
-            Panels[2].BackColor = Color.Blue;
-            Panels[3].BackColor = Color.Yellow;
+            Panels[0].BackColor = Color.Green;
+            Panels[1].BackColor = Color.Red;
+            Panels[2].BackColor = Color.Yellow;
+            Panels[3].BackColor = Color.Blue;
             Operations.Clear();
             File.Delete("last.txt");
             rtbOut.Text = "";
