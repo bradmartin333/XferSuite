@@ -47,7 +47,7 @@ namespace XferSuite
                         }
                         break;
                     case 1:
-                        path = OpenFile("Open a HeightSensorLog File");
+                        path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
                         if (path == null)
                         {
                             break;
@@ -63,7 +63,7 @@ namespace XferSuite
                         }
                         break;
                     case 3:
-                        path = OpenFile("Open a XferPrint recipe");
+                        path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
                         if (path == null)
                         {
                             break;
@@ -73,7 +73,7 @@ namespace XferSuite
                         settings.controlsArr[idx] = PS;
                         break;
                     case 4:
-                        path = OpenFile("Open an EventLog File");
+                        path = OpenFile("Open an EventLog File", "txt file (*.txt)|*.txt");
                         if (path == null)
                         {
                             break;
@@ -116,12 +116,13 @@ namespace XferSuite
             settings.BringToFront();
         }
 
-        private string OpenFile(string title)
+        private string OpenFile(string title, string filter)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Title = title;
+                openFileDialog.Filter = filter;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     return openFileDialog.FileName;
@@ -132,7 +133,7 @@ namespace XferSuite
 
         private bool ReadMetro(int idx)
         {
-            string path = OpenFile("Open an Inlinepositions File");
+            string path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
             if (path == null)
             {
                 return false;
