@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using XferHelper;
 using static XferSuite.Parameters;
+using static XferSuite.TransferMap;
 
 namespace XferSuite
 {
@@ -47,6 +48,8 @@ namespace XferSuite
         }
 
         private string _Path;
+        private string _MapPath;
+        private int _PrintNum = 0;
         private List<Sim.ID> _Devices = new List<Sim.ID>();
         private List<Sim.ID> _Sites = new List<Sim.ID>();
 
@@ -60,6 +63,12 @@ namespace XferSuite
             _Devices.Clear();
             _Sites.Clear();
             LoadRecipe(_Path);
+            if (!(_MapPath == null))
+            {
+                LoadMap(_MapPath);
+            }
+            _PrintNum = 0;
+            UpdatePrintIdx();
             CreateSourceFeatures();
             CreateTargetFeatures();
             MakePlot();
@@ -68,17 +77,43 @@ namespace XferSuite
 
         private void btnOpenMap_Click(object sender, EventArgs e)
         {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Title = "Open a Transfer Map";
+                openFileDialog.Filter = "xmap file (*.xmap)|*.xmap";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _MapPath = openFileDialog.FileName;
+                }
+            }
+            UpdateAll();
+        }
 
+        private void UpdatePrintIdx()
+        {
+            lblPrintIdx.Text = string.Format("{0}/{1} Prints", _PrintNum, _NumPrints);
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-
+            if (_PrintNum == _NumPrints)
+            {
+                return;
+            }
+            Sim.SelectDevice(_Picks[_PrintNum], _Devices.ToArray(), true);
+            Sim.SelectSite(_Prints[_PrintNum], _Sites.ToArray(), true);
+            MakePlot();
+            _PrintNum++;
+            UpdatePrintIdx();
         }
 
         private void btnFinish_Click(object sender, EventArgs e)
         {
-
+            while (_PrintNum != _NumPrints)
+            {
+                btnNext_Click(sender, e);
+            }
         }
 
         private void SavePlot()

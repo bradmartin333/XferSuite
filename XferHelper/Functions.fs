@@ -323,14 +323,14 @@ module Sim =
          IDX = idx;
          Selected = selected}
 
-    let SelectDevice (rr:int, rc:int, idx:int, ids:ID[], sel:bool) =
+    let SelectDevice (vals:int[], ids:ID[], sel:bool) =
         for x in ids do
-            if x.RR = rr && x.RC = rc && x.IDX = idx then
+            if x.RR = vals.[0] && x.RC = vals.[1] && x.IDX = vals.[2] then
                 x.Selected <- sel
 
-    let SelectSite (rr:int, rc:int, r:int, c:int, ids:ID[], sel:bool) =
+    let SelectSite (vals:int[], ids:ID[], sel:bool) =
         for x in ids do
-            if x.RR = rr && x.RC = rc && x.R = r && x.C = c then
+            if x.RR = vals.[0] && x.RC = vals.[1] && x.R = vals.[2] && x.C = vals.[3] then
                 x.Selected <- sel
 
     let MakeIDs (ax:float, ay:float, 

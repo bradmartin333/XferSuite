@@ -84,6 +84,7 @@
     <Compile Include="Apps\MapFlip.designer.cs">
       <DependentUpon>MapFlip.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\PrintSim\TransferMap.cs" />
     <Compile Include="MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
