@@ -49,6 +49,7 @@ namespace XferSuite
 
         private string _Path;
         private string _MapPath;
+        private int _PrintNum = 0;
         private List<Sim.ID> _Devices = new List<Sim.ID>();
         private List<Sim.ID> _Sites = new List<Sim.ID>();
 
@@ -66,6 +67,8 @@ namespace XferSuite
             {
                 LoadMap(_MapPath);
             }
+            _PrintNum = 0;
+            UpdatePrintIdx();
             CreateSourceFeatures();
             CreateTargetFeatures();
             MakePlot();
@@ -84,18 +87,33 @@ namespace XferSuite
                     _MapPath = openFileDialog.FileName;
                 }
             }
-
             UpdateAll();
+        }
+
+        private void UpdatePrintIdx()
+        {
+            lblPrintIdx.Text = string.Format("{0}/{1} Prints", _PrintNum, _NumPrints);
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-
+            if (_PrintNum == _NumPrints)
+            {
+                return;
+            }
+            Sim.SelectDevice(_Picks[_PrintNum], _Devices.ToArray(), true);
+            Sim.SelectSite(_Prints[_PrintNum], _Sites.ToArray(), true);
+            MakePlot();
+            _PrintNum++;
+            UpdatePrintIdx();
         }
 
         private void btnFinish_Click(object sender, EventArgs e)
         {
-
+            while (_PrintNum != _NumPrints)
+            {
+                btnNext_Click(sender, e);
+            }
         }
 
         private void SavePlot()

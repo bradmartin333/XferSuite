@@ -104,7 +104,7 @@ namespace XferSuite
             this.btnFinish.Name = "btnFinish";
             this.btnFinish.Size = new System.Drawing.Size(138, 23);
             this.btnFinish.TabIndex = 3;
-            this.btnFinish.Text = "Finish Cycle";
+            this.btnFinish.Text = "Finish .xmap";
             this.btnFinish.UseVisualStyleBackColor = true;
             this.btnFinish.Click += new System.EventHandler(this.btnFinish_Click);
             // 
