@@ -30,51 +30,29 @@ namespace XferSuite
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventLogParsing));
-            this.rtbPrints = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.rtbMain = new System.Windows.Forms.RichTextBox();
             this.lblDateRange = new System.Windows.Forms.Label();
+            this.RecipeList = new System.Windows.Forms.ListBox();
+            this.plot = new OxyPlot.WindowsForms.PlotView();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // rtbPrints
-            // 
-            this.rtbPrints.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbPrints.Location = new System.Drawing.Point(2, 355);
-            this.rtbPrints.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.rtbPrints.Name = "rtbPrints";
-            this.rtbPrints.Size = new System.Drawing.Size(494, 139);
-            this.rtbPrints.TabIndex = 0;
-            this.rtbPrints.Text = "Print List:\n";
-            this.rtbPrints.WordWrap = false;
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.rtbPrints, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.rtbMain, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblDateRange, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.RecipeList, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.plot, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(498, 496);
             this.tableLayoutPanel1.TabIndex = 2;
-            // 
-            // rtbMain
-            // 
-            this.rtbMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbMain.Location = new System.Drawing.Point(3, 23);
-            this.rtbMain.Name = "rtbMain";
-            this.rtbMain.Size = new System.Drawing.Size(492, 327);
-            this.rtbMain.TabIndex = 1;
-            this.rtbMain.Text = "";
-            this.rtbMain.WordWrap = false;
             // 
             // lblDateRange
             // 
@@ -87,6 +65,29 @@ namespace XferSuite
             this.lblDateRange.Text = "Start Date - End Date";
             this.lblDateRange.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // RecipeList
+            // 
+            this.RecipeList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RecipeList.FormattingEnabled = true;
+            this.RecipeList.Location = new System.Drawing.Point(3, 23);
+            this.RecipeList.Name = "RecipeList";
+            this.RecipeList.Size = new System.Drawing.Size(492, 232);
+            this.RecipeList.TabIndex = 3;
+            this.RecipeList.SelectedIndexChanged += new System.EventHandler(this.RecipeList_SelectedIndexChanged);
+            // 
+            // plot
+            // 
+            this.plot.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plot.Location = new System.Drawing.Point(3, 261);
+            this.plot.Name = "plot";
+            this.plot.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plot.Size = new System.Drawing.Size(492, 232);
+            this.plot.TabIndex = 4;
+            this.plot.Text = "plotView1";
+            this.plot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
             // EventLogParsing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -94,7 +95,7 @@ namespace XferSuite
             this.ClientSize = new System.Drawing.Size(498, 496);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "EventLogParsing";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Event Log Parsing";
@@ -105,10 +106,9 @@ namespace XferSuite
         }
 
         #endregion
-
-        public System.Windows.Forms.RichTextBox rtbPrints;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.RichTextBox rtbMain;
         private System.Windows.Forms.Label lblDateRange;
+        private System.Windows.Forms.ListBox RecipeList;
+        private OxyPlot.WindowsForms.PlotView plot;
     }
 }

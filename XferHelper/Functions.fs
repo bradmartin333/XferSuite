@@ -10,7 +10,7 @@ module Stats =
         Statistics.Mean(data)
 
     let median (data:float[]) =
-        Statistics.Median(data)
+        Math.Round(Statistics.Median(data), 3)
 
     let stdDev (data:float[]) =
         Statistics.StandardDeviation(data)
@@ -264,13 +264,22 @@ module Parser =
         |> Array.filter(fun x -> x <> "")
         |> Array.map toEvent
 
-    let getRuns (data:Event[]) = 
-        data 
-        |> Array.filter(fun x -> x.Msg.Contains "EVENT:  Program Started")
+    let getPrints (recipe:string, data:Event[]) = 
+        let times = data 
+                    |> Array.filter(fun x -> x.Msg.Contains "EVENT: Process Recipe Saved to")
+                    |> Array.filter(fun x -> x.Msg.Contains recipe)
+                    |> Array.map(fun x -> x.Time)
 
-    let main (data:string[]) : Event[] =
-        let d = reader data
-        getRuns d
+        let timeSpans = Array.create times.Length 0.
+        for i in 0 .. times.Length - 2 do
+            timeSpans.[i] <- times.[i+1].Subtract(times.[i]).TotalSeconds
+        timeSpans
+
+    let getRecipes (data:Event[]) =
+        data
+        |> Array.filter(fun x -> x.Msg.Contains "EVENT: Recipe opened")
+        |> Array.map(fun x -> Array.rev(x.Msg.Split('\t')).[0])
+        |> Array.distinct
   
 module Sim =
     type ID = {X:float
