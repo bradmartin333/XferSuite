@@ -31,7 +31,6 @@ namespace XferSuite
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventLogParsing));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblDateRange = new System.Windows.Forms.Label();
             this.RecipeList = new System.Windows.Forms.ListBox();
             this.plot = new OxyPlot.WindowsForms.PlotView();
             this.tableLayoutPanel1.SuspendLayout();
@@ -41,47 +40,35 @@ namespace XferSuite
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.lblDateRange, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.RecipeList, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.plot, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.RecipeList, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.plot, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(498, 496);
             this.tableLayoutPanel1.TabIndex = 2;
-            // 
-            // lblDateRange
-            // 
-            this.lblDateRange.AutoSize = true;
-            this.lblDateRange.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDateRange.Location = new System.Drawing.Point(3, 0);
-            this.lblDateRange.Name = "lblDateRange";
-            this.lblDateRange.Size = new System.Drawing.Size(492, 20);
-            this.lblDateRange.TabIndex = 2;
-            this.lblDateRange.Text = "Start Date - End Date";
-            this.lblDateRange.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RecipeList
             // 
             this.RecipeList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RecipeList.FormattingEnabled = true;
-            this.RecipeList.Location = new System.Drawing.Point(3, 23);
+            this.RecipeList.Location = new System.Drawing.Point(3, 3);
             this.RecipeList.Name = "RecipeList";
-            this.RecipeList.Size = new System.Drawing.Size(492, 232);
+            this.RecipeList.Size = new System.Drawing.Size(492, 142);
             this.RecipeList.TabIndex = 3;
             this.RecipeList.SelectedIndexChanged += new System.EventHandler(this.RecipeList_SelectedIndexChanged);
             // 
             // plot
             // 
             this.plot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plot.Location = new System.Drawing.Point(3, 261);
+            this.plot.Location = new System.Drawing.Point(3, 151);
             this.plot.Name = "plot";
             this.plot.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plot.Size = new System.Drawing.Size(492, 232);
+            this.plot.Size = new System.Drawing.Size(492, 342);
             this.plot.TabIndex = 4;
             this.plot.Text = "plotView1";
             this.plot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -100,14 +87,12 @@ namespace XferSuite
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Event Log Parsing";
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label lblDateRange;
         private System.Windows.Forms.ListBox RecipeList;
         private OxyPlot.WindowsForms.PlotView plot;
     }

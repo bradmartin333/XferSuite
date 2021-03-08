@@ -3,6 +3,7 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using XferHelper;
@@ -11,6 +12,24 @@ namespace XferSuite
 {
     public partial class EventLogParsing : Form
     {
+        private double _MaxTime = 60.0;
+        [
+            Category("User Parameters"),
+            Description("Filter out any print durations longer than this value in seconds")
+        ]
+        public double MaxTime
+        {
+            get => _MaxTime;
+            set
+            {
+                _MaxTime = value;
+                if (RecipeList.SelectedIndices.Count > 0)
+                {
+                    MakePrintTimePlot(RecipeList.SelectedItem.ToString());
+                }
+            }
+        }
+
         public EventLogParsing(string Path)
         {
             InitializeComponent();
@@ -32,6 +51,7 @@ namespace XferSuite
                 FileInfo recipe = new FileInfo(r);
                 RecipeList.Items.Add(recipe.Name.Replace(recipe.Extension, ""));
             }
+            RecipeList.SelectedIndex = 0;
         }
 
         private void RecipeList_SelectedIndexChanged(object sender, EventArgs e)
@@ -50,7 +70,8 @@ namespace XferSuite
                 }
             };
 
-            double[] times = Parser.getPrints(recipe, _events);
+            double[] timesRaw = Parser.getPrints(recipe, _events);
+            double[] times = Parser.filterPrints(timesRaw, _MaxTime);
 
             StairStepSeries timeSeries = new StairStepSeries();
             for (int i = 0; i < times.Length; i++)
@@ -73,6 +94,7 @@ namespace XferSuite
             print.Axes.Add(myYaxis);
             print.Series.Add(timeSeries);
             print.Title = string.Format("Median: {0} s   3Sigma: {1}", Stats.median(times), Stats.threeSig(times));
+            print.Subtitle = string.Format("Max Filter = {0} s", _MaxTime.ToString());
             plot.Model = print;
         }
 

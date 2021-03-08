@@ -265,15 +265,27 @@ module Parser =
         |> Array.map toEvent
 
     let getPrints (recipe:string, data:Event[]) = 
-        let times = data 
-                    |> Array.filter(fun x -> x.Msg.Contains "EVENT: Process Recipe Saved to")
-                    |> Array.filter(fun x -> x.Msg.Contains recipe)
-                    |> Array.map(fun x -> x.Time)
+        let timeStamps = Array.create data.Length DateTime.MinValue
+        let mutable idx = 0
+        for i in 0 .. data.Length - 1 do
+            if data.[i].Msg.Contains("EVENT: RestartProgram") then
+                timeStamps.[idx] <- data.[i].Time
+                idx <- idx + 1
+        
+        let times, nulls = 
+            timeStamps
+            |> Array.splitAt idx
 
         let timeSpans = Array.create times.Length 0.
         for i in 0 .. times.Length - 2 do
             timeSpans.[i] <- times.[i+1].Subtract(times.[i]).TotalSeconds
+        
         timeSpans
+        |> Array.filter(fun x -> x > 0.)
+
+    let filterPrints (times:float[], max:float) =
+        times
+        |> Array.filter(fun x -> x < max)
 
     let getRecipes (data:Event[]) =
         data
