@@ -23,7 +23,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=commandline
-OutputDir=X:\Programs\Repos\XferSuite\Setup
+OutputDir=C:\Repos\XferSuite\Setup
 OutputBaseFilename=XferSuiteSetup
 Compression=lzma
 SolidCompression=yes
@@ -36,22 +36,22 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\DataFileTree.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\DataFileTree.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\DataFileTree.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\FSharp.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\MathNet.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.WindowsForms.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\System.ValueTuple.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\XferHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\XferHelper.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\XferSuite.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\XferSuite.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\ZRegistration.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\ZRegistration.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\Programs\Repos\XferSuite\XferSuite\bin\Release\ZRegistration.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\DataFileTree.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\DataFileTree.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\DataFileTree.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\FSharp.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\MathNet.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.WindowsForms.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\System.ValueTuple.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferHelper.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferSuite.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferSuite.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ZRegistration.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ZRegistration.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ZRegistration.pdb"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
