@@ -323,10 +323,14 @@ module Sim =
          IDX = idx;
          Selected = selected}
 
-    let SelectDevice (vals:int[], ids:ID[], sel:bool) =
+    let SelectDevice (vals:int[], ids:ID[], sel:bool, nullRegion:bool) =
         for x in ids do
-            if x.RR = vals.[0] && x.RC = vals.[1] && x.IDX = vals.[2] then
-                x.Selected <- sel
+            if nullRegion then
+                if x.R = vals.[2] && x.C = vals.[3] && x.IDX = vals.[4] then
+                    x.Selected <- sel
+            else
+                if x.RR = vals.[0] && x.RC = vals.[1] && x.IDX = vals.[4] then
+                    x.Selected <- sel
 
     let SelectSite (vals:int[], ids:ID[], sel:bool) =
         for x in ids do
@@ -340,7 +344,7 @@ module Sim =
                  bpx:float, bpy:float,
                  cpx:float, cpy:float,
                  ox:float, oy:float,
-                 device:bool) : ID[] =
+                 device:bool, nullRegion:bool) : ID[] =
         [|
         for n in 0. .. cy-1. do
             for m in 0. .. cx-1. do
@@ -348,13 +352,19 @@ module Sim =
                     for k in 0. .. bx-1. do
                         let mutable idx = 1
                         if device then
-                            idx <- int (ax*ay)
+                            idx <- int (((ax-1.)*(ay-1.)) + 1.)
                         for j in 0. .. ay-1. do
                             for i in 0. .. ax-1. do
-                            yield toID(float (i*apx+k*bpx+m*cpx+ox),
-                                       float (j*apy+l*bpy+n*cpy+oy),
-                                       int (cx-m), int (cy-n), int (bx-k), int (by-l), 
-                                       idx, false)
+                            if nullRegion then
+                                yield toID(float (i*apx+k*bpx+m*cpx+ox),
+                                    float (j*apy+l*bpy+n*cpy+oy),
+                                    1, 1, int (cy-n), int (cx-m),
+                                    idx, false)
+                            else
+                                yield toID(float (i*apx+k*bpx+m*cpx+ox),
+                                    float (j*apy+l*bpy+n*cpy+oy),
+                                    int (cy-n), int (cx-m), int (by-l), int (bx-k),
+                                    idx, false)
                             if device then
                                 idx <- idx - 1
         |]

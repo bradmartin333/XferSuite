@@ -25,7 +25,7 @@ namespace XferSuite
             foreach (XElement transfer in transfers)
             {
                 XAttribute[] pick = transfer.Element("Pick").Attributes().ToArray();
-                int[] pickVals = new int[] { int.Parse(pick[1].Value), int.Parse(pick[2].Value), int.Parse(pick[5].Value) };
+                int[] pickVals = new int[] { int.Parse(pick[1].Value), int.Parse(pick[2].Value), int.Parse(pick[3].Value), int.Parse(pick[4].Value), int.Parse(pick[5].Value) };
                 _Picks.Add(pickVals);
 
                 XAttribute[] print = transfer.Element("Print").Attributes().ToArray();

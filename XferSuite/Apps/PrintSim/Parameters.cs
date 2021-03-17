@@ -9,7 +9,7 @@ namespace XferSuite
         public static string ToolName = "NoTool";
 
         // Source
-        public static PointF SourceChiplets;
+        //public static PointF SourceChiplets;
         public static PointF SourceChipletPitch;
         public static PointF SourceClusters;
         public static PointF SourceClusterPitch;
@@ -43,7 +43,7 @@ namespace XferSuite
             RecipeName = recipe.Element("Name").Value;
 
             XElement source = doc.Element("ProcessParameters").Element("Source");
-            SourceChiplets = new PointF(float.Parse(source.Element("SourceXChiplets").Value), float.Parse(source.Element("SourceYChiplets").Value));
+            //SourceChiplets = new PointF(float.Parse(source.Element("SourceXChiplets").Value), float.Parse(source.Element("SourceYChiplets").Value));
             SourceChipletPitch = new PointF(float.Parse(source.Element("SourceXChipletPitch").Value), float.Parse(source.Element("SourceYChipletPitch").Value));
             SourceClusters = new PointF(float.Parse(source.Element("SourceXClusters").Value), float.Parse(source.Element("SourceYClusters").Value));
             SourceClusterPitch = new PointF(float.Parse(source.Element("SourceXClusterPitch").Value), float.Parse(source.Element("SourceYClusterPitch").Value));
