@@ -221,7 +221,7 @@ namespace XferSuite
 
         private void CreateSourceFeatures()
         {
-            _Devices.AddRange(Sim.MakeIDs(SourceChiplets.X, SourceChiplets.Y,
+            _Devices.AddRange(Sim.MakeIDs(1 + (StampPostPitch.X / SourceChipletPitch.X), 1 + (StampPostPitch.Y / SourceChipletPitch.Y),
                                           SourceClusters.X, SourceClusters.Y,
                                           SourceRegions.X, SourceRegions.Y,
                                           SourceChipletPitch.X, SourceChipletPitch.Y,
