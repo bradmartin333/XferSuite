@@ -50,6 +50,7 @@ namespace XferSuite
         private string _Path;
         private string _MapPath;
         private int _PrintNum = 0;
+        private bool _NullSourceRegion;
         private List<Sim.ID> _Devices = new List<Sim.ID>();
         private List<Sim.ID> _Sites = new List<Sim.ID>();
 
@@ -101,7 +102,7 @@ namespace XferSuite
             {
                 return;
             }
-            Sim.SelectDevice(_Picks[_PrintNum], _Devices.ToArray(), true);
+            Sim.SelectDevice(_Picks[_PrintNum], _Devices.ToArray(), true, _NullSourceRegion);
             Sim.SelectSite(_Prints[_PrintNum], _Sites.ToArray(), true);
             MakePlot();
             _PrintNum++;
@@ -221,14 +222,30 @@ namespace XferSuite
 
         private void CreateSourceFeatures()
         {
-            _Devices.AddRange(Sim.MakeIDs(1 + (StampPostPitch.X / SourceChipletPitch.X), 1 + (StampPostPitch.Y / SourceChipletPitch.Y),
+            if (SourceRegions.X == 1 && SourceRegions.Y == 1)
+            {
+                _NullSourceRegion = true;
+                _Devices.AddRange(Sim.MakeIDs(1 + (StampPostPitch.X / SourceChipletPitch.X), 1 + (StampPostPitch.Y / SourceChipletPitch.Y),
+                                          StampPosts.X, StampPosts.Y,
+                                          SourceClusters.X, SourceClusters.Y,
+                                          SourceChipletPitch.X, SourceChipletPitch.Y,
+                                          StampPostPitch.X, StampPostPitch.Y,
+                                          SourceClusterPitch.X, SourceClusterPitch.Y,
+                                          SourceOrigin.X, SourceOrigin.Y,
+                                          true, _NullSourceRegion));
+            }
+            else
+            {
+                _NullSourceRegion = false;
+                _Devices.AddRange(Sim.MakeIDs(1 + (StampPostPitch.X / SourceChipletPitch.X), 1 + (StampPostPitch.Y / SourceChipletPitch.Y),
                                           SourceClusters.X, SourceClusters.Y,
                                           SourceRegions.X, SourceRegions.Y,
                                           SourceChipletPitch.X, SourceChipletPitch.Y,
                                           SourceClusterPitch.X, SourceClusterPitch.Y,
                                           SourceRegionPitch.X, SourceRegionPitch.Y,
                                           SourceOrigin.X, SourceOrigin.Y,
-                                          true));
+                                          true, _NullSourceRegion));
+            } 
         }
 
         private void CreateTargetFeatures()
@@ -240,7 +257,7 @@ namespace XferSuite
                                         TargetPrintPitch.X, TargetPrintPitch.Y,
                                         TargetClusterPitch.X, TargetClusterPitch.Y,
                                         TargetOrigin.X, TargetOrigin.Y,
-                                        false));
+                                        false, false));
         }
     }
 }
