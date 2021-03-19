@@ -183,6 +183,12 @@ module Metro =
             else
                 x.Aln <- " PASS "
 
+    let NormErrorRange (data:Position[]) =
+        let normError =
+            data 
+            |> Array.map(fun x -> (x.XE**2. + x.YE**2.)**0.5)
+        normError.Maximum() - normError.Minimum()
+
 module Zed =
     type Position = {Time:System.DateTime; X:float; Y:float; H:float}
     
