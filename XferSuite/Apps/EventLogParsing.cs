@@ -4,9 +4,11 @@ using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using XferHelper;
+using BrightIdeasSoftware;
 
 namespace XferSuite
 {
@@ -23,10 +25,6 @@ namespace XferSuite
             set
             {
                 _MaxTime = value;
-                if (RecipeList.SelectedIndices.Count > 0)
-                {
-                    MakePrintTimePlot(RecipeList.SelectedItem.ToString());
-                }
             }
         }
 
@@ -36,66 +34,22 @@ namespace XferSuite
 
             _lines = File.ReadAllLines(Path);
             _events = Parser.reader(_lines);
-
-            GetRecipes();
+            fastObjectListView.SetObjects(_events);
+            eventColumn.ImageGetter = new ImageGetterDelegate(EventImageGetter);
         }
 
         private string[] _lines;
         private Parser.Event[] _events;
 
-        private void GetRecipes()
+        public object EventImageGetter(object rowObject)
         {
-            string[] recipes = Parser.getRecipes(_events);
-            foreach (string r in recipes)
-            {
-                FileInfo recipe = new FileInfo(r);
-                RecipeList.Items.Add(recipe.Name.Replace(recipe.Extension, ""));
-            }
-            RecipeList.SelectedIndex = 0;
-        }
-
-        private void RecipeList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            MakePrintTimePlot(RecipeList.SelectedItem.ToString());
-        }
-
-        private void MakePrintTimePlot(string recipe)
-        {
-            PlotModel print = new PlotModel() { TitleFontSize = 15 };
-            print.MouseDown += (s, e) =>
-            {
-                if (e.IsShiftDown)
-                {
-                    SavePlot();
-                }
-            };
-
-            double[] timesRaw = Parser.getPrints(recipe, _events);
-            double[] times = Parser.filterPrints(timesRaw, _MaxTime);
-
-            StairStepSeries timeSeries = new StairStepSeries();
-            for (int i = 0; i < times.Length; i++)
-            {
-                timeSeries.Points.Add(new DataPoint(i, times[i]));
-            }
-
-            LinearAxis myXaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                Title = "Print #"
-            };
-            LinearAxis myYaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                Title = "Duration (s)"
-            };
-
-            print.Axes.Add(myXaxis);
-            print.Axes.Add(myYaxis);
-            print.Series.Add(timeSeries);
-            print.Title = string.Format("Median: {0} s   Mean: {1} s", Stats.median(times), Stats.mean(times));
-            print.Subtitle = string.Format("Max Filter = {0} s", _MaxTime.ToString());
-            plot.Model = print;
+            Parser.Event e = (Parser.Event) rowObject;
+            if (e.Msg.Contains("ERROR:") && !e.Msg.Contains("No Error"))
+                return Properties.Resources.iconmonstr_error_3_16;
+            else if (e.Msg.Contains("XferPrint Operational"))
+                return Properties.Resources.iconmonstr_check_mark_1_16;
+            else
+                return null;
         }
 
         private void SavePlot()

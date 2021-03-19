@@ -241,57 +241,29 @@ module Zed =
         ]
 
 module Parser = 
-    type Event = {Time:DateTime; Msg:string}
+    type Event = {Date:DateTime; Time:TimeSpan; Msg:string}
 
     let mutable lastTime = DateTime.Today
 
     let toEvent (csvData:string) =
         let columns = csvData.Split('\t')
         if columns.Length <= 1 then
-            {Time = lastTime; Msg = columns.[0..] |> String.concat "\t"}
+            {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[0..] |> String.concat "\t"}
         else
             try
                let Time = DateTime.Parse(columns.[0])
                lastTime <- Time
                let Msg = columns.[2..] |> String.concat "\t"
-               {Time = Time; Msg = Msg}
+               {Date = Time.Date; Time = Time.TimeOfDay; Msg = Msg}
             with
-               | :? System.IndexOutOfRangeException -> {Time = lastTime; Msg = columns.[1..] |> String.concat "\t"}
-               | :? System.FormatException -> {Time = lastTime; Msg = columns.[0..] |> String.concat "\t"}
+               | :? System.IndexOutOfRangeException -> {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[1..] |> String.concat "\t"}
+               | :? System.FormatException -> {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[0..] |> String.concat "\t"}
 
     let reader (data:string[]) =
         data
         |> Array.filter(fun x -> x <> "")
         |> Array.map toEvent
-
-    let getPrints (recipe:string, data:Event[]) = 
-        let timeStamps = Array.create data.Length DateTime.MinValue
-        let mutable idx = 0
-        for i in 0 .. data.Length - 1 do
-            if data.[i].Msg.Contains("EVENT: RestartProgram") then
-                timeStamps.[idx] <- data.[i].Time
-                idx <- idx + 1
-        
-        let times, nulls = 
-            timeStamps
-            |> Array.splitAt idx
-
-        let timeSpans = Array.create times.Length 0.
-        for i in 0 .. times.Length - 2 do
-            timeSpans.[i] <- times.[i+1].Subtract(times.[i]).TotalSeconds
-        
-        timeSpans
-        |> Array.filter(fun x -> x > 0.)
-
-    let filterPrints (times:float[], max:float) =
-        times
-        |> Array.filter(fun x -> x < max)
-
-    let getRecipes (data:Event[]) =
-        data
-        |> Array.filter(fun x -> x.Msg.Contains "EVENT: Recipe opened")
-        |> Array.map(fun x -> Array.rev(x.Msg.Split('\t')).[0])
-        |> Array.distinct
+        |> Array.filter(fun x -> x.Msg <> "" && not (x.Msg.Contains("+")) && not (x.Msg.Contains("*")))
   
 module Sim =
     type ID = {X:float
