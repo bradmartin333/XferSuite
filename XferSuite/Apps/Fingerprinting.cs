@@ -97,10 +97,10 @@ namespace XferSuite
             foreach (int idx in PrintList.SelectedIndices)
             {
                 Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
-                double normRange= Metro.NormErrorRange(printData);
+                double[] normError = Metro.NormErrorRange(printData);
                 for (int i = 0; i < printData.Length; i++)
                 {
-                    vectorPlot.Series.Add(PlotVector(printData[i], normRange));
+                    vectorPlot.Series.Add(PlotVector(printData[i], normError));
                 }
             }
 
@@ -131,7 +131,7 @@ namespace XferSuite
             plot.Model = vectorPlot;
         }
 
-        private LineSeries PlotVector(Metro.Position vector, double normRange)
+        private LineSeries PlotVector(Metro.Position vector, double[] normError)
         {
             var fromP = new DataPoint(vector.X, vector.Y);
             var toP = new DataPoint(vector.X + vector.XE, vector.Y + vector.YE);
@@ -152,7 +152,7 @@ namespace XferSuite
             DataPoint arrowheadA = new DataPoint(toP.X + Math.Abs(toP.X - fromP.X) * ax * VectorMagnitude, toP.Y + Math.Abs(toP.Y - fromP.Y) * ay * VectorMagnitude);
             DataPoint arrowheadB = new DataPoint(toP.X + Math.Abs(toP.X - fromP.X) * bx * VectorMagnitude, toP.Y + Math.Abs(toP.Y - fromP.Y) * by * VectorMagnitude);
 
-            Color color = Lux2Color(norm / normRange);
+            Color color = Lux2Color((norm - normError.Min()) / (normError.Max() - normError.Min()));
             LineSeries post = new LineSeries() { Color = OxyColor.FromRgb(color.R, color.G, color.B), LineStyle = LineStyle.Solid, StrokeThickness = 0.5 };
             post.Points.Add(fromP);
             post.Points.Add(toP);
@@ -169,49 +169,46 @@ namespace XferSuite
             double g = 0.5;
             double b = 0.5;
             double v = 0.75;
-            if (v > 0)
+            double m = 1 - v;
+            double sv = (v - m) / v;
+            lux *= 5.0;
+            int sextant = (int)lux;
+            double fract = lux - sextant;
+            double vsf = v * sv * fract;
+            double mid1 = m + vsf;
+            double mid2 = v - vsf;
+            switch (sextant)
             {
-                double m = 1 - v;
-                double sv = (v - m) / v;
-                lux *= 6.0;
-                int sextant = (int)lux;
-                double fract = lux - sextant;
-                double vsf = v * sv * fract;
-                double mid1 = m + vsf;
-                double mid2 = v - vsf;
-                switch (sextant)
-                {
-                    case 0:
-                        r = v;
-                        g = mid1;
-                        b = m;
-                        break;
-                    case 1:
-                        r = mid2;
-                        g = v;
-                        b = m;
-                        break;
-                    case 2:
-                        r = m;
-                        g = v;
-                        b = mid1;
-                        break;
-                    case 3:
-                        r = m;
-                        g = mid2;
-                        b = v;
-                        break;
-                    case 4:
-                        r = mid1;
-                        g = m;
-                        b = v;
-                        break;
-                    case 5:
-                        r = v;
-                        g = m;
-                        b = mid2;
-                        break;
-                }
+                case 0:
+                    r = v;
+                    g = mid1;
+                    b = m;
+                    break;
+                case 1:
+                    r = mid2;
+                    g = v;
+                    b = m;
+                    break;
+                case 2:
+                    r = m;
+                    g = v;
+                    b = mid1;
+                    break;
+                case 3:
+                    r = m;
+                    g = mid2;
+                    b = v;
+                    break;
+                case 4:
+                    r = mid1;
+                    g = m;
+                    b = v;
+                    break;
+                case 5:
+                    r = v;
+                    g = m;
+                    b = mid2;
+                    break;
             }
             return Color.FromArgb(255, Convert.ToByte(r * 255.0f), Convert.ToByte(g * 255.0f), Convert.ToByte(b * 255.0f));
         }
