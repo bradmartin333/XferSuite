@@ -80,14 +80,18 @@ namespace XferSuite
                 _raw[posIdx].PrintNum = printIdx;
                 posIdx += 1;
             }
+
+            MakePlot();
         }
 
         private Metro.Position[] _raw; // gets split into data and missing
         private Metro.Position[] _data; // gets split into pass and fail
+        private bool _FirstPlot = true;
         List<string> _prints = new List<string>();
 
         private void PrintList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            _FirstPlot = false;
             MakePlot();
         }
 
@@ -106,9 +110,26 @@ namespace XferSuite
                 }
             };
 
-            if (!_ShowEntropy)
+            // Hacky, but fast way of selecting all by default
+            List<int> loopSet = new List<int>();
+            if (_FirstPlot)
+            {
+                for (int idx = 0; idx < PrintList.Items.Count; idx++)
+                {
+                    loopSet.Add(idx);
+                }
+            }
+            else
             {
                 foreach (int idx in PrintList.SelectedIndices)
+                {
+                    loopSet.Add(idx);
+                }
+            }
+
+            if (!_ShowEntropy)
+            {
+                foreach (int idx in loopSet)
                 {
                     Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
                     double[] normError = Metro.NormErrorRange(printData);
@@ -122,12 +143,12 @@ namespace XferSuite
             {
                 Metro.Position[][] printData = new Metro.Position[_prints.Count()][];
                 double[] printEntropy = new double[_prints.Count()];
-                foreach (int idx in PrintList.SelectedIndices)
+                foreach (int idx in loopSet)
                 {
                     printData[idx] = Metro.getPrint(_prints[idx], plotData);
                     printEntropy[idx] = Metro.NextMagnitudeEntropy(printData[idx]);
                 }
-                foreach (int idx in PrintList.SelectedIndices)
+                foreach (int idx in loopSet)
                 {
                     for (int i = 0; i < printData[idx].Length; i++)
                     {
