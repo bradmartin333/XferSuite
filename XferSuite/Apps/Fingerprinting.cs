@@ -84,14 +84,20 @@ namespace XferSuite
             MakePlot();
         }
 
-        private Metro.Position[] _raw; // gets split into data and missing
-        private Metro.Position[] _data; // gets split into pass and fail
-        private bool _FirstPlot = true;
+        private Metro.Position[] _raw; // Gets split into data and missing
+        private Metro.Position[] _data; // Gets split into pass and fail
+        private bool _PlotAll = true; // On by default
         List<string> _prints = new List<string>();
 
         private void PrintList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _FirstPlot = false;
+            _PlotAll = false;
+            MakePlot();
+        }
+
+        private void PrintList_DoubleClick(object sender, EventArgs e)
+        {
+            _PlotAll = true;
             MakePlot();
         }
 
@@ -112,7 +118,7 @@ namespace XferSuite
 
             // Hacky, but fast way of selecting all by default
             List<int> loopSet = new List<int>();
-            if (_FirstPlot)
+            if (_PlotAll)
             {
                 for (int idx = 0; idx < PrintList.Items.Count; idx++)
                 {
