@@ -114,24 +114,24 @@ namespace XferSuite
                     double[] normError = Metro.NormErrorRange(printData);
                     for (int i = 0; i < printData.Length; i++)
                     {
-                        vectorPlot.Series.Add(PlotVector(printData[i], normError, normError[i]));
+                        vectorPlot.Series.Add(PlotVector(printData[i], normError, normError[i], idx));
                     }
                 }
             }
             else
             {
-                Dictionary<int, Metro.Position[]> printData = new Dictionary<int, Metro.Position[]>();
-                List<double> printEntropy = new List<double>();
+                Metro.Position[][] printData = new Metro.Position[_prints.Count()][];
+                double[] printEntropy = new double[_prints.Count()];
                 foreach (int idx in PrintList.SelectedIndices)
                 {
                     printData[idx] = Metro.getPrint(_prints[idx], plotData);
-                    printEntropy.Add(Metro.NextMagnitudeEntropy(printData[idx]));
+                    printEntropy[idx] = Metro.NextMagnitudeEntropy(printData[idx]);
                 }
-                foreach (KeyValuePair<int, Metro.Position[]> kvp in printData)
+                foreach (int idx in PrintList.SelectedIndices)
                 {
-                    for (int i = 0; i < kvp.Value.Length; i++)
+                    for (int i = 0; i < printData[idx].Length; i++)
                     {
-                        vectorPlot.Series.Add(PlotVector(kvp.Value[i], printEntropy.ToArray(), printEntropy[PrintList.SelectedIndices.IndexOf(kvp.Key)]));
+                        vectorPlot.Series.Add(PlotVector(printData[idx][i], printEntropy, printEntropy[idx], idx));
                     }
                 }
             }
@@ -163,7 +163,7 @@ namespace XferSuite
             plot.Model = vectorPlot;
         }
 
-        private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal)
+        private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal, int idx)
         {
             var fromP = new DataPoint(vector.X, vector.Y);
             var toP = new DataPoint(vector.X + vector.XE, vector.Y + vector.YE);
@@ -186,6 +186,7 @@ namespace XferSuite
 
             Color color = Lux2Color((colorVal - colorRangeVals.Min()) / (colorRangeVals.Max() - colorRangeVals.Min()));
             LineSeries post = new LineSeries() { Color = OxyColor.FromRgb(color.R, color.G, color.B), LineStyle = LineStyle.Solid, StrokeThickness = 0.5 };
+            post.TrackerFormatString = post.TrackerFormatString + Environment.NewLine + PrintList.Items[idx].ToString();
             post.Points.Add(fromP);
             post.Points.Add(toP);
             post.Points.Add(arrowheadA);
