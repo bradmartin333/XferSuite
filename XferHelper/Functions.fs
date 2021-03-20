@@ -251,23 +251,23 @@ module Zed =
         ]
 
 module Parser = 
-    type Event = {Date:DateTime; Time:TimeSpan; Msg:string}
+    type Event = {Date:DateTime; Time:TimeSpan; Msg:string; Stamp:int64}
 
     let mutable lastTime = DateTime.Today
 
     let toEvent (csvData:string) =
         let columns = csvData.Split('\t')
         if columns.Length <= 1 then
-            {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[0..] |> String.concat "\t"}
+            {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[0..] |> String.concat "\t"; Stamp = lastTime.Ticks}
         else
             try
                let Time = DateTime.Parse(columns.[0])
                lastTime <- Time
                let Msg = columns.[2..] |> String.concat "\t"
-               {Date = Time.Date; Time = Time.TimeOfDay; Msg = Msg}
+               {Date = Time.Date; Time = Time.TimeOfDay; Msg = Msg; Stamp = Time.Ticks}
             with
-               | :? System.IndexOutOfRangeException -> {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[1..] |> String.concat "\t"}
-               | :? System.FormatException -> {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[0..] |> String.concat "\t"}
+               | :? System.IndexOutOfRangeException -> {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[1..] |> String.concat "\t"; Stamp = lastTime.Ticks}
+               | :? System.FormatException -> {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[0..] |> String.concat "\t"; Stamp = lastTime.Ticks}
 
     let reader (data:string[]) =
         data

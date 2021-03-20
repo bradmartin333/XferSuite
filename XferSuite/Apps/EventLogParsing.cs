@@ -4,7 +4,6 @@ using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using XferHelper;
@@ -66,6 +65,35 @@ namespace XferSuite
                     pngExporter.ExportToFile(plot.Model, saveFileDialog.FileName);
                 }
             }
+        }
+
+        private void fastObjectListView_SelectedChanged(object sender, EventArgs ev)
+        {
+            PlotModel plotModel = new PlotModel();
+            plotModel.MouseUp += (s, e) =>
+            {
+                if (e.IsShiftDown)
+                {
+                    SavePlot();
+                }
+            };
+
+            plotModel.Axes.Add(new TimeSpanAxis { Position = AxisPosition.Left, Title = "TimeSpan" });
+            StairStepSeries stairStepSeries = new StairStepSeries();
+            var events = fastObjectListView.SelectedObjects;
+            for (int i = 1; i < events.Count; i++)
+            {
+                Parser.Event eventA = (Parser.Event)events[i];
+                Parser.Event eventB = (Parser.Event)events[i-1];
+                TimeSpan duration = new TimeSpan(eventA.Stamp - eventB.Stamp);
+                if (duration.Ticks == 0)
+                {
+                    continue;
+                }
+                stairStepSeries.Points.Add(new DataPoint(i, Axis.ToDouble(duration)));
+            }
+            plotModel.Series.Add(stairStepSeries);
+            plot.Model = plotModel;
         }
     }
 }

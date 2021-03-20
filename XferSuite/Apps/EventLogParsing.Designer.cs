@@ -34,8 +34,8 @@ namespace XferSuite
             this.plot = new OxyPlot.WindowsForms.PlotView();
             this.fastObjectListView = new BrightIdeasSoftware.FastObjectListView();
             this.dateColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.eventColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.timeColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.eventColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListView)).BeginInit();
             this.SuspendLayout();
@@ -73,6 +73,7 @@ namespace XferSuite
             this.fastObjectListView.AllColumns.Add(this.dateColumn);
             this.fastObjectListView.AllColumns.Add(this.timeColumn);
             this.fastObjectListView.AllColumns.Add(this.eventColumn);
+            this.fastObjectListView.AllowColumnReorder = true;
             this.fastObjectListView.CellEditUseWholeCell = false;
             this.fastObjectListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.dateColumn,
@@ -80,15 +81,21 @@ namespace XferSuite
             this.eventColumn});
             this.fastObjectListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastObjectListView.FullRowSelect = true;
             this.fastObjectListView.HideSelection = false;
             this.fastObjectListView.Location = new System.Drawing.Point(3, 3);
             this.fastObjectListView.Name = "fastObjectListView";
             this.fastObjectListView.ShowGroups = false;
             this.fastObjectListView.Size = new System.Drawing.Size(492, 242);
             this.fastObjectListView.TabIndex = 5;
+            this.fastObjectListView.TintSortColumn = true;
+            this.fastObjectListView.UseAlternatingBackColors = true;
             this.fastObjectListView.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListView.UseFiltering = true;
+            this.fastObjectListView.UseHotItem = true;
             this.fastObjectListView.View = System.Windows.Forms.View.Details;
             this.fastObjectListView.VirtualMode = true;
+            this.fastObjectListView.SelectionChanged += fastObjectListView_SelectedChanged;
             // 
             // dateColumn
             // 
@@ -97,18 +104,18 @@ namespace XferSuite
             this.dateColumn.Text = "Date";
             this.dateColumn.Width = 84;
             // 
-            // eventColumn
-            // 
-            this.eventColumn.AspectName = "Msg";
-            this.eventColumn.Text = "Event";
-            this.eventColumn.Width = 438;
-            // 
             // timeColumn
             // 
             this.timeColumn.AspectName = "Time";
             this.timeColumn.AspectToStringFormat = "{0:g}";
             this.timeColumn.Text = "Time";
             this.timeColumn.Width = 86;
+            // 
+            // eventColumn
+            // 
+            this.eventColumn.AspectName = "Msg";
+            this.eventColumn.Text = "Event";
+            this.eventColumn.Width = 438;
             // 
             // EventLogParsing
             // 
