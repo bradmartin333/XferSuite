@@ -5,11 +5,8 @@ using OxyPlot.WindowsForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using XferHelper;
 
@@ -17,7 +14,7 @@ namespace XferSuite
 {
     public partial class Fingerprinting : Form
     {
-        private float _VectorMagnitude = 150F;
+        private float _VectorMagnitude = 200F;
         [
             Category("User Parameters"),
             Description("Value to multiply position error by")
@@ -43,6 +40,21 @@ namespace XferSuite
             set
             {
                 _Threshold = value;
+                MakePlot();
+            }
+        }
+
+        private bool _ShowEntropy = false;
+        [
+            Category("User Parameters"),
+            Description("Colorize prints based of their statistical entropy relative to each other")
+        ]
+        public bool ShowEntropy
+        {
+            get => _ShowEntropy;
+            set
+            {
+                _ShowEntropy = value;
                 MakePlot();
             }
         }
@@ -94,13 +106,33 @@ namespace XferSuite
                 }
             };
 
-            foreach (int idx in PrintList.SelectedIndices)
+            if (!_ShowEntropy)
             {
-                Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
-                double[] normError = Metro.NormErrorRange(printData);
-                for (int i = 0; i < printData.Length; i++)
+                foreach (int idx in PrintList.SelectedIndices)
                 {
-                    vectorPlot.Series.Add(PlotVector(printData[i], normError));
+                    Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
+                    double[] normError = Metro.NormErrorRange(printData);
+                    for (int i = 0; i < printData.Length; i++)
+                    {
+                        vectorPlot.Series.Add(PlotVector(printData[i], normError, normError[i]));
+                    }
+                }
+            }
+            else
+            {
+                Dictionary<int, Metro.Position[]> printData = new Dictionary<int, Metro.Position[]>();
+                List<double> printEntropy = new List<double>();
+                foreach (int idx in PrintList.SelectedIndices)
+                {
+                    printData[idx] = Metro.getPrint(_prints[idx], plotData);
+                    printEntropy.Add(Metro.NextMagnitudeEntropy(printData[idx]));
+                }
+                foreach (KeyValuePair<int, Metro.Position[]> kvp in printData)
+                {
+                    for (int i = 0; i < kvp.Value.Length; i++)
+                    {
+                        vectorPlot.Series.Add(PlotVector(kvp.Value[i], printEntropy.ToArray(), printEntropy[PrintList.SelectedIndices.IndexOf(kvp.Key)]));
+                    }
                 }
             }
 
@@ -131,7 +163,7 @@ namespace XferSuite
             plot.Model = vectorPlot;
         }
 
-        private LineSeries PlotVector(Metro.Position vector, double[] normError)
+        private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal)
         {
             var fromP = new DataPoint(vector.X, vector.Y);
             var toP = new DataPoint(vector.X + vector.XE, vector.Y + vector.YE);
@@ -152,7 +184,7 @@ namespace XferSuite
             DataPoint arrowheadA = new DataPoint(toP.X + Math.Abs(toP.X - fromP.X) * ax * VectorMagnitude, toP.Y + Math.Abs(toP.Y - fromP.Y) * ay * VectorMagnitude);
             DataPoint arrowheadB = new DataPoint(toP.X + Math.Abs(toP.X - fromP.X) * bx * VectorMagnitude, toP.Y + Math.Abs(toP.Y - fromP.Y) * by * VectorMagnitude);
 
-            Color color = Lux2Color((norm - normError.Min()) / (normError.Max() - normError.Min()));
+            Color color = Lux2Color((colorVal - colorRangeVals.Min()) / (colorRangeVals.Max() - colorRangeVals.Min()));
             LineSeries post = new LineSeries() { Color = OxyColor.FromRgb(color.R, color.G, color.B), LineStyle = LineStyle.Solid, StrokeThickness = 0.5 };
             post.Points.Add(fromP);
             post.Points.Add(toP);
@@ -171,7 +203,7 @@ namespace XferSuite
             double v = 0.75;
             double m = 1 - v;
             double sv = (v - m) / v;
-            lux *= 5.0;
+            lux *= 4.0;
             int sextant = (int)lux;
             double fract = lux - sextant;
             double vsf = v * sv * fract;
@@ -204,11 +236,11 @@ namespace XferSuite
                     g = m;
                     b = v;
                     break;
-                case 5:
-                    r = v;
-                    g = m;
-                    b = mid2;
-                    break;
+                //case 5:
+                //    r = v;
+                //    g = m;
+                //    b = mid2;
+                //    break;
             }
             return Color.FromArgb(255, Convert.ToByte(r * 255.0f), Convert.ToByte(g * 255.0f), Convert.ToByte(b * 255.0f));
         }

@@ -187,6 +187,12 @@ module Metro =
         data 
         |> Array.map(fun x -> (x.XE**2. + x.YE**2.)**0.5)
 
+    let NextMagnitudeEntropy (data:Position[]) =
+        data
+        |> NormErrorRange
+        |> Statistics.Entropy
+        |> fun x -> x**10.
+
 module Zed =
     type Position = {Time:System.DateTime; X:float; Y:float; H:float}
     
