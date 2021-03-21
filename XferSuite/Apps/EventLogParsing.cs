@@ -3,6 +3,7 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
@@ -23,10 +24,6 @@ namespace XferSuite
             set
             {
                 _MaxTime = value;
-                if (RecipeList.SelectedIndices.Count > 0)
-                {
-                    MakePrintTimePlot(RecipeList.SelectedItem.ToString());
-                }
             }
         }
 
@@ -36,74 +33,20 @@ namespace XferSuite
 
             _lines = File.ReadAllLines(Path);
             _events = Parser.reader(_lines);
+            fastObjectListView.SetObjects(_events);
 
-            GetRecipes();
+            lblFilterPercent.Text = (1.0 - (_events.Length / (double) _lines.Length)).ToString("p") + " Lines Filtered Out";
         }
 
         private string[] _lines;
         private Parser.Event[] _events;
-
-        private void GetRecipes()
-        {
-            string[] recipes = Parser.getRecipes(_events);
-            foreach (string r in recipes)
-            {
-                FileInfo recipe = new FileInfo(r);
-                RecipeList.Items.Add(recipe.Name.Replace(recipe.Extension, ""));
-            }
-            RecipeList.SelectedIndex = 0;
-        }
-
-        private void RecipeList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            MakePrintTimePlot(RecipeList.SelectedItem.ToString());
-        }
-
-        private void MakePrintTimePlot(string recipe)
-        {
-            PlotModel print = new PlotModel() { TitleFontSize = 15 };
-            print.MouseDown += (s, e) =>
-            {
-                if (e.IsShiftDown)
-                {
-                    SavePlot();
-                }
-            };
-
-            double[] timesRaw = Parser.getPrints(recipe, _events);
-            double[] times = Parser.filterPrints(timesRaw, _MaxTime);
-
-            StairStepSeries timeSeries = new StairStepSeries();
-            for (int i = 0; i < times.Length; i++)
-            {
-                timeSeries.Points.Add(new DataPoint(i, times[i]));
-            }
-
-            LinearAxis myXaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                Title = "Print #"
-            };
-            LinearAxis myYaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                Title = "Duration (s)"
-            };
-
-            print.Axes.Add(myXaxis);
-            print.Axes.Add(myYaxis);
-            print.Series.Add(timeSeries);
-            print.Title = string.Format("Median: {0} s   Mean: {1} s", Stats.median(times), Stats.mean(times));
-            print.Subtitle = string.Format("Max Filter = {0} s", _MaxTime.ToString());
-            plot.Model = print;
-        }
 
         private void SavePlot()
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.Title = "Export Print Time Plot";
+                saveFileDialog.Title = "Export Event Time Plot";
                 saveFileDialog.DefaultExt = ".png";
                 saveFileDialog.Filter = "png file (*.png)|*.png";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -112,6 +55,38 @@ namespace XferSuite
                     pngExporter.ExportToFile(plot.Model, saveFileDialog.FileName);
                 }
             }
+        }
+
+        private void FastObjectListView_SelectionChanged(object sender, EventArgs e)
+        {
+            PlotModel plotModel = new PlotModel() { TitleFontSize = 15 };
+            plotModel.MouseUp += (s, ev) =>
+            {
+                if (ev.IsShiftDown)
+                {
+                    SavePlot();
+                }
+            };
+
+            plotModel.Axes.Add(new TimeSpanAxis { Position = AxisPosition.Left, Title = "TimeSpan" });
+            StairStepSeries stairStepSeries = new StairStepSeries();
+            List<double> timeSpans = new List<double>();
+            var events = fastObjectListView.SelectedObjects;
+            for (int i = 1; i < events.Count; i++)
+            {
+                Parser.Event eventA = (Parser.Event)events[i];
+                Parser.Event eventB = (Parser.Event)events[i-1];
+                TimeSpan duration = new TimeSpan(eventA.Stamp - eventB.Stamp);
+                if (duration.Ticks == 0)
+                {
+                    continue;
+                }
+                timeSpans.Add(Axis.ToDouble(duration));
+                stairStepSeries.Points.Add(new DataPoint(eventA.IDX, Axis.ToDouble(duration)));
+            }
+            plotModel.Series.Add(stairStepSeries);
+            plotModel.Title = string.Format("Mean: {0} s  Range: {1} s", Stats.mean(timeSpans.ToArray()), Stats.range(timeSpans.ToArray()));
+            plot.Model = plotModel;
         }
     }
 }
