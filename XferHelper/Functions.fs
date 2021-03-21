@@ -25,6 +25,9 @@ module Stats =
     let summary (data:float[]) =
         Statistics.FiveNumberSummary(data)
 
+    let range (data:float[]) =
+        data.Maximum() - data.Minimum()
+
 module Metro =
     [<Literal>] 
     let CSVschema = "Inline_Trial\tImage_Number\tX_Position\tY_Position\tTarget_RR\tTarget_RC\tTarget_R\tTarget_C\tStamp_R\tStamp_C\tX_error\tY_error\tYield_Measure\tAlignment_Measure\tAngle_error"
@@ -250,30 +253,49 @@ module Zed =
         |> List.max);
         ]
 
-module Parser = 
-    type Event = {Date:DateTime; Time:TimeSpan; Msg:string; Stamp:int64}
+module Parser =
+    let stripChars text (chars:string) =
+        Array.fold (
+            fun (s:string) c -> s.Replace(c.ToString(),"")
+        ) text (chars.ToCharArray())
 
-    let mutable lastTime = DateTime.Today
+    let mutable IDX = 0
 
-    let toEvent (csvData:string) =
-        let columns = csvData.Split('\t')
-        if columns.Length <= 1 then
-            {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[0..] |> String.concat "\t"; Stamp = lastTime.Ticks}
-        else
-            try
-               let Time = DateTime.Parse(columns.[0])
-               lastTime <- Time
-               let Msg = columns.[2..] |> String.concat "\t"
-               {Date = Time.Date; Time = Time.TimeOfDay; Msg = Msg; Stamp = Time.Ticks}
-            with
-               | :? System.IndexOutOfRangeException -> {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[1..] |> String.concat "\t"; Stamp = lastTime.Ticks}
-               | :? System.FormatException -> {Date = lastTime.Date; Time = lastTime.TimeOfDay; Msg = columns.[0..] |> String.concat "\t"; Stamp = lastTime.Ticks}
+    type Event = {IDX:int; Date:DateTime; Time:TimeSpan; Category:string; Description:string; Msg:string; Data:string; Stamp:int64}
+
+    let toEvent (csvData:string[]) =
+        let Time = DateTime.Parse(csvData.[0])
+        let Details = csvData.[2].Split(' ')
+        let Category = 
+            match Details.[0] with
+            | "SETUP" -> Details.[0..1] |> String.concat " "
+            | _ -> Details.[0]
+        let Description = 
+            match Details.Length with
+            | 1 -> ""
+            | _ -> 
+                match Details.[1] with
+                | "DATA:" -> Details.[2..] |> String.concat " "
+                | _ -> Details.[1..] |> String.concat " "
+        let Details2 = csvData.[3..] |> String.concat " "
+        let CleanDetails2 = stripChars Details2 "-,.>@ "
+        let Msg = 
+            match System.Double.TryParse CleanDetails2 |> fst with
+            | true -> ""
+            | false -> Details2
+        let Data =
+            match Msg with
+            | "" -> Details2
+            | _ -> ""
+        IDX <- IDX + 1
+        {IDX = IDX; Date = Time.Date; Time = Time.TimeOfDay; Category = Category; Description = Description; Msg = Msg; Data = Data; Stamp = Time.Ticks}
 
     let reader (data:string[]) =
         data
-        |> Array.filter(fun x -> x <> "")
+        |> Array.filter(fun x -> x <> "" && not (x.Contains("+")) && not (x.Contains("*")))
+        |> Array.map(fun x -> x.Split('\t'))
+        |> Array.filter(fun x -> x.Length > 2)
         |> Array.map toEvent
-        |> Array.filter(fun x -> x.Msg <> "" && not (x.Msg.Contains("+")) && not (x.Msg.Contains("*")))
   
 module Sim =
     type ID = {X:float

@@ -3,11 +3,11 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using XferHelper;
-using BrightIdeasSoftware;
 
 namespace XferSuite
 {
@@ -34,29 +34,19 @@ namespace XferSuite
             _lines = File.ReadAllLines(Path);
             _events = Parser.reader(_lines);
             fastObjectListView.SetObjects(_events);
-            eventColumn.ImageGetter = new ImageGetterDelegate(EventImageGetter);
+
+            lblFilterPercent.Text = (1.0 - (_events.Length / (double) _lines.Length)).ToString("p") + " Lines Filtered Out";
         }
 
         private string[] _lines;
         private Parser.Event[] _events;
-
-        public object EventImageGetter(object rowObject)
-        {
-            Parser.Event e = (Parser.Event) rowObject;
-            if (e.Msg.Contains("ERROR:") && !e.Msg.Contains("No Error"))
-                return Properties.Resources.iconmonstr_error_3_16;
-            else if (e.Msg.Contains("XferPrint Operational"))
-                return Properties.Resources.iconmonstr_check_mark_1_16;
-            else
-                return null;
-        }
 
         private void SavePlot()
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.Title = "Export Print Time Plot";
+                saveFileDialog.Title = "Export Event Time Plot";
                 saveFileDialog.DefaultExt = ".png";
                 saveFileDialog.Filter = "png file (*.png)|*.png";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -67,12 +57,12 @@ namespace XferSuite
             }
         }
 
-        private void fastObjectListView_SelectedChanged(object sender, EventArgs ev)
+        private void FastObjectListView_SelectionChanged(object sender, EventArgs e)
         {
-            PlotModel plotModel = new PlotModel();
-            plotModel.MouseUp += (s, e) =>
+            PlotModel plotModel = new PlotModel() { TitleFontSize = 15 };
+            plotModel.MouseUp += (s, ev) =>
             {
-                if (e.IsShiftDown)
+                if (ev.IsShiftDown)
                 {
                     SavePlot();
                 }
@@ -80,6 +70,7 @@ namespace XferSuite
 
             plotModel.Axes.Add(new TimeSpanAxis { Position = AxisPosition.Left, Title = "TimeSpan" });
             StairStepSeries stairStepSeries = new StairStepSeries();
+            List<double> timeSpans = new List<double>();
             var events = fastObjectListView.SelectedObjects;
             for (int i = 1; i < events.Count; i++)
             {
@@ -90,9 +81,11 @@ namespace XferSuite
                 {
                     continue;
                 }
-                stairStepSeries.Points.Add(new DataPoint(i, Axis.ToDouble(duration)));
+                timeSpans.Add(Axis.ToDouble(duration));
+                stairStepSeries.Points.Add(new DataPoint(eventA.IDX, Axis.ToDouble(duration)));
             }
             plotModel.Series.Add(stairStepSeries);
+            plotModel.Title = string.Format("Mean: {0} s  Range: {1} s", Stats.mean(timeSpans.ToArray()), Stats.range(timeSpans.ToArray()));
             plot.Model = plotModel;
         }
     }
