@@ -54,6 +54,10 @@ namespace XferSuite
         private List<Sim.ID> _Devices = new List<Sim.ID>();
         private List<Sim.ID> _Sites = new List<Sim.ID>();
 
+        // ToDo - Load Printer Config
+        private PointF XExtent = new PointF(0, 800);
+        private PointF YExtent = new PointF(0, 600);
+
         private void UpdateAll()
         {
             timer.Start(); // Need a delay so fileSystemWatcher and XML reader don't overlap
@@ -200,7 +204,9 @@ namespace XferSuite
                 EndPosition = 0,
                 IsZoomEnabled = true,
                 IsPanEnabled = true,
-                Title = "X Position (mm)"
+                Title = "X Position (mm)",
+                Minimum = XExtent.X,
+                Maximum = XExtent.Y
             };
 
             LinearAxis myYaxis = new LinearAxis()
@@ -211,13 +217,30 @@ namespace XferSuite
                 EndPosition = 0,
                 IsZoomEnabled = true,
                 IsPanEnabled = true,
-                Title = "Y Position (mm)"
+                Title = "Y Position (mm)",
+                Minimum = YExtent.X,
+                Maximum = YExtent.Y
             };
+
+            myXaxis.TransformChanged += MyXaxis_TransformChanged;
+            myYaxis.TransformChanged += MyYaxis_TransformChanged;
 
             map.Axes.Add(myXaxis);
             map.Axes.Add(myYaxis);
             plot.Model = map;
             Refresh();
+        }
+
+        private void MyXaxis_TransformChanged(object sender, EventArgs e)
+        {
+            LinearAxis axis = (LinearAxis)sender;
+            XExtent = new PointF((float)axis.ActualMinimum, (float)axis.ActualMaximum);
+        }
+
+        private void MyYaxis_TransformChanged(object sender, EventArgs e)
+        {
+            LinearAxis axis = (LinearAxis)sender;
+            YExtent = new PointF((float)axis.ActualMinimum, (float)axis.ActualMaximum);
         }
 
         private void CreateSourceFeatures()

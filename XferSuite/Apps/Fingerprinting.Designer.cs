@@ -61,6 +61,7 @@ namespace XferSuite
             this.PrintList.Size = new System.Drawing.Size(119, 418);
             this.PrintList.TabIndex = 0;
             this.PrintList.SelectedIndexChanged += new System.EventHandler(this.PrintList_SelectedIndexChanged);
+            this.PrintList.DoubleClick += new System.EventHandler(this.PrintList_DoubleClick);
             // 
             // plot
             // 
