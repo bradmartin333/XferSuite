@@ -264,7 +264,10 @@ module Parser =
     type Event = {IDX:int; Date:DateTime; Time:TimeSpan; Category:string; Description:string; Msg:string; Data:string; Stamp:int64}
 
     let toEvent (csvData:string[]) =
-        let Time = DateTime.Parse(csvData.[0])
+        let Time = 
+            match DateTime.TryParse(csvData.[0]) |> fst with
+            | true -> DateTime.Parse(csvData.[0])
+            | false -> DateTime.Today
         let Details = csvData.[2].Split(' ')
         let Category = 
             match Details.[0] with
