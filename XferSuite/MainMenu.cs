@@ -36,63 +36,60 @@ namespace XferSuite
             int idx = int.Parse(btn.Tag.ToString());
             string path = null;
 
-            if (settings.controlsArr[idx] == null || ((Form)settings.controlsArr[idx]).IsDisposed == true || idx == 0)
+            switch (idx)
             {
-                switch (idx)
-                {
-                    case 0:
-                        if (!ReadMetro(idx))
-                        {
-                            break;
-                        }
+                case 0:
+                    if (!ReadMetro(idx))
+                    {
                         break;
-                    case 1:
-                        path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
-                        if (path == null)
-                        {
-                            break;
-                        }
-                        ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect() { Path = path };
-                        ZS.FormClosed += new FormClosedEventHandler(controlClosed);
-                        settings.controlsArr[idx] = ZS;
+                    }
+                    break;
+                case 1:
+                    path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
+                    if (path == null)
+                    {
                         break;
-                    case 2:
-                        if (!ReadMetro(idx))
-                        {
-                            break;
-                        }
+                    }
+                    ZRegistration.frmScanSelect ZS = new ZRegistration.frmScanSelect() { Path = path };
+                    ZS.FormClosed += new FormClosedEventHandler(controlClosed);
+                    settings.controlsArr[idx] = ZS;
+                    break;
+                case 2:
+                    if (!ReadMetro(idx))
+                    {
                         break;
-                    case 3:
-                        path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
-                        if (path == null)
-                        {
-                            break;
-                        }
-                        PrintSim PS = new PrintSim(path);
-                        PS.FormClosed += new FormClosedEventHandler(controlClosed);
-                        settings.controlsArr[idx] = PS;
+                    }
+                    break;
+                case 3:
+                    path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
+                    if (path == null)
+                    {
                         break;
-                    case 4:
-                        path = OpenFile("Open an EventLog File", "txt file (*.txt)|*.txt");
-                        if (path == null)
-                        {
-                            break;
-                        }
-                        EventLogParsing ELP = new EventLogParsing(path);
-                        ELP.FormClosed += new FormClosedEventHandler(controlClosed);
-                        settings.controlsArr[idx] = ELP;
+                    }
+                    PrintSim PS = new PrintSim(path);
+                    PS.FormClosed += new FormClosedEventHandler(controlClosed);
+                    settings.controlsArr[idx] = PS;
+                    break;
+                case 4:
+                    path = OpenFile("Open an EventLog File", "txt file (*.txt)|*.txt");
+                    if (path == null)
+                    {
                         break;
-                    case 5:
-                        DataFileTree.frmDataFileTreeMain DFT = new DataFileTree.frmDataFileTreeMain() { Location = PointToScreen(btn.Location) };
-                        DFT.FormClosed += new FormClosedEventHandler(controlClosed);
-                        settings.controlsArr[idx] = DFT;
-                        break;
-                    case 6:
-                        MapFlip MF = new MapFlip();
-                        MF.FormClosed += new FormClosedEventHandler(controlClosed);
-                        settings.controlsArr[idx] = MF;
-                        break;
-                }
+                    }
+                    EventLogParsing ELP = new EventLogParsing(path);
+                    ELP.FormClosed += new FormClosedEventHandler(controlClosed);
+                    settings.controlsArr[idx] = ELP;
+                    break;
+                case 5:
+                    DataFileTree.frmDataFileTreeMain DFT = new DataFileTree.frmDataFileTreeMain() { Location = PointToScreen(btn.Location) };
+                    DFT.FormClosed += new FormClosedEventHandler(controlClosed);
+                    settings.controlsArr[idx] = DFT;
+                    break;
+                case 6:
+                    MapFlip MF = new MapFlip();
+                    MF.FormClosed += new FormClosedEventHandler(controlClosed);
+                    settings.controlsArr[idx] = MF;
+                    break;
             }
 
             if (settings.controlsArr[idx] != null)

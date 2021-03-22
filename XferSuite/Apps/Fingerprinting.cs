@@ -59,6 +59,34 @@ namespace XferSuite
             }
         }
 
+        private double _EntropyLowerBound = 0.0;
+        [
+            Category("User Parameters"),
+        ]
+        public double EntropyLowerBound
+        {
+            get => _EntropyLowerBound;
+            set
+            {
+                _EntropyLowerBound = value;
+                MakePlot();
+            }
+        }
+
+        private double _EntropyUpperBound = 1.0;
+        [
+            Category("User Parameters"),
+        ]
+        public double EntropyUpperBound
+        {
+            get => _EntropyUpperBound;
+            set
+            {
+                _EntropyUpperBound = value;
+                MakePlot();
+            }
+        }
+
         public Fingerprinting(Metro.Position[] data)
         {
             InitializeComponent();
@@ -152,13 +180,14 @@ namespace XferSuite
                 foreach (int idx in loopSet)
                 {
                     printData[idx] = Metro.getPrint(_prints[idx], plotData);
-                    printEntropy[idx] = Metro.NextMagnitudeEntropy(printData[idx]);
+                    printEntropy[idx] = Metro.NextMagnitudeEntropy(printData[idx]) / 1e10;
                 }
                 foreach (int idx in loopSet)
                 {
                     for (int i = 0; i < printData[idx].Length; i++)
                     {
-                        vectorPlot.Series.Add(PlotVector(printData[idx][i], printEntropy, printEntropy[idx], idx));
+                        vectorPlot.Series.Add(PlotVector(printData[idx][i], 
+                            new double[] { _EntropyLowerBound, _EntropyUpperBound }, printEntropy[idx], idx));
                     }
                 }
             }
@@ -211,9 +240,11 @@ namespace XferSuite
             DataPoint arrowheadA = new DataPoint(toP.X + Math.Abs(toP.X - fromP.X) * ax * VectorMagnitude, toP.Y + Math.Abs(toP.Y - fromP.Y) * ay * VectorMagnitude);
             DataPoint arrowheadB = new DataPoint(toP.X + Math.Abs(toP.X - fromP.X) * bx * VectorMagnitude, toP.Y + Math.Abs(toP.Y - fromP.Y) * by * VectorMagnitude);
 
-            Color color = Lux2Color((colorVal - colorRangeVals.Min()) / (colorRangeVals.Max() - colorRangeVals.Min()));
+            Color color = Lux2Color((colorVal - colorRangeVals.Max()) / (colorRangeVals.Max() - colorRangeVals.Min()));
             LineSeries post = new LineSeries() { Color = OxyColor.FromRgb(color.R, color.G, color.B), LineStyle = LineStyle.Solid, StrokeThickness = 0.5 };
-            post.TrackerFormatString = post.TrackerFormatString + Environment.NewLine + PrintList.Items[idx].ToString();
+            post.TrackerFormatString = post.TrackerFormatString + Environment.NewLine + 
+                PrintList.Items[idx].ToString() + Environment.NewLine + 
+                "Color Value: " + Math.Round(colorVal, 6).ToString();
             post.Points.Add(fromP);
             post.Points.Add(toP);
             post.Points.Add(arrowheadA);
@@ -225,6 +256,7 @@ namespace XferSuite
 
         public static Color Lux2Color(double lux)
         {
+            lux = Math.Abs(lux);
             double r = 0.5;
             double g = 0.5;
             double b = 0.5;
@@ -281,7 +313,14 @@ namespace XferSuite
                 saveFileDialog.Title = "Export Fingerprint Plot";
                 saveFileDialog.DefaultExt = ".png";
                 saveFileDialog.Filter = "png file (*.png)|*.png";
-                saveFileDialog.FileName = Text.Replace(".txt", "Fingerprint");
+                if (_ShowEntropy)
+                {
+                    saveFileDialog.FileName = Text.Replace(".txt", "FingerprintEntropy");
+                }
+                else
+                {
+                    saveFileDialog.FileName = Text.Replace(".txt", "Fingerprint");
+                }
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width, Background = OxyColors.White };
