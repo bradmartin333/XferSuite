@@ -313,7 +313,14 @@ namespace XferSuite
                 saveFileDialog.Title = "Export Fingerprint Plot";
                 saveFileDialog.DefaultExt = ".png";
                 saveFileDialog.Filter = "png file (*.png)|*.png";
-                saveFileDialog.FileName = Text.Replace(".txt", "Fingerprint");
+                if (_ShowEntropy)
+                {
+                    saveFileDialog.FileName = Text.Replace(".txt", "FingerprintEntropy");
+                }
+                else
+                {
+                    saveFileDialog.FileName = Text.Replace(".txt", "Fingerprint");
+                }
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width, Background = OxyColors.White };
