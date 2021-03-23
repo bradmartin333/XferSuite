@@ -74,7 +74,6 @@ Partial Class frmScanSelect
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmScanSelect"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Click to choose a scan"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
