@@ -33,6 +33,7 @@ namespace XferSuite
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.plot = new OxyPlot.WindowsForms.PlotView();
             this.fastObjectListView = new BrightIdeasSoftware.FastObjectListView();
+            this.idxColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.dateColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.timeColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.categoryColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -40,7 +41,6 @@ namespace XferSuite
             this.eventColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.dataColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.lblFilterPercent = new System.Windows.Forms.Label();
-            this.idxColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListView)).BeginInit();
             this.SuspendLayout();
@@ -110,7 +110,12 @@ namespace XferSuite
             this.fastObjectListView.UseHotItem = true;
             this.fastObjectListView.View = System.Windows.Forms.View.Details;
             this.fastObjectListView.VirtualMode = true;
-            this.fastObjectListView.SelectionChanged += FastObjectListView_SelectionChanged;
+            // 
+            // idxColumn
+            // 
+            this.idxColumn.AspectName = "IDX";
+            this.idxColumn.Text = "Index";
+            this.idxColumn.Width = 39;
             // 
             // dateColumn
             // 
@@ -161,12 +166,6 @@ namespace XferSuite
             this.lblFilterPercent.Text = "label1";
             this.lblFilterPercent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // idxColumn
-            // 
-            this.idxColumn.AspectName = "IDX";
-            this.idxColumn.Text = "Index";
-            this.idxColumn.Width = 39;
-            // 
             // EventLogParsing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -176,7 +175,6 @@ namespace XferSuite
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "EventLogParsing";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Event Log Parsing";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
