@@ -36,35 +36,35 @@ namespace XferSuite
                 case 0:
                     path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
                     if (path == null)
-                        break;
+                        return;
                     if (!VerifyMetro(path))
-                        break;
+                        return;
                     form = new MetroGraphs(Metro.data(path)) { Text = new FileInfo(path).Name };
                     break;
                 case 1:
                     path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
                     if (path == null)
-                        break;
+                        return;
                     form = new ZRegistration.frmScanSelect() { Path = path };
                     break;
                 case 2:
                     path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
                     if (path == null)
-                        break;
+                        return;
                     if (!VerifyMetro(path))
-                        break;
+                        return;
                     form = new Fingerprinting(Metro.data(path)) { Text = new FileInfo(path).Name };
                     break;
                 case 3:
                     path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
                     if (path == null)
-                        break;
+                        return;
                     form = new PrintSim(path);
                     break;
                 case 4:
                     path = OpenFile("Open an EventLog File", "txt file (*.txt)|*.txt");
                     if (path == null)
-                        break;
+                        return;
                     form = new EventLogParsing(path);
                     break;
                 case 5:
@@ -81,7 +81,8 @@ namespace XferSuite
 
         private void Form_Activated(object sender, EventArgs e)
         {
-            _Settings.propertyGrid.SelectedObject = sender;
+            if (!_Settings.IsDisposed) // Prevents error on app close
+                _Settings.propertyGrid.SelectedObject = sender;
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
