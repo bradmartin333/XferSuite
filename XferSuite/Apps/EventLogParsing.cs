@@ -34,6 +34,7 @@ namespace XferSuite
             _lines = File.ReadAllLines(Path);
             _events = Parser.reader(_lines);
             fastObjectListView.SetObjects(_events);
+            fastObjectListView.SelectionChanged += FastObjectListView_SelectionChanged;
 
             lblFilterPercent.Text = (1.0 - (_events.Length / (double) _lines.Length)).ToString("p") + " Lines Filtered Out";
         }
