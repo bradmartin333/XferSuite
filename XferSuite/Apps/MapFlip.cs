@@ -53,6 +53,10 @@ namespace XferSuite
             List<string[]> arrBuilder = new List<string[]>();
             foreach (string line in clipLines)
             {
+                if (line.Trim() == "")
+                {
+                    continue;
+                }
                 string[] values = line.Trim().Split(_Delimeter.ToCharArray());
                 arrBuilder.Add(values);
             }
@@ -181,19 +185,26 @@ namespace XferSuite
             _Panels[3].BackColor = _PnlColors[vals[3]];
         }
 
-        private void btnHorizFlip_Click(object sender, EventArgs e)
+        private void btnClick(object sender, EventArgs e)
         {
-            horizFlip();
-        }
+            BackColor = Color.Firebrick;
+            Refresh();
 
-        private void btnVertFlip_Click(object sender, EventArgs e)
-        {
-            vertFlip();
-        }
+            Button button = (Button)sender;
+            switch (button.Tag)
+            {
+                case "0":
+                    horizFlip();
+                    break;
+                case "1":
+                    vertFlip();
+                    break;
+                case "2":
+                    rotate();
+                    break;
+            }
 
-        private void btnRotate_Click(object sender, EventArgs e)
-        {
-            rotate();
+            BackColor = Color.Silver;
         }
 
         private void getPanelColors(bool init = false)
