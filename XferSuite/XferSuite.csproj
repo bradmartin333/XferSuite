@@ -188,9 +188,6 @@
     <None Include="Resources\horizFlip.png" />
     <None Include="Resources\vertFlip.png" />
     <None Include="Resources\rotateArrow.png" />
-    <None Include="Resources\iconmonstr-error-3-240.png" />
-    <None Include="Resources\iconmonstr-error-3-16.png" />
-    <None Include="Resources\iconmonstr-check-mark-1-16.png" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>
