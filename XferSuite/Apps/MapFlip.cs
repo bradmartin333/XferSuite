@@ -1,276 +1,224 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace XferSuite
 {
     public partial class MapFlip : Form
     {
-        List<Panel> Panels = new List<Panel>();
-        Color[] PnlColors = new Color[4];
-        List<int> Operations = new List<int>();
-        private string[][] Input;
-        private bool OperationsLoaded;
-
-        private bool _WordWrapping;
+        private string _Delimeter = "";
         [Category("User Parameters")]
-        public bool WordWrapping
+        public string Delimeter
         {
-            get => _WordWrapping;
+            get => _Delimeter;
             set
             {
-                _WordWrapping = value;
-                rtbIn.WordWrap = _WordWrapping;
-                rtbOut.WordWrap = _WordWrapping;
+                _Delimeter = value;
+                InitInput();
             }
         }
 
-        private float _Zoom;
-        [Category("User Parameters")]
-        public float Zoom
-        {
-            get => _Zoom;
-            set
-            {
-                _Zoom = value;
-                rtbIn.ZoomFactor = _Zoom;
-                rtbOut.ZoomFactor = _Zoom;
-            }
-        }
+        Panel[] _Panels = new Panel[4];
+        Color[] _PnlColors = new Color[4];
+        Color[] _PnlColorsInit = new Color[4];
+        private string[][] _Input;
 
         public MapFlip()
         {
             InitializeComponent();
+            _Panels = new Panel[] { pnlOutA, pnlOutB, pnlOutC, pnlOutD };
+            getPanelColors(init: true);
+            InitInput();
+        }
 
-            foreach (Panel p in tableLayoutPanel2.Controls.OfType<Panel>())
+        private void MapFlip_Activated(object sender, EventArgs e)
+        {
+            InitInput();
+        }
+
+        private void InitInput()
+        {
+            string clipText = Clipboard.GetText();
+
+            if (_Delimeter == "")
             {
-                if (!p.Name.Contains("Out"))
+                DetermineDelimeter(clipText);
+            }
+
+            string[] clipLines = clipText.Split('\n');
+
+            List<string[]> arrBuilder = new List<string[]>();
+            foreach (string line in clipLines)
+            {
+                string[] values = line.Trim().Split(_Delimeter.ToCharArray());
+                arrBuilder.Add(values);
+            }
+
+            bool validArr = true;
+            int checkLen = arrBuilder[0].Length;
+            for (int i = 1; i < arrBuilder.Count; i++)
+            {
+                if (arrBuilder[i].Length != checkLen)
                 {
-                    continue;
-                }
-                Panels.Add(p);
-            }
-
-            if (File.Exists("last.txt"))
-            {
-                LoadOperations();
-                Operate(true);
-            }
-
-            OperationsLoaded = true;
-        }
-
-        private void btnGenerate_Click(object sender, EventArgs e)
-        {
-            rtbOut.Text = "";
-            TSV_ToArray(rtbIn.Text);
-            Operate(false);
-            PrintOutput();
-            SaveOperations();
-        }
-
-        private void TSV_ToArray(string TSV)
-        {
-            List<string[]> temp = new List<string[]>();
-
-            string[] lines = TSV.Split('\n');
-
-            foreach (string line in lines)
-            {
-                string[] values = line.Split("\t".ToCharArray());
-                temp.Add(values);
-            }
-
-            Input = temp.ToArray();
-        }
-
-        private void Operate(bool colors)
-        {
-            foreach (int i in Operations)
-            {
-                switch (i)
-                {
-                    case 0:
-                        horizFlip(colors);
-                        break;
-                    case 1:
-                        vertFlip(colors);
-                        break;
-                    case 2:
-                        rotate(colors);
-                        break;
+                    validArr = false;
                 }
             }
-        }
 
-        private void PrintOutput()
-        {
-            for (int i = 0; i < Input.Length - 1; i++)
+            if (validArr)
             {
-                for (int j = 0; j < Input[0].Length; j++)
-                {
-                    rtbOut.Text += Input[i][j] + "\t";
-                }
-                rtbOut.Text += "\n";
-            }
-        }
-
-        private void horizFlip(bool colors)
-        {
-            if (colors)
-            {
-                getPanelColors();
-                Panels[0].BackColor = PnlColors[1];
-                Panels[1].BackColor = PnlColors[0];
-                Panels[2].BackColor = PnlColors[3];
-                Panels[3].BackColor = PnlColors[2];
-                if (OperationsLoaded)
-                {
-                    Operations.Add(0);
-                }
+                lblClip.Text = string.Format("Clipboard contains a {0} x {1} matrix", arrBuilder.Count, checkLen);
             }
             else
             {
-                List<string[]> Output = new List<string[]>();
-                for (int i = 0; i < Input.Length - 1; i++)
-                {
-                    List<string> temp = new List<string>();
-                    for (int j = Input[0].Length - 1; j >= 0; j--)
-                    {
-                        temp.Add(Input[i][j]);
-                    }
-                    Output.Add(temp.ToArray());
-                }
-                finishOperation(Output);
+                lblClip.Text = "Clipboard does not contain a valid m x n matrix";
             }
+
+            _Input = arrBuilder.ToArray();
         }
 
-        private void vertFlip(bool colors)
+        private void DetermineDelimeter(string clipText)
         {
-            if (colors)
+            char[] delims = new char[] { ' ', ',', '\t', '|' };
+            int[] count = new int[delims.Length];
+            for (int i = 0; i < delims.Length; i++)
             {
-                getPanelColors();
-                Panels[0].BackColor = PnlColors[2];
-                Panels[1].BackColor = PnlColors[3];
-                Panels[2].BackColor = PnlColors[0];
-                Panels[3].BackColor = PnlColors[1];
-                if (OperationsLoaded)
+                char[] arr = clipText.ToCharArray();
+                foreach (char c in arr)
                 {
-                    Operations.Add(1);
-                }
-            }
-            else
-            {
-                List<string[]> Output = new List<string[]>();
-                for (int i = Input.Length - 2; i >= 0; i--)
-                {
-                    List<string> temp = new List<string>();
-                    for (int j = 0; j < Input[0].Length; j++)
+                    if (c == delims[i])
                     {
-                        temp.Add(Input[i][j]);
+                        count[i]++;
                     }
-                    Output.Add(temp.ToArray());
                 }
-                finishOperation(Output);
             }
+            _Delimeter = delims[count.ToList().IndexOf(count.Max())].ToString();
         }
 
-        private void rotate(bool colors)
+        private void horizFlip()
         {
-            if (colors)
+            UpdateColors(new int[] { 1, 0, 3, 2 });
+
+            string output = "";
+            for (int i = 0; i < _Input.Length; i++)
             {
-                getPanelColors();
-                Panels[0].BackColor = PnlColors[1];
-                Panels[1].BackColor = PnlColors[3];
-                Panels[2].BackColor = PnlColors[0];
-                Panels[3].BackColor = PnlColors[2];
-                if (OperationsLoaded)
+                for (int j = _Input[0].Length - 1; j >= 0; j--)
                 {
-                    Operations.Add(2);
-                }
-            }
-            else
-            {
-                List<string[]> Output = new List<string[]>();
-                for (int j = Input[0].Length - 1; j >= 0; j--)
-                {
-                    List<string> temp = new List<string>();
-                    for (int i = 0; i < Input.Length - 1; i++)
+                    output += _Input[i][j];
+                    if (j != 0)
                     {
-                        temp.Add(Input[i][j]);
+                        output += _Delimeter;
                     }
-                    Output.Add(temp.ToArray());
                 }
-                finishOperation(Output);
+                if (i != _Input.Length - 1)
+                {
+                    output += '\n';
+                }
             }
+            Clipboard.SetText(output);
+
+            InitInput();
         }
 
-        private void finishOperation(List<string[]> Output)
+        private void vertFlip()
         {
-            string[] newLine = { "\n" };
-            Output.Add(newLine);
-            Input = Output.ToArray();
+            UpdateColors(new int[] { 2, 3, 0, 1 });
+
+            string output = "";
+            for (int i = _Input.Length - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < _Input[0].Length; j++)
+                {
+                    output += _Input[i][j];
+                    if (j != _Input[0].Length - 1)
+                    {
+                        output += _Delimeter;
+                    }
+                }
+                if (i != 0)
+                {
+                    output += '\n';
+                }
+            }
+            Clipboard.SetText(output);
+
+            InitInput();
+        }
+
+        private void rotate()
+        {
+            UpdateColors(new int[] { 1, 3, 0, 2 });
+
+            string output = "";
+            for (int j = _Input[0].Length - 1; j >= 0; j--)
+            {
+                for (int i = 0; i < _Input.Length; i++)
+                {
+                    output += _Input[i][j];
+                    if (i != _Input.Length - 1)
+                    {
+                        output += _Delimeter;
+                    }
+                }
+                if (j != 0)
+                {
+                    output += '\n';
+                }
+            }
+            Clipboard.SetText(output);
+
+            InitInput();
+        }
+
+        private void UpdateColors(int[] vals)
+        {
+            getPanelColors();
+            _Panels[0].BackColor = _PnlColors[vals[0]];
+            _Panels[1].BackColor = _PnlColors[vals[1]];
+            _Panels[2].BackColor = _PnlColors[vals[2]];
+            _Panels[3].BackColor = _PnlColors[vals[3]];
         }
 
         private void btnHorizFlip_Click(object sender, EventArgs e)
         {
-            horizFlip(true);
+            horizFlip();
         }
 
         private void btnVertFlip_Click(object sender, EventArgs e)
         {
-            vertFlip(true);
+            vertFlip();
         }
 
         private void btnRotate_Click(object sender, EventArgs e)
         {
-            rotate(true);
+            rotate();
         }
 
-        private void getPanelColors()
+        private void getPanelColors(bool init = false)
         {
             for(int i = 0; i < 4; i++)
             {
-                PnlColors[i] = Panels[i].BackColor;
+                if (init)
+                {
+                    _PnlColorsInit[i] = _Panels[i].BackColor;
+                }
+                else
+                {
+                    _PnlColors[i] = _Panels[i].BackColor;
+                }
             }
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            Panels[0].BackColor = Color.Green;
-            Panels[1].BackColor = Color.Red;
-            Panels[2].BackColor = Color.Yellow;
-            Panels[3].BackColor = Color.Blue;
-            Operations.Clear();
-            File.Delete("last.txt");
-            rtbOut.Text = "";
-        }
-
-        private void LoadOperations()
-        {
-            string text = File.ReadAllText("last.txt");
-            foreach (char i in text)
+            for (int i = 0; i < _Panels.Length; i++)
             {
-                Operations.Add(int.Parse(char.ToString(i)));
+                _Panels[i].BackColor = _PnlColorsInit[i];
             }
-        }
-
-        private void SaveOperations()
-        {
-            string text = "";
-            foreach (int i in Operations)
-            {
-                text += i.ToString();
-            }
-            File.WriteAllText("last.txt", text);
+            _Delimeter = "";
+            InitInput();
         }
     }
 }
