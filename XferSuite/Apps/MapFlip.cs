@@ -195,17 +195,24 @@ namespace XferSuite
             Refresh();
 
             Button button = (Button)sender;
-            switch (button.Tag)
+            try
             {
-                case "0":
-                    horizFlip();
-                    break;
-                case "1":
-                    vertFlip();
-                    break;
-                case "2":
-                    rotate();
-                    break;
+                switch (button.Tag)
+                {
+                    case "0":
+                        horizFlip();
+                        break;
+                    case "1":
+                        vertFlip();
+                        break;
+                    case "2":
+                        rotate();
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please check the clipboad contents", "Map Flip");
             }
 
             BackColor = Color.Silver;
