@@ -63,13 +63,14 @@ namespace XferSuite
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(279, 197);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(293, 197);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.BackColor = System.Drawing.Color.Silver;
-            this.tableLayoutPanel2.ColumnCount = 7;
+            this.tableLayoutPanel2.ColumnCount = 9;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 3F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17F));
@@ -77,32 +78,34 @@ namespace XferSuite
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.Controls.Add(this.pnlInA, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.pnlInB, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.pnlInC, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.pnlInD, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.pnlOutA, 5, 3);
-            this.tableLayoutPanel2.Controls.Add(this.pnlOutB, 6, 3);
-            this.tableLayoutPanel2.Controls.Add(this.pnlOutC, 5, 4);
-            this.tableLayoutPanel2.Controls.Add(this.pnlOutD, 6, 4);
-            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.label2, 5, 2);
-            this.tableLayoutPanel2.Controls.Add(this.btnHorizFlip, 3, 2);
-            this.tableLayoutPanel2.Controls.Add(this.btnVertFlip, 3, 3);
-            this.tableLayoutPanel2.Controls.Add(this.btnRotate, 3, 4);
-            this.tableLayoutPanel2.Controls.Add(this.btnReset, 2, 1);
-            this.tableLayoutPanel2.Controls.Add(this.lblClip, 0, 0);
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 3F));
+            this.tableLayoutPanel2.Controls.Add(this.pnlInA, 1, 4);
+            this.tableLayoutPanel2.Controls.Add(this.pnlInB, 1, 4);
+            this.tableLayoutPanel2.Controls.Add(this.pnlInC, 1, 5);
+            this.tableLayoutPanel2.Controls.Add(this.pnlInD, 1, 5);
+            this.tableLayoutPanel2.Controls.Add(this.pnlOutA, 6, 4);
+            this.tableLayoutPanel2.Controls.Add(this.pnlOutB, 7, 4);
+            this.tableLayoutPanel2.Controls.Add(this.pnlOutC, 6, 5);
+            this.tableLayoutPanel2.Controls.Add(this.pnlOutD, 7, 5);
+            this.tableLayoutPanel2.Controls.Add(this.label1, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.label2, 6, 3);
+            this.tableLayoutPanel2.Controls.Add(this.btnHorizFlip, 4, 3);
+            this.tableLayoutPanel2.Controls.Add(this.btnVertFlip, 4, 4);
+            this.tableLayoutPanel2.Controls.Add(this.btnRotate, 4, 5);
+            this.tableLayoutPanel2.Controls.Add(this.btnReset, 3, 2);
+            this.tableLayoutPanel2.Controls.Add(this.lblClip, 1, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 5;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.RowCount = 7;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(273, 191);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(287, 191);
             this.tableLayoutPanel2.TabIndex = 2;
             // 
             // pnlInA
@@ -110,9 +113,9 @@ namespace XferSuite
             this.pnlInA.BackColor = System.Drawing.Color.Green;
             this.pnlInA.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlInA.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlInA.Location = new System.Drawing.Point(3, 107);
+            this.pnlInA.Location = new System.Drawing.Point(6, 107);
             this.pnlInA.Name = "pnlInA";
-            this.pnlInA.Size = new System.Drawing.Size(41, 36);
+            this.pnlInA.Size = new System.Drawing.Size(43, 36);
             this.pnlInA.TabIndex = 0;
             // 
             // pnlInB
@@ -120,9 +123,9 @@ namespace XferSuite
             this.pnlInB.BackColor = System.Drawing.Color.Black;
             this.pnlInB.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlInB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlInB.Location = new System.Drawing.Point(50, 107);
+            this.pnlInB.Location = new System.Drawing.Point(55, 107);
             this.pnlInB.Name = "pnlInB";
-            this.pnlInB.Size = new System.Drawing.Size(41, 36);
+            this.pnlInB.Size = new System.Drawing.Size(43, 36);
             this.pnlInB.TabIndex = 1;
             // 
             // pnlInC
@@ -130,9 +133,9 @@ namespace XferSuite
             this.pnlInC.BackColor = System.Drawing.Color.Goldenrod;
             this.pnlInC.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlInC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlInC.Location = new System.Drawing.Point(3, 149);
+            this.pnlInC.Location = new System.Drawing.Point(6, 149);
             this.pnlInC.Name = "pnlInC";
-            this.pnlInC.Size = new System.Drawing.Size(41, 39);
+            this.pnlInC.Size = new System.Drawing.Size(43, 36);
             this.pnlInC.TabIndex = 2;
             // 
             // pnlInD
@@ -140,9 +143,9 @@ namespace XferSuite
             this.pnlInD.BackColor = System.Drawing.Color.Blue;
             this.pnlInD.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlInD.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlInD.Location = new System.Drawing.Point(50, 149);
+            this.pnlInD.Location = new System.Drawing.Point(55, 149);
             this.pnlInD.Name = "pnlInD";
-            this.pnlInD.Size = new System.Drawing.Size(41, 39);
+            this.pnlInD.Size = new System.Drawing.Size(43, 36);
             this.pnlInD.TabIndex = 3;
             // 
             // pnlOutA
@@ -150,9 +153,9 @@ namespace XferSuite
             this.pnlOutA.BackColor = System.Drawing.Color.Green;
             this.pnlOutA.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlOutA.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlOutA.Location = new System.Drawing.Point(178, 107);
+            this.pnlOutA.Location = new System.Drawing.Point(187, 107);
             this.pnlOutA.Name = "pnlOutA";
-            this.pnlOutA.Size = new System.Drawing.Size(41, 36);
+            this.pnlOutA.Size = new System.Drawing.Size(43, 36);
             this.pnlOutA.TabIndex = 4;
             this.pnlOutA.Tag = "";
             // 
@@ -161,9 +164,9 @@ namespace XferSuite
             this.pnlOutB.BackColor = System.Drawing.Color.Black;
             this.pnlOutB.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlOutB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlOutB.Location = new System.Drawing.Point(225, 107);
+            this.pnlOutB.Location = new System.Drawing.Point(236, 107);
             this.pnlOutB.Name = "pnlOutB";
-            this.pnlOutB.Size = new System.Drawing.Size(45, 36);
+            this.pnlOutB.Size = new System.Drawing.Size(43, 36);
             this.pnlOutB.TabIndex = 5;
             // 
             // pnlOutC
@@ -171,9 +174,9 @@ namespace XferSuite
             this.pnlOutC.BackColor = System.Drawing.Color.Goldenrod;
             this.pnlOutC.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlOutC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlOutC.Location = new System.Drawing.Point(178, 149);
+            this.pnlOutC.Location = new System.Drawing.Point(187, 149);
             this.pnlOutC.Name = "pnlOutC";
-            this.pnlOutC.Size = new System.Drawing.Size(41, 39);
+            this.pnlOutC.Size = new System.Drawing.Size(43, 36);
             this.pnlOutC.TabIndex = 6;
             // 
             // pnlOutD
@@ -181,9 +184,9 @@ namespace XferSuite
             this.pnlOutD.BackColor = System.Drawing.Color.Blue;
             this.pnlOutD.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlOutD.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlOutD.Location = new System.Drawing.Point(225, 149);
+            this.pnlOutD.Location = new System.Drawing.Point(236, 149);
             this.pnlOutD.Name = "pnlOutD";
-            this.pnlOutD.Size = new System.Drawing.Size(45, 39);
+            this.pnlOutD.Size = new System.Drawing.Size(43, 36);
             this.pnlOutD.TabIndex = 7;
             // 
             // label1
@@ -193,9 +196,9 @@ namespace XferSuite
             this.label1.AutoSize = true;
             this.tableLayoutPanel2.SetColumnSpan(this.label1, 2);
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(3, 79);
+            this.label1.Location = new System.Drawing.Point(6, 79);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(88, 25);
+            this.label1.Size = new System.Drawing.Size(92, 25);
             this.label1.TabIndex = 8;
             this.label1.Text = "In";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -207,7 +210,7 @@ namespace XferSuite
             this.label2.AutoSize = true;
             this.tableLayoutPanel2.SetColumnSpan(this.label2, 2);
             this.label2.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label2.Location = new System.Drawing.Point(178, 79);
+            this.label2.Location = new System.Drawing.Point(187, 79);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(92, 25);
             this.label2.TabIndex = 9;
@@ -221,12 +224,13 @@ namespace XferSuite
             this.btnHorizFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnHorizFlip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnHorizFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHorizFlip.Location = new System.Drawing.Point(114, 65);
+            this.btnHorizFlip.Location = new System.Drawing.Point(121, 65);
             this.btnHorizFlip.Name = "btnHorizFlip";
-            this.btnHorizFlip.Size = new System.Drawing.Size(41, 36);
+            this.btnHorizFlip.Size = new System.Drawing.Size(43, 36);
             this.btnHorizFlip.TabIndex = 11;
+            this.btnHorizFlip.Tag = "0";
             this.btnHorizFlip.UseVisualStyleBackColor = false;
-            this.btnHorizFlip.Click += new System.EventHandler(this.btnHorizFlip_Click);
+            this.btnHorizFlip.Click += new System.EventHandler(this.btnClick);
             // 
             // btnVertFlip
             // 
@@ -235,12 +239,13 @@ namespace XferSuite
             this.btnVertFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnVertFlip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnVertFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVertFlip.Location = new System.Drawing.Point(114, 107);
+            this.btnVertFlip.Location = new System.Drawing.Point(121, 107);
             this.btnVertFlip.Name = "btnVertFlip";
-            this.btnVertFlip.Size = new System.Drawing.Size(41, 36);
+            this.btnVertFlip.Size = new System.Drawing.Size(43, 36);
             this.btnVertFlip.TabIndex = 12;
+            this.btnVertFlip.Tag = "1";
             this.btnVertFlip.UseVisualStyleBackColor = false;
-            this.btnVertFlip.Click += new System.EventHandler(this.btnVertFlip_Click);
+            this.btnVertFlip.Click += new System.EventHandler(this.btnClick);
             // 
             // btnRotate
             // 
@@ -249,12 +254,13 @@ namespace XferSuite
             this.btnRotate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnRotate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnRotate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRotate.Location = new System.Drawing.Point(114, 149);
+            this.btnRotate.Location = new System.Drawing.Point(121, 149);
             this.btnRotate.Name = "btnRotate";
-            this.btnRotate.Size = new System.Drawing.Size(41, 39);
+            this.btnRotate.Size = new System.Drawing.Size(43, 36);
             this.btnRotate.TabIndex = 13;
+            this.btnRotate.Tag = "2";
             this.btnRotate.UseVisualStyleBackColor = false;
-            this.btnRotate.Click += new System.EventHandler(this.btnRotate_Click);
+            this.btnRotate.Click += new System.EventHandler(this.btnClick);
             // 
             // btnReset
             // 
@@ -263,9 +269,9 @@ namespace XferSuite
             this.btnReset.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel2.SetColumnSpan(this.btnReset, 3);
             this.btnReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReset.Location = new System.Drawing.Point(97, 28);
+            this.btnReset.Location = new System.Drawing.Point(104, 28);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(75, 25);
+            this.btnReset.Size = new System.Drawing.Size(77, 25);
             this.btnReset.TabIndex = 15;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = false;
@@ -276,9 +282,9 @@ namespace XferSuite
             this.lblClip.AutoSize = true;
             this.tableLayoutPanel2.SetColumnSpan(this.lblClip, 7);
             this.lblClip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblClip.Location = new System.Drawing.Point(3, 0);
+            this.lblClip.Location = new System.Drawing.Point(6, 3);
             this.lblClip.Name = "lblClip";
-            this.lblClip.Size = new System.Drawing.Size(267, 20);
+            this.lblClip.Size = new System.Drawing.Size(273, 17);
             this.lblClip.TabIndex = 16;
             this.lblClip.Text = "Clipboard contains an m x n matrix";
             this.lblClip.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -288,7 +294,7 @@ namespace XferSuite
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.ClientSize = new System.Drawing.Size(279, 197);
+            this.ClientSize = new System.Drawing.Size(293, 197);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MapFlip";
