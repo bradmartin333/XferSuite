@@ -50,6 +50,7 @@ namespace XferSuite
 
             string[] clipLines = clipText.Split('\n');
 
+            bool validArr = true;
             List<string[]> arrBuilder = new List<string[]>();
             foreach (string line in clipLines)
             {
@@ -61,18 +62,21 @@ namespace XferSuite
                 arrBuilder.Add(values);
             }
 
-            bool validArr = true;
-            int checkLen = arrBuilder[0].Length;
-            for (int i = 1; i < arrBuilder.Count; i++)
+            if (arrBuilder.Count == 0)
             {
-                if (arrBuilder[i].Length != checkLen)
-                {
-                    validArr = false;
-                }
+                validArr = false;
             }
 
             if (validArr)
             {
+                int checkLen = arrBuilder[0].Length;
+                for (int i = 1; i < arrBuilder.Count; i++)
+                {
+                    if (arrBuilder[i].Length != checkLen)
+                    {
+                        validArr = false;
+                    }
+                }
                 lblClip.Text = string.Format("Clipboard contains a {0} x {1} matrix", arrBuilder.Count, checkLen);
             }
             else
