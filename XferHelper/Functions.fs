@@ -33,7 +33,13 @@ module Metro =
     let CSVschema = "Inline_Trial\tImage_Number\tX_Position\tY_Position\tTarget_RR\tTarget_RC\tTarget_R\tTarget_C\tStamp_R\tStamp_C\tX_error\tY_error\tYield_Measure\tAlignment_Measure\tAngle_error"
 
     [<Literal>] 
+    let CSVschemaAPR2021 = "Inline_Trial\tImage_Number\tX_Position\tY_Position\tTarget_RR\tTarget_RC\tTarget_R\tTarget_C\tStamp_R\tStamp_C\tX_error\tY_error\tYield_Measure\tAlignment_Measure\tAngle_error\tTarget_Score\tTarget_Contrast\tSource_Score\tSource_Contrast"
+
+    [<Literal>] 
     let CSVschemaSingle = "Inline_Trial\tImage_Number\tX_Position\tY_Position\tStamp_R\tStamp_C\tX_error\tY_error\tYield_Measure\tAlignment_Measure\tAngle_error"
+
+    [<Literal>] 
+    let CSVschemaSingleAPR2021 = "Inline_Trial\tImage_Number\tX_Position\tY_Position\tStamp_R\tStamp_C\tX_error\tY_error\tYield_Measure\tAlignment_Measure\tAngle_error\tTarget_Score\tTarget_Contrast\tSource_Score\tSource_Contrast"
 
     let mutable single:bool = false
 
@@ -43,9 +49,9 @@ module Metro =
         if data.Length < 2 then
             0 //Insufficient Data/Empty File
         else
-            if data.[0] = CSVschema then
+            if data.[0] = CSVschema || data.[0] = CSVschemaAPR2021 then
                 1
-            elif data.[0] = CSVschemaSingle then 
+            elif data.[0] = CSVschemaSingle || data.[0] = CSVschemaSingleAPR2021 then
                 single <- true
                 2
             else

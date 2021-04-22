@@ -82,6 +82,21 @@ namespace XferSuite
             }
         }
 
+        private int _PointSize = 1;
+        [
+            Category("User Parameters"),
+            Description("Size of points in scatterplot"),
+        ]
+        public int PointSize
+        {
+            get => _PointSize;
+            set
+            {
+                _PointSize = value;
+                MakePlots();
+            }
+        }
+
         public MetroGraphs(Metro.Position[] data)
         {
             InitializeComponent();
@@ -142,7 +157,7 @@ namespace XferSuite
 
             double[] passX = Metro.XPos(_pass);
             double[] passY = Metro.YPos(_pass);
-            ScatterSeries passSeries = new ScatterSeries() { MarkerFill = OxyColors.Green, MarkerSize = 1 };
+            ScatterSeries passSeries = new ScatterSeries() { MarkerFill = OxyColors.Green, MarkerSize = _PointSize };
             for (int i = 0; i < _pass.Length; i++)
             {
                 passSeries.Points.Add(new ScatterPoint(passX[i], passY[i]));
@@ -151,7 +166,7 @@ namespace XferSuite
 
             double[] failX = Metro.XPos(_fail);
             double[] failY = Metro.YPos(_fail);
-            ScatterSeries failSeries = new ScatterSeries() { MarkerFill = OxyColors.Gold, MarkerSize = 1 };
+            ScatterSeries failSeries = new ScatterSeries() { MarkerFill = OxyColors.Gold, MarkerSize = _PointSize };
             for (int i = 0; i < _fail.Length; i++)
             {
                 failSeries.Points.Add(new ScatterPoint(failX[i], failY[i]));
@@ -160,7 +175,7 @@ namespace XferSuite
 
             double[] missingX = Metro.XPos(_missing);
             double[] missingY = Metro.YPos(_missing);
-            ScatterSeries missingSeries = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = 1 };
+            ScatterSeries missingSeries = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = _PointSize };
             for (int i = 0; i < _missing.Length; i++)
             {
                 missingSeries.Points.Add(new ScatterPoint(missingX[i], missingY[i]));
@@ -306,9 +321,15 @@ namespace XferSuite
         private HistogramSeries makeHistogram(double[] data)
         {
             HistogramSeries histogramSeries = new HistogramSeries() { FillColor = OxyColors.DarkBlue };
-            BinningOptions binningOptions = new BinningOptions(BinningOutlierMode.CountOutliers, BinningIntervalType.InclusiveUpperBound, BinningExtremeValueMode.IncludeExtremeValues);
-            var binBreaks = HistogramHelpers.CreateUniformBins(data.Min(), data.Max(), NumBins);
-            histogramSeries.Items.AddRange(HistogramHelpers.Collect(data, binBreaks, binningOptions));
+            try
+            {
+                BinningOptions binningOptions = new BinningOptions(BinningOutlierMode.CountOutliers, BinningIntervalType.InclusiveUpperBound, BinningExtremeValueMode.IncludeExtremeValues);
+                var binBreaks = HistogramHelpers.CreateUniformBins(data.Min(), data.Max(), NumBins);
+                histogramSeries.Items.AddRange(HistogramHelpers.Collect(data, binBreaks, binningOptions));
+            }
+            catch (Exception)
+            {
+            }
             return histogramSeries;
         }
 
@@ -325,9 +346,15 @@ namespace XferSuite
         private LineSeries makeNormDistribution(double[] data)
         {
             LineSeries lineSeries = new LineSeries() { StrokeThickness = 3, Color = OxyColors.LightGreen };
-            for (double i = data.Min(); i < data.Max(); i+=0.01)
+            try
             {
-                lineSeries.Points.Add(new DataPoint(i, Stats.normVal(data, i)));
+                for (double i = data.Min(); i < data.Max(); i += 0.01)
+                {
+                    lineSeries.Points.Add(new DataPoint(i, Stats.normVal(data, i)));
+                }
+            }
+            catch (Exception)
+            {
             }
             return lineSeries;
         }
@@ -551,24 +578,30 @@ namespace XferSuite
             yield.Series.Add(Green);
             yield.Series.Add(Red);
 
-            LinearAxis myXaxis = new LinearAxis()
+            try
             {
-                Position = AxisPosition.Bottom,
-                Title = "Print Number",
-                Minimum = 0.5,
-                Maximum = _prints.Count + 0.5
-            };
-            LinearAxis myYaxis = new LinearAxis()
+                LinearAxis myXaxis = new LinearAxis()
+                {
+                    Position = AxisPosition.Bottom,
+                    Title = "Print Number",
+                    Minimum = 0.5,
+                    Maximum = _prints.Count + 0.5
+                };
+                LinearAxis myYaxis = new LinearAxis()
+                {
+                    Position = AxisPosition.Left,
+                    Title = "Functional Yield (%)",
+                    Minimum = yieldList.Min() - 0.25,
+                    Maximum = 100.25
+                };
+
+                yield.Axes.Add(myXaxis);
+                yield.Axes.Add(myYaxis);
+            }
+            catch (Exception)
             {
-                Position = AxisPosition.Left,
-                Title = "Functional Yield (%)",
-                Minimum = yieldList.Min() - 0.25,
-                Maximum = 100.25
-            };
-
-            yield.Axes.Add(myXaxis);
-            yield.Axes.Add(myYaxis);
-
+            }
+            
             yieldPlot.Model = yield;
         }
 
