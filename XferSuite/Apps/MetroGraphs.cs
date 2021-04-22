@@ -329,6 +329,7 @@ namespace XferSuite
             }
             catch (Exception)
             {
+                // Insufficient Data
             }
             return histogramSeries;
         }
@@ -355,6 +356,7 @@ namespace XferSuite
             }
             catch (Exception)
             {
+                // Insufficient Data
             }
             return lineSeries;
         }
@@ -600,8 +602,9 @@ namespace XferSuite
             }
             catch (Exception)
             {
+                // Insufficient Data
             }
-            
+
             yieldPlot.Model = yield;
         }
 
