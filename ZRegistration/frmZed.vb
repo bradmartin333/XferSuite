@@ -8,7 +8,7 @@ Public Class frmZed
     Dim Min, Max As PointF
     Dim HistData, Outliers As New List(Of Double)
     Dim ScatterDataX, ScatterDataY As New List(Of ScatterPoint)
-    Dim HistMin, HistMax As Double
+    Dim HistMin, HistMax, ColorMin, ColorMax, ColorMinOriginal, ColorMaxOriginal As Double
 
     Public Sub New(data As List(Of String), text As String)
         InitializeComponent()
@@ -34,15 +34,25 @@ Public Class frmZed
         Dim BufferScatterDataY = Zed.scatter(ZedData, False)
         ScanScatterData(BufferScatterDataY, False)
 
+        Dim cleanHeightData As New List(Of Double)
         For i = 0 To Math.Round(Max.X - Min.X)
             For j = 0 To Math.Round(Max.Y - Min.Y)
-                If PlotData(i, j) = 0 Or Outliers.Contains(PlotData(i, j)) Then PlotData(i, j) = Double.NaN
+                If PlotData(i, j) = 0 Or Outliers.Contains(PlotData(i, j)) Then
+                    PlotData(i, j) = Double.NaN
+                Else
+                    cleanHeightData.Add(PlotData(i, j))
+                End If
             Next
         Next
         Me.PlotData = PlotData
 
         HistMin = HistData.Min
         HistMax = HistData.Max
+
+        ColorMinOriginal = cleanHeightData.Min()
+        ColorMaxOriginal = cleanHeightData.Max()
+        numColorAxisMin.Value = ColorMinOriginal
+        numColorAxisMax.Value = ColorMaxOriginal
     End Sub
 
     Private Sub ScanScatterData(data As Object, coord As Boolean)
@@ -72,7 +82,9 @@ Public Class frmZed
         plot.Axes.Add(New LinearColorAxis With {.Position = AxisPosition.Right,
                                                 .Palette = OxyPalettes.BlueWhiteRed31,
                                                 .HighColor = OxyColors.Gray,
-                                                .LowColor = OxyColors.Black})
+                                                .LowColor = OxyColors.Black,
+                                                .Minimum = ColorMin,
+                                                .Maximum = ColorMax})
         plot.Series.Add(CreateHeatMap())
         HeatPlot.Model = plot
 
@@ -89,6 +101,22 @@ Public Class frmZed
 
         CreateHistogram()
         CreateScatterplot()
+    End Sub
+
+    Private Sub numColorAxisMin_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMin.ValueChanged
+        ColorMin = numColorAxisMin.Value
+        CreatePlots()
+    End Sub
+
+    Private Sub numColorAxisMax_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMax.ValueChanged
+        ColorMax = numColorAxisMax.Value
+        CreatePlots()
+    End Sub
+
+    Private Sub btnResetColorAxes_Click(sender As Object, e As EventArgs) Handles btnResetColorAxes.Click
+        numColorAxisMin.Value = ColorMinOriginal
+        numColorAxisMax.Value = ColorMaxOriginal
+        CreatePlots()
     End Sub
 
     Private Sub CreateHistogram()

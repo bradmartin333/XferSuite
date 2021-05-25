@@ -29,17 +29,24 @@ Partial Class frmZed
         Me.lblStats = New System.Windows.Forms.Label()
         Me.HistPlot = New OxyPlot.WindowsForms.PlotView()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.btnSaveWindow = New System.Windows.Forms.Button()
         Me.ZedPlot = New OxyPlot.WindowsForms.PlotView()
+        Me.flowHeatMapSettings = New System.Windows.Forms.FlowLayoutPanel()
+        Me.lblColorAxisMin = New System.Windows.Forms.Label()
+        Me.numColorAxisMin = New System.Windows.Forms.NumericUpDown()
+        Me.lblColorAxisMax = New System.Windows.Forms.Label()
+        Me.numColorAxisMax = New System.Windows.Forms.NumericUpDown()
+        Me.btnResetColorAxes = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.FlowLayoutPanel1.SuspendLayout()
+        Me.flowHeatMapSettings.SuspendLayout()
+        CType(Me.numColorAxisMin, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.numColorAxisMax, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'HeatPlot
         '
         Me.HeatPlot.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HeatPlot.Location = New System.Drawing.Point(3, 58)
+        Me.HeatPlot.Location = New System.Drawing.Point(3, 23)
         Me.HeatPlot.Name = "HeatPlot"
         Me.HeatPlot.PanCursor = System.Windows.Forms.Cursors.Hand
         Me.HeatPlot.Size = New System.Drawing.Size(331, 286)
@@ -53,22 +60,24 @@ Partial Class frmZed
         '
         Me.TableLayoutPanel1.ColumnCount = 3
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 3, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.lblStats, 1, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.HeatPlot, 0, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.HistPlot, 1, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label1, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.FlowLayoutPanel1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.ZedPlot, 2, 2)
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334!))
+        Me.TableLayoutPanel1.Controls.Add(Me.btnSaveWindow, 2, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 3, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.lblStats, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.HeatPlot, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.HistPlot, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label1, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.ZedPlot, 2, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.flowHeatMapSettings, 0, 2)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(1013, 347)
         Me.TableLayoutPanel1.TabIndex = 1
         '
@@ -76,7 +85,7 @@ Partial Class frmZed
         '
         Me.Label2.AutoSize = True
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label2.Location = New System.Drawing.Point(677, 35)
+        Me.Label2.Location = New System.Drawing.Point(677, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(333, 20)
         Me.Label2.TabIndex = 6
@@ -87,7 +96,7 @@ Partial Class frmZed
         '
         Me.lblStats.AutoSize = True
         Me.lblStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblStats.Location = New System.Drawing.Point(340, 35)
+        Me.lblStats.Location = New System.Drawing.Point(340, 0)
         Me.lblStats.Name = "lblStats"
         Me.lblStats.Size = New System.Drawing.Size(331, 20)
         Me.lblStats.TabIndex = 4
@@ -97,7 +106,7 @@ Partial Class frmZed
         'HistPlot
         '
         Me.HistPlot.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HistPlot.Location = New System.Drawing.Point(340, 58)
+        Me.HistPlot.Location = New System.Drawing.Point(340, 23)
         Me.HistPlot.Name = "HistPlot"
         Me.HistPlot.PanCursor = System.Windows.Forms.Cursors.Hand
         Me.HistPlot.Size = New System.Drawing.Size(331, 286)
@@ -111,29 +120,18 @@ Partial Class frmZed
         '
         Me.Label1.AutoSize = True
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label1.Location = New System.Drawing.Point(3, 35)
+        Me.Label1.Location = New System.Drawing.Point(3, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(331, 20)
         Me.Label1.TabIndex = 3
         Me.Label1.Text = "Heat Map: Height Measurement (mm)"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'FlowLayoutPanel1
-        '
-        Me.FlowLayoutPanel1.AutoSize = True
-        Me.TableLayoutPanel1.SetColumnSpan(Me.FlowLayoutPanel1, 3)
-        Me.FlowLayoutPanel1.Controls.Add(Me.btnSaveWindow)
-        Me.FlowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(3, 3)
-        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(1007, 29)
-        Me.FlowLayoutPanel1.TabIndex = 5
-        '
         'btnSaveWindow
         '
+        Me.btnSaveWindow.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.btnSaveWindow.AutoSize = True
-        Me.btnSaveWindow.Location = New System.Drawing.Point(920, 3)
+        Me.btnSaveWindow.Location = New System.Drawing.Point(926, 318)
         Me.btnSaveWindow.Name = "btnSaveWindow"
         Me.btnSaveWindow.Size = New System.Drawing.Size(84, 23)
         Me.btnSaveWindow.TabIndex = 0
@@ -143,7 +141,7 @@ Partial Class frmZed
         'ZedPlot
         '
         Me.ZedPlot.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ZedPlot.Location = New System.Drawing.Point(677, 58)
+        Me.ZedPlot.Location = New System.Drawing.Point(677, 23)
         Me.ZedPlot.Name = "ZedPlot"
         Me.ZedPlot.PanCursor = System.Windows.Forms.Cursors.Hand
         Me.ZedPlot.Size = New System.Drawing.Size(333, 286)
@@ -152,6 +150,71 @@ Partial Class frmZed
         Me.ZedPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE
         Me.ZedPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE
         Me.ZedPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS
+        '
+        'flowHeatMapSettings
+        '
+        Me.flowHeatMapSettings.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
+        Me.flowHeatMapSettings.AutoSize = True
+        Me.flowHeatMapSettings.Controls.Add(Me.lblColorAxisMin)
+        Me.flowHeatMapSettings.Controls.Add(Me.numColorAxisMin)
+        Me.flowHeatMapSettings.Controls.Add(Me.lblColorAxisMax)
+        Me.flowHeatMapSettings.Controls.Add(Me.numColorAxisMax)
+        Me.flowHeatMapSettings.Controls.Add(Me.btnResetColorAxes)
+        Me.flowHeatMapSettings.Location = New System.Drawing.Point(35, 315)
+        Me.flowHeatMapSettings.Name = "flowHeatMapSettings"
+        Me.flowHeatMapSettings.Size = New System.Drawing.Size(266, 29)
+        Me.flowHeatMapSettings.TabIndex = 8
+        '
+        'lblColorAxisMin
+        '
+        Me.lblColorAxisMin.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblColorAxisMin.AutoSize = True
+        Me.lblColorAxisMin.Location = New System.Drawing.Point(3, 8)
+        Me.lblColorAxisMin.Name = "lblColorAxisMin"
+        Me.lblColorAxisMin.Size = New System.Drawing.Size(24, 13)
+        Me.lblColorAxisMin.TabIndex = 0
+        Me.lblColorAxisMin.Text = "Min"
+        '
+        'numColorAxisMin
+        '
+        Me.numColorAxisMin.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.numColorAxisMin.DecimalPlaces = 3
+        Me.numColorAxisMin.Increment = New Decimal(New Integer() {1, 0, 0, 196608})
+        Me.numColorAxisMin.Location = New System.Drawing.Point(33, 4)
+        Me.numColorAxisMin.Name = "numColorAxisMin"
+        Me.numColorAxisMin.Size = New System.Drawing.Size(54, 20)
+        Me.numColorAxisMin.TabIndex = 1
+        '
+        'lblColorAxisMax
+        '
+        Me.lblColorAxisMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblColorAxisMax.AutoSize = True
+        Me.lblColorAxisMax.Location = New System.Drawing.Point(93, 8)
+        Me.lblColorAxisMax.Name = "lblColorAxisMax"
+        Me.lblColorAxisMax.Size = New System.Drawing.Size(27, 13)
+        Me.lblColorAxisMax.TabIndex = 2
+        Me.lblColorAxisMax.Text = "Max"
+        '
+        'numColorAxisMax
+        '
+        Me.numColorAxisMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.numColorAxisMax.DecimalPlaces = 3
+        Me.numColorAxisMax.Increment = New Decimal(New Integer() {1, 0, 0, 196608})
+        Me.numColorAxisMax.Location = New System.Drawing.Point(126, 4)
+        Me.numColorAxisMax.Name = "numColorAxisMax"
+        Me.numColorAxisMax.Size = New System.Drawing.Size(56, 20)
+        Me.numColorAxisMax.TabIndex = 3
+        '
+        'btnResetColorAxes
+        '
+        Me.btnResetColorAxes.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnResetColorAxes.AutoSize = True
+        Me.btnResetColorAxes.Location = New System.Drawing.Point(188, 3)
+        Me.btnResetColorAxes.Name = "btnResetColorAxes"
+        Me.btnResetColorAxes.Size = New System.Drawing.Size(75, 23)
+        Me.btnResetColorAxes.TabIndex = 4
+        Me.btnResetColorAxes.Text = "Reset"
+        Me.btnResetColorAxes.UseVisualStyleBackColor = True
         '
         'frmZed
         '
@@ -164,8 +227,10 @@ Partial Class frmZed
         Me.Text = "Height Sensor Data"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
-        Me.FlowLayoutPanel1.ResumeLayout(False)
-        Me.FlowLayoutPanel1.PerformLayout()
+        Me.flowHeatMapSettings.ResumeLayout(False)
+        Me.flowHeatMapSettings.PerformLayout()
+        CType(Me.numColorAxisMin, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.numColorAxisMax, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -175,8 +240,13 @@ Partial Class frmZed
     Friend WithEvents HistPlot As OxyPlot.WindowsForms.PlotView
     Friend WithEvents lblStats As Label
     Friend WithEvents Label1 As Label
-    Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
     Friend WithEvents btnSaveWindow As Button
     Friend WithEvents Label2 As Label
     Friend WithEvents ZedPlot As OxyPlot.WindowsForms.PlotView
+    Friend WithEvents flowHeatMapSettings As FlowLayoutPanel
+    Friend WithEvents lblColorAxisMin As Label
+    Friend WithEvents numColorAxisMin As NumericUpDown
+    Friend WithEvents lblColorAxisMax As Label
+    Friend WithEvents numColorAxisMax As NumericUpDown
+    Friend WithEvents btnResetColorAxes As Button
 End Class
