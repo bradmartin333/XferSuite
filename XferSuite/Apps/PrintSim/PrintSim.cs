@@ -106,7 +106,7 @@ namespace XferSuite
             {
                 return;
             }
-            Sim.SelectDevice(_Picks[_PrintNum], _Devices.ToArray(), true, _NullSourceRegion);
+            Sim.SelectDevice(_Picks[_PrintNum], _Devices.ToArray(), true, _NullSourceRegion, (int)StampPosts.X, (int)StampPosts.Y);
             Sim.SelectSite(_Prints[_PrintNum], _Sites.ToArray(), true);
             MakePlot();
             _PrintNum++;
