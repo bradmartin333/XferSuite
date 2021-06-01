@@ -336,13 +336,13 @@ module Sim =
          IDX = idx;
          Selected = selected}
 
-    let SelectDevice (vals:int[], ids:ID[], sel:bool, nullRegion:bool) =
+    let SelectDevice (vals:int[], ids:ID[], sel:bool, nullRegion:bool, stampX:int, stampY:int) =
         for x in ids do
             if nullRegion then
                 if x.R = vals.[2] && x.C = vals.[3] && x.IDX = vals.[4] then
                     x.Selected <- sel
             else
-                if x.RR = vals.[0] && x.RC = vals.[1] && x.IDX = vals.[4] then
+                if x.RR = vals.[0] && x.RC = vals.[1] && x.R < vals.[2] + stampX && x.C < vals.[3] + stampY && x.IDX = vals.[4] then
                     x.Selected <- sel
 
     let SelectSite (vals:int[], ids:ID[], sel:bool) =
