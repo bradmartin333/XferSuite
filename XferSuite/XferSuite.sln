@@ -9,7 +9,7 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "XferHelper", "..\XferHelper
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DataFileTree", "..\DataFileTree\DataFileTree.vbproj", "{20DD8969-2AB2-408F-8097-6D7443D12B0F}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ZRegistration", "..\ZRegistration\ZRegistration.vbproj", "{8DB48105-B268-42AF-A320-3A8EE0C42413}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "XYZscan", "..\ZRegistration\XYZscan.vbproj", "{8DB48105-B268-42AF-A320-3A8EE0C42413}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

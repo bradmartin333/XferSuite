@@ -203,37 +203,23 @@ module Metro =
         |> fun x -> x**10.
 
 module Zed =
-    type Position = {Time:System.DateTime; X:float; Y:float; H:float}
+    type Position = {Time:System.DateTime; X:float; Y:float; Z:float}
     
     let toPosition (csvData:string) =
         let columns = csvData.Split('\t')
         let Time = System.DateTime.Parse(columns.[0])
         let X = float columns.[1]
         let Y = float columns.[2]
-        let mutable H = float columns.[3]
-        if columns.[3] = "NaN" then H <- 0.0
+        let mutable Z = float columns.[3]
+        if columns.[3] = "NaN" then Z <- 0.0
         {Time = Time;
         X = X;
         Y = Y;
-        H = H}
+        Z = Z}
 
     let parse (data:string[]) =
         data
         |> Array.map toPosition
-
-    type ScatterPosition = {Pos:float; H:float}
-    
-    let scatter (data:Position[], coord:bool) =
-        let toScatterPosition (data:Position) =
-            if coord then
-                {Pos = data.X;
-                H = data.H}
-            else
-                {Pos = data.Y;
-                H = data.H}
-        data 
-        |> Array.map toScatterPosition
-        |> Set.ofArray
 
     let bounds (data:Position[]) =
         [
@@ -254,6 +240,16 @@ module Zed =
         |> List.min);
         (data
         |> Array.map(fun x -> float(x.Y))
+        |> Set.ofArray
+        |> Set.toList
+        |> List.max);
+        (data
+        |> Array.map(fun x -> float(abs(x.Z)))
+        |> Set.ofArray
+        |> Set.toList
+        |> List.min);
+        (data
+        |> Array.map(fun x -> float(abs(x.Z)))
         |> Set.ofArray
         |> Set.toList
         |> List.max);
