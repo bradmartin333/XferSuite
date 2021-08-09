@@ -153,16 +153,16 @@ Public Class frmZed
                 If bounds(3) - d.Y < (bounds(3) - bounds(2)) * 0.05 Then Continue For
             End If
 
-            Dim bufferX = d.X
-            Dim bufferY = d.Y
-            Dim bufferZ = d.Z
+            Dim adjX = d.X
+            Dim adjY = d.Y
+            Dim adjZ = d.Z
 
-            If FlipX Then bufferX = bounds(1) - bufferX
-            If FlipY Then bufferY = bounds(3) - bufferY
-            If FlipZ Then bufferZ = bounds(5) - bufferZ
+            If FlipX Then adjX = bounds(1) - adjX
+            If FlipY Then adjY = bounds(3) - adjY
+            If FlipZ Then adjZ = bounds(5) - adjZ
 
             If ColorMin <> 0 And ColorMax <> 0 Then
-                If bufferZ < ColorMin Or bufferZ > ColorMax Then Continue For
+                If adjZ < ColorMin Or adjZ > ColorMax Then Continue For
             End If
 
             If Math.Abs(d.Z - median) / ((d.Z + median) / 2) > 0.05 And RemoveOutliers Then
@@ -170,24 +170,24 @@ Public Class frmZed
             ElseIf Not filter.Contains(Math.Round(Pos, 1) And RemoveOutliers) Then
                 filter.Add(Math.Round(Pos, 1))
                 If coord Then
-                    ScatterDataX.Add(New ScatterPoint(bufferX, bufferZ))
+                    ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
                 Else
-                    ScatterDataY.Add(New ScatterPoint(bufferY, bufferZ))
+                    ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
                 End If
-                ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, bufferZ))
-                HistData.Add(bufferZ)
-                If bufferZ < ColorMinOriginal Then ColorMinOriginal = bufferZ
-                If bufferZ > ColorMaxOriginal Then ColorMaxOriginal = bufferZ
+                ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
+                HistData.Add(adjZ)
+                If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
+                If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
             ElseIf Not RemoveOutliers Then
                 If coord Then
-                    ScatterDataX.Add(New ScatterPoint(bufferX, bufferZ))
+                    ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
                 Else
-                    ScatterDataY.Add(New ScatterPoint(bufferY, bufferZ))
+                    ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
                 End If
-                ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, bufferZ))
-                HistData.Add(bufferZ)
-                If bufferZ < ColorMinOriginal Then ColorMinOriginal = bufferZ
-                If bufferZ > ColorMaxOriginal Then ColorMaxOriginal = bufferZ
+                ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
+                HistData.Add(adjZ)
+                If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
+                If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
             End If
         Next
     End Sub
@@ -195,34 +195,17 @@ Public Class frmZed
     Private Sub CreateHeatmap()
         Dim plot As New PlotModel
         Dim zScatter As New ScatterSeries()
-
-        Dim myXaxis = New LinearAxis With {
-            .Title = "X Position (mm)",
-            .Position = AxisPosition.Bottom,
-            .StartPosition = Convert.ToInt32(FlipX),
-            .EndPosition = Convert.ToInt32(Not FlipX)
-        }
-        Dim myYaxis = New LinearAxis With {
-            .Title = "Y Position (mm)",
-            .Position = AxisPosition.Left,
-            .StartPosition = Convert.ToInt32(FlipY),
-            .EndPosition = Convert.ToInt32(Not FlipY)
-        }
-        Dim myZaxis = New LinearColorAxis With {
+        zScatter.TrackerFormatString = zScatter.TrackerFormatString + vbNewLine + "Z Position (mm): {Value}"
+        plot.Series.Add(zScatter)
+        plot.Axes.Add(New LinearAxis With {.Title = "X Position (mm)", .Position = AxisPosition.Bottom})
+        plot.Axes.Add(New LinearAxis With {.Title = "Y Position (mm)", .Position = AxisPosition.Left})
+        plot.Axes.Add(New LinearColorAxis With {
             .Title = "Z Position (mm)",
             .Position = AxisPosition.Right,
             .Key = "Color Axis",
             .Minimum = ColorMin,
             .Maximum = ColorMax
-        }
-
-        zScatter.TrackerFormatString = zScatter.TrackerFormatString + vbNewLine + "Z Position (mm): {Value}"
-
-        plot.Series.Add(zScatter)
-        plot.Axes.Add(myXaxis)
-        plot.Axes.Add(myYaxis)
-        plot.Axes.Add(myZaxis)
-
+        })
         zScatter.Points.AddRange(ScatterDataZ.AsEnumerable)
         HeatPlot.Model = plot
     End Sub
@@ -243,18 +226,8 @@ Public Class frmZed
         histSeries.Items.AddRange(HistogramHelpers.Collect(HistData, binBreaks, binningOptions))
         plot.Series.Add(histSeries)
 
-        Dim myXaxis = New LinearAxis With {
-            .Title = "Height Measurement (mm)",
-            .Position = AxisPosition.Bottom,
-            .StartPosition = Convert.ToInt32(FlipZ),
-            .EndPosition = Convert.ToInt32(Not FlipZ)
-        }
-        Dim myYaxis = New LinearAxis With {
-            .Title = "Relative Frequency",
-            .Position = AxisPosition.Left
-        }
-        plot.Axes.Add(myXaxis)
-        plot.Axes.Add(myYaxis)
+        plot.Axes.Add(New LinearAxis With {.Title = "Height Measurement (mm)", .Position = AxisPosition.Bottom})
+        plot.Axes.Add(New LinearAxis With {.Title = "Relative Frequency", .Position = AxisPosition.Left})
         HistPlot.Model = plot
     End Sub
 
