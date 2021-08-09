@@ -73,8 +73,8 @@ Public Class frmScanSelect
         For i As Integer = 0 To lines.Count() - 1
             If lines(i).Contains("NEWSCAN") Then
                 If HideSource AndAlso lines(i).Contains("Source") Then Continue For
-                If _HideTarget AndAlso lines(i).Contains("Target") Then Continue For
-                If _HideClean AndAlso lines(i).Contains("Clean") Then Continue For
+                If HideTarget AndAlso lines(i).Contains("Target") Then Continue For
+                If HideClean AndAlso lines(i).Contains("Clean") Then Continue For
                 If dataBuffer.Count > 0 Then
                     scanData.Add(dataBuffer)
                 End If
