@@ -1,122 +1,196 @@
-﻿Imports OxyPlot
+﻿Imports MathNet.Spatial.Euclidean
+Imports OxyPlot
 Imports OxyPlot.Axes
 Imports OxyPlot.Series
 Imports XferHelper
 
 Public Class frmZed
-    Dim PlotData, ZedData
-    Dim Min, Max As PointF
-    Dim HistData, Outliers As New List(Of Double)
-    Dim ScatterDataX, ScatterDataY As New List(Of ScatterPoint)
-    Dim HistMin, HistMax, ColorMin, ColorMax, ColorMinOriginal, ColorMaxOriginal As Double
+    Private _RemoveOutliers As Boolean = False
+    Public Property RemoveOutliers() As Boolean
+        Get
+            Return _RemoveOutliers
+        End Get
+        Set(value As Boolean)
+            _RemoveOutliers = value
+            CreatePlots()
+        End Set
+    End Property
+
+    Private _RemoveBorders As Boolean = False
+    Public Property RemoveBorders() As Boolean
+        Get
+            Return _RemoveBorders
+        End Get
+        Set(value As Boolean)
+            _RemoveBorders = value
+            CreatePlots()
+        End Set
+    End Property
+
+    Private _FlipX As Boolean = False
+    Public Property FlipX() As Boolean
+        Get
+            Return _FlipX
+        End Get
+        Set(value As Boolean)
+            _FlipX = value
+            CreatePlots()
+        End Set
+    End Property
+
+    Private _FlipY As Boolean = False
+    Public Property FlipY() As Boolean
+        Get
+            Return _FlipY
+        End Get
+        Set(value As Boolean)
+            _FlipY = value
+            CreatePlots()
+        End Set
+    End Property
+
+    Private _FlipZ As Boolean = False
+    Public Property FlipZ() As Boolean
+        Get
+            Return _FlipZ
+        End Get
+        Set(value As Boolean)
+            _FlipZ = value
+            CreatePlots()
+        End Set
+    End Property
+
+    Dim _Data
+    Dim HistData As New List(Of Double)
+    Dim ScatterData As New List(Of Point3D)
+    Dim ScatterDataX, ScatterDataY, ScatterDataZ As New List(Of ScatterPoint)
+    Dim HistMin, HistMax, ColorMin, ColorMax As Double
+    Dim ColorMinOriginal As Double = 999
+    Dim ColorMaxOriginal As Double = -999
 
     Public Sub New(data As List(Of String), text As String)
         InitializeComponent()
         Me.Text = text
-        ParseData(data)
+        _Data = Zed.parse(data.ToArray)
         CreatePlots()
     End Sub
 
-    Private Sub ParseData(data As List(Of String))
-        ZedData = Zed.parse(data.ToArray)
-        Dim bounds = Zed.bounds(ZedData)
-        Min = New PointF(bounds(0), bounds(2))
-        Max = New PointF(bounds(1), bounds(3))
-        Dim PlotData(Math.Round(Max.X - Min.X), Math.Round(Max.Y - Min.Y)) As Double
+    Private Sub CreatePlots()
+        Cursor = Cursors.WaitCursor
+        Application.DoEvents()
+        ParseData()
+        CreateHeatmap()
+        CreateHistogram()
+        CreateScatterplot(True)
+        CreateScatterplot(False)
+        Cursor = Cursors.Default
+    End Sub
 
-        For Each d In ZedData
-            If d.X > Max.X OrElse d.Y > Max.Y OrElse d.X < Min.X OrElse d.Y < Min.Y Then Continue For
-            PlotData(Math.Round(d.X - Min.X), Math.Round(d.Y - Min.Y)) = d.H
-        Next
-
-        Dim BufferScatterDataX = Zed.scatter(ZedData, True)
-        ScanScatterData(BufferScatterDataX, True)
-        Dim BufferScatterDataY = Zed.scatter(ZedData, False)
-        ScanScatterData(BufferScatterDataY, False)
-
-        Dim cleanHeightData As New List(Of Double)
-        For i = 0 To Math.Round(Max.X - Min.X)
-            For j = 0 To Math.Round(Max.Y - Min.Y)
-                If PlotData(i, j) = 0 Or Outliers.Contains(PlotData(i, j)) Then
-                    PlotData(i, j) = Double.NaN
-                Else
-                    cleanHeightData.Add(PlotData(i, j))
-                End If
-            Next
-        Next
-        Me.PlotData = PlotData
-
+    Private Sub ParseData()
+        ' Reset globals
+        HistData.Clear()
+        ScatterData.Clear()
+        ScatterDataX.Clear()
+        ScatterDataY.Clear()
+        ScatterDataZ.Clear()
+        ColorMinOriginal = 999
+        ColorMaxOriginal = -999
+        ' Recreate data sets
+        ScanScatterData(True)
+        ScanScatterData(False)
         HistMin = HistData.Min
         HistMax = HistData.Max
-
-        ColorMinOriginal = cleanHeightData.Min()
-        ColorMaxOriginal = cleanHeightData.Max()
         numColorAxisMin.Value = ColorMinOriginal
         numColorAxisMax.Value = ColorMaxOriginal
     End Sub
 
-    Private Sub ScanScatterData(data As Object, coord As Boolean)
-        Dim heights As New List(Of Double)
-        For Each d In data
-            heights.Add(d.H)
-        Next
-        Dim median As Double = Stats.median(heights.ToArray())
+    Private Sub ScanScatterData(coord As Boolean)
+        Dim bounds = Zed.bounds(_Data)
+        Dim median As Double = Stats.median(Zed.getAxis(_Data, 2).ToArray())
         Dim filter As New List(Of Double)
-        For Each d In data
-            If Math.Abs(d.H - median) / ((d.H + median) / 2) > 0.05 Then
-                Outliers.Add(d.H)
-            ElseIf Not filter.Contains(Math.Round(d.Pos, 1)) Then
-                filter.Add(Math.Round(d.Pos, 1))
+        For Each d In _Data
+            Dim Pos As Double
+            If coord Then
+                Pos = d.X
+            Else
+                Pos = d.Y
+            End If
+
+            If RemoveBorders Then
+                If d.X - bounds(0) < (bounds(1) - bounds(0)) * 0.05 Then Continue For
+                If bounds(1) - d.X < (bounds(1) - bounds(0)) * 0.05 Then Continue For
+                If d.Y - bounds(2) < (bounds(3) - bounds(2)) * 0.05 Then Continue For
+                If bounds(3) - d.Y < (bounds(3) - bounds(2)) * 0.05 Then Continue For
+            End If
+
+            Dim bufferX = d.X
+            Dim bufferY = d.Y
+            Dim bufferZ = d.Z
+
+            If FlipX Then bufferX = bounds(1) - bufferX
+            If FlipY Then bufferY = bounds(3) - bufferY
+            If FlipZ Then bufferZ = bounds(5) - bufferZ
+
+            If Math.Abs(d.Z - median) / ((d.Z + median) / 2) > 0.05 And RemoveOutliers Then
+                Continue For ' Outliers
+            ElseIf Not filter.Contains(Math.Round(Pos, 1) And RemoveOutliers) Then
+                filter.Add(Math.Round(Pos, 1))
                 If coord Then
-                    ScatterDataX.Add(New ScatterPoint(d.Pos, d.H))
+                    ScatterDataX.Add(New ScatterPoint(bufferX, bufferZ))
                 Else
-                    ScatterDataY.Add(New ScatterPoint(d.Pos, d.H))
+                    ScatterDataY.Add(New ScatterPoint(bufferY, bufferZ))
                 End If
-                HistData.Add(d.H)
+                ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, bufferZ))
+                HistData.Add(d.Z)
+                If bufferZ < ColorMinOriginal Then ColorMinOriginal = bufferZ
+                If bufferZ > ColorMaxOriginal Then ColorMaxOriginal = bufferZ
+            ElseIf Not RemoveOutliers Then
+                If coord Then
+                    ScatterDataX.Add(New ScatterPoint(bufferX, bufferZ))
+                Else
+                    ScatterDataY.Add(New ScatterPoint(bufferY, bufferZ))
+                End If
+                ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, bufferZ))
+                HistData.Add(d.Z)
+                If bufferZ < ColorMinOriginal Then ColorMinOriginal = bufferZ
+                If bufferZ > ColorMaxOriginal Then ColorMaxOriginal = bufferZ
             End If
         Next
     End Sub
 
-    Private Sub CreatePlots()
+    Private Sub CreateHeatmap()
         Dim plot As New PlotModel
-        plot.Axes.Add(New LinearColorAxis With {.Position = AxisPosition.Right,
-                                                .Palette = OxyPalettes.BlueWhiteRed31,
-                                                .HighColor = OxyColors.Gray,
-                                                .LowColor = OxyColors.Black,
-                                                .Minimum = ColorMin,
-                                                .Maximum = ColorMax})
-        plot.Series.Add(CreateHeatMap())
-        HeatPlot.Model = plot
+        Dim zScatter As New ScatterSeries()
 
-        Dim myXaxis = New Axes.LinearAxis With {
-            .Title = "X Coordinate (mm)",
-            .Position = Axes.AxisPosition.Bottom
+        Dim myXaxis = New LinearAxis With {
+            .Title = "X Position (mm)",
+            .Position = AxisPosition.Bottom,
+            .StartPosition = Convert.ToInt32(FlipX),
+            .EndPosition = Convert.ToInt32(Not FlipX)
         }
-        Dim myYaxis = New Axes.LinearAxis With {
-            .Title = "Y Coordinate (mm)",
-            .Position = Axes.AxisPosition.Left
+        Dim myYaxis = New LinearAxis With {
+            .Title = "Y Position (mm)",
+            .Position = AxisPosition.Left,
+            .StartPosition = Convert.ToInt32(FlipY),
+            .EndPosition = Convert.ToInt32(Not FlipY)
         }
+        Dim myZaxis = New LinearColorAxis With {
+            .Title = "Z Position (mm)",
+            .Position = AxisPosition.Right,
+            .Key = "Color Axis",
+            .Minimum = ColorMin,
+            .Maximum = ColorMax
+        }
+
+        zScatter.TrackerFormatString = zScatter.TrackerFormatString + vbNewLine + "Z Position (mm): {Value}"
+
+        plot.Series.Add(zScatter)
         plot.Axes.Add(myXaxis)
         plot.Axes.Add(myYaxis)
+        plot.Axes.Add(myZaxis)
 
-        CreateHistogram()
-        CreateScatterplot()
-    End Sub
-
-    Private Sub numColorAxisMin_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMin.ValueChanged
-        ColorMin = numColorAxisMin.Value
-        CreatePlots()
-    End Sub
-
-    Private Sub numColorAxisMax_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMax.ValueChanged
-        ColorMax = numColorAxisMax.Value
-        CreatePlots()
-    End Sub
-
-    Private Sub btnResetColorAxes_Click(sender As Object, e As EventArgs) Handles btnResetColorAxes.Click
-        numColorAxisMin.Value = ColorMinOriginal
-        numColorAxisMax.Value = ColorMaxOriginal
-        CreatePlots()
+        zScatter.Points.AddRange(ScatterDataZ.AsEnumerable)
+        HeatPlot.Model = plot
     End Sub
 
     Private Sub CreateHistogram()
@@ -135,64 +209,93 @@ Public Class frmZed
         histSeries.Items.AddRange(HistogramHelpers.Collect(HistData, binBreaks, binningOptions))
         plot.Series.Add(histSeries)
 
-        Dim myXaxis = New Axes.LinearAxis With {
+        Dim myXaxis = New LinearAxis With {
             .Title = "Height Measurement (mm)",
-            .Position = Axes.AxisPosition.Bottom
+            .Position = AxisPosition.Bottom,
+            .StartPosition = Convert.ToInt32(FlipZ),
+            .EndPosition = Convert.ToInt32(Not FlipZ)
         }
-        Dim myYaxis = New Axes.LinearAxis With {
+        Dim myYaxis = New LinearAxis With {
             .Title = "Relative Frequency",
-            .Position = Axes.AxisPosition.Left
+            .Position = AxisPosition.Left
         }
         plot.Axes.Add(myXaxis)
         plot.Axes.Add(myYaxis)
         HistPlot.Model = plot
     End Sub
 
-    Private Sub CreateScatterplot()
+    Private Sub CreateScatterplot(coord As Boolean)
         Dim plot As New PlotModel
 
-        Dim xScatter As New ScatterSeries With {.MarkerFill = OxyColors.LawnGreen, .MarkerSize = 2}
-        xScatter.Points.AddRange(ScatterDataX.AsEnumerable)
+        Dim scatterData As List(Of ScatterPoint)
+        If coord Then
+            scatterData = ScatterDataX
+        Else
+            scatterData = ScatterDataY
+        End If
 
-        Dim yScatter As New ScatterSeries With {.MarkerFill = OxyColors.DarkBlue, .MarkerSize = 2}
-        yScatter.Points.AddRange(ScatterDataY.AsEnumerable)
+        Dim scatter As New ScatterSeries With {.MarkerFill = OxyColors.DarkBlue, .MarkerSize = 2}
+        scatter.Points.AddRange(scatterData.AsEnumerable)
 
-        plot.Series.Add(xScatter)
-        plot.Series.Add(yScatter)
+        Dim poly As Double() = Zed.scatterPolynomial(scatterData.ToArray())
+        Dim polyScatter As New ScatterSeries With {.MarkerFill = OxyColors.Black, .MarkerSize = 2}
 
-        Dim myXaxis = New Axes.LinearAxis With {
-            .Title = "Position (mm)",
-            .Position = Axes.AxisPosition.Bottom
-        }
-        Dim myYaxis = New Axes.LinearAxis With {
-            .Title = "Height Measurement (mm)",
-            .Position = Axes.AxisPosition.Left,
-            .StartPosition = 1,
-            .EndPosition = 0
-        }
-        plot.Axes.Add(myXaxis)
-        plot.Axes.Add(myYaxis)
-        ZedPlot.Model = plot
+        For Each point In scatterData
+            Dim val = poly(0) + poly(1) * point.X + poly(2) * Math.Pow(point.X, 2) + poly(3) * Math.Pow(point.X, 3)
+            polyScatter.Points.Add(New ScatterPoint(point.X, val))
+        Next
+
+        plot.Series.Add(scatter)
+        plot.Series.Add(polyScatter)
+        plot.Axes.Add(New LinearAxis With {.Title = "Position (mm)", .Position = AxisPosition.Bottom})
+        plot.Axes.Add(New LinearAxis With {.Title = "Height (mm)", .Position = AxisPosition.Left})
+
+        Dim rSquared = Zed.rSquared(polyScatter.Points.ToArray(), scatterData.ToArray())
+        If coord Then
+            ScatterXvsZ.Model = plot
+            ScatterXvsZ.Model.Title = "HI"
+            lblXvsZ.Text = String.Format("X vs. Z: r^2 = {0}", rSquared)
+        Else
+            ScatterYvsZ.Model = plot
+            lblYvsZ.Text = String.Format("Y vs. Z: r^2 = {0}", rSquared)
+        End If
     End Sub
 
-    Private Function CreateHeatMap() As HeatMapSeries
-        Try
-            Dim hms = New HeatMapSeries With {
-                .CoordinateDefinition = HeatMapCoordinateDefinition.Center,
-                .X1 = Max.X,
-                .X0 = Min.X,
-                .Y0 = Max.Y,
-                .Y1 = Min.Y,
-                .Data = PlotData,
-                .Interpolate = True
-            }
-            Dim x = hms.Data
-            Return hms
-        Catch ex As Exception
-            MsgBox("Field too small for heat map plotting", MsgBoxStyle.OkOnly, "Load Zed Data")
-            Return New HeatMapSeries
-        End Try
-    End Function
+    Private Sub cbxRemoveOutliers_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveOutliers.CheckedChanged
+        RemoveOutliers = Not RemoveOutliers
+    End Sub
+
+    Private Sub cbxRemoveBorders_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveBorders.CheckedChanged
+        RemoveBorders = Not RemoveBorders
+    End Sub
+
+    Private Sub cbxFlipX_CheckedChanged(sender As Object, e As EventArgs) Handles cbxFlipX.CheckedChanged
+        FlipX = Not FlipX
+    End Sub
+
+    Private Sub cbxFlipY_CheckedChanged(sender As Object, e As EventArgs) Handles cbxFlipY.CheckedChanged
+        FlipY = Not FlipY
+    End Sub
+
+    Private Sub cbxFlipZ_CheckedChanged(sender As Object, e As EventArgs) Handles cbxFlipZ.CheckedChanged
+        FlipZ = Not FlipZ
+    End Sub
+
+    Private Sub numColorAxisMin_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMin.ValueChanged
+        ColorMin = numColorAxisMin.Value
+        CreatePlots()
+    End Sub
+
+    Private Sub numColorAxisMax_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMax.ValueChanged
+        ColorMax = numColorAxisMax.Value
+        CreatePlots()
+    End Sub
+
+    Private Sub btnResetColorAxes_Click(sender As Object, e As EventArgs) Handles btnResetColorAxes.Click
+        numColorAxisMin.Value = ColorMinOriginal
+        numColorAxisMax.Value = ColorMaxOriginal
+        CreatePlots()
+    End Sub
 
     Private Sub btnSaveWindow_Click(sender As Object, e As EventArgs) Handles btnSaveWindow.Click
         Using sfd As New SaveFileDialog() With {.Filter = "PNG Image|*.png", .InitialDirectory = My.Computer.FileSystem.SpecialDirectories.Desktop}

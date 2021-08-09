@@ -199,9 +199,9 @@
       <Project>{ee2ad740-dece-4dec-8400-3f6c0d8700bf}</Project>
       <Name>XferHelper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ZRegistration\ZRegistration.vbproj">
+    <ProjectReference Include="..\ZRegistration\XYZscan.vbproj">
       <Project>{8db48105-b268-42af-a320-3a8ee0c42413}</Project>
-      <Name>ZRegistration</Name>
+      <Name>XYZscan</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

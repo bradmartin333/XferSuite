@@ -45,7 +45,7 @@ namespace XferSuite
                     path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
                     if (path == null)
                         return;
-                    form = new ZRegistration.frmScanSelect() { Path = path };
+                    form = new XYZscan.frmScanSelect() { Path = path };
                     break;
                 case 2:
                     path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
