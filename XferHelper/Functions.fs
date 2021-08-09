@@ -4,6 +4,7 @@ open MathNet.Numerics.Statistics
 open MathNet.Numerics.Distributions
 open System.IO
 open System
+open OxyPlot.Series
 
 module Stats =
     let mean (data:float[]) =
@@ -220,6 +221,37 @@ module Zed =
     let parse (data:string[]) =
         data
         |> Array.map toPosition
+
+    let getAxis (data:Position[], axis:int) =
+        let output = 
+            if axis = 0 then 
+                data
+                |> Array.map(fun x -> x.X)
+            elif axis = 1 then
+                data
+                |> Array.map(fun x -> x.Y)
+            else
+                data
+                |> Array.map(fun x -> x.Z)
+        output
+
+    let scatterPolynomial (scatter:ScatterPoint[]) =
+        let x = 
+            scatter
+            |> Array.map(fun x -> x.X)
+        let y = 
+            scatter
+            |> Array.map(fun x -> x.Y)
+        MathNet.Numerics.Fit.Polynomial(x, y, 3)
+
+    let rSquared (modelScatter:ScatterPoint[], observedScatter:ScatterPoint[]) =
+        let model =
+            modelScatter
+            |> Array.map(fun x-> x.Y)
+        let observed =
+            observedScatter
+            |> Array.map(fun x-> x.Y)
+        System.Math.Round(MathNet.Numerics.GoodnessOfFit.RSquared(model, observed), 3)
 
     let bounds (data:Position[]) =
         [
