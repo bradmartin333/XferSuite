@@ -37,7 +37,7 @@ namespace XferSuite
             this.btnFileParse = new System.Windows.Forms.Button();
             this.btnPrintCycle = new System.Windows.Forms.Button();
             this.btnFingerprint = new System.Windows.Forms.Button();
-            this.btnZreg = new System.Windows.Forms.Button();
+            this.btnXYZscan = new System.Windows.Forms.Button();
             this.btnInlinepositions = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -56,7 +56,7 @@ namespace XferSuite
             this.tableLayoutPanel.Controls.Add(this.btnFileParse, 0, 1);
             this.tableLayoutPanel.Controls.Add(this.btnPrintCycle, 3, 0);
             this.tableLayoutPanel.Controls.Add(this.btnFingerprint, 2, 0);
-            this.tableLayoutPanel.Controls.Add(this.btnZreg, 1, 0);
+            this.tableLayoutPanel.Controls.Add(this.btnXYZscan, 1, 0);
             this.tableLayoutPanel.Controls.Add(this.btnInlinepositions, 0, 0);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
@@ -188,25 +188,25 @@ namespace XferSuite
             this.btnFingerprint.UseVisualStyleBackColor = true;
             this.btnFingerprint.Click += new System.EventHandler(this.btn_Click);
             // 
-            // btnZreg
+            // btnXYZscan
             // 
-            this.btnZreg.AccessibleName = "Z Registration";
-            this.btnZreg.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_layer_21_240;
-            this.btnZreg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnZreg.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnZreg.FlatAppearance.BorderSize = 0;
-            this.btnZreg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnZreg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnZreg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnZreg.Location = new System.Drawing.Point(113, 8);
-            this.btnZreg.Margin = new System.Windows.Forms.Padding(8);
-            this.btnZreg.Name = "btnZreg";
-            this.btnZreg.Size = new System.Drawing.Size(89, 79);
-            this.btnZreg.TabIndex = 4;
-            this.btnZreg.Tag = "1";
-            this.btnZreg.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnZreg.UseVisualStyleBackColor = true;
-            this.btnZreg.Click += new System.EventHandler(this.btn_Click);
+            this.btnXYZscan.AccessibleName = "XYZ Scans";
+            this.btnXYZscan.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_layer_21_240;
+            this.btnXYZscan.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnXYZscan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnXYZscan.FlatAppearance.BorderSize = 0;
+            this.btnXYZscan.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnXYZscan.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnXYZscan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXYZscan.Location = new System.Drawing.Point(113, 8);
+            this.btnXYZscan.Margin = new System.Windows.Forms.Padding(8);
+            this.btnXYZscan.Name = "btnXYZscan";
+            this.btnXYZscan.Size = new System.Drawing.Size(89, 79);
+            this.btnXYZscan.TabIndex = 4;
+            this.btnXYZscan.Tag = "1";
+            this.btnXYZscan.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnXYZscan.UseVisualStyleBackColor = true;
+            this.btnXYZscan.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnInlinepositions
             // 
@@ -240,7 +240,7 @@ namespace XferSuite
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "XferSuite v1.12";
+            this.Text = "XferSuite v1.13";
             this.tableLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -256,7 +256,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnFileParse;
         private System.Windows.Forms.Button btnPrintCycle;
         private System.Windows.Forms.Button btnFingerprint;
-        private System.Windows.Forms.Button btnZreg;
+        private System.Windows.Forms.Button btnXYZscan;
     }
 }
 

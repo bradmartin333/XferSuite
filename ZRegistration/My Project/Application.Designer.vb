@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.ZRegistration.frmScanSelect
+            Me.MainForm = Global.XYZscan.frmScanSelect
         End Sub
     End Class
 End Namespace
