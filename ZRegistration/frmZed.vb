@@ -1,5 +1,4 @@
-﻿Imports MathNet.Spatial.Euclidean
-Imports OxyPlot
+﻿Imports OxyPlot
 Imports OxyPlot.Axes
 Imports OxyPlot.Series
 Imports XferHelper
@@ -60,10 +59,30 @@ Public Class frmZed
         End Set
     End Property
 
+    Private _ColorMin As Double
+    Public Property ColorMin() As Double
+        Get
+            Return _ColorMin
+        End Get
+        Set(value As Double)
+            _ColorMin = value
+        End Set
+    End Property
+
+    Private _ColorMax As Double
+    Public Property ColorMax() As Double
+        Get
+            Return _ColorMax
+        End Get
+        Set(value As Double)
+            _ColorMax = value
+        End Set
+    End Property
+
     Dim _Data
     Dim HistData As New List(Of Double)
     Dim ScatterDataX, ScatterDataY, ScatterDataZ As New List(Of ScatterPoint)
-    Dim HistMin, HistMax, ColorMin, ColorMax As Double
+    Dim HistMin, HistMax As Double
     Dim ColorMinOriginal As Double = 999
     Dim ColorMaxOriginal As Double = -999
 
@@ -74,18 +93,25 @@ Public Class frmZed
         CreatePlots()
     End Sub
 
-    Private Sub CreatePlots()
+    Private Sub CreatePlots(Optional preserveColors As Boolean = False)
         Cursor = Cursors.WaitCursor
         Application.DoEvents()
-        ParseData()
+
+        If Not preserveColors Then
+            ColorMin = 0
+            ColorMax = 0
+        End If
+
+        ParseData(preserveColors)
         CreateHeatmap()
         CreateHistogram()
         CreateScatterplot(True)
         CreateScatterplot(False)
+
         Cursor = Cursors.Default
     End Sub
 
-    Private Sub ParseData()
+    Private Sub ParseData(Optional preserveColors As Boolean = False)
         ' Reset globals
         HistData.Clear()
         ScatterDataX.Clear()
@@ -93,13 +119,19 @@ Public Class frmZed
         ScatterDataZ.Clear()
         ColorMinOriginal = 999
         ColorMaxOriginal = -999
+
         ' Recreate data sets
         ScanScatterData(True)
         ScanScatterData(False)
         HistMin = HistData.Min
         HistMax = HistData.Max
-        numColorAxisMin.Value = ColorMinOriginal
-        numColorAxisMax.Value = ColorMaxOriginal
+
+        If Not preserveColors Then
+            ColorMin = ColorMinOriginal
+            numColorAxisMin.Value = ColorMinOriginal
+            ColorMax = ColorMaxOriginal
+            numColorAxisMax.Value = ColorMaxOriginal
+        End If
     End Sub
 
     Private Sub ScanScatterData(coord As Boolean)
@@ -129,6 +161,10 @@ Public Class frmZed
             If FlipY Then bufferY = bounds(3) - bufferY
             If FlipZ Then bufferZ = bounds(5) - bufferZ
 
+            If ColorMin <> 0 And ColorMax <> 0 Then
+                If bufferZ < ColorMin Or bufferZ > ColorMax Then Continue For
+            End If
+
             If Math.Abs(d.Z - median) / ((d.Z + median) / 2) > 0.05 And RemoveOutliers Then
                 Continue For ' Outliers
             ElseIf Not filter.Contains(Math.Round(Pos, 1) And RemoveOutliers) Then
@@ -139,7 +175,7 @@ Public Class frmZed
                     ScatterDataY.Add(New ScatterPoint(bufferY, bufferZ))
                 End If
                 ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, bufferZ))
-                HistData.Add(d.Z)
+                HistData.Add(bufferZ)
                 If bufferZ < ColorMinOriginal Then ColorMinOriginal = bufferZ
                 If bufferZ > ColorMaxOriginal Then ColorMaxOriginal = bufferZ
             ElseIf Not RemoveOutliers Then
@@ -149,7 +185,7 @@ Public Class frmZed
                     ScatterDataY.Add(New ScatterPoint(bufferY, bufferZ))
                 End If
                 ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, bufferZ))
-                HistData.Add(d.Z)
+                HistData.Add(bufferZ)
                 If bufferZ < ColorMinOriginal Then ColorMinOriginal = bufferZ
                 If bufferZ > ColorMaxOriginal Then ColorMaxOriginal = bufferZ
             End If
@@ -192,14 +228,14 @@ Public Class frmZed
     End Sub
 
     Private Sub CreateHistogram()
-        Dim plot As New PlotModel
+        Dim plot As New PlotModel With {.TitleFontSize = 10, .TitleHorizontalAlignment = TitleHorizontalAlignment.CenteredWithinView}
 
         HistData.Sort()
         Dim median = Stats.median(HistData.ToArray())
         Dim stdDev = Stats.stdDev(HistData.ToArray())
         Dim my3sig = stdDev * 3
         Dim range = Math.Round((HistData.Max - HistData.Min) * 1000, 1)
-        lblStats.Text = "Range = " & range.ToString & " microns   Median = " & String.Format("{0:N3}", median) & " mm   3Sigma = " & String.Format("{0:N3}", my3sig)
+        plot.Title = "Range = " & range.ToString & " μm   Median = " & String.Format("{0:N3}", median) & " mm   3Sigma = " & String.Format("{0:N3}", my3sig)
 
         Dim histSeries As New HistogramSeries With {.FillColor = OxyColors.DarkBlue}
         Dim binningOptions = New BinningOptions(BinningOutlierMode.CountOutliers, BinningIntervalType.InclusiveLowerBound, BinningExtremeValueMode.IncludeExtremeValues)
@@ -223,7 +259,7 @@ Public Class frmZed
     End Sub
 
     Private Sub CreateScatterplot(coord As Boolean)
-        Dim plot As New PlotModel
+        Dim plot As New PlotModel With {.TitleFontSize = 10, .TitleHorizontalAlignment = TitleHorizontalAlignment.CenteredWithinView}
 
         Dim scatterData As List(Of ScatterPoint)
         If coord Then
@@ -250,11 +286,11 @@ Public Class frmZed
 
         Dim rSquared = Zed.rSquared(polyScatter.Points.ToArray(), scatterData.ToArray())
         If coord Then
+            plot.Title = String.Format("X Direction     R² = {0}", rSquared)
             ScatterXvsZ.Model = plot
-            lblXvsZ.Text = String.Format("X vs. Z: r^2 = {0}", rSquared)
         Else
+            plot.Title = String.Format("Y Direction     R² = {0}", rSquared)
             ScatterYvsZ.Model = plot
-            lblYvsZ.Text = String.Format("Y vs. Z: r^2 = {0}", rSquared)
         End If
     End Sub
 
@@ -278,14 +314,22 @@ Public Class frmZed
         FlipZ = Not FlipZ
     End Sub
 
-    Private Sub numColorAxisMin_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMin.ValueChanged
-        ColorMin = numColorAxisMin.Value
-        CreatePlots()
+    Private Sub numColorAxisMin_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMin.Click
+        If (Math.Abs(numColorAxisMin.Value - ColorMax) < 0.001) Then
+            numColorAxisMin.Value = ColorMin
+        Else
+            ColorMin = numColorAxisMin.Value
+            CreatePlots(preserveColors:=True)
+        End If
     End Sub
 
-    Private Sub numColorAxisMax_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMax.ValueChanged
-        ColorMax = numColorAxisMax.Value
-        CreatePlots()
+    Private Sub numColorAxisMax_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMax.Click
+        If (Math.Abs(numColorAxisMax.Value - ColorMin) < 0.001) Then
+            numColorAxisMax.Value = ColorMax
+        Else
+            ColorMax = numColorAxisMax.Value
+            CreatePlots(preserveColors:=True)
+        End If
     End Sub
 
     Private Sub btnResetColorAxes_Click(sender As Object, e As EventArgs) Handles btnResetColorAxes.Click
