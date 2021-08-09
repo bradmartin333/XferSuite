@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "XferSuite"
-#define MyAppVersion "1.12"
+#define MyAppVersion "1.13"
 #define MyAppPublisher "bradmartin333"
 #define MyAppURL "https://github.com/bradmartin333/XferSuite"
 #define MyAppExeName "XferSuite.exe"
@@ -50,9 +50,9 @@ Source: "S:\XferSuite\XferSuite\bin\Release\XferHelper.dll"; DestDir: "{app}"; F
 Source: "S:\XferSuite\XferSuite\bin\Release\XferHelper.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\XferSuite.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\XferSuite.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "S:\XferSuite\XferSuite\bin\Release\ZRegistration.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "S:\XferSuite\XferSuite\bin\Release\ZRegistration.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "S:\XferSuite\XferSuite\bin\Release\ZRegistration.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "S:\XferSuite\XferSuite\bin\Release\XYZscan.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "S:\XferSuite\XferSuite\bin\Release\XYZscan.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "S:\XferSuite\XferSuite\bin\Release\XYZscan.pdb"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

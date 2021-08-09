@@ -62,7 +62,6 @@ Public Class frmZed
 
     Dim _Data
     Dim HistData As New List(Of Double)
-    Dim ScatterData As New List(Of Point3D)
     Dim ScatterDataX, ScatterDataY, ScatterDataZ As New List(Of ScatterPoint)
     Dim HistMin, HistMax, ColorMin, ColorMax As Double
     Dim ColorMinOriginal As Double = 999
@@ -89,7 +88,6 @@ Public Class frmZed
     Private Sub ParseData()
         ' Reset globals
         HistData.Clear()
-        ScatterData.Clear()
         ScatterDataX.Clear()
         ScatterDataY.Clear()
         ScatterDataZ.Clear()
@@ -253,7 +251,6 @@ Public Class frmZed
         Dim rSquared = Zed.rSquared(polyScatter.Points.ToArray(), scatterData.ToArray())
         If coord Then
             ScatterXvsZ.Model = plot
-            ScatterXvsZ.Model.Title = "HI"
             lblXvsZ.Text = String.Format("X vs. Z: r^2 = {0}", rSquared)
         Else
             ScatterYvsZ.Model = plot
