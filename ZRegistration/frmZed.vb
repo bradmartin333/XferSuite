@@ -99,23 +99,37 @@ Public Class frmZed
         End Set
     End Property
 
+    Private _PercentBorderRemoval As Double = 5
+    Public Property PercentBorderRemoval() As Double
+        Get
+            Return _PercentBorderRemoval
+        End Get
+        Set(ByVal value As Double)
+            _PercentBorderRemoval = value
+            CreatePlots()
+        End Set
+    End Property
+
     Dim _Data
     Dim HistData As New List(Of Double)
     Dim ScatterDataX, ScatterDataY, ScatterDataZ As New List(Of ScatterPoint)
     Dim HistMin, HistMax As Double
     Dim ColorMinOriginal As Double = 999
     Dim ColorMaxOriginal As Double = -999
-    Dim PercentBorderRemoval As Double = 10
     Dim PercentOutlier As Double = 5
+    Dim Initialied As Boolean
 
     Public Sub New(data As List(Of String), text As String)
         InitializeComponent()
         Me.Text = text
         _Data = Zed.parse(data.ToArray)
-        CreatePlots()
+        CreatePlots(initialPlot:=True)
+        Initialied = True
     End Sub
 
-    Private Sub CreatePlots(Optional preserveColors As Boolean = False)
+    Private Sub CreatePlots(Optional initialPlot As Boolean = False, Optional preserveColors As Boolean = False)
+        If Not Initialied And Not initialPlot Then Return
+
         Cursor = Cursors.WaitCursor
         Application.DoEvents()
 
@@ -325,6 +339,10 @@ Public Class frmZed
 
     Private Sub cbxRemoveBorders_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveBorders.CheckedChanged
         RemoveBorders = Not RemoveBorders
+    End Sub
+
+    Private Sub numPercentBorderRemoval_ValueChanged(sender As Object, e As EventArgs) Handles numPercentBorderRemoval.ValueChanged
+        PercentBorderRemoval = numPercentBorderRemoval.Value
     End Sub
 
     Private Sub cbxFlipX_CheckedChanged(sender As Object, e As EventArgs) Handles cbxFlipX.CheckedChanged
