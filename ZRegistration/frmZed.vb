@@ -4,17 +4,6 @@ Imports OxyPlot.Series
 Imports XferHelper
 
 Public Class frmZed
-    Private _RemoveOutliers As Boolean = False
-    Public Property RemoveOutliers() As Boolean
-        Get
-            Return _RemoveOutliers
-        End Get
-        Set(value As Boolean)
-            _RemoveOutliers = value
-            CreatePlots()
-        End Set
-    End Property
-
     Private _RemoveBorders As Boolean = False
     Public Property RemoveBorders() As Boolean
         Get
@@ -79,21 +68,57 @@ Public Class frmZed
         End Set
     End Property
 
+    Private _PolyX As Double()
+    Public Property PolyX() As Double()
+        Get
+            Return _PolyX
+        End Get
+        Set(ByVal value As Double())
+            _PolyX = value
+        End Set
+    End Property
+
+    Private _PolyY As Double()
+    Public Property PolyY() As Double()
+        Get
+            Return _PolyY
+        End Get
+        Set(ByVal value As Double())
+            _PolyY = value
+        End Set
+    End Property
+
+    Private _PercentBorderRemoval As Double = 5
+    Public Property PercentBorderRemoval() As Double
+        Get
+            Return _PercentBorderRemoval
+        End Get
+        Set(ByVal value As Double)
+            _PercentBorderRemoval = value
+            CreatePlots()
+        End Set
+    End Property
+
     Dim _Data
     Dim HistData As New List(Of Double)
     Dim ScatterDataX, ScatterDataY, ScatterDataZ As New List(Of ScatterPoint)
     Dim HistMin, HistMax As Double
     Dim ColorMinOriginal As Double = 999
     Dim ColorMaxOriginal As Double = -999
+    Dim PercentOutlier As Double = 5
+    Dim Initialied As Boolean
 
     Public Sub New(data As List(Of String), text As String)
         InitializeComponent()
         Me.Text = text
         _Data = Zed.parse(data.ToArray)
-        CreatePlots()
+        CreatePlots(initialPlot:=True)
+        Initialied = True
     End Sub
 
-    Private Sub CreatePlots(Optional preserveColors As Boolean = False)
+    Private Sub CreatePlots(Optional initialPlot As Boolean = False, Optional preserveColors As Boolean = False)
+        If Not Initialied And Not initialPlot Then Return
+
         Cursor = Cursors.WaitCursor
         Application.DoEvents()
 
@@ -136,8 +161,22 @@ Public Class frmZed
 
     Private Sub ScanScatterData(coord As Boolean)
         Dim bounds = Zed.bounds(_Data)
-        Dim median As Double = Stats.median(Zed.getAxis(_Data, 2).ToArray())
-        Dim filter As New List(Of Double)
+        Dim center As PointF
+        Dim radius As Double
+        Dim isCircular = True
+
+        If RemoveBorders Then
+            center = New PointF((bounds(0) + bounds(1)) / 2, (bounds(2) + bounds(3)) / 2)
+            radius = Math.Max(bounds(1) - bounds(0), bounds(3) - bounds(2)) / 2
+            For Each d In _Data
+                Dim distance = MathNet.Numerics.Distance.Euclidean(New Double() {d.X, d.Y}, New Double() {center.X, center.Y})
+                If distance > radius * (1 + PercentBorderRemoval / 100) Then
+                    isCircular = False
+                    Exit For
+                End If
+            Next
+        End If
+
         For Each d In _Data
             Dim Pos As Double
             If coord Then
@@ -147,10 +186,17 @@ Public Class frmZed
             End If
 
             If RemoveBorders Then
-                If d.X - bounds(0) < (bounds(1) - bounds(0)) * 0.05 Then Continue For
-                If bounds(1) - d.X < (bounds(1) - bounds(0)) * 0.05 Then Continue For
-                If d.Y - bounds(2) < (bounds(3) - bounds(2)) * 0.05 Then Continue For
-                If bounds(3) - d.Y < (bounds(3) - bounds(2)) * 0.05 Then Continue For
+                If isCircular Then
+                    Dim distance = MathNet.Numerics.Distance.Euclidean(New Double() {d.X, d.Y}, New Double() {center.X, center.Y})
+                    If distance > radius * (1 - PercentBorderRemoval / 100) Then
+                        Continue For
+                    End If
+                Else
+                    If d.X - bounds(0) < (bounds(1) - bounds(0)) * (PercentBorderRemoval / 100) Then Continue For
+                    If bounds(1) - d.X < (bounds(1) - bounds(0)) * (PercentBorderRemoval / 100) Then Continue For
+                    If d.Y - bounds(2) < (bounds(3) - bounds(2)) * (PercentBorderRemoval / 100) Then Continue For
+                    If bounds(3) - d.Y < (bounds(3) - bounds(2)) * (PercentBorderRemoval / 100) Then Continue For
+                End If
             End If
 
             Dim adjX = d.X
@@ -165,30 +211,15 @@ Public Class frmZed
                 If adjZ < ColorMin Or adjZ > ColorMax Then Continue For
             End If
 
-            If Math.Abs(d.Z - median) / ((d.Z + median) / 2) > 0.05 And RemoveOutliers Then
-                Continue For ' Outliers
-            ElseIf Not filter.Contains(Math.Round(Pos, 1) And RemoveOutliers) Then
-                filter.Add(Math.Round(Pos, 1))
-                If coord Then
-                    ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
-                Else
-                    ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
-                End If
-                ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
-                HistData.Add(adjZ)
-                If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
-                If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
-            ElseIf Not RemoveOutliers Then
-                If coord Then
-                    ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
-                Else
-                    ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
-                End If
-                ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
-                HistData.Add(adjZ)
-                If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
-                If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
+            If coord Then
+                ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
+            Else
+                ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
             End If
+            ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
+            HistData.Add(adjZ)
+            If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
+            If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
         Next
     End Sub
 
@@ -245,11 +276,18 @@ Public Class frmZed
         scatter.Points.AddRange(scatterData.AsEnumerable)
 
         Dim poly As Double() = Zed.scatterPolynomial(scatterData.ToArray())
-        Dim polyScatter As New ScatterSeries With {.MarkerFill = OxyColors.Black, .MarkerSize = 2}
+        If coord Then
+            PolyX = poly
+        Else
+            PolyY = poly
+        End If
 
-        For Each point In scatterData
+        Dim polyScatter As New LineSeries With {.Color = OxyColors.LawnGreen, .StrokeThickness = 5}
+        Dim scatterCopy As ScatterPoint() = scatterData.ToArray().Clone()
+        Dim scatterList As List(Of ScatterPoint) = scatterCopy.ToList().OrderBy(Function(x) x.X).ToList()
+        For Each point In scatterList
             Dim val = poly(0) + poly(1) * point.X + poly(2) * Math.Pow(point.X, 2) + poly(3) * Math.Pow(point.X, 3)
-            polyScatter.Points.Add(New ScatterPoint(point.X, val))
+            polyScatter.Points.Add(New DataPoint(point.X, val))
         Next
 
         plot.Series.Add(scatter)
@@ -267,12 +305,12 @@ Public Class frmZed
         End If
     End Sub
 
-    Private Sub cbxRemoveOutliers_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveOutliers.CheckedChanged
-        RemoveOutliers = Not RemoveOutliers
-    End Sub
-
     Private Sub cbxRemoveBorders_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveBorders.CheckedChanged
         RemoveBorders = Not RemoveBorders
+    End Sub
+
+    Private Sub numPercentBorderRemoval_ValueChanged(sender As Object, e As EventArgs) Handles numPercentBorderRemoval.ValueChanged
+        PercentBorderRemoval = numPercentBorderRemoval.Value
     End Sub
 
     Private Sub cbxFlipX_CheckedChanged(sender As Object, e As EventArgs) Handles cbxFlipX.CheckedChanged
@@ -309,6 +347,21 @@ Public Class frmZed
         numColorAxisMin.Value = ColorMinOriginal
         numColorAxisMax.Value = ColorMaxOriginal
         CreatePlots()
+    End Sub
+
+    Private Sub btnCopyTrendline_Click(sender As Object, e As EventArgs) Handles btnCopyTrendline.Click
+        Dim output As String = String.Format("{0}x² + {1}x + {2}{3}{4}y² + {5}y + {6}",
+                                             PolyX(2), PolyX(1), PolyX(0), vbNewLine, PolyY(2), PolyY(1), PolyY(0))
+        Clipboard.SetText(output)
+    End Sub
+
+    Private Sub btnCopyData_Click(sender As Object, e As EventArgs) Handles btnCopyData.Click
+        Dim output As String = ""
+        For Each scatter As ScatterPoint In ScatterDataZ
+            output += String.Format("{0}{1}{2}{3}{4}{5}",
+                                    scatter.X, vbTab, scatter.Y, vbTab, scatter.Value, vbNewLine)
+        Next
+        Clipboard.SetText(output)
     End Sub
 
     Private Sub btnSaveWindow_Click(sender As Object, e As EventArgs) Handles btnSaveWindow.Click
