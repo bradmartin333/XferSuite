@@ -105,6 +105,8 @@ Public Class frmZed
     Dim HistMin, HistMax As Double
     Dim ColorMinOriginal As Double = 999
     Dim ColorMaxOriginal As Double = -999
+    Dim PercentBorderRemoval As Double = 10
+    Dim PercentOutlier As Double = 5
 
     Public Sub New(data As List(Of String), text As String)
         InitializeComponent()
@@ -158,6 +160,22 @@ Public Class frmZed
         Dim bounds = Zed.bounds(_Data)
         Dim median As Double = Stats.median(Zed.getAxis(_Data, 2).ToArray())
         Dim filter As New List(Of Double)
+        Dim center As PointF
+        Dim radius As Double
+        Dim isCircular = True
+
+        If RemoveBorders Then
+            center = New PointF((bounds(0) + bounds(1)) / 2, (bounds(2) + bounds(3)) / 2)
+            radius = Math.Max(bounds(1) - bounds(0), bounds(3) - bounds(2)) / 2
+            For Each d In _Data
+                Dim distance = MathNet.Numerics.Distance.Euclidean(New Double() {d.X, d.Y}, New Double() {center.X, center.Y})
+                If distance > radius * (1 + PercentBorderRemoval / 100) Then
+                    isCircular = False
+                    Exit For
+                End If
+            Next
+        End If
+
         For Each d In _Data
             Dim Pos As Double
             If coord Then
@@ -167,10 +185,17 @@ Public Class frmZed
             End If
 
             If RemoveBorders Then
-                If d.X - bounds(0) < (bounds(1) - bounds(0)) * 0.05 Then Continue For
-                If bounds(1) - d.X < (bounds(1) - bounds(0)) * 0.05 Then Continue For
-                If d.Y - bounds(2) < (bounds(3) - bounds(2)) * 0.05 Then Continue For
-                If bounds(3) - d.Y < (bounds(3) - bounds(2)) * 0.05 Then Continue For
+                If isCircular Then
+                    Dim distance = MathNet.Numerics.Distance.Euclidean(New Double() {d.X, d.Y}, New Double() {center.X, center.Y})
+                    If distance > radius * (1 - PercentBorderRemoval / 100) Then
+                        Continue For
+                    End If
+                Else
+                    If d.X - bounds(0) < (bounds(1) - bounds(0)) * (PercentBorderRemoval / 100) Then Continue For
+                    If bounds(1) - d.X < (bounds(1) - bounds(0)) * (PercentBorderRemoval / 100) Then Continue For
+                    If d.Y - bounds(2) < (bounds(3) - bounds(2)) * (PercentBorderRemoval / 100) Then Continue For
+                    If bounds(3) - d.Y < (bounds(3) - bounds(2)) * (PercentBorderRemoval / 100) Then Continue For
+                End If
             End If
 
             Dim adjX = d.X
@@ -185,7 +210,7 @@ Public Class frmZed
                 If adjZ < ColorMin Or adjZ > ColorMax Then Continue For
             End If
 
-            If Math.Abs(d.Z - median) / ((d.Z + median) / 2) > 0.05 And RemoveOutliers Then
+            If Math.Abs(d.Z - median) / ((d.Z + median) / 2) > (PercentOutlier / 100) And RemoveOutliers Then
                 Continue For ' Outliers
             ElseIf Not filter.Contains(Math.Round(Pos, 1) And RemoveOutliers) Then
                 filter.Add(Math.Round(Pos, 1))
