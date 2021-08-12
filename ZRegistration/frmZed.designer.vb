@@ -33,8 +33,9 @@ Partial Class frmZed
         Me.numColorAxisMax = New System.Windows.Forms.NumericUpDown()
         Me.btnResetColorAxes = New System.Windows.Forms.Button()
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.cbxRemoveOutliers = New System.Windows.Forms.CheckBox()
         Me.cbxRemoveBorders = New System.Windows.Forms.CheckBox()
+        Me.numPercentBorderRemoval = New System.Windows.Forms.NumericUpDown()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
         Me.cbxFlipX = New System.Windows.Forms.CheckBox()
         Me.cbxFlipY = New System.Windows.Forms.CheckBox()
@@ -45,16 +46,14 @@ Partial Class frmZed
         Me.btnCopyTrendline = New System.Windows.Forms.Button()
         Me.btnCopyData = New System.Windows.Forms.Button()
         Me.btnSaveWindow = New System.Windows.Forms.Button()
-        Me.numPercentBorderRemoval = New System.Windows.Forms.NumericUpDown()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.flowHeatMapSettings.SuspendLayout()
         CType(Me.numColorAxisMin, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numColorAxisMax, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FlowLayoutPanel1.SuspendLayout()
+        CType(Me.numPercentBorderRemoval, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
-        CType(Me.numPercentBorderRemoval, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'HeatPlot
@@ -185,38 +184,47 @@ Partial Class frmZed
         '
         Me.FlowLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanel1.AutoSize = True
-        Me.FlowLayoutPanel1.Controls.Add(Me.cbxRemoveOutliers)
         Me.FlowLayoutPanel1.Controls.Add(Me.cbxRemoveBorders)
         Me.FlowLayoutPanel1.Controls.Add(Me.numPercentBorderRemoval)
         Me.FlowLayoutPanel1.Controls.Add(Me.Label1)
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(39, 604)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(90, 604)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(272, 29)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(171, 29)
         Me.FlowLayoutPanel1.TabIndex = 9
-        '
-        'cbxRemoveOutliers
-        '
-        Me.cbxRemoveOutliers.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.cbxRemoveOutliers.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbxRemoveOutliers.AutoSize = True
-        Me.cbxRemoveOutliers.Location = New System.Drawing.Point(3, 3)
-        Me.cbxRemoveOutliers.Name = "cbxRemoveOutliers"
-        Me.cbxRemoveOutliers.Size = New System.Drawing.Size(95, 23)
-        Me.cbxRemoveOutliers.TabIndex = 0
-        Me.cbxRemoveOutliers.Text = "Remove Outliers"
-        Me.cbxRemoveOutliers.UseVisualStyleBackColor = True
         '
         'cbxRemoveBorders
         '
         Me.cbxRemoveBorders.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
         Me.cbxRemoveBorders.Appearance = System.Windows.Forms.Appearance.Button
         Me.cbxRemoveBorders.AutoSize = True
-        Me.cbxRemoveBorders.Location = New System.Drawing.Point(104, 3)
+        Me.cbxRemoveBorders.Location = New System.Drawing.Point(3, 3)
         Me.cbxRemoveBorders.Name = "cbxRemoveBorders"
         Me.cbxRemoveBorders.Size = New System.Drawing.Size(96, 23)
         Me.cbxRemoveBorders.TabIndex = 1
         Me.cbxRemoveBorders.Text = "Remove Borders"
         Me.cbxRemoveBorders.UseVisualStyleBackColor = True
+        '
+        'numPercentBorderRemoval
+        '
+        Me.numPercentBorderRemoval.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.numPercentBorderRemoval.Location = New System.Drawing.Point(105, 4)
+        Me.numPercentBorderRemoval.Maximum = New Decimal(New Integer() {50, 0, 0, 0})
+        Me.numPercentBorderRemoval.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.numPercentBorderRemoval.Name = "numPercentBorderRemoval"
+        Me.numPercentBorderRemoval.Size = New System.Drawing.Size(42, 20)
+        Me.numPercentBorderRemoval.TabIndex = 2
+        Me.numPercentBorderRemoval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.numPercentBorderRemoval.Value = New Decimal(New Integer() {5, 0, 0, 0})
+        '
+        'Label1
+        '
+        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(153, 8)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(15, 13)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "%"
         '
         'FlowLayoutPanel2
         '
@@ -337,28 +345,6 @@ Partial Class frmZed
         Me.btnSaveWindow.Text = "Save Window"
         Me.btnSaveWindow.UseVisualStyleBackColor = True
         '
-        'numPercentBorderRemoval
-        '
-        Me.numPercentBorderRemoval.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.numPercentBorderRemoval.Location = New System.Drawing.Point(206, 4)
-        Me.numPercentBorderRemoval.Maximum = New Decimal(New Integer() {50, 0, 0, 0})
-        Me.numPercentBorderRemoval.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numPercentBorderRemoval.Name = "numPercentBorderRemoval"
-        Me.numPercentBorderRemoval.Size = New System.Drawing.Size(42, 20)
-        Me.numPercentBorderRemoval.TabIndex = 2
-        Me.numPercentBorderRemoval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        Me.numPercentBorderRemoval.Value = New Decimal(New Integer() {5, 0, 0, 0})
-        '
-        'Label1
-        '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(254, 8)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(15, 13)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "%"
-        '
         'frmZed
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -376,11 +362,11 @@ Partial Class frmZed
         CType(Me.numColorAxisMax, System.ComponentModel.ISupportInitialize).EndInit()
         Me.FlowLayoutPanel1.ResumeLayout(False)
         Me.FlowLayoutPanel1.PerformLayout()
+        CType(Me.numPercentBorderRemoval, System.ComponentModel.ISupportInitialize).EndInit()
         Me.FlowLayoutPanel2.ResumeLayout(False)
         Me.FlowLayoutPanel2.PerformLayout()
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.FlowLayoutPanel3.PerformLayout()
-        CType(Me.numPercentBorderRemoval, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -396,7 +382,6 @@ Partial Class frmZed
     Friend WithEvents numColorAxisMax As NumericUpDown
     Friend WithEvents btnResetColorAxes As Button
     Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
-    Friend WithEvents cbxRemoveOutliers As CheckBox
     Friend WithEvents cbxFlipX As CheckBox
     Friend WithEvents cbxFlipY As CheckBox
     Friend WithEvents cbxFlipZ As CheckBox

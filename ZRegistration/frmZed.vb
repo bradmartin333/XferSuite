@@ -4,17 +4,6 @@ Imports OxyPlot.Series
 Imports XferHelper
 
 Public Class frmZed
-    Private _RemoveOutliers As Boolean = False
-    Public Property RemoveOutliers() As Boolean
-        Get
-            Return _RemoveOutliers
-        End Get
-        Set(value As Boolean)
-            _RemoveOutliers = value
-            CreatePlots()
-        End Set
-    End Property
-
     Private _RemoveBorders As Boolean = False
     Public Property RemoveBorders() As Boolean
         Get
@@ -172,8 +161,6 @@ Public Class frmZed
 
     Private Sub ScanScatterData(coord As Boolean)
         Dim bounds = Zed.bounds(_Data)
-        Dim median As Double = Stats.median(Zed.getAxis(_Data, 2).ToArray())
-        Dim filter As New List(Of Double)
         Dim center As PointF
         Dim radius As Double
         Dim isCircular = True
@@ -224,30 +211,15 @@ Public Class frmZed
                 If adjZ < ColorMin Or adjZ > ColorMax Then Continue For
             End If
 
-            If Math.Abs(d.Z - median) / ((d.Z + median) / 2) > (PercentOutlier / 100) And RemoveOutliers Then
-                Continue For ' Outliers
-            ElseIf Not filter.Contains(Math.Round(Pos, 1) And RemoveOutliers) Then
-                filter.Add(Math.Round(Pos, 1))
-                If coord Then
-                    ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
-                Else
-                    ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
-                End If
-                ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
-                HistData.Add(adjZ)
-                If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
-                If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
-            ElseIf Not RemoveOutliers Then
-                If coord Then
-                    ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
-                Else
-                    ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
-                End If
-                ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
-                HistData.Add(adjZ)
-                If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
-                If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
+            If coord Then
+                ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
+            Else
+                ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
             End If
+            ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
+            HistData.Add(adjZ)
+            If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
+            If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
         Next
     End Sub
 
@@ -331,10 +303,6 @@ Public Class frmZed
             plot.Title = String.Format("Y Direction     R² = {0}", rSquared)
             ScatterYvsZ.Model = plot
         End If
-    End Sub
-
-    Private Sub cbxRemoveOutliers_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveOutliers.CheckedChanged
-        RemoveOutliers = Not RemoveOutliers
     End Sub
 
     Private Sub cbxRemoveBorders_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveBorders.CheckedChanged
