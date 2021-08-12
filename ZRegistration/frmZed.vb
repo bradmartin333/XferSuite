@@ -4,17 +4,6 @@ Imports OxyPlot.Series
 Imports XferHelper
 
 Public Class frmZed
-    Private _RemoveOutliers As Boolean = False
-    Public Property RemoveOutliers() As Boolean
-        Get
-            Return _RemoveOutliers
-        End Get
-        Set(value As Boolean)
-            _RemoveOutliers = value
-            CreatePlots()
-        End Set
-    End Property
-
     Private _RemoveBorders As Boolean = False
     Public Property RemoveBorders() As Boolean
         Get
@@ -99,23 +88,37 @@ Public Class frmZed
         End Set
     End Property
 
+    Private _PercentBorderRemoval As Double = 5
+    Public Property PercentBorderRemoval() As Double
+        Get
+            Return _PercentBorderRemoval
+        End Get
+        Set(ByVal value As Double)
+            _PercentBorderRemoval = value
+            CreatePlots()
+        End Set
+    End Property
+
     Dim _Data
     Dim HistData As New List(Of Double)
     Dim ScatterDataX, ScatterDataY, ScatterDataZ As New List(Of ScatterPoint)
     Dim HistMin, HistMax As Double
     Dim ColorMinOriginal As Double = 999
     Dim ColorMaxOriginal As Double = -999
-    Dim PercentBorderRemoval As Double = 10
     Dim PercentOutlier As Double = 5
+    Dim Initialied As Boolean
 
     Public Sub New(data As List(Of String), text As String)
         InitializeComponent()
         Me.Text = text
         _Data = Zed.parse(data.ToArray)
-        CreatePlots()
+        CreatePlots(initialPlot:=True)
+        Initialied = True
     End Sub
 
-    Private Sub CreatePlots(Optional preserveColors As Boolean = False)
+    Private Sub CreatePlots(Optional initialPlot As Boolean = False, Optional preserveColors As Boolean = False)
+        If Not Initialied And Not initialPlot Then Return
+
         Cursor = Cursors.WaitCursor
         Application.DoEvents()
 
@@ -158,8 +161,6 @@ Public Class frmZed
 
     Private Sub ScanScatterData(coord As Boolean)
         Dim bounds = Zed.bounds(_Data)
-        Dim median As Double = Stats.median(Zed.getAxis(_Data, 2).ToArray())
-        Dim filter As New List(Of Double)
         Dim center As PointF
         Dim radius As Double
         Dim isCircular = True
@@ -210,30 +211,15 @@ Public Class frmZed
                 If adjZ < ColorMin Or adjZ > ColorMax Then Continue For
             End If
 
-            If Math.Abs(d.Z - median) / ((d.Z + median) / 2) > (PercentOutlier / 100) And RemoveOutliers Then
-                Continue For ' Outliers
-            ElseIf Not filter.Contains(Math.Round(Pos, 1) And RemoveOutliers) Then
-                filter.Add(Math.Round(Pos, 1))
-                If coord Then
-                    ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
-                Else
-                    ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
-                End If
-                ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
-                HistData.Add(adjZ)
-                If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
-                If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
-            ElseIf Not RemoveOutliers Then
-                If coord Then
-                    ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
-                Else
-                    ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
-                End If
-                ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
-                HistData.Add(adjZ)
-                If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
-                If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
+            If coord Then
+                ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
+            Else
+                ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
             End If
+            ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
+            HistData.Add(adjZ)
+            If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
+            If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
         Next
     End Sub
 
@@ -319,12 +305,12 @@ Public Class frmZed
         End If
     End Sub
 
-    Private Sub cbxRemoveOutliers_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveOutliers.CheckedChanged
-        RemoveOutliers = Not RemoveOutliers
-    End Sub
-
     Private Sub cbxRemoveBorders_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveBorders.CheckedChanged
         RemoveBorders = Not RemoveBorders
+    End Sub
+
+    Private Sub numPercentBorderRemoval_ValueChanged(sender As Object, e As EventArgs) Handles numPercentBorderRemoval.ValueChanged
+        PercentBorderRemoval = numPercentBorderRemoval.Value
     End Sub
 
     Private Sub cbxFlipX_CheckedChanged(sender As Object, e As EventArgs) Handles cbxFlipX.CheckedChanged
