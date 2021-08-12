@@ -244,7 +244,7 @@ module Zed =
             |> Array.map(fun x -> x.Y)
         MathNet.Numerics.Fit.Polynomial(x, y, 3)
 
-    let rSquared (modelScatter:ScatterPoint[], observedScatter:ScatterPoint[]) =
+    let rSquared (modelScatter:OxyPlot.DataPoint[], observedScatter:ScatterPoint[]) =
         let model =
             modelScatter
             |> Array.map(fun x-> x.Y)

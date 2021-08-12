@@ -43,6 +43,8 @@ Partial Class frmZed
         Me.ScatterYvsZ = New OxyPlot.WindowsForms.PlotView()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
         Me.btnSaveWindow = New System.Windows.Forms.Button()
+        Me.btnCopyTrendline = New System.Windows.Forms.Button()
+        Me.btnCopyData = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.flowHeatMapSettings.SuspendLayout()
         CType(Me.numColorAxisMin, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -291,22 +293,44 @@ Partial Class frmZed
         '
         Me.FlowLayoutPanel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanel3.AutoSize = True
+        Me.FlowLayoutPanel3.Controls.Add(Me.btnCopyTrendline)
+        Me.FlowLayoutPanel3.Controls.Add(Me.btnCopyData)
         Me.FlowLayoutPanel3.Controls.Add(Me.btnSaveWindow)
-        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(482, 604)
+        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(394, 604)
         Me.FlowLayoutPanel3.Name = "FlowLayoutPanel3"
-        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(90, 29)
+        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(265, 29)
         Me.FlowLayoutPanel3.TabIndex = 15
         '
         'btnSaveWindow
         '
         Me.btnSaveWindow.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.btnSaveWindow.AutoSize = True
-        Me.btnSaveWindow.Location = New System.Drawing.Point(3, 3)
+        Me.btnSaveWindow.Location = New System.Drawing.Point(178, 3)
         Me.btnSaveWindow.Name = "btnSaveWindow"
         Me.btnSaveWindow.Size = New System.Drawing.Size(84, 23)
         Me.btnSaveWindow.TabIndex = 0
         Me.btnSaveWindow.Text = "Save Window"
         Me.btnSaveWindow.UseVisualStyleBackColor = True
+        '
+        'btnCopyTrendline
+        '
+        Me.btnCopyTrendline.AutoSize = True
+        Me.btnCopyTrendline.Location = New System.Drawing.Point(3, 3)
+        Me.btnCopyTrendline.Name = "btnCopyTrendline"
+        Me.btnCopyTrendline.Size = New System.Drawing.Size(88, 23)
+        Me.btnCopyTrendline.TabIndex = 1
+        Me.btnCopyTrendline.Text = "Copy Trendline"
+        Me.btnCopyTrendline.UseVisualStyleBackColor = True
+        '
+        'btnCopyData
+        '
+        Me.btnCopyData.AutoSize = True
+        Me.btnCopyData.Location = New System.Drawing.Point(97, 3)
+        Me.btnCopyData.Name = "btnCopyData"
+        Me.btnCopyData.Size = New System.Drawing.Size(75, 23)
+        Me.btnCopyData.TabIndex = 2
+        Me.btnCopyData.Text = "Copy Data"
+        Me.btnCopyData.UseVisualStyleBackColor = True
         '
         'frmZed
         '
@@ -353,4 +377,6 @@ Partial Class frmZed
     Friend WithEvents ScatterXvsZ As OxyPlot.WindowsForms.PlotView
     Friend WithEvents ScatterYvsZ As OxyPlot.WindowsForms.PlotView
     Friend WithEvents FlowLayoutPanel3 As FlowLayoutPanel
+    Friend WithEvents btnCopyTrendline As Button
+    Friend WithEvents btnCopyData As Button
 End Class

@@ -79,6 +79,26 @@ Public Class frmZed
         End Set
     End Property
 
+    Private _PolyX As Double()
+    Public Property PolyX() As Double()
+        Get
+            Return _PolyX
+        End Get
+        Set(ByVal value As Double())
+            _PolyX = value
+        End Set
+    End Property
+
+    Private _PolyY As Double()
+    Public Property PolyY() As Double()
+        Get
+            Return _PolyY
+        End Get
+        Set(ByVal value As Double())
+            _PolyY = value
+        End Set
+    End Property
+
     Dim _Data
     Dim HistData As New List(Of Double)
     Dim ScatterDataX, ScatterDataY, ScatterDataZ As New List(Of ScatterPoint)
@@ -245,11 +265,18 @@ Public Class frmZed
         scatter.Points.AddRange(scatterData.AsEnumerable)
 
         Dim poly As Double() = Zed.scatterPolynomial(scatterData.ToArray())
-        Dim polyScatter As New ScatterSeries With {.MarkerFill = OxyColors.Black, .MarkerSize = 2}
+        If coord Then
+            PolyX = poly
+        Else
+            PolyY = poly
+        End If
 
-        For Each point In scatterData
+        Dim polyScatter As New LineSeries With {.Color = OxyColors.LawnGreen, .StrokeThickness = 5}
+        Dim scatterCopy As ScatterPoint() = scatterData.ToArray().Clone()
+        Dim scatterList As List(Of ScatterPoint) = scatterCopy.ToList().OrderBy(Function(x) x.X).ToList()
+        For Each point In scatterList
             Dim val = poly(0) + poly(1) * point.X + poly(2) * Math.Pow(point.X, 2) + poly(3) * Math.Pow(point.X, 3)
-            polyScatter.Points.Add(New ScatterPoint(point.X, val))
+            polyScatter.Points.Add(New DataPoint(point.X, val))
         Next
 
         plot.Series.Add(scatter)
@@ -309,6 +336,21 @@ Public Class frmZed
         numColorAxisMin.Value = ColorMinOriginal
         numColorAxisMax.Value = ColorMaxOriginal
         CreatePlots()
+    End Sub
+
+    Private Sub btnCopyTrendline_Click(sender As Object, e As EventArgs) Handles btnCopyTrendline.Click
+        Dim output As String = String.Format("{0}x² + {1}x + {2}{3}{4}y² + {5}y + {6}",
+                                             PolyX(2), PolyX(1), PolyX(0), vbNewLine, PolyY(2), PolyY(1), PolyY(0))
+        Clipboard.SetText(output)
+    End Sub
+
+    Private Sub btnCopyData_Click(sender As Object, e As EventArgs) Handles btnCopyData.Click
+        Dim output As String = ""
+        For Each scatter As ScatterPoint In ScatterDataZ
+            output += String.Format("{0}{1}{2}{3}{4}{5}",
+                                    scatter.X, vbTab, scatter.Y, vbTab, scatter.Value, vbNewLine)
+        Next
+        Clipboard.SetText(output)
     End Sub
 
     Private Sub btnSaveWindow_Click(sender As Object, e As EventArgs) Handles btnSaveWindow.Click
