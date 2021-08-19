@@ -1,4 +1,4 @@
-# XferSuite
+# XferSuite ![build](https://github.com/bradmartin333/XferSuite/actions/workflows/dotnet.yml/badge.svg)
 A toolbox for MTP.
 Open the settings app to tinker with other open apps.
 Shift + click any graph to export it as a .png.
