@@ -8,7 +8,7 @@ ___
 The reincarnation of MetroGraphs. Most of the same information, but much faster.
 
 ___
-### Z Registration
+### XYZ Scan
 Load a HeightSensorLog.txt file and click on scans to see their graphical and statistical representation.
 
 ___
@@ -20,10 +20,8 @@ ___
 Load a .xrec and .xmap to step through and visually verify the planned print.
 
 ___
-### Event Log Parsing
-Load an EventLog.txt to see a list of the used recipes and a graphical breakdown of print cycle time.
-This app has the greatest potential to grow as there is a ton of usable info in the log.
-Open to requests!
+### SEYR Parser
+Load a SEYR report to conert raw data into yields.
 
 ___
 ### Data File Tree
