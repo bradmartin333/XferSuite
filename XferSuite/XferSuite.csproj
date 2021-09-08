@@ -85,12 +85,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Apps\EventLogParsing.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Apps\EventLogParsing.Designer.cs">
-      <DependentUpon>EventLogParsing.cs</DependentUpon>
-    </Compile>
     <Compile Include="Apps\Fingerprinting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +96,12 @@
     </Compile>
     <Compile Include="Apps\MapFlip.designer.cs">
       <DependentUpon>MapFlip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\ParseSEYR.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\ParseSEYR.Designer.cs">
+      <DependentUpon>ParseSEYR.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\PrintSim\TransferMap.cs" />
     <Compile Include="MainMenu.cs">
@@ -131,14 +131,14 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Apps\EventLogParsing.resx">
-      <DependentUpon>EventLogParsing.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Apps\Fingerprinting.resx">
       <DependentUpon>Fingerprinting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\MapFlip.resx">
       <DependentUpon>MapFlip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\ParseSEYR.resx">
+      <DependentUpon>ParseSEYR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
@@ -188,6 +188,7 @@
     <None Include="Resources\horizFlip.png" />
     <None Include="Resources\vertFlip.png" />
     <None Include="Resources\rotateArrow.png" />
+    <None Include="Resources\SEYRgrey.png" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>

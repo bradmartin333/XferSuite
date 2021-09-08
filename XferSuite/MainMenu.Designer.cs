@@ -34,7 +34,7 @@ namespace XferSuite
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnMapFlip = new System.Windows.Forms.Button();
             this.btnDataFileTree = new System.Windows.Forms.Button();
-            this.btnFileParse = new System.Windows.Forms.Button();
+            this.btnParseSEYR = new System.Windows.Forms.Button();
             this.btnPrintCycle = new System.Windows.Forms.Button();
             this.btnFingerprint = new System.Windows.Forms.Button();
             this.btnXYZscan = new System.Windows.Forms.Button();
@@ -53,7 +53,7 @@ namespace XferSuite
             this.tableLayoutPanel.Controls.Add(this.btnSettings, 3, 1);
             this.tableLayoutPanel.Controls.Add(this.btnMapFlip, 2, 1);
             this.tableLayoutPanel.Controls.Add(this.btnDataFileTree, 1, 1);
-            this.tableLayoutPanel.Controls.Add(this.btnFileParse, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnParseSEYR, 0, 1);
             this.tableLayoutPanel.Controls.Add(this.btnPrintCycle, 3, 0);
             this.tableLayoutPanel.Controls.Add(this.btnFingerprint, 2, 0);
             this.tableLayoutPanel.Controls.Add(this.btnXYZscan, 1, 0);
@@ -128,25 +128,25 @@ namespace XferSuite
             this.btnDataFileTree.UseVisualStyleBackColor = true;
             this.btnDataFileTree.Click += new System.EventHandler(this.btn_Click);
             // 
-            // btnFileParse
+            // btnParseSEYR
             // 
-            this.btnFileParse.AccessibleName = "Event Log Parsing";
-            this.btnFileParse.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_file_37_240;
-            this.btnFileParse.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnFileParse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnFileParse.FlatAppearance.BorderSize = 0;
-            this.btnFileParse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnFileParse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnFileParse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFileParse.Location = new System.Drawing.Point(8, 103);
-            this.btnFileParse.Margin = new System.Windows.Forms.Padding(8);
-            this.btnFileParse.Name = "btnFileParse";
-            this.btnFileParse.Size = new System.Drawing.Size(89, 79);
-            this.btnFileParse.TabIndex = 7;
-            this.btnFileParse.Tag = "4";
-            this.btnFileParse.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnFileParse.UseVisualStyleBackColor = true;
-            this.btnFileParse.Click += new System.EventHandler(this.btn_Click);
+            this.btnParseSEYR.AccessibleName = "Parse SEYR Report";
+            this.btnParseSEYR.BackgroundImage = global::XferSuite.Properties.Resources.SEYRgrey;
+            this.btnParseSEYR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnParseSEYR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnParseSEYR.FlatAppearance.BorderSize = 0;
+            this.btnParseSEYR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnParseSEYR.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnParseSEYR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnParseSEYR.Location = new System.Drawing.Point(8, 103);
+            this.btnParseSEYR.Margin = new System.Windows.Forms.Padding(8);
+            this.btnParseSEYR.Name = "btnParseSEYR";
+            this.btnParseSEYR.Size = new System.Drawing.Size(89, 79);
+            this.btnParseSEYR.TabIndex = 7;
+            this.btnParseSEYR.Tag = "4";
+            this.btnParseSEYR.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnParseSEYR.UseVisualStyleBackColor = true;
+            this.btnParseSEYR.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnPrintCycle
             // 
@@ -240,7 +240,7 @@ namespace XferSuite
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "XferSuite v1.15";
+            this.Text = "XferSuite v1.16";
             this.tableLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -253,7 +253,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnMapFlip;
         private System.Windows.Forms.Button btnDataFileTree;
-        private System.Windows.Forms.Button btnFileParse;
+        private System.Windows.Forms.Button btnParseSEYR;
         private System.Windows.Forms.Button btnPrintCycle;
         private System.Windows.Forms.Button btnFingerprint;
         private System.Windows.Forms.Button btnXYZscan;

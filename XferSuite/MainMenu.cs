@@ -62,10 +62,10 @@ namespace XferSuite
                     form = new PrintSim(path);
                     break;
                 case 4:
-                    path = OpenFile("Open an EventLog File", "txt file (*.txt)|*.txt");
+                    path = OpenFile("Open a SEYR Report", "txt file (*.txt)|*.txt");
                     if (path == null)
                         return;
-                    form = new EventLogParsing(path);
+                    form = new ParseSEYR(path);
                     break;
                 case 5:
                     form = new DataFileTree.frmDataFileTreeMain() { Location = PointToScreen(btn.Location) };

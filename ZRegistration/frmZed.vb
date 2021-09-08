@@ -112,11 +112,11 @@ Public Class frmZed
         InitializeComponent()
         Me.Text = text
         _Data = Zed.parse(data.ToArray)
-        CreatePlots(initialPlot:=True)
+        CreatePlots(initialPlot:=True, preserveColors:=False)
         Initialied = True
     End Sub
 
-    Private Sub CreatePlots(Optional initialPlot As Boolean = False, Optional preserveColors As Boolean = False)
+    Private Sub CreatePlots(Optional initialPlot As Boolean = False, Optional preserveColors As Boolean = True)
         If Not Initialied And Not initialPlot Then Return
 
         Cursor = Cursors.WaitCursor
@@ -330,7 +330,7 @@ Public Class frmZed
             numColorAxisMin.Value = ColorMin
         Else
             ColorMin = numColorAxisMin.Value
-            CreatePlots(preserveColors:=True)
+            CreatePlots()
         End If
     End Sub
 
@@ -339,14 +339,14 @@ Public Class frmZed
             numColorAxisMax.Value = ColorMax
         Else
             ColorMax = numColorAxisMax.Value
-            CreatePlots(preserveColors:=True)
+            CreatePlots()
         End If
     End Sub
 
     Private Sub btnResetColorAxes_Click(sender As Object, e As EventArgs) Handles btnResetColorAxes.Click
         numColorAxisMin.Value = ColorMinOriginal
         numColorAxisMax.Value = ColorMaxOriginal
-        CreatePlots()
+        CreatePlots(preserveColors:=False)
     End Sub
 
     Private Sub btnCopyTrendline_Click(sender As Object, e As EventArgs) Handles btnCopyTrendline.Click

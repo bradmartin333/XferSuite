@@ -409,3 +409,101 @@ module Sim =
                             if device then
                                 idx <- idx - 1
         |]
+
+module Report =
+    type State = 
+        | Pass = 0 
+        | Fail = 1 
+        | Null = 2 
+        | Misaligned = 3 
+        | Other = 4
+
+    let toState(num:int) =
+        enum<State> num
+
+    type Entry = { ImageNumber:int;
+                   Row:int;
+                   Col:int;
+                   Name:string;
+                   State:State; }
+    
+    let toEntry (data:string) =
+        let columns = data.Split('\t')
+        let ImageNumber = int columns.[0]  
+        let Row = int columns.[1]
+        let Col = int columns.[2]
+        let Name = string columns.[3]
+        let State = 
+            match string columns.[4] with
+                | "Pass" -> State.Pass
+                | "Fail" -> State.Fail
+                | "Null" -> State.Null
+                | "Misaligned" -> State.Misaligned
+                | _ -> State.Other
+        { ImageNumber = ImageNumber;
+          Row = Row;
+          Col = Col;
+          Name = Name;
+          State = State }
+    
+    type Bucket =
+        | Buffer = 0
+        | Required = 1
+        | NeedOne = 2
+
+    let toBucket(num: int) =
+        enum<Bucket> num
+
+    type Criteria = { Name:string;
+                      mutable Bucket:Bucket;
+                      mutable Requirements:State[]; }
+
+    let toCriteria (name:string) =
+        { Name = name;
+          Bucket = Bucket.Buffer;
+          Requirements = [| State.Pass |] }
+
+    let reader (path:string) =
+        let data = File.ReadAllLines path
+        data
+        |> Array.filter(fun x -> x <> "")
+        |> Array.map toEntry
+
+    let data (path:string) = reader path
+
+    let getNumImages (data:Entry[]) =
+        data
+        |> Array.map(fun x -> x.ImageNumber)
+        |> Array.toSeq
+        |> Seq.distinct
+        |> Seq.length
+
+    let getNumX (data:Entry[]) =
+        data
+        |> Array.map(fun x -> x.Row)
+        |> Array.toSeq
+        |> Seq.distinct
+        |> Seq.length
+
+    let getNumY (data:Entry[]) =
+        data
+        |> Array.map(fun x -> x.Col)
+        |> Array.toSeq
+        |> Seq.distinct
+        |> Seq.length
+
+    let getFeatures (data:Entry[]) =
+        data
+        |> Array.map(fun x -> x.Name)
+        |> Array.toSeq
+        |> Seq.distinct
+        |> Seq.toArray
+        |> Array.map toCriteria
+
+    let getImage (data:Entry[], num:int) =
+        data
+        |> Array.filter(fun x -> x.ImageNumber = num)
+
+    let getCell (data:Entry[], row:int, col:int) =
+        data
+        |> Array.filter(fun x -> x.Row = row && x.Col = col)
