@@ -258,6 +258,11 @@ module Zed =
             |> Array.map(fun x-> x.Y)
         System.Math.Round(MathNet.Numerics.GoodnessOfFit.RSquared(model, observed), 3)
 
+    let XYbounds (data:Position[]) =
+        let x = getAxis(data, 0)
+        let y = getAxis(data, 1)
+        [x.Minimum(), x.Maximum(), y.Minimum(), y.Maximum()]
+
     let bounds (data:Position[]) =
         [
         (data
