@@ -15,7 +15,7 @@ Public Class frmZed
         End Set
     End Property
 
-    Private _FlipX As Boolean = False
+    Private _FlipX As Boolean = True
     Public Property FlipX() As Boolean
         Get
             Return _FlipX
@@ -26,7 +26,7 @@ Public Class frmZed
         End Set
     End Property
 
-    Private _FlipY As Boolean = False
+    Private _FlipY As Boolean = True
     Public Property FlipY() As Boolean
         Get
             Return _FlipY
@@ -44,6 +44,17 @@ Public Class frmZed
         End Get
         Set(value As Boolean)
             _FlipZ = value
+            CreatePlots()
+        End Set
+    End Property
+
+    Private _RemoveTilt As Boolean = False
+    Public Property RemoveTilt() As Boolean
+        Get
+            Return _RemoveTilt
+        End Get
+        Set(value As Boolean)
+            _RemoveTilt = value
             CreatePlots()
         End Set
     End Property
@@ -105,7 +116,6 @@ Public Class frmZed
     Dim HistMin, HistMax As Double
     Dim ColorMinOriginal As Double = 999
     Dim ColorMaxOriginal As Double = -999
-    Dim PercentOutlier As Double = 5
     Dim Initialied As Boolean
 
     Public Sub New(data As List(Of String), text As String)
@@ -177,7 +187,9 @@ Public Class frmZed
             Next
         End If
 
-        For Each d In _Data
+        Dim TrimmedData = New List(Of Zed.Position)
+
+        For Each d As Zed.Position In _Data
             Dim Pos As Double
             If coord Then
                 Pos = d.X
@@ -211,15 +223,27 @@ Public Class frmZed
                 If adjZ < ColorMin Or adjZ > ColorMax Then Continue For
             End If
 
-            If coord Then
-                ScatterDataX.Add(New ScatterPoint(adjX, adjZ))
-            Else
-                ScatterDataY.Add(New ScatterPoint(adjY, adjZ))
+            TrimmedData.Add(New Zed.Position(d.Time, adjX, adjY, adjZ))
+        Next
+
+        Dim XLine = Zed.dataLineFit(TrimmedData.ToArray(), 0)
+        Dim YLine = Zed.dataLineFit(TrimmedData.ToArray(), 1)
+
+        For Each d In TrimmedData
+            Dim thisZ = d.Z
+            If (RemoveTilt) Then
+                thisZ -= (d.X * XLine.Item2) + (d.Y * YLine.Item2)
             End If
-            ScatterDataZ.Add(New ScatterPoint(adjX, adjY, 2, adjZ))
-            HistData.Add(adjZ)
-            If adjZ < ColorMinOriginal Then ColorMinOriginal = adjZ
-            If adjZ > ColorMaxOriginal Then ColorMaxOriginal = adjZ
+
+            If coord Then
+                ScatterDataX.Add(New ScatterPoint(d.X, thisZ))
+            Else
+                ScatterDataY.Add(New ScatterPoint(d.Y, thisZ))
+            End If
+            ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, thisZ))
+            HistData.Add(thisZ)
+            If d.Z < ColorMinOriginal Then ColorMinOriginal = thisZ
+            If d.Z > ColorMaxOriginal Then ColorMaxOriginal = thisZ
         Next
     End Sub
 
@@ -313,18 +337,6 @@ Public Class frmZed
         PercentBorderRemoval = numPercentBorderRemoval.Value
     End Sub
 
-    Private Sub cbxFlipX_CheckedChanged(sender As Object, e As EventArgs) Handles cbxFlipX.CheckedChanged
-        FlipX = Not FlipX
-    End Sub
-
-    Private Sub cbxFlipY_CheckedChanged(sender As Object, e As EventArgs) Handles cbxFlipY.CheckedChanged
-        FlipY = Not FlipY
-    End Sub
-
-    Private Sub cbxFlipZ_CheckedChanged(sender As Object, e As EventArgs) Handles cbxFlipZ.CheckedChanged
-        FlipZ = Not FlipZ
-    End Sub
-
     Private Sub numColorAxisMin_ValueChanged(sender As Object, e As EventArgs) Handles numColorAxisMin.Click
         If (Math.Abs(numColorAxisMin.Value - ColorMax) < 0.001) Then
             numColorAxisMin.Value = ColorMin
@@ -347,6 +359,20 @@ Public Class frmZed
         numColorAxisMin.Value = ColorMinOriginal
         numColorAxisMax.Value = ColorMaxOriginal
         CreatePlots(preserveColors:=False)
+    End Sub
+
+    Private Sub cbxView_CheckedChanged(sender As Object, e As EventArgs) Handles cbxView.CheckedChanged
+        FlipX = Not FlipX
+
+        If FlipX Then
+            cbxView.Text = "SPOT View"
+        Else
+            cbxView.Text = "Printer View"
+        End If
+    End Sub
+
+    Private Sub cbxRemoveTilt_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveTilt.CheckedChanged
+        RemoveTilt = Not RemoveTilt
     End Sub
 
     Private Sub btnCopyTrendline_Click(sender As Object, e As EventArgs) Handles btnCopyTrendline.Click

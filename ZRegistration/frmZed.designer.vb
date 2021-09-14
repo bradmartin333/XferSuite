@@ -37,15 +37,14 @@ Partial Class frmZed
         Me.numPercentBorderRemoval = New System.Windows.Forms.NumericUpDown()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.cbxFlipX = New System.Windows.Forms.CheckBox()
-        Me.cbxFlipY = New System.Windows.Forms.CheckBox()
-        Me.cbxFlipZ = New System.Windows.Forms.CheckBox()
         Me.ScatterXvsZ = New OxyPlot.WindowsForms.PlotView()
         Me.ScatterYvsZ = New OxyPlot.WindowsForms.PlotView()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
         Me.btnCopyTrendline = New System.Windows.Forms.Button()
         Me.btnCopyData = New System.Windows.Forms.Button()
         Me.btnSaveWindow = New System.Windows.Forms.Button()
+        Me.cbxView = New System.Windows.Forms.CheckBox()
+        Me.cbxRemoveTilt = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.flowHeatMapSettings.SuspendLayout()
         CType(Me.numColorAxisMin, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -230,49 +229,12 @@ Partial Class frmZed
         '
         Me.FlowLayoutPanel2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanel2.AutoSize = True
-        Me.FlowLayoutPanel2.Controls.Add(Me.cbxFlipX)
-        Me.FlowLayoutPanel2.Controls.Add(Me.cbxFlipY)
-        Me.FlowLayoutPanel2.Controls.Add(Me.cbxFlipZ)
-        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(453, 286)
+        Me.FlowLayoutPanel2.Controls.Add(Me.cbxView)
+        Me.FlowLayoutPanel2.Controls.Add(Me.cbxRemoveTilt)
+        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(448, 286)
         Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(147, 29)
+        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(158, 29)
         Me.FlowLayoutPanel2.TabIndex = 10
-        '
-        'cbxFlipX
-        '
-        Me.cbxFlipX.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.cbxFlipX.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbxFlipX.AutoSize = True
-        Me.cbxFlipX.Location = New System.Drawing.Point(3, 3)
-        Me.cbxFlipX.Name = "cbxFlipX"
-        Me.cbxFlipX.Size = New System.Drawing.Size(43, 23)
-        Me.cbxFlipX.TabIndex = 1
-        Me.cbxFlipX.Text = "Flip X"
-        Me.cbxFlipX.UseVisualStyleBackColor = True
-        '
-        'cbxFlipY
-        '
-        Me.cbxFlipY.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.cbxFlipY.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbxFlipY.AutoSize = True
-        Me.cbxFlipY.Location = New System.Drawing.Point(52, 3)
-        Me.cbxFlipY.Name = "cbxFlipY"
-        Me.cbxFlipY.Size = New System.Drawing.Size(43, 23)
-        Me.cbxFlipY.TabIndex = 2
-        Me.cbxFlipY.Text = "Flip Y"
-        Me.cbxFlipY.UseVisualStyleBackColor = True
-        '
-        'cbxFlipZ
-        '
-        Me.cbxFlipZ.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.cbxFlipZ.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbxFlipZ.AutoSize = True
-        Me.cbxFlipZ.Location = New System.Drawing.Point(101, 3)
-        Me.cbxFlipZ.Name = "cbxFlipZ"
-        Me.cbxFlipZ.Size = New System.Drawing.Size(43, 23)
-        Me.cbxFlipZ.TabIndex = 3
-        Me.cbxFlipZ.Text = "Flip Z"
-        Me.cbxFlipZ.UseVisualStyleBackColor = True
         '
         'ScatterXvsZ
         '
@@ -345,6 +307,30 @@ Partial Class frmZed
         Me.btnSaveWindow.Text = "Save Window"
         Me.btnSaveWindow.UseVisualStyleBackColor = True
         '
+        'cbxView
+        '
+        Me.cbxView.Appearance = System.Windows.Forms.Appearance.Button
+        Me.cbxView.AutoSize = True
+        Me.cbxView.Location = New System.Drawing.Point(3, 3)
+        Me.cbxView.Name = "cbxView"
+        Me.cbxView.Size = New System.Drawing.Size(72, 23)
+        Me.cbxView.TabIndex = 2
+        Me.cbxView.Text = "SPOT View"
+        Me.cbxView.UseVisualStyleBackColor = True
+        '
+        'cbxRemoveTilt
+        '
+        Me.cbxRemoveTilt.Appearance = System.Windows.Forms.Appearance.Button
+        Me.cbxRemoveTilt.AutoSize = True
+        Me.cbxRemoveTilt.Checked = True
+        Me.cbxRemoveTilt.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbxRemoveTilt.Location = New System.Drawing.Point(81, 3)
+        Me.cbxRemoveTilt.Name = "cbxRemoveTilt"
+        Me.cbxRemoveTilt.Size = New System.Drawing.Size(74, 23)
+        Me.cbxRemoveTilt.TabIndex = 3
+        Me.cbxRemoveTilt.Text = "Remove Tilt"
+        Me.cbxRemoveTilt.UseVisualStyleBackColor = True
+        '
         'frmZed
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -382,9 +368,6 @@ Partial Class frmZed
     Friend WithEvents numColorAxisMax As NumericUpDown
     Friend WithEvents btnResetColorAxes As Button
     Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
-    Friend WithEvents cbxFlipX As CheckBox
-    Friend WithEvents cbxFlipY As CheckBox
-    Friend WithEvents cbxFlipZ As CheckBox
     Friend WithEvents FlowLayoutPanel2 As FlowLayoutPanel
     Friend WithEvents cbxRemoveBorders As CheckBox
     Friend WithEvents ScatterXvsZ As OxyPlot.WindowsForms.PlotView
@@ -394,4 +377,6 @@ Partial Class frmZed
     Friend WithEvents btnCopyData As Button
     Friend WithEvents numPercentBorderRemoval As NumericUpDown
     Friend WithEvents Label1 As Label
+    Friend WithEvents cbxView As CheckBox
+    Friend WithEvents cbxRemoveTilt As CheckBox
 End Class

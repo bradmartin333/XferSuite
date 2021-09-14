@@ -235,6 +235,11 @@ module Zed =
                 |> Array.map(fun x -> x.Z)
         output
 
+    let dataLineFit(data:Position[], axis:int) =
+        let Z = getAxis(data, 2)
+        let Q = getAxis(data, axis)
+        MathNet.Numerics.Fit.Line(Q, Z)
+
     let scatterPolynomial (scatter:ScatterPoint[]) =
         let x = 
             scatter
