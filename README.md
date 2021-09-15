@@ -1,6 +1,6 @@
 # XferSuite ![build](https://github.com/bradmartin333/XferSuite/actions/workflows/dotnet.yml/badge.svg)
 
-[Download Here](tinyurl.com/DownloadXferSuite)
+[Download Here](https://bradmartin333.github.io/utility/XferSuite)
 
 ![image](https://user-images.githubusercontent.com/19335151/133506934-017acb8f-4bb2-48ad-b9d8-247e622c6456.png)
 
