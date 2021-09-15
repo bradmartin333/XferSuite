@@ -247,12 +247,12 @@ Public Class frmZed
     End Sub
 
     Private Sub btnCopyData_Click(sender As Object, e As EventArgs) Handles btnCopyData.Click
-        Dim output As String = ""
+        Dim builder As New Text.StringBuilder
         For Each scatter As ScatterPoint In ScatterDataZ
-            output += String.Format("{0}{1}{2}{3}{4}{5}",
-                                    scatter.X, vbTab, scatter.Y, vbTab, scatter.Value, vbNewLine)
+            builder.Append(String.Format("{0}{1}{2}{3}{4}{5}",
+                                    scatter.X, vbTab, scatter.Y, vbTab, scatter.Value, vbNewLine))
         Next
-        Clipboard.SetText(output)
+        Clipboard.SetText(builder.ToString())
     End Sub
 
     Private Sub btnSaveWindow_Click(sender As Object, e As EventArgs) Handles btnSaveWindow.Click

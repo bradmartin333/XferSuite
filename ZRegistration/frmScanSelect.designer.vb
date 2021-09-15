@@ -86,6 +86,8 @@ Partial Class frmScanSelect
         Me.olv.Size = New System.Drawing.Size(490, 317)
         Me.olv.TabIndex = 2
         Me.olv.UseCompatibleStateImageBehavior = False
+        Me.olv.UseFilterIndicator = True
+        Me.olv.UseFiltering = True
         Me.olv.View = System.Windows.Forms.View.Details
         Me.olv.VirtualMode = True
         '
@@ -119,7 +121,7 @@ Partial Class frmScanSelect
         'OlvColumn4
         '
         Me.OlvColumn4.AspectName = "Temp"
-        Me.OlvColumn4.AspectToStringFormat = "{0}°"
+        Me.OlvColumn4.AspectToStringFormat = "{0}°C"
         Me.OlvColumn4.Text = "Temp"
         '
         'OlvColumn5
@@ -147,7 +149,7 @@ Partial Class frmScanSelect
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmScanSelect"
-        Me.Text = "Click a row to plot a scan"
+        Me.Text = "Double click a row to plot a scan"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         CType(Me.olv, System.ComponentModel.ISupportInitialize).EndInit()

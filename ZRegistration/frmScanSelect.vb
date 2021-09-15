@@ -18,7 +18,6 @@ Public Class frmScanSelect
     Public Sub MakeList()
         ProgressBar.Style = ProgressBarStyle.Marquee
         ProgressBar.MarqueeAnimationSpeed = 100
-        Application.DoEvents()
 
         FindScans()
         olv.SetObjects(Scans)
@@ -56,10 +55,8 @@ Public Class frmScanSelect
                 End If
                 Scans.Add(thisScan)
             Else
-                Application.DoEvents()
                 Scans(scanIdx).Data.Add(XferHelper.Zed.toPosition(line))
             End If
-            Application.DoEvents()
         End While
     End Sub
 End Class
