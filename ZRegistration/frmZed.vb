@@ -59,18 +59,19 @@ Public Class frmZed
         End Set
     End Property
 
-    Dim _Data
+    Dim Data As Zed.Position()
     Dim HistData As New List(Of Double)
     Dim ScatterDataX, ScatterDataY, ScatterDataZ As New List(Of ScatterPoint)
     Dim HistMin, HistMax As Double
     Dim Initialized As Boolean
 
-    Public Sub New(data As List(Of String), text As String)
+    Public Sub New(selectedObject As cScan)
         InitializeComponent()
-        Me.Text = text
-        _Data = Zed.parse(data.ToArray)
+        Text = selectedObject.Name
+        Data = selectedObject.Data.ToArray()
         CreatePlots(initialPlot:=True)
         Initialized = True
+        Show()
     End Sub
 
     Private Sub CreatePlots(Optional initialPlot As Boolean = False)
@@ -103,8 +104,8 @@ Public Class frmZed
 
     Private Sub ScanScatterData()
         Dim UserData = New List(Of Zed.Position)
-        Dim bounds = Zed.bounds(_Data)
-        For Each d As Zed.Position In _Data
+        Dim bounds = Zed.bounds(Data)
+        For Each d As Zed.Position In Data
             Dim adjX = d.X
             Dim adjY = d.Y
             Dim adjZ = d.Z
@@ -135,7 +136,7 @@ Public Class frmZed
             Dim histItems = HistogramHelpers.Collect(zData, binBreaks, binningOptions)
             For Each d As Zed.Position In TiltData
                 For Each bin As HistogramItem In histItems
-                    If bin.RangeStart <= d.Z And bin.RangeEnd >= d.Z And bin.Height > 5 Then
+                    If bin.RangeStart <= d.Z And bin.RangeEnd >= d.Z And bin.Count > 5 Then
                         FilteredData.Add(d)
                     End If
                 Next
