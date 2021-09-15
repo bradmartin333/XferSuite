@@ -240,7 +240,7 @@ namespace XferSuite
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "XferSuite v1.16";
+            this.Text = "XferSuite v1.17";
             this.tableLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
