@@ -1,90 +1,62 @@
 ﻿Imports System.IO
 
 Public Class frmScanSelect
-    Private _HideSource As Boolean
-    <ComponentModel.Category("User Parameters")>
-    Public Property HideSource As Boolean
-        Get
-            Return _HideSource
-        End Get
-        Set(Value As Boolean)
-            _HideSource = Value
-            MakeList()
-        End Set
-    End Property
-
-    Private _HideTarget As Boolean
-    <ComponentModel.Category("User Parameters")>
-    Public Property HideTarget As Boolean
-        Get
-            Return _HideTarget
-        End Get
-        Set(Value As Boolean)
-            _HideTarget = Value
-            MakeList()
-        End Set
-    End Property
-
-
-    Private _HideClean As Boolean
-    <ComponentModel.Category("User Parameters")>
-    Public Property HideClean As Boolean
-        Get
-            Return _HideClean
-        End Get
-        Set(Value As Boolean)
-            _HideClean = Value
-            MakeList()
-        End Set
-    End Property
-
     Public Property Path As String
-    Dim scans As New List(Of String)
-    Dim scanData As New List(Of List(Of String))
+    Dim Scans As New List(Of cScan)
 
-    Public Sub New()
+    Public Sub New(filePath As String)
         InitializeComponent()
+        Path = filePath
+        Show()
+        MakeList()
     End Sub
 
-    Private Sub btnReload_Click(sender As Object, e As EventArgs) Handles btnReload.Click, MyBase.Load
+    Private Sub btnReload_Click(sender As Object, e As EventArgs) Handles btnReload.Click
         MakeList()
     End Sub
 
     Public Sub MakeList()
-        scans.Clear()
-        scanData.Clear()
-        ScanList.Items.Clear()
-        FindScans(File.ReadAllLines(Path))
-        scans.Reverse()
-        scanData.Reverse()
-        For Each scan In scans
-            ScanList.Items.Add(scan)
-        Next
-        Refresh()
+        ProgressBar.Style = ProgressBarStyle.Marquee
+        ProgressBar.MarqueeAnimationSpeed = 100
+
+        FindScans()
+        olv.SetObjects(Scans)
+        olv.Sort(OlvColumn6, SortOrder.Descending)
+
+        ProgressBar.Style = ProgressBarStyle.Continuous
+        ProgressBar.MarqueeAnimationSpeed = 0
     End Sub
 
-    Private Sub ScanList_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ScanList.SelectedIndexChanged
-        Dim Zed As New frmZed(scanData(sender.SelectedIndex), scans(sender.SelectedIndex))
-        Zed.Show()
+    Private Sub ScanSelected(sender As Object, e As EventArgs) Handles olv.ItemActivate
+        Dim Zed As New frmZed(olv.SelectedObject)
     End Sub
 
-    Private Sub FindScans(lines As String())
-        Dim dataBuffer As New List(Of String)
-        For i As Integer = 0 To lines.Count() - 1
-            If lines(i).Contains("NEWSCAN") Then
-                If HideSource AndAlso lines(i).Contains("Source") Then Continue For
-                If HideTarget AndAlso lines(i).Contains("Target") Then Continue For
-                If HideClean AndAlso lines(i).Contains("Clean") Then Continue For
-                If dataBuffer.Count > 0 Then
-                    scanData.Add(dataBuffer)
+    Private Sub FindScans()
+        Scans.Clear()
+        Dim scanIdx As Integer = -1
+        Dim reader As StreamReader = New StreamReader(Path)
+        While reader.Peek <> -1
+            Application.DoEvents()
+            Dim line = reader.ReadLine
+            Dim p = reader.Peek
+            If line.Contains("NEWSCAN") Then
+                scanIdx += 1
+                Dim info = line.Split(vbTab)
+                Dim thisScan = New cScan With
+                {
+                    .Index = scanIdx + 1,
+                    .ShortDate = Date.Parse(info(0)).ToShortDateString,
+                    .Time = Date.Parse(info(0)).ToShortTimeString,
+                    .Name = info(2)
+                }
+                If (info.Length > 3) Then
+                    thisScan.Temp = info(3)
+                    thisScan.RH = info(4)
                 End If
-                dataBuffer = New List(Of String)
-                If lines(i + 1).Contains("NEWSCAN") Or lines(i + 1) = "" Then Continue For
-                scans.Add(lines(i).Replace(vbTab & "NEWSCAN" & vbTab, "     "))
+                Scans.Add(thisScan)
             Else
-                dataBuffer.Add(lines(i))
+                Scans(scanIdx).Data.Add(XferHelper.Zed.toPosition(line))
             End If
-        Next
-        If dataBuffer.Count > 0 Then scanData.Add(dataBuffer)
+        End While
     End Sub
 End Class

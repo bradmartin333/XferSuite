@@ -26,32 +26,16 @@ Partial Class frmZed
         Me.HeatPlot = New OxyPlot.WindowsForms.PlotView()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.HistPlot = New OxyPlot.WindowsForms.PlotView()
-        Me.flowHeatMapSettings = New System.Windows.Forms.FlowLayoutPanel()
-        Me.lblColorAxisMin = New System.Windows.Forms.Label()
-        Me.numColorAxisMin = New System.Windows.Forms.NumericUpDown()
-        Me.lblColorAxisMax = New System.Windows.Forms.Label()
-        Me.numColorAxisMax = New System.Windows.Forms.NumericUpDown()
-        Me.btnResetColorAxes = New System.Windows.Forms.Button()
-        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.cbxRemoveBorders = New System.Windows.Forms.CheckBox()
-        Me.numPercentBorderRemoval = New System.Windows.Forms.NumericUpDown()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.cbxFlipX = New System.Windows.Forms.CheckBox()
-        Me.cbxFlipY = New System.Windows.Forms.CheckBox()
-        Me.cbxFlipZ = New System.Windows.Forms.CheckBox()
+        Me.cbxView = New System.Windows.Forms.CheckBox()
+        Me.cbxRemoveTilt = New System.Windows.Forms.CheckBox()
         Me.ScatterXvsZ = New OxyPlot.WindowsForms.PlotView()
         Me.ScatterYvsZ = New OxyPlot.WindowsForms.PlotView()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.btnCopyTrendline = New System.Windows.Forms.Button()
         Me.btnCopyData = New System.Windows.Forms.Button()
         Me.btnSaveWindow = New System.Windows.Forms.Button()
+        Me.cbxRemoveOutliers = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.flowHeatMapSettings.SuspendLayout()
-        CType(Me.numColorAxisMin, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.numColorAxisMax, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.FlowLayoutPanel1.SuspendLayout()
-        CType(Me.numPercentBorderRemoval, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.SuspendLayout()
@@ -77,12 +61,10 @@ Partial Class frmZed
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.00002!))
         Me.TableLayoutPanel1.Controls.Add(Me.HeatPlot, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.HistPlot, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.flowHeatMapSettings, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.FlowLayoutPanel1, 0, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.FlowLayoutPanel2, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.ScatterXvsZ, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.ScatterYvsZ, 1, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.FlowLayoutPanel3, 1, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.FlowLayoutPanel3, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.FlowLayoutPanel2, 0, 1)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -109,170 +91,42 @@ Partial Class frmZed
         Me.HistPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE
         Me.HistPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS
         '
-        'flowHeatMapSettings
-        '
-        Me.flowHeatMapSettings.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.flowHeatMapSettings.AutoSize = True
-        Me.flowHeatMapSettings.Controls.Add(Me.lblColorAxisMin)
-        Me.flowHeatMapSettings.Controls.Add(Me.numColorAxisMin)
-        Me.flowHeatMapSettings.Controls.Add(Me.lblColorAxisMax)
-        Me.flowHeatMapSettings.Controls.Add(Me.numColorAxisMax)
-        Me.flowHeatMapSettings.Controls.Add(Me.btnResetColorAxes)
-        Me.flowHeatMapSettings.Location = New System.Drawing.Point(32, 286)
-        Me.flowHeatMapSettings.Name = "flowHeatMapSettings"
-        Me.flowHeatMapSettings.Size = New System.Drawing.Size(286, 29)
-        Me.flowHeatMapSettings.TabIndex = 8
-        '
-        'lblColorAxisMin
-        '
-        Me.lblColorAxisMin.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblColorAxisMin.AutoSize = True
-        Me.lblColorAxisMin.Location = New System.Drawing.Point(3, 8)
-        Me.lblColorAxisMin.Name = "lblColorAxisMin"
-        Me.lblColorAxisMin.Size = New System.Drawing.Size(24, 13)
-        Me.lblColorAxisMin.TabIndex = 0
-        Me.lblColorAxisMin.Text = "Min"
-        '
-        'numColorAxisMin
-        '
-        Me.numColorAxisMin.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.numColorAxisMin.DecimalPlaces = 3
-        Me.numColorAxisMin.Increment = New Decimal(New Integer() {1, 0, 0, 196608})
-        Me.numColorAxisMin.Location = New System.Drawing.Point(33, 4)
-        Me.numColorAxisMin.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numColorAxisMin.Minimum = New Decimal(New Integer() {1000, 0, 0, -2147483648})
-        Me.numColorAxisMin.Name = "numColorAxisMin"
-        Me.numColorAxisMin.Size = New System.Drawing.Size(65, 20)
-        Me.numColorAxisMin.TabIndex = 1
-        Me.numColorAxisMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'lblColorAxisMax
-        '
-        Me.lblColorAxisMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblColorAxisMax.AutoSize = True
-        Me.lblColorAxisMax.Location = New System.Drawing.Point(104, 8)
-        Me.lblColorAxisMax.Name = "lblColorAxisMax"
-        Me.lblColorAxisMax.Size = New System.Drawing.Size(27, 13)
-        Me.lblColorAxisMax.TabIndex = 2
-        Me.lblColorAxisMax.Text = "Max"
-        '
-        'numColorAxisMax
-        '
-        Me.numColorAxisMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.numColorAxisMax.DecimalPlaces = 3
-        Me.numColorAxisMax.Increment = New Decimal(New Integer() {1, 0, 0, 196608})
-        Me.numColorAxisMax.Location = New System.Drawing.Point(137, 4)
-        Me.numColorAxisMax.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numColorAxisMax.Minimum = New Decimal(New Integer() {1000, 0, 0, -2147483648})
-        Me.numColorAxisMax.Name = "numColorAxisMax"
-        Me.numColorAxisMax.Size = New System.Drawing.Size(65, 20)
-        Me.numColorAxisMax.TabIndex = 3
-        Me.numColorAxisMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'btnResetColorAxes
-        '
-        Me.btnResetColorAxes.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnResetColorAxes.AutoSize = True
-        Me.btnResetColorAxes.Location = New System.Drawing.Point(208, 3)
-        Me.btnResetColorAxes.Name = "btnResetColorAxes"
-        Me.btnResetColorAxes.Size = New System.Drawing.Size(75, 23)
-        Me.btnResetColorAxes.TabIndex = 4
-        Me.btnResetColorAxes.Text = "Reset"
-        Me.btnResetColorAxes.UseVisualStyleBackColor = True
-        '
-        'FlowLayoutPanel1
-        '
-        Me.FlowLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.FlowLayoutPanel1.AutoSize = True
-        Me.FlowLayoutPanel1.Controls.Add(Me.cbxRemoveBorders)
-        Me.FlowLayoutPanel1.Controls.Add(Me.numPercentBorderRemoval)
-        Me.FlowLayoutPanel1.Controls.Add(Me.Label1)
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(90, 604)
-        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(171, 29)
-        Me.FlowLayoutPanel1.TabIndex = 9
-        '
-        'cbxRemoveBorders
-        '
-        Me.cbxRemoveBorders.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.cbxRemoveBorders.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbxRemoveBorders.AutoSize = True
-        Me.cbxRemoveBorders.Location = New System.Drawing.Point(3, 3)
-        Me.cbxRemoveBorders.Name = "cbxRemoveBorders"
-        Me.cbxRemoveBorders.Size = New System.Drawing.Size(96, 23)
-        Me.cbxRemoveBorders.TabIndex = 1
-        Me.cbxRemoveBorders.Text = "Remove Borders"
-        Me.cbxRemoveBorders.UseVisualStyleBackColor = True
-        '
-        'numPercentBorderRemoval
-        '
-        Me.numPercentBorderRemoval.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.numPercentBorderRemoval.Location = New System.Drawing.Point(105, 4)
-        Me.numPercentBorderRemoval.Maximum = New Decimal(New Integer() {50, 0, 0, 0})
-        Me.numPercentBorderRemoval.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numPercentBorderRemoval.Name = "numPercentBorderRemoval"
-        Me.numPercentBorderRemoval.Size = New System.Drawing.Size(42, 20)
-        Me.numPercentBorderRemoval.TabIndex = 2
-        Me.numPercentBorderRemoval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        Me.numPercentBorderRemoval.Value = New Decimal(New Integer() {5, 0, 0, 0})
-        '
-        'Label1
-        '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(153, 8)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(15, 13)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "%"
-        '
         'FlowLayoutPanel2
         '
         Me.FlowLayoutPanel2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanel2.AutoSize = True
-        Me.FlowLayoutPanel2.Controls.Add(Me.cbxFlipX)
-        Me.FlowLayoutPanel2.Controls.Add(Me.cbxFlipY)
-        Me.FlowLayoutPanel2.Controls.Add(Me.cbxFlipZ)
-        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(453, 286)
+        Me.TableLayoutPanel1.SetColumnSpan(Me.FlowLayoutPanel2, 2)
+        Me.FlowLayoutPanel2.Controls.Add(Me.cbxView)
+        Me.FlowLayoutPanel2.Controls.Add(Me.cbxRemoveOutliers)
+        Me.FlowLayoutPanel2.Controls.Add(Me.cbxRemoveTilt)
+        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(222, 286)
         Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(147, 29)
+        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(259, 29)
         Me.FlowLayoutPanel2.TabIndex = 10
         '
-        'cbxFlipX
+        'cbxView
         '
-        Me.cbxFlipX.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.cbxFlipX.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbxFlipX.AutoSize = True
-        Me.cbxFlipX.Location = New System.Drawing.Point(3, 3)
-        Me.cbxFlipX.Name = "cbxFlipX"
-        Me.cbxFlipX.Size = New System.Drawing.Size(43, 23)
-        Me.cbxFlipX.TabIndex = 1
-        Me.cbxFlipX.Text = "Flip X"
-        Me.cbxFlipX.UseVisualStyleBackColor = True
+        Me.cbxView.Appearance = System.Windows.Forms.Appearance.Button
+        Me.cbxView.AutoSize = True
+        Me.cbxView.Location = New System.Drawing.Point(3, 3)
+        Me.cbxView.Name = "cbxView"
+        Me.cbxView.Size = New System.Drawing.Size(72, 23)
+        Me.cbxView.TabIndex = 2
+        Me.cbxView.Text = "SPOT View"
+        Me.cbxView.UseVisualStyleBackColor = True
         '
-        'cbxFlipY
+        'cbxRemoveTilt
         '
-        Me.cbxFlipY.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.cbxFlipY.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbxFlipY.AutoSize = True
-        Me.cbxFlipY.Location = New System.Drawing.Point(52, 3)
-        Me.cbxFlipY.Name = "cbxFlipY"
-        Me.cbxFlipY.Size = New System.Drawing.Size(43, 23)
-        Me.cbxFlipY.TabIndex = 2
-        Me.cbxFlipY.Text = "Flip Y"
-        Me.cbxFlipY.UseVisualStyleBackColor = True
-        '
-        'cbxFlipZ
-        '
-        Me.cbxFlipZ.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
-        Me.cbxFlipZ.Appearance = System.Windows.Forms.Appearance.Button
-        Me.cbxFlipZ.AutoSize = True
-        Me.cbxFlipZ.Location = New System.Drawing.Point(101, 3)
-        Me.cbxFlipZ.Name = "cbxFlipZ"
-        Me.cbxFlipZ.Size = New System.Drawing.Size(43, 23)
-        Me.cbxFlipZ.TabIndex = 3
-        Me.cbxFlipZ.Text = "Flip Z"
-        Me.cbxFlipZ.UseVisualStyleBackColor = True
+        Me.cbxRemoveTilt.Appearance = System.Windows.Forms.Appearance.Button
+        Me.cbxRemoveTilt.AutoSize = True
+        Me.cbxRemoveTilt.Checked = True
+        Me.cbxRemoveTilt.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbxRemoveTilt.Location = New System.Drawing.Point(182, 3)
+        Me.cbxRemoveTilt.Name = "cbxRemoveTilt"
+        Me.cbxRemoveTilt.Size = New System.Drawing.Size(74, 23)
+        Me.cbxRemoveTilt.TabIndex = 3
+        Me.cbxRemoveTilt.Text = "Remove Tilt"
+        Me.cbxRemoveTilt.UseVisualStyleBackColor = True
         '
         'ScatterXvsZ
         '
@@ -306,28 +160,18 @@ Partial Class frmZed
         '
         Me.FlowLayoutPanel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanel3.AutoSize = True
-        Me.FlowLayoutPanel3.Controls.Add(Me.btnCopyTrendline)
+        Me.TableLayoutPanel1.SetColumnSpan(Me.FlowLayoutPanel3, 2)
         Me.FlowLayoutPanel3.Controls.Add(Me.btnCopyData)
         Me.FlowLayoutPanel3.Controls.Add(Me.btnSaveWindow)
-        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(394, 604)
+        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(266, 604)
         Me.FlowLayoutPanel3.Name = "FlowLayoutPanel3"
-        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(265, 29)
+        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(171, 29)
         Me.FlowLayoutPanel3.TabIndex = 15
-        '
-        'btnCopyTrendline
-        '
-        Me.btnCopyTrendline.AutoSize = True
-        Me.btnCopyTrendline.Location = New System.Drawing.Point(3, 3)
-        Me.btnCopyTrendline.Name = "btnCopyTrendline"
-        Me.btnCopyTrendline.Size = New System.Drawing.Size(88, 23)
-        Me.btnCopyTrendline.TabIndex = 1
-        Me.btnCopyTrendline.Text = "Copy Trendline"
-        Me.btnCopyTrendline.UseVisualStyleBackColor = True
         '
         'btnCopyData
         '
         Me.btnCopyData.AutoSize = True
-        Me.btnCopyData.Location = New System.Drawing.Point(97, 3)
+        Me.btnCopyData.Location = New System.Drawing.Point(3, 3)
         Me.btnCopyData.Name = "btnCopyData"
         Me.btnCopyData.Size = New System.Drawing.Size(75, 23)
         Me.btnCopyData.TabIndex = 2
@@ -338,12 +182,26 @@ Partial Class frmZed
         '
         Me.btnSaveWindow.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.btnSaveWindow.AutoSize = True
-        Me.btnSaveWindow.Location = New System.Drawing.Point(178, 3)
+        Me.btnSaveWindow.Location = New System.Drawing.Point(84, 3)
         Me.btnSaveWindow.Name = "btnSaveWindow"
         Me.btnSaveWindow.Size = New System.Drawing.Size(84, 23)
         Me.btnSaveWindow.TabIndex = 0
         Me.btnSaveWindow.Text = "Save Window"
         Me.btnSaveWindow.UseVisualStyleBackColor = True
+        '
+        'cbxRemoveOutliers
+        '
+        Me.cbxRemoveOutliers.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
+        Me.cbxRemoveOutliers.Appearance = System.Windows.Forms.Appearance.Button
+        Me.cbxRemoveOutliers.AutoSize = True
+        Me.cbxRemoveOutliers.Checked = True
+        Me.cbxRemoveOutliers.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbxRemoveOutliers.Location = New System.Drawing.Point(81, 3)
+        Me.cbxRemoveOutliers.Name = "cbxRemoveOutliers"
+        Me.cbxRemoveOutliers.Size = New System.Drawing.Size(95, 23)
+        Me.cbxRemoveOutliers.TabIndex = 1
+        Me.cbxRemoveOutliers.Text = "Remove Outliers"
+        Me.cbxRemoveOutliers.UseVisualStyleBackColor = True
         '
         'frmZed
         '
@@ -356,13 +214,6 @@ Partial Class frmZed
         Me.Text = "Height Sensor Data"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
-        Me.flowHeatMapSettings.ResumeLayout(False)
-        Me.flowHeatMapSettings.PerformLayout()
-        CType(Me.numColorAxisMin, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.numColorAxisMax, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.FlowLayoutPanel1.ResumeLayout(False)
-        Me.FlowLayoutPanel1.PerformLayout()
-        CType(Me.numPercentBorderRemoval, System.ComponentModel.ISupportInitialize).EndInit()
         Me.FlowLayoutPanel2.ResumeLayout(False)
         Me.FlowLayoutPanel2.PerformLayout()
         Me.FlowLayoutPanel3.ResumeLayout(False)
@@ -375,23 +226,12 @@ Partial Class frmZed
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents HistPlot As OxyPlot.WindowsForms.PlotView
     Friend WithEvents btnSaveWindow As Button
-    Friend WithEvents flowHeatMapSettings As FlowLayoutPanel
-    Friend WithEvents lblColorAxisMin As Label
-    Friend WithEvents numColorAxisMin As NumericUpDown
-    Friend WithEvents lblColorAxisMax As Label
-    Friend WithEvents numColorAxisMax As NumericUpDown
-    Friend WithEvents btnResetColorAxes As Button
-    Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
-    Friend WithEvents cbxFlipX As CheckBox
-    Friend WithEvents cbxFlipY As CheckBox
-    Friend WithEvents cbxFlipZ As CheckBox
     Friend WithEvents FlowLayoutPanel2 As FlowLayoutPanel
-    Friend WithEvents cbxRemoveBorders As CheckBox
     Friend WithEvents ScatterXvsZ As OxyPlot.WindowsForms.PlotView
     Friend WithEvents ScatterYvsZ As OxyPlot.WindowsForms.PlotView
     Friend WithEvents FlowLayoutPanel3 As FlowLayoutPanel
-    Friend WithEvents btnCopyTrendline As Button
     Friend WithEvents btnCopyData As Button
-    Friend WithEvents numPercentBorderRemoval As NumericUpDown
-    Friend WithEvents Label1 As Label
+    Friend WithEvents cbxView As CheckBox
+    Friend WithEvents cbxRemoveTilt As CheckBox
+    Friend WithEvents cbxRemoveOutliers As CheckBox
 End Class
