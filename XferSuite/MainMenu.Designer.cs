@@ -242,7 +242,7 @@ namespace XferSuite
             this.MaximizeBox = false;
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "XferSuite v1.17";
+            this.Text = "XferSuite v1.18";
             this.tableLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
