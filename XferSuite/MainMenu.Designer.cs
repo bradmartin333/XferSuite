@@ -72,8 +72,8 @@ namespace XferSuite
             // btnSettings
             // 
             this.btnSettings.AccessibleName = "Settings";
-            this.btnSettings.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_wrench_10_240;
-            this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSettings.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_gear_10_72;
+            this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSettings.FlatAppearance.BorderSize = 0;
             this.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSeaGreen;
@@ -91,8 +91,8 @@ namespace XferSuite
             // btnMapFlip
             // 
             this.btnMapFlip.AccessibleName = "Map Flip";
-            this.btnMapFlip.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_map_10_240;
-            this.btnMapFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnMapFlip.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_map_10_72;
+            this.btnMapFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnMapFlip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnMapFlip.FlatAppearance.BorderSize = 0;
             this.btnMapFlip.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
@@ -111,8 +111,8 @@ namespace XferSuite
             // btnDataFileTree
             // 
             this.btnDataFileTree.AccessibleName = "Data File Tree";
-            this.btnDataFileTree.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_tree_4_240;
-            this.btnDataFileTree.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnDataFileTree.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_tree_4_72;
+            this.btnDataFileTree.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnDataFileTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDataFileTree.FlatAppearance.BorderSize = 0;
             this.btnDataFileTree.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
@@ -131,8 +131,8 @@ namespace XferSuite
             // btnParseSEYR
             // 
             this.btnParseSEYR.AccessibleName = "Parse SEYR Report";
-            this.btnParseSEYR.BackgroundImage = global::XferSuite.Properties.Resources.SEYRgrey;
-            this.btnParseSEYR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnParseSEYR.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_layer_6_72;
+            this.btnParseSEYR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnParseSEYR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnParseSEYR.FlatAppearance.BorderSize = 0;
             this.btnParseSEYR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
@@ -151,8 +151,8 @@ namespace XferSuite
             // btnPrintCycle
             // 
             this.btnPrintCycle.AccessibleName = "Print Cycle Simulation";
-            this.btnPrintCycle.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_party_9_240;
-            this.btnPrintCycle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPrintCycle.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_party_9_72;
+            this.btnPrintCycle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnPrintCycle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnPrintCycle.FlatAppearance.BorderSize = 0;
             this.btnPrintCycle.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
@@ -171,8 +171,8 @@ namespace XferSuite
             // btnFingerprint
             // 
             this.btnFingerprint.AccessibleName = "Fingerprinting";
-            this.btnFingerprint.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_fingerprint_5_240;
-            this.btnFingerprint.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnFingerprint.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_fingerprint_5_72;
+            this.btnFingerprint.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnFingerprint.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnFingerprint.FlatAppearance.BorderSize = 0;
             this.btnFingerprint.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
@@ -191,8 +191,8 @@ namespace XferSuite
             // btnXYZscan
             // 
             this.btnXYZscan.AccessibleName = "XYZ Scans";
-            this.btnXYZscan.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_layer_21_240;
-            this.btnXYZscan.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnXYZscan.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_layer_21_72;
+            this.btnXYZscan.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnXYZscan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnXYZscan.FlatAppearance.BorderSize = 0;
             this.btnXYZscan.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
@@ -211,8 +211,8 @@ namespace XferSuite
             // btnInlinepositions
             // 
             this.btnInlinepositions.AccessibleName = "Inlinepositions";
-            this.btnInlinepositions.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_cube_6_240;
-            this.btnInlinepositions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnInlinepositions.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_cube_6_72;
+            this.btnInlinepositions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnInlinepositions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnInlinepositions.FlatAppearance.BorderSize = 0;
             this.btnInlinepositions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
@@ -236,8 +236,10 @@ namespace XferSuite
             this.Controls.Add(this.tableLayoutPanel);
             this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximizeBox = false;
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XferSuite v1.17";
