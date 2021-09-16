@@ -51,7 +51,7 @@ namespace XferSuite
             }
         }
 
-        private float _Threshold = 1.5F;
+        private float _Threshold = 10F;
         [
             Category("User Parameters"),
             Description("Positions with placement error greater than this micron value will be filtered out of the plotted data")
