@@ -10,9 +10,13 @@ namespace XferSuite
 {
     public partial class MainMenu : Form
     {
+        public static int MajorVersion = 2;
+        public static int MinorVerson = 0;
+
         public MainMenu()
         {
             InitializeComponent();
+            Text = string.Format("XferSuite v{0}.{1}", MajorVersion, MinorVerson);
             foreach (Button b in tableLayoutPanel.Controls.OfType<Button>())
             {
                 ToolTip tip = new ToolTip
