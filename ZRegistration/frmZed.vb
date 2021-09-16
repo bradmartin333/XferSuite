@@ -48,18 +48,8 @@ Public Class frmZed
         End Set
     End Property
 
-    Private _RemoveOutliers As Boolean = False
-    Public Property RemoveOutliers() As Boolean
-        Get
-            Return _RemoveOutliers
-        End Get
-        Set(value As Boolean)
-            _RemoveOutliers = value
-            CreatePlots()
-        End Set
-    End Property
-
     Dim Data As Zed.Position()
+    Dim LastData As List(Of Zed.Position)
     Dim HistData As New List(Of Double)
     Dim ScatterDataX, ScatterDataY, ScatterDataZ As New List(Of ScatterPoint)
     Dim HistMin, HistMax As Double
@@ -128,7 +118,8 @@ Public Class frmZed
         End If
 
         Dim FilteredData = TiltData
-        If (RemoveOutliers) Then
+        Dim outlierRemovalLevel As Integer = OutlierLevelScrollBar.Value
+        If (outlierRemovalLevel > 0) Then
             FilteredData = New List(Of Zed.Position)
             Dim zData = Zed.getAxis(TiltData.ToArray(), 2)
             Dim binningOptions = New BinningOptions(BinningOutlierMode.CountOutliers, BinningIntervalType.InclusiveLowerBound, BinningExtremeValueMode.IncludeExtremeValues)
@@ -136,11 +127,17 @@ Public Class frmZed
             Dim histItems = HistogramHelpers.Collect(zData, binBreaks, binningOptions)
             For Each d As Zed.Position In TiltData
                 For Each bin As HistogramItem In histItems
-                    If bin.RangeStart <= d.Z And bin.RangeEnd >= d.Z And bin.Count > 5 Then
+                    If bin.RangeStart <= d.Z And bin.RangeEnd >= d.Z And bin.Count > 5 * outlierRemovalLevel Then
                         FilteredData.Add(d)
                     End If
                 Next
             Next
+        End If
+
+        If FilteredData.Count = 0 Then
+            FilteredData = LastData
+        Else
+            LastData = FilteredData
         End If
 
         For Each d In FilteredData
@@ -149,6 +146,8 @@ Public Class frmZed
             ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, d.Z))
             HistData.Add(d.Z)
         Next
+
+        lblNumData.Text = String.Format("{0}/{1} Points Removed", Data.Count() - FilteredData.Count(), Data.Count())
     End Sub
 
     Private Sub CreateHeatmap()
@@ -228,10 +227,6 @@ Public Class frmZed
         End If
     End Sub
 
-    Private Sub cbxRemoveOutliers_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveOutliers.CheckedChanged
-        RemoveOutliers = Not RemoveOutliers
-    End Sub
-
     Private Sub cbxView_CheckedChanged(sender As Object, e As EventArgs) Handles cbxView.CheckedChanged
         FlipX = Not FlipX
 
@@ -244,6 +239,11 @@ Public Class frmZed
 
     Private Sub cbxRemoveTilt_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveTilt.CheckedChanged
         RemoveTilt = Not RemoveTilt
+    End Sub
+
+    Private Sub OutlierLevelScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles OutlierLevelScrollBar.Scroll
+        CreatePlots()
+        lblOutlierRemovalLevel.Text = String.Format("Outlier Removal Level {0}", OutlierLevelScrollBar.Value)
     End Sub
 
     Private Sub btnCopyData_Click(sender As Object, e As EventArgs) Handles btnCopyData.Click
@@ -263,5 +263,11 @@ Public Class frmZed
                 bmp.Save(sfd.FileName, Imaging.ImageFormat.Png)
             End If
         End Using
+    End Sub
+
+    Private Sub btnCopyWindow_Click(sender As Object, e As EventArgs) Handles btnCopyWindow.Click
+        Dim bmp As New Bitmap(Width, Height)
+        DrawToBitmap(bmp, New Rectangle(0, 0, Width, Height))
+        Clipboard.SetImage(bmp)
     End Sub
 End Class

@@ -125,6 +125,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -151,14 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
@@ -177,18 +177,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\iconmonstr-cube-6-240.png" />
-    <None Include="Resources\iconmonstr-map-10-240.png" />
-    <None Include="Resources\iconmonstr-fingerprint-5-240.png" />
-    <None Include="Resources\iconmonstr-layer-21-240.png" />
-    <None Include="Resources\iconmonstr-file-37-240.png" />
-    <None Include="Resources\iconmonstr-tree-4-240.png" />
-    <None Include="Resources\iconmonstr-wrench-10-240.png" />
-    <None Include="Resources\iconmonstr-party-9-240.png" />
-    <None Include="Resources\horizFlip.png" />
-    <None Include="Resources\vertFlip.png" />
     <None Include="Resources\rotateArrow.png" />
-    <None Include="Resources\SEYRgrey.png" />
+    <None Include="Resources\iconmonstr-cube-6-72.png" />
+    <None Include="Resources\iconmonstr-layer-21-72.png" />
+    <None Include="Resources\iconmonstr-fingerprint-5-72.png" />
+    <None Include="Resources\iconmonstr-party-9-72.png" />
+    <None Include="Resources\iconmonstr-tree-4-72.png" />
+    <None Include="Resources\iconmonstr-map-10-72.png" />
+    <None Include="Resources\iconmonstr-gear-10-72.png" />
+    <None Include="Resources\iconmonstr-layer-6-72.png" />
+    <None Include="Resources\iconmonstr-cursor-16-32.png" />
+    <None Include="Resources\iconmonstr-cursor-16-32_2.png" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>

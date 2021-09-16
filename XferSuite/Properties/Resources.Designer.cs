@@ -63,9 +63,9 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap horizFlip {
+        internal static System.Drawing.Bitmap iconmonstr_cube_6_72 {
             get {
-                object obj = ResourceManager.GetObject("horizFlip", resourceCulture);
+                object obj = ResourceManager.GetObject("iconmonstr-cube-6-72", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iconmonstr_cube_6_240 {
+        internal static System.Drawing.Bitmap iconmonstr_cursor_16_32 {
             get {
-                object obj = ResourceManager.GetObject("iconmonstr-cube-6-240", resourceCulture);
+                object obj = ResourceManager.GetObject("iconmonstr-cursor-16-32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iconmonstr_file_37_240 {
+        internal static System.Drawing.Bitmap iconmonstr_cursor_16_32_2 {
             get {
-                object obj = ResourceManager.GetObject("iconmonstr-file-37-240", resourceCulture);
+                object obj = ResourceManager.GetObject("iconmonstr-cursor-16-32_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iconmonstr_fingerprint_5_240 {
+        internal static System.Drawing.Bitmap iconmonstr_fingerprint_5_72 {
             get {
-                object obj = ResourceManager.GetObject("iconmonstr-fingerprint-5-240", resourceCulture);
+                object obj = ResourceManager.GetObject("iconmonstr-fingerprint-5-72", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iconmonstr_layer_21_240 {
+        internal static System.Drawing.Bitmap iconmonstr_gear_10_72 {
             get {
-                object obj = ResourceManager.GetObject("iconmonstr-layer-21-240", resourceCulture);
+                object obj = ResourceManager.GetObject("iconmonstr-gear-10-72", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iconmonstr_map_10_240 {
+        internal static System.Drawing.Bitmap iconmonstr_layer_21_72 {
             get {
-                object obj = ResourceManager.GetObject("iconmonstr-map-10-240", resourceCulture);
+                object obj = ResourceManager.GetObject("iconmonstr-layer-21-72", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iconmonstr_party_9_240 {
+        internal static System.Drawing.Bitmap iconmonstr_layer_6_72 {
             get {
-                object obj = ResourceManager.GetObject("iconmonstr-party-9-240", resourceCulture);
+                object obj = ResourceManager.GetObject("iconmonstr-layer-6-72", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,9 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iconmonstr_tree_4_240 {
+        internal static System.Drawing.Bitmap iconmonstr_map_10_72 {
             get {
-                object obj = ResourceManager.GetObject("iconmonstr-tree-4-240", resourceCulture);
+                object obj = ResourceManager.GetObject("iconmonstr-map-10-72", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +143,19 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iconmonstr_wrench_10_240 {
+        internal static System.Drawing.Bitmap iconmonstr_party_9_72 {
             get {
-                object obj = ResourceManager.GetObject("iconmonstr-wrench-10-240", resourceCulture);
+                object obj = ResourceManager.GetObject("iconmonstr-party-9-72", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap iconmonstr_tree_4_72 {
+            get {
+                object obj = ResourceManager.GetObject("iconmonstr-tree-4-72", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -156,26 +166,6 @@ namespace XferSuite.Properties {
         internal static System.Drawing.Bitmap rotateArrow {
             get {
                 object obj = ResourceManager.GetObject("rotateArrow", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap SEYRgrey {
-            get {
-                object obj = ResourceManager.GetObject("SEYRgrey", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap vertFlip {
-            get {
-                object obj = ResourceManager.GetObject("vertFlip", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

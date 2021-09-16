@@ -42,11 +42,11 @@ namespace XferSuite
             this.pnlOutD = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnReset = new System.Windows.Forms.Button();
+            this.lblClip = new System.Windows.Forms.Label();
             this.btnHorizFlip = new System.Windows.Forms.Button();
             this.btnVertFlip = new System.Windows.Forms.Button();
             this.btnRotate = new System.Windows.Forms.Button();
-            this.btnReset = new System.Windows.Forms.Button();
-            this.lblClip = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -78,7 +78,7 @@ namespace XferSuite
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 3F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanel2.Controls.Add(this.pnlInA, 1, 4);
             this.tableLayoutPanel2.Controls.Add(this.pnlInB, 1, 4);
             this.tableLayoutPanel2.Controls.Add(this.pnlInC, 1, 5);
@@ -217,51 +217,6 @@ namespace XferSuite
             this.label2.Text = "Out";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // btnHorizFlip
-            // 
-            this.btnHorizFlip.BackColor = System.Drawing.SystemColors.Control;
-            this.btnHorizFlip.BackgroundImage = global::XferSuite.Properties.Resources.horizFlip;
-            this.btnHorizFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnHorizFlip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnHorizFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHorizFlip.Location = new System.Drawing.Point(121, 65);
-            this.btnHorizFlip.Name = "btnHorizFlip";
-            this.btnHorizFlip.Size = new System.Drawing.Size(43, 36);
-            this.btnHorizFlip.TabIndex = 11;
-            this.btnHorizFlip.Tag = "0";
-            this.btnHorizFlip.UseVisualStyleBackColor = false;
-            this.btnHorizFlip.Click += new System.EventHandler(this.btnClick);
-            // 
-            // btnVertFlip
-            // 
-            this.btnVertFlip.BackColor = System.Drawing.SystemColors.Control;
-            this.btnVertFlip.BackgroundImage = global::XferSuite.Properties.Resources.vertFlip;
-            this.btnVertFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnVertFlip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnVertFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVertFlip.Location = new System.Drawing.Point(121, 107);
-            this.btnVertFlip.Name = "btnVertFlip";
-            this.btnVertFlip.Size = new System.Drawing.Size(43, 36);
-            this.btnVertFlip.TabIndex = 12;
-            this.btnVertFlip.Tag = "1";
-            this.btnVertFlip.UseVisualStyleBackColor = false;
-            this.btnVertFlip.Click += new System.EventHandler(this.btnClick);
-            // 
-            // btnRotate
-            // 
-            this.btnRotate.BackColor = System.Drawing.SystemColors.Control;
-            this.btnRotate.BackgroundImage = global::XferSuite.Properties.Resources.rotateArrow;
-            this.btnRotate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnRotate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnRotate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRotate.Location = new System.Drawing.Point(121, 149);
-            this.btnRotate.Name = "btnRotate";
-            this.btnRotate.Size = new System.Drawing.Size(43, 36);
-            this.btnRotate.TabIndex = 13;
-            this.btnRotate.Tag = "2";
-            this.btnRotate.UseVisualStyleBackColor = false;
-            this.btnRotate.Click += new System.EventHandler(this.btnClick);
-            // 
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -289,6 +244,51 @@ namespace XferSuite
             this.lblClip.Text = "Clipboard contains an m x n matrix";
             this.lblClip.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // btnHorizFlip
+            // 
+            this.btnHorizFlip.BackColor = System.Drawing.SystemColors.Control;
+            this.btnHorizFlip.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_cursor_16_32;
+            this.btnHorizFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnHorizFlip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnHorizFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHorizFlip.Location = new System.Drawing.Point(121, 65);
+            this.btnHorizFlip.Name = "btnHorizFlip";
+            this.btnHorizFlip.Size = new System.Drawing.Size(43, 36);
+            this.btnHorizFlip.TabIndex = 11;
+            this.btnHorizFlip.Tag = "0";
+            this.btnHorizFlip.UseVisualStyleBackColor = false;
+            this.btnHorizFlip.Click += new System.EventHandler(this.btnClick);
+            // 
+            // btnVertFlip
+            // 
+            this.btnVertFlip.BackColor = System.Drawing.SystemColors.Control;
+            this.btnVertFlip.BackgroundImage = global::XferSuite.Properties.Resources.iconmonstr_cursor_16_32_2;
+            this.btnVertFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnVertFlip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnVertFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVertFlip.Location = new System.Drawing.Point(121, 107);
+            this.btnVertFlip.Name = "btnVertFlip";
+            this.btnVertFlip.Size = new System.Drawing.Size(43, 36);
+            this.btnVertFlip.TabIndex = 12;
+            this.btnVertFlip.Tag = "1";
+            this.btnVertFlip.UseVisualStyleBackColor = false;
+            this.btnVertFlip.Click += new System.EventHandler(this.btnClick);
+            // 
+            // btnRotate
+            // 
+            this.btnRotate.BackColor = System.Drawing.SystemColors.Control;
+            this.btnRotate.BackgroundImage = global::XferSuite.Properties.Resources.rotateArrow;
+            this.btnRotate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnRotate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnRotate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRotate.Location = new System.Drawing.Point(121, 149);
+            this.btnRotate.Name = "btnRotate";
+            this.btnRotate.Size = new System.Drawing.Size(43, 36);
+            this.btnRotate.TabIndex = 13;
+            this.btnRotate.Tag = "2";
+            this.btnRotate.UseVisualStyleBackColor = false;
+            this.btnRotate.Click += new System.EventHandler(this.btnClick);
+            // 
             // MapFlip
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -296,7 +296,9 @@ namespace XferSuite
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.ClientSize = new System.Drawing.Size(293, 197);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "MapFlip";
             this.Text = "MapFlip";
             this.Activated += new System.EventHandler(this.MapFlip_Activated);
