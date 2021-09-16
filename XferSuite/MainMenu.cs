@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -118,6 +120,22 @@ namespace XferSuite
                 default:
                     MessageBox.Show("Invalid file", "XferSuite");
                     return false;
+            }
+        }
+
+        private void MainMenu_Load(object sender, EventArgs e)
+        {
+            if (Debugger.IsAttached)
+            {
+                Bitmap bmp = new Bitmap(Width, Height);
+                DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
+                DirectoryInfo directoryInfo = new DirectoryInfo(Application.StartupPath);
+                string desiredPath;
+                if (directoryInfo.FullName.Contains("Debug"))
+                    desiredPath = directoryInfo.FullName.Replace("bin\\Debug", "");
+                else
+                    desiredPath = directoryInfo.FullName.Replace("bin\\Release", "");
+                bmp.Save(desiredPath + "\\Main.png");
             }
         }
     }

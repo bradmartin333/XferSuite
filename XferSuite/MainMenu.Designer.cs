@@ -243,6 +243,7 @@ namespace XferSuite
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XferSuite v1.18";
+            this.Load += new System.EventHandler(this.MainMenu_Load);
             this.tableLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
