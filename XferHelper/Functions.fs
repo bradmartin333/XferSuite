@@ -348,16 +348,22 @@ module Report =
         enum<State> num
 
     type Entry = { ImageNumber:int;
-                   Row:int;
-                   Col:int;
+                   XCopy:int;
+                   YCopy:int;
                    Name:string;
-                   State:State; }
+                   State:State;
+                   RR:int;
+                   RC:int;
+                   R:int;
+                   C:int;
+                   X:float;
+                   Y:float;}
     
     let toEntry (data:string) =
         let columns = data.Split('\t')
         let ImageNumber = int columns.[0]  
-        let Row = int columns.[1]
-        let Col = int columns.[2]
+        let XCopy = int columns.[1]
+        let YCopy = int columns.[2]
         let Name = string columns.[3]
         let State = 
             match string columns.[4] with
@@ -366,11 +372,23 @@ module Report =
                 | "Null" -> State.Null
                 | "Misaligned" -> State.Misaligned
                 | _ -> State.Other
+        let RR = int columns.[5]
+        let RC = int columns.[6]
+        let R = int columns.[7]
+        let C = int columns.[8]
+        let X = float columns.[9]
+        let Y = float columns.[10]
         { ImageNumber = ImageNumber;
-          Row = Row;
-          Col = Col;
+          XCopy = XCopy;
+          YCopy = YCopy;
           Name = Name;
-          State = State }
+          State = State;
+          RR = RR;
+          RC = RC;
+          R = R;
+          C = C;
+          X = X;
+          Y = Y;}
     
     type Bucket =
         | Buffer = 0
@@ -406,14 +424,14 @@ module Report =
 
     let getNumX (data:Entry[]) =
         data
-        |> Array.map(fun x -> x.Row)
+        |> Array.map(fun x -> x.XCopy)
         |> Array.toSeq
         |> Seq.distinct
         |> Seq.length
 
     let getNumY (data:Entry[]) =
         data
-        |> Array.map(fun x -> x.Col)
+        |> Array.map(fun x -> x.YCopy)
         |> Array.toSeq
         |> Seq.distinct
         |> Seq.length
@@ -430,6 +448,9 @@ module Report =
         data
         |> Array.filter(fun x -> x.ImageNumber = num)
 
+    let getRegion (data:Entry[]) =
+        [|data.[0].RR; data.[0].RC|]
+
     let getCell (data:Entry[], row:int, col:int) =
         data
-        |> Array.filter(fun x -> x.Row = row && x.Col = col)
+        |> Array.filter(fun x -> x.XCopy = row && x.YCopy = col)

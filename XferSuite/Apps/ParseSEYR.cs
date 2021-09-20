@@ -4,6 +4,12 @@ using BrightIdeasSoftware;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.WindowsForms;
+using OxyPlot.Annotations;
+using OxyPlot.Axes;
+using System.Diagnostics;
 
 namespace XferSuite
 {
@@ -41,19 +47,38 @@ namespace XferSuite
             Show();
         }
 
-        private void btnOpenReport_Click(object sender, EventArgs e)
+        private void btnShowScatterplot_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            Form form = new Form()
             {
-                openFileDialog.RestoreDirectory = true;
-                openFileDialog.Title = "Open a SEYR Report";
-                openFileDialog.Filter = "txt file (*.txt)|*.txt";
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    Path = openFileDialog.FileName;
-                    OpenReport();
-                }
+                FormBorderStyle = FormBorderStyle.FixedToolWindow,
+                Text = "SEYR Report Scatter"
+            };
+            PlotView plotView = new PlotView()
+            {
+                Dock = DockStyle.Fill
+            };
+            PlotModel plotModel = new PlotModel();
+            ScatterSeries[] scatters = Parse();
+            foreach (ScatterSeries series in scatters)
+            {
+                plotModel.Series.Add(series);
             }
+            LinearAxis Xaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "X Position"
+            };
+            LinearAxis Yaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "Y Position"
+            };
+            plotModel.Axes.Add(Xaxis);
+            plotModel.Axes.Add(Yaxis);
+            plotView.Model = plotModel;
+            form.Controls.Add(plotView);
+            form.Show();
         }
 
         private void OpenReport()
@@ -121,9 +146,13 @@ namespace XferSuite
                 feature.Requirements = requirements.ToArray();
         }
 
-        private void btnParse_Click(object sender, EventArgs e)
+        private ScatterSeries[] Parse()
         {
-            rtb.Text = "THIS IS A DEMO\n";
+            rtb.Text = "RR\tRC\tYield\n";
+
+            ScatterSeries passScatter = new ScatterSeries() { MarkerFill = OxyColors.LawnGreen, TrackerFormatString = "{Tag}" };
+            ScatterSeries failScatter = new ScatterSeries() { MarkerFill = OxyColors.Red, TrackerFormatString = "{Tag}" };
+
             int fieldNum = 0;
             double passNum = 0;
             double failNum = 0;
@@ -131,7 +160,8 @@ namespace XferSuite
             int num = Report.getNumImages(Data) + 1;
             int numX = Report.getNumX(Data);
             int numY = Report.getNumY(Data);
-            for (int k = 0; k < num; k++)
+            int[] lastRegion = Report.getRegion(Report.getImage(Data, 1));
+            for (int k = 1; k < num; k++)
             {
                 var thisImg = Report.getImage(Data, k);
 
@@ -164,22 +194,49 @@ namespace XferSuite
 
                         if (needOneList.Count > 0 && !needOneList.Contains(true)) pass = false;
 
+                        double thisX = thisCell[0].X;
+                        double thisY = thisCell[0].Y;
+                        if (thisX == -1 || thisY == -1)
+                        {
+                            thisX = (k - 1) % Math.Sqrt(num - 1);
+                            thisY = (k - 1) / Math.Sqrt(num - 1) - (thisX / 10);
+                        }
+                        thisX += (i - ((double)numX / 2)) * (1 / (double)numX);
+                        thisY -= (j - ((double)numY / 2)) * (1 / (double)numY);
+
+                        string thisTag = string.Format("X: {0}\nY: {1}\nRR: {2}\nRC: {3}\nR: {4}\nC: {5}",
+                            thisX, thisY, thisCell[0].RR, thisCell[0].RC, thisCell[0].R, thisCell[0].C);
+
                         if (pass)
+                        {
                             passNum++;
+                            passScatter.Points.Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                        }
                         else
+                        {
                             failNum++;
+                            failScatter.Points.Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                        }
                     }
                 }
 
-                if (passNum + failNum == 1600)
+                int[] thisRegion = Report.getRegion(thisImg);
+                if (thisRegion != lastRegion)
                 {
+                    lastRegion = thisRegion;
                     fieldNum++;
-                    rtb.Text += string.Format("{0}\n", (passNum / (passNum + failNum)).ToString("P"));
+                    rtb.Text += string.Format("{0}\t{1}\t{2}\n", thisRegion[0], thisRegion[1], (passNum / (passNum + failNum)).ToString("P"));
                     passNum = 0;
                     failNum = 0;
                 }
             }
-            rtb.Text += string.Format("{0}\n", (passNum / (passNum + failNum)).ToString("P"));
+
+            return new ScatterSeries[] { passScatter, failScatter };
+        }
+
+        private void btnParse_Click(object sender, EventArgs e)
+        {
+            Parse();
         }
 
         private void btnCopy_Click(object sender, EventArgs e)

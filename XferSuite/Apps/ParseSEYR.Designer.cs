@@ -44,13 +44,13 @@ namespace XferSuite
             this.cbxFail = new System.Windows.Forms.CheckBox();
             this.cbxNull = new System.Windows.Forms.CheckBox();
             this.cbxMisaligned = new System.Windows.Forms.CheckBox();
+            this.btnApplyToAll = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnCopy = new System.Windows.Forms.Button();
             this.btnParse = new System.Windows.Forms.Button();
             this.btnResetColumns = new System.Windows.Forms.Button();
+            this.btnShowScatterplot = new System.Windows.Forms.Button();
             this.rtb = new System.Windows.Forms.RichTextBox();
-            this.btnApplyToAll = new System.Windows.Forms.Button();
-            this.btnOpenReport = new System.Windows.Forms.Button();
-            this.btnCopy = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -79,7 +79,7 @@ namespace XferSuite
             this.tableLayoutPanel.RowCount = 2;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.Size = new System.Drawing.Size(301, 350);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(568, 350);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // olvNeedOne
@@ -92,10 +92,10 @@ namespace XferSuite
             this.olvNeedOne.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvNeedOne.HideSelection = false;
             this.olvNeedOne.IsSimpleDropSink = true;
-            this.olvNeedOne.Location = new System.Drawing.Point(203, 3);
+            this.olvNeedOne.Location = new System.Drawing.Point(381, 3);
             this.olvNeedOne.Name = "olvNeedOne";
             this.olvNeedOne.ShowGroups = false;
-            this.olvNeedOne.Size = new System.Drawing.Size(95, 174);
+            this.olvNeedOne.Size = new System.Drawing.Size(184, 174);
             this.olvNeedOne.TabIndex = 2;
             this.olvNeedOne.Tag = "2";
             this.olvNeedOne.UseCompatibleStateImageBehavior = false;
@@ -117,10 +117,10 @@ namespace XferSuite
             this.olvRequire.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvRequire.HideSelection = false;
             this.olvRequire.IsSimpleDropSink = true;
-            this.olvRequire.Location = new System.Drawing.Point(103, 3);
+            this.olvRequire.Location = new System.Drawing.Point(192, 3);
             this.olvRequire.Name = "olvRequire";
             this.olvRequire.ShowGroups = false;
-            this.olvRequire.Size = new System.Drawing.Size(94, 174);
+            this.olvRequire.Size = new System.Drawing.Size(183, 174);
             this.olvRequire.TabIndex = 1;
             this.olvRequire.Tag = "1";
             this.olvRequire.UseCompatibleStateImageBehavior = false;
@@ -145,7 +145,7 @@ namespace XferSuite
             this.olvBuffer.Location = new System.Drawing.Point(3, 3);
             this.olvBuffer.Name = "olvBuffer";
             this.olvBuffer.ShowGroups = false;
-            this.olvBuffer.Size = new System.Drawing.Size(94, 174);
+            this.olvBuffer.Size = new System.Drawing.Size(183, 174);
             this.olvBuffer.TabIndex = 0;
             this.olvBuffer.Tag = "0";
             this.olvBuffer.UseCompatibleStateImageBehavior = false;
@@ -170,9 +170,9 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.Controls.Add(this.btnApplyToAll);
             this.flowLayoutPanelCriteria.Enabled = false;
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(9, 183);
+            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(46, 183);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
-            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(82, 164);
+            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(97, 164);
             this.flowLayoutPanelCriteria.TabIndex = 4;
             // 
             // label1
@@ -181,7 +181,7 @@ namespace XferSuite
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 26);
+            this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Functional Criteria";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -191,9 +191,9 @@ namespace XferSuite
             this.lblSelectedFeature.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSelectedFeature.AutoSize = true;
             this.lblSelectedFeature.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSelectedFeature.Location = new System.Drawing.Point(3, 26);
+            this.lblSelectedFeature.Location = new System.Drawing.Point(3, 13);
             this.lblSelectedFeature.Name = "lblSelectedFeature";
-            this.lblSelectedFeature.Size = new System.Drawing.Size(76, 12);
+            this.lblSelectedFeature.Size = new System.Drawing.Size(91, 12);
             this.lblSelectedFeature.TabIndex = 7;
             this.lblSelectedFeature.Text = "N/A";
             this.lblSelectedFeature.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -204,9 +204,9 @@ namespace XferSuite
             this.cbxPass.AutoSize = true;
             this.cbxPass.Checked = true;
             this.cbxPass.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbxPass.Location = new System.Drawing.Point(3, 41);
+            this.cbxPass.Location = new System.Drawing.Point(3, 28);
             this.cbxPass.Name = "cbxPass";
-            this.cbxPass.Size = new System.Drawing.Size(76, 17);
+            this.cbxPass.Size = new System.Drawing.Size(91, 17);
             this.cbxPass.TabIndex = 2;
             this.cbxPass.Tag = "0";
             this.cbxPass.Text = "Pass";
@@ -217,9 +217,9 @@ namespace XferSuite
             // 
             this.cbxFail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxFail.AutoSize = true;
-            this.cbxFail.Location = new System.Drawing.Point(3, 64);
+            this.cbxFail.Location = new System.Drawing.Point(3, 51);
             this.cbxFail.Name = "cbxFail";
-            this.cbxFail.Size = new System.Drawing.Size(76, 17);
+            this.cbxFail.Size = new System.Drawing.Size(91, 17);
             this.cbxFail.TabIndex = 3;
             this.cbxFail.Tag = "1";
             this.cbxFail.Text = "Fail";
@@ -230,9 +230,9 @@ namespace XferSuite
             // 
             this.cbxNull.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxNull.AutoSize = true;
-            this.cbxNull.Location = new System.Drawing.Point(3, 87);
+            this.cbxNull.Location = new System.Drawing.Point(3, 74);
             this.cbxNull.Name = "cbxNull";
-            this.cbxNull.Size = new System.Drawing.Size(76, 17);
+            this.cbxNull.Size = new System.Drawing.Size(91, 17);
             this.cbxNull.TabIndex = 4;
             this.cbxNull.Tag = "2";
             this.cbxNull.Text = "Null";
@@ -243,64 +243,18 @@ namespace XferSuite
             // 
             this.cbxMisaligned.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxMisaligned.AutoSize = true;
-            this.cbxMisaligned.Location = new System.Drawing.Point(3, 110);
+            this.cbxMisaligned.Location = new System.Drawing.Point(3, 97);
             this.cbxMisaligned.Name = "cbxMisaligned";
-            this.cbxMisaligned.Size = new System.Drawing.Size(76, 17);
+            this.cbxMisaligned.Size = new System.Drawing.Size(91, 17);
             this.cbxMisaligned.TabIndex = 5;
             this.cbxMisaligned.Tag = "3";
             this.cbxMisaligned.Text = "Misaligned";
             this.cbxMisaligned.UseVisualStyleBackColor = true;
             this.cbxMisaligned.CheckedChanged += new System.EventHandler(this.cbx_CheckedChanged);
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.btnCopy);
-            this.flowLayoutPanel1.Controls.Add(this.btnParse);
-            this.flowLayoutPanel1.Controls.Add(this.btnResetColumns);
-            this.flowLayoutPanel1.Controls.Add(this.btnOpenReport);
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(210, 183);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(81, 164);
-            this.flowLayoutPanel1.TabIndex = 5;
-            // 
-            // btnParse
-            // 
-            this.btnParse.Location = new System.Drawing.Point(3, 85);
-            this.btnParse.Name = "btnParse";
-            this.btnParse.Size = new System.Drawing.Size(75, 35);
-            this.btnParse.TabIndex = 4;
-            this.btnParse.Text = "Parse Report";
-            this.btnParse.UseVisualStyleBackColor = true;
-            this.btnParse.Click += new System.EventHandler(this.btnParse_Click);
-            // 
-            // btnResetColumns
-            // 
-            this.btnResetColumns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetColumns.Location = new System.Drawing.Point(3, 44);
-            this.btnResetColumns.Name = "btnResetColumns";
-            this.btnResetColumns.Size = new System.Drawing.Size(75, 35);
-            this.btnResetColumns.TabIndex = 3;
-            this.btnResetColumns.Text = "Reset Columns";
-            this.btnResetColumns.UseVisualStyleBackColor = true;
-            this.btnResetColumns.Click += new System.EventHandler(this.btnResetColumns_Click);
-            // 
-            // rtb
-            // 
-            this.rtb.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtb.Location = new System.Drawing.Point(103, 183);
-            this.rtb.Name = "rtb";
-            this.rtb.Size = new System.Drawing.Size(94, 164);
-            this.rtb.TabIndex = 6;
-            this.rtb.Text = "";
-            // 
             // btnApplyToAll
             // 
-            this.btnApplyToAll.Location = new System.Drawing.Point(3, 133);
+            this.btnApplyToAll.Location = new System.Drawing.Point(3, 120);
             this.btnApplyToAll.Name = "btnApplyToAll";
             this.btnApplyToAll.Size = new System.Drawing.Size(75, 23);
             this.btnApplyToAll.TabIndex = 8;
@@ -308,15 +262,19 @@ namespace XferSuite
             this.btnApplyToAll.UseVisualStyleBackColor = true;
             this.btnApplyToAll.Click += new System.EventHandler(this.btnApplyToAll_Click);
             // 
-            // btnOpenReport
+            // flowLayoutPanel1
             // 
-            this.btnOpenReport.Location = new System.Drawing.Point(3, 3);
-            this.btnOpenReport.Name = "btnOpenReport";
-            this.btnOpenReport.Size = new System.Drawing.Size(75, 35);
-            this.btnOpenReport.TabIndex = 5;
-            this.btnOpenReport.Text = "Open Report";
-            this.btnOpenReport.UseVisualStyleBackColor = true;
-            this.btnOpenReport.Click += new System.EventHandler(this.btnOpenReport_Click);
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.btnCopy);
+            this.flowLayoutPanel1.Controls.Add(this.btnResetColumns);
+            this.flowLayoutPanel1.Controls.Add(this.btnShowScatterplot);
+            this.flowLayoutPanel1.Controls.Add(this.btnParse);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(432, 183);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(81, 164);
+            this.flowLayoutPanel1.TabIndex = 5;
             // 
             // btnCopy
             // 
@@ -328,11 +286,53 @@ namespace XferSuite
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
             // 
+            // btnParse
+            // 
+            this.btnParse.Location = new System.Drawing.Point(3, 3);
+            this.btnParse.Name = "btnParse";
+            this.btnParse.Size = new System.Drawing.Size(75, 35);
+            this.btnParse.TabIndex = 4;
+            this.btnParse.Text = "Parse Report";
+            this.btnParse.UseVisualStyleBackColor = true;
+            this.btnParse.Click += new System.EventHandler(this.btnParse_Click);
+            // 
+            // btnResetColumns
+            // 
+            this.btnResetColumns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetColumns.Location = new System.Drawing.Point(3, 85);
+            this.btnResetColumns.Name = "btnResetColumns";
+            this.btnResetColumns.Size = new System.Drawing.Size(75, 35);
+            this.btnResetColumns.TabIndex = 3;
+            this.btnResetColumns.Text = "Reset Columns";
+            this.btnResetColumns.UseVisualStyleBackColor = true;
+            this.btnResetColumns.Click += new System.EventHandler(this.btnResetColumns_Click);
+            // 
+            // btnShowScatterplot
+            // 
+            this.btnShowScatterplot.Location = new System.Drawing.Point(3, 44);
+            this.btnShowScatterplot.Name = "btnShowScatterplot";
+            this.btnShowScatterplot.Size = new System.Drawing.Size(75, 35);
+            this.btnShowScatterplot.TabIndex = 5;
+            this.btnShowScatterplot.Text = "Show Scatterplot";
+            this.btnShowScatterplot.UseVisualStyleBackColor = true;
+            this.btnShowScatterplot.Click += new System.EventHandler(this.btnShowScatterplot_Click);
+            // 
+            // rtb
+            // 
+            this.rtb.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtb.Location = new System.Drawing.Point(192, 183);
+            this.rtb.Name = "rtb";
+            this.rtb.Size = new System.Drawing.Size(183, 164);
+            this.rtb.TabIndex = 6;
+            this.rtb.Text = "";
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(301, 350);
+            this.ClientSize = new System.Drawing.Size(568, 350);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ParseSEYR";
@@ -370,7 +370,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnParse;
         private System.Windows.Forms.RichTextBox rtb;
         private System.Windows.Forms.Button btnApplyToAll;
-        private System.Windows.Forms.Button btnOpenReport;
+        private System.Windows.Forms.Button btnShowScatterplot;
         private System.Windows.Forms.Button btnCopy;
     }
 }

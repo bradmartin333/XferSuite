@@ -55,7 +55,12 @@ Public Class frmScanSelect
                 End If
                 Scans.Add(thisScan)
             Else
-                Scans(scanIdx).Data.Add(XferHelper.Zed.toPosition(line))
+                Try
+                    Scans(scanIdx).Data.Add(XferHelper.Zed.toPosition(line))
+                Catch ex As Exception
+                    MessageBox.Show(text:="Invalid File", caption:="XYZscan")
+                    Return
+                End Try
             End If
         End While
     End Sub
