@@ -9,11 +9,23 @@ using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 using OxyPlot.Axes;
 using System.Drawing;
+using System.ComponentModel;
 
 namespace XferSuite
 {
     public partial class ParseSEYR : Form
     {
+        private bool _FlipRC = false;
+        [Category("User Parameters")]
+        public bool FlipRC
+        {
+            get => _FlipRC;
+            set
+            {
+                _FlipRC = value;
+            }
+        }
+
         private string Path { get; set; }
         private Report.Entry[] Data { get; set; }
         private Report.Criteria[] Features { get; set; }
@@ -206,13 +218,27 @@ namespace XferSuite
 
                         double thisX = thisCell[0].X;
                         double thisY = thisCell[0].Y;
-                        if (thisX == -1 || thisY == -1)
+
+                        if (_FlipRC)
                         {
-                            thisX = (k - 1) % Math.Sqrt(num - 1);
-                            thisY = (k - 1) / Math.Sqrt(num - 1) - (thisX / 10);
+                            if (thisX == -1 || thisY == -1)
+                            {
+                                thisY = (k - 1) % Math.Sqrt(num - 1);
+                                thisX = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
+                            }
+                            thisX += (i - ((double)numX / 2)) * Pitch.X;
+                            thisY -= (j - ((double)numY / 2)) * Pitch.Y;
                         }
-                        thisX += (i - ((double)numX / 2)) * Pitch.X;
-                        thisY -= (j - ((double)numY / 2)) * Pitch.Y;
+                        else
+                        {
+                            if (thisX == -1 || thisY == -1)
+                            {
+                                thisX = (k - 1) % Math.Sqrt(num - 1);
+                                thisY = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
+                            }
+                            thisX += (i - ((double)numX / 2)) * Pitch.X;
+                            thisY -= (j - ((double)numY / 2)) * Pitch.Y;
+                        }
 
                         string thisTag = string.Format("X: {0}\nY: {1}\nRR: {2}\nRC: {3}\nR: {4}\nC: {5}",
                             thisX, thisY, thisCell[0].RR, thisCell[0].RC, thisCell[0].R, thisCell[0].C);
