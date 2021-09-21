@@ -5,7 +5,7 @@
 ![image](/XferSuite/Main.png)
 
 A toolbox for MTP.
-Open the settings app to tinker with other open apps.
+Open the settings app to tinker with other open apps and check for updates
 ___
 ### Inlinepositions
 The reincarnation of MetroGraphs. Most of the same information, but much faster.
