@@ -10,6 +10,7 @@ using OxyPlot.WindowsForms;
 using OxyPlot.Axes;
 using System.Drawing;
 using System.ComponentModel;
+using System.IO;
 
 namespace XferSuite
 {
@@ -23,6 +24,17 @@ namespace XferSuite
             set
             {
                 _FlipRC = value;
+            }
+        }
+
+        private bool _ShowPlotAxes = false;
+        [Category("User Parameters")]
+        public bool ShowPlotAxes
+        {
+            get => _ShowPlotAxes;
+            set
+            {
+                _ShowPlotAxes = value;
             }
         }
 
@@ -73,7 +85,7 @@ namespace XferSuite
         {
             Form form = new Form()
             {
-                FormBorderStyle = FormBorderStyle.FixedToolWindow,
+                FormBorderStyle = FormBorderStyle.None,
                 Text = "SEYR Report Scatter"
             };
             PlotView plotView = new PlotView()
@@ -89,18 +101,26 @@ namespace XferSuite
             LinearAxis Xaxis = new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
-                Title = "X Position"
+                Title = "X Position",
+                IsAxisVisible = ShowPlotAxes
             };
             LinearAxis Yaxis = new LinearAxis()
             {
                 Position = AxisPosition.Left,
-                Title = "Y Position"
+                Title = "Y Position",
+                IsAxisVisible = ShowPlotAxes
             };
             plotModel.Axes.Add(Xaxis);
             plotModel.Axes.Add(Yaxis);
             plotView.Model = plotModel;
             form.Controls.Add(plotView);
             form.Show();
+
+            Bitmap bitmap = new Bitmap(form.Width, form.Height);
+            form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
+            Clipboard.SetImage(bitmap);
+
+            form.FormBorderStyle = FormBorderStyle.SizableToolWindow;
         }
 
         private void OpenReport()
@@ -172,8 +192,8 @@ namespace XferSuite
         {
             rtb.Text = "RR\tRC\tYield\n";
 
-            ScatterSeries passScatter = new ScatterSeries() { MarkerFill = OxyColors.LawnGreen, TrackerFormatString = "{Tag}" };
-            ScatterSeries failScatter = new ScatterSeries() { MarkerFill = OxyColors.Red, TrackerFormatString = "{Tag}" };
+            ScatterSeries passScatter = new ScatterSeries() { MarkerFill = OxyColors.LawnGreen, MarkerSize = 1, TrackerFormatString = "{Tag}" };
+            ScatterSeries failScatter = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = 1, TrackerFormatString = "{Tag}" };
 
             int fieldNum = 0;
             double passNum = 0;
