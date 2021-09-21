@@ -141,10 +141,10 @@ Public Class frmZed
         End If
 
         For Each d In FilteredData
-            ScatterDataX.Add(New ScatterPoint(d.X, d.Z))
-            ScatterDataY.Add(New ScatterPoint(d.Y, d.Z))
-            ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, d.Z))
-            HistData.Add(d.Z)
+            ScatterDataX.Add(New ScatterPoint(d.X, d.Z * 1000.0))
+            ScatterDataY.Add(New ScatterPoint(d.Y, d.Z * 1000.0))
+            ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, d.Z * 1000.0))
+            HistData.Add(d.Z * 1000.0)
         Next
 
         lblNumData.Text = String.Format("{0}/{1} Points Removed", Data.Count() - FilteredData.Count(), Data.Count())
@@ -153,12 +153,12 @@ Public Class frmZed
     Private Sub CreateHeatmap()
         Dim plot As New PlotModel
         Dim zScatter As New ScatterSeries()
-        zScatter.TrackerFormatString = zScatter.TrackerFormatString + vbNewLine + "Z Position (mm): {Value}"
+        zScatter.TrackerFormatString = zScatter.TrackerFormatString + vbNewLine + "Z Position (μm): {Value}"
         plot.Series.Add(zScatter)
         plot.Axes.Add(New LinearAxis With {.Title = "X Position (mm)", .Position = AxisPosition.Bottom})
         plot.Axes.Add(New LinearAxis With {.Title = "Y Position (mm)", .Position = AxisPosition.Left})
         plot.Axes.Add(New LinearColorAxis With {
-            .Title = "Z Position (mm)",
+            .Title = "Z Position (μm)",
             .Position = AxisPosition.Right,
             .Key = "Color Axis",
             .Maximum = HistMax,
@@ -175,8 +175,9 @@ Public Class frmZed
         Dim median = Stats.median(HistData.ToArray())
         Dim stdDev = Stats.stdDev(HistData.ToArray())
         Dim my3sig = stdDev * 3
-        Dim range = Math.Round((HistData.Max - HistData.Min) * 1000, 1)
-        plot.Title = "Range = " & range.ToString & " μm   Median = " & String.Format("{0:N3}", median) & " mm   3Sigma = " & String.Format("{0:N3}", my3sig)
+        Dim range = HistData.Max - HistData.Min
+        plot.Title = String.Format("Range = {0} μm   Median = {1} μm   3Sigma = {2} μm", Math.Round(range, 1), Math.Round(median, 1), Math.Round(my3sig, 1))
+        'plot.Title = "Range = " & range.ToString & " μm   Median = " & String.Format("{0:N3}", median) & " μm   3Sigma = " & String.Format("{0:N3}", my3sig)
 
         Dim histSeries As New HistogramSeries With {.FillColor = OxyColors.DarkBlue}
         Dim binningOptions = New BinningOptions(BinningOutlierMode.CountOutliers, BinningIntervalType.InclusiveLowerBound, BinningExtremeValueMode.IncludeExtremeValues)
@@ -184,7 +185,7 @@ Public Class frmZed
         histSeries.Items.AddRange(HistogramHelpers.Collect(HistData, binBreaks, binningOptions))
         plot.Series.Add(histSeries)
 
-        plot.Axes.Add(New LinearAxis With {.Title = "Height Measurement (mm)", .Position = AxisPosition.Bottom})
+        plot.Axes.Add(New LinearAxis With {.Title = "Height Measurement (μm)", .Position = AxisPosition.Bottom})
         plot.Axes.Add(New LinearAxis With {.Title = "Relative Frequency", .Position = AxisPosition.Left})
         HistPlot.Model = plot
     End Sub
@@ -215,7 +216,7 @@ Public Class frmZed
         plot.Series.Add(scatter)
         plot.Series.Add(polyScatter)
         plot.Axes.Add(New LinearAxis With {.Title = "Position (mm)", .Position = AxisPosition.Bottom})
-        plot.Axes.Add(New LinearAxis With {.Title = "Height (mm)", .Position = AxisPosition.Left})
+        plot.Axes.Add(New LinearAxis With {.Title = "Height (μm)", .Position = AxisPosition.Left})
 
         Dim rSquared = Zed.rSquared(polyScatter.Points.ToArray(), scatterData.ToArray())
         If coord Then
@@ -250,7 +251,7 @@ Public Class frmZed
         Dim builder As New Text.StringBuilder
         For Each scatter As ScatterPoint In ScatterDataZ
             builder.Append(String.Format("{0}{1}{2}{3}{4}{5}",
-                                    scatter.X, vbTab, scatter.Y, vbTab, scatter.Value, vbNewLine))
+                                    scatter.X, vbTab, scatter.Y, vbTab, scatter.Value / 1000.0, vbNewLine))
         Next
         Clipboard.SetText(builder.ToString())
     End Sub
