@@ -7,9 +7,8 @@ using System.Collections.Generic;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
-using OxyPlot.Annotations;
 using OxyPlot.Axes;
-using System.Diagnostics;
+using System.Drawing;
 
 namespace XferSuite
 {
@@ -20,10 +19,21 @@ namespace XferSuite
         private Report.Criteria[] Features { get; set; }
         private Report.Criteria SelectedFeature { get; set; }
 
+        private PointF Pitch = PointF.Empty;
+
         public ParseSEYR(string path)
         {
             InitializeComponent();
             Path = path;
+            string[] splitPath = path.Split('_');
+            try
+            {
+                Pitch = new PointF(float.Parse(splitPath[splitPath.Length - 2]), float.Parse(splitPath.Last().Replace(".txt", "")));
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "Invalid SEYR report filename - scatteplot not functional", caption: "Parse SEYR Report");
+            }
             OpenReport();
 
             SimpleDragSource bufferSource = (SimpleDragSource)olvBuffer.DragSource;
@@ -201,8 +211,8 @@ namespace XferSuite
                             thisX = (k - 1) % Math.Sqrt(num - 1);
                             thisY = (k - 1) / Math.Sqrt(num - 1) - (thisX / 10);
                         }
-                        thisX += (i - ((double)numX / 2)) * (1 / (double)numX);
-                        thisY -= (j - ((double)numY / 2)) * (1 / (double)numY);
+                        thisX += (i - ((double)numX / 2)) * Pitch.X;
+                        thisY -= (j - ((double)numY / 2)) * Pitch.Y;
 
                         string thisTag = string.Format("X: {0}\nY: {1}\nRR: {2}\nRC: {3}\nR: {4}\nC: {5}",
                             thisX, thisY, thisCell[0].RR, thisCell[0].RC, thisCell[0].R, thisCell[0].C);
@@ -221,7 +231,7 @@ namespace XferSuite
                 }
 
                 int[] thisRegion = Report.getRegion(thisImg);
-                if (thisRegion != lastRegion)
+                if (thisRegion[0] != lastRegion[0] || thisRegion[1] != lastRegion[1])
                 {
                     lastRegion = thisRegion;
                     fieldNum++;
@@ -230,6 +240,7 @@ namespace XferSuite
                     failNum = 0;
                 }
             }
+            rtb.Text += string.Format("{0}\t{1}\t{2}\n", lastRegion[0], lastRegion[1], (passNum / (passNum + failNum)).ToString("P"));
 
             return new ScatterSeries[] { passScatter, failScatter };
         }
