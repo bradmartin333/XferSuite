@@ -11,7 +11,7 @@ namespace XferSuite
     public partial class MainMenu : Form
     {
         public static int MajorVersion = 2;
-        public static int MinorVerson = 1;
+        public static int MinorVerson = 2;
 
         public MainMenu()
         {
@@ -43,9 +43,12 @@ namespace XferSuite
                     path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
                     if (path == null)
                         return;
-                    if (!VerifyMetro(path))
-                        return;
-                    form = new MetroGraphs(Metro.data(path)) { Text = new FileInfo(path).Name };
+                    using (new HourGlass())
+                    {
+                        if (!VerifyMetro(path))
+                            return;
+                        form = new MetroGraphs(Metro.data(path)) { Text = new FileInfo(path).Name };
+                    }
                     break;
                 case 1:
                     path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
@@ -57,21 +60,30 @@ namespace XferSuite
                     path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
                     if (path == null)
                         return;
-                    if (!VerifyMetro(path))
-                        return;
-                    form = new Fingerprinting(Metro.data(path)) { Text = new FileInfo(path).Name };
+                    using (new HourGlass())
+                    {
+                        if (!VerifyMetro(path))
+                            return;
+                        form = new Fingerprinting(Metro.data(path)) { Text = new FileInfo(path).Name };
+                    }
                     break;
                 case 3:
                     path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
                     if (path == null)
                         return;
-                    form = new PrintSim(path);
+                    using (new HourGlass())
+                    {
+                        form = new PrintSim(path);
+                    }
                     break;
                 case 4:
                     path = OpenFile("Open a SEYR Report", "txt file (*.txt)|*.txt");
                     if (path == null)
                         return;
-                    form = new ParseSEYR(path);
+                    using (new HourGlass()) 
+                    { 
+                        form = new ParseSEYR(path); 
+                    }
                     break;
                 case 5:
                     form = new DataFileTree.frmDataFileTreeMain() { Location = PointToScreen(btn.Location) };
@@ -83,6 +95,7 @@ namespace XferSuite
 
             form.Activated += Form_Activated;
             form.Show();
+            Application.UseWaitCursor = false;
         }
 
         private void Form_Activated(object sender, EventArgs e)

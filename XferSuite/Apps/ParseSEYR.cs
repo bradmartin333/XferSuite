@@ -10,7 +10,6 @@ using OxyPlot.WindowsForms;
 using OxyPlot.Axes;
 using System.Drawing;
 using System.ComponentModel;
-using System.IO;
 
 namespace XferSuite
 {
@@ -83,44 +82,47 @@ namespace XferSuite
 
         private void btnShowScatterplot_Click(object sender, EventArgs e)
         {
-            Form form = new Form()
-            {
-                FormBorderStyle = FormBorderStyle.None,
-                Text = "SEYR Report Scatter"
-            };
-            PlotView plotView = new PlotView()
-            {
-                Dock = DockStyle.Fill
-            };
-            PlotModel plotModel = new PlotModel();
-            ScatterSeries[] scatters = Parse();
-            foreach (ScatterSeries series in scatters)
-            {
-                plotModel.Series.Add(series);
+            using (new HourGlass(UsePlexiglass:false))
+            { 
+                Form form = new Form()
+                {
+                    FormBorderStyle = FormBorderStyle.None,
+                    Text = "SEYR Report Scatter"
+                };
+                PlotView plotView = new PlotView()
+                {
+                    Dock = DockStyle.Fill
+                };
+                PlotModel plotModel = new PlotModel();
+                ScatterSeries[] scatters = Parse();
+                foreach (ScatterSeries series in scatters)
+                {
+                    plotModel.Series.Add(series);
+                }
+                LinearAxis Xaxis = new LinearAxis()
+                {
+                    Position = AxisPosition.Bottom,
+                    Title = "X Position",
+                    IsAxisVisible = ShowPlotAxes
+                };
+                LinearAxis Yaxis = new LinearAxis()
+                {
+                    Position = AxisPosition.Left,
+                    Title = "Y Position",
+                    IsAxisVisible = ShowPlotAxes
+                };
+                plotModel.Axes.Add(Xaxis);
+                plotModel.Axes.Add(Yaxis);
+                plotView.Model = plotModel;
+                form.Controls.Add(plotView);
+                form.Show();
+
+                Bitmap bitmap = new Bitmap(form.Width, form.Height);
+                form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
+                Clipboard.SetImage(bitmap);
+
+                form.FormBorderStyle = FormBorderStyle.SizableToolWindow;
             }
-            LinearAxis Xaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                Title = "X Position",
-                IsAxisVisible = ShowPlotAxes
-            };
-            LinearAxis Yaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                Title = "Y Position",
-                IsAxisVisible = ShowPlotAxes
-            };
-            plotModel.Axes.Add(Xaxis);
-            plotModel.Axes.Add(Yaxis);
-            plotView.Model = plotModel;
-            form.Controls.Add(plotView);
-            form.Show();
-
-            Bitmap bitmap = new Bitmap(form.Width, form.Height);
-            form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
-            Clipboard.SetImage(bitmap);
-
-            form.FormBorderStyle = FormBorderStyle.SizableToolWindow;
         }
 
         private void OpenReport()

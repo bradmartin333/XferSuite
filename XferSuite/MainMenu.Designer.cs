@@ -250,8 +250,6 @@ namespace XferSuite
         }
 
         #endregion
-
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.Button btnInlinepositions;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnMapFlip;
@@ -260,6 +258,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnPrintCycle;
         private System.Windows.Forms.Button btnFingerprint;
         private System.Windows.Forms.Button btnXYZscan;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
     }
 }
 
