@@ -53,10 +53,7 @@ namespace XferSuite
             {
                 Pitch = new PointF(float.Parse(splitPath[splitPath.Length - 2]), float.Parse(splitPath.Last().Replace(".txt", "")));
             }
-            catch (Exception)
-            {
-                MessageBox.Show(text: "Invalid SEYR report filename - scatteplot not functional", caption: "Parse SEYR Report");
-            }
+            catch (Exception) { }
             OpenReport();
 
             SimpleDragSource bufferSource = (SimpleDragSource)olvBuffer.DragSource;
@@ -82,47 +79,44 @@ namespace XferSuite
 
         private void btnShowScatterplot_Click(object sender, EventArgs e)
         {
-            using (new HourGlass(UsePlexiglass:false))
-            { 
-                Form form = new Form()
-                {
-                    FormBorderStyle = FormBorderStyle.None,
-                    Text = "SEYR Report Scatter"
-                };
-                PlotView plotView = new PlotView()
-                {
-                    Dock = DockStyle.Fill
-                };
-                PlotModel plotModel = new PlotModel();
-                ScatterSeries[] scatters = Parse();
-                foreach (ScatterSeries series in scatters)
-                {
-                    plotModel.Series.Add(series);
-                }
-                LinearAxis Xaxis = new LinearAxis()
-                {
-                    Position = AxisPosition.Bottom,
-                    Title = "X Position",
-                    IsAxisVisible = ShowPlotAxes
-                };
-                LinearAxis Yaxis = new LinearAxis()
-                {
-                    Position = AxisPosition.Left,
-                    Title = "Y Position",
-                    IsAxisVisible = ShowPlotAxes
-                };
-                plotModel.Axes.Add(Xaxis);
-                plotModel.Axes.Add(Yaxis);
-                plotView.Model = plotModel;
-                form.Controls.Add(plotView);
-                form.Show();
-
-                Bitmap bitmap = new Bitmap(form.Width, form.Height);
-                form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
-                Clipboard.SetImage(bitmap);
-
-                form.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+            Form form = new Form()
+            {
+                FormBorderStyle = FormBorderStyle.None,
+                Text = "SEYR Report Scatter"
+            };
+            PlotView plotView = new PlotView()
+            {
+                Dock = DockStyle.Fill
+            };
+            PlotModel plotModel = new PlotModel();
+            ScatterSeries[] scatters = Parse();
+            foreach (ScatterSeries series in scatters)
+            {
+                plotModel.Series.Add(series);
             }
+            LinearAxis Xaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "X Position",
+                IsAxisVisible = ShowPlotAxes
+            };
+            LinearAxis Yaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "Y Position",
+                IsAxisVisible = ShowPlotAxes
+            };
+            plotModel.Axes.Add(Xaxis);
+            plotModel.Axes.Add(Yaxis);
+            plotView.Model = plotModel;
+            form.Controls.Add(plotView);
+            form.Show();
+
+            Bitmap bitmap = new Bitmap(form.Width, form.Height);
+            form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
+            Clipboard.SetImage(bitmap);
+
+            form.FormBorderStyle = FormBorderStyle.SizableToolWindow;
         }
 
         private void OpenReport()
@@ -192,105 +186,108 @@ namespace XferSuite
 
         private ScatterSeries[] Parse()
         {
-            rtb.Text = "RR\tRC\tYield\n";
-
-            ScatterSeries passScatter = new ScatterSeries() { MarkerFill = OxyColors.LawnGreen, MarkerSize = 1, TrackerFormatString = "{Tag}" };
-            ScatterSeries failScatter = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = 1, TrackerFormatString = "{Tag}" };
-
-            int fieldNum = 0;
-            double passNum = 0;
-            double failNum = 0;
-
-            int num = Report.getNumImages(Data) + 1;
-            int numX = Report.getNumX(Data);
-            int numY = Report.getNumY(Data);
-            int[] lastRegion = Report.getRegion(Report.getImage(Data, 1));
-            for (int k = 1; k < num; k++)
+            using (new HourGlass())
             {
-                var thisImg = Report.getImage(Data, k);
+                rtb.Text = "RR\tRC\tYield\n";
 
-                for (int i = 0; i < numX; i++)
+                ScatterSeries passScatter = new ScatterSeries() { MarkerFill = OxyColors.LawnGreen, MarkerSize = 1, TrackerFormatString = "{Tag}" };
+                ScatterSeries failScatter = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = 1, TrackerFormatString = "{Tag}" };
+
+                int fieldNum = 0;
+                double passNum = 0;
+                double failNum = 0;
+
+                int num = Report.getNumImages(Data) + 1;
+                int numX = Report.getNumX(Data);
+                int numY = Report.getNumY(Data);
+                int[] lastRegion = Report.getRegion(Report.getImage(Data, 1));
+                for (int k = 1; k < num; k++)
                 {
-                    for (int j = 0; j < numY; j++)
+                    var thisImg = Report.getImage(Data, k);
+
+                    for (int i = 0; i < numX; i++)
                     {
-                        var thisCell = Report.getCell(thisImg, i, j);
-                        if (thisCell.Length == 0) continue;
-                        bool pass = true;
-                        List<bool> needOneList = new List<bool>();
-
-                        foreach (Report.Entry item in thisCell)
+                        for (int j = 0; j < numY; j++)
                         {
-                            Report.Criteria criteria = Features.First(x => x.Name == item.Name);
-                            switch (criteria.Bucket)
+                            var thisCell = Report.getCell(thisImg, i, j);
+                            if (thisCell.Length == 0) continue;
+                            bool pass = true;
+                            List<bool> needOneList = new List<bool>();
+
+                            foreach (Report.Entry item in thisCell)
                             {
-                                case Report.Bucket.Buffer:
-                                    break;
-                                case Report.Bucket.Required:
-                                    if (!criteria.Requirements.Contains(item.State)) pass = false;
-                                    break;
-                                case Report.Bucket.NeedOne:
-                                    needOneList.Add(criteria.Requirements.Contains(item.State));
-                                    break;
-                                default:
-                                    break;
+                                Report.Criteria criteria = Features.First(x => x.Name == item.Name);
+                                switch (criteria.Bucket)
+                                {
+                                    case Report.Bucket.Buffer:
+                                        break;
+                                    case Report.Bucket.Required:
+                                        if (!criteria.Requirements.Contains(item.State)) pass = false;
+                                        break;
+                                    case Report.Bucket.NeedOne:
+                                        needOneList.Add(criteria.Requirements.Contains(item.State));
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
-                        }
 
-                        if (needOneList.Count > 0 && !needOneList.Contains(true)) pass = false;
+                            if (needOneList.Count > 0 && !needOneList.Contains(true)) pass = false;
 
-                        double thisX = thisCell[0].X;
-                        double thisY = thisCell[0].Y;
+                            double thisX = thisCell[0].X;
+                            double thisY = thisCell[0].Y;
 
-                        if (_FlipRC)
-                        {
-                            if (thisX == -1 || thisY == -1)
+                            if (_FlipRC)
                             {
-                                thisY = (k - 1) % Math.Sqrt(num - 1);
-                                thisX = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
+                                if (thisX == -1 || thisY == -1)
+                                {
+                                    thisY = (k - 1) % Math.Sqrt(num - 1);
+                                    thisX = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
+                                }
+                                thisX += (i - ((double)numX / 2)) * Pitch.X;
+                                thisY -= (j - ((double)numY / 2)) * Pitch.Y;
                             }
-                            thisX += (i - ((double)numX / 2)) * Pitch.X;
-                            thisY -= (j - ((double)numY / 2)) * Pitch.Y;
-                        }
-                        else
-                        {
-                            if (thisX == -1 || thisY == -1)
+                            else
                             {
-                                thisX = (k - 1) % Math.Sqrt(num - 1);
-                                thisY = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
+                                if (thisX == -1 || thisY == -1)
+                                {
+                                    thisX = (k - 1) % Math.Sqrt(num - 1);
+                                    thisY = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
+                                }
+                                thisX += (i - ((double)numX / 2)) * Pitch.X;
+                                thisY -= (j - ((double)numY / 2)) * Pitch.Y;
                             }
-                            thisX += (i - ((double)numX / 2)) * Pitch.X;
-                            thisY -= (j - ((double)numY / 2)) * Pitch.Y;
-                        }
 
-                        string thisTag = string.Format("X: {0}\nY: {1}\nRR: {2}\nRC: {3}\nR: {4}\nC: {5}",
-                            thisX, thisY, thisCell[0].RR, thisCell[0].RC, thisCell[0].R, thisCell[0].C);
+                            string thisTag = string.Format("X: {0}\nY: {1}\nRR: {2}\nRC: {3}\nR: {4}\nC: {5}",
+                                thisX, thisY, thisCell[0].RR, thisCell[0].RC, thisCell[0].R, thisCell[0].C);
 
-                        if (pass)
-                        {
-                            passNum++;
-                            passScatter.Points.Add(new ScatterPoint(thisX, thisY, tag: thisTag));
-                        }
-                        else
-                        {
-                            failNum++;
-                            failScatter.Points.Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                            if (pass)
+                            {
+                                passNum++;
+                                passScatter.Points.Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                            }
+                            else
+                            {
+                                failNum++;
+                                failScatter.Points.Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                            }
                         }
                     }
-                }
 
-                int[] thisRegion = Report.getRegion(thisImg);
-                if (thisRegion[0] != lastRegion[0] || thisRegion[1] != lastRegion[1])
-                {
-                    lastRegion = thisRegion;
-                    fieldNum++;
-                    rtb.Text += string.Format("{0}\t{1}\t{2}\n", thisRegion[0], thisRegion[1], (passNum / (passNum + failNum)).ToString("P"));
-                    passNum = 0;
-                    failNum = 0;
+                    int[] thisRegion = Report.getRegion(thisImg);
+                    if (thisRegion[0] != lastRegion[0] || thisRegion[1] != lastRegion[1])
+                    {
+                        lastRegion = thisRegion;
+                        fieldNum++;
+                        rtb.Text += string.Format("{0}\t{1}\t{2}\n", thisRegion[0], thisRegion[1], (passNum / (passNum + failNum)).ToString("P"));
+                        passNum = 0;
+                        failNum = 0;
+                    }
                 }
+                rtb.Text += string.Format("{0}\t{1}\t{2}\n", lastRegion[0], lastRegion[1], (passNum / (passNum + failNum)).ToString("P"));
+
+                return new ScatterSeries[] { passScatter, failScatter };
             }
-            rtb.Text += string.Format("{0}\t{1}\t{2}\n", lastRegion[0], lastRegion[1], (passNum / (passNum + failNum)).ToString("P"));
-
-            return new ScatterSeries[] { passScatter, failScatter };
         }
 
         private void btnParse_Click(object sender, EventArgs e)
