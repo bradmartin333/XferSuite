@@ -35,6 +35,9 @@ namespace XferSuite
         public static float TargetDiameter;
         public static PointF StageRange;
 
+        // Cleaning Tape
+        public static PointF CleaningTapeOrigin;
+
         public static void LoadRecipe(string path)
         {
             XDocument doc = XDocument.Load(path);
@@ -61,6 +64,9 @@ namespace XferSuite
             XElement stamp = doc.Element("ProcessParameters").Element("Stamp");
             StampPosts = new PointF(float.Parse(stamp.Element("StampXPosts").Value), float.Parse(stamp.Element("StampYPosts").Value));
             StampPostPitch = new PointF(float.Parse(stamp.Element("StampXPostPitch").Value), float.Parse(stamp.Element("StampYPostPitch").Value));
+
+            XElement clean = doc.Element("ProcessParameters").Element("Clean");
+            CleaningTapeOrigin = new PointF(float.Parse(clean.Element("CleanXOrigin").Value), float.Parse(clean.Element("CleanYOrigin").Value));
         }
 
         public static void LoadConfig(string path)

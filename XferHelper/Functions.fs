@@ -304,6 +304,11 @@ module Sim =
             if x.RR = vals.[0] && x.RC = vals.[1] && x.R = vals.[2] && x.C = vals.[3] then
                 x.Selected <- sel
 
+    let SelectClean (vals:int[], ids:ID[], sel:bool) =
+        for x in ids do
+            if x.R = vals.[0] && x.C = vals.[1] && x.IDX = vals.[2] then
+                x.Selected <- sel
+
     let MakeIDs (ax:float, ay:float, 
                  bx:float, by:float, 
                  cx:float, cy:float, 
