@@ -308,8 +308,8 @@ namespace XferSuite
         private void CreateCleanFeatures()
         {
             _CleanLocations.AddRange(Sim.MakeIDs(1 + (StampPostPitch.X / SourceChipletPitch.X), 1 + (StampPostPitch.Y / SourceChipletPitch.Y),
-                                          SourceClusters.X, SourceClusters.Y,
-                                          SourceRegions.X, SourceRegions.Y,
+                                          (double)numCTLength.Value, (double)numCTWidth.Value,
+                                          CleanRegionRow, CleanRegionColumn,
                                           SourceChipletPitch.X, SourceChipletPitch.Y,
                                           SourceClusterPitch.X, SourceClusterPitch.Y,
                                           SourceRegionPitch.X, SourceRegionPitch.Y,

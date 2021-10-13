@@ -28,6 +28,8 @@ namespace XferSuite
         private static int CleanIndex;
         private static int CleanRow;
         private static int CleanColumn;
+        public static int CleanRegionRow = 1;
+        public static int CleanRegionColumn = 1;
         private static sRCI CleanResults;
         private static decimal CTLength;
         private static decimal CTWidth;
@@ -109,10 +111,12 @@ namespace XferSuite
                 CleanResults.Index = CleanIndex;
                 if (CleanResults.Column == CleanMaxColumns && CleanResults.Row == CleanMaxRows && CleanResults.Index == CleanMaxIndex)
                 {
-                    //ProjectParameters.IndexTape = true;
-                    //ProjectParameters.IndexTapeCycleNums.Add(CycleNum);
-                    //Debug.Print("Cleaning Tape Index Flag Set");
-                    //WriteEventLog("Cleaning Tape Index Flag Set", "");
+                    CleanRegionRow++;
+                    if (CleanRegionRow == 11)
+                    {
+                        CleanRegionRow = 1;
+                        CleanRegionColumn++;
+                    }
                 }
                 return CleanResults;
             }
