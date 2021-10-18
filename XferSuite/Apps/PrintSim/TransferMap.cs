@@ -86,8 +86,8 @@ namespace XferSuite
         {
             StampXSize = (StampPosts.X + 1) * StampPostPitch.X;
             StampYSize = (StampPosts.Y + 1) * StampPostPitch.Y;
-            CleanMaxRows = Convert.ToInt32(Math.Round(CleanConfigSize.Y / StampYSize));
-            CleanMaxColumns = Convert.ToInt32(Math.Round(CleanConfigSize.X / StampXSize));
+            CleanMaxRows = Convert.ToInt32(Math.Round(CleanConfigSize.Height / StampYSize));
+            CleanMaxColumns = Convert.ToInt32(Math.Round(CleanConfigSize.Width / StampXSize));
             CleanMaxIndex = Convert.ToInt32(StampPostPitch.X / SourceChipletPitch.X * (StampPostPitch.Y / SourceChipletPitch.Y));
             MaxCleanCycle = CleanMaxRows * CleanMaxColumns * CleanMaxIndex; // Max number of cleans that cab be done using the current Stamp dimensions
         }

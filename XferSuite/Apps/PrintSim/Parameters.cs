@@ -33,6 +33,7 @@ namespace XferSuite
         // Stamp
         public static PointF StampPosts;
         public static PointF StampPostPitch;
+        public static SizeF StampSize;
 
         // Tool
         public static PointF SourceWaferCenter;
@@ -41,7 +42,7 @@ namespace XferSuite
         public static float TargetDiameter;
         public static PointF StageRange;
         public static PointF CleanConfigOrigin;
-        public static PointF CleanConfigSize;
+        public static SizeF CleanConfigSize;
 
         public static void LoadRecipe(string path)
         {
@@ -69,6 +70,7 @@ namespace XferSuite
             XElement stamp = doc.Element("ProcessParameters").Element("Stamp");
             StampPosts = new PointF(float.Parse(stamp.Element("StampXPosts").Value), float.Parse(stamp.Element("StampYPosts").Value));
             StampPostPitch = new PointF(float.Parse(stamp.Element("StampXPostPitch").Value), float.Parse(stamp.Element("StampYPostPitch").Value));
+            StampSize = new SizeF(StampPosts.X * StampPostPitch.X, StampPosts.Y * StampPostPitch.Y);
 
             XElement clean = doc.Element("ProcessParameters").Element("Clean");
             CleaningTapeOrigin = new PointF(float.Parse(clean.Element("CleanXOrigin").Value), float.Parse(clean.Element("CleanYOrigin").Value));
@@ -92,7 +94,7 @@ namespace XferSuite
             TargetDiameter = float.Parse(doc.Element("config").Element("TargetWaferSize").Value);
             StageRange = new PointF(float.Parse(doc.Element("config").Element("MaxStageRangeX").Value), float.Parse(doc.Element("config").Element("MaxStageRangeY").Value));
             CleanConfigOrigin = new PointF(float.Parse(doc.Element("config").Element("CleanTapeOriginX").Value), float.Parse(doc.Element("config").Element("CleanTapeOriginY").Value));
-            CleanConfigSize = new PointF(float.Parse(doc.Element("config").Element("CleanTapeZoneLength").Value), float.Parse(doc.Element("config").Element("CleanTapeZoneWidth").Value));
+            CleanConfigSize = new SizeF(float.Parse(doc.Element("config").Element("CleanTapeZoneLength").Value), float.Parse(doc.Element("config").Element("CleanTapeZoneWidth").Value));
             return true;
         }
     }

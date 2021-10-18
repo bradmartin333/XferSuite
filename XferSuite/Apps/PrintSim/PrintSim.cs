@@ -1,17 +1,9 @@
-﻿using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
-using OxyPlot.WindowsForms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using XferHelper;
 using static XferSuite.Parameters;
@@ -41,9 +33,8 @@ namespace XferSuite
             if (!LoadConfig()) return;
 
             InitializeComponent();
-
-            XExtent = new PointF(0, StageRange.X);
-            YExtent = new PointF(0, StageRange.Y);
+            pb.BackgroundImage = new Bitmap((int)StageRange.X, (int)StageRange.Y);
+            pb.Image = new Bitmap((int)StageRange.X, (int)StageRange.Y);
 
             _Path = path;
             fileSystemWatcher.Path = Path.GetDirectoryName(path);
@@ -55,11 +46,9 @@ namespace XferSuite
         private string _Path;
         private string _MapPath;
         private int _PrintNum = 0;
-        private bool _NullSourceRegion;
         private List<Sim.ID> _Devices = new List<Sim.ID>();
         private List<Sim.ID> _Sites = new List<Sim.ID>();
         private List<Sim.ID> _CleanLocations = new List<Sim.ID>();
-        private PointF XExtent, YExtent;
 
         private void UpdateAll()
         {
@@ -80,7 +69,7 @@ namespace XferSuite
             UpdatePrintIdx();
             CreateSourceFeatures();
             CreateTargetFeatures();
-            //CreateCleanFeatures();
+            CreateCleanFeatures();
             MakePlot();
             timer.Stop();
         }
@@ -108,15 +97,28 @@ namespace XferSuite
         private void btnNext_Click(object sender, EventArgs e)
         {
             if (_PrintNum == _NumPrints)
-            {
                 return;
-            }
-            Sim.SelectDevice(_Picks[_PrintNum], _Devices.ToArray(), true, _NullSourceRegion, (int)StampPosts.X, (int)StampPosts.Y);
-            Sim.SelectSite(_Prints[_PrintNum], _Sites.ToArray(), true);
-            Sim.SelectClean(_Cleans[_PrintNum], _CleanLocations.ToArray(), true);
+            SelectDevice(_Picks[_PrintNum], _Devices.ToArray());
+            SelectSite(_Prints[_PrintNum], _Sites.ToArray());
+            SelectClean(_Cleans[_PrintNum], _CleanLocations.ToArray());
             MakePlot();
             _PrintNum++;
             UpdatePrintIdx();
+        }
+
+        private void SelectDevice(int[] vs, Sim.ID[] iDs)
+        {
+            iDs.Where(id => id.RR == vs[0] && id.RC == vs[1] && id.R == vs[2] && id.C == vs[3] && id.IDX == vs[4]).AsParallel().ForAll(e => e.Selected = false);
+        }
+
+        private void SelectSite(int[] vs, Sim.ID[] iDs)
+        {
+            iDs.Where(id => id.RR == vs[0] && id.RC == vs[1] && id.R == vs[2] && id.C == vs[3]).AsParallel().ForAll(e => e.Selected = true);
+        }
+
+        private void SelectClean(int[] vs, Sim.ID[] iDs)
+        {
+            iDs.Where(id => id.RR == vs[0] && id.RC == vs[1] && id.IDX == vs[2]).AsParallel().ForAll(e => e.Selected = true);
         }
 
         private void btnFinish_Click(object sender, EventArgs e)
@@ -124,22 +126,6 @@ namespace XferSuite
             while (_PrintNum != _NumPrints)
             {
                 btnNext_Click(sender, e);
-            }
-        }
-
-        private void SavePlot()
-        {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-            {
-                saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.Title = "Export Print Sim Map";
-                saveFileDialog.DefaultExt = ".png";
-                saveFileDialog.Filter = "png file (*.png)|*.png";
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width, Background = OxyColors.White };
-                    pngExporter.ExportToFile(plot.Model, saveFileDialog.FileName);
-                }
             }
         }
 
@@ -153,192 +139,105 @@ namespace XferSuite
 
         private void MakePlot()
         {
-            PlotModel map = new PlotModel();
-            map.MouseDown += (s, e) =>
+            Bitmap bg = new Bitmap((int)StageRange.X, (int)StageRange.Y);
+            using (Graphics g = Graphics.FromImage(bg))
             {
-                if (e.IsShiftDown)
-                {
-                    SavePlot();
-                }
-            };
-
-            LineSeries sourceWafer = new LineSeries() { MarkerFill = OxyColors.DarkSeaGreen };
-            ScatterSeries availableDevices = new ScatterSeries() { MarkerFill = OxyColors.DarkSeaGreen };
-            ScatterSeries pickedDevices = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.LightSeaGreen, MarkerStrokeThickness = 1 };
-            ScatterSeries availableSites = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.DarkBlue, MarkerStrokeThickness = 1 };
-            LineSeries targetWafer = new LineSeries() { MarkerFill = OxyColors.BlueViolet };
-            ScatterSeries printedSites = new ScatterSeries() { MarkerFill = OxyColors.BlueViolet };
-            LineSeries cleanTape = new LineSeries() { MarkerFill = OxyColors.Orange };
-            ScatterSeries availableCleans = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.OrangeRed, MarkerStrokeThickness = 1 };
-            ScatterSeries cleanedSites = new ScatterSeries() { MarkerFill = OxyColors.Orange };
-
-            for (double i = 0.0; i < 360.0; i += 0.1)
-            {
-                double angle = i * Math.PI / 180;
-                int sx = (int)(SourceWaferCenter.X + SourceDiameter / 2 * Math.Cos(angle));
-                int sy = (int)(SourceWaferCenter.Y + SourceDiameter / 2 * Math.Sin(angle));
-                sourceWafer.Points.Add(new DataPoint(sx, sy));
-                int tx = (int)(TargetWaferCenter.X + TargetDiameter / 2 * Math.Cos(angle));
-                int ty = (int)(TargetWaferCenter.Y + TargetDiameter / 2 * Math.Sin(angle));
-                targetWafer.Points.Add(new DataPoint(tx, ty));
+                g.FillRectangle(Brushes.White, new RectangleF(0, 0, StageRange.X, StageRange.Y));
+                g.DrawEllipse(new Pen(Brushes.DarkSeaGreen, 3), 
+                    new RectangleF(
+                        SourceWaferCenter.X - SourceDiameter / 2, 
+                        SourceWaferCenter.Y - SourceDiameter / 2, 
+                        SourceDiameter, 
+                        SourceDiameter));
+                g.DrawEllipse(new Pen(Brushes.BlueViolet, 3),
+                    new RectangleF(
+                        TargetWaferCenter.X - TargetDiameter / 2,
+                        TargetWaferCenter.Y - TargetDiameter / 2,
+                        TargetDiameter, 
+                        TargetDiameter));
+                g.DrawRectangle(new Pen(Brushes.Orange, 3),
+                    new Rectangle(
+                        (int)(CleanConfigOrigin.X - CleanConfigSize.Width),
+                        (int)(CleanConfigOrigin.Y - CleanConfigSize.Height),
+                        (int)CleanConfigSize.Width,
+                        (int)CleanConfigSize.Height));
             }
-            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X, CleanConfigOrigin.Y)); 
-            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X, CleanConfigOrigin.Y - CleanConfigSize.Y));
-            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X - CleanConfigSize.X, CleanConfigOrigin.Y - CleanConfigSize.Y));
-            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X - CleanConfigSize.X, CleanConfigOrigin.Y));
-            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X, CleanConfigOrigin.Y));
+            bg.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            pb.BackgroundImage = bg;
 
-            foreach (Sim.ID device in _Devices)
+            Bitmap fg = new Bitmap((int)StageRange.X, (int)StageRange.Y);
+            using (Graphics g = Graphics.FromImage(fg))
             {
-                ScatterPoint thisDevice = new ScatterPoint(device.X, device.Y) { Tag = device.ToString() };
-                if (device.Selected)
-                {
-                    //pickedDevices.Points.Add(thisDevice);
-                }
-                else
-                {
-                    availableDevices.Points.Add(thisDevice);
-                }
+                foreach (Sim.ID device in _Devices.Where(x => x.Selected))
+                    g.FillRectangle(Brushes.DarkSeaGreen, RectFromID(device));
+                foreach (Sim.ID site in _Sites.Where(x => x.Selected))
+                    g.FillRectangle(Brushes.BlueViolet, RectFromID(site));
+                foreach (Sim.ID clean in _CleanLocations.Where(x => x.Selected))
+                    g.FillRectangle(Brushes.Orange, RectFromID(clean));
             }
-            foreach (Sim.ID site in _Sites)
-            {
-                ScatterPoint thisSite = new ScatterPoint(site.X, site.Y) { Tag = site.ToString() };
-                if (site.Selected)
-                {
-                    printedSites.Points.Add(thisSite);
-                }
-                else
-                {
-                    //availableSites.Points.Add(thisSite);
-                }
-            }
-            foreach (Sim.ID clean in _CleanLocations)
-            {
-                ScatterPoint thisSite = new ScatterPoint(clean.X, clean.Y) { Tag = clean.ToString() };
-                if (clean.Selected)
-                {
-                    cleanedSites.Points.Add(thisSite);
-                }
-                else
-                {
-                    availableCleans.Points.Add(thisSite);
-                }
-            }
+            fg.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            pb.Image = fg;
 
-            map.Series.Add(sourceWafer);
-            map.Series.Add(availableDevices);
-            map.Series.Add(pickedDevices);
-            map.Series.Add(targetWafer);
-            map.Series.Add(availableSites);
-            map.Series.Add(printedSites);
-            map.Series.Add(cleanTape);
-            map.Series.Add(availableCleans);
-            map.Series.Add(cleanedSites);
-
-            availableDevices.TrackerFormatString = availableDevices.TrackerFormatString + Environment.NewLine + "{Tag}";
-            pickedDevices.TrackerFormatString = pickedDevices.TrackerFormatString + Environment.NewLine + "{Tag}";
-            availableSites.TrackerFormatString = availableSites.TrackerFormatString + Environment.NewLine + "{Tag}";
-            printedSites.TrackerFormatString = printedSites.TrackerFormatString + Environment.NewLine + "{Tag}";
-            availableCleans.TrackerFormatString = availableCleans.TrackerFormatString + Environment.NewLine + "{Tag}";
-            cleanedSites.TrackerFormatString = cleanedSites.TrackerFormatString + Environment.NewLine + "{Tag}";
-
-            LinearAxis myXaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                IsAxisVisible = true,
-                StartPosition = 1,
-                EndPosition = 0,
-                IsZoomEnabled = true,
-                IsPanEnabled = true,
-                Title = "X Position (mm)",
-                Minimum = XExtent.X,
-                Maximum = XExtent.Y
-            };
-
-            LinearAxis myYaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                IsAxisVisible = true,
-                StartPosition = 1,
-                EndPosition = 0,
-                IsZoomEnabled = true,
-                IsPanEnabled = true,
-                Title = "Y Position (mm)",
-                Minimum = YExtent.X,
-                Maximum = YExtent.Y
-            };
-
-            myXaxis.TransformChanged += MyXaxis_TransformChanged;
-            myYaxis.TransformChanged += MyYaxis_TransformChanged;
-
-            map.Axes.Add(myXaxis);
-            map.Axes.Add(myYaxis);
-            plot.Model = map;
             Refresh();
-        }
-
-        private void MyXaxis_TransformChanged(object sender, EventArgs e)
-        {
-            LinearAxis axis = (LinearAxis)sender;
-            XExtent = new PointF((float)axis.ActualMinimum, (float)axis.ActualMaximum);
-        }
-
-        private void MyYaxis_TransformChanged(object sender, EventArgs e)
-        {
-            LinearAxis axis = (LinearAxis)sender;
-            YExtent = new PointF((float)axis.ActualMinimum, (float)axis.ActualMaximum);
         }
 
         private void CreateSourceFeatures()
         {
-            if (SourceRegions.X == 1 && SourceRegions.Y == 1)
+            for (int i = 0; i < (StampPostPitch.X / SourceChipletPitch.X) * (StampPostPitch.Y / SourceChipletPitch.Y); i++)
             {
-                _NullSourceRegion = true;
-                _Devices.AddRange(Sim.MakeIDs(1 + (StampPostPitch.X / SourceChipletPitch.X), 1 + (StampPostPitch.Y / SourceChipletPitch.Y),
-                                          StampPosts.X, StampPosts.Y,
-                                          SourceClusters.X, SourceClusters.Y,
-                                          SourceChipletPitch.X, SourceChipletPitch.Y,
-                                          StampPostPitch.X, StampPostPitch.Y,
-                                          SourceClusterPitch.X, SourceClusterPitch.Y,
-                                          SourceOrigin.X, SourceOrigin.Y,
-                                          true, _NullSourceRegion));
+                _Devices.AddRange(Sim.MakeIDs(SourceClusters.X, SourceClusters.Y,
+                                            SourceRegions.X, SourceRegions.Y,
+                                            SourceClusterPitch.X, SourceClusterPitch.Y,
+                                            SourceRegionPitch.X, SourceRegionPitch.Y,
+                                            SourceOrigin.X, SourceOrigin.Y,
+                                            true, i + 1));
             }
-            else
-            {
-                _NullSourceRegion = false;
-                _Devices.AddRange(Sim.MakeIDs(1 + (StampPostPitch.X / SourceChipletPitch.X), 1 + (StampPostPitch.Y / SourceChipletPitch.Y),
-                                          SourceClusters.X, SourceClusters.Y,
-                                          SourceRegions.X, SourceRegions.Y,
-                                          SourceChipletPitch.X, SourceChipletPitch.Y,
-                                          SourceClusterPitch.X, SourceClusterPitch.Y,
-                                          SourceRegionPitch.X, SourceRegionPitch.Y,
-                                          SourceOrigin.X, SourceOrigin.Y,
-                                          true, _NullSourceRegion));
-            } 
         }
 
         private void CreateTargetFeatures()
         {
-            _Sites.AddRange(Sim.MakeIDs(StampPosts.X, StampPosts.Y,
-                                        TargetPrints.X, TargetPrints.Y,
+            _Sites.AddRange(Sim.MakeIDs(TargetPrints.X, TargetPrints.Y,
                                         TargetClusters.X, TargetClusters.Y,
-                                        StampPostPitch.X, StampPostPitch.Y,
                                         TargetPrintPitch.X, TargetPrintPitch.Y,
                                         TargetClusterPitch.X, TargetClusterPitch.Y,
                                         TargetOrigin.X, TargetOrigin.Y,
-                                        false, false));
+                                        false, 1));
         }
 
         private void CreateCleanFeatures()
         {
-            _CleanLocations.AddRange(Sim.MakeIDs(1 + (StampPostPitch.X / SourceChipletPitch.X), 1 + (StampPostPitch.Y / SourceChipletPitch.Y),
-                                          (double)numCTLength.Value, (double)numCTWidth.Value,
-                                          CleanRegionRow, CleanRegionColumn,
-                                          SourceChipletPitch.X, SourceChipletPitch.Y,
-                                          SourceClusterPitch.X, SourceClusterPitch.Y,
-                                          SourceRegionPitch.X, SourceRegionPitch.Y,
-                                          CleaningTapeOrigin.X, CleaningTapeOrigin.Y,
-                                          false, false));
+            _CleanLocations.AddRange(Sim.MakeIDs(SourceClusters.X, SourceClusters.Y,
+                                                  CleanRegionRow, CleanRegionColumn,
+                                                  SourceClusterPitch.X, SourceClusterPitch.Y,
+                                                  SourceRegionPitch.X, SourceRegionPitch.Y,
+                                                  CleaningTapeOrigin.X, CleaningTapeOrigin.Y,
+                                                  false, 1));
+        }
+
+        private RectangleF RectFromID(Sim.ID id)
+        {
+            return new RectangleF((float)id.X, (float)id.Y, StampSize.Width, StampSize.Height);
+        }
+
+        private void btnSaveImage_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.Title = "Export Print Sim Map";
+                saveFileDialog.DefaultExt = ".png";
+                saveFileDialog.Filter = "png file (*.png)|*.png";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    Bitmap bg = (Bitmap)pb.BackgroundImage.Clone();
+                    Bitmap fg = (Bitmap)pb.Image.Clone();
+                    using (Graphics g = Graphics.FromImage(bg))
+                    {
+                        g.DrawImage(fg, new Point(0, 0));
+                    }
+                    bg.Save(saveFileDialog.FileName);
+                }
+            }
         }
     }
 }
