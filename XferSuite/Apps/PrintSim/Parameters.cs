@@ -1,15 +1,18 @@
 ﻿using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace XferSuite
 {
     public static class Parameters
     {
+        private static readonly string ConfigPath = @"C:\XferPrint\XferPrintConfig.xml";
         public static string RecipeName = "NoRecipe";
         public static string ToolName = "NoTool";
 
         // Source
-        //public static PointF SourceChiplets;
+        public static PointF SourceChiplets;
         public static PointF SourceChipletPitch;
         public static PointF SourceClusters;
         public static PointF SourceClusterPitch;
@@ -24,6 +27,9 @@ namespace XferSuite
         public static PointF TargetClusterPitch;
         public static PointF TargetOrigin;
 
+        // Cleaning Tape
+        public static PointF CleaningTapeOrigin;
+
         // Stamp
         public static PointF StampPosts;
         public static PointF StampPostPitch;
@@ -34,9 +40,8 @@ namespace XferSuite
         public static float SourceDiameter;
         public static float TargetDiameter;
         public static PointF StageRange;
-
-        // Cleaning Tape
-        public static PointF CleaningTapeOrigin;
+        public static PointF CleanConfigOrigin;
+        public static PointF CleanConfigSize;
 
         public static void LoadRecipe(string path)
         {
@@ -46,7 +51,7 @@ namespace XferSuite
             RecipeName = recipe.Element("Name").Value;
 
             XElement source = doc.Element("ProcessParameters").Element("Source");
-            //SourceChiplets = new PointF(float.Parse(source.Element("SourceXChiplets").Value), float.Parse(source.Element("SourceYChiplets").Value));
+            SourceChiplets = new PointF(float.Parse(source.Element("SourceXChiplets").Value), float.Parse(source.Element("SourceYChiplets").Value));
             SourceChipletPitch = new PointF(float.Parse(source.Element("SourceXChipletPitch").Value), float.Parse(source.Element("SourceYChipletPitch").Value));
             SourceClusters = new PointF(float.Parse(source.Element("SourceXClusters").Value), float.Parse(source.Element("SourceYClusters").Value));
             SourceClusterPitch = new PointF(float.Parse(source.Element("SourceXClusterPitch").Value), float.Parse(source.Element("SourceYClusterPitch").Value));
@@ -69,9 +74,15 @@ namespace XferSuite
             CleaningTapeOrigin = new PointF(float.Parse(clean.Element("CleanXOrigin").Value), float.Parse(clean.Element("CleanYOrigin").Value));
         }
 
-        public static void LoadConfig(string path)
+        public static bool LoadConfig()
         {
-            XDocument doc = XDocument.Load(path);
+            if (!File.Exists(ConfigPath))
+            {
+                MessageBox.Show("Config File Not Present - PrintSim Unavailable");
+                return false;
+            }
+
+            XDocument doc = XDocument.Load(ConfigPath);
 
             ToolName = doc.Element("config").Element("Printer").Value;
 
@@ -80,6 +91,9 @@ namespace XferSuite
             SourceDiameter = float.Parse(doc.Element("config").Element("SourceWaferSize").Value);
             TargetDiameter = float.Parse(doc.Element("config").Element("TargetWaferSize").Value);
             StageRange = new PointF(float.Parse(doc.Element("config").Element("MaxStageRangeX").Value), float.Parse(doc.Element("config").Element("MaxStageRangeY").Value));
+            CleanConfigOrigin = new PointF(float.Parse(doc.Element("config").Element("CleanTapeOriginX").Value), float.Parse(doc.Element("config").Element("CleanTapeOriginY").Value));
+            CleanConfigSize = new PointF(float.Parse(doc.Element("config").Element("CleanTapeZoneLength").Value), float.Parse(doc.Element("config").Element("CleanTapeZoneWidth").Value));
+            return true;
         }
     }
 }

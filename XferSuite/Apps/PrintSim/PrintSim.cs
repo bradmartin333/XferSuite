@@ -38,7 +38,12 @@ namespace XferSuite
 
         public PrintSim(string path)
         {
+            if (!LoadConfig()) return;
+
             InitializeComponent();
+
+            XExtent = new PointF(0, StageRange.X);
+            YExtent = new PointF(0, StageRange.Y);
 
             _Path = path;
             fileSystemWatcher.Path = Path.GetDirectoryName(path);
@@ -54,10 +59,7 @@ namespace XferSuite
         private List<Sim.ID> _Devices = new List<Sim.ID>();
         private List<Sim.ID> _Sites = new List<Sim.ID>();
         private List<Sim.ID> _CleanLocations = new List<Sim.ID>();
-
-        // ToDo - Load Printer Config
-        private PointF XExtent = new PointF(0, 800);
-        private PointF YExtent = new PointF(0, 600);
+        private PointF XExtent, YExtent;
 
         private void UpdateAll()
         {
@@ -72,13 +74,13 @@ namespace XferSuite
             LoadRecipe(_Path);
             if (!(_MapPath == null))
             {
-                LoadMap(_MapPath, numCTLength.Value, numCTWidth.Value);
+                LoadMap(_MapPath);
             }
             _PrintNum = 0;
             UpdatePrintIdx();
             CreateSourceFeatures();
             CreateTargetFeatures();
-            CreateCleanFeatures();
+            //CreateCleanFeatures();
             MakePlot();
             timer.Stop();
         }
@@ -160,19 +162,38 @@ namespace XferSuite
                 }
             };
 
+            LineSeries sourceWafer = new LineSeries() { MarkerFill = OxyColors.DarkSeaGreen };
             ScatterSeries availableDevices = new ScatterSeries() { MarkerFill = OxyColors.DarkSeaGreen };
             ScatterSeries pickedDevices = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.LightSeaGreen, MarkerStrokeThickness = 1 };
             ScatterSeries availableSites = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.DarkBlue, MarkerStrokeThickness = 1 };
+            LineSeries targetWafer = new LineSeries() { MarkerFill = OxyColors.BlueViolet };
             ScatterSeries printedSites = new ScatterSeries() { MarkerFill = OxyColors.BlueViolet };
+            LineSeries cleanTape = new LineSeries() { MarkerFill = OxyColors.Orange };
             ScatterSeries availableCleans = new ScatterSeries() { MarkerFill = OxyColors.Transparent, MarkerStroke = OxyColors.OrangeRed, MarkerStrokeThickness = 1 };
             ScatterSeries cleanedSites = new ScatterSeries() { MarkerFill = OxyColors.Orange };
+
+            for (double i = 0.0; i < 360.0; i += 0.1)
+            {
+                double angle = i * Math.PI / 180;
+                int sx = (int)(SourceWaferCenter.X + SourceDiameter / 2 * Math.Cos(angle));
+                int sy = (int)(SourceWaferCenter.Y + SourceDiameter / 2 * Math.Sin(angle));
+                sourceWafer.Points.Add(new DataPoint(sx, sy));
+                int tx = (int)(TargetWaferCenter.X + TargetDiameter / 2 * Math.Cos(angle));
+                int ty = (int)(TargetWaferCenter.Y + TargetDiameter / 2 * Math.Sin(angle));
+                targetWafer.Points.Add(new DataPoint(tx, ty));
+            }
+            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X, CleanConfigOrigin.Y)); 
+            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X, CleanConfigOrigin.Y - CleanConfigSize.Y));
+            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X - CleanConfigSize.X, CleanConfigOrigin.Y - CleanConfigSize.Y));
+            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X - CleanConfigSize.X, CleanConfigOrigin.Y));
+            cleanTape.Points.Add(new DataPoint(CleanConfigOrigin.X, CleanConfigOrigin.Y));
 
             foreach (Sim.ID device in _Devices)
             {
                 ScatterPoint thisDevice = new ScatterPoint(device.X, device.Y) { Tag = device.ToString() };
                 if (device.Selected)
                 {
-                    pickedDevices.Points.Add(thisDevice);
+                    //pickedDevices.Points.Add(thisDevice);
                 }
                 else
                 {
@@ -188,7 +209,7 @@ namespace XferSuite
                 }
                 else
                 {
-                    availableSites.Points.Add(thisSite);
+                    //availableSites.Points.Add(thisSite);
                 }
             }
             foreach (Sim.ID clean in _CleanLocations)
@@ -204,10 +225,13 @@ namespace XferSuite
                 }
             }
 
+            map.Series.Add(sourceWafer);
             map.Series.Add(availableDevices);
             map.Series.Add(pickedDevices);
+            map.Series.Add(targetWafer);
             map.Series.Add(availableSites);
             map.Series.Add(printedSites);
+            map.Series.Add(cleanTape);
             map.Series.Add(availableCleans);
             map.Series.Add(cleanedSites);
 

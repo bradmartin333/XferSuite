@@ -17,10 +17,10 @@ namespace XferSuite
         public static int _NumPrints;
         public static bool _autoCleanLocations = false;
 
-        private static decimal StampXSize;
-        private static decimal StampYSize;
-        private static decimal CleanTapeXSize;
-        private static decimal CleanTapeYSize;
+        private static float StampXSize;
+        private static float StampYSize;
+        private static float CleanTapeXSize;
+        private static float CleanTapeYSize;
         private static int CleanMaxRows;
         private static int CleanMaxColumns;
         private static int CleanMaxIndex;
@@ -31,14 +31,9 @@ namespace XferSuite
         public static int CleanRegionRow = 1;
         public static int CleanRegionColumn = 1;
         private static sRCI CleanResults;
-        private static decimal CTLength;
-        private static decimal CTWidth;
 
-        public static async void LoadMap(string path, decimal cleanlength, decimal cleanwidth)
+        public static async void LoadMap(string path)
         {
-            CTLength = cleanlength;
-            CTWidth = cleanwidth;
-
             _Picks.Clear();
             _Prints.Clear();
             _Cleans.Clear();
@@ -89,12 +84,10 @@ namespace XferSuite
         }
         public static void Init_Class()
         {
-            StampXSize = Convert.ToDecimal((StampPosts.X + 1) * StampPostPitch.X);
-            StampYSize = Convert.ToDecimal((StampPosts.Y + 1) * StampPostPitch.Y);
-            CleanTapeXSize = CTLength; // Default 100mm
-            CleanTapeYSize = CTWidth;  // Default 90mm
-            CleanMaxRows = Convert.ToInt32(Math.Round(CleanTapeYSize / StampYSize));
-            CleanMaxColumns = Convert.ToInt32(Math.Round(CleanTapeXSize / StampXSize));
+            StampXSize = (StampPosts.X + 1) * StampPostPitch.X;
+            StampYSize = (StampPosts.Y + 1) * StampPostPitch.Y;
+            CleanMaxRows = Convert.ToInt32(Math.Round(CleanConfigSize.Y / StampYSize));
+            CleanMaxColumns = Convert.ToInt32(Math.Round(CleanConfigSize.X / StampXSize));
             CleanMaxIndex = Convert.ToInt32(StampPostPitch.X / SourceChipletPitch.X * (StampPostPitch.Y / SourceChipletPitch.Y));
             MaxCleanCycle = CleanMaxRows * CleanMaxColumns * CleanMaxIndex; // Max number of cleans that cab be done using the current Stamp dimensions
         }
