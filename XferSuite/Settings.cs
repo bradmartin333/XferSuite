@@ -18,6 +18,8 @@ namespace XferSuite
 
         private void CheckForUpdates()
         {
+            if (btnCheckForUpdates.BackColor == Color.PaleTurquoise)
+                System.Diagnostics.Process.Start(@"https://bradmartin333.github.io/utility/XferSuite");
             btnCheckForUpdates.Text = "Checking For Updates...";
             btnCheckForUpdates.BackColor = Color.White;
             try
