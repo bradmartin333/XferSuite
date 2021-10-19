@@ -14,20 +14,37 @@ namespace XferSuite
         public static List<int[]> _Prints = new List<int[]>();
         public static List<int[]> _Cleans = new List<int[]>();
         public static int _NumPrints;
-        public static Point _CleanMax;
 
         public static void LoadMap(string path)
         {
             _Picks.Clear();
             _Prints.Clear();
             _Cleans.Clear();
-            _CleanMax = new Point((int)((CleanConfigSize.Width - Math.Abs(CleanConfigOrigin.X - CleaningTapeOrigin.X)) / StampSize.Width),
+
+            Point cleanMax = new Point((int)((CleanConfigSize.Width - Math.Abs(CleanConfigOrigin.X - CleaningTapeOrigin.X)) / StampSize.Width),
                 (int)((CleanConfigSize.Height - Math.Abs(CleanConfigOrigin.Y - CleaningTapeOrigin.Y)) / StampSize.Height));
-            if (_CleanMax.Y == 0)
+            int cleanIndicesX = cleanMax.X;
+            int cleanIndicesY = cleanMax.Y;
+            if (cleanMax.X == 0)
+            {
+                MessageBox.Show("Stamp exceeds CleanTapeZoneHeight with current CleanXOrigin");
+                return;
+            }
+            if (cleanMax.Y == 0)
             {
                 MessageBox.Show("Stamp exceeds CleanTapeZoneWidth with current CleanYOrigin");
                 return;
             }
+            /*
+             * Can be smarter here...
+             * Currently only packing in cleans if there is plenty of space where are indicies are within the tape area
+             * Could possibly just pack available clean area
+             * Can also determine ideal tape index length here
+             */
+            if (cleanMax.X > 1 && (int)((CleanConfigSize.Width - Math.Abs(CleanConfigOrigin.X - CleaningTapeOrigin.X)) / SourceClusterPitch.X) == cleanMax.X)
+                    cleanIndicesX = (int)SourceChiplets.X;
+            if (cleanMax.Y > 1 && (int)((CleanConfigSize.Height - Math.Abs(CleanConfigOrigin.Y - CleaningTapeOrigin.Y)) / SourceClusterPitch.Y) == cleanMax.Y)
+                    cleanIndicesY = (int)SourceChiplets.Y;
 
             XDocument doc = XDocument.Load(path);
             IEnumerable<XElement> transfers = doc.Element("TransferMap").Element("Transfers").Elements("Transfer");
@@ -51,8 +68,8 @@ namespace XferSuite
                 {
                     _Cleans.Add(new int[]
                     {
-                        _NumPrints % _CleanMax.Y + 1,
-                        _NumPrints % _CleanMax.X + 1,
+                        _NumPrints / cleanIndicesY % cleanMax.Y + 1,
+                        _NumPrints / cleanIndicesX % cleanMax.X + 1,
                         _NumPrints % NumIndices + 1
                     }); // Row, Col, IDX
                 }
