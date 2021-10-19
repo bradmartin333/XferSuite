@@ -13,6 +13,21 @@ namespace XferSuite
 {
     public partial class PrintSim : Form
     {
+        private double _FinishXMapDelay = 0;
+        [
+            Category("User Parameters"),
+            Description("Delay in ms between prints when finishing .xmap")
+        ]
+        public double FinishXMapDelay
+        {
+            get => _FinishXMapDelay;
+            set
+            {
+                _FinishXMapDelay = value;
+                UpdateAll();
+            }
+        }
+
         public PrintSim(string path)
         {
             if (!LoadConfig()) return;
@@ -109,6 +124,8 @@ namespace XferSuite
             while (_PrintNum != _NumPrints)
             {
                 btnNext_Click(sender, e);
+                Application.DoEvents();
+                System.Threading.Thread.Sleep((int)FinishXMapDelay);
             }
         }
 
@@ -144,11 +161,14 @@ namespace XferSuite
             using (Graphics g = Graphics.FromImage(fg))
             {
                 foreach (Sim.ID device in _Devices.Where(x => x.Selected))
-                    g.FillRectangle(Brushes.DarkSeaGreen, RectFromID(device));
+                    g.FillRectangle(Brushes.DarkSeaGreen, 
+                        new RectangleF((float)device.X, (float)device.Y, SourceClusterPitch.X, SourceClusterPitch.Y));
                 foreach (Sim.ID site in _Sites.Where(x => x.Selected))
-                    g.FillRectangle(Brushes.BlueViolet, RectFromID(site));
+                    g.FillRectangle(Brushes.BlueViolet, 
+                        new RectangleF((float)site.X, (float)site.Y, StampSize.Width, StampSize.Height));
                 foreach (Sim.ID clean in _CleanLocations.Where(x => x.Selected))
-                    g.FillRectangle(Brushes.Orange, RectFromID(clean));
+                    g.FillRectangle(Brushes.Orange, 
+                        new RectangleF((float)clean.X, (float)clean.Y, StampSize.Width, StampSize.Height));
             }
             fg.RotateFlip(RotateFlipType.RotateNoneFlipX);
             pb.Image = fg;
@@ -184,11 +204,6 @@ namespace XferSuite
             foreach (int[] clean in _Cleans)
                 _CleanLocations.Add(new Sim.ID(-clean[1] * SourceClusterPitch.X + CleaningTapeOrigin.X, -clean[0] * SourceClusterPitch.Y + CleaningTapeOrigin.Y, 
                     1, 1, clean[0], clean[1], clean[2], false));
-        }
-
-        private RectangleF RectFromID(Sim.ID id)
-        {
-            return new RectangleF((float)id.X, (float)id.Y, StampSize.Width, StampSize.Height);
         }
 
         private void btnSaveImage_Click(object sender, EventArgs e)

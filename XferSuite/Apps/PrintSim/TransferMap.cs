@@ -17,6 +17,7 @@ namespace XferSuite
 
         public static void LoadMap(string path)
         {
+            _NumPrints = 0;
             _Picks.Clear();
             _Prints.Clear();
             _Cleans.Clear();
