@@ -34,6 +34,7 @@ namespace XferSuite
         public static PointF StampPosts;
         public static PointF StampPostPitch;
         public static SizeF StampSize;
+        public static int NumIndices;
 
         // Tool
         public static PointF SourceWaferCenter;
@@ -71,6 +72,7 @@ namespace XferSuite
             StampPosts = new PointF(float.Parse(stamp.Element("StampXPosts").Value), float.Parse(stamp.Element("StampYPosts").Value));
             StampPostPitch = new PointF(float.Parse(stamp.Element("StampXPostPitch").Value), float.Parse(stamp.Element("StampYPostPitch").Value));
             StampSize = new SizeF(StampPosts.X * StampPostPitch.X, StampPosts.Y * StampPostPitch.Y);
+            NumIndices = (int)(StampPostPitch.X / SourceChipletPitch.X * (StampPostPitch.Y / SourceChipletPitch.Y));
 
             XElement clean = doc.Element("ProcessParameters").Element("Clean");
             CleaningTapeOrigin = new PointF(float.Parse(clean.Element("CleanXOrigin").Value), float.Parse(clean.Element("CleanYOrigin").Value));

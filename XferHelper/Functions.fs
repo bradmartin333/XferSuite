@@ -290,21 +290,21 @@ module Sim =
          IDX = idx;
          Selected = selected}
 
-    let MakeIDs (bx:float, by:float, 
-                 cx:float, cy:float, 
+    let MakeIDs (ax:float, ay:float, 
+                 bx:float, by:float, 
+                 apx:float, apy:float,
                  bpx:float, bpy:float,
-                 cpx:float, cpy:float,
                  ox:float, oy:float,
                  selected:bool,
                  idx:int) : ID[] =
         [|
-        for n in 0. .. cy-1. do
-            for m in 0. .. cx-1. do
-                for l in 0. .. by-1. do
-                    for k in 0. .. bx-1. do
-                        yield toID(float (k*bpx+m*cpx+ox),
-                            float (l*bpy+n*cpy+oy),
-                            int (cy-n), int (cx-m), int (by-l), int (bx-k),
+        for n in 0. .. by-1. do
+            for m in 0. .. bx-1. do
+                for l in 0. .. ay-1. do
+                    for k in 0. .. ax-1. do
+                        yield toID(float (k*apx+m*bpx+ox),
+                            float (l*apy+n*bpy+oy),
+                            int (by-n), int (bx-m), int (ay-l), int (ax-k),
                             idx, selected)
         |]
 

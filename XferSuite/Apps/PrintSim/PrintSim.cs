@@ -49,6 +49,7 @@ namespace XferSuite
         private List<Sim.ID> _Devices = new List<Sim.ID>();
         private List<Sim.ID> _Sites = new List<Sim.ID>();
         private List<Sim.ID> _CleanLocations = new List<Sim.ID>();
+        private int _LastCleanCol;
 
         private void UpdateAll()
         {
@@ -62,9 +63,7 @@ namespace XferSuite
             _CleanLocations.Clear();
             LoadRecipe(_Path);
             if (!(_MapPath == null))
-            {
                 LoadMap(_MapPath);
-            }
             _PrintNum = 0;
             UpdatePrintIdx();
             CreateSourceFeatures();
@@ -118,7 +117,15 @@ namespace XferSuite
 
         private void SelectClean(int[] vs, Sim.ID[] iDs)
         {
-            iDs.Where(id => id.RR == vs[0] && id.RC == vs[1] && id.IDX == vs[2]).AsParallel().ForAll(e => e.Selected = true);
+            if (vs[1] < _LastCleanCol)
+            {
+                iDs.AsParallel().ForAll(e => e.Selected = false); 
+                MessageBox.Show("Tape Indexed");
+                _LastCleanCol = vs[1];
+            }
+            else
+                _LastCleanCol = vs[1];
+            iDs.Where(id => id.R == vs[0] && id.C == vs[1] && id.IDX == vs[2]).AsParallel().ForAll(e => e.Selected = true);
         }
 
         private void btnFinish_Click(object sender, EventArgs e)
@@ -183,14 +190,14 @@ namespace XferSuite
 
         private void CreateSourceFeatures()
         {
-            for (int i = 0; i < (StampPostPitch.X / SourceChipletPitch.X) * (StampPostPitch.Y / SourceChipletPitch.Y); i++)
+            for (int i = 0; i < NumIndices; i++)
             {
                 _Devices.AddRange(Sim.MakeIDs(SourceClusters.X, SourceClusters.Y,
-                                            SourceRegions.X, SourceRegions.Y,
-                                            SourceClusterPitch.X, SourceClusterPitch.Y,
-                                            SourceRegionPitch.X, SourceRegionPitch.Y,
-                                            SourceOrigin.X, SourceOrigin.Y,
-                                            true, i + 1));
+                                              SourceRegions.X, SourceRegions.Y,
+                                              SourceClusterPitch.X, SourceClusterPitch.Y,
+                                              SourceRegionPitch.X, SourceRegionPitch.Y,
+                                              SourceOrigin.X, SourceOrigin.Y,
+                                              true, i + 1));
             }
         }
 
@@ -206,12 +213,9 @@ namespace XferSuite
 
         private void CreateCleanFeatures()
         {
-            _CleanLocations.AddRange(Sim.MakeIDs(SourceClusters.X, SourceClusters.Y,
-                                                  CleanRegionRow, CleanRegionColumn,
-                                                  SourceClusterPitch.X, SourceClusterPitch.Y,
-                                                  SourceRegionPitch.X, SourceRegionPitch.Y,
-                                                  CleaningTapeOrigin.X, CleaningTapeOrigin.Y,
-                                                  false, 1));
+            foreach (int[] clean in _Cleans)
+                _CleanLocations.Add(new Sim.ID(-clean[1] * StampSize.Width + CleaningTapeOrigin.X, -clean[0] * StampSize.Height + CleaningTapeOrigin.Y, 
+                    1, 1, clean[0], clean[1], clean[2], false));
         }
 
         private RectangleF RectFromID(Sim.ID id)
