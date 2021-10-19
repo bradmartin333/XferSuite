@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows;
 using System.Xml.Linq;
 using static XferSuite.Parameters;
 
@@ -19,7 +21,13 @@ namespace XferSuite
             _Picks.Clear();
             _Prints.Clear();
             _Cleans.Clear();
-            _CleanMax = new Point((int)(CleanConfigSize.Width / StampSize.Height), (int)(CleanConfigSize.Height / StampSize.Width));
+            _CleanMax = new Point((int)((CleanConfigSize.Width - Math.Abs(CleanConfigOrigin.X - CleaningTapeOrigin.X)) / StampSize.Width),
+                (int)((CleanConfigSize.Height - Math.Abs(CleanConfigOrigin.Y - CleaningTapeOrigin.Y)) / StampSize.Height));
+            if (_CleanMax.Y == 0)
+            {
+                MessageBox.Show("Stamp exceeds CleanTapeZoneWidth with current CleanYOrigin");
+                return;
+            }
 
             XDocument doc = XDocument.Load(path);
             IEnumerable<XElement> transfers = doc.Element("TransferMap").Element("Transfers").Elements("Transfer");
@@ -43,8 +51,8 @@ namespace XferSuite
                 {
                     _Cleans.Add(new int[]
                     {
-                        _NumPrints / NumIndices % _CleanMax.Y + 1,
-                        _NumPrints / NumIndices % _CleanMax.X + 1,
+                        _NumPrints % _CleanMax.Y + 1,
+                        _NumPrints % _CleanMax.X + 1,
                         _NumPrints % NumIndices + 1
                     }); // Row, Col, IDX
                 }

@@ -13,21 +13,6 @@ namespace XferSuite
 {
     public partial class PrintSim : Form
     {
-        private bool _WatchFile = true;
-        [
-            Category("User Parameters"),
-            Description("Monitor loaded .xrec for file changes")
-        ]
-        public bool WatchFile
-        {
-            get => _WatchFile;
-            set
-            {
-                _WatchFile = value;
-                UpdateAll();
-            }
-        }
-
         public PrintSim(string path)
         {
             if (!LoadConfig()) return;
@@ -37,8 +22,6 @@ namespace XferSuite
             pb.Image = new Bitmap((int)StageRange.X, (int)StageRange.Y);
 
             _Path = path;
-            fileSystemWatcher.Path = Path.GetDirectoryName(path);
-            fileSystemWatcher.Changed += UpdateFile;
 
             UpdateAll();
         }
@@ -53,11 +36,6 @@ namespace XferSuite
 
         private void UpdateAll()
         {
-            timer.Start(); // Need a delay so fileSystemWatcher and XML reader don't overlap
-        }
-
-        private void timer_Tick(object sender, EventArgs e)
-        {
             _Devices.Clear();
             _Sites.Clear();
             _CleanLocations.Clear();
@@ -70,7 +48,6 @@ namespace XferSuite
             CreateTargetFeatures();
             CreateCleanFeatures();
             MakePlot();
-            timer.Stop();
         }
 
         private void btnOpenMap_Click(object sender, EventArgs e)
@@ -119,8 +96,7 @@ namespace XferSuite
         {
             if (vs[1] < _LastCleanCol)
             {
-                iDs.AsParallel().ForAll(e => e.Selected = false); 
-                MessageBox.Show("Tape Indexed");
+                iDs.AsParallel().ForAll(e => e.Selected = false); // Tape Indexed
                 _LastCleanCol = vs[1];
             }
             else
@@ -133,14 +109,6 @@ namespace XferSuite
             while (_PrintNum != _NumPrints)
             {
                 btnNext_Click(sender, e);
-            }
-        }
-
-        private void UpdateFile(object sender, FileSystemEventArgs e)
-        {
-            if (e.ChangeType == WatcherChangeTypes.Changed && _WatchFile)
-            {
-                UpdateAll();
             }
         }
 
@@ -214,7 +182,7 @@ namespace XferSuite
         private void CreateCleanFeatures()
         {
             foreach (int[] clean in _Cleans)
-                _CleanLocations.Add(new Sim.ID(-clean[1] * StampSize.Width + CleaningTapeOrigin.X, -clean[0] * StampSize.Height + CleaningTapeOrigin.Y, 
+                _CleanLocations.Add(new Sim.ID(-clean[1] * SourceClusterPitch.X + CleaningTapeOrigin.X, -clean[0] * SourceClusterPitch.Y + CleaningTapeOrigin.Y, 
                     1, 1, clean[0], clean[1], clean[2], false));
         }
 
