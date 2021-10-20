@@ -136,5 +136,20 @@ namespace XferSuite
         {
             Rotation++;
         }
+
+        private void btnSaveFrame_Click(object sender, EventArgs e)
+        {
+            if (VideoSource == null || !VideoSource.IsRunning) return;
+            Bitmap bitmap = (Bitmap)PictureBox.BackgroundImage.Clone();
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.Title = "Export Camera Frame";
+                saveFileDialog.DefaultExt = ".png";
+                saveFileDialog.Filter = "png file (*.png)|*.png";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    bitmap.Save(saveFileDialog.FileName);
+            }
+        }
     }
 }

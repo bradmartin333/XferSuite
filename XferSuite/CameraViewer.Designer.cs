@@ -30,27 +30,29 @@ namespace XferSuite
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CameraViewer));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.btnToggleListView = new System.Windows.Forms.ToolStripButton();
             this.btnToggleCrosshair = new System.Windows.Forms.ToolStripButton();
             this.btnCrosshairColor = new System.Windows.Forms.ToolStripButton();
             this.btnRotateImage = new System.Windows.Forms.ToolStripButton();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.toolStrip1.SuspendLayout();
+            this.btnSaveFrame = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnToggleListView,
             this.btnToggleCrosshair,
             this.btnCrosshairColor,
-            this.btnRotateImage});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(543, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.btnRotateImage,
+            this.btnSaveFrame});
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(543, 25);
+            this.toolStrip.TabIndex = 0;
+            this.toolStrip.Text = "toolStrip1";
             // 
             // btnToggleListView
             // 
@@ -96,18 +98,28 @@ namespace XferSuite
             this.btnRotateImage.Text = "Rotate Image";
             this.btnRotateImage.Click += new System.EventHandler(this.btnRotateImage_Click);
             // 
+            // btnSaveFrame
+            // 
+            this.btnSaveFrame.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnSaveFrame.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveFrame.Image")));
+            this.btnSaveFrame.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSaveFrame.Name = "btnSaveFrame";
+            this.btnSaveFrame.Size = new System.Drawing.Size(23, 22);
+            this.btnSaveFrame.Text = "Save Frame";
+            this.btnSaveFrame.Click += new System.EventHandler(this.btnSaveFrame_Click);
+            // 
             // CameraViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(543, 420);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CameraViewer";
             this.Text = "Camera Viewer";
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -115,11 +127,12 @@ namespace XferSuite
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton btnToggleListView;
         private System.Windows.Forms.ToolStripButton btnToggleCrosshair;
         private System.Windows.Forms.ToolStripButton btnRotateImage;
         private System.Windows.Forms.ToolStripButton btnCrosshairColor;
         private System.Windows.Forms.ColorDialog colorDialog;
+        private System.Windows.Forms.ToolStripButton btnSaveFrame;
     }
 }
