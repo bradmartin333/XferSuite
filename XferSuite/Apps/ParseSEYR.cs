@@ -210,52 +210,11 @@ namespace XferSuite
                         {
                             var thisCell = Report.getCell(thisImg, i, j);
                             if (thisCell.Length == 0) continue;
-                            bool pass = true;
-                            List<bool> needOneList = new List<bool>();
-
-                            foreach (Report.Entry item in thisCell)
-                            {
-                                Report.Criteria criteria = Features.First(x => x.Name == item.Name);
-                                switch (criteria.Bucket)
-                                {
-                                    case Report.Bucket.Buffer:
-                                        break;
-                                    case Report.Bucket.Required:
-                                        if (!criteria.Requirements.Contains(item.State)) pass = false;
-                                        break;
-                                    case Report.Bucket.NeedOne:
-                                        needOneList.Add(criteria.Requirements.Contains(item.State));
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-
-                            if (needOneList.Count > 0 && !needOneList.Contains(true)) pass = false;
+                            bool pass = CheckCriteria(thisCell);
 
                             double thisX = thisCell[0].X;
                             double thisY = thisCell[0].Y;
-
-                            if (_FlipRC)
-                            {
-                                if (thisX == -1 || thisY == -1)
-                                {
-                                    thisY = (k - 1) % Math.Sqrt(num - 1);
-                                    thisX = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
-                                }
-                                thisX += (i - ((double)numX / 2)) * Pitch.X;
-                                thisY -= (j - ((double)numY / 2)) * Pitch.Y;
-                            }
-                            else
-                            {
-                                if (thisX == -1 || thisY == -1)
-                                {
-                                    thisX = (k - 1) % Math.Sqrt(num - 1);
-                                    thisY = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
-                                }
-                                thisX += (i - ((double)numX / 2)) * Pitch.X;
-                                thisY -= (j - ((double)numY / 2)) * Pitch.Y;
-                            }
+                            AdjustPlotPosition(ref thisX, ref thisY, i, j, k, num, numX, numY);
 
                             string thisTag = string.Format("X: {0}\nY: {1}\nRR: {2}\nRC: {3}\nR: {4}\nC: {5}",
                                 thisX, thisY, thisCell[0].RR, thisCell[0].RC, thisCell[0].R, thisCell[0].C);
@@ -286,6 +245,56 @@ namespace XferSuite
                 rtb.Text += string.Format("{0}\t{1}\t{2}\n", lastRegion[0], lastRegion[1], (passNum / (passNum + failNum)).ToString("P"));
 
                 return new ScatterSeries[] { passScatter, failScatter };
+            }
+        }
+
+        private bool CheckCriteria(Report.Entry[] thisCell)
+        {
+            List<bool> needOneList = new List<bool>();
+
+            foreach (Report.Entry item in thisCell)
+            {
+                Report.Criteria criteria = Features.First(x => x.Name == item.Name);
+                switch (criteria.Bucket)
+                {
+                    case Report.Bucket.Buffer:
+                        break;
+                    case Report.Bucket.Required:
+                        if (!criteria.Requirements.Contains(item.State)) return false;
+                        break;
+                    case Report.Bucket.NeedOne:
+                        needOneList.Add(criteria.Requirements.Contains(item.State));
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (needOneList.Count > 0 && !needOneList.Contains(true)) return false;
+            return true;
+        }
+
+        private void AdjustPlotPosition(ref double thisX, ref double thisY, int i, int j, int k, int num, int numX, int numY)
+        {
+            if (_FlipRC)
+            {
+                if (thisX == -1 || thisY == -1)
+                {
+                    thisY = (k - 1) % Math.Sqrt(num - 1);
+                    thisX = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
+                }
+                thisX += (i - ((double)numX / 2)) * Pitch.X;
+                thisY -= (j - ((double)numY / 2)) * Pitch.Y;
+            }
+            else
+            {
+                if (thisX == -1 || thisY == -1)
+                {
+                    thisX = (k - 1) % Math.Sqrt(num - 1);
+                    thisY = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
+                }
+                thisX += (i - ((double)numX / 2)) * Pitch.X;
+                thisY -= (j - ((double)numY / 2)) * Pitch.Y;
             }
         }
 

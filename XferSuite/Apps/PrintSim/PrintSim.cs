@@ -204,8 +204,8 @@ namespace XferSuite
             foreach (int[] clean in _Cleans)
             {
                 _CleanLocations.Add(new Sim.ID(
-                    (-clean[1] * SourceChipletPitch.X) + -clean[3] * (SourceClusterPitch.X + CleaningTapeOrigin.X),
-                    (-clean[0] * SourceChipletPitch.Y) + -clean[2] * (SourceClusterPitch.Y + CleaningTapeOrigin.Y),
+                    (-clean[1] * SourceChipletPitch.X) + (-clean[3] * SourceClusterPitch.X) + CleaningTapeOrigin.X,
+                    (-clean[0] * SourceChipletPitch.Y) + (-clean[2] * SourceClusterPitch.Y) + CleaningTapeOrigin.Y,
                     clean[0], clean[1], clean[2], clean[3], clean[4], false));
             }
         }

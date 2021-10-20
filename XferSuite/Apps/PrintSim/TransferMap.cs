@@ -68,7 +68,7 @@ namespace XferSuite
                 else // Auto Clean: RR, RC, R, C, IDX
                     _Cleans.Add(new int[] { 1, 1, 
                         (_NumPrints % cleanMax.Y) + 1, 
-                        (_NumPrints / (cleanMax.Y > 1 ? cleanMax.X : 1) % cleanMax.X) + 1, 
+                        (_NumPrints / ((cleanMax.Y > 1) ? cleanMax.X : 1) % cleanMax.X) + 1, 
                         _NumPrints });
 
                 _NumPrints++;
