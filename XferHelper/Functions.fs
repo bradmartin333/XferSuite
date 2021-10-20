@@ -271,7 +271,7 @@ module Sim =
                mutable Selected:bool}
                
                 override this.ToString() =
-                    string this.RR + "," + string this.RC + "," + string this.R + "," + string this.C + "," + string this.IDX
+                    "RR " + string this.RR + ", RC " + string this.RC + ", R " + string this.R + ", C " + string this.C + ", IDX " + string this.IDX
 
     let toID (x:float,
               y:float,
@@ -290,50 +290,22 @@ module Sim =
          IDX = idx;
          Selected = selected}
 
-    let SelectDevice (vals:int[], ids:ID[], sel:bool, nullRegion:bool, stampX:int, stampY:int) =
-        for x in ids do
-            if nullRegion then
-                if x.R = vals.[2] && x.C = vals.[3] && x.IDX = vals.[4] then
-                    x.Selected <- sel
-            else
-                if x.RR = vals.[0] && x.RC = vals.[1] && x.R < vals.[2] + stampX && x.C < vals.[3] + stampY && x.IDX = vals.[4] then
-                    x.Selected <- sel
-
-    let SelectSite (vals:int[], ids:ID[], sel:bool) =
-        for x in ids do
-            if x.RR = vals.[0] && x.RC = vals.[1] && x.R = vals.[2] && x.C = vals.[3] then
-                x.Selected <- sel
-
     let MakeIDs (ax:float, ay:float, 
                  bx:float, by:float, 
-                 cx:float, cy:float, 
-                 apx:float, apy:float, 
+                 apx:float, apy:float,
                  bpx:float, bpy:float,
-                 cpx:float, cpy:float,
                  ox:float, oy:float,
-                 device:bool, nullRegion:bool) : ID[] =
+                 selected:bool,
+                 idx:int) : ID[] =
         [|
-        for n in 0. .. cy-1. do
-            for m in 0. .. cx-1. do
-                for l in 0. .. by-1. do
-                    for k in 0. .. bx-1. do
-                        let mutable idx = 1
-                        if device then
-                            idx <- int (((ax-1.)*(ay-1.)) + 1.)
-                        for j in 0. .. ay-1. do
-                            for i in 0. .. ax-1. do
-                            if nullRegion then
-                                yield toID(float (i*apx+k*bpx+m*cpx+ox),
-                                    float (j*apy+l*bpy+n*cpy+oy),
-                                    1, 1, int (cy-n), int (cx-m),
-                                    idx, false)
-                            else
-                                yield toID(float (i*apx+k*bpx+m*cpx+ox),
-                                    float (j*apy+l*bpy+n*cpy+oy),
-                                    int (cy-n), int (cx-m), int (by-l), int (bx-k),
-                                    idx, false)
-                            if device then
-                                idx <- idx - 1
+        for n in 0. .. by-1. do
+            for m in 0. .. bx-1. do
+                for l in 0. .. ay-1. do
+                    for k in 0. .. ax-1. do
+                        yield toID(float (k*apx+m*bpx+ox),
+                            float (l*apy+n*bpy+oy),
+                            int (by-n), int (bx-m), int (ay-l), int (ax-k),
+                            idx, selected)
         |]
 
 module Report =
