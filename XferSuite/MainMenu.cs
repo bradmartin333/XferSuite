@@ -33,44 +33,59 @@ namespace XferSuite
         {
             Button btn = (Button)sender;
             int idx = int.Parse(btn.Tag.ToString());
-            Form form = new Form();
-            string path = string.Empty;
-            if (CreateForm(idx, ref form, ref path))
-            {
-                form.Activated += Form_Activated;
-                form.Show();
-            }
+            string path = GetPath(idx);
+            if (path == null) return;
+            CreateForm(idx, path);
         }
 
-        private bool CreateForm(int idx, ref Form form, ref string path)
+        private string GetPath(int idx)
         {
+            string path = string.Empty;
+            switch (idx)
+            {
+                case 0:
+                    path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
+                    break;
+                case 1:
+                    path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
+                    break;
+                case 2:
+                    path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
+                    break;
+                case 3:
+                    path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
+                    break;
+                case 4:
+                    path = OpenFile("Open a SEYR Report", "txt file (*.txt)|*.txt");
+                    break;
+                default:
+                    break;
+            }
+            return path;
+        }
+
+        private void CreateForm(int idx, string path)
+        {
+            Form form = new Form();
             using (new HourGlass())
             {
                 switch (idx)
                 {
                     case 0:
-                        path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
-                        if (path == null || !VerifyMetro(path)) return false;
+                        if (!VerifyMetro(path)) return;
                         form = new MetroGraphs(Metro.data(path)) { Text = new FileInfo(path).Name };
                         break;
                     case 1:
-                        path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
-                        if (path == null) return false;
                         form = new XYZscan.frmScanSelect(path);
                         break;
                     case 2:
-                        path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
-                        if (path == null || !VerifyMetro(path)) return false;
+                        if (!VerifyMetro(path)) return;
                         form = new Fingerprinting(Metro.data(path)) { Text = new FileInfo(path).Name };
                         break;
                     case 3:
-                        path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
-                        if (path == null) return false;
                         form = new PrintSim(path);
                         break;
                     case 4:
-                        path = OpenFile("Open a SEYR Report", "txt file (*.txt)|*.txt");
-                        if (path == null) return false;
                         form = new ParseSEYR(path);
                         break;
                     case 5:
@@ -80,10 +95,11 @@ namespace XferSuite
                         form = new MapFlip();
                         break;
                     default:
-                        return false;
+                        return;
                 }
             }
-            return true;
+            form.Activated += Form_Activated;
+            form.Show();
         }
 
         private void Form_Activated(object sender, EventArgs e)

@@ -70,7 +70,7 @@ namespace XferSuite
                     int columnDivisor = (cleanMax.Y > 1) ? cleanMax.X : 1;
                     _Cleans.Add(new int[] { 1, 1,
                         (_NumPrints % cleanMax.Y) + 1,
-                        (_NumPrints / columnDivisor % cleanMax.X) + 1,
+                        ((_NumPrints / columnDivisor) % cleanMax.X) + 1,
                         _NumPrints });
                 }
                    
