@@ -147,14 +147,6 @@ namespace XferSuite
             _fail = _scoredData.Item1;
 
             PlotModel scatter = new PlotModel() { TitleFontSize = 15 };
-            scatter.MouseUp += (s, e) =>
-            {
-                if (e.IsShiftDown)
-                {
-                    SaveSummary();
-                }
-            };
-
             double[] passX = Metro.XPos(_pass);
             double[] passY = Metro.YPos(_pass);
             ScatterSeries passSeries = new ScatterSeries() { MarkerFill = OxyColors.Green, MarkerSize = _PointSize };
@@ -213,14 +205,6 @@ namespace XferSuite
         private void makeErrorScatterPlot()
         {
             PlotModel errorScatter = new PlotModel() { TitleFontSize = 15 };
-            errorScatter.MouseUp += (s, e) =>
-            {
-                if (e.IsShiftDown)
-                {
-                    SaveSummary();
-                }
-            };
-
             double[] errorX = Metro.XError(_pass);
             double[] errorY = Metro.YError(_pass);
             ScatterSeries errorScatterSeries = new ScatterSeries() { MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Blue, MarkerSize = 1 };
@@ -252,15 +236,7 @@ namespace XferSuite
 
         private void makeHistograms()
         {
-            PlotModel histogramX = new PlotModel() { TitleFontSize = 15 };
-            histogramX.MouseUp += (s, e) =>
-            {
-                if (e.IsShiftDown)
-                {
-                    SaveSummary();
-                }
-            };
-
+            PlotModel histogramX = new PlotModel() { TitleFontSize = 15 };       
             double[] dataX = Metro.XError(_pass);
             histogramX.Series.Add(makeHistogram(dataX));
             histogramX.Series.Add(makeHistStatBars(dataX));
@@ -268,14 +244,6 @@ namespace XferSuite
             histogramX.Title = string.Format("Median: {0} micron   3Sigma: {1}", Stats.median(dataX), Stats.threeSig(dataX));
             
             PlotModel histogramY = new PlotModel() { TitleFontSize = 15 };
-            histogramY.MouseUp += (s, e) =>
-            {
-                if (e.IsShiftDown)
-                {
-                    SaveSummary();
-                }
-            };
-
             double[] dataY = Metro.YError(_pass);
             histogramY.Series.Add(makeHistogram(dataY));
             histogramY.Series.Add(makeHistStatBars(dataY));
@@ -608,22 +576,22 @@ namespace XferSuite
             yieldPlot.Model = yield;
         }
 
-        private void SaveSummary()
-        {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-            {
-                saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.Title = "Export 4 Graph Summary";
-                saveFileDialog.DefaultExt = ".png";
-                saveFileDialog.Filter = "png file (*.png)|*.png";
-                saveFileDialog.FileName = Text.Replace(".txt", "Summary");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    Bitmap output = ComposeSummary();
-                    output.Save(saveFileDialog.FileName);
-                }
-            }
-        }
+        //private void SaveSummary()
+        //{
+        //    using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+        //    {
+        //        saveFileDialog.RestoreDirectory = true;
+        //        saveFileDialog.Title = "Export 4 Graph Summary";
+        //        saveFileDialog.DefaultExt = ".png";
+        //        saveFileDialog.Filter = "png file (*.png)|*.png";
+        //        saveFileDialog.FileName = Text.Replace(".txt", "Summary");
+        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        //        {
+        //            Bitmap output = ComposeSummary();
+        //            output.Save(saveFileDialog.FileName);
+        //        }
+        //    }
+        //}
 
         private Bitmap ComposeSummary()
         {
@@ -666,7 +634,7 @@ namespace XferSuite
                     {
                         foreach (PlotView plot in tlp.Controls.OfType<PlotView>())
                         {
-                            var pngExporter = new PngExporter { Width = size.Width, Height = size.Width, Background = OxyColors.White };
+                            var pngExporter = new PngExporter { Width = size.Width, Height = size.Width };
                             g.DrawImage(pngExporter.ExportToBitmap(plot.Model), new Rectangle(i * size.Width, j * size.Height, size.Width, size.Height), 
                                 new Rectangle(0, 0, size.Width, size.Height), GraphicsUnit.Pixel);
 

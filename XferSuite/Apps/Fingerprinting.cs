@@ -136,13 +136,6 @@ namespace XferSuite
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
             PlotModel vectorPlot = new PlotModel() { TitleFontSize = 15 };
-            vectorPlot.MouseDown += (s, e) =>
-            {
-                if (e.IsShiftDown)
-                {
-                    SavePlot();
-                }
-            };
 
             // Hacky, but fast way of selecting all by default
             List<int> loopSet = new List<int>();
@@ -305,28 +298,28 @@ namespace XferSuite
             return Color.FromArgb(255, Convert.ToByte(r * 255.0f), Convert.ToByte(g * 255.0f), Convert.ToByte(b * 255.0f));
         }
 
-        private void SavePlot()
-        {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-            {
-                saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.Title = "Export Fingerprint Plot";
-                saveFileDialog.DefaultExt = ".png";
-                saveFileDialog.Filter = "png file (*.png)|*.png";
-                if (_ShowEntropy)
-                {
-                    saveFileDialog.FileName = Text.Replace(".txt", "FingerprintEntropy");
-                }
-                else
-                {
-                    saveFileDialog.FileName = Text.Replace(".txt", "Fingerprint");
-                }
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width, Background = OxyColors.White };
-                    pngExporter.ExportToFile(plot.Model, saveFileDialog.FileName);
-                }
-            }
-        }
+        //private void SavePlot()
+        //{
+        //    using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+        //    {
+        //        saveFileDialog.RestoreDirectory = true;
+        //        saveFileDialog.Title = "Export Fingerprint Plot";
+        //        saveFileDialog.DefaultExt = ".png";
+        //        saveFileDialog.Filter = "png file (*.png)|*.png";
+        //        if (_ShowEntropy)
+        //        {
+        //            saveFileDialog.FileName = Text.Replace(".txt", "FingerprintEntropy");
+        //        }
+        //        else
+        //        {
+        //            saveFileDialog.FileName = Text.Replace(".txt", "Fingerprint");
+        //        }
+        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        //        {
+        //            var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width };
+        //            pngExporter.ExportToFile(plot.Model, saveFileDialog.FileName);
+        //        }
+        //    }
+        //}
     }
 }
