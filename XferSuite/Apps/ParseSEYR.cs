@@ -187,8 +187,7 @@ namespace XferSuite
         {
             using (new HourGlass())
             {
-                string header = "RR\tRC\tYield\n";
-                rtb.Text = header;
+                rtb.Text = "RR\tRC\tYield\n";
 
                 ScatterSeries passScatter = new ScatterSeries() { MarkerFill = OxyColors.LawnGreen, MarkerSize = 1, TrackerFormatString = "{Tag}" };
                 ScatterSeries failScatter = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = 1, TrackerFormatString = "{Tag}" };

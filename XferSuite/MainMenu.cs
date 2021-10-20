@@ -32,8 +32,7 @@ namespace XferSuite
         private void btn_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            string tag = btn.Tag.ToString();
-            int idx = int.Parse(tag);
+            int idx = int.Parse(btn.Tag.ToString());
 
             Form form = new Form();
             string path;
