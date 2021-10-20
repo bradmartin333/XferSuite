@@ -340,7 +340,7 @@ namespace XferSuite
             double threeSig = Stats.threeSig(data);
             double median = Stats.median(data);
             barSeries.Items.Add(new RectangleBarItem((-threeSig / 2) + median, 0, (-threeSig / 2) + median, 1e6));
-            barSeries.Items.Add(new RectangleBarItem(threeSig / 2 + median, 0, threeSig / 2 + median, 1e6));
+            barSeries.Items.Add(new RectangleBarItem((threeSig / 2) + median, 0,( threeSig / 2) + median, 1e6));
             return barSeries;
         }
 

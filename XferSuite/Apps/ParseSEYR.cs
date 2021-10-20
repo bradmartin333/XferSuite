@@ -139,7 +139,6 @@ namespace XferSuite
             olvNeedOne.Objects = null;
         }
 
-
         private void btnResetColumns_Click(object sender, EventArgs e)
         {
             InitObjects();
@@ -188,7 +187,8 @@ namespace XferSuite
         {
             using (new HourGlass())
             {
-                rtb.Text = "RR\tRC\tYield\n";
+                string header = "RR\tRC\tYield\n";
+                rtb.Text = header;
 
                 ScatterSeries passScatter = new ScatterSeries() { MarkerFill = OxyColors.LawnGreen, MarkerSize = 1, TrackerFormatString = "{Tag}" };
                 ScatterSeries failScatter = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = 1, TrackerFormatString = "{Tag}" };
