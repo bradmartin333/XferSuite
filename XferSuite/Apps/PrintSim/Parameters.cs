@@ -12,18 +12,18 @@ namespace XferSuite
         public static string ToolName = "NoTool";
 
         // Source
-        public static PointF SourceChiplets;
+        public static Point SourceChiplets;
         public static PointF SourceChipletPitch;
-        public static PointF SourceClusters;
+        public static Point SourceClusters;
         public static PointF SourceClusterPitch;
-        public static PointF SourceRegions;
+        public static Point SourceRegions;
         public static PointF SourceRegionPitch;
         public static PointF SourceOrigin;
 
         // Target
-        public static PointF TargetPrints;
+        public static Point TargetPrints;
         public static PointF TargetPrintPitch;
-        public static PointF TargetClusters;
+        public static Point TargetClusters;
         public static PointF TargetClusterPitch;
         public static PointF TargetOrigin;
 
@@ -31,7 +31,7 @@ namespace XferSuite
         public static PointF CleaningTapeOrigin;
 
         // Stamp
-        public static PointF StampPosts;
+        public static Point StampPosts;
         public static PointF StampPostPitch;
         public static SizeF StampSize;
         public static int NumIndices;
@@ -53,23 +53,23 @@ namespace XferSuite
             RecipeName = recipe.Element("Name").Value;
 
             XElement source = doc.Element("ProcessParameters").Element("Source");
-            SourceChiplets = new PointF(float.Parse(source.Element("SourceXChiplets").Value), float.Parse(source.Element("SourceYChiplets").Value));
+            SourceChiplets = new Point(int.Parse(source.Element("SourceXChiplets").Value), int.Parse(source.Element("SourceYChiplets").Value));
             SourceChipletPitch = new PointF(float.Parse(source.Element("SourceXChipletPitch").Value), float.Parse(source.Element("SourceYChipletPitch").Value));
-            SourceClusters = new PointF(float.Parse(source.Element("SourceXClusters").Value), float.Parse(source.Element("SourceYClusters").Value));
+            SourceClusters = new Point(int.Parse(source.Element("SourceXClusters").Value), int.Parse(source.Element("SourceYClusters").Value));
             SourceClusterPitch = new PointF(float.Parse(source.Element("SourceXClusterPitch").Value), float.Parse(source.Element("SourceYClusterPitch").Value));
-            SourceRegions = new PointF(float.Parse(source.Element("SourceXRegions").Value), float.Parse(source.Element("SourceYRegions").Value));
+            SourceRegions = new Point(int.Parse(source.Element("SourceXRegions").Value), int.Parse(source.Element("SourceYRegions").Value));
             SourceRegionPitch = new PointF(float.Parse(source.Element("SourceXRegionsPitch").Value), float.Parse(source.Element("SourceYRegionsPitch").Value));
             SourceOrigin = new PointF(float.Parse(source.Element("SourceR1C1XPosGlobal").Value), float.Parse(source.Element("SourceR1C1YPosGlobal").Value));
 
             XElement target = doc.Element("ProcessParameters").Element("Target");
-            TargetPrints = new PointF(float.Parse(target.Element("TargetXPrints").Value), float.Parse(target.Element("TargetYPrints").Value));
+            TargetPrints = new Point(int.Parse(target.Element("TargetXPrints").Value), int.Parse(target.Element("TargetYPrints").Value));
             TargetPrintPitch = new PointF(float.Parse(target.Element("TargetXPrintPitch").Value), float.Parse(target.Element("TargetYPrintPitch").Value));
-            TargetClusters = new PointF(float.Parse(target.Element("TargetXClusters").Value), float.Parse(target.Element("TargetYClusters").Value));
+            TargetClusters = new Point(int.Parse(target.Element("TargetXClusters").Value), int.Parse(target.Element("TargetYClusters").Value));
             TargetClusterPitch = new PointF(float.Parse(target.Element("TargetXClusterPitch").Value), float.Parse(target.Element("TargetYClusterPitch").Value));
             TargetOrigin = new PointF(float.Parse(target.Element("TargetR1C1XPosGlobal").Value), float.Parse(target.Element("TargetR1C1YPosGlobal").Value));
 
             XElement stamp = doc.Element("ProcessParameters").Element("Stamp");
-            StampPosts = new PointF(float.Parse(stamp.Element("StampXPosts").Value), float.Parse(stamp.Element("StampYPosts").Value));
+            StampPosts = new Point(int.Parse(stamp.Element("StampXPosts").Value), int.Parse(stamp.Element("StampYPosts").Value));
             StampPostPitch = new PointF(float.Parse(stamp.Element("StampXPostPitch").Value), float.Parse(stamp.Element("StampYPostPitch").Value));
             StampSize = new SizeF(StampPosts.X * StampPostPitch.X, StampPosts.Y * StampPostPitch.Y);
             NumIndices = (int)(StampPostPitch.X / SourceChipletPitch.X * (StampPostPitch.Y / SourceChipletPitch.Y));

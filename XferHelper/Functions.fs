@@ -271,7 +271,7 @@ module Sim =
                mutable Selected:bool}
                
                 override this.ToString() =
-                    string this.RR + "," + string this.RC + "," + string this.R + "," + string this.C + "," + string this.IDX
+                    "RR " + string this.RR + ", RC " + string this.RC + ", R " + string this.R + ", C " + string this.C + ", IDX " + string this.IDX
 
     let toID (x:float,
               y:float,

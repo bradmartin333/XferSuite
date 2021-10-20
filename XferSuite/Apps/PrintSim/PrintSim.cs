@@ -109,14 +109,14 @@ namespace XferSuite
 
         private void SelectClean(int[] vs, Sim.ID[] iDs)
         {
-            if (vs[1] < _LastCleanCol)
+            if (vs[3] < _LastCleanCol)
             {
                 iDs.AsParallel().ForAll(e => e.Selected = false); // Tape Indexed
-                _LastCleanCol = vs[1];
+                _LastCleanCol = vs[3];
             }
             else
-                _LastCleanCol = vs[1];
-            iDs.Where(id => id.R == vs[0] && id.C == vs[1] && id.IDX == vs[2]).AsParallel().ForAll(e => e.Selected = true);
+                _LastCleanCol = vs[3];
+            iDs.Where(id => id.R == vs[2] && id.C == vs[3]).AsParallel().ForAll(e => e.Selected = true);
         }
 
         private void btnFinish_Click(object sender, EventArgs e)
@@ -161,7 +161,7 @@ namespace XferSuite
             using (Graphics g = Graphics.FromImage(fg))
             {
                 foreach (Sim.ID device in _Devices.Where(x => x.Selected))
-                    g.FillRectangle(Brushes.DarkSeaGreen, 
+                    g.FillRectangle(new SolidBrush(Color.FromArgb((int)(1.0 / NumIndices * 255),  Color.DarkSeaGreen)), 
                         new RectangleF((float)device.X, (float)device.Y, SourceClusterPitch.X, SourceClusterPitch.Y));
                 foreach (Sim.ID site in _Sites.Where(x => x.Selected))
                     g.FillRectangle(Brushes.BlueViolet, 
@@ -202,8 +202,12 @@ namespace XferSuite
         private void CreateCleanFeatures()
         {
             foreach (int[] clean in _Cleans)
-                _CleanLocations.Add(new Sim.ID(-clean[1] * SourceClusterPitch.X + CleaningTapeOrigin.X, -clean[0] * SourceClusterPitch.Y + CleaningTapeOrigin.Y, 
-                    1, 1, clean[0], clean[1], clean[2], false));
+            {
+                _CleanLocations.Add(new Sim.ID(
+                    -clean[1] * SourceChipletPitch.X + -clean[3] * SourceClusterPitch.X + CleaningTapeOrigin.X,
+                    -clean[0] * SourceChipletPitch.Y + -clean[2] * SourceClusterPitch.Y + CleaningTapeOrigin.Y,
+                    clean[0], clean[1], clean[2], clean[3], clean[4], false));
+            }
         }
 
         private void btnSaveImage_Click(object sender, EventArgs e)

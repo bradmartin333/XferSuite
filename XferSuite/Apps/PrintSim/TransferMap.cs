@@ -17,35 +17,35 @@ namespace XferSuite
 
         public static void LoadMap(string path)
         {
+            // Reset
             _NumPrints = 0;
             _Picks.Clear();
             _Prints.Clear();
             _Cleans.Clear();
 
-            Point cleanMax = new Point((int)((CleanConfigSize.Width - Math.Abs(CleanConfigOrigin.X - CleaningTapeOrigin.X)) / StampSize.Width),
-                (int)((CleanConfigSize.Height - Math.Abs(CleanConfigOrigin.Y - CleaningTapeOrigin.Y)) / StampSize.Height));
-            int cleanIndicesX = cleanMax.X;
-            int cleanIndicesY = cleanMax.Y;
+            // Find number of stamps that fit in the clean area
+            Point cleanMax = new Point((int)((CleanConfigSize.Width - Math.Abs(CleanConfigOrigin.X - CleaningTapeOrigin.X)) / SourceClusterPitch.X),
+                (int)((CleanConfigSize.Height - Math.Abs(CleanConfigOrigin.Y - CleaningTapeOrigin.Y)) / SourceClusterPitch.Y));
             if (cleanMax.X == 0)
             {
-                MessageBox.Show("Stamp exceeds CleanTapeZoneHeight with current CleanXOrigin");
-                return;
+                if ((CleanConfigSize.Width - Math.Abs(CleanConfigOrigin.X - CleaningTapeOrigin.X)) / StampSize.Width == 0 ) // See if we can fit anything in the X dir
+                {
+                    MessageBox.Show("Stamp exceeds CleanTapeZoneHeight with current CleanXOrigin");
+                    return;
+                }
+                else
+                    cleanMax.X = 1;
             }
             if (cleanMax.Y == 0)
             {
-                MessageBox.Show("Stamp exceeds CleanTapeZoneWidth with current CleanYOrigin");
-                return;
+                if ((CleanConfigSize.Height - Math.Abs(CleanConfigOrigin.Y - CleaningTapeOrigin.Y)) / StampSize.Height == 0) // See if we can fit anything in the Y dir
+                {
+                    MessageBox.Show("Stamp exceeds CleanTapeZoneWidth with current CleanYOrigin");
+                    return;
+                }
+                else
+                    cleanMax.Y = 1;
             }
-            /*
-             * Can be smarter here...
-             * Currently only packing in cleans if there is plenty of space where are indicies are within the tape area
-             * Could possibly just pack available clean area
-             * Can also determine ideal tape index length here
-             */
-            if (cleanMax.X > 1 && (int)((CleanConfigSize.Width - Math.Abs(CleanConfigOrigin.X - CleaningTapeOrigin.X)) / SourceClusterPitch.X) == cleanMax.X)
-                    cleanIndicesX = (int)SourceChiplets.X;
-            if (cleanMax.Y > 1 && (int)((CleanConfigSize.Height - Math.Abs(CleanConfigOrigin.Y - CleaningTapeOrigin.Y)) / SourceClusterPitch.Y) == cleanMax.Y)
-                    cleanIndicesY = (int)SourceChiplets.Y;
 
             XDocument doc = XDocument.Load(path);
             IEnumerable<XElement> transfers = doc.Element("TransferMap").Element("Transfers").Elements("Transfer");
@@ -59,21 +59,17 @@ namespace XferSuite
                 int[] printVals = new int[] { int.Parse(print[1].Value), int.Parse(print[2].Value), int.Parse(print[3].Value), int.Parse(print[4].Value), 1 };
                 _Prints.Add(printVals);
 
-                if (transfer.Elements("Clean").Any())
+                if (transfer.Elements("Clean").Any()) // Specified Clean
                 {
                     XAttribute[] clean = transfer.Element("Clean").Attributes().ToArray();
                     int[] cleanVals = new int[] { 1, 1, int.Parse(clean[1].Value), int.Parse(clean[2].Value), int.Parse(clean[3].Value) };
                     _Cleans.Add(cleanVals);
                 }
-                else
-                {
-                    _Cleans.Add(new int[]
-                    {
-                        _NumPrints / cleanIndicesY % cleanMax.Y + 1,
-                        _NumPrints / cleanIndicesX % cleanMax.X + 1,
-                        _NumPrints % NumIndices + 1
-                    }); // Row, Col, IDX
-                }
+                else // Auto Clean: RR, RC, R, C, IDX
+                    _Cleans.Add(new int[] { 1, 1, 
+                        _NumPrints % cleanMax.Y + 1, 
+                        _NumPrints / (cleanMax.Y > 1 ? cleanMax.X : 1) % cleanMax.X + 1, 
+                        _NumPrints });
 
                 _NumPrints++;
             }
