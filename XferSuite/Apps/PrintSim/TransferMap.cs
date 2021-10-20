@@ -66,11 +66,14 @@ namespace XferSuite
                     _Cleans.Add(cleanVals);
                 }
                 else // Auto Clean: RR, RC, R, C, IDX
-                    _Cleans.Add(new int[] { 1, 1, 
-                        (_NumPrints % cleanMax.Y) + 1, 
-                        (_NumPrints / ((cleanMax.Y > 1) ? cleanMax.X : 1) % cleanMax.X) + 1, 
+                {
+                    int columnDivisor = (cleanMax.Y > 1) ? cleanMax.X : 1;
+                    _Cleans.Add(new int[] { 1, 1,
+                        (_NumPrints % cleanMax.Y) + 1,
+                        (_NumPrints / columnDivisor % cleanMax.X) + 1,
                         _NumPrints });
-
+                }
+                   
                 _NumPrints++;
             }
         }

@@ -35,69 +35,53 @@ namespace XferSuite
             int idx = int.Parse(btn.Tag.ToString());
             Form form = new Form();
             string path = string.Empty;
-            CreateForm(idx, ref form, ref path);
-            form.Activated += Form_Activated;
-            form.Show();
+            if (CreateForm(idx, ref form, ref path))
+            {
+                form.Activated += Form_Activated;
+                form.Show();
+            }
         }
 
         private bool CreateForm(int idx, ref Form form, ref string path)
         {
-            switch (idx)
+            using (new HourGlass())
             {
-                case 0:
-                    path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
-                    if (path == null)
-                        return false;
-                    using (new HourGlass())
-                    {
-                        if (!VerifyMetro(path))
-                            return false;
+                switch (idx)
+                {
+                    case 0:
+                        path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
+                        if (path == null || !VerifyMetro(path)) return false;
                         form = new MetroGraphs(Metro.data(path)) { Text = new FileInfo(path).Name };
-                    }
-                    break;
-                case 1:
-                    path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
-                    if (path == null)
-                        return false;
-                    form = new XYZscan.frmScanSelect(path);
-                    break;
-                case 2:
-                    path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
-                    if (path == null)
-                        return false;
-                    using (new HourGlass())
-                    {
-                        if (!VerifyMetro(path))
-                            return false;
+                        break;
+                    case 1:
+                        path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
+                        if (path == null) return false;
+                        form = new XYZscan.frmScanSelect(path);
+                        break;
+                    case 2:
+                        path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
+                        if (path == null || !VerifyMetro(path)) return false;
                         form = new Fingerprinting(Metro.data(path)) { Text = new FileInfo(path).Name };
-                    }
-                    break;
-                case 3:
-                    path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
-                    if (path == null)
-                        return false;
-                    using (new HourGlass())
-                    {
+                        break;
+                    case 3:
+                        path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
+                        if (path == null) return false;
                         form = new PrintSim(path);
-                    }
-                    break;
-                case 4:
-                    path = OpenFile("Open a SEYR Report", "txt file (*.txt)|*.txt");
-                    if (path == null)
-                        return false;
-                    using (new HourGlass())
-                    {
+                        break;
+                    case 4:
+                        path = OpenFile("Open a SEYR Report", "txt file (*.txt)|*.txt");
+                        if (path == null) return false;
                         form = new ParseSEYR(path);
-                    }
-                    break;
-                case 5:
-                    form = new DataFileTree.frmDataFileTreeMain();
-                    break;
-                case 6:
-                    form = new MapFlip();
-                    break;
-                default:
-                    return false;
+                        break;
+                    case 5:
+                        form = new DataFileTree.frmDataFileTreeMain();
+                        break;
+                    case 6:
+                        form = new MapFlip();
+                        break;
+                    default:
+                        return false;
+                }
             }
             return true;
         }
