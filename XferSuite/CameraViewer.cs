@@ -58,7 +58,7 @@ namespace XferSuite
             }  
         }
 
-        private void EndStream()
+        public void EndStream()
         {
             if (VideoSource != null && VideoSource.IsRunning)
             {

@@ -13,6 +13,8 @@ namespace XferSuite
         public static int MajorVersion = 2;
         public static int MinorVerson = 4;
 
+        private Settings _Settings = new Settings();
+
         public MainMenu()
         {
             InitializeComponent();
@@ -27,7 +29,10 @@ namespace XferSuite
             }
         }
 
-        private Settings _Settings = new Settings();
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            foreach (CameraViewer cameraViewer in Application.OpenForms.OfType<CameraViewer>()) cameraViewer.EndStream();
+        }
 
         private void btn_Click(object sender, EventArgs e)
         {
