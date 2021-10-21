@@ -136,13 +136,6 @@ namespace XferSuite
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
             PlotModel vectorPlot = new PlotModel() { TitleFontSize = 15 };
-            vectorPlot.MouseDown += (s, e) =>
-            {
-                if (e.IsShiftDown)
-                {
-                    SavePlot();
-                }
-            };
 
             // Hacky, but fast way of selecting all by default
             List<int> loopSet = new List<int>();
@@ -305,7 +298,7 @@ namespace XferSuite
             return Color.FromArgb(255, Convert.ToByte(r * 255.0f), Convert.ToByte(g * 255.0f), Convert.ToByte(b * 255.0f));
         }
 
-        private void SavePlot()
+        private void btnSavePlot_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
@@ -323,8 +316,15 @@ namespace XferSuite
                 }
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width, Background = OxyColors.White };
-                    pngExporter.ExportToFile(plot.Model, saveFileDialog.FileName);
+                    var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width };
+                    Bitmap fg = pngExporter.ExportToBitmap(plot.Model);
+                    Bitmap bg = new Bitmap(fg.Width, fg.Height);
+                    using (Graphics g = Graphics.FromImage(bg))
+                    {
+                        g.FillRectangle(Brushes.White, new Rectangle(Point.Empty, bg.Size));
+                        g.DrawImage(fg, new Point(0, 0));
+                    }
+                    bg.Save(saveFileDialog.FileName);
                 }
             }
         }
