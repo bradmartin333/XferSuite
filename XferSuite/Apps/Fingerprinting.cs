@@ -298,28 +298,35 @@ namespace XferSuite
             return Color.FromArgb(255, Convert.ToByte(r * 255.0f), Convert.ToByte(g * 255.0f), Convert.ToByte(b * 255.0f));
         }
 
-        //private void SavePlot()
-        //{
-        //    using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-        //    {
-        //        saveFileDialog.RestoreDirectory = true;
-        //        saveFileDialog.Title = "Export Fingerprint Plot";
-        //        saveFileDialog.DefaultExt = ".png";
-        //        saveFileDialog.Filter = "png file (*.png)|*.png";
-        //        if (_ShowEntropy)
-        //        {
-        //            saveFileDialog.FileName = Text.Replace(".txt", "FingerprintEntropy");
-        //        }
-        //        else
-        //        {
-        //            saveFileDialog.FileName = Text.Replace(".txt", "Fingerprint");
-        //        }
-        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        //        {
-        //            var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width };
-        //            pngExporter.ExportToFile(plot.Model, saveFileDialog.FileName);
-        //        }
-        //    }
-        //}
+        private void btnSavePlot_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.Title = "Export Fingerprint Plot";
+                saveFileDialog.DefaultExt = ".png";
+                saveFileDialog.Filter = "png file (*.png)|*.png";
+                if (_ShowEntropy)
+                {
+                    saveFileDialog.FileName = Text.Replace(".txt", "FingerprintEntropy");
+                }
+                else
+                {
+                    saveFileDialog.FileName = Text.Replace(".txt", "Fingerprint");
+                }
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var pngExporter = new PngExporter { Width = plot.Width, Height = plot.Width };
+                    Bitmap fg = pngExporter.ExportToBitmap(plot.Model);
+                    Bitmap bg = new Bitmap(fg.Width, fg.Height);
+                    using (Graphics g = Graphics.FromImage(bg))
+                    {
+                        g.FillRectangle(Brushes.White, new Rectangle(Point.Empty, bg.Size));
+                        g.DrawImage(fg, new Point(0, 0));
+                    }
+                    bg.Save(saveFileDialog.FileName);
+                }
+            }
+        }
     }
 }
