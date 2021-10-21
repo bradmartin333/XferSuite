@@ -16,7 +16,7 @@ jobs:
       - name: Clean Packages
         run: dotnet clean ./XferSuite.sln --configuration Release && dotnet nuget locals all --clear
       - name: Restore Packages
-        run: nuget restore ./XferSuite.sln
+        run: dotnet nuget restore ./XferSuite.sln
       - name: Build Solution
         run: |
           msbuild.exe ./XferSuite.sln /p:platform="Any CPU" /p:configuration="Release"
