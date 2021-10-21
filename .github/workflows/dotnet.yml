@@ -13,6 +13,8 @@ jobs:
         uses: NuGet/setup-nuget@v1.0.5
       - name: Setup VSTest
         uses: darenm/Setup-VSTest@v1
+      - name: Clean Packages
+        run: dotnet clean ./XferSuite.sln --configuration Release && dotnet nuget locals all --clear
       - name: Restore Packages
         run: nuget restore ./XferSuite.sln
       - name: Build Solution
