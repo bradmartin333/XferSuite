@@ -5,13 +5,8 @@ using OxyPlot.WindowsForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using XferHelper;
 
@@ -576,28 +571,30 @@ namespace XferSuite
             yieldPlot.Model = yield;
         }
 
-        //private void SaveSummary()
-        //{
-        //    using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-        //    {
-        //        saveFileDialog.RestoreDirectory = true;
-        //        saveFileDialog.Title = "Export 4 Graph Summary";
-        //        saveFileDialog.DefaultExt = ".png";
-        //        saveFileDialog.Filter = "png file (*.png)|*.png";
-        //        saveFileDialog.FileName = Text.Replace(".txt", "Summary");
-        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        //        {
-        //            Bitmap output = ComposeSummary();
-        //            output.Save(saveFileDialog.FileName);
-        //        }
-        //    }
-        //}
+        private void btnSaveSummary_Click(object sender, EventArgs e)
+        {
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.RestoreDirectory = true;
+                    saveFileDialog.Title = "Export 4 Graph Summary";
+                    saveFileDialog.DefaultExt = ".png";
+                    saveFileDialog.Filter = "png file (*.png)|*.png";
+                    saveFileDialog.FileName = Text.Replace(".txt", "Summary");
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        Bitmap output = ComposeSummary();
+                        output.Save(saveFileDialog.FileName);
+                    }
+                }
+            }
+        }
 
         private Bitmap ComposeSummary()
         {
             Size size = new Size(0, 0);
 
-            foreach (TabPage page in tabControl1.TabPages)
+            foreach (TabPage page in tabControl.TabPages)
             {
                 foreach (TableLayoutPanel tlp in page.Controls.OfType<TableLayoutPanel>())
                 {
@@ -623,7 +620,7 @@ namespace XferSuite
             {
                 g.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, size.Width * 2, size.Height * 2));
 
-                foreach (TabPage page in tabControl1.TabPages)
+                foreach (TabPage page in tabControl.TabPages)
                 {
                     if (j == 2)
                     {

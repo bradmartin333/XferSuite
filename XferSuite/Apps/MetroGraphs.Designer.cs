@@ -30,7 +30,7 @@ namespace XferSuite
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MetroGraphs));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.scatterPlot = new OxyPlot.WindowsForms.PlotView();
@@ -50,7 +50,9 @@ namespace XferSuite
             this.sigmaPlotY = new OxyPlot.WindowsForms.PlotView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.yieldPlot = new OxyPlot.WindowsForms.PlotView();
-            this.tabControl1.SuspendLayout();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.btnSaveSummary = new System.Windows.Forms.Button();
+            this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -60,21 +62,23 @@ namespace XferSuite
             this.tabPage4.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tabPage5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // tabControl
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(802, 381);
-            this.tabControl1.TabIndex = 0;
+            this.tabControl.Controls.Add(this.tabPage1);
+            this.tabControl.Controls.Add(this.tabPage2);
+            this.tabControl.Controls.Add(this.tabPage3);
+            this.tabControl.Controls.Add(this.tabPage4);
+            this.tabControl.Controls.Add(this.tabPage5);
+            this.tabControl.Controls.Add(this.tabPage6);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(802, 381);
+            this.tabControl.TabIndex = 0;
             // 
             // tabPage1
             // 
@@ -321,16 +325,38 @@ namespace XferSuite
             this.yieldPlot.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.yieldPlot.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.btnSaveSummary);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(794, 355);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Tools";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // btnSaveSummary
+            // 
+            this.btnSaveSummary.AutoSize = true;
+            this.btnSaveSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveSummary.Location = new System.Drawing.Point(19, 16);
+            this.btnSaveSummary.Name = "btnSaveSummary";
+            this.btnSaveSummary.Size = new System.Drawing.Size(149, 47);
+            this.btnSaveSummary.TabIndex = 0;
+            this.btnSaveSummary.Text = "Save 4 Graph Summary";
+            this.btnSaveSummary.UseVisualStyleBackColor = true;
+            this.btnSaveSummary.Click += new System.EventHandler(this.btnSaveSummary_Click);
+            // 
             // MetroGraphs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(802, 381);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControl);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MetroGraphs";
             this.Text = "MetroGraphs";
-            this.tabControl1.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -340,13 +366,15 @@ namespace XferSuite
             this.tabPage4.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
@@ -366,5 +394,7 @@ namespace XferSuite
         private OxyPlot.WindowsForms.PlotView sigmaPlotX;
         private OxyPlot.WindowsForms.PlotView sigmaPlotY;
         private OxyPlot.WindowsForms.PlotView yieldPlot;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.Button btnSaveSummary;
     }
 }
