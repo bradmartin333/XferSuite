@@ -19,6 +19,15 @@ namespace XferSuite
             if (VideoDevices.Count == 0) btnOpenCameraViewer.Enabled = false;
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+        }
+
         private void CheckForUpdates()
         {
             if (btnCheckForUpdates.BackColor == Color.PaleTurquoise)
