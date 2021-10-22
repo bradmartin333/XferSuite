@@ -1,5 +1,4 @@
-﻿using Accord.Video.DirectShow;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -15,8 +14,6 @@ namespace XferSuite
         {
             InitializeComponent();
             propertyGrid.BrowsableAttributes = new AttributeCollection(new CategoryAttribute("User Parameters"));
-            FilterInfoCollection VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-            if (VideoDevices.Count == 0) btnOpenCameraViewer.Enabled = false;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -70,11 +67,6 @@ namespace XferSuite
         private void btnCheckForUpdates_Click(object sender, EventArgs e)
         {
             CheckForUpdates();
-        }
-
-        private void btnOpenCameraViewer_Click(object sender, EventArgs e)
-        {
-            _ = new CameraViewer();
         }
     }
 }

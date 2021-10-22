@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using XferHelper;
@@ -92,10 +93,13 @@ namespace XferSuite
             }
         }
 
-        public MetroGraphs(Metro.Position[] data)
+        private string Path;
+
+        public MetroGraphs(string path)
         {
             InitializeComponent();
-            _raw = data;
+            Path = path;
+            _raw = Metro.data(Path);
             Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_raw);
             _data = _splitData.Item2;
             _missing = _splitData.Item1;
@@ -647,6 +651,13 @@ namespace XferSuite
             }
 
             return bmp;
+        }
+
+        private void btnShowFingerprintPlots_Click(object sender, EventArgs e)
+        {
+            Form form = new Fingerprinting(Metro.data(Path)) { Text = new FileInfo(Path).Name };
+            form.Activated += MainMenu.Form_Activated;
+            form.Show();
         }
     }
 }

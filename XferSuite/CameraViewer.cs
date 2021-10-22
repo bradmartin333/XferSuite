@@ -30,7 +30,6 @@ namespace XferSuite
             ListBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
             VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             ListBox.Items.AddRange(VideoDevices.Select(x => x.Name).ToArray());
-            Show();
         }
 
         private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -111,7 +110,7 @@ namespace XferSuite
 
         private void DrawCrosshair()
         {
-            if (VideoSource == null || !VideoSource.IsRunning) return;
+            if (VideoSource == null || !VideoSource.IsRunning || PictureBox.BackgroundImage == null) return;
             Bitmap bitmap = new Bitmap(PictureBox.BackgroundImage.Width, PictureBox.BackgroundImage.Height);
             if (btnToggleCrosshair.Checked)
             {

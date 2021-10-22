@@ -11,15 +11,23 @@ namespace XferSuite
     public partial class MainMenu : Form
     {
         public static int MajorVersion = 2;
-        public static int MinorVerson = 5;
+        public static int MinorVerson = 6;
 
-        private Settings _Settings = new Settings();
+        private static Settings _Settings = new Settings();
 
         public MainMenu()
         {
             InitializeComponent();
             Text = string.Format("XferSuite v{0}.{1}", MajorVersion, MinorVerson);
             foreach (Button b in tableLayoutPanel.Controls.OfType<Button>())
+            {
+                ToolTip tip = new ToolTip
+                {
+                    InitialDelay = 0
+                };
+                tip.SetToolTip(b, b.AccessibleName);
+            }
+            foreach (Button b in tableLayoutPanelMini.Controls.OfType<Button>())
             {
                 ToolTip tip = new ToolTip
                 {
@@ -55,12 +63,6 @@ namespace XferSuite
                     path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
                     break;
                 case 2:
-                    path = OpenFile("Open an Inlinepositions File", "txt file (*.txt)|*.txt");
-                    break;
-                case 3:
-                    path = OpenFile("Open a XferPrint recipe", "xrec file (*.xrec)|*.xrec");
-                    break;
-                case 4:
                     path = OpenFile("Open a SEYR Report", "txt file (*.txt)|*.txt");
                     break;
                 default:
@@ -78,26 +80,28 @@ namespace XferSuite
                 {
                     case 0:
                         if (!VerifyMetro(path)) return;
-                        form = new MetroGraphs(Metro.data(path)) { Text = new FileInfo(path).Name };
+                        form = new MetroGraphs(path) { Text = new FileInfo(path).Name };
                         break;
                     case 1:
                         form = new XYZscan.frmScanSelect(path);
                         break;
                     case 2:
-                        if (!VerifyMetro(path)) return;
-                        form = new Fingerprinting(Metro.data(path)) { Text = new FileInfo(path).Name };
-                        break;
-                    case 3:
-                        form = new PrintSim(path);
-                        break;
-                    case 4:
                         form = new ParseSEYR(path);
                         break;
-                    case 5:
+                    case 3:
+                        form = new CameraViewer();
+                        break;
+                    case 4:
                         form = new DataFileTree.frmDataFileTreeMain();
                         break;
-                    case 6:
+                    case 5:
                         form = new MapFlip();
+                        break;
+                    case 6:
+                        form = new BusyBox();
+                        break;
+                    case 7:
+                        form = new PositionCalc();
                         break;
                     default:
                         return;
@@ -107,7 +111,7 @@ namespace XferSuite
             form.Show();
         }
 
-        private void Form_Activated(object sender, EventArgs e)
+        public static void Form_Activated(object sender, EventArgs e)
         {
             if (!_Settings.IsDisposed) // Prevents error on app close
                 _Settings.propertyGrid.SelectedObject = sender;

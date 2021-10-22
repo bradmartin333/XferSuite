@@ -52,6 +52,7 @@ namespace XferSuite
             this.yieldPlot = new OxyPlot.WindowsForms.PlotView();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.btnSaveSummary = new System.Windows.Forms.Button();
+            this.btnShowFingerprintPlots = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -327,6 +328,7 @@ namespace XferSuite
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.btnShowFingerprintPlots);
             this.tabPage6.Controls.Add(this.btnSaveSummary);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
@@ -346,6 +348,18 @@ namespace XferSuite
             this.btnSaveSummary.Text = "Save 4 Graph Summary";
             this.btnSaveSummary.UseVisualStyleBackColor = true;
             this.btnSaveSummary.Click += new System.EventHandler(this.btnSaveSummary_Click);
+            // 
+            // btnShowFingerprintPlots
+            // 
+            this.btnShowFingerprintPlots.AutoSize = true;
+            this.btnShowFingerprintPlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowFingerprintPlots.Location = new System.Drawing.Point(19, 69);
+            this.btnShowFingerprintPlots.Name = "btnShowFingerprintPlots";
+            this.btnShowFingerprintPlots.Size = new System.Drawing.Size(149, 47);
+            this.btnShowFingerprintPlots.TabIndex = 1;
+            this.btnShowFingerprintPlots.Text = "Show Fingerprint Plots";
+            this.btnShowFingerprintPlots.UseVisualStyleBackColor = true;
+            this.btnShowFingerprintPlots.Click += new System.EventHandler(this.btnShowFingerprintPlots_Click);
             // 
             // MetroGraphs
             // 
@@ -396,5 +410,6 @@ namespace XferSuite
         private OxyPlot.WindowsForms.PlotView yieldPlot;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Button btnSaveSummary;
+        private System.Windows.Forms.Button btnShowFingerprintPlots;
     }
 }

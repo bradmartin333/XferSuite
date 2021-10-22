@@ -41,7 +41,7 @@
             this.Panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel.Location = new System.Drawing.Point(0, 0);
             this.Panel.Name = "Panel";
-            this.Panel.Size = new System.Drawing.Size(423, 190);
+            this.Panel.Size = new System.Drawing.Size(348, 187);
             this.Panel.TabIndex = 1;
             this.Panel.UseWaitCursor = true;
             // 
@@ -52,21 +52,21 @@
             this.Label.Font = new System.Drawing.Font("Microsoft YaHei UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label.Location = new System.Drawing.Point(0, 0);
             this.Label.Name = "Label";
-            this.Label.Size = new System.Drawing.Size(423, 190);
+            this.Label.Size = new System.Drawing.Size(348, 187);
             this.Label.TabIndex = 0;
             this.Label.Text = "Loading...";
             this.Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Label.UseWaitCursor = true;
             // 
-            // Plexiglass
+            // PlexiGlass
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Fuchsia;
-            this.ClientSize = new System.Drawing.Size(423, 190);
+            this.ClientSize = new System.Drawing.Size(348, 187);
             this.Controls.Add(this.Panel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "Plexiglass";
+            this.Name = "PlexiGlass";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Plexiglass";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;

@@ -96,6 +96,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Apps\BusyBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\BusyBox.Designer.cs">
+      <DependentUpon>BusyBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\Fingerprinting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -113,6 +119,12 @@
     </Compile>
     <Compile Include="Apps\ParseSEYR.Designer.cs">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\PositionCalc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\PositionCalc.Designer.cs">
+      <DependentUpon>PositionCalc.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\PrintSim\TransferMap.cs" />
     <Compile Include="CameraViewer.cs">
@@ -160,6 +172,9 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Apps\BusyBox.resx">
+      <DependentUpon>BusyBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Apps\Fingerprinting.resx">
       <DependentUpon>Fingerprinting.cs</DependentUpon>
     </EmbeddedResource>
@@ -168,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\ParseSEYR.resx">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\PositionCalc.resx">
+      <DependentUpon>PositionCalc.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CameraViewer.resx">
       <DependentUpon>CameraViewer.cs</DependentUpon>
