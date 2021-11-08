@@ -177,7 +177,6 @@ Public Class frmZed
         Dim my3sig = stdDev * 3
         Dim range = HistData.Max - HistData.Min
         plot.Title = String.Format("Range = {0} μm   Median = {1} μm   3Sigma = {2} μm", Math.Round(range, 1), Math.Round(median, 1), Math.Round(my3sig, 1))
-        'plot.Title = "Range = " & range.ToString & " μm   Median = " & String.Format("{0:N3}", median) & " μm   3Sigma = " & String.Format("{0:N3}", my3sig)
 
         Dim histSeries As New HistogramSeries With {.FillColor = OxyColors.DarkBlue}
         Dim binningOptions = New BinningOptions(BinningOutlierMode.CountOutliers, BinningIntervalType.InclusiveLowerBound, BinningExtremeValueMode.IncludeExtremeValues)
@@ -230,6 +229,7 @@ Public Class frmZed
 
     Private Sub cbxView_CheckedChanged(sender As Object, e As EventArgs) Handles cbxView.CheckedChanged
         FlipX = Not FlipX
+        FlipZ = Not FlipZ
 
         If FlipX Then
             cbxView.Text = "SPOT View"
