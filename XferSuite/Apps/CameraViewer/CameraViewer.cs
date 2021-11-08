@@ -4,11 +4,17 @@ using System;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace XferSuite
 {
     public partial class CameraViewer : Form
     {
+        // Session Memory
+        private string MemoryPath = @"C:\XferPrint\Data\Log\Layouts\XferSuiteCamera.bin";
+        private CameraLayout CameraLayout;
+
         // Video Feed
         private FilterInfoCollection VideoDevices;
         private VideoCaptureDevice VideoSource;
@@ -30,12 +36,19 @@ namespace XferSuite
             ListBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
             VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             ListBox.Items.AddRange(VideoDevices.Select(x => x.Name).ToArray());
+            ResizeEnd += CameraViewer_WindowChanged;
+            LocationChanged += CameraViewer_WindowChanged;
+
+            CameraLayout = new CameraLayout();
+            Deserialize(MemoryPath);
         }
 
         private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (ListBox.SelectedIndex == -1) return;
             EndStream();
-            StartStream(ListBox.SelectedIndex);
+            StartStream(VideoDevices[ListBox.SelectedIndex].MonikerString);
+            UpdateSessionMemory();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -43,11 +56,12 @@ namespace XferSuite
             EndStream();
         }
 
-        private void StartStream(int v)
+        private void StartStream(string moniker)
         {
             try
             {
-                VideoSource = new VideoCaptureDevice(VideoDevices[v].MonikerString);
+                CameraLayout.CamID = moniker;
+                VideoSource = new VideoCaptureDevice(moniker);
                 VideoSource.NewFrame += new NewFrameEventHandler(NewFrame);
                 VideoSource.Start();
             }
@@ -107,6 +121,7 @@ namespace XferSuite
                 btnToggleListView.Image = Properties.Resources.visible;
             else
                 btnToggleListView.Image = Properties.Resources.invisible;
+            UpdateSessionMemory();
         }
 
         private void btnToggleCrosshair_Click(object sender, EventArgs e)
@@ -127,6 +142,7 @@ namespace XferSuite
             }
             PictureBox.Image = bitmap;
             LastSize = bitmap.Size;
+            UpdateSessionMemory();
         }
 
         private void btnCrosshairColor_Click(object sender, EventArgs e)
@@ -141,6 +157,7 @@ namespace XferSuite
         private void btnRotateImage_Click(object sender, EventArgs e)
         {
             Rotation++;
+            UpdateSessionMemory();
         }
 
         private void btnSaveFrame_Click(object sender, EventArgs e)
@@ -157,5 +174,83 @@ namespace XferSuite
                     bitmap.Save(saveFileDialog.FileName);
             }
         }
+
+        #region Session Memory
+
+        private void btnResetSessionMem_Click(object sender, EventArgs e)
+        {
+            File.Delete(MemoryPath);
+            Close();
+        }
+
+        private void CameraViewer_WindowChanged(object sender, EventArgs e)
+        {
+            if (File.Exists(MemoryPath)) UpdateSessionMemory();
+        }
+
+        private void UpdateSessionMemory()
+        {
+            if (Visible)
+            {
+                CameraLayout.WindowSize = Size;
+                CameraLayout.WindowLocation = Location;
+                CameraLayout.ShowListView = btnToggleListView.Checked;
+                CameraLayout.ShowCrosshair = btnToggleCrosshair.Checked;
+                CameraLayout.CrosshairColor = Color;
+                CameraLayout.Rotation = Rotation;
+            }
+            
+            Serialize(CameraLayout, MemoryPath);
+            btnResetSessionMem.Visible = File.Exists(MemoryPath);
+        }
+
+        public void Serialize(CameraLayout cameraLayout, string filename)
+        {
+            FileInfo fileInfo = new FileInfo(filename);
+            if (!fileInfo.Directory.Exists) return;
+
+            Stream ms = File.OpenWrite(filename);
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(ms, cameraLayout);
+            ms.Flush();
+            ms.Close();
+            ms.Dispose();
+        }
+
+        public void Deserialize(string filename)
+        {
+            if (!File.Exists(filename))
+            {
+                btnResetSessionMem.Visible = false;
+                return;
+            }
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream fs = File.Open(filename, FileMode.Open);
+            object obj = formatter.Deserialize(fs);
+            CameraLayout = (CameraLayout)obj;
+            fs.Flush();
+            fs.Close();
+            fs.Dispose();
+
+            // Start Video
+            foreach (FilterInfo device in VideoDevices)
+                if (device.MonikerString == CameraLayout.CamID) StartStream(CameraLayout.CamID);
+            System.Threading.Thread.SpinWait(1000);
+            if (!VideoSource.IsRunning) return;
+
+            // Restore Position
+            StartPosition = FormStartPosition.Manual;
+            Size = CameraLayout.WindowSize;
+            DesktopLocation = CameraLayout.WindowLocation;
+
+            // Restore Options
+            Rotation = CameraLayout.Rotation;
+            Color = CameraLayout.CrosshairColor;
+            if (!CameraLayout.ShowListView) btnToggleListView.PerformClick();
+            if (CameraLayout.ShowCrosshair) btnToggleCrosshair.PerformClick();
+        }
+
+        #endregion
     }
 }
