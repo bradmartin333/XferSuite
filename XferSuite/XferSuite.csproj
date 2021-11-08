@@ -102,6 +102,7 @@
     <Compile Include="Apps\BusyBox.Designer.cs">
       <DependentUpon>BusyBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\CameraViewer\CameraLayout.cs" />
     <Compile Include="Apps\Fingerprinting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,10 +128,10 @@
       <DependentUpon>PositionCalc.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\PrintSim\TransferMap.cs" />
-    <Compile Include="CameraViewer.cs">
+    <Compile Include="Apps\CameraViewer\CameraViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CameraViewer.Designer.cs">
+    <Compile Include="Apps\CameraViewer\CameraViewer.Designer.cs">
       <DependentUpon>CameraViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="HourGlass.cs" />
@@ -187,7 +188,7 @@
     <EmbeddedResource Include="Apps\PositionCalc.resx">
       <DependentUpon>PositionCalc.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CameraViewer.resx">
+    <EmbeddedResource Include="Apps\CameraViewer\CameraViewer.resx">
       <DependentUpon>CameraViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
