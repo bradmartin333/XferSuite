@@ -68,15 +68,20 @@ namespace XferSuite
 
         private void NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
-            RotateImage(ref bitmap);
-            PictureBox.BackgroundImage = bitmap;
-            if (bitmap.Size != LastSize)
-                DrawCrosshair();
-            LastSize = bitmap.Size;
+            try
+            {
+                Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
+                Size thisSize = RotateImage(ref bitmap);
+                PictureBox.BackgroundImage = bitmap;
+                if (thisSize != LastSize) DrawCrosshair();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
         }
 
-        private void RotateImage(ref Bitmap bitmap)
+        private Size RotateImage(ref Bitmap bitmap)
         {
             switch (Rotation % 4)
             {
@@ -92,6 +97,7 @@ namespace XferSuite
                 default:
                     break;
             }
+            return bitmap.Size;
         }
 
         private void btnToggleListView_Click(object sender, EventArgs e)
@@ -120,6 +126,7 @@ namespace XferSuite
                 g.DrawLine(pen, new Point(0, bitmap.Height / 2), new Point(bitmap.Width, bitmap.Height / 2));
             }
             PictureBox.Image = bitmap;
+            LastSize = bitmap.Size;
         }
 
         private void btnCrosshairColor_Click(object sender, EventArgs e)
