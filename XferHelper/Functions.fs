@@ -421,7 +421,7 @@ module Report =
         |> Array.filter(fun x -> x.ImageNumber = num)
 
     let getRegion (data:Entry[]) =
-        [|data.[0].RR; data.[0].RC|]
+        [|data.[0].RR; data.[0].RC; data.[0].R; data.[0].C|]
 
     let getCell (data:Entry[], row:int, col:int) =
         data

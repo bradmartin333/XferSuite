@@ -6,7 +6,6 @@ using System.Linq;
 using System.Collections.Generic;
 using OxyPlot;
 using OxyPlot.Series;
-using OxyPlot.WindowsForms;
 using OxyPlot.Axes;
 using System.Drawing;
 using System.ComponentModel;
@@ -15,18 +14,7 @@ namespace XferSuite
 {
     public partial class ParseSEYR : Form
     {
-        private bool _FlipRC = false;
-        [Category("User Parameters")]
-        public bool FlipRC
-        {
-            get => _FlipRC;
-            set
-            {
-                _FlipRC = value;
-            }
-        }
-
-        private bool _ShowPlotAxes = false;
+        private bool _ShowPlotAxes = true;
         [Category("User Parameters")]
         public bool ShowPlotAxes
         {
@@ -34,6 +22,43 @@ namespace XferSuite
             set
             {
                 _ShowPlotAxes = value;
+                ConfigurePlot();
+            }
+        }
+
+        private bool _FlipXAxis = true;
+        [Category("User Parameters")]
+        public bool FlipXAxis
+        {
+            get => _FlipXAxis;
+            set
+            {
+                _FlipXAxis = value;
+                ConfigurePlot();
+            }
+        }
+
+        private bool _FlipYAxis = true;
+        [Category("User Parameters")]
+        public bool FlipYAxis
+        {
+            get => _FlipYAxis;
+            set
+            {
+                _FlipYAxis = value;
+                ConfigurePlot();
+            }
+        }
+
+        private int _PointSize = 2;
+        [Category("User Parameters")]
+        public int PointSize
+        {
+            get => _PointSize;
+            set
+            {
+                _PointSize = value;
+                ConfigurePlot();
             }
         }
 
@@ -42,18 +67,12 @@ namespace XferSuite
         private Report.Criteria[] Features { get; set; }
         private Report.Criteria SelectedFeature { get; set; }
 
-        private PointF Pitch = PointF.Empty;
+        private List<ScatterPoint>[] ScatterPoints = new List<ScatterPoint>[2];
 
         public ParseSEYR(string path)
         {
             InitializeComponent();
             Path = path;
-            string[] splitPath = path.Split('_');
-            try
-            {
-                Pitch = new PointF(float.Parse(splitPath[splitPath.Length - 2]), float.Parse(splitPath.Last().Replace(".txt", "")));
-            }
-            catch (Exception) { }
             OpenReport();
 
             SimpleDragSource bufferSource = (SimpleDragSource)olvBuffer.DragSource;
@@ -77,48 +96,6 @@ namespace XferSuite
             Show();
         }
 
-        private void btnShowScatterplot_Click(object sender, EventArgs e)
-        {
-            Form form = new Form()
-            {
-                FormBorderStyle = FormBorderStyle.None,
-                Text = "SEYR Report Scatter"
-            };
-            PlotView plotView = new PlotView()
-            {
-                Dock = DockStyle.Fill
-            };
-            PlotModel plotModel = new PlotModel();
-            ScatterSeries[] scatters = Parse();
-            foreach (ScatterSeries series in scatters)
-            {
-                plotModel.Series.Add(series);
-            }
-            LinearAxis Xaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                Title = "X Position",
-                IsAxisVisible = ShowPlotAxes
-            };
-            LinearAxis Yaxis = new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                Title = "Y Position",
-                IsAxisVisible = ShowPlotAxes
-            };
-            plotModel.Axes.Add(Xaxis);
-            plotModel.Axes.Add(Yaxis);
-            plotView.Model = plotModel;
-            form.Controls.Add(plotView);
-            form.Show();
-
-            Bitmap bitmap = new Bitmap(form.Width, form.Height);
-            form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
-            Clipboard.SetImage(bitmap);
-
-            form.FormBorderStyle = FormBorderStyle.SizableToolWindow;
-        }
-
         private void OpenReport()
         {
             Text = Path.Split('\\').Last().Replace(".txt", "");
@@ -137,11 +114,6 @@ namespace XferSuite
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
-        }
-
-        private void btnResetColumns_Click(object sender, EventArgs e)
-        {
-            InitObjects();
         }
 
         private void ModelDropped(object sender, ModelDropEventArgs e)
@@ -183,19 +155,19 @@ namespace XferSuite
                 feature.Requirements = requirements.ToArray();
         }
 
-        private ScatterSeries[] Parse()
+        private void Parse()
         {
             using (new HourGlass())
             {
-                rtb.Text = "RR\tRC\tYield\n";
-
-                ScatterSeries passScatter = new ScatterSeries() { MarkerFill = OxyColors.LawnGreen, MarkerSize = 1, TrackerFormatString = "{Tag}" };
-                ScatterSeries failScatter = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = 1, TrackerFormatString = "{Tag}" };
-
+                // Reset
+                rtb.Text = "RR\tRC\tR\tC\tYield\n";
+                ScatterPoints[0] = new List<ScatterPoint>();
+                ScatterPoints[1] = new List<ScatterPoint>();
                 int fieldNum = 0;
                 double passNum = 0;
                 double failNum = 0;
 
+                // Parse
                 int num = Report.getNumImages(Data) + 1;
                 int numX = Report.getNumX(Data);
                 int numY = Report.getNumY(Data);
@@ -214,38 +186,100 @@ namespace XferSuite
 
                             double thisX = thisCell[0].X;
                             double thisY = thisCell[0].Y;
-                            AdjustPlotPosition(ref thisX, ref thisY, i, j, k, num, numX, numY);
 
-                            string thisTag = string.Format("X: {0}\nY: {1}\nRR: {2}\nRC: {3}\nR: {4}\nC: {5}",
-                                thisX, thisY, thisCell[0].RR, thisCell[0].RC, thisCell[0].R, thisCell[0].C);
+                            string thisTag = 
+                                $"X: {thisX}\n" +
+                                $"Y: {thisY}\n" +
+                                $"RR: {thisCell[0].RR}\n" +
+                                $"RC: {thisCell[0].RC}\n" +
+                                $"R: {thisCell[0].R}\n" +
+                                $"C: {thisCell[0].C}";
 
                             if (pass)
                             {
                                 passNum++;
-                                passScatter.Points.Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                                ScatterPoints[0].Add(new ScatterPoint(thisX, thisY, tag: thisTag));
                             }
                             else
                             {
                                 failNum++;
-                                failScatter.Points.Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                                ScatterPoints[1].Add(new ScatterPoint(thisX, thisY, tag: thisTag));
                             }
                         }
                     }
 
                     int[] thisRegion = Report.getRegion(thisImg);
-                    if (thisRegion[0] != lastRegion[0] || thisRegion[1] != lastRegion[1])
+                    if (!Enumerable.SequenceEqual(thisRegion, lastRegion))
                     {
                         lastRegion = thisRegion;
                         fieldNum++;
-                        rtb.Text += string.Format("{0}\t{1}\t{2}\n", thisRegion[0], thisRegion[1], (passNum / (passNum + failNum)).ToString("P"));
+                        rtb.Text += 
+                            $"{thisRegion[0]}\t" +
+                            $"{thisRegion[1]}\t" +
+                            $"{thisRegion[2]}\t" +
+                            $"{thisRegion[3]}\t" +
+                            $"{passNum / (passNum + failNum):P}\n";
                         passNum = 0;
                         failNum = 0;
                     }
                 }
-                rtb.Text += string.Format("{0}\t{1}\t{2}\n", lastRegion[0], lastRegion[1], (passNum / (passNum + failNum)).ToString("P"));
 
-                return new ScatterSeries[] { passScatter, failScatter };
+                rtb.Text += 
+                    $"{lastRegion[0]}\t" +
+                    $"{lastRegion[1]}\t" +
+                    $"{lastRegion[2]}\t" +
+                    $"{lastRegion[3]}\t" +
+                    $"{passNum / (passNum + failNum):P}\n";
+
+                rtb.Text += 
+                    $"\nTotal Yield\t{ScatterPoints[0].Count() / (double)(ScatterPoints[0].Count() + ScatterPoints[1].Count()):P}";
+
+                // Plot
+                ConfigurePlot();
             }
+        }
+
+        private void ConfigurePlot()
+        {
+            PlotModel plotModel = new PlotModel();
+
+            LinearAxis Xaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Title = "X Position",
+                IsAxisVisible = ShowPlotAxes,
+                StartPosition = _FlipXAxis ? 1 : 0,
+                EndPosition = _FlipXAxis ? 0 : 1
+            };
+            LinearAxis Yaxis = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Title = "Y Position",
+                IsAxisVisible = ShowPlotAxes,
+                StartPosition = _FlipYAxis ? 1 : 0,
+                EndPosition = _FlipYAxis ? 0 : 1
+            };
+
+            ScatterSeries passScatter = new ScatterSeries()
+            {
+                MarkerFill = OxyColors.LawnGreen,
+                MarkerSize = _PointSize,
+                TrackerFormatString = "{Tag}"
+            };
+            passScatter.Points.AddRange(ScatterPoints[0]);
+            ScatterSeries failScatter = new ScatterSeries()
+            {
+                MarkerFill = OxyColors.Red,
+                MarkerSize = _PointSize,
+                TrackerFormatString = "{Tag}"
+            };
+            failScatter.Points.AddRange(ScatterPoints[1]);
+
+            plotModel.Axes.Add(Xaxis);
+            plotModel.Axes.Add(Yaxis);
+            plotModel.Series.Add(passScatter);
+            plotModel.Series.Add(failScatter);
+            plotView.Model = plotModel;
         }
 
         private bool CheckCriteria(Report.Entry[] thisCell)
@@ -274,38 +308,29 @@ namespace XferSuite
             return true;
         }
 
-        private void AdjustPlotPosition(ref double thisX, ref double thisY, int i, int j, int k, int num, int numX, int numY)
+        private void toolStripButtonReset_Click(object sender, EventArgs e)
         {
-            if (_FlipRC)
-            {
-                if (thisX == -1 || thisY == -1)
-                {
-                    thisY = (k - 1) % Math.Sqrt(num - 1);
-                    thisX = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
-                }
-                thisX += (i - ((double)numX / 2)) * Pitch.X;
-                thisY -= (j - ((double)numY / 2)) * Pitch.Y;
-            }
-            else
-            {
-                if (thisX == -1 || thisY == -1)
-                {
-                    thisX = (k - 1) % Math.Sqrt(num - 1);
-                    thisY = double.Parse(((k - 1) / Math.Sqrt(num - 1)).ToString().Split('.').First());
-                }
-                thisX += (i - ((double)numX / 2)) * Pitch.X;
-                thisY -= (j - ((double)numY / 2)) * Pitch.Y;
-            }
+            InitObjects();
         }
 
-        private void btnParse_Click(object sender, EventArgs e)
+        private void toolStripButtonParse_Click(object sender, EventArgs e)
         {
             Parse();
         }
 
-        private void btnCopy_Click(object sender, EventArgs e)
+        private void toolStripButtonCopyText_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(rtb.Text);
+            if (rtb.Text != "")
+                Clipboard.SetText(rtb.Text);
+            else
+                Clipboard.Clear();
+        }
+
+        private void toolStripButtonCopyPlot_Click(object sender, EventArgs e)
+        {
+            Bitmap bitmap = new Bitmap(plotView.Width, plotView.Height);
+            plotView.DrawToBitmap(bitmap, new Rectangle(0, 0, plotView.Width, plotView.Height));
+            Clipboard.SetImage(bitmap);
         }
     }
 }

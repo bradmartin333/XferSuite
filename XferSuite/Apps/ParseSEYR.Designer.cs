@@ -45,41 +45,42 @@ namespace XferSuite
             this.cbxNull = new System.Windows.Forms.CheckBox();
             this.cbxMisaligned = new System.Windows.Forms.CheckBox();
             this.btnApplyToAll = new System.Windows.Forms.Button();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnCopy = new System.Windows.Forms.Button();
-            this.btnParse = new System.Windows.Forms.Button();
-            this.btnResetColumns = new System.Windows.Forms.Button();
-            this.btnShowScatterplot = new System.Windows.Forms.Button();
             this.rtb = new System.Windows.Forms.RichTextBox();
+            this.plotView = new OxyPlot.WindowsForms.PlotView();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonParse = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonCopyText = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonCopyPlot = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvBuffer)).BeginInit();
             this.flowLayoutPanelCriteria.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel
             // 
-            this.tableLayoutPanel.ColumnCount = 3;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel.Controls.Add(this.olvNeedOne, 2, 0);
-            this.tableLayoutPanel.Controls.Add(this.olvRequire, 1, 0);
-            this.tableLayoutPanel.Controls.Add(this.olvBuffer, 0, 0);
-            this.tableLayoutPanel.Controls.Add(this.flowLayoutPanelCriteria, 0, 1);
-            this.tableLayoutPanel.Controls.Add(this.flowLayoutPanel1, 2, 1);
-            this.tableLayoutPanel.Controls.Add(this.rtb, 1, 1);
+            this.tableLayoutPanel.ColumnCount = 4;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.04762F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.04762F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.04762F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.85714F));
+            this.tableLayoutPanel.Controls.Add(this.olvNeedOne, 2, 1);
+            this.tableLayoutPanel.Controls.Add(this.olvRequire, 1, 1);
+            this.tableLayoutPanel.Controls.Add(this.olvBuffer, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.flowLayoutPanelCriteria, 0, 2);
+            this.tableLayoutPanel.Controls.Add(this.rtb, 1, 2);
+            this.tableLayoutPanel.Controls.Add(this.plotView, 3, 1);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 2;
+            this.tableLayoutPanel.RowCount = 3;
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.Size = new System.Drawing.Size(568, 350);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(878, 361);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // olvNeedOne
@@ -92,10 +93,10 @@ namespace XferSuite
             this.olvNeedOne.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvNeedOne.HideSelection = false;
             this.olvNeedOne.IsSimpleDropSink = true;
-            this.olvNeedOne.Location = new System.Drawing.Point(381, 3);
+            this.olvNeedOne.Location = new System.Drawing.Point(337, 28);
             this.olvNeedOne.Name = "olvNeedOne";
             this.olvNeedOne.ShowGroups = false;
-            this.olvNeedOne.Size = new System.Drawing.Size(184, 174);
+            this.olvNeedOne.Size = new System.Drawing.Size(161, 178);
             this.olvNeedOne.TabIndex = 2;
             this.olvNeedOne.Tag = "2";
             this.olvNeedOne.UseCompatibleStateImageBehavior = false;
@@ -117,10 +118,10 @@ namespace XferSuite
             this.olvRequire.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvRequire.HideSelection = false;
             this.olvRequire.IsSimpleDropSink = true;
-            this.olvRequire.Location = new System.Drawing.Point(192, 3);
+            this.olvRequire.Location = new System.Drawing.Point(170, 28);
             this.olvRequire.Name = "olvRequire";
             this.olvRequire.ShowGroups = false;
-            this.olvRequire.Size = new System.Drawing.Size(183, 174);
+            this.olvRequire.Size = new System.Drawing.Size(161, 178);
             this.olvRequire.TabIndex = 1;
             this.olvRequire.Tag = "1";
             this.olvRequire.UseCompatibleStateImageBehavior = false;
@@ -142,10 +143,10 @@ namespace XferSuite
             this.olvBuffer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvBuffer.HideSelection = false;
             this.olvBuffer.IsSimpleDragSource = true;
-            this.olvBuffer.Location = new System.Drawing.Point(3, 3);
+            this.olvBuffer.Location = new System.Drawing.Point(3, 28);
             this.olvBuffer.Name = "olvBuffer";
             this.olvBuffer.ShowGroups = false;
-            this.olvBuffer.Size = new System.Drawing.Size(183, 174);
+            this.olvBuffer.Size = new System.Drawing.Size(161, 178);
             this.olvBuffer.TabIndex = 0;
             this.olvBuffer.Tag = "0";
             this.olvBuffer.UseCompatibleStateImageBehavior = false;
@@ -170,9 +171,9 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.Controls.Add(this.btnApplyToAll);
             this.flowLayoutPanelCriteria.Enabled = false;
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(46, 183);
+            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(35, 212);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
-            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(97, 164);
+            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(97, 146);
             this.flowLayoutPanelCriteria.TabIndex = 4;
             // 
             // label1
@@ -262,77 +263,91 @@ namespace XferSuite
             this.btnApplyToAll.UseVisualStyleBackColor = true;
             this.btnApplyToAll.Click += new System.EventHandler(this.btnApplyToAll_Click);
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.btnCopy);
-            this.flowLayoutPanel1.Controls.Add(this.btnResetColumns);
-            this.flowLayoutPanel1.Controls.Add(this.btnShowScatterplot);
-            this.flowLayoutPanel1.Controls.Add(this.btnParse);
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(432, 183);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(81, 164);
-            this.flowLayoutPanel1.TabIndex = 5;
-            // 
-            // btnCopy
-            // 
-            this.btnCopy.Location = new System.Drawing.Point(3, 126);
-            this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(75, 35);
-            this.btnCopy.TabIndex = 6;
-            this.btnCopy.Text = "Copy To Clipboard";
-            this.btnCopy.UseVisualStyleBackColor = true;
-            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
-            // btnParse
-            // 
-            this.btnParse.Location = new System.Drawing.Point(3, 3);
-            this.btnParse.Name = "btnParse";
-            this.btnParse.Size = new System.Drawing.Size(75, 35);
-            this.btnParse.TabIndex = 4;
-            this.btnParse.Text = "Parse Report";
-            this.btnParse.UseVisualStyleBackColor = true;
-            this.btnParse.Click += new System.EventHandler(this.btnParse_Click);
-            // 
-            // btnResetColumns
-            // 
-            this.btnResetColumns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetColumns.Location = new System.Drawing.Point(3, 85);
-            this.btnResetColumns.Name = "btnResetColumns";
-            this.btnResetColumns.Size = new System.Drawing.Size(75, 35);
-            this.btnResetColumns.TabIndex = 3;
-            this.btnResetColumns.Text = "Reset Columns";
-            this.btnResetColumns.UseVisualStyleBackColor = true;
-            this.btnResetColumns.Click += new System.EventHandler(this.btnResetColumns_Click);
-            // 
-            // btnShowScatterplot
-            // 
-            this.btnShowScatterplot.Location = new System.Drawing.Point(3, 44);
-            this.btnShowScatterplot.Name = "btnShowScatterplot";
-            this.btnShowScatterplot.Size = new System.Drawing.Size(75, 35);
-            this.btnShowScatterplot.TabIndex = 5;
-            this.btnShowScatterplot.Text = "Show Scatterplot";
-            this.btnShowScatterplot.UseVisualStyleBackColor = true;
-            this.btnShowScatterplot.Click += new System.EventHandler(this.btnShowScatterplot_Click);
-            // 
             // rtb
             // 
             this.rtb.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tableLayoutPanel.SetColumnSpan(this.rtb, 2);
             this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtb.Location = new System.Drawing.Point(192, 183);
+            this.rtb.Location = new System.Drawing.Point(170, 212);
             this.rtb.Name = "rtb";
-            this.rtb.Size = new System.Drawing.Size(183, 164);
+            this.rtb.Size = new System.Drawing.Size(328, 146);
             this.rtb.TabIndex = 6;
             this.rtb.Text = "";
+            // 
+            // plotView
+            // 
+            this.plotView.BackColor = System.Drawing.Color.White;
+            this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotView.Location = new System.Drawing.Point(504, 28);
+            this.plotView.Name = "plotView";
+            this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.tableLayoutPanel.SetRowSpan(this.plotView, 2);
+            this.plotView.Size = new System.Drawing.Size(371, 330);
+            this.plotView.TabIndex = 7;
+            this.plotView.Text = "plotView1";
+            this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonParse,
+            this.toolStripButtonReset,
+            this.toolStripButtonCopyText,
+            this.toolStripButtonCopyPlot});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(878, 25);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonParse
+            // 
+            this.toolStripButtonParse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonParse.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonParse.Image")));
+            this.toolStripButtonParse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonParse.Name = "toolStripButtonParse";
+            this.toolStripButtonParse.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonParse.Text = "Parse";
+            this.toolStripButtonParse.Click += new System.EventHandler(this.toolStripButtonParse_Click);
+            // 
+            // toolStripButtonReset
+            // 
+            this.toolStripButtonReset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonReset.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonReset.Image")));
+            this.toolStripButtonReset.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonReset.Name = "toolStripButtonReset";
+            this.toolStripButtonReset.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonReset.Text = "Reset Columns";
+            this.toolStripButtonReset.Click += new System.EventHandler(this.toolStripButtonReset_Click);
+            // 
+            // toolStripButtonCopyText
+            // 
+            this.toolStripButtonCopyText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCopyText.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyText.Image")));
+            this.toolStripButtonCopyText.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCopyText.Name = "toolStripButtonCopyText";
+            this.toolStripButtonCopyText.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonCopyText.Text = "Copy Text";
+            this.toolStripButtonCopyText.Click += new System.EventHandler(this.toolStripButtonCopyText_Click);
+            // 
+            // toolStripButtonCopyPlot
+            // 
+            this.toolStripButtonCopyPlot.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCopyPlot.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyPlot.Image")));
+            this.toolStripButtonCopyPlot.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCopyPlot.Name = "toolStripButtonCopyPlot";
+            this.toolStripButtonCopyPlot.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonCopyPlot.Text = "Copy Plot";
+            this.toolStripButtonCopyPlot.Click += new System.EventHandler(this.toolStripButtonCopyPlot_Click);
             // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 350);
+            this.ClientSize = new System.Drawing.Size(878, 361);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ParseSEYR";
@@ -344,8 +359,10 @@ namespace XferSuite
             ((System.ComponentModel.ISupportInitialize)(this.olvBuffer)).EndInit();
             this.flowLayoutPanelCriteria.ResumeLayout(false);
             this.flowLayoutPanelCriteria.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -358,7 +375,6 @@ namespace XferSuite
         private BrightIdeasSoftware.OLVColumn olvColumn3;
         private BrightIdeasSoftware.ObjectListView olvRequire;
         private BrightIdeasSoftware.OLVColumn olvColumn2;
-        private System.Windows.Forms.Button btnResetColumns;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelCriteria;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox cbxPass;
@@ -366,11 +382,13 @@ namespace XferSuite
         private System.Windows.Forms.CheckBox cbxNull;
         private System.Windows.Forms.CheckBox cbxMisaligned;
         private System.Windows.Forms.Label lblSelectedFeature;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Button btnParse;
         private System.Windows.Forms.RichTextBox rtb;
         private System.Windows.Forms.Button btnApplyToAll;
-        private System.Windows.Forms.Button btnShowScatterplot;
-        private System.Windows.Forms.Button btnCopy;
+        private OxyPlot.WindowsForms.PlotView plotView;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonParse;
+        private System.Windows.Forms.ToolStripButton toolStripButtonReset;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCopyText;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
     }
 }
