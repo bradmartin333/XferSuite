@@ -121,7 +121,6 @@
     <Compile Include="Apps\PositionCalc.Designer.cs">
       <DependentUpon>PositionCalc.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\PrintSim\TransferMap.cs" />
     <Compile Include="Apps\CameraViewer\CameraViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,13 +139,6 @@
     </Compile>
     <Compile Include="Apps\MetroGraphs.Designer.cs">
       <DependentUpon>MetroGraphs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\PrintSim\Parameters.cs" />
-    <Compile Include="Apps\PrintSim\PrintSim.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Apps\PrintSim\PrintSim.Designer.cs">
-      <DependentUpon>PrintSim.cs</DependentUpon>
     </Compile>
     <Compile Include="PlexiGlass.cs">
       <SubType>Form</SubType>
@@ -187,9 +179,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\MetroGraphs.resx">
       <DependentUpon>MetroGraphs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Apps\PrintSim\PrintSim.resx">
-      <DependentUpon>PrintSim.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PlexiGlass.resx">
       <DependentUpon>PlexiGlass.cs</DependentUpon>

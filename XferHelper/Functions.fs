@@ -260,54 +260,6 @@ module Zed =
         let z = getAxis(data, 2)
         [| x.Minimum(); x.Maximum(); y.Minimum(); y.Maximum(); z.Minimum(); z.Maximum() |]
 
-module Sim =
-    type ID = {X:float
-               Y:float
-               RR:int
-               RC:int
-               R:int
-               C:int
-               IDX:int
-               mutable Selected:bool}
-               
-                override this.ToString() =
-                    "RR " + string this.RR + ", RC " + string this.RC + ", R " + string this.R + ", C " + string this.C + ", IDX " + string this.IDX
-
-    let toID (x:float,
-              y:float,
-              rr:int,
-              rc:int,
-              r:int,
-              c:int,
-              idx:int,
-              selected:bool) =
-        {X = x;
-         Y = y;
-         RR = rr;
-         RC = rc;
-         R = r;
-         C = c;
-         IDX = idx;
-         Selected = selected}
-
-    let MakeIDs (ax:float, ay:float, 
-                 bx:float, by:float, 
-                 apx:float, apy:float,
-                 bpx:float, bpy:float,
-                 ox:float, oy:float,
-                 selected:bool,
-                 idx:int) : ID[] =
-        [|
-        for n in 0. .. by-1. do
-            for m in 0. .. bx-1. do
-                for l in 0. .. ay-1. do
-                    for k in 0. .. ax-1. do
-                        yield toID(float (k*apx+m*bpx+ox),
-                            float (l*apy+n*bpy+oy),
-                            int (by-n), int (bx-m), int (ay-l), int (ax-k),
-                            idx, selected)
-        |]
-
 module Report =
     type State = 
         | Pass = 0 
