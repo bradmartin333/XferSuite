@@ -14,6 +14,7 @@ namespace XferSuite
                 TableLayoutPanel tableLayoutPanel = mainMenu.tableLayoutPanel;
                 PlexiGlass plexiglass = new PlexiGlass()
                 {
+                    Size = tableLayoutPanel.Size,
                     Location = tableLayoutPanel.PointToScreen(tableLayoutPanel.Location),
                     Opacity = 0.85
                 };
