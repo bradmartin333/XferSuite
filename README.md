@@ -33,9 +33,5 @@ Excel doesn't seem to have a native tool for flipping and rotating grids of data
 This is the solution!
 
 ___
-### Busy Box
-Take over the screen with a "Process" or "Service" message as a digital LOTO.
-
-___
 ### Position Calculator
 Quick way of finding position deltas for 9 axes in CSV format
