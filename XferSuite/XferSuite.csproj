@@ -207,21 +207,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\rotateArrow.png" />
-    <None Include="Resources\iconmonstr-cube-6-72.png" />
-    <None Include="Resources\iconmonstr-layer-21-72.png" />
-    <None Include="Resources\iconmonstr-fingerprint-5-72.png" />
-    <None Include="Resources\iconmonstr-party-9-72.png" />
-    <None Include="Resources\iconmonstr-tree-4-72.png" />
-    <None Include="Resources\iconmonstr-map-10-72.png" />
-    <None Include="Resources\iconmonstr-gear-10-72.png" />
-    <None Include="Resources\iconmonstr-layer-6-72.png" />
     <None Include="Resources\iconmonstr-cursor-16-32.png" />
     <None Include="Resources\iconmonstr-cursor-16-32_2.png" />
     <None Include="Resources\iconmonstr-eye-1-24.png" />
     <None Include="Resources\iconmonstr-eye-10-24.png" />
-    <Content Include="LicenseInfo.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Resources\LicenseInfo.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>

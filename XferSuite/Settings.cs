@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -77,7 +79,7 @@ namespace XferSuite
                 Icon = Icon
             };
             RichTextBox textBox = new RichTextBox() { Dock = DockStyle.Fill };
-            textBox.Text = System.IO.File.ReadAllText("LicenseInfo.txt");
+            textBox.Text = Properties.Resources.LicenseInfo.ToString();
             form.Controls.Add(textBox);
             form.Show();
         }
