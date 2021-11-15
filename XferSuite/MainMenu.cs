@@ -11,7 +11,7 @@ namespace XferSuite
     public partial class MainMenu : Form
     {
         public static int MajorVersion = 2;
-        public static int MinorVerson = 7;
+        public static int MinorVerson = 8;
 
         private static Settings _Settings = new Settings();
 
@@ -20,14 +20,6 @@ namespace XferSuite
             InitializeComponent();
             Text = string.Format("XferSuite v{0}.{1}", MajorVersion, MinorVerson);
             foreach (Button b in tableLayoutPanel.Controls.OfType<Button>())
-            {
-                ToolTip tip = new ToolTip
-                {
-                    InitialDelay = 0
-                };
-                tip.SetToolTip(b, b.AccessibleName);
-            }
-            foreach (Button b in tableLayoutPanelMini.Controls.OfType<Button>())
             {
                 ToolTip tip = new ToolTip
                 {
@@ -98,9 +90,6 @@ namespace XferSuite
                         form = new MapFlip();
                         break;
                     case 6:
-                        form = new BusyBox();
-                        break;
-                    case 7:
                         form = new PositionCalc();
                         break;
                     default:

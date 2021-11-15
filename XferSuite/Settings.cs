@@ -68,5 +68,18 @@ namespace XferSuite
         {
             CheckForUpdates();
         }
+
+        private void btnViewLicense_Click(object sender, EventArgs e)
+        {
+            Form form = new Form()
+            {
+                Text = "XferSuite Licenses",
+                Icon = Icon
+            };
+            RichTextBox textBox = new RichTextBox() { Dock = DockStyle.Fill };
+            textBox.Text = System.IO.File.ReadAllText("LicenseInfo.txt");
+            form.Controls.Add(textBox);
+            form.Show();
+        }
     }
 }
