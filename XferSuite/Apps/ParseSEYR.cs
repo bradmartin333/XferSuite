@@ -395,5 +395,75 @@ namespace XferSuite
             FlipXAxis = !FlipXAxis;
             FlipYAxis = !FlipYAxis;
         }
+
+        private void toolStripButtonSmartSort_Click(object sender, EventArgs e)
+        {
+            Report.Criteria[] originalFeatures = Features;
+            Features = Report.getFeatures(Data);
+            var sortList = Features.ToList();
+            sortList.Sort();
+            Features = sortList.ToArray();
+
+            // Init
+            SelectedFeature = null;
+            lblSelectedFeature.Text = "N\\A";
+            rtb.Text = "";
+            flowLayoutPanelCriteria.Enabled = false;
+            olvBuffer.Objects = null;
+            olvRequire.Objects = null;
+            olvNeedOne.Objects = null;
+            ObjectHasBeenDropped = true;
+
+            foreach (Report.Criteria feature in Features)
+            {
+                feature.Requirements = originalFeatures.First(x => x.Name == feature.Name).Requirements;
+                FindHome(feature);
+            }
+
+            olvNeedOne.RebuildAll(true);
+        }
+
+        private void FindHome(Report.Criteria feature)
+        {
+            char[] digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+            if (feature.Name.Any(char.IsDigit))
+            {
+                feature.Bucket = Report.Bucket.NeedOne;
+                string rootName = feature.Name.TrimEnd(digits);
+                bool foundParent = false;
+                foreach (var item in olvNeedOne.Objects)
+                {
+                    Report.Criteria targ = (Report.Criteria)item;
+                    if (targ.Name.Contains(rootName) && targ.IsParent)
+                    {
+                        feature.IsChild = true;
+                        feature.FamilyName = targ.Name;
+
+                        // Converting between F# and C# lists
+                        List<Report.Criteria> children = targ.Children.ToList();
+                        children.Add(feature);
+                        targ.Children = ListModule.OfSeq(children);
+                        foundParent = true;
+                    }
+                }
+                if (!foundParent)
+                {
+                    feature.IsParent = true;
+                    feature.FamilyName = feature.Name;
+                    olvNeedOne.AddObject(feature);
+                    olvNeedOne.ExpandAll();
+                }
+            }
+            else if (!feature.Name.ToLower().Contains("pat"))
+            {
+                feature.Bucket = Report.Bucket.Required;
+                olvRequire.AddObject(feature);
+            }
+            else
+            {
+                feature.Bucket = Report.Bucket.Buffer;
+                olvBuffer.AddObject(feature);
+            }   
+        }
     }
 }

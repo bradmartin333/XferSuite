@@ -54,6 +54,7 @@ namespace XferSuite
             this.toolStripButtonCopyText = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyPlot = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonFlipAxes = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -296,6 +297,7 @@ namespace XferSuite
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonParse,
+            this.toolStripButtonSmartSort,
             this.toolStripButtonReset,
             this.toolStripButtonCopyText,
             this.toolStripButtonCopyPlot,
@@ -356,6 +358,16 @@ namespace XferSuite
             this.toolStripButtonFlipAxes.Text = "Flip X and Y Axes";
             this.toolStripButtonFlipAxes.Click += new System.EventHandler(this.toolStripButtonFlipAxes_Click);
             // 
+            // toolStripButtonSmartSort
+            // 
+            this.toolStripButtonSmartSort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSmartSort.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSmartSort.Image")));
+            this.toolStripButtonSmartSort.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSmartSort.Name = "toolStripButtonSmartSort";
+            this.toolStripButtonSmartSort.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonSmartSort.Text = "Smart Sort";
+            this.toolStripButtonSmartSort.Click += new System.EventHandler(this.toolStripButtonSmartSort_Click);
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,5 +418,6 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyText;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
         private System.Windows.Forms.ToolStripButton toolStripButtonFlipAxes;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
     }
 }
