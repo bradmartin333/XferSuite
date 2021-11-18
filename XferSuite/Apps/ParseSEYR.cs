@@ -280,7 +280,7 @@ namespace XferSuite
                     $"{lastRegion[1]}\t" +
                     $"{lastRegion[2]}\t" +
                     $"{lastRegion[3]}\t" +
-                    $"{passNum / (passNum + failNum):P}";;
+                    $"{passNum / (passNum + failNum):P}";
 
                 ConfigurePlot();
             }
