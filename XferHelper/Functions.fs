@@ -324,12 +324,20 @@ module Report =
 
     type Criteria = { Name:string;
                       mutable Bucket:Bucket;
-                      mutable Requirements:State[]; }
+                      mutable Requirements:State[];
+                      mutable Children:List<Criteria>
+                      mutable FamilyName:string
+                      mutable IsChild:bool
+                      mutable IsParent:bool}
 
     let toCriteria (name:string) =
-        { Name = name;
-          Bucket = Bucket.Buffer;
-          Requirements = [| State.Pass |] }
+        { Name = name
+          Bucket = Bucket.Buffer
+          Requirements = [| State.Pass |]
+          Children = []
+          FamilyName = ""
+          IsChild = false
+          IsParent = false}
 
     let reader (path:string) =
         let data = File.ReadAllLines path

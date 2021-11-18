@@ -29,9 +29,10 @@ namespace XferSuite
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParseSEYR));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.olvNeedOne = new BrightIdeasSoftware.ObjectListView();
+            this.olvNeedOne = new BrightIdeasSoftware.TreeListView();
             this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvRequire = new BrightIdeasSoftware.ObjectListView();
             this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -80,7 +81,7 @@ namespace XferSuite
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.Size = new System.Drawing.Size(878, 361);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(834, 361);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // olvNeedOne
@@ -93,14 +94,15 @@ namespace XferSuite
             this.olvNeedOne.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvNeedOne.HideSelection = false;
             this.olvNeedOne.IsSimpleDropSink = true;
-            this.olvNeedOne.Location = new System.Drawing.Point(337, 28);
+            this.olvNeedOne.Location = new System.Drawing.Point(319, 28);
             this.olvNeedOne.Name = "olvNeedOne";
             this.olvNeedOne.ShowGroups = false;
-            this.olvNeedOne.Size = new System.Drawing.Size(161, 178);
+            this.olvNeedOne.Size = new System.Drawing.Size(152, 178);
             this.olvNeedOne.TabIndex = 2;
             this.olvNeedOne.Tag = "2";
             this.olvNeedOne.UseCompatibleStateImageBehavior = false;
             this.olvNeedOne.View = System.Windows.Forms.View.Details;
+            this.olvNeedOne.VirtualMode = true;
             // 
             // olvColumn3
             // 
@@ -118,10 +120,10 @@ namespace XferSuite
             this.olvRequire.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvRequire.HideSelection = false;
             this.olvRequire.IsSimpleDropSink = true;
-            this.olvRequire.Location = new System.Drawing.Point(170, 28);
+            this.olvRequire.Location = new System.Drawing.Point(161, 28);
             this.olvRequire.Name = "olvRequire";
             this.olvRequire.ShowGroups = false;
-            this.olvRequire.Size = new System.Drawing.Size(161, 178);
+            this.olvRequire.Size = new System.Drawing.Size(152, 178);
             this.olvRequire.TabIndex = 1;
             this.olvRequire.Tag = "1";
             this.olvRequire.UseCompatibleStateImageBehavior = false;
@@ -146,7 +148,7 @@ namespace XferSuite
             this.olvBuffer.Location = new System.Drawing.Point(3, 28);
             this.olvBuffer.Name = "olvBuffer";
             this.olvBuffer.ShowGroups = false;
-            this.olvBuffer.Size = new System.Drawing.Size(161, 178);
+            this.olvBuffer.Size = new System.Drawing.Size(152, 178);
             this.olvBuffer.TabIndex = 0;
             this.olvBuffer.Tag = "0";
             this.olvBuffer.UseCompatibleStateImageBehavior = false;
@@ -171,7 +173,7 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.Controls.Add(this.btnApplyToAll);
             this.flowLayoutPanelCriteria.Enabled = false;
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(35, 212);
+            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(30, 212);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
             this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(97, 146);
             this.flowLayoutPanelCriteria.TabIndex = 4;
@@ -268,9 +270,9 @@ namespace XferSuite
             this.rtb.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tableLayoutPanel.SetColumnSpan(this.rtb, 2);
             this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtb.Location = new System.Drawing.Point(170, 212);
+            this.rtb.Location = new System.Drawing.Point(161, 212);
             this.rtb.Name = "rtb";
-            this.rtb.Size = new System.Drawing.Size(328, 146);
+            this.rtb.Size = new System.Drawing.Size(310, 146);
             this.rtb.TabIndex = 6;
             this.rtb.Text = "";
             // 
@@ -278,11 +280,11 @@ namespace XferSuite
             // 
             this.plotView.BackColor = System.Drawing.Color.White;
             this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotView.Location = new System.Drawing.Point(504, 28);
+            this.plotView.Location = new System.Drawing.Point(477, 28);
             this.plotView.Name = "plotView";
             this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.tableLayoutPanel.SetRowSpan(this.plotView, 2);
-            this.plotView.Size = new System.Drawing.Size(371, 330);
+            this.plotView.Size = new System.Drawing.Size(354, 330);
             this.plotView.TabIndex = 7;
             this.plotView.Text = "plotView1";
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -298,7 +300,7 @@ namespace XferSuite
             this.toolStripButtonCopyPlot});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(878, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(834, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -346,10 +348,11 @@ namespace XferSuite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(878, 361);
+            this.ClientSize = new System.Drawing.Size(834, 361);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(850, 400);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
             this.tableLayoutPanel.ResumeLayout(false);
@@ -371,7 +374,7 @@ namespace XferSuite
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private BrightIdeasSoftware.ObjectListView olvBuffer;
         private BrightIdeasSoftware.OLVColumn olvColumn1;
-        private BrightIdeasSoftware.ObjectListView olvNeedOne;
+        private BrightIdeasSoftware.TreeListView olvNeedOne;
         private BrightIdeasSoftware.OLVColumn olvColumn3;
         private BrightIdeasSoftware.ObjectListView olvRequire;
         private BrightIdeasSoftware.OLVColumn olvColumn2;

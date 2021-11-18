@@ -9,6 +9,8 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 using System.Drawing;
 using System.ComponentModel;
+using System.Collections;
+using Microsoft.FSharp.Collections;
 
 namespace XferSuite
 {
@@ -66,6 +68,7 @@ namespace XferSuite
         private Report.Entry[] Data { get; set; }
         private Report.Criteria[] Features { get; set; }
         private Report.Criteria SelectedFeature { get; set; }
+        private bool ObjectHasBeenDropped { get; set; }
 
         private List<ScatterPoint>[] ScatterPoints = new List<ScatterPoint>[2];
 
@@ -90,8 +93,10 @@ namespace XferSuite
 
             olvRequire.ModelCanDrop += (s, e) => { e.Effect = DragDropEffects.Copy; };
             olvRequire.ModelDropped += ModelDropped;
-            olvNeedOne.ModelCanDrop += (s, e) => { e.Effect = DragDropEffects.Copy; };
+            olvNeedOne.ModelCanDrop += ModelCanDrop;
             olvNeedOne.ModelDropped += ModelDropped;
+            olvNeedOne.CanExpandGetter = delegate (object x) { return true; };
+            olvNeedOne.ChildrenGetter = delegate (object x) { return ((Report.Criteria)x).Children; };
 
             Show();
         }
@@ -114,6 +119,21 @@ namespace XferSuite
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
+            ObjectHasBeenDropped = false;
+        }
+
+        private void ModelCanDrop(object sender, ModelDropEventArgs e)
+        {
+            e.Handled = true;
+            e.Effect = DragDropEffects.None;
+            if (e.TargetModel != null) 
+            {
+                // Only one branch
+                if (!((Report.Criteria)e.TargetModel).IsChild)
+                    e.Effect = DragDropEffects.Link;
+            }
+            else
+                e.Effect = DragDropEffects.Copy;
         }
 
         private void ModelDropped(object sender, ModelDropEventArgs e)
@@ -121,14 +141,40 @@ namespace XferSuite
             foreach (Report.Criteria m in e.SourceModels)
             {
                 m.Bucket = Report.toBucket(int.Parse(e.ListView.Tag.ToString()));
-                ((ObjectListView)sender).AddObject(m);
+                if ((ObjectListView)sender == olvNeedOne)
+                {
+                    if (e.DropTargetLocation == DropTargetLocation.Item)
+                    {
+                        m.IsChild = true;
+                        Report.Criteria targ = (Report.Criteria)e.TargetModel;
+                        m.FamilyName = targ.Name;
+
+                        // Converting between F# and C# lists
+                        List<Report.Criteria> children = targ.Children.ToList();
+                        children.Add(m);
+                        targ.Children = ListModule.OfSeq(children);
+                    }
+                    else
+                    {
+                        m.IsParent = true;
+                        m.FamilyName = m.Name;
+                        ((ObjectListView)sender).AddObject(m);
+                    }
+                } 
+                else
+                {
+                    ((ObjectListView)sender).AddObject(m);
+                }
                 olvBuffer.RemoveObject(m);
             }
+            e.RefreshObjects();
+            flowLayoutPanelCriteria.Enabled = false;
+            ObjectHasBeenDropped = true;
         }
 
         private void ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            flowLayoutPanelCriteria.Enabled = true;
+            flowLayoutPanelCriteria.Enabled = !ObjectHasBeenDropped;
             SelectedFeature = Features.First(x => x.Name == e.Item.Text);
             lblSelectedFeature.Text = SelectedFeature.Name;
             foreach (CheckBox cbx in flowLayoutPanelCriteria.Controls.OfType<CheckBox>())
@@ -157,8 +203,10 @@ namespace XferSuite
 
         private void Parse()
         {
-            using (new HourGlass())
+            using (new HourGlass(UsePlexiglass: false))
             {
+                List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
+
                 // Reset
                 rtb.Text = "RR\tRC\tR\tC\tYield\n";
                 ScatterPoints[0] = new List<ScatterPoint>();
@@ -182,12 +230,15 @@ namespace XferSuite
                         {
                             var thisCell = Report.getCell(thisImg, i, j);
                             if (thisCell.Length == 0) continue;
-                            bool pass = CheckCriteria(thisCell);
+                            bool pass = CheckCriteria(thisCell, needOneParents);
 
                             double thisX = thisCell[0].X;
                             double thisY = thisCell[0].Y;
 
-                            string thisTag = 
+                            if (thisX == 4 && thisY == 22)
+                                Application.DoEvents();
+
+                            string thisTag =
                                 $"X: {thisX}\n" +
                                 $"Y: {thisY}\n" +
                                 $"RR: {thisCell[0].RR}\n" +
@@ -213,7 +264,7 @@ namespace XferSuite
                     {
                         lastRegion = thisRegion;
                         fieldNum++;
-                        rtb.Text += 
+                        rtb.Text +=
                             $"{thisRegion[0]}\t" +
                             $"{thisRegion[1]}\t" +
                             $"{thisRegion[2]}\t" +
@@ -224,24 +275,24 @@ namespace XferSuite
                     }
                 }
 
-                rtb.Text += 
+                rtb.Text +=
                     $"{lastRegion[0]}\t" +
                     $"{lastRegion[1]}\t" +
                     $"{lastRegion[2]}\t" +
                     $"{lastRegion[3]}\t" +
-                    $"{passNum / (passNum + failNum):P}\n";
+                    $"{passNum / (passNum + failNum):P}";;
 
-                rtb.Text += 
-                    $"\nTotal Yield\t{ScatterPoints[0].Count() / (double)(ScatterPoints[0].Count() + ScatterPoints[1].Count()):P}";
-
-                // Plot
                 ConfigurePlot();
             }
         }
 
         private void ConfigurePlot()
         {
-            PlotModel plotModel = new PlotModel();
+            PlotModel plotModel = new PlotModel()
+            {
+                Title = $"Total Yield   {ScatterPoints[0].Count() / (double)(ScatterPoints[0].Count() + ScatterPoints[1].Count()):P}",
+                TitleFontSize = 12
+            };
 
             LinearAxis Xaxis = new LinearAxis()
             {
@@ -282,12 +333,13 @@ namespace XferSuite
             plotView.Model = plotModel;
         }
 
-        private bool CheckCriteria(Report.Entry[] thisCell)
+        private bool CheckCriteria(Report.Entry[] thisCell, List<string> needOneParents)
         {
-            List<bool> needOneList = new List<bool>();
+            List<bool>[] needOneLists = new List<bool>[needOneParents.Count];
 
-            foreach (Report.Entry item in thisCell)
+            for (int i = 0; i < thisCell.Length - 1; i++)
             {
+                Report.Entry item = thisCell[i];
                 Report.Criteria criteria = Features.First(x => x.Name == item.Name);
                 switch (criteria.Bucket)
                 {
@@ -297,14 +349,19 @@ namespace XferSuite
                         if (!criteria.Requirements.Contains(item.State)) return false;
                         break;
                     case Report.Bucket.NeedOne:
-                        needOneList.Add(criteria.Requirements.Contains(item.State));
+                        int listIdx = needOneParents.IndexOf(criteria.FamilyName);
+                        if (needOneLists[listIdx] == null) needOneLists[listIdx] = new List<bool>(); // Init list
+                        needOneLists[listIdx].Add(
+                            criteria.Requirements.Contains(item.State));
                         break;
                     default:
                         break;
                 }
             }
 
-            if (needOneList.Count > 0 && !needOneList.Contains(true)) return false;
+            foreach (List<bool> needOneList in needOneLists)
+                if (needOneList.Count != 0 && !needOneList.Contains(true)) return false;
+
             return true;
         }
 
