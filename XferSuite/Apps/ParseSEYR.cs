@@ -9,7 +9,6 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 using System.Drawing;
 using System.ComponentModel;
-using System.Collections;
 using Microsoft.FSharp.Collections;
 
 namespace XferSuite
@@ -95,7 +94,7 @@ namespace XferSuite
             olvRequire.ModelDropped += ModelDropped;
             olvNeedOne.ModelCanDrop += ModelCanDrop;
             olvNeedOne.ModelDropped += ModelDropped;
-            olvNeedOne.CanExpandGetter = delegate (object x) { return true; };
+            olvNeedOne.CanExpandGetter = delegate (object x) { return ((Report.Criteria)x).IsParent; };
             olvNeedOne.ChildrenGetter = delegate (object x) { return ((Report.Criteria)x).Children; };
 
             Show();
@@ -159,6 +158,7 @@ namespace XferSuite
                         m.IsParent = true;
                         m.FamilyName = m.Name;
                         ((ObjectListView)sender).AddObject(m);
+                        olvNeedOne.ExpandAll();
                     }
                 } 
                 else
@@ -388,6 +388,12 @@ namespace XferSuite
             Bitmap bitmap = new Bitmap(plotView.Width, plotView.Height);
             plotView.DrawToBitmap(bitmap, new Rectangle(0, 0, plotView.Width, plotView.Height));
             Clipboard.SetImage(bitmap);
+        }
+
+        private void toolStripButtonFlipAxes_Click(object sender, EventArgs e)
+        {
+            FlipXAxis = !FlipXAxis;
+            FlipYAxis = !FlipYAxis;
         }
     }
 }

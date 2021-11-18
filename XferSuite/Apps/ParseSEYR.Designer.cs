@@ -53,6 +53,7 @@ namespace XferSuite
             this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyText = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyPlot = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonFlipAxes = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -297,7 +298,8 @@ namespace XferSuite
             this.toolStripButtonParse,
             this.toolStripButtonReset,
             this.toolStripButtonCopyText,
-            this.toolStripButtonCopyPlot});
+            this.toolStripButtonCopyPlot,
+            this.toolStripButtonFlipAxes});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(834, 25);
@@ -343,6 +345,16 @@ namespace XferSuite
             this.toolStripButtonCopyPlot.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonCopyPlot.Text = "Copy Plot";
             this.toolStripButtonCopyPlot.Click += new System.EventHandler(this.toolStripButtonCopyPlot_Click);
+            // 
+            // toolStripButtonFlipAxes
+            // 
+            this.toolStripButtonFlipAxes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFlipAxes.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFlipAxes.Image")));
+            this.toolStripButtonFlipAxes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFlipAxes.Name = "toolStripButtonFlipAxes";
+            this.toolStripButtonFlipAxes.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonFlipAxes.Text = "Flip X and Y Axes";
+            this.toolStripButtonFlipAxes.Click += new System.EventHandler(this.toolStripButtonFlipAxes_Click);
             // 
             // ParseSEYR
             // 
@@ -393,5 +405,6 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyText;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFlipAxes;
     }
 }
