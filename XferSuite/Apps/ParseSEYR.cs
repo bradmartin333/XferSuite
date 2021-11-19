@@ -10,6 +10,7 @@ using OxyPlot.Axes;
 using System.Drawing;
 using System.ComponentModel;
 using Microsoft.FSharp.Collections;
+using System.Text;
 
 namespace XferSuite
 {
@@ -69,7 +70,7 @@ namespace XferSuite
         private Report.Criteria SelectedFeature { get; set; }
         private bool ObjectHasBeenDropped { get; set; }
 
-        private List<ScatterPoint>[] ScatterPoints = new List<ScatterPoint>[2];
+        private List<ScatterPoint>[] ScatterPoints = new List<ScatterPoint>[2]; // Pass, Fail
 
         public ParseSEYR(string path)
         {
@@ -373,6 +374,10 @@ namespace XferSuite
         private void toolStripButtonParse_Click(object sender, EventArgs e)
         {
             Parse();
+
+            toolStripButtonCopyText.Enabled = true;
+            toolStripButtonCopyPlot.Enabled = true;
+            toolStripButtonCopyForExcel.Enabled = true;
         }
 
         private void toolStripButtonCopyText_Click(object sender, EventArgs e)
@@ -388,12 +393,6 @@ namespace XferSuite
             Bitmap bitmap = new Bitmap(plotView.Width, plotView.Height);
             plotView.DrawToBitmap(bitmap, new Rectangle(0, 0, plotView.Width, plotView.Height));
             Clipboard.SetImage(bitmap);
-        }
-
-        private void toolStripButtonFlipAxes_Click(object sender, EventArgs e)
-        {
-            FlipXAxis = !FlipXAxis;
-            FlipYAxis = !FlipYAxis;
         }
 
         private void toolStripButtonSmartSort_Click(object sender, EventArgs e)
@@ -464,6 +463,38 @@ namespace XferSuite
                 feature.Bucket = Report.Bucket.Buffer;
                 olvBuffer.AddObject(feature);
             }   
+        }
+
+        private void toolStripButtonCopyForExcel_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show(
+                    "This feature is currently only supported for SEYRDesktop generated data. Continue?",
+                    "Copy SEYR Plot for Excel", MessageBoxButtons.YesNoCancel);
+            if (dialogResult != DialogResult.Yes) return;
+
+            double xMin = Math.Floor(plotView.Model.Axes[0].DataMinimum);
+            double yMin = Math.Floor(plotView.Model.Axes[1].DataMinimum);
+            int xRange = (int)Math.Ceiling(plotView.Model.Axes[0].DataMaximum - xMin);
+            int yRange = (int)Math.Ceiling(plotView.Model.Axes[1].DataMaximum - yMin);
+
+            int[,] output = new int[xRange, yRange];
+            foreach (ScatterPoint pt in ScatterPoints[0])
+            {
+                int thisX = (int)Math.Floor(pt.X - xMin);
+                int thisY = (int)Math.Floor(pt.Y - yMin);
+                output[thisX, thisY] = 1;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < xRange; i++)
+            {
+                for (int j = 0; j < yRange; j++)
+                {
+                    sb.Append($"{output[i, j]}\t");
+                }
+                sb.Append('\n');
+            }
+            Clipboard.SetText(sb.ToString());
         }
     }
 }

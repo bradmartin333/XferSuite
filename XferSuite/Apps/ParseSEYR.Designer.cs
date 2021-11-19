@@ -50,11 +50,11 @@ namespace XferSuite
             this.plotView = new OxyPlot.WindowsForms.PlotView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonParse = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyText = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyPlot = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFlipAxes = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonCopyForExcel = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -301,7 +301,7 @@ namespace XferSuite
             this.toolStripButtonReset,
             this.toolStripButtonCopyText,
             this.toolStripButtonCopyPlot,
-            this.toolStripButtonFlipAxes});
+            this.toolStripButtonCopyForExcel});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(834, 25);
@@ -318,6 +318,16 @@ namespace XferSuite
             this.toolStripButtonParse.Text = "Parse";
             this.toolStripButtonParse.Click += new System.EventHandler(this.toolStripButtonParse_Click);
             // 
+            // toolStripButtonSmartSort
+            // 
+            this.toolStripButtonSmartSort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSmartSort.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSmartSort.Image")));
+            this.toolStripButtonSmartSort.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSmartSort.Name = "toolStripButtonSmartSort";
+            this.toolStripButtonSmartSort.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonSmartSort.Text = "Smart Sort";
+            this.toolStripButtonSmartSort.Click += new System.EventHandler(this.toolStripButtonSmartSort_Click);
+            // 
             // toolStripButtonReset
             // 
             this.toolStripButtonReset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -331,6 +341,7 @@ namespace XferSuite
             // toolStripButtonCopyText
             // 
             this.toolStripButtonCopyText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCopyText.Enabled = false;
             this.toolStripButtonCopyText.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyText.Image")));
             this.toolStripButtonCopyText.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonCopyText.Name = "toolStripButtonCopyText";
@@ -341,6 +352,7 @@ namespace XferSuite
             // toolStripButtonCopyPlot
             // 
             this.toolStripButtonCopyPlot.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCopyPlot.Enabled = false;
             this.toolStripButtonCopyPlot.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyPlot.Image")));
             this.toolStripButtonCopyPlot.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonCopyPlot.Name = "toolStripButtonCopyPlot";
@@ -348,25 +360,16 @@ namespace XferSuite
             this.toolStripButtonCopyPlot.Text = "Copy Plot";
             this.toolStripButtonCopyPlot.Click += new System.EventHandler(this.toolStripButtonCopyPlot_Click);
             // 
-            // toolStripButtonFlipAxes
+            // toolStripButtonCopyForExcel
             // 
-            this.toolStripButtonFlipAxes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFlipAxes.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFlipAxes.Image")));
-            this.toolStripButtonFlipAxes.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFlipAxes.Name = "toolStripButtonFlipAxes";
-            this.toolStripButtonFlipAxes.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonFlipAxes.Text = "Flip X and Y Axes";
-            this.toolStripButtonFlipAxes.Click += new System.EventHandler(this.toolStripButtonFlipAxes_Click);
-            // 
-            // toolStripButtonSmartSort
-            // 
-            this.toolStripButtonSmartSort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonSmartSort.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSmartSort.Image")));
-            this.toolStripButtonSmartSort.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonSmartSort.Name = "toolStripButtonSmartSort";
-            this.toolStripButtonSmartSort.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonSmartSort.Text = "Smart Sort";
-            this.toolStripButtonSmartSort.Click += new System.EventHandler(this.toolStripButtonSmartSort_Click);
+            this.toolStripButtonCopyForExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCopyForExcel.Enabled = false;
+            this.toolStripButtonCopyForExcel.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyForExcel.Image")));
+            this.toolStripButtonCopyForExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCopyForExcel.Name = "toolStripButtonCopyForExcel";
+            this.toolStripButtonCopyForExcel.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonCopyForExcel.Text = "Copy Plot For Excel";
+            this.toolStripButtonCopyForExcel.Click += new System.EventHandler(this.toolStripButtonCopyForExcel_Click);
             // 
             // ParseSEYR
             // 
@@ -417,7 +420,7 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyText;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFlipAxes;
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCopyForExcel;
     }
 }
