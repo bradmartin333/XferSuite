@@ -388,11 +388,11 @@ namespace XferSuite
                 double[] data = new double[_raw.Length];
                 if (axis == "X")
                 {
-                    data = Metro.XError(Metro.getPrint(print, _data));
+                    data = Metro.XError(Metro.getPrint(print, _pass));
                 }
                 else if (axis == "Y")
                 {
-                    data = Metro.YError(Metro.getPrint(print, _data));
+                    data = Metro.YError(Metro.getPrint(print, _pass));
                 }
                 if (data.Length == 0)
                 {
@@ -480,11 +480,11 @@ namespace XferSuite
                 double[] data = new double[_raw.Length];
                 if (axis == "X")
                 {
-                    data = Metro.XError(Metro.getPrint(print, _data));
+                    data = Metro.XError(Metro.getPrint(print, _pass));
                 }
                 else if (axis == "Y")
                 {
-                    data = Metro.YError(Metro.getPrint(print, _data));
+                    data = Metro.YError(Metro.getPrint(print, _pass));
                 }
                 if (data.Length == 0)
                 {
@@ -494,7 +494,7 @@ namespace XferSuite
                 double sig = Stats.threeSig(data);
                 if (sig > TargetSigma + 0.5)
                 {
-                    RedOut.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, TargetSigma + 0.5) { Tag = print });
+                    RedOut.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, TargetSigma + 0.5) { Tag = print + $"\nActual Value = {sig}" });
                 }
                 else if (sig > TargetSigma)
                 {
@@ -606,9 +606,13 @@ namespace XferSuite
                     {
                         if (!(plot.Tag == null))
                         {
-                            if (plot.Width > size.Width | plot.Height > size.Height)
+                            if (plot.Width > size.Width)
                             {
-                                size = plot.Size;
+                                size = new Size(plot.Width, size.Height);
+                            }
+                            if (plot.Height > size.Height)
+                            {
+                                size = new Size(size.Width, plot.Height);
                             }
                         }
                     }
@@ -635,7 +639,7 @@ namespace XferSuite
                     {
                         foreach (PlotView plot in tlp.Controls.OfType<PlotView>())
                         {
-                            var pngExporter = new PngExporter { Width = size.Width, Height = size.Width };
+                            var pngExporter = new PngExporter { Width = size.Width, Height = size.Height };
                             g.DrawImage(pngExporter.ExportToBitmap(plot.Model), new Rectangle(i * size.Width, j * size.Height, size.Width, size.Height), 
                                 new Rectangle(0, 0, size.Width, size.Height), GraphicsUnit.Pixel);
 
