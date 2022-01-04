@@ -99,6 +99,11 @@ namespace XferSuite
         {
             InitializeComponent();
             Path = path;
+            _ = InitializeData();
+        }
+
+        private bool InitializeData()
+        {
             _raw = Metro.data(Path);
             Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_raw);
             _data = _splitData.Item2;
@@ -119,6 +124,8 @@ namespace XferSuite
             }
 
             MakePlots();
+
+            return true;
         }
 
         private Metro.Position[] _raw; // gets split into data and missing
@@ -669,6 +676,29 @@ namespace XferSuite
             Form form = new Angleprinting(Metro.data(Path)) { Text = new FileInfo(Path).Name };
             form.Activated += MainMenu.Form_Activated;
             form.Show();
+        }
+
+        private void btnApplyDataFilters_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<string> filters = new List<string>();
+                foreach (DataGridViewRow row in dataGridView.Rows)
+                {
+                    string rowString = string.Empty;
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        if (cell.Value != null)
+                            rowString += $"{cell.Value}\t";
+                    }
+                    // Make sure all cols are valid
+                    if (rowString.Count(x => x == '\t') == 3) filters.Add(rowString); 
+                }
+            }        
+            catch (Exception)
+            {
+                MessageBox.Show("Error in data filter entries", "XferSuite");
+            }
         }
     }
 }

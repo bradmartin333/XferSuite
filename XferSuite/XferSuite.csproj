@@ -188,6 +188,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\MetroGraphs.resx">
       <DependentUpon>MetroGraphs.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PlexiGlass.resx">
       <DependentUpon>PlexiGlass.cs</DependentUpon>

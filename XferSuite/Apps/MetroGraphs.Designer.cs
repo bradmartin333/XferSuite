@@ -51,9 +51,15 @@ namespace XferSuite
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.yieldPlot = new OxyPlot.WindowsForms.PlotView();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanelTools = new System.Windows.Forms.TableLayoutPanel();
+            this.btnSaveSummary = new System.Windows.Forms.Button();
             this.btnShowAnglePlots = new System.Windows.Forms.Button();
             this.btnShowFingerprintPlots = new System.Windows.Forms.Button();
-            this.btnSaveSummary = new System.Windows.Forms.Button();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.btnApplyDataFilters = new System.Windows.Forms.Button();
+            this.Field = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Operator = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -65,6 +71,8 @@ namespace XferSuite
             this.tableLayoutPanel4.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            this.tableLayoutPanelTools.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -329,9 +337,7 @@ namespace XferSuite
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.btnShowAnglePlots);
-            this.tabPage6.Controls.Add(this.btnShowFingerprintPlots);
-            this.tabPage6.Controls.Add(this.btnSaveSummary);
+            this.tabPage6.Controls.Add(this.tableLayoutPanelTools);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Size = new System.Drawing.Size(851, 355);
@@ -339,11 +345,49 @@ namespace XferSuite
             this.tabPage6.Text = "Tools";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanelTools
+            // 
+            this.tableLayoutPanelTools.AutoSize = true;
+            this.tableLayoutPanelTools.ColumnCount = 3;
+            this.tableLayoutPanelTools.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelTools.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelTools.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelTools.Controls.Add(this.btnSaveSummary, 0, 0);
+            this.tableLayoutPanelTools.Controls.Add(this.btnShowAnglePlots, 0, 2);
+            this.tableLayoutPanelTools.Controls.Add(this.btnShowFingerprintPlots, 0, 1);
+            this.tableLayoutPanelTools.Controls.Add(this.dataGridView, 2, 1);
+            this.tableLayoutPanelTools.Controls.Add(this.btnApplyDataFilters, 2, 0);
+            this.tableLayoutPanelTools.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelTools.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanelTools.Name = "tableLayoutPanelTools";
+            this.tableLayoutPanelTools.Padding = new System.Windows.Forms.Padding(10);
+            this.tableLayoutPanelTools.RowCount = 4;
+            this.tableLayoutPanelTools.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelTools.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelTools.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelTools.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelTools.Size = new System.Drawing.Size(851, 355);
+            this.tableLayoutPanelTools.TabIndex = 3;
+            // 
+            // btnSaveSummary
+            // 
+            this.btnSaveSummary.AutoSize = true;
+            this.btnSaveSummary.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSaveSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveSummary.Location = new System.Drawing.Point(13, 13);
+            this.btnSaveSummary.Name = "btnSaveSummary";
+            this.btnSaveSummary.Size = new System.Drawing.Size(149, 47);
+            this.btnSaveSummary.TabIndex = 0;
+            this.btnSaveSummary.Text = "Save Summary";
+            this.btnSaveSummary.UseVisualStyleBackColor = true;
+            this.btnSaveSummary.Click += new System.EventHandler(this.btnSaveSummary_Click);
+            // 
             // btnShowAnglePlots
             // 
             this.btnShowAnglePlots.AutoSize = true;
+            this.btnShowAnglePlots.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShowAnglePlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowAnglePlots.Location = new System.Drawing.Point(19, 122);
+            this.btnShowAnglePlots.Location = new System.Drawing.Point(13, 119);
             this.btnShowAnglePlots.Name = "btnShowAnglePlots";
             this.btnShowAnglePlots.Size = new System.Drawing.Size(149, 47);
             this.btnShowAnglePlots.TabIndex = 2;
@@ -354,8 +398,9 @@ namespace XferSuite
             // btnShowFingerprintPlots
             // 
             this.btnShowFingerprintPlots.AutoSize = true;
+            this.btnShowFingerprintPlots.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShowFingerprintPlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowFingerprintPlots.Location = new System.Drawing.Point(19, 69);
+            this.btnShowFingerprintPlots.Location = new System.Drawing.Point(13, 66);
             this.btnShowFingerprintPlots.Name = "btnShowFingerprintPlots";
             this.btnShowFingerprintPlots.Size = new System.Drawing.Size(149, 47);
             this.btnShowFingerprintPlots.TabIndex = 1;
@@ -363,17 +408,70 @@ namespace XferSuite
             this.btnShowFingerprintPlots.UseVisualStyleBackColor = true;
             this.btnShowFingerprintPlots.Click += new System.EventHandler(this.btnShowFingerprintPlots_Click);
             // 
-            // btnSaveSummary
+            // dataGridView
             // 
-            this.btnSaveSummary.AutoSize = true;
-            this.btnSaveSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSaveSummary.Location = new System.Drawing.Point(19, 16);
-            this.btnSaveSummary.Name = "btnSaveSummary";
-            this.btnSaveSummary.Size = new System.Drawing.Size(149, 47);
-            this.btnSaveSummary.TabIndex = 0;
-            this.btnSaveSummary.Text = "Save Summary";
-            this.btnSaveSummary.UseVisualStyleBackColor = true;
-            this.btnSaveSummary.Click += new System.EventHandler(this.btnSaveSummary_Click);
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Field,
+            this.Operator,
+            this.Value});
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.Location = new System.Drawing.Point(496, 66);
+            this.dataGridView.Name = "dataGridView";
+            this.tableLayoutPanelTools.SetRowSpan(this.dataGridView, 3);
+            this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridView.Size = new System.Drawing.Size(342, 276);
+            this.dataGridView.TabIndex = 3;
+            // 
+            // btnApplyDataFilters
+            // 
+            this.btnApplyDataFilters.AutoSize = true;
+            this.btnApplyDataFilters.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnApplyDataFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnApplyDataFilters.Location = new System.Drawing.Point(496, 13);
+            this.btnApplyDataFilters.Name = "btnApplyDataFilters";
+            this.btnApplyDataFilters.Size = new System.Drawing.Size(342, 47);
+            this.btnApplyDataFilters.TabIndex = 4;
+            this.btnApplyDataFilters.Text = "Apply Data Filters";
+            this.btnApplyDataFilters.UseVisualStyleBackColor = true;
+            this.btnApplyDataFilters.Click += new System.EventHandler(this.btnApplyDataFilters_Click);
+            // 
+            // Field
+            // 
+            this.Field.HeaderText = "Field";
+            this.Field.Items.AddRange(new object[] {
+            "Num",
+            "X",
+            "Y",
+            "RR",
+            "RC",
+            "R",
+            "C",
+            "SR",
+            "SC",
+            "XE",
+            "YE",
+            "AE"});
+            this.Field.Name = "Field";
+            this.Field.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Field.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Operator
+            // 
+            this.Operator.HeaderText = "Operator";
+            this.Operator.Items.AddRange(new object[] {
+            "<",
+            ">",
+            "<=",
+            ">=",
+            "==",
+            "!="});
+            this.Operator.Name = "Operator";
+            // 
+            // Value
+            // 
+            this.Value.HeaderText = "Value";
+            this.Value.Name = "Value";
             // 
             // MetroGraphs
             // 
@@ -396,6 +494,9 @@ namespace XferSuite
             this.tabPage5.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
+            this.tableLayoutPanelTools.ResumeLayout(false);
+            this.tableLayoutPanelTools.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -426,5 +527,11 @@ namespace XferSuite
         private System.Windows.Forms.Button btnSaveSummary;
         private System.Windows.Forms.Button btnShowFingerprintPlots;
         private System.Windows.Forms.Button btnShowAnglePlots;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTools;
+        private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.Button btnApplyDataFilters;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Field;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Operator;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
     }
 }
