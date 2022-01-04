@@ -203,6 +203,9 @@ module Metro =
         |> Statistics.Entropy
         |> fun x -> x**10.
 
+    let FilterData (filters:string[], data:Position[]) =
+        data
+
 module Zed =
     type Position = {Time:System.DateTime; X:float; Y:float; Z:float}
     
