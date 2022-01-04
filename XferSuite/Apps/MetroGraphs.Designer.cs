@@ -51,9 +51,9 @@ namespace XferSuite
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.yieldPlot = new OxyPlot.WindowsForms.PlotView();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.btnShowAnglePlots = new System.Windows.Forms.Button();
             this.btnShowFingerprintPlots = new System.Windows.Forms.Button();
             this.btnSaveSummary = new System.Windows.Forms.Button();
-            this.btnShowAnglePlots = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -339,6 +339,18 @@ namespace XferSuite
             this.tabPage6.Text = "Tools";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // btnShowAnglePlots
+            // 
+            this.btnShowAnglePlots.AutoSize = true;
+            this.btnShowAnglePlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowAnglePlots.Location = new System.Drawing.Point(19, 122);
+            this.btnShowAnglePlots.Name = "btnShowAnglePlots";
+            this.btnShowAnglePlots.Size = new System.Drawing.Size(149, 47);
+            this.btnShowAnglePlots.TabIndex = 2;
+            this.btnShowAnglePlots.Text = "Show Angleprint Plots";
+            this.btnShowAnglePlots.UseVisualStyleBackColor = true;
+            this.btnShowAnglePlots.Click += new System.EventHandler(this.btnShowAnglePlots_Click);
+            // 
             // btnShowFingerprintPlots
             // 
             this.btnShowFingerprintPlots.AutoSize = true;
@@ -359,21 +371,9 @@ namespace XferSuite
             this.btnSaveSummary.Name = "btnSaveSummary";
             this.btnSaveSummary.Size = new System.Drawing.Size(149, 47);
             this.btnSaveSummary.TabIndex = 0;
-            this.btnSaveSummary.Text = "Save 4 Graph Summary";
+            this.btnSaveSummary.Text = "Save Summary";
             this.btnSaveSummary.UseVisualStyleBackColor = true;
             this.btnSaveSummary.Click += new System.EventHandler(this.btnSaveSummary_Click);
-            // 
-            // btnShowAnglePlots
-            // 
-            this.btnShowAnglePlots.AutoSize = true;
-            this.btnShowAnglePlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowAnglePlots.Location = new System.Drawing.Point(19, 122);
-            this.btnShowAnglePlots.Name = "btnShowAnglePlots";
-            this.btnShowAnglePlots.Size = new System.Drawing.Size(149, 47);
-            this.btnShowAnglePlots.TabIndex = 2;
-            this.btnShowAnglePlots.Text = "Show Angleprint Plots";
-            this.btnShowAnglePlots.UseVisualStyleBackColor = true;
-            this.btnShowAnglePlots.Click += new System.EventHandler(this.btnShowAnglePlots_Click);
             // 
             // MetroGraphs
             // 

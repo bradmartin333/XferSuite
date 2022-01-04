@@ -581,7 +581,7 @@ namespace XferSuite
                 using (SaveFileDialog saveFileDialog = new SaveFileDialog())
                 {
                     saveFileDialog.RestoreDirectory = true;
-                    saveFileDialog.Title = "Export 4 Graph Summary";
+                    saveFileDialog.Title = "Export Summary";
                     saveFileDialog.DefaultExt = ".png";
                     saveFileDialog.Filter = "png file (*.png)|*.png";
                     saveFileDialog.FileName = Text.Replace(".txt", "Summary");
@@ -599,58 +599,58 @@ namespace XferSuite
             Size size = new Size(0, 0);
 
             foreach (TabPage page in tabControl.TabPages)
-            {
                 foreach (TableLayoutPanel tlp in page.Controls.OfType<TableLayoutPanel>())
-                {
                     foreach (PlotView plot in tlp.Controls.OfType<PlotView>())
-                    {
                         if (!(plot.Tag == null))
                         {
                             if (plot.Width > size.Width)
-                            {
                                 size = new Size(plot.Width, size.Height);
-                            }
                             if (plot.Height > size.Height)
-                            {
                                 size = new Size(size.Width, plot.Height);
-                            }
                         }
-                    }
-                }
-            }
 
-            Bitmap bmp = new Bitmap(size.Width * 2, size.Height * 2); // First 2 pages
+            Bitmap bmp = new Bitmap(size.Width * 2, size.Height * 4);
 
+            int pageIDX = 0;
             int i = 0;
             int j = 0;
 
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                g.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, size.Width * 2, size.Height * 2));
+                g.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, size.Width * 2, size.Height * 4));
 
                 foreach (TabPage page in tabControl.TabPages)
                 {
-                    if (j == 2)
+                    if (pageIDX < 4 && pageIDX != 2) // Don't wan't boxplot
                     {
-                        continue; // Only save first 2 pages for now
-                    }
-
-                    foreach (TableLayoutPanel tlp in page.Controls.OfType<TableLayoutPanel>())
-                    {
-                        foreach (PlotView plot in tlp.Controls.OfType<PlotView>())
+                        foreach (TableLayoutPanel tlp in page.Controls.OfType<TableLayoutPanel>())
                         {
-                            var pngExporter = new PngExporter { Width = size.Width, Height = size.Height };
-                            g.DrawImage(pngExporter.ExportToBitmap(plot.Model), new Rectangle(i * size.Width, j * size.Height, size.Width, size.Height), 
-                                new Rectangle(0, 0, size.Width, size.Height), GraphicsUnit.Pixel);
-
-                            i += 1;
-                            if (i == 2)
+                            foreach (PlotView plot in tlp.Controls.OfType<PlotView>())
                             {
-                                i = 0;
-                                j += 1;
+                                var pngExporter = new PngExporter { Width = size.Width, Height = size.Height };
+                                g.DrawImage(pngExporter.ExportToBitmap(plot.Model), new Rectangle(i * size.Width, j * size.Height, size.Width, size.Height),
+                                    new Rectangle(0, 0, size.Width, size.Height), GraphicsUnit.Pixel);
+
+                                i += 1;
+                                if (i == 2)
+                                {
+                                    i = 0;
+                                    j += 1;
+                                }
                             }
                         }
                     }
+                    else if (pageIDX == 4) // Yield plot
+                    {
+                        foreach (PlotView plot in page.Controls.OfType<PlotView>()) // There is only one
+                        {
+                            var pngExporter = new PngExporter { Width = size.Width * 2, Height = size.Height };
+                            g.DrawImage(pngExporter.ExportToBitmap(plot.Model), new Rectangle(0, j * size.Height, size.Width * 2, size.Height),
+                                new Rectangle(0, 0, size.Width * 2, size.Height), GraphicsUnit.Pixel);
+                        }
+                    }
+
+                    pageIDX++;
                 }
             }
 
