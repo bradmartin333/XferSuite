@@ -346,7 +346,7 @@ module Report =
         else
             let firstLineCols = data.[0].Split('\t');
             if firstLineCols.Length < 11 then
-                2 // Not enough cols
+                3 // Not enough cols
             else
                 let state = 
                     match firstLineCols.[4] with
@@ -356,7 +356,7 @@ module Report =
                         | "Misaligned" -> State.Misaligned
                         | _ -> State.Other
                 if state = State.Other then
-                    2
+                    3
                 else
                     1
 

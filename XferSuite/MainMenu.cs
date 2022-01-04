@@ -135,6 +135,7 @@ namespace XferSuite
                     MessageBox.Show("Insufficient data in file", "XferSuite");
                     return false;
                 case 1:
+                case 2:
                     return true;
                 default:
                     MessageBox.Show("Invalid file", "XferSuite");
