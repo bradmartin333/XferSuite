@@ -681,17 +681,14 @@ namespace XferSuite
         {
             try
             {
-                List<string> filters = new List<string>();
+                List<string[]> filters = new List<string[]>();
                 foreach (DataGridViewRow row in dataGridView.Rows)
                 {
-                    string rowString = string.Empty;
+                    List<string> cols = new List<string>();
                     foreach (DataGridViewCell cell in row.Cells)
-                    {
-                        if (cell.Value != null)
-                            rowString += $"{cell.Value}\t";
-                    }
+                        if (cell.Value != null) cols.Add(cell.Value.ToString());
                     // Make sure all cols are valid
-                    if (rowString.Count(x => x == '\t') == 3) filters.Add(rowString); 
+                    if (cols.Count == 3) filters.Add(cols.ToArray()); 
                 }
 
                 _Raw = Metro.FilterData(filters.ToArray(), Metro.data(_Path));

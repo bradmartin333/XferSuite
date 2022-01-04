@@ -203,8 +203,94 @@ module Metro =
         |> Statistics.Entropy
         |> fun x -> x**10.
 
-    let FilterData (filters:string[], data:Position[]) =
+    let ApplyFilter (filter:string[], data:Position[]) =
         data
+        |> Array.filter(
+            match filter.[1] with
+                | "<" -> fun x -> (match filter.[0] with
+                                    | "X" -> x.X
+                                    | "Y" -> x.Y
+                                    | "RR" -> float x.RR
+                                    | "RC" -> float x.RC
+                                    | "R" -> float x.R
+                                    | "C" -> float x.C
+                                    | "SR" -> float x.SR
+                                    | "SC" -> float x.SC
+                                    | "XE" -> x.XE
+                                    | "YE" -> x.YE
+                                    | "AE" -> x.AE
+                                    | _ -> x.Num) < float filter.[2]
+                | ">" -> fun x -> (match filter.[0] with
+                                    | "X" -> x.X
+                                    | "Y" -> x.Y
+                                    | "RR" -> float x.RR
+                                    | "RC" -> float x.RC
+                                    | "R" -> float x.R
+                                    | "C" -> float x.C
+                                    | "SR" -> float x.SR
+                                    | "SC" -> float x.SC
+                                    | "XE" -> x.XE
+                                    | "YE" -> x.YE
+                                    | "AE" -> x.AE
+                                    | _ -> x.Num) > float filter.[2]
+                | "<=" -> fun x -> (match filter.[0] with
+                                    | "X" -> x.X
+                                    | "Y" -> x.Y
+                                    | "RR" -> float x.RR
+                                    | "RC" -> float x.RC
+                                    | "R" -> float x.R
+                                    | "C" -> float x.C
+                                    | "SR" -> float x.SR
+                                    | "SC" -> float x.SC
+                                    | "XE" -> x.XE
+                                    | "YE" -> x.YE
+                                    | "AE" -> x.AE
+                                    | _ -> x.Num) <= float filter.[2]
+                | ">=" -> fun x -> (match filter.[0] with
+                                    | "X" -> x.X
+                                    | "Y" -> x.Y
+                                    | "RR" -> float x.RR
+                                    | "RC" -> float x.RC
+                                    | "R" -> float x.R
+                                    | "C" -> float x.C
+                                    | "SR" -> float x.SR
+                                    | "SC" -> float x.SC
+                                    | "XE" -> x.XE
+                                    | "YE" -> x.YE
+                                    | "AE" -> x.AE
+                                    | _ -> x.Num) >= float filter.[2]
+                | "==" -> fun x -> (match filter.[0] with
+                                    | "X" -> x.X
+                                    | "Y" -> x.Y
+                                    | "RR" -> float x.RR
+                                    | "RC" -> float x.RC
+                                    | "R" -> float x.R
+                                    | "C" -> float x.C
+                                    | "SR" -> float x.SR
+                                    | "SC" -> float x.SC
+                                    | "XE" -> x.XE
+                                    | "YE" -> x.YE
+                                    | "AE" -> x.AE
+                                    | _ -> x.Num) = float filter.[2]
+                | _ -> fun x -> (match filter.[0] with
+                                    | "X" -> x.X
+                                    | "Y" -> x.Y
+                                    | "RR" -> float x.RR
+                                    | "RC" -> float x.RC
+                                    | "R" -> float x.R
+                                    | "C" -> float x.C
+                                    | "SR" -> float x.SR
+                                    | "SC" -> float x.SC
+                                    | "XE" -> x.XE
+                                    | "YE" -> x.YE
+                                    | "AE" -> x.AE
+                                    | _ -> x.Num) <> float filter.[2])
+
+    let FilterData (filters:string[][], data:Position[]) =
+        let mutable output = data;
+        for filter in filters do
+            output <- ApplyFilter(filter, data)  
+        output
 
 module Zed =
     type Position = {Time:System.DateTime; X:float; Y:float; Z:float}
