@@ -71,13 +71,15 @@ namespace XferSuite
                 switch (idx)
                 {
                     case 0:
-                        if (!VerifyMetro(path)) return;
+                        if (!VerifyPath(path, isMetro: true)) return;
                         form = new MetroGraphs(path) { Text = new FileInfo(path).Name };
                         break;
                     case 1:
+                        // Internal file validation
                         form = new XYZscan.frmScanSelect(path);
                         break;
                     case 2:
+                        if (!VerifyPath(path, isMetro: false)) return;
                         form = new ParseSEYR(path);
                         break;
                     case 3:
@@ -125,16 +127,14 @@ namespace XferSuite
             return null;
         }
 
-        private bool VerifyMetro(string path)
+        private bool VerifyPath(string path, bool isMetro)
         {
-            switch (Metro.verify(path))
+            switch (isMetro ? Metro.verify(path) : Report.verify(path))
             {
                 case 0:
                     MessageBox.Show("Insufficient data in file", "XferSuite");
                     return false;
                 case 1:
-                    return true;
-                case 2:
                     return true;
                 default:
                     MessageBox.Show("Invalid file", "XferSuite");

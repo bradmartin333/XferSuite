@@ -339,6 +339,27 @@ module Report =
           IsChild = false
           IsParent = false}
 
+    let verify (path:string) =
+        let data = File.ReadAllLines path
+        if data.Length < 2 then
+            0 //Insufficient Data/Empty File
+        else
+            let firstLineCols = data.[0].Split('\t');
+            if firstLineCols.Length < 11 then
+                2 // Not enough cols
+            else
+                let state = 
+                    match firstLineCols.[4] with
+                        | "Pass" -> State.Pass
+                        | "Fail" -> State.Fail
+                        | "Null" -> State.Null
+                        | "Misaligned" -> State.Misaligned
+                        | _ -> State.Other
+                if state = State.Other then
+                    2
+                else
+                    1
+
     let reader (path:string) =
         let data = File.ReadAllLines path
         data
