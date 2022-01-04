@@ -663,5 +663,12 @@ namespace XferSuite
             form.Activated += MainMenu.Form_Activated;
             form.Show();
         }
+
+        private void btnShowAnglePlots_Click(object sender, EventArgs e)
+        {
+            Form form = new Angleprinting(Metro.data(Path)) { Text = new FileInfo(Path).Name };
+            form.Activated += MainMenu.Form_Activated;
+            form.Show();
+        }
     }
 }

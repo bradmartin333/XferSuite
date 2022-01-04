@@ -97,6 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Apps\CameraViewer\CameraLayout.cs" />
+    <Compile Include="Apps\Angleprinting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\Angleprinting.Designer.cs">
+      <DependentUpon>Angleprinting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\Fingerprinting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +165,9 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Apps\Angleprinting.resx">
+      <DependentUpon>Angleprinting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Apps\Fingerprinting.resx">
       <DependentUpon>Fingerprinting.cs</DependentUpon>
     </EmbeddedResource>
