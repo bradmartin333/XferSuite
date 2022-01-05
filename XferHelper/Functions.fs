@@ -231,7 +231,7 @@ module Metro =
                     | "XE" -> x.XE
                     | "YE" -> x.YE
                     | "AE" -> x.AE
-                    | _ -> x.Num
+                    | _ -> float x.Num
 
                 let b = float filter.[2]
 
