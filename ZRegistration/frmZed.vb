@@ -118,6 +118,9 @@ Public Class frmZed
         Dim YLine = Zed.dataLineFit(UserData.ToArray(), 1)
         XLineAngle = XLine.Item1
         YLineAngle = YLine.Item1
+        Dim PlaneThetas = Zed.dataPlaneFit(UserData.ToArray())
+        XPlaneAngle = PlaneThetas.Item1
+        YPlaneAngle = PlaneThetas.Item2
         If (RemoveTilt) Then
             TiltData = New List(Of Zed.Position)
             For Each d In UserData
