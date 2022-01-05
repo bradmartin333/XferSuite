@@ -93,44 +93,50 @@ namespace XferSuite
             }
         }
 
-        private string Path;
+        private string _Path;
+        private Metro.Position[] _Raw; // gets split into data and missing
+        private Metro.Position[] _Data; // gets split into pass and fail
+        private Metro.Position[] _Missing;
+        private Metro.Position[] _Pass;
+        private Metro.Position[] _Fail;
+        List<string> _Prints = new List<string>();
 
         public MetroGraphs(string path)
         {
             InitializeComponent();
-            Path = path;
-            _raw = Metro.data(Path);
-            Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_raw);
-            _data = _splitData.Item2;
-            _missing = _splitData.Item1;
+            _Path = path;
+            _Raw = Metro.data(_Path);
+            _ = InitializeData();
+        }
 
-            string[] indices = Metro.prints(_raw);
+        private bool InitializeData()
+        {
+            Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_Raw);
+            _Data = _splitData.Item2;
+            _Missing = _splitData.Item1;
+
+            string[] indices = Metro.prints(_Raw);
             int printIdx = 1;
             int posIdx = 0;
             foreach (string index in indices)
             {
-                if (!_prints.Contains(index))
+                if (!_Prints.Contains(index))
                 {
-                    _prints.Add(index);
+                    _Prints.Add(index);
                     printIdx += 1;
                 }
-                _raw[posIdx].PrintNum = printIdx;
+                _Raw[posIdx].PrintNum = printIdx;
                 posIdx += 1;
             }
 
             MakePlots();
-        }
 
-        private Metro.Position[] _raw; // gets split into data and missing
-        private Metro.Position[] _data; // gets split into pass and fail
-        private Metro.Position[] _missing;
-        private Metro.Position[] _pass;
-        private Metro.Position[] _fail;
-        List<string> _prints = new List<string>();
+            return true;
+        }
 
         private void MakePlots()
         {
-            Metro.Rescore(_data, Threshold);
+            Metro.Rescore(_Data, Threshold);
             makeScatterPlot();
             makeErrorScatterPlot();
             makeHistograms();
@@ -141,33 +147,33 @@ namespace XferSuite
 
         private void makeScatterPlot()
         {
-            Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
-            _pass = _scoredData.Item2;
-            _fail = _scoredData.Item1;
+            Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_Data);
+            _Pass = _scoredData.Item2;
+            _Fail = _scoredData.Item1;
 
             PlotModel scatter = new PlotModel() { TitleFontSize = 15 };
-            double[] passX = Metro.XPos(_pass);
-            double[] passY = Metro.YPos(_pass);
+            double[] passX = Metro.XPos(_Pass);
+            double[] passY = Metro.YPos(_Pass);
             ScatterSeries passSeries = new ScatterSeries() { MarkerFill = OxyColors.Green, MarkerSize = _PointSize };
-            for (int i = 0; i < _pass.Length; i++)
+            for (int i = 0; i < _Pass.Length; i++)
             {
                 passSeries.Points.Add(new ScatterPoint(passX[i], passY[i]));
             }
             scatter.Series.Add(passSeries);
 
-            double[] failX = Metro.XPos(_fail);
-            double[] failY = Metro.YPos(_fail);
+            double[] failX = Metro.XPos(_Fail);
+            double[] failY = Metro.YPos(_Fail);
             ScatterSeries failSeries = new ScatterSeries() { MarkerFill = OxyColors.Gold, MarkerSize = _PointSize };
-            for (int i = 0; i < _fail.Length; i++)
+            for (int i = 0; i < _Fail.Length; i++)
             {
                 failSeries.Points.Add(new ScatterPoint(failX[i], failY[i]));
             }
             scatter.Series.Add(failSeries);
 
-            double[] missingX = Metro.XPos(_missing);
-            double[] missingY = Metro.YPos(_missing);
+            double[] missingX = Metro.XPos(_Missing);
+            double[] missingY = Metro.YPos(_Missing);
             ScatterSeries missingSeries = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = _PointSize };
-            for (int i = 0; i < _missing.Length; i++)
+            for (int i = 0; i < _Missing.Length; i++)
             {
                 missingSeries.Points.Add(new ScatterPoint(missingX[i], missingY[i]));
             }
@@ -197,17 +203,17 @@ namespace XferSuite
 
             scatter.Axes.Add(myXaxis);
             scatter.Axes.Add(myYaxis);
-            scatter.Title = string.Format("{0} Pass   {1} Fail   {2} Missing", _scoredData.Item2.Length, _scoredData.Item1.Length, _missing.Length);
+            scatter.Title = string.Format("{0} Pass   {1} Fail   {2} Missing", _scoredData.Item2.Length, _scoredData.Item1.Length, _Missing.Length);
             scatterPlot.Model = scatter;
         }
 
         private void makeErrorScatterPlot()
         {
             PlotModel errorScatter = new PlotModel() { TitleFontSize = 15 };
-            double[] errorX = Metro.XError(_pass);
-            double[] errorY = Metro.YError(_pass);
+            double[] errorX = Metro.XError(_Pass);
+            double[] errorY = Metro.YError(_Pass);
             ScatterSeries errorScatterSeries = new ScatterSeries() { MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Blue, MarkerSize = 1 };
-            for (int i = 0; i < _pass.Length; i++)
+            for (int i = 0; i < _Pass.Length; i++)
             {
                 errorScatterSeries.Points.Add(new ScatterPoint(errorX[i], errorY[i]));
             }
@@ -227,8 +233,8 @@ namespace XferSuite
             errorScatter.Axes.Add(myXaxis);
             errorScatter.Axes.Add(myYaxis);
 
-            float FYld = _pass.Length / (float) _raw.Length;
-            float PYld = (_pass.Length + _fail.Length) / (float) _raw.Length;
+            float FYld = _Pass.Length / (float) _Raw.Length;
+            float PYld = (_Pass.Length + _Fail.Length) / (float) _Raw.Length;
             errorScatter.Title = string.Format("Func. Yield: {0}   Print Yield: {1}", FYld.ToString("p"), PYld.ToString("p"));
             errorScatterPlot.Model = errorScatter;
         }
@@ -236,14 +242,14 @@ namespace XferSuite
         private void makeHistograms()
         {
             PlotModel histogramX = new PlotModel() { TitleFontSize = 15 };       
-            double[] dataX = Metro.XError(_pass);
+            double[] dataX = Metro.XError(_Pass);
             histogramX.Series.Add(makeHistogram(dataX));
             histogramX.Series.Add(makeHistStatBars(dataX));
             histogramX.Series.Add(makeNormDistribution(dataX));
             histogramX.Title = string.Format("Median: {0} micron   3Sigma: {1}", Stats.median(dataX), Stats.threeSig(dataX));
             
             PlotModel histogramY = new PlotModel() { TitleFontSize = 15 };
-            double[] dataY = Metro.YError(_pass);
+            double[] dataY = Metro.YError(_Pass);
             histogramY.Series.Add(makeHistogram(dataY));
             histogramY.Series.Add(makeHistStatBars(dataY));
             histogramY.Series.Add(makeNormDistribution(dataY));
@@ -345,14 +351,14 @@ namespace XferSuite
                 Position = AxisPosition.Bottom,
                 Title = "Print Number",
                 Minimum = 0.5,
-                Maximum = _prints.Count + 0.5
+                Maximum = _Prints.Count + 0.5
             };
             LinearAxis myXaxis2 = new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
                 Title = "Print Number",
                 Minimum = 0.5,
-                Maximum = _prints.Count + 0.5
+                Maximum = _Prints.Count + 0.5
             };
             LinearAxis myYaxis1 = new LinearAxis()
             {
@@ -383,16 +389,16 @@ namespace XferSuite
             BoxPlotSeries Red = new BoxPlotSeries() { Fill = OxyColors.Red };
             BoxPlotSeries Green = new BoxPlotSeries() { Fill = OxyColors.Green };
 
-            foreach (string print in _prints)
+            foreach (string print in _Prints)
             {
-                double[] data = new double[_raw.Length];
+                double[] data = new double[_Raw.Length];
                 if (axis == "X")
                 {
-                    data = Metro.XError(Metro.getPrint(print, _pass));
+                    data = Metro.XError(Metro.getPrint(print, _Pass));
                 }
                 else if (axis == "Y")
                 {
-                    data = Metro.YError(Metro.getPrint(print, _pass));
+                    data = Metro.YError(Metro.getPrint(print, _Pass));
                 }
                 if (data.Length == 0)
                 {
@@ -403,11 +409,11 @@ namespace XferSuite
                 double sig = Stats.threeSig(data);
                 if (sig > TargetSigma)
                 {
-                    Red.Items.Add(new BoxPlotItem(_prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]) { Tag = print });
+                    Red.Items.Add(new BoxPlotItem(_Prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]) { Tag = print });
                 }
                 else
                 {
-                    Green.Items.Add(new BoxPlotItem(_prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]) { Tag = print });
+                    Green.Items.Add(new BoxPlotItem(_Prints.IndexOf(print) + 1, summary[0], summary[1], summary[2], summary[3], summary[4]) { Tag = print });
                 }
             }
 
@@ -436,14 +442,14 @@ namespace XferSuite
                 Position = AxisPosition.Bottom,
                 Title = "Print Number",
                 Minimum = 0.5,
-                Maximum = _prints.Count + 0.5
+                Maximum = _Prints.Count + 0.5
             };
             LinearAxis myXaxis2 = new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
                 Title = "Print Number",
                 Minimum = 0.5,
-                Maximum = _prints.Count + 0.5
+                Maximum = _Prints.Count + 0.5
             };
             LinearAxis myYaxis1 = new LinearAxis()
             {
@@ -475,16 +481,16 @@ namespace XferSuite
             ScatterSeries Red = new ScatterSeries() {MarkerSize = 3, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Red };
             ScatterSeries RedOut = new ScatterSeries() {MarkerSize = 3, MarkerType = MarkerType.Cross, MarkerStroke = OxyColors.Red };
 
-            foreach (string print in _prints)
+            foreach (string print in _Prints)
             {
-                double[] data = new double[_raw.Length];
+                double[] data = new double[_Raw.Length];
                 if (axis == "X")
                 {
-                    data = Metro.XError(Metro.getPrint(print, _pass));
+                    data = Metro.XError(Metro.getPrint(print, _Pass));
                 }
                 else if (axis == "Y")
                 {
-                    data = Metro.YError(Metro.getPrint(print, _pass));
+                    data = Metro.YError(Metro.getPrint(print, _Pass));
                 }
                 if (data.Length == 0)
                 {
@@ -494,15 +500,15 @@ namespace XferSuite
                 double sig = Stats.threeSig(data);
                 if (sig > TargetSigma + 0.5)
                 {
-                    RedOut.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, TargetSigma + 0.5) { Tag = print + $"\nActual Value = {sig}" });
+                    RedOut.Points.Add(new ScatterPoint(_Prints.IndexOf(print) + 1, TargetSigma + 0.5) { Tag = print + $"\nActual Value = {sig}" });
                 }
                 else if (sig > TargetSigma)
                 {
-                    Red.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, sig) { Tag = print });
+                    Red.Points.Add(new ScatterPoint(_Prints.IndexOf(print) + 1, sig) { Tag = print });
                 }
                 else
                 {
-                    Green.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, sig) { Tag = print });
+                    Green.Points.Add(new ScatterPoint(_Prints.IndexOf(print) + 1, sig) { Tag = print });
                 }
             }
 
@@ -521,23 +527,23 @@ namespace XferSuite
             ScatterSeries Green = new ScatterSeries() { MarkerSize = 5, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Green };
             ScatterSeries Red = new ScatterSeries() { MarkerSize = 5, MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Red };
 
-            foreach (string print in _prints)
+            foreach (string print in _Prints)
             {
-                int FYld = Metro.getPrint(print, _pass).Length;
+                int FYld = Metro.getPrint(print, _Pass).Length;
                 if (FYld == 0)
                 {
                     continue;
                 }
 
-                double yld = (FYld / (float) Metro.getPrint(print, _raw).Length) * 100;
+                double yld = (FYld / (float) Metro.getPrint(print, _Raw).Length) * 100;
                 yieldList.Add(yld);
                 if (yld < TargetYield)
                 {
-                    Red.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, yld) { Tag = print });
+                    Red.Points.Add(new ScatterPoint(_Prints.IndexOf(print) + 1, yld) { Tag = print });
                 }
                 else
                 {
-                    Green.Points.Add(new ScatterPoint(_prints.IndexOf(print) + 1, yld) { Tag = print });
+                    Green.Points.Add(new ScatterPoint(_Prints.IndexOf(print) + 1, yld) { Tag = print });
                 }
             }
 
@@ -554,7 +560,7 @@ namespace XferSuite
                     Position = AxisPosition.Bottom,
                     Title = "Print Number",
                     Minimum = 0.5,
-                    Maximum = _prints.Count + 0.5
+                    Maximum = _Prints.Count + 0.5
                 };
                 LinearAxis myYaxis = new LinearAxis()
                 {
@@ -659,16 +665,39 @@ namespace XferSuite
 
         private void btnShowFingerprintPlots_Click(object sender, EventArgs e)
         {
-            Form form = new Fingerprinting(Metro.data(Path)) { Text = new FileInfo(Path).Name };
+            Form form = new Fingerprinting(Metro.data(_Path)) { Text = new FileInfo(_Path).Name };
             form.Activated += MainMenu.Form_Activated;
             form.Show();
         }
 
         private void btnShowAnglePlots_Click(object sender, EventArgs e)
         {
-            Form form = new Angleprinting(Metro.data(Path)) { Text = new FileInfo(Path).Name };
+            Form form = new Angleprinting(Metro.data(_Path)) { Text = new FileInfo(_Path).Name };
             form.Activated += MainMenu.Form_Activated;
             form.Show();
+        }
+
+        private void btnApplyDataFilters_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<string[]> filters = new List<string[]>();
+                foreach (DataGridViewRow row in dataGridView.Rows)
+                {
+                    List<string> cols = new List<string>();
+                    foreach (DataGridViewCell cell in row.Cells)
+                        if (cell.Value != null) cols.Add(cell.Value.ToString());
+                    // Make sure all cols are valid
+                    if (cols.Count == 3) filters.Add(cols.ToArray()); 
+                }
+
+                _Raw = Metro.FilterData(filters.ToArray(), Metro.data(_Path));
+                InitializeData();
+            }        
+            catch (Exception)
+            {
+                MessageBox.Show("Error in data filter entries", "XferSuite");
+            }
         }
     }
 }
