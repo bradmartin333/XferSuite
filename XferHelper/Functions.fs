@@ -351,7 +351,7 @@ module Zed =
           Z = a.Z * b.Z }
 
     let normalizeVec3 (v: Vec3) =
-        divideVec3 v (nVec3 (Math.Sqrt(v.X ** 2 + v.Y ** 2 + v.Z ** 2)))
+        divideVec3 v (nVec3 (Math.Sqrt(v.X ** 2. + v.Y ** 2. + v.Z ** 2.)))
 
     type Plane = { Centroid: Vec3; Normal: Vec3 }
 
@@ -433,7 +433,7 @@ module Zed =
               Y = c.XZ * c.YZ - c.XY * c.ZZ
               Z = c.XY * c.YZ - c.XZ * c.YY }
 
-        let mutable weight = detX ** 2
+        let mutable weight = detX ** 2.
 
         if dotVec3 out axis_dir < 0.0 then
             weight <- -weight
@@ -447,7 +447,7 @@ module Zed =
               Y = detY
               Z = c.XY * c.XZ - c.YZ * c.XX }
 
-        let mutable weight = detY ** 2
+        let mutable weight = detY ** 2.
 
         if dotVec3 out axis_dir < 0.0 then
             weight <- -weight
@@ -461,7 +461,7 @@ module Zed =
               Y = c.XY * c.XZ - c.YZ * c.XX
               Z = detZ }
 
-        let mutable weight = detX ** 2
+        let mutable weight = detX ** 2.
 
         if dotVec3 out axis_dir < 0. then
             weight <- -weight
@@ -472,9 +472,9 @@ module Zed =
 
     let dataPlaneFit (data: Position []) =
         let vecs = data |> Array.map (fun x -> posToVec3 x)
-        let n = vecs.Length
+        let n = float vecs.Length
 
-        if n < 3 then
+        if n < 3. then
             (0., 0.)
         else
             let mutable sum = zeroVec3
@@ -482,7 +482,7 @@ module Zed =
             for v in vecs do
                 sum <- addVec3 sum v
 
-            let centroid = multiplyVec3 sum (nVec3 (1. / float n))
+            let centroid = multiplyVec3 sum (nVec3 (1. / n))
 
             let mutable covar = defaultCovariance
 
