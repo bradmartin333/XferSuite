@@ -176,27 +176,27 @@ module Metro =
         data
         |> Array.filter (fun x -> x.RR = RR && x.RC = RC && x.R = R && x.C = C)
 
-    let XPos (data: Position []) = data |> Array.map (fun x -> x.X)
+    let xPos (data: Position []) = data |> Array.map (fun x -> x.X)
 
-    let YPos (data: Position []) = data |> Array.map (fun x -> x.Y)
+    let yPos (data: Position []) = data |> Array.map (fun x -> x.Y)
 
-    let XError (data: Position []) = data |> Array.map (fun x -> x.XE * 1e3)
+    let xError (data: Position []) = data |> Array.map (fun x -> x.XE * 1e3)
 
-    let YError (data: Position []) = data |> Array.map (fun x -> x.YE * 1e3)
+    let yError (data: Position []) = data |> Array.map (fun x -> x.YE * 1e3)
 
-    let X3Sig (data: Position []) =
+    let x3Sig (data: Position []) =
         data
         |> Array.map (fun x -> x.XE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
 
-    let Y3Sig (data: Position []) =
+    let y3Sig (data: Position []) =
         data
         |> Array.map (fun x -> x.YE * 1e3)
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
 
-    let Rescore (data: Position []) (threshold: float) =
+    let rescore (data: Position []) (threshold: float) =
         for x in data do
             if (Math.Abs(x.XE) > threshold / 1e3
                 || Math.Abs(x.YE) > threshold / 1e3) then
@@ -204,17 +204,17 @@ module Metro =
             else
                 x.Aln <- " PASS "
 
-    let NormErrorRange (data: Position []) =
+    let normErrorRange (data: Position []) =
         data
         |> Array.map (fun x -> (x.XE ** 2. + x.YE ** 2.) ** 0.5)
 
-    let NextMagnitudeEntropy (data: Position []) =
+    let nextMagnitudeEntropy (data: Position []) =
         data
-        |> NormErrorRange
+        |> normErrorRange
         |> Statistics.Entropy
         |> fun x -> x ** 10.
 
-    let ApplyFilter (filter: string []) (data: Position []) =
+    let applyFilter (filter: string []) (data: Position []) =
         data
         |> Array.filter
             (fun x ->
@@ -243,11 +243,11 @@ module Metro =
                 | "==" -> a = b
                 | _ -> a <> b)
 
-    let FilterData (filters: string [] []) (data: Position []) =
+    let filterData (filters: string [] []) (data: Position []) =
         let mutable output = data
 
         for filter in filters do
-            output <- ApplyFilter filter output
+            output <- applyFilter filter output
 
         output
 

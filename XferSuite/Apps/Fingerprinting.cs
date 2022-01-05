@@ -131,7 +131,7 @@ namespace XferSuite
 
         private void MakePlot()
         {
-            Metro.Rescore(_data, Threshold);
+            Metro.rescore(_data, Threshold);
             Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
@@ -159,7 +159,7 @@ namespace XferSuite
                 foreach (int idx in loopSet)
                 {
                     Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
-                    double[] normError = Metro.NormErrorRange(printData);
+                    double[] normError = Metro.normErrorRange(printData);
                     for (int i = 0; i < printData.Length; i++)
                     {
                         vectorPlot.Series.Add(PlotVector(printData[i], normError, normError[i], idx));
@@ -173,7 +173,7 @@ namespace XferSuite
                 foreach (int idx in loopSet)
                 {
                     printData[idx] = Metro.getPrint(_prints[idx], plotData);
-                    printEntropy[idx] = Metro.NextMagnitudeEntropy(printData[idx]) / 1e10;
+                    printEntropy[idx] = Metro.nextMagnitudeEntropy(printData[idx]) / 1e10;
                 }
                 foreach (int idx in loopSet)
                 {

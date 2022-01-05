@@ -88,7 +88,7 @@ namespace XferSuite
 
         private void MakePlot()
         {
-            Metro.Rescore(_data, Threshold);
+            Metro.rescore(_data, Threshold);
             Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
@@ -116,7 +116,7 @@ namespace XferSuite
             foreach (int idx in loopSet)
             {
                 printData[idx] = Metro.getPrint(_prints[idx], plotData);
-                printEntropy[idx] = Metro.NextMagnitudeEntropy(printData[idx]) / 1e10;
+                printEntropy[idx] = Metro.nextMagnitudeEntropy(printData[idx]) / 1e10;
             }
             foreach (int idx in loopSet)
             {

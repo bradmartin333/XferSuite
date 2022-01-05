@@ -136,7 +136,7 @@ namespace XferSuite
 
         private void MakePlots()
         {
-            Metro.Rescore(_Data, Threshold);
+            Metro.rescore(_Data, Threshold);
             makeScatterPlot();
             makeErrorScatterPlot();
             makeHistograms();
@@ -152,8 +152,8 @@ namespace XferSuite
             _Fail = _scoredData.Item1;
 
             PlotModel scatter = new PlotModel() { TitleFontSize = 15 };
-            double[] passX = Metro.XPos(_Pass);
-            double[] passY = Metro.YPos(_Pass);
+            double[] passX = Metro.xPos(_Pass);
+            double[] passY = Metro.yPos(_Pass);
             ScatterSeries passSeries = new ScatterSeries() { MarkerFill = OxyColors.Green, MarkerSize = _PointSize };
             for (int i = 0; i < _Pass.Length; i++)
             {
@@ -161,8 +161,8 @@ namespace XferSuite
             }
             scatter.Series.Add(passSeries);
 
-            double[] failX = Metro.XPos(_Fail);
-            double[] failY = Metro.YPos(_Fail);
+            double[] failX = Metro.xPos(_Fail);
+            double[] failY = Metro.yPos(_Fail);
             ScatterSeries failSeries = new ScatterSeries() { MarkerFill = OxyColors.Gold, MarkerSize = _PointSize };
             for (int i = 0; i < _Fail.Length; i++)
             {
@@ -170,8 +170,8 @@ namespace XferSuite
             }
             scatter.Series.Add(failSeries);
 
-            double[] missingX = Metro.XPos(_Missing);
-            double[] missingY = Metro.YPos(_Missing);
+            double[] missingX = Metro.xPos(_Missing);
+            double[] missingY = Metro.yPos(_Missing);
             ScatterSeries missingSeries = new ScatterSeries() { MarkerFill = OxyColors.Red, MarkerSize = _PointSize };
             for (int i = 0; i < _Missing.Length; i++)
             {
@@ -210,8 +210,8 @@ namespace XferSuite
         private void makeErrorScatterPlot()
         {
             PlotModel errorScatter = new PlotModel() { TitleFontSize = 15 };
-            double[] errorX = Metro.XError(_Pass);
-            double[] errorY = Metro.YError(_Pass);
+            double[] errorX = Metro.xError(_Pass);
+            double[] errorY = Metro.yError(_Pass);
             ScatterSeries errorScatterSeries = new ScatterSeries() { MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Blue, MarkerSize = 1 };
             for (int i = 0; i < _Pass.Length; i++)
             {
@@ -242,14 +242,14 @@ namespace XferSuite
         private void makeHistograms()
         {
             PlotModel histogramX = new PlotModel() { TitleFontSize = 15 };       
-            double[] dataX = Metro.XError(_Pass);
+            double[] dataX = Metro.xError(_Pass);
             histogramX.Series.Add(makeHistogram(dataX));
             histogramX.Series.Add(makeHistStatBars(dataX));
             histogramX.Series.Add(makeNormDistribution(dataX));
             histogramX.Title = string.Format("Median: {0} micron   3Sigma: {1}", Stats.median(dataX), Stats.threeSig(dataX));
             
             PlotModel histogramY = new PlotModel() { TitleFontSize = 15 };
-            double[] dataY = Metro.YError(_Pass);
+            double[] dataY = Metro.yError(_Pass);
             histogramY.Series.Add(makeHistogram(dataY));
             histogramY.Series.Add(makeHistStatBars(dataY));
             histogramY.Series.Add(makeNormDistribution(dataY));
@@ -394,11 +394,11 @@ namespace XferSuite
                 double[] data = new double[_Raw.Length];
                 if (axis == "X")
                 {
-                    data = Metro.XError(Metro.getPrint(print, _Pass));
+                    data = Metro.xError(Metro.getPrint(print, _Pass));
                 }
                 else if (axis == "Y")
                 {
-                    data = Metro.YError(Metro.getPrint(print, _Pass));
+                    data = Metro.yError(Metro.getPrint(print, _Pass));
                 }
                 if (data.Length == 0)
                 {
@@ -486,11 +486,11 @@ namespace XferSuite
                 double[] data = new double[_Raw.Length];
                 if (axis == "X")
                 {
-                    data = Metro.XError(Metro.getPrint(print, _Pass));
+                    data = Metro.xError(Metro.getPrint(print, _Pass));
                 }
                 else if (axis == "Y")
                 {
-                    data = Metro.YError(Metro.getPrint(print, _Pass));
+                    data = Metro.yError(Metro.getPrint(print, _Pass));
                 }
                 if (data.Length == 0)
                 {
@@ -691,7 +691,7 @@ namespace XferSuite
                     if (cols.Count == 3) filters.Add(cols.ToArray()); 
                 }
 
-                _Raw = Metro.FilterData(filters.ToArray(), Metro.data(_Path));
+                _Raw = Metro.filterData(filters.ToArray(), Metro.data(_Path));
                 InitializeData();
             }        
             catch (Exception)
