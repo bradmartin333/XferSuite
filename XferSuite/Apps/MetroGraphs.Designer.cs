@@ -51,8 +51,15 @@ namespace XferSuite
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.yieldPlot = new OxyPlot.WindowsForms.PlotView();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.btnShowFingerprintPlots = new System.Windows.Forms.Button();
+            this.tableLayoutPanelTools = new System.Windows.Forms.TableLayoutPanel();
             this.btnSaveSummary = new System.Windows.Forms.Button();
+            this.btnShowAnglePlots = new System.Windows.Forms.Button();
+            this.btnShowFingerprintPlots = new System.Windows.Forms.Button();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.btnApplyDataFilters = new System.Windows.Forms.Button();
+            this.Field = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Operator = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -64,6 +71,8 @@ namespace XferSuite
             this.tableLayoutPanel4.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            this.tableLayoutPanelTools.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -150,7 +159,7 @@ namespace XferSuite
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(826, 355);
+            this.tabPage2.Size = new System.Drawing.Size(851, 355);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Histogram";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -168,7 +177,7 @@ namespace XferSuite
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 349F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(820, 349);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(845, 349);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // histogramPlotX
@@ -177,7 +186,7 @@ namespace XferSuite
             this.histogramPlotX.Location = new System.Drawing.Point(3, 3);
             this.histogramPlotX.Name = "histogramPlotX";
             this.histogramPlotX.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.histogramPlotX.Size = new System.Drawing.Size(404, 343);
+            this.histogramPlotX.Size = new System.Drawing.Size(416, 343);
             this.histogramPlotX.TabIndex = 0;
             this.histogramPlotX.Tag = "1";
             this.histogramPlotX.Text = "X Error Histogram";
@@ -188,10 +197,10 @@ namespace XferSuite
             // histogramPlotY
             // 
             this.histogramPlotY.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.histogramPlotY.Location = new System.Drawing.Point(413, 3);
+            this.histogramPlotY.Location = new System.Drawing.Point(425, 3);
             this.histogramPlotY.Name = "histogramPlotY";
             this.histogramPlotY.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.histogramPlotY.Size = new System.Drawing.Size(404, 343);
+            this.histogramPlotY.Size = new System.Drawing.Size(417, 343);
             this.histogramPlotY.TabIndex = 1;
             this.histogramPlotY.Tag = "1";
             this.histogramPlotY.Text = "Y Error Histogram";
@@ -204,7 +213,7 @@ namespace XferSuite
             this.tabPage3.Controls.Add(this.tableLayoutPanel3);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(826, 355);
+            this.tabPage3.Size = new System.Drawing.Size(851, 355);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Boxplot";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -222,7 +231,7 @@ namespace XferSuite
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 355F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(826, 355);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(851, 355);
             this.tableLayoutPanel3.TabIndex = 1;
             // 
             // errorBoxplotX
@@ -231,7 +240,7 @@ namespace XferSuite
             this.errorBoxplotX.Location = new System.Drawing.Point(3, 3);
             this.errorBoxplotX.Name = "errorBoxplotX";
             this.errorBoxplotX.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.errorBoxplotX.Size = new System.Drawing.Size(407, 349);
+            this.errorBoxplotX.Size = new System.Drawing.Size(419, 349);
             this.errorBoxplotX.TabIndex = 0;
             this.errorBoxplotX.Text = "X Error Boxplot";
             this.errorBoxplotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -241,10 +250,10 @@ namespace XferSuite
             // errorBoxplotY
             // 
             this.errorBoxplotY.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.errorBoxplotY.Location = new System.Drawing.Point(416, 3);
+            this.errorBoxplotY.Location = new System.Drawing.Point(428, 3);
             this.errorBoxplotY.Name = "errorBoxplotY";
             this.errorBoxplotY.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.errorBoxplotY.Size = new System.Drawing.Size(407, 349);
+            this.errorBoxplotY.Size = new System.Drawing.Size(420, 349);
             this.errorBoxplotY.TabIndex = 1;
             this.errorBoxplotY.Text = "Y Error Boxplot";
             this.errorBoxplotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -256,7 +265,7 @@ namespace XferSuite
             this.tabPage4.Controls.Add(this.tableLayoutPanel4);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(826, 355);
+            this.tabPage4.Size = new System.Drawing.Size(851, 355);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "3 Sigma";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -274,7 +283,7 @@ namespace XferSuite
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 355F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(826, 355);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(851, 355);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // sigmaPlotX
@@ -283,7 +292,7 @@ namespace XferSuite
             this.sigmaPlotX.Location = new System.Drawing.Point(3, 3);
             this.sigmaPlotX.Name = "sigmaPlotX";
             this.sigmaPlotX.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.sigmaPlotX.Size = new System.Drawing.Size(407, 349);
+            this.sigmaPlotX.Size = new System.Drawing.Size(419, 349);
             this.sigmaPlotX.TabIndex = 0;
             this.sigmaPlotX.Text = "X 3Sigma Plot";
             this.sigmaPlotX.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -293,10 +302,10 @@ namespace XferSuite
             // sigmaPlotY
             // 
             this.sigmaPlotY.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sigmaPlotY.Location = new System.Drawing.Point(416, 3);
+            this.sigmaPlotY.Location = new System.Drawing.Point(428, 3);
             this.sigmaPlotY.Name = "sigmaPlotY";
             this.sigmaPlotY.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.sigmaPlotY.Size = new System.Drawing.Size(407, 349);
+            this.sigmaPlotY.Size = new System.Drawing.Size(420, 349);
             this.sigmaPlotY.TabIndex = 1;
             this.sigmaPlotY.Text = "Y 3Sigma Plot";
             this.sigmaPlotY.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -308,7 +317,7 @@ namespace XferSuite
             this.tabPage5.Controls.Add(this.yieldPlot);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(826, 355);
+            this.tabPage5.Size = new System.Drawing.Size(851, 355);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Yield";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -319,7 +328,7 @@ namespace XferSuite
             this.yieldPlot.Location = new System.Drawing.Point(0, 0);
             this.yieldPlot.Name = "yieldPlot";
             this.yieldPlot.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.yieldPlot.Size = new System.Drawing.Size(826, 355);
+            this.yieldPlot.Size = new System.Drawing.Size(851, 355);
             this.yieldPlot.TabIndex = 0;
             this.yieldPlot.Text = "Yield Plot";
             this.yieldPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -328,20 +337,70 @@ namespace XferSuite
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.btnShowFingerprintPlots);
-            this.tabPage6.Controls.Add(this.btnSaveSummary);
+            this.tabPage6.Controls.Add(this.tableLayoutPanelTools);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(826, 355);
+            this.tabPage6.Size = new System.Drawing.Size(851, 355);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Tools";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanelTools
+            // 
+            this.tableLayoutPanelTools.AutoSize = true;
+            this.tableLayoutPanelTools.ColumnCount = 3;
+            this.tableLayoutPanelTools.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelTools.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelTools.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelTools.Controls.Add(this.btnSaveSummary, 0, 0);
+            this.tableLayoutPanelTools.Controls.Add(this.btnShowAnglePlots, 0, 2);
+            this.tableLayoutPanelTools.Controls.Add(this.btnShowFingerprintPlots, 0, 1);
+            this.tableLayoutPanelTools.Controls.Add(this.dataGridView, 2, 1);
+            this.tableLayoutPanelTools.Controls.Add(this.btnApplyDataFilters, 2, 0);
+            this.tableLayoutPanelTools.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelTools.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanelTools.Name = "tableLayoutPanelTools";
+            this.tableLayoutPanelTools.Padding = new System.Windows.Forms.Padding(10);
+            this.tableLayoutPanelTools.RowCount = 4;
+            this.tableLayoutPanelTools.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelTools.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelTools.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelTools.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelTools.Size = new System.Drawing.Size(851, 355);
+            this.tableLayoutPanelTools.TabIndex = 3;
+            // 
+            // btnSaveSummary
+            // 
+            this.btnSaveSummary.AutoSize = true;
+            this.btnSaveSummary.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSaveSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveSummary.Location = new System.Drawing.Point(13, 13);
+            this.btnSaveSummary.Name = "btnSaveSummary";
+            this.btnSaveSummary.Size = new System.Drawing.Size(149, 47);
+            this.btnSaveSummary.TabIndex = 0;
+            this.btnSaveSummary.Text = "Save Summary";
+            this.btnSaveSummary.UseVisualStyleBackColor = true;
+            this.btnSaveSummary.Click += new System.EventHandler(this.btnSaveSummary_Click);
+            // 
+            // btnShowAnglePlots
+            // 
+            this.btnShowAnglePlots.AutoSize = true;
+            this.btnShowAnglePlots.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnShowAnglePlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowAnglePlots.Location = new System.Drawing.Point(13, 119);
+            this.btnShowAnglePlots.Name = "btnShowAnglePlots";
+            this.btnShowAnglePlots.Size = new System.Drawing.Size(149, 47);
+            this.btnShowAnglePlots.TabIndex = 2;
+            this.btnShowAnglePlots.Text = "Show Angleprint Plots";
+            this.btnShowAnglePlots.UseVisualStyleBackColor = true;
+            this.btnShowAnglePlots.Click += new System.EventHandler(this.btnShowAnglePlots_Click);
+            // 
             // btnShowFingerprintPlots
             // 
             this.btnShowFingerprintPlots.AutoSize = true;
+            this.btnShowFingerprintPlots.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShowFingerprintPlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowFingerprintPlots.Location = new System.Drawing.Point(19, 69);
+            this.btnShowFingerprintPlots.Location = new System.Drawing.Point(13, 66);
             this.btnShowFingerprintPlots.Name = "btnShowFingerprintPlots";
             this.btnShowFingerprintPlots.Size = new System.Drawing.Size(149, 47);
             this.btnShowFingerprintPlots.TabIndex = 1;
@@ -349,17 +408,70 @@ namespace XferSuite
             this.btnShowFingerprintPlots.UseVisualStyleBackColor = true;
             this.btnShowFingerprintPlots.Click += new System.EventHandler(this.btnShowFingerprintPlots_Click);
             // 
-            // btnSaveSummary
+            // dataGridView
             // 
-            this.btnSaveSummary.AutoSize = true;
-            this.btnSaveSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSaveSummary.Location = new System.Drawing.Point(19, 16);
-            this.btnSaveSummary.Name = "btnSaveSummary";
-            this.btnSaveSummary.Size = new System.Drawing.Size(149, 47);
-            this.btnSaveSummary.TabIndex = 0;
-            this.btnSaveSummary.Text = "Save 4 Graph Summary";
-            this.btnSaveSummary.UseVisualStyleBackColor = true;
-            this.btnSaveSummary.Click += new System.EventHandler(this.btnSaveSummary_Click);
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Field,
+            this.Operator,
+            this.Value});
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.Location = new System.Drawing.Point(496, 66);
+            this.dataGridView.Name = "dataGridView";
+            this.tableLayoutPanelTools.SetRowSpan(this.dataGridView, 3);
+            this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridView.Size = new System.Drawing.Size(342, 276);
+            this.dataGridView.TabIndex = 3;
+            // 
+            // btnApplyDataFilters
+            // 
+            this.btnApplyDataFilters.AutoSize = true;
+            this.btnApplyDataFilters.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnApplyDataFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnApplyDataFilters.Location = new System.Drawing.Point(496, 13);
+            this.btnApplyDataFilters.Name = "btnApplyDataFilters";
+            this.btnApplyDataFilters.Size = new System.Drawing.Size(342, 47);
+            this.btnApplyDataFilters.TabIndex = 4;
+            this.btnApplyDataFilters.Text = "Apply Data Filters";
+            this.btnApplyDataFilters.UseVisualStyleBackColor = true;
+            this.btnApplyDataFilters.Click += new System.EventHandler(this.btnApplyDataFilters_Click);
+            // 
+            // Field
+            // 
+            this.Field.HeaderText = "Field";
+            this.Field.Items.AddRange(new object[] {
+            "Num",
+            "X",
+            "Y",
+            "RR",
+            "RC",
+            "R",
+            "C",
+            "SR",
+            "SC",
+            "XE",
+            "YE",
+            "AE"});
+            this.Field.Name = "Field";
+            this.Field.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Field.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Operator
+            // 
+            this.Operator.HeaderText = "Operator";
+            this.Operator.Items.AddRange(new object[] {
+            "<",
+            ">",
+            "<=",
+            ">=",
+            "==",
+            "!="});
+            this.Operator.Name = "Operator";
+            // 
+            // Value
+            // 
+            this.Value.HeaderText = "Value";
+            this.Value.Name = "Value";
             // 
             // MetroGraphs
             // 
@@ -382,6 +494,9 @@ namespace XferSuite
             this.tabPage5.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
+            this.tableLayoutPanelTools.ResumeLayout(false);
+            this.tableLayoutPanelTools.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -411,5 +526,12 @@ namespace XferSuite
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Button btnSaveSummary;
         private System.Windows.Forms.Button btnShowFingerprintPlots;
+        private System.Windows.Forms.Button btnShowAnglePlots;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTools;
+        private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.Button btnApplyDataFilters;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Field;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Operator;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
     }
 }
