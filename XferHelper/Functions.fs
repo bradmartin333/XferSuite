@@ -318,13 +318,13 @@ module Zed =
 
     let nVec3 (a: float) = { X = a; Y = a; Z = a }
 
-    let zeroVec3 = { X = 0; Y = 0; Z = 0 }
+    let zeroVec3 = { X = 0.; Y = 0.; Z = 0. }
 
-    let oneVec3 = { X = 1; Y = 1; Z = 1 }
+    let oneVec3 = { X = 1.; Y = 1.; Z = 1. }
 
-    let xVec3 = { X = 1; Y = 0; Z = 0 }
+    let xVec3 = { X = 1.; Y = 0.; Z = 0. }
 
-    let yVec3 = { X = 0; Y = 1; Z = 0 }
+    let yVec3 = { X = 0.; Y = 1.; Z = 0. }
 
     let dotVec3 (a: Vec3) (b: Vec3) = a.X * b.X + a.Y * b.Y + a.Z * b.Z
 
@@ -463,7 +463,7 @@ module Zed =
 
         let mutable weight = detX ** 2
 
-        if dotVec3 out axis_dir < 0.0 then
+        if dotVec3 out axis_dir < 0. then
             weight <- -weight
 
         out <- addVec3 out (multiplyVec3 axis_dir (nVec3 weight))
