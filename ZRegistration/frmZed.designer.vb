@@ -31,13 +31,14 @@ Partial Class frmZed
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
         Me.btnCopyData = New System.Windows.Forms.Button()
         Me.btnSaveWindow = New System.Windows.Forms.Button()
+        Me.btnCopyWindow = New System.Windows.Forms.Button()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
         Me.cbxView = New System.Windows.Forms.CheckBox()
         Me.cbxRemoveTilt = New System.Windows.Forms.CheckBox()
         Me.lblOutlierRemovalLevel = New System.Windows.Forms.Label()
-        Me.btnCopyWindow = New System.Windows.Forms.Button()
-        Me.lblNumData = New System.Windows.Forms.Label()
         Me.OutlierLevelScrollBar = New System.Windows.Forms.HScrollBar()
+        Me.lblNumData = New System.Windows.Forms.Label()
+        Me.btnThetaInfo = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
@@ -131,9 +132,10 @@ Partial Class frmZed
         Me.FlowLayoutPanel3.Controls.Add(Me.btnCopyData)
         Me.FlowLayoutPanel3.Controls.Add(Me.btnSaveWindow)
         Me.FlowLayoutPanel3.Controls.Add(Me.btnCopyWindow)
-        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(219, 602)
+        Me.FlowLayoutPanel3.Controls.Add(Me.btnThetaInfo)
+        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(169, 602)
         Me.FlowLayoutPanel3.Name = "FlowLayoutPanel3"
-        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(264, 31)
+        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(365, 31)
         Me.FlowLayoutPanel3.TabIndex = 15
         '
         'btnCopyData
@@ -143,7 +145,7 @@ Partial Class frmZed
         Me.btnCopyData.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnCopyData.Location = New System.Drawing.Point(3, 3)
         Me.btnCopyData.Name = "btnCopyData"
-        Me.btnCopyData.Size = New System.Drawing.Size(75, 25)
+        Me.btnCopyData.Size = New System.Drawing.Size(85, 25)
         Me.btnCopyData.TabIndex = 2
         Me.btnCopyData.Text = "Copy Data"
         Me.btnCopyData.UseVisualStyleBackColor = False
@@ -154,12 +156,25 @@ Partial Class frmZed
         Me.btnSaveWindow.AutoSize = True
         Me.btnSaveWindow.BackColor = System.Drawing.SystemColors.Control
         Me.btnSaveWindow.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSaveWindow.Location = New System.Drawing.Point(84, 3)
+        Me.btnSaveWindow.Location = New System.Drawing.Point(94, 3)
         Me.btnSaveWindow.Name = "btnSaveWindow"
         Me.btnSaveWindow.Size = New System.Drawing.Size(86, 25)
         Me.btnSaveWindow.TabIndex = 0
         Me.btnSaveWindow.Text = "Save Window"
         Me.btnSaveWindow.UseVisualStyleBackColor = False
+        '
+        'btnCopyWindow
+        '
+        Me.btnCopyWindow.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.btnCopyWindow.AutoSize = True
+        Me.btnCopyWindow.BackColor = System.Drawing.SystemColors.Control
+        Me.btnCopyWindow.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnCopyWindow.Location = New System.Drawing.Point(186, 3)
+        Me.btnCopyWindow.Name = "btnCopyWindow"
+        Me.btnCopyWindow.Size = New System.Drawing.Size(85, 25)
+        Me.btnCopyWindow.TabIndex = 3
+        Me.btnCopyWindow.Text = "Copy Window"
+        Me.btnCopyWindow.UseVisualStyleBackColor = False
         '
         'FlowLayoutPanel2
         '
@@ -218,18 +233,15 @@ Partial Class frmZed
         Me.lblOutlierRemovalLevel.TabIndex = 5
         Me.lblOutlierRemovalLevel.Text = "Outlier Removal Level 1"
         '
-        'btnCopyWindow
+        'OutlierLevelScrollBar
         '
-        Me.btnCopyWindow.Anchor = System.Windows.Forms.AnchorStyles.Right
-        Me.btnCopyWindow.AutoSize = True
-        Me.btnCopyWindow.BackColor = System.Drawing.SystemColors.Control
-        Me.btnCopyWindow.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnCopyWindow.Location = New System.Drawing.Point(176, 3)
-        Me.btnCopyWindow.Name = "btnCopyWindow"
-        Me.btnCopyWindow.Size = New System.Drawing.Size(85, 25)
-        Me.btnCopyWindow.TabIndex = 3
-        Me.btnCopyWindow.Text = "Copy Window"
-        Me.btnCopyWindow.UseVisualStyleBackColor = False
+        Me.OutlierLevelScrollBar.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.OutlierLevelScrollBar.LargeChange = 1
+        Me.OutlierLevelScrollBar.Location = New System.Drawing.Point(284, 4)
+        Me.OutlierLevelScrollBar.Name = "OutlierLevelScrollBar"
+        Me.OutlierLevelScrollBar.Size = New System.Drawing.Size(141, 20)
+        Me.OutlierLevelScrollBar.TabIndex = 7
+        Me.OutlierLevelScrollBar.Value = 1
         '
         'lblNumData
         '
@@ -242,15 +254,18 @@ Partial Class frmZed
         Me.lblNumData.Text = "0/0 Points Removed"
         Me.lblNumData.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'OutlierLevelScrollBar
+        'btnThetaInfo
         '
-        Me.OutlierLevelScrollBar.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.OutlierLevelScrollBar.LargeChange = 1
-        Me.OutlierLevelScrollBar.Location = New System.Drawing.Point(284, 4)
-        Me.OutlierLevelScrollBar.Name = "OutlierLevelScrollBar"
-        Me.OutlierLevelScrollBar.Size = New System.Drawing.Size(141, 20)
-        Me.OutlierLevelScrollBar.TabIndex = 7
-        Me.OutlierLevelScrollBar.Value = 1
+        Me.btnThetaInfo.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.btnThetaInfo.AutoSize = True
+        Me.btnThetaInfo.BackColor = System.Drawing.SystemColors.Control
+        Me.btnThetaInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnThetaInfo.Location = New System.Drawing.Point(277, 3)
+        Me.btnThetaInfo.Name = "btnThetaInfo"
+        Me.btnThetaInfo.Size = New System.Drawing.Size(85, 25)
+        Me.btnThetaInfo.TabIndex = 4
+        Me.btnThetaInfo.Text = "Theta Info"
+        Me.btnThetaInfo.UseVisualStyleBackColor = False
         '
         'frmZed
         '
@@ -286,4 +301,5 @@ Partial Class frmZed
     Friend WithEvents btnCopyWindow As Button
     Friend WithEvents lblNumData As Label
     Friend WithEvents OutlierLevelScrollBar As HScrollBar
+    Friend WithEvents btnThetaInfo As Button
 End Class

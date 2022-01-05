@@ -55,6 +55,12 @@ Public Class frmZed
     Dim HistMin, HistMax As Double
     Dim Initialized As Boolean
 
+    ' Theta Info
+    Dim XLineAngle As Double
+    Dim YLineAngle As Double
+    Dim XPlaneAngle As Double
+    Dim YPlaneAngle As Double
+
     Public Sub New(selectedObject As cScan)
         InitializeComponent()
         Text = selectedObject.Name
@@ -108,10 +114,15 @@ Public Class frmZed
         Next
 
         Dim TiltData = UserData
+        Dim XLine = Zed.dataLineFit(UserData.ToArray(), 0)
+        Dim YLine = Zed.dataLineFit(UserData.ToArray(), 1)
+        XLineAngle = XLine.Item1
+        YLineAngle = YLine.Item1
+        Dim PlaneThetas = Zed.dataPlaneFit(UserData.ToArray())
+        XPlaneAngle = PlaneThetas.Item1
+        YPlaneAngle = PlaneThetas.Item2
         If (RemoveTilt) Then
             TiltData = New List(Of Zed.Position)
-            Dim XLine = Zed.dataLineFit(UserData.ToArray(), 0)
-            Dim YLine = Zed.dataLineFit(UserData.ToArray(), 1)
             For Each d In UserData
                 TiltData.Add(New Zed.Position(d.Time, d.X, d.Y, d.Z - (d.X * XLine.Item2) - (d.Y * YLine.Item2)))
             Next
@@ -245,6 +256,25 @@ Public Class frmZed
     Private Sub OutlierLevelScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles OutlierLevelScrollBar.Scroll
         CreatePlots()
         lblOutlierRemovalLevel.Text = String.Format("Outlier Removal Level {0}", OutlierLevelScrollBar.Value)
+    End Sub
+
+    Private Sub btnThetaInfo_Click(sender As Object, e As EventArgs) Handles btnThetaInfo.Click
+        Dim THXlinear = Math.Round(YLineAngle, 3)
+        Dim THYlinear = Math.Round(XLineAngle, 3)
+        Dim THXplanar = Math.Round(YPlaneAngle, 3)
+        Dim THYplanar = Math.Round(XPlaneAngle, 3)
+        Dim result As DialogResult = MessageBox.Show($"Evalutation Only:
+
+Linear
+    THX: {THXlinear:#0.000} deg
+    THY: {THYlinear:#0.000} deg
+
+Planar
+    THX: {THXplanar:#0.000} deg
+    THY: {THYplanar:#0.000} deg", "Press OK to copy as CSV", MessageBoxButtons.OKCancel)
+        If result = DialogResult.OK Then
+            Clipboard.SetText($"{THXlinear:#0.000}{vbTab}{THYlinear:#0.000}{vbTab}{THXplanar:#0.000}{vbTab}{THYplanar:#0.000}")
+        End If
     End Sub
 
     Private Sub btnCopyData_Click(sender As Object, e As EventArgs) Handles btnCopyData.Click
