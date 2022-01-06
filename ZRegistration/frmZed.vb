@@ -116,8 +116,8 @@ Public Class frmZed
         Dim TiltData = UserData
         Dim XLine = Zed.dataLineFit(UserData.ToArray(), 0)
         Dim YLine = Zed.dataLineFit(UserData.ToArray(), 1)
-        XLineAngle = XLine.Item1
-        YLineAngle = YLine.Item1
+        XLineAngle = XLine.Item1 * Math.Sign(XLine.Item2)
+        YLineAngle = YLine.Item1 * Math.Sign(YLine.Item2)
         Dim PlaneThetas = Zed.dataPlaneFit(UserData.ToArray())
         XPlaneAngle = PlaneThetas.Item1
         YPlaneAngle = PlaneThetas.Item2

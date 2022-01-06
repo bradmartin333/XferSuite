@@ -376,10 +376,8 @@ module Zed =
         let projY = projectPlane p yVec3
 
         toVec2
-            (-1.
-             * Math.Atan((projX.Z - projStart.Z) / (projX.X - projStart.X)))
-            (-1.
-             * Math.Atan((projY.Z - projStart.Z) / (projY.Y - projStart.Y)))
+            (Math.Atan((projX.Z - projStart.Z) / (projX.X - projStart.X)))
+            (Math.Atan((projY.Z - projStart.Z) / (projY.Y - projStart.Y)))
 
     let thetaDegrees (p: Plane) : Vec2 =
         let radians = thetaRadians p
