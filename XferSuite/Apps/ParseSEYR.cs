@@ -236,9 +236,6 @@ namespace XferSuite
                             double thisX = thisCell[0].X;
                             double thisY = thisCell[0].Y;
 
-                            if (thisX == 4 && thisY == 22)
-                                Application.DoEvents();
-
                             string thisTag =
                                 $"X: {thisX}\n" +
                                 $"Y: {thisY}\n" +
@@ -338,7 +335,7 @@ namespace XferSuite
         {
             List<bool>[] needOneLists = new List<bool>[needOneParents.Count];
 
-            for (int i = 0; i < thisCell.Length - 1; i++)
+            for (int i = 0; i < thisCell.Length; i++)
             {
                 Report.Entry item = thisCell[i];
                 Report.Criteria criteria = Features.First(x => x.Name == item.Name);
