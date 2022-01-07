@@ -326,8 +326,8 @@ namespace XferSuite
 
             plotModel.Axes.Add(Xaxis);
             plotModel.Axes.Add(Yaxis);
-            plotModel.Series.Add(passScatter);
             plotModel.Series.Add(failScatter);
+            plotModel.Series.Add(passScatter);
             plotView.Model = plotModel;
         }
 
