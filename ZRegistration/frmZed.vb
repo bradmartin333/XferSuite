@@ -60,9 +60,13 @@ Public Class frmZed
     Dim YLineAngle As Double
     Dim XPlaneAngle As Double
     Dim YPlaneAngle As Double
+    Dim CustomAxes As Double()
+    Dim UseCustomAxes As Boolean
 
-    Public Sub New(selectedObject As cScan)
+    Public Sub New(selectedObject As cScan, userSetAxes As Double(), userSetAxesEnabled As Boolean)
         InitializeComponent()
+        CustomAxes = userSetAxes
+        UseCustomAxes = userSetAxesEnabled
         Text = selectedObject.Name
         Data = selectedObject.Data.ToArray()
         CreatePlots(initialPlot:=True)
@@ -166,15 +170,46 @@ Public Class frmZed
         Dim zScatter As New ScatterSeries()
         zScatter.TrackerFormatString = zScatter.TrackerFormatString + vbNewLine + "Z Position (μm): {Value}"
         plot.Series.Add(zScatter)
-        plot.Axes.Add(New LinearAxis With {.Title = "X Position (mm)", .Position = AxisPosition.Bottom})
-        plot.Axes.Add(New LinearAxis With {.Title = "Y Position (mm)", .Position = AxisPosition.Left})
-        plot.Axes.Add(New LinearColorAxis With {
+
+        Dim xAxis As New LinearAxis With {
+            .Title = "X Position (mm)",
+            .Position = AxisPosition.Bottom
+        }
+
+        If UseCustomAxes Then
+            xAxis.Minimum = CustomAxes(0)
+            xAxis.Maximum = CustomAxes(1)
+        End If
+
+        Dim yAxis As New LinearAxis With {
+            .Title = "Y Position (mm)",
+            .Position = AxisPosition.Left
+        }
+
+        If UseCustomAxes Then
+            yAxis.Minimum = CustomAxes(2)
+            yAxis.Maximum = CustomAxes(3)
+        End If
+
+        Dim zAxis As New LinearColorAxis With {
             .Title = "Z Position (μm)",
             .Position = AxisPosition.Right,
             .Key = "Color Axis",
             .Maximum = HistMax,
             .Minimum = HistMin
-        })
+        }
+
+        If UseCustomAxes Then
+            zAxis.Minimum = CustomAxes(4)
+            zAxis.Maximum = CustomAxes(5)
+        Else
+            zAxis.Minimum = HistMin
+            zAxis.Maximum = HistMax
+        End If
+
+        plot.Axes.Add(xAxis)
+        plot.Axes.Add(yAxis)
+        plot.Axes.Add(zAxis)
         zScatter.Points.AddRange(ScatterDataZ.AsEnumerable)
         HeatPlot.Model = plot
     End Sub
@@ -225,8 +260,29 @@ Public Class frmZed
 
         plot.Series.Add(scatter)
         plot.Series.Add(polyScatter)
-        plot.Axes.Add(New LinearAxis With {.Title = "Position (mm)", .Position = AxisPosition.Bottom})
-        plot.Axes.Add(New LinearAxis With {.Title = "Height (μm)", .Position = AxisPosition.Left})
+
+        Dim xAxis As New LinearAxis With {
+            .Title = "Position (mm)",
+            .Position = AxisPosition.Bottom
+        }
+
+        If UseCustomAxes Then
+            xAxis.Minimum = CustomAxes(0)
+            xAxis.Maximum = CustomAxes(1)
+        End If
+
+        Dim yAxis As New LinearAxis With {
+            .Title = "Y Height (μm)",
+            .Position = AxisPosition.Left
+        }
+
+        If UseCustomAxes Then
+            yAxis.Minimum = CustomAxes(4)
+            yAxis.Maximum = CustomAxes(5)
+        End If
+
+        plot.Axes.Add(xAxis)
+        plot.Axes.Add(yAxis)
 
         Dim rSquared = Zed.rSquared(polyScatter.Points.ToArray(), scatterData.ToArray())
         If coord Then

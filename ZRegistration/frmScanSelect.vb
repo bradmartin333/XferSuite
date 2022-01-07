@@ -1,6 +1,28 @@
 ﻿Imports System.IO
 
 Public Class frmScanSelect
+    <ComponentModel.Description("Use these editable axes with a newly opened scan")>
+    <ComponentModel.Category("User Parameters")>
+    Public Property UseCustomAxes As Boolean = False
+
+    <ComponentModel.Category("User Parameters")>
+    Public Property XMin As Double = 0.0
+
+    <ComponentModel.Category("User Parameters")>
+    Public Property XMax As Double = 15.0
+
+    <ComponentModel.Category("User Parameters")>
+    Public Property YMin As Double = 0.0
+
+    <ComponentModel.Category("User Parameters")>
+    Public Property YMax As Double = 15.0
+
+    <ComponentModel.Category("User Parameters")>
+    Public Property ZMin As Double = 0.0
+
+    <ComponentModel.Category("User Parameters")>
+    Public Property ZMax As Double = 1.0
+
     Public Property Path As String
     Dim Scans As New List(Of cScan)
 
@@ -28,7 +50,7 @@ Public Class frmScanSelect
     End Sub
 
     Private Sub ScanSelected(sender As Object, e As EventArgs) Handles olv.ItemActivate
-        Dim Zed As New frmZed(olv.SelectedObject)
+        Dim Zed As New frmZed(olv.SelectedObject, New Double() {XMin, XMax, YMin, YMax, ZMin, ZMax}, UseCustomAxes)
     End Sub
 
     Private Sub FindScans()
