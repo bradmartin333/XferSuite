@@ -267,8 +267,13 @@ Public Class frmZed
         }
 
         If UseCustomAxes Then
-            xAxis.Minimum = CustomAxes(0)
-            xAxis.Maximum = CustomAxes(1)
+            If coord Then
+                xAxis.Minimum = CustomAxes(0)
+                xAxis.Maximum = CustomAxes(1)
+            Else
+                xAxis.Minimum = CustomAxes(2)
+                xAxis.Maximum = CustomAxes(3)
+            End If
         End If
 
         Dim yAxis As New LinearAxis With {
