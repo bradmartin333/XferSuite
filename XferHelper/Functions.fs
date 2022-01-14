@@ -590,7 +590,7 @@ module Report =
         else
             let firstLineCols = data.[0].Split('\t')
 
-            if firstLineCols.Length < 11 then
+            if firstLineCols.Length < 12 then
                 3 // Not enough cols
             else
                 let state =

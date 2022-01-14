@@ -247,6 +247,7 @@
     <EmbeddedResource Include="Resources\LicenseInfo.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Include="Resources\iconmonstr-fullscreen-1-24.png" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -57,6 +57,8 @@ namespace XferSuite
             this.toolStripButtonCopyPlot = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyForExcel = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonFullscreenPlot = new System.Windows.Forms.ToolStripButton();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -390,13 +392,33 @@ namespace XferSuite
             this.toolStripButtonSmartSort,
             this.toolStripButtonReset,
             this.toolStripButtonCopyText,
+            this.toolStripButtonFullscreenPlot,
             this.toolStripButtonCopyPlot,
-            this.toolStripButtonCopyForExcel});
+            this.toolStripButtonCopyForExcel,
+            this.toolStripProgressBar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(949, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonFullscreenPlot
+            // 
+            this.toolStripButtonFullscreenPlot.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFullscreenPlot.Enabled = false;
+            this.toolStripButtonFullscreenPlot.Image = global::XferSuite.Properties.Resources.iconmonstr_fullscreen_1_24;
+            this.toolStripButtonFullscreenPlot.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFullscreenPlot.Name = "toolStripButtonFullscreenPlot";
+            this.toolStripButtonFullscreenPlot.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonFullscreenPlot.Text = "toolStripButton1";
+            this.toolStripButtonFullscreenPlot.Click += new System.EventHandler(this.toolStripButtonFullscreenPlot_Click);
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(700, 22);
+            this.toolStripProgressBar.Step = 1;
+            this.toolStripProgressBar.Visible = false;
             // 
             // ParseSEYR
             // 
@@ -406,7 +428,7 @@ namespace XferSuite
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(850, 400);
+            this.MinimumSize = new System.Drawing.Size(965, 480);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
             this.tableLayoutPanel.ResumeLayout(false);
@@ -451,5 +473,7 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyForExcel;
         private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFullscreenPlot;
     }
 }

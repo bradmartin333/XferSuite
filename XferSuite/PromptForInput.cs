@@ -23,7 +23,7 @@ namespace XferSuite
             if (textEntry)
                 Control = new TextBox() { TextAlign = HorizontalAlignment.Center };
             else
-                Control = new NumericUpDown() { TextAlign = HorizontalAlignment.Center, Maximum = max };
+                Control = new NumericUpDown() { TextAlign = HorizontalAlignment.Center, Maximum = max, DecimalPlaces = 3 };
             Control.Dock = DockStyle.Fill;
             tableLayoutPanel.Controls.Add(Control, 1, 2);
         }

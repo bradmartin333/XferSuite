@@ -243,10 +243,37 @@ namespace XferSuite
 
         private void Parse()
         {
+            double distX = 0.0;
+            using (PromptForInput input = new PromptForInput(
+                prompt: "Enter X grid pitch in millimeters",
+                textEntry: false,
+                max: 100,
+                title: $"SEYR Parser Grid Setup"))
+            {
+                var result = input.ShowDialog();
+                if (result == DialogResult.OK)
+                    distX = (int)((NumericUpDown)input.Control).Value;
+            }
+
+            double distY = 0.0;
+            using (PromptForInput input = new PromptForInput(
+                prompt: "Enter Y grid pitch in millimeters",
+                textEntry: false,
+                max: 100,
+                title: $"SEYR Parser Grid Setup"))
+            {
+                var result = input.ShowDialog();
+                if (result == DialogResult.OK)
+                    distY = (int)((NumericUpDown)input.Control).Value;
+            }
+
             string output = string.Empty;
 
             using (new HourGlass(UsePlexiglass: false))
             {
+                toolStripProgressBar.Value = 0;
+                toolStripProgressBar.Visible = true;
+
                 List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
 
                 // Reset
@@ -265,13 +292,11 @@ namespace XferSuite
                 int numX = Report.getNumX(filteredData);
                 int numY = Report.getNumY(filteredData);
 
-                // Hardcoded for Murphy
-                double distX = 0.06;
-                double distY = 0.06;
+                toolStripProgressBar.Maximum = num;
 
                 string[] regions = Report.getRegions(filteredData);
 
-                for (int l = 0; l < regions.Length; l++)
+                System.Threading.Tasks.Parallel.For(0, regions.Length, l =>
                 {
                     Report.Entry[] regionData = Report.getRegion(filteredData, regions[l]);
                     int numRegionPics = Report.getNumImages(regionData);
@@ -309,12 +334,16 @@ namespace XferSuite
                                 }
                             }
                         }
+
+                        toolStripProgressBar.Control.Invoke((Action)delegate { toolStripProgressBar.PerformStep(); });
                     }
 
                     output += $"{regions[l]}\t{passNum / (passNum + failNum):P}\n";
                     passNum = 0;
                     failNum = 0;
-                };
+                });
+
+                toolStripProgressBar.Visible = false;
             }
 
             rtb.Text = output;
@@ -420,6 +449,7 @@ namespace XferSuite
             Parse();
 
             toolStripButtonCopyText.Enabled = true;
+            toolStripButtonFullscreenPlot.Enabled = true;
             toolStripButtonCopyPlot.Enabled = true;
             toolStripButtonCopyForExcel.Enabled = true;
         }
@@ -430,6 +460,21 @@ namespace XferSuite
                 Clipboard.SetText(rtb.Text);
             else
                 Clipboard.Clear();
+        }
+
+        private void toolStripButtonFullscreenPlot_Click(object sender, EventArgs e)
+        {
+            Rectangle bounds = Screen.FromControl(this).Bounds;
+            int size = Math.Min(bounds.Width, bounds.Height);
+            Form form = new Form()
+            {
+                Width = size,
+                Height = size,
+                FormBorderStyle = FormBorderStyle.SizableToolWindow
+            };
+            OxyPlot.WindowsForms.PlotView fullscreenPlot = plotView;
+            form.Controls.Add(fullscreenPlot);
+            form.Show();
         }
 
         private void toolStripButtonCopyPlot_Click(object sender, EventArgs e)
