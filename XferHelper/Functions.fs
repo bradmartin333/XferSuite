@@ -518,7 +518,8 @@ module Report =
           R: int
           C: int
           X: float
-          Y: float }
+          Y: float
+          Score: float }
 
     let toEntry (data: string) =
         let columns = data.Split('\t')
@@ -541,6 +542,7 @@ module Report =
         let C = int columns.[8]
         let X = float columns.[9]
         let Y = float columns.[10]
+        let Score = float columns.[10]
 
         { ImageNumber = ImageNumber
           XCopy = XCopy
@@ -552,7 +554,8 @@ module Report =
           R = R
           C = C
           X = X
-          Y = Y }
+          Y = Y
+          Score = Score }
 
     type Bucket =
         | Buffer = 0
@@ -637,6 +640,11 @@ module Report =
         |> Seq.distinct
         |> Seq.toArray
         |> Array.map toCriteria
+
+    let getData (data: Entry [], name: string) =
+        data
+        |> Array.filter (fun x -> x.Name = name)
+        |> Array.map (fun x -> x.Score)
 
     let getImage (data: Entry [], num: int) =
         data

@@ -55,6 +55,7 @@ namespace XferSuite
             this.toolStripButtonCopyText = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyPlot = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyForExcel = new System.Windows.Forms.ToolStripButton();
+            this.btnViewData = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -83,7 +84,7 @@ namespace XferSuite
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.Size = new System.Drawing.Size(834, 361);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(834, 384);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // olvNeedOne
@@ -99,7 +100,7 @@ namespace XferSuite
             this.olvNeedOne.Location = new System.Drawing.Point(319, 28);
             this.olvNeedOne.Name = "olvNeedOne";
             this.olvNeedOne.ShowGroups = false;
-            this.olvNeedOne.Size = new System.Drawing.Size(152, 178);
+            this.olvNeedOne.Size = new System.Drawing.Size(152, 172);
             this.olvNeedOne.TabIndex = 2;
             this.olvNeedOne.Tag = "2";
             this.olvNeedOne.UseCompatibleStateImageBehavior = false;
@@ -125,7 +126,7 @@ namespace XferSuite
             this.olvRequire.Location = new System.Drawing.Point(161, 28);
             this.olvRequire.Name = "olvRequire";
             this.olvRequire.ShowGroups = false;
-            this.olvRequire.Size = new System.Drawing.Size(152, 178);
+            this.olvRequire.Size = new System.Drawing.Size(152, 172);
             this.olvRequire.TabIndex = 1;
             this.olvRequire.Tag = "1";
             this.olvRequire.UseCompatibleStateImageBehavior = false;
@@ -150,7 +151,7 @@ namespace XferSuite
             this.olvBuffer.Location = new System.Drawing.Point(3, 28);
             this.olvBuffer.Name = "olvBuffer";
             this.olvBuffer.ShowGroups = false;
-            this.olvBuffer.Size = new System.Drawing.Size(152, 178);
+            this.olvBuffer.Size = new System.Drawing.Size(152, 172);
             this.olvBuffer.TabIndex = 0;
             this.olvBuffer.Tag = "0";
             this.olvBuffer.UseCompatibleStateImageBehavior = false;
@@ -173,11 +174,12 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.Controls.Add(this.cbxNull);
             this.flowLayoutPanelCriteria.Controls.Add(this.cbxMisaligned);
             this.flowLayoutPanelCriteria.Controls.Add(this.btnApplyToAll);
+            this.flowLayoutPanelCriteria.Controls.Add(this.btnViewData);
             this.flowLayoutPanelCriteria.Enabled = false;
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(30, 212);
+            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(30, 206);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
-            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(97, 146);
+            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(97, 175);
             this.flowLayoutPanelCriteria.TabIndex = 4;
             // 
             // label1
@@ -259,9 +261,10 @@ namespace XferSuite
             // 
             // btnApplyToAll
             // 
+            this.btnApplyToAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApplyToAll.Location = new System.Drawing.Point(3, 120);
             this.btnApplyToAll.Name = "btnApplyToAll";
-            this.btnApplyToAll.Size = new System.Drawing.Size(75, 23);
+            this.btnApplyToAll.Size = new System.Drawing.Size(91, 23);
             this.btnApplyToAll.TabIndex = 8;
             this.btnApplyToAll.Text = "Apply To All";
             this.btnApplyToAll.UseVisualStyleBackColor = true;
@@ -272,9 +275,9 @@ namespace XferSuite
             this.rtb.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tableLayoutPanel.SetColumnSpan(this.rtb, 2);
             this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtb.Location = new System.Drawing.Point(161, 212);
+            this.rtb.Location = new System.Drawing.Point(161, 206);
             this.rtb.Name = "rtb";
-            this.rtb.Size = new System.Drawing.Size(310, 146);
+            this.rtb.Size = new System.Drawing.Size(310, 175);
             this.rtb.TabIndex = 6;
             this.rtb.Text = "";
             // 
@@ -286,7 +289,7 @@ namespace XferSuite
             this.plotView.Name = "plotView";
             this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.tableLayoutPanel.SetRowSpan(this.plotView, 2);
-            this.plotView.Size = new System.Drawing.Size(354, 330);
+            this.plotView.Size = new System.Drawing.Size(354, 353);
             this.plotView.TabIndex = 7;
             this.plotView.Text = "plotView1";
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -371,11 +374,22 @@ namespace XferSuite
             this.toolStripButtonCopyForExcel.Text = "Copy Plot For Excel";
             this.toolStripButtonCopyForExcel.Click += new System.EventHandler(this.toolStripButtonCopyForExcel_Click);
             // 
+            // btnViewData
+            // 
+            this.btnViewData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnViewData.Location = new System.Drawing.Point(3, 149);
+            this.btnViewData.Name = "btnViewData";
+            this.btnViewData.Size = new System.Drawing.Size(91, 23);
+            this.btnViewData.TabIndex = 9;
+            this.btnViewData.Text = "View Data";
+            this.btnViewData.UseVisualStyleBackColor = true;
+            this.btnViewData.Click += new System.EventHandler(this.btnViewData_Click);
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(834, 361);
+            this.ClientSize = new System.Drawing.Size(834, 384);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -422,5 +436,6 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyForExcel;
+        private System.Windows.Forms.Button btnViewData;
     }
 }
