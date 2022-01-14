@@ -46,17 +46,17 @@ namespace XferSuite
             this.cbxNull = new System.Windows.Forms.CheckBox();
             this.cbxMisaligned = new System.Windows.Forms.CheckBox();
             this.btnApplyToAll = new System.Windows.Forms.Button();
+            this.btnViewData = new System.Windows.Forms.Button();
+            this.btnAdjustData = new System.Windows.Forms.Button();
             this.rtb = new System.Windows.Forms.RichTextBox();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonParse = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyText = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyPlot = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyForExcel = new System.Windows.Forms.ToolStripButton();
-            this.btnViewData = new System.Windows.Forms.Button();
-            this.btnAdjustData = new System.Windows.Forms.Button();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -272,6 +272,28 @@ namespace XferSuite
             this.btnApplyToAll.UseVisualStyleBackColor = true;
             this.btnApplyToAll.Click += new System.EventHandler(this.btnApplyToAll_Click);
             // 
+            // btnViewData
+            // 
+            this.btnViewData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnViewData.Location = new System.Drawing.Point(3, 149);
+            this.btnViewData.Name = "btnViewData";
+            this.btnViewData.Size = new System.Drawing.Size(91, 23);
+            this.btnViewData.TabIndex = 9;
+            this.btnViewData.Text = "View Data";
+            this.btnViewData.UseVisualStyleBackColor = true;
+            this.btnViewData.Click += new System.EventHandler(this.btnViewData_Click);
+            // 
+            // btnAdjustData
+            // 
+            this.btnAdjustData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAdjustData.Location = new System.Drawing.Point(3, 178);
+            this.btnAdjustData.Name = "btnAdjustData";
+            this.btnAdjustData.Size = new System.Drawing.Size(91, 23);
+            this.btnAdjustData.TabIndex = 10;
+            this.btnAdjustData.Text = "Adjust Data";
+            this.btnAdjustData.UseVisualStyleBackColor = true;
+            this.btnAdjustData.Click += new System.EventHandler(this.btnAdjustData_Click);
+            // 
             // rtb
             // 
             this.rtb.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -297,21 +319,6 @@ namespace XferSuite
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonParse,
-            this.toolStripButtonSmartSort,
-            this.toolStripButtonReset,
-            this.toolStripButtonCopyText,
-            this.toolStripButtonCopyPlot,
-            this.toolStripButtonCopyForExcel});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(949, 25);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripButtonParse
             // 
@@ -376,27 +383,20 @@ namespace XferSuite
             this.toolStripButtonCopyForExcel.Text = "Copy Plot For Excel";
             this.toolStripButtonCopyForExcel.Click += new System.EventHandler(this.toolStripButtonCopyForExcel_Click);
             // 
-            // btnViewData
+            // toolStrip1
             // 
-            this.btnViewData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnViewData.Location = new System.Drawing.Point(3, 149);
-            this.btnViewData.Name = "btnViewData";
-            this.btnViewData.Size = new System.Drawing.Size(91, 23);
-            this.btnViewData.TabIndex = 9;
-            this.btnViewData.Text = "View Data";
-            this.btnViewData.UseVisualStyleBackColor = true;
-            this.btnViewData.Click += new System.EventHandler(this.btnViewData_Click);
-            // 
-            // btnAdjustData
-            // 
-            this.btnAdjustData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdjustData.Location = new System.Drawing.Point(3, 178);
-            this.btnAdjustData.Name = "btnAdjustData";
-            this.btnAdjustData.Size = new System.Drawing.Size(91, 23);
-            this.btnAdjustData.TabIndex = 10;
-            this.btnAdjustData.Text = "Adjust Data";
-            this.btnAdjustData.UseVisualStyleBackColor = true;
-            this.btnAdjustData.Click += new System.EventHandler(this.btnAdjustData_Click);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonParse,
+            this.toolStripButtonSmartSort,
+            this.toolStripButtonReset,
+            this.toolStripButtonCopyText,
+            this.toolStripButtonCopyPlot,
+            this.toolStripButtonCopyForExcel});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(949, 25);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
             // 
             // ParseSEYR
             // 
@@ -442,14 +442,14 @@ namespace XferSuite
         private System.Windows.Forms.RichTextBox rtb;
         private System.Windows.Forms.Button btnApplyToAll;
         private OxyPlot.WindowsForms.PlotView plotView;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.Button btnViewData;
+        private System.Windows.Forms.Button btnAdjustData;
         private System.Windows.Forms.ToolStripButton toolStripButtonParse;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyText;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
-        private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyForExcel;
-        private System.Windows.Forms.Button btnViewData;
-        private System.Windows.Forms.Button btnAdjustData;
+        private System.Windows.Forms.ToolStrip toolStrip1;
     }
 }

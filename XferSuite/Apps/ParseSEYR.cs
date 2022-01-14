@@ -90,6 +90,19 @@ namespace XferSuite
             }
         }
 
+        private bool _PlotOrder = false;
+        [Category("User Parameters")]
+        [Description("True: Fail beneath Pass, False: Pass beneath Fail")]
+        public bool PlotOrder
+        {
+            get => _PlotOrder;
+            set
+            {
+                _PlotOrder = value;
+                ConfigurePlot();
+            }
+        }
+
         private string Path { get; set; }
         private Report.Entry[] Data { get; set; }
         private Report.Criteria[] Features { get; set; }
@@ -230,84 +243,82 @@ namespace XferSuite
 
         private void Parse()
         {
+            string output = string.Empty;
+
             using (new HourGlass(UsePlexiglass: false))
             {
                 List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
 
                 // Reset
-                rtb.Text = "RR\tRC\tR\tC\tYield\n";
+                rtb.Text = "(RR, RC, R, C)\tYield\n";
                 ScatterPoints[0] = new List<ScatterPoint>();
                 ScatterPoints[1] = new List<ScatterPoint>();
-                int fieldNum = 0;
                 double passNum = 0;
                 double failNum = 0;
 
+                // Filter out buffer data
+                string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
+                var filteredData = Report.removeBuffers(Data, bufferStrings);
+
                 // Parse
-                int num = Report.getNumImages(Data) + 1;
-                int numX = Report.getNumX(Data);
-                int numY = Report.getNumY(Data);
-                int[] lastRegion = Report.getRegion(Report.getImage(Data, 1));
-                for (int k = 1; k < num; k++)
+                int num = Report.getNumImages(filteredData) + 1;
+                int numX = Report.getNumX(filteredData);
+                int numY = Report.getNumY(filteredData);
+
+                // Hardcoded for Murphy
+                double distX = 0.06;
+                double distY = 0.06;
+
+                string[] regions = Report.getRegions(filteredData);
+
+                for (int l = 0; l < regions.Length; l++)
                 {
-                    var thisImg = Report.getImage(Data, k);
+                    Report.Entry[] regionData = Report.getRegion(filteredData, regions[l]);
+                    int numRegionPics = Report.getNumImages(regionData);
 
-                    for (int i = 0; i < numX; i++)
+                    for (int k = 1; k < numRegionPics + 1; k++)
                     {
-                        for (int j = 0; j < numY; j++)
+                        var thisImg = Report.getImage(regionData, k + l * numRegionPics);
+
+                        for (int i = 0; i < numX; i++)
                         {
-                            var thisCell = Report.getCell(thisImg, i, j);
-                            if (thisCell.Length == 0) continue;
-                            bool pass = CheckCriteria(thisCell, needOneParents);
-
-                            double thisX = thisCell[0].X;
-                            double thisY = thisCell[0].Y;
-
-                            string thisTag =
-                                $"X: {thisX}\n" +
-                                $"Y: {thisY}\n" +
-                                $"RR: {thisCell[0].RR}\n" +
-                                $"RC: {thisCell[0].RC}\n" +
-                                $"R: {thisCell[0].R}\n" +
-                                $"C: {thisCell[0].C}";
-
-                            if (pass)
+                            for (int j = 0; j < numY; j++)
                             {
-                                passNum++;
-                                ScatterPoints[0].Add(new ScatterPoint(thisX, thisY, tag: thisTag));
-                            }
-                            else
-                            {
-                                failNum++;
-                                ScatterPoints[1].Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                                var thisCell = Report.getCell(thisImg, i, j);
+                                if (thisCell.Length == 0) continue;
+                                bool pass = CheckCriteria(thisCell, needOneParents);
+
+                                double thisX = thisCell[0].X + (i * distX);
+                                double thisY = thisCell[0].Y + (j * distY);
+
+                                string thisTag =
+                                    $"X: {thisX}\n" +
+                                    $"Y: {thisY}\n" +
+                                    $"{regions[l]}\n" +
+                                    $"Score: {thisCell[0].Score}";
+
+                                if (pass)
+                                {
+                                    passNum++;
+                                    ScatterPoints[0].Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                                }
+                                else
+                                {
+                                    failNum++;
+                                    ScatterPoints[1].Add(new ScatterPoint(thisX, thisY, tag: thisTag));
+                                }
                             }
                         }
                     }
 
-                    int[] thisRegion = Report.getRegion(thisImg);
-                    if (!Enumerable.SequenceEqual(thisRegion, lastRegion))
-                    {
-                        lastRegion = thisRegion;
-                        fieldNum++;
-                        rtb.Text +=
-                            $"{thisRegion[0]}\t" +
-                            $"{thisRegion[1]}\t" +
-                            $"{thisRegion[2]}\t" +
-                            $"{thisRegion[3]}\t" +
-                            $"{passNum / (passNum + failNum):P}\n";
-                        passNum = 0;
-                        failNum = 0;
-                    }
-                }
-
-                rtb.Text +=
-                    $"{lastRegion[0]}\t" +
-                    $"{lastRegion[1]}\t" +
-                    $"{lastRegion[2]}\t" +
-                    $"{lastRegion[3]}\t" +
-                    $"{passNum / (passNum + failNum):P}";
-
-                ConfigurePlot();
+                    output += $"{regions[l]}\t{passNum / (passNum + failNum):P}\n";
+                    passNum = 0;
+                    failNum = 0;
+                };
             }
+
+            rtb.Text = output;
+            ConfigurePlot();
         }
 
         private void ConfigurePlot()
@@ -352,8 +363,18 @@ namespace XferSuite
 
             plotModel.Axes.Add(Xaxis);
             plotModel.Axes.Add(Yaxis);
-            plotModel.Series.Add(failScatter);
-            plotModel.Series.Add(passScatter);
+
+            if (PlotOrder)
+            {
+                plotModel.Series.Add(failScatter);
+                plotModel.Series.Add(passScatter);
+            }
+            else
+            {
+                plotModel.Series.Add(passScatter);
+                plotModel.Series.Add(failScatter);
+            }
+
             plotView.Model = plotModel;
         }
 
@@ -522,16 +543,21 @@ namespace XferSuite
 
         private void btnViewData_Click(object sender, EventArgs e)
         {
+            double[] data = Report.getData(Data, SelectedFeature.Name);
             ScottPlot.FormsPlot control = new ScottPlot.FormsPlot() { Dock = DockStyle.Fill };
-            control.Plot.AddSignal(Report.getData(Data, SelectedFeature.Name));
+            (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(
+                data, min: data.Min(), max: data.Max(), binSize: 1);
+            double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
+            ScottPlot.Plottable.BarPlot bar = control.Plot.AddBar(values: counts, positions: leftEdges);
+            bar.BarWidth = 1;
             control.Plot.Title(SelectedFeature.Name);
-            control.Plot.XAxis.Label("Device #");
-            control.Plot.YAxis.Label("Score");
+            control.Plot.XAxis.Label("Score");
+            control.Plot.YAxis.Label("Count");
             control.Refresh();
             Form form = new Form()
             {
                 Size = new Size(600, 400),
-                FormBorderStyle = FormBorderStyle.FixedToolWindow
+                FormBorderStyle = FormBorderStyle.SizableToolWindow
             };
             form.Controls.Add(control);
             form.Show();

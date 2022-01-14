@@ -542,7 +542,7 @@ module Report =
         let C = int columns.[8]
         let X = float columns.[9]
         let Y = float columns.[10]
-        let Score = float ImageNumber
+        let Score = float columns.[11]
 
         { ImageNumber = ImageNumber
           XCopy = XCopy
@@ -658,12 +658,24 @@ module Report =
         data
         |> Array.filter (fun x -> x.ImageNumber = num)
 
-    let getRegion (data: Entry []) =
-        [| data.[0].RR
-           data.[0].RC
-           data.[0].R
-           data.[0].C |]
+    let getRegions (data: Entry[]) =
+        data
+        |> Array.map (fun x -> x.RR, x.RC, x.R, x.C)
+        |> Array.map (fun x -> x.ToString())
+        |> Array.toSeq
+        |> Seq.distinct
+        |> Seq.toArray
+
+    let getRegion (data: Entry [], region: string) =
+        data
+        |> Array.filter(fun x -> (x.RR, x.RC, x.R, x.C).ToString() = region)
 
     let getCell (data: Entry [], row: int, col: int) =
         data
         |> Array.filter (fun x -> x.XCopy = row && x.YCopy = col)
+
+    let removeBuffers (data: Entry [], names: string []) =
+        let nameList = names |> Array.toList
+
+        data
+        |> Array.filter (fun x -> not (List.contains x.Name nameList))
