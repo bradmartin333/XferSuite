@@ -64,6 +64,32 @@ namespace XferSuite
             }
         }
 
+        private bool _TransposePlot = false;
+        [Category("User Parameters")]
+        [Description("Flip X and Y coords of scatterpoints")]
+        public bool TransposePlot
+        {
+            get => _TransposePlot;
+            set
+            {
+                _TransposePlot = value;
+
+                // Rotate points
+                List<ScatterPoint>[] scatterPointsRotated = new List<ScatterPoint>[2]; // Pass, Fail
+                for (int i = 0; i < ScatterPoints.Length; i++)
+                {
+                    scatterPointsRotated[i] = new List<ScatterPoint>();
+                    for (int j = 0; j < ScatterPoints[i].Count; j++)
+                    {
+                        scatterPointsRotated[i].Add(new ScatterPoint(ScatterPoints[i][j].Y, ScatterPoints[i][j].X));
+                    }
+                }
+                ScatterPoints = scatterPointsRotated;
+
+                ConfigurePlot();
+            }
+        }
+
         private string Path { get; set; }
         private Report.Entry[] Data { get; set; }
         private Report.Criteria[] Features { get; set; }
