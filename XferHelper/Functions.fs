@@ -512,7 +512,7 @@ module Report =
           XCopy: int
           YCopy: int
           Name: string
-          State: State
+          mutable State: State
           RR: int
           RC: int
           R: int
@@ -528,7 +528,7 @@ module Report =
         let YCopy = int columns.[2]
         let Name = string columns.[3]
 
-        let State =
+        let mutable State =
             match string columns.[4] with
             | "Pass" -> State.Pass
             | "Fail" -> State.Fail
@@ -542,7 +542,7 @@ module Report =
         let C = int columns.[8]
         let X = float columns.[9]
         let Y = float columns.[10]
-        let Score = float ImageNumber * X * Y
+        let Score = float ImageNumber
 
         { ImageNumber = ImageNumber
           XCopy = XCopy
@@ -645,6 +645,14 @@ module Report =
         data
         |> Array.filter (fun x -> x.Name = name)
         |> Array.map (fun x -> x.Score)
+
+    let rescoreFeature (data: Entry [], name: string, min: int, max: int) =
+        for d in data do
+            if d.Name = name then
+                if d.Score > min && d.Score < max then
+                    d.State <- State.Pass
+                else
+                    d.State <- State.Fail
 
     let getImage (data: Entry [], num: int) =
         data

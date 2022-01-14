@@ -513,27 +513,37 @@ namespace XferSuite
 
         private void btnAdjustData_Click(object sender, EventArgs e)
         {
-            string testStr = string.Empty;
-            using (PromptForInput input = new PromptForInput("HI", "How are ya?", true))
+            int min = int.MinValue;
+            using (PromptForInput input = new PromptForInput(
+                prompt: "Enter new lower bound for passing score", 
+                textEntry: false,
+                title: $"Adjust {SelectedFeature.Name}"))
             {
                 var result = input.ShowDialog();
                 if (result == DialogResult.OK)
-                    testStr = ((TextBox)input.Control).Text;
+                    min = (int)((NumericUpDown)input.Control).Value;
                 else
                     return;
             }
-            MessageBox.Show(testStr);
 
-            int testNum = int.MinValue;
-            using (PromptForInput input = new PromptForInput("HI", "How are ya?", false))
+            int max = int.MinValue;
+            using (PromptForInput input = new PromptForInput(
+                prompt: "Enter new upper bound for passing score",
+                textEntry: false,
+                max: (int)Report.getData(Data, SelectedFeature.Name).Max(),
+                title: $"Adjust {SelectedFeature.Name}"))
             {
                 var result = input.ShowDialog();
                 if (result == DialogResult.OK)
-                    testNum = (int)((NumericUpDown)input.Control).Value;
+                    max = (int)((NumericUpDown)input.Control).Value;
                 else
                     return;
             }
-            MessageBox.Show(testNum.ToString());
+
+            if (max > min)
+                Report.rescoreFeature(Data, SelectedFeature.Name, min, max);
+            else
+                MessageBox.Show("Max must be greater than min.");
         }
     }
 }
