@@ -52,7 +52,7 @@ namespace XferSuite
             }
         }
 
-        private int _PointSize = 2;
+        private int _PointSize = 1;
         [Category("User Parameters")]
         public int PointSize
         {
@@ -90,7 +90,7 @@ namespace XferSuite
             }
         }
 
-        private bool _PlotOrder = false;
+        private bool _PlotOrder = true;
         [Category("User Parameters")]
         [Description("True: Fail beneath Pass, False: Pass beneath Fail")]
         public bool PlotOrder
@@ -271,9 +271,6 @@ namespace XferSuite
 
             using (new HourGlass(UsePlexiglass: false))
             {
-                toolStripProgressBar.Value = 0;
-                toolStripProgressBar.Visible = true;
-
                 List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
 
                 // Reset
@@ -291,8 +288,6 @@ namespace XferSuite
                 int num = Report.getNumImages(filteredData) + 1;
                 int numX = Report.getNumX(filteredData);
                 int numY = Report.getNumY(filteredData);
-
-                toolStripProgressBar.Maximum = num;
 
                 string[] regions = Report.getRegions(filteredData);
 
@@ -334,16 +329,12 @@ namespace XferSuite
                                 }
                             }
                         }
-
-                        toolStripProgressBar.Control.Invoke((Action)delegate { toolStripProgressBar.PerformStep(); });
                     }
 
                     output += $"{regions[l]}\t{passNum / (passNum + failNum):P}\n";
                     passNum = 0;
                     failNum = 0;
                 });
-
-                toolStripProgressBar.Visible = false;
             }
 
             rtb.Text = output;
@@ -465,12 +456,13 @@ namespace XferSuite
         private void toolStripButtonFullscreenPlot_Click(object sender, EventArgs e)
         {
             Rectangle bounds = Screen.FromControl(this).Bounds;
-            int size = Math.Min(bounds.Width, bounds.Height);
+            int size = (int)(Math.Min(bounds.Width, bounds.Height) * 0.95);
             Form form = new Form()
             {
                 Width = size,
                 Height = size,
-                FormBorderStyle = FormBorderStyle.SizableToolWindow
+                FormBorderStyle = FormBorderStyle.SizableToolWindow,
+                StartPosition = FormStartPosition.CenterScreen
             };
             OxyPlot.WindowsForms.PlotView fullscreenPlot = plotView;
             form.Controls.Add(fullscreenPlot);

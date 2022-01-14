@@ -58,7 +58,6 @@ namespace XferSuite
             this.toolStripButtonCopyForExcel = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonFullscreenPlot = new System.Windows.Forms.ToolStripButton();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -394,8 +393,7 @@ namespace XferSuite
             this.toolStripButtonCopyText,
             this.toolStripButtonFullscreenPlot,
             this.toolStripButtonCopyPlot,
-            this.toolStripButtonCopyForExcel,
-            this.toolStripProgressBar});
+            this.toolStripButtonCopyForExcel});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(949, 25);
@@ -412,13 +410,6 @@ namespace XferSuite
             this.toolStripButtonFullscreenPlot.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonFullscreenPlot.Text = "toolStripButton1";
             this.toolStripButtonFullscreenPlot.Click += new System.EventHandler(this.toolStripButtonFullscreenPlot_Click);
-            // 
-            // toolStripProgressBar
-            // 
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(700, 22);
-            this.toolStripProgressBar.Step = 1;
-            this.toolStripProgressBar.Visible = false;
             // 
             // ParseSEYR
             // 
@@ -473,7 +464,6 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyForExcel;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ToolStripButton toolStripButtonFullscreenPlot;
     }
 }
