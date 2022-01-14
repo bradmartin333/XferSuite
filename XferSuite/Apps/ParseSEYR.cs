@@ -496,28 +496,15 @@ namespace XferSuite
 
         private void btnViewData_Click(object sender, EventArgs e)
         {
-            double[] data = Report.getData(Data, SelectedFeature.Name);
-
-            ScottPlot.FormsPlot control = new ScottPlot.FormsPlot()
-            {
-                Dock = DockStyle.Fill
-            };
-
-            (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(data, data.Min(), data.Max(), 1);
-            double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
-
-            // Display the histogram counts as a bar plot
-            ScottPlot.Plottable.BarPlot bar = control.Plot.AddBar(counts, leftEdges);
-            bar.BarWidth = 1;
+            ScottPlot.FormsPlot control = new ScottPlot.FormsPlot() { Dock = DockStyle.Fill };
+            control.Plot.AddSignal(Report.getData(Data, SelectedFeature.Name));
             control.Plot.Title(SelectedFeature.Name);
-            control.Plot.YAxis.Label("Count (#)");
-            control.Plot.XAxis.Label("Score");
-            control.Plot.SetAxisLimits(yMin: 0);
+            control.Plot.XAxis.Label("Device #");
+            control.Plot.YAxis.Label("Score");
             control.Refresh();
-
             Form form = new Form()
             {
-                Size = new Size(650, 450),
+                Size = new Size(600, 400),
                 FormBorderStyle = FormBorderStyle.FixedToolWindow
             };
             form.Controls.Add(control);

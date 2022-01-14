@@ -542,7 +542,7 @@ module Report =
         let C = int columns.[8]
         let X = float columns.[9]
         let Y = float columns.[10]
-        let Score = float columns.[10]
+        let Score = float ImageNumber * X * Y
 
         { ImageNumber = ImageNumber
           XCopy = XCopy
