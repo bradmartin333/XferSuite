@@ -510,5 +510,30 @@ namespace XferSuite
             form.Controls.Add(control);
             form.Show();
         }
+
+        private void btnAdjustData_Click(object sender, EventArgs e)
+        {
+            string testStr = string.Empty;
+            using (PromptForInput input = new PromptForInput("HI", "How are ya?", true))
+            {
+                var result = input.ShowDialog();
+                if (result == DialogResult.OK)
+                    testStr = ((TextBox)input.Control).Text;
+                else
+                    return;
+            }
+            MessageBox.Show(testStr);
+
+            int testNum = int.MinValue;
+            using (PromptForInput input = new PromptForInput("HI", "How are ya?", false))
+            {
+                var result = input.ShowDialog();
+                if (result == DialogResult.OK)
+                    testNum = (int)((NumericUpDown)input.Control).Value;
+                else
+                    return;
+            }
+            MessageBox.Show(testNum.ToString());
+        }
     }
 }
