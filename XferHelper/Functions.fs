@@ -512,13 +512,14 @@ module Report =
           XCopy: int
           YCopy: int
           Name: string
-          State: State
+          mutable State: State
           RR: int
           RC: int
           R: int
           C: int
           X: float
-          Y: float }
+          Y: float
+          Score: float }
 
     let toEntry (data: string) =
         let columns = data.Split('\t')
@@ -527,7 +528,7 @@ module Report =
         let YCopy = int columns.[2]
         let Name = string columns.[3]
 
-        let State =
+        let mutable State =
             match string columns.[4] with
             | "Pass" -> State.Pass
             | "Fail" -> State.Fail
@@ -541,6 +542,7 @@ module Report =
         let C = int columns.[8]
         let X = float columns.[9]
         let Y = float columns.[10]
+        let Score = float columns.[11]
 
         { ImageNumber = ImageNumber
           XCopy = XCopy
@@ -552,7 +554,8 @@ module Report =
           R = R
           C = C
           X = X
-          Y = Y }
+          Y = Y
+          Score = Score }
 
     type Bucket =
         | Buffer = 0
@@ -587,7 +590,7 @@ module Report =
         else
             let firstLineCols = data.[0].Split('\t')
 
-            if firstLineCols.Length < 11 then
+            if firstLineCols.Length < 12 then
                 3 // Not enough cols
             else
                 let state =
@@ -638,16 +641,41 @@ module Report =
         |> Seq.toArray
         |> Array.map toCriteria
 
+    let getData (data: Entry [], name: string) =
+        data
+        |> Array.filter (fun x -> x.Name = name)
+        |> Array.map (fun x -> x.Score)
+
+    let rescoreFeature (data: Entry [], name: string, min: int, max: int) =
+        for d in data do
+            if d.Name = name then
+                if d.Score >= min && d.Score <= max then
+                    d.State <- State.Pass
+                else
+                    d.State <- State.Fail
+
     let getImage (data: Entry [], num: int) =
         data
         |> Array.filter (fun x -> x.ImageNumber = num)
 
-    let getRegion (data: Entry []) =
-        [| data.[0].RR
-           data.[0].RC
-           data.[0].R
-           data.[0].C |]
+    let getRegions (data: Entry[]) =
+        data
+        |> Array.map (fun x -> x.RR, x.RC, x.R, x.C)
+        |> Array.map (fun x -> x.ToString())
+        |> Array.toSeq
+        |> Seq.distinct
+        |> Seq.toArray
+
+    let getRegion (data: Entry [], region: string) =
+        data
+        |> Array.filter(fun x -> (x.RR, x.RC, x.R, x.C).ToString() = region)
 
     let getCell (data: Entry [], row: int, col: int) =
         data
         |> Array.filter (fun x -> x.XCopy = row && x.YCopy = col)
+
+    let removeBuffers (data: Entry [], names: string []) =
+        let nameList = names |> Array.toList
+
+        data
+        |> Array.filter (fun x -> not (List.contains x.Name nameList))

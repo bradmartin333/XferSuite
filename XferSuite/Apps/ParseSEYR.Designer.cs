@@ -46,15 +46,17 @@ namespace XferSuite
             this.cbxNull = new System.Windows.Forms.CheckBox();
             this.cbxMisaligned = new System.Windows.Forms.CheckBox();
             this.btnApplyToAll = new System.Windows.Forms.Button();
+            this.btnViewData = new System.Windows.Forms.Button();
+            this.btnAdjustData = new System.Windows.Forms.Button();
             this.rtb = new System.Windows.Forms.RichTextBox();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonParse = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonCopyText = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonCopyPlot = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonCopyForExcel = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonParseNoPicthes = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonCopyWindow = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSpecificRegion = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -66,10 +68,10 @@ namespace XferSuite
             // tableLayoutPanel
             // 
             this.tableLayoutPanel.ColumnCount = 4;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.04762F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.04762F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.04762F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.85714F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 17.77778F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 17.77778F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 17.77778F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.66666F));
             this.tableLayoutPanel.Controls.Add(this.olvNeedOne, 2, 1);
             this.tableLayoutPanel.Controls.Add(this.olvRequire, 1, 1);
             this.tableLayoutPanel.Controls.Add(this.olvBuffer, 0, 1);
@@ -83,7 +85,8 @@ namespace XferSuite
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.Size = new System.Drawing.Size(834, 361);
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel.Size = new System.Drawing.Size(949, 441);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // olvNeedOne
@@ -96,10 +99,10 @@ namespace XferSuite
             this.olvNeedOne.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvNeedOne.HideSelection = false;
             this.olvNeedOne.IsSimpleDropSink = true;
-            this.olvNeedOne.Location = new System.Drawing.Point(319, 28);
+            this.olvNeedOne.Location = new System.Drawing.Point(339, 28);
             this.olvNeedOne.Name = "olvNeedOne";
             this.olvNeedOne.ShowGroups = false;
-            this.olvNeedOne.Size = new System.Drawing.Size(152, 178);
+            this.olvNeedOne.Size = new System.Drawing.Size(162, 200);
             this.olvNeedOne.TabIndex = 2;
             this.olvNeedOne.Tag = "2";
             this.olvNeedOne.UseCompatibleStateImageBehavior = false;
@@ -122,10 +125,10 @@ namespace XferSuite
             this.olvRequire.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvRequire.HideSelection = false;
             this.olvRequire.IsSimpleDropSink = true;
-            this.olvRequire.Location = new System.Drawing.Point(161, 28);
+            this.olvRequire.Location = new System.Drawing.Point(171, 28);
             this.olvRequire.Name = "olvRequire";
             this.olvRequire.ShowGroups = false;
-            this.olvRequire.Size = new System.Drawing.Size(152, 178);
+            this.olvRequire.Size = new System.Drawing.Size(162, 200);
             this.olvRequire.TabIndex = 1;
             this.olvRequire.Tag = "1";
             this.olvRequire.UseCompatibleStateImageBehavior = false;
@@ -150,7 +153,7 @@ namespace XferSuite
             this.olvBuffer.Location = new System.Drawing.Point(3, 28);
             this.olvBuffer.Name = "olvBuffer";
             this.olvBuffer.ShowGroups = false;
-            this.olvBuffer.Size = new System.Drawing.Size(152, 178);
+            this.olvBuffer.Size = new System.Drawing.Size(162, 200);
             this.olvBuffer.TabIndex = 0;
             this.olvBuffer.Tag = "0";
             this.olvBuffer.UseCompatibleStateImageBehavior = false;
@@ -173,11 +176,13 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.Controls.Add(this.cbxNull);
             this.flowLayoutPanelCriteria.Controls.Add(this.cbxMisaligned);
             this.flowLayoutPanelCriteria.Controls.Add(this.btnApplyToAll);
+            this.flowLayoutPanelCriteria.Controls.Add(this.btnViewData);
+            this.flowLayoutPanelCriteria.Controls.Add(this.btnAdjustData);
             this.flowLayoutPanelCriteria.Enabled = false;
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(30, 212);
+            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(35, 234);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
-            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(97, 146);
+            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(97, 204);
             this.flowLayoutPanelCriteria.TabIndex = 4;
             // 
             // label1
@@ -259,54 +264,61 @@ namespace XferSuite
             // 
             // btnApplyToAll
             // 
+            this.btnApplyToAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApplyToAll.Location = new System.Drawing.Point(3, 120);
             this.btnApplyToAll.Name = "btnApplyToAll";
-            this.btnApplyToAll.Size = new System.Drawing.Size(75, 23);
+            this.btnApplyToAll.Size = new System.Drawing.Size(91, 23);
             this.btnApplyToAll.TabIndex = 8;
             this.btnApplyToAll.Text = "Apply To All";
             this.btnApplyToAll.UseVisualStyleBackColor = true;
             this.btnApplyToAll.Click += new System.EventHandler(this.btnApplyToAll_Click);
+            // 
+            // btnViewData
+            // 
+            this.btnViewData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnViewData.Location = new System.Drawing.Point(3, 149);
+            this.btnViewData.Name = "btnViewData";
+            this.btnViewData.Size = new System.Drawing.Size(91, 23);
+            this.btnViewData.TabIndex = 9;
+            this.btnViewData.Text = "View Data";
+            this.btnViewData.UseVisualStyleBackColor = true;
+            this.btnViewData.Click += new System.EventHandler(this.btnViewData_Click);
+            // 
+            // btnAdjustData
+            // 
+            this.btnAdjustData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAdjustData.Location = new System.Drawing.Point(3, 178);
+            this.btnAdjustData.Name = "btnAdjustData";
+            this.btnAdjustData.Size = new System.Drawing.Size(91, 23);
+            this.btnAdjustData.TabIndex = 10;
+            this.btnAdjustData.Text = "Adjust Data";
+            this.btnAdjustData.UseVisualStyleBackColor = true;
+            this.btnAdjustData.Click += new System.EventHandler(this.btnAdjustData_Click);
             // 
             // rtb
             // 
             this.rtb.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tableLayoutPanel.SetColumnSpan(this.rtb, 2);
             this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtb.Location = new System.Drawing.Point(161, 212);
+            this.rtb.Location = new System.Drawing.Point(171, 234);
             this.rtb.Name = "rtb";
-            this.rtb.Size = new System.Drawing.Size(310, 146);
+            this.rtb.Size = new System.Drawing.Size(330, 204);
             this.rtb.TabIndex = 6;
             this.rtb.Text = "";
             // 
             // plotView
             // 
-            this.plotView.BackColor = System.Drawing.Color.White;
             this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotView.Location = new System.Drawing.Point(477, 28);
+            this.plotView.Location = new System.Drawing.Point(507, 28);
             this.plotView.Name = "plotView";
             this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.tableLayoutPanel.SetRowSpan(this.plotView, 2);
-            this.plotView.Size = new System.Drawing.Size(354, 330);
+            this.plotView.Size = new System.Drawing.Size(439, 410);
             this.plotView.TabIndex = 7;
             this.plotView.Text = "plotView1";
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonParse,
-            this.toolStripButtonSmartSort,
-            this.toolStripButtonReset,
-            this.toolStripButtonCopyText,
-            this.toolStripButtonCopyPlot,
-            this.toolStripButtonCopyForExcel});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(834, 25);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripButtonParse
             // 
@@ -338,48 +350,61 @@ namespace XferSuite
             this.toolStripButtonReset.Text = "Reset Columns";
             this.toolStripButtonReset.Click += new System.EventHandler(this.toolStripButtonReset_Click);
             // 
-            // toolStripButtonCopyText
+            // toolStrip1
             // 
-            this.toolStripButtonCopyText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonCopyText.Enabled = false;
-            this.toolStripButtonCopyText.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyText.Image")));
-            this.toolStripButtonCopyText.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonCopyText.Name = "toolStripButtonCopyText";
-            this.toolStripButtonCopyText.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonCopyText.Text = "Copy Text";
-            this.toolStripButtonCopyText.Click += new System.EventHandler(this.toolStripButtonCopyText_Click);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonParse,
+            this.toolStripButtonParseNoPicthes,
+            this.toolStripButtonSmartSort,
+            this.toolStripButtonReset,
+            this.toolStripButtonCopyWindow,
+            this.toolStripButtonSpecificRegion});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(949, 25);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButtonCopyPlot
+            // toolStripButtonParseNoPicthes
             // 
-            this.toolStripButtonCopyPlot.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonCopyPlot.Enabled = false;
-            this.toolStripButtonCopyPlot.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyPlot.Image")));
-            this.toolStripButtonCopyPlot.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonCopyPlot.Name = "toolStripButtonCopyPlot";
-            this.toolStripButtonCopyPlot.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonCopyPlot.Text = "Copy Plot";
-            this.toolStripButtonCopyPlot.Click += new System.EventHandler(this.toolStripButtonCopyPlot_Click);
+            this.toolStripButtonParseNoPicthes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonParseNoPicthes.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonParseNoPicthes.Image")));
+            this.toolStripButtonParseNoPicthes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonParseNoPicthes.Name = "toolStripButtonParseNoPicthes";
+            this.toolStripButtonParseNoPicthes.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonParseNoPicthes.Text = "Parse Without Pitches";
+            this.toolStripButtonParseNoPicthes.Click += new System.EventHandler(this.toolStripButtonParseNoPicthes_Click);
             // 
-            // toolStripButtonCopyForExcel
+            // toolStripButtonCopyWindow
             // 
-            this.toolStripButtonCopyForExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonCopyForExcel.Enabled = false;
-            this.toolStripButtonCopyForExcel.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyForExcel.Image")));
-            this.toolStripButtonCopyForExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonCopyForExcel.Name = "toolStripButtonCopyForExcel";
-            this.toolStripButtonCopyForExcel.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonCopyForExcel.Text = "Copy Plot For Excel";
-            this.toolStripButtonCopyForExcel.Click += new System.EventHandler(this.toolStripButtonCopyForExcel_Click);
+            this.toolStripButtonCopyWindow.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCopyWindow.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyWindow.Image")));
+            this.toolStripButtonCopyWindow.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCopyWindow.Name = "toolStripButtonCopyWindow";
+            this.toolStripButtonCopyWindow.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonCopyWindow.Text = "Copy Window to Clipboard";
+            this.toolStripButtonCopyWindow.Click += new System.EventHandler(this.toolStripButtonCopyWindow_Click);
+            // 
+            // toolStripButtonSpecificRegion
+            // 
+            this.toolStripButtonSpecificRegion.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSpecificRegion.Enabled = false;
+            this.toolStripButtonSpecificRegion.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSpecificRegion.Image")));
+            this.toolStripButtonSpecificRegion.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSpecificRegion.Name = "toolStripButtonSpecificRegion";
+            this.toolStripButtonSpecificRegion.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonSpecificRegion.Text = "Plot Specific Region";
+            this.toolStripButtonSpecificRegion.Click += new System.EventHandler(this.toolStripButtonSpecificRegion_Click);
             // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(834, 361);
+            this.ClientSize = new System.Drawing.Size(949, 441);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(850, 400);
+            this.MinimumSize = new System.Drawing.Size(965, 480);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
             this.tableLayoutPanel.ResumeLayout(false);
@@ -414,13 +439,15 @@ namespace XferSuite
         private System.Windows.Forms.Label lblSelectedFeature;
         private System.Windows.Forms.RichTextBox rtb;
         private System.Windows.Forms.Button btnApplyToAll;
-        private OxyPlot.WindowsForms.PlotView plotView;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.Button btnViewData;
+        private System.Windows.Forms.Button btnAdjustData;
         private System.Windows.Forms.ToolStripButton toolStripButtonParse;
-        private System.Windows.Forms.ToolStripButton toolStripButtonReset;
-        private System.Windows.Forms.ToolStripButton toolStripButtonCopyText;
-        private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
-        private System.Windows.Forms.ToolStripButton toolStripButtonCopyForExcel;
+        private System.Windows.Forms.ToolStripButton toolStripButtonReset;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonParseNoPicthes;
+        private OxyPlot.WindowsForms.PlotView plotView;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCopyWindow;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSpecificRegion;
     }
 }

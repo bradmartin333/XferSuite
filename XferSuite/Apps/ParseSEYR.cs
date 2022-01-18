@@ -7,27 +7,16 @@ using System.Collections.Generic;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Axes;
+using OxyPlot.WindowsForms;
 using System.Drawing;
 using System.ComponentModel;
 using Microsoft.FSharp.Collections;
-using System.Text;
+using System.IO;
 
 namespace XferSuite
 {
     public partial class ParseSEYR : Form
     {
-        private bool _ShowPlotAxes = true;
-        [Category("User Parameters")]
-        public bool ShowPlotAxes
-        {
-            get => _ShowPlotAxes;
-            set
-            {
-                _ShowPlotAxes = value;
-                ConfigurePlot();
-            }
-        }
-
         private bool _FlipXAxis = true;
         [Category("User Parameters")]
         public bool FlipXAxis
@@ -52,7 +41,7 @@ namespace XferSuite
             }
         }
 
-        private int _PointSize = 2;
+        private int _PointSize = 1;
         [Category("User Parameters")]
         public int PointSize
         {
@@ -64,18 +53,70 @@ namespace XferSuite
             }
         }
 
-        private string Path { get; set; }
+        private bool _TransposePlot = false;
+        [Category("User Parameters")]
+        [Description("Flip X and Y coords of scatterpoints")]
+        public bool TransposePlot
+        {
+            get => _TransposePlot;
+            set
+            {
+                _TransposePlot = value;
+                List<Plottable> PlottablesRotated = new List<Plottable>();
+                foreach (Plottable p in Plottables)
+                {
+                    PlottablesRotated.Add(new Plottable
+                    {
+                        Region = p.Region,
+                        X = p.Y,
+                        Y = p.X,
+                        Pass = p.Pass
+                    });
+                }
+                Plottables = PlottablesRotated;
+                ConfigurePlot();
+            }
+        }
+
+        private bool _PlotOrder = true;
+        [Category("User Parameters")]
+        [Description("True: Fail beneath Pass, False: Pass beneath Fail")]
+        public bool PlotOrder
+        {
+            get => _PlotOrder;
+            set
+            {
+                _PlotOrder = value;
+                ConfigurePlot();
+            }
+        }
+
+        public struct Plottable
+        {
+            public string Region;
+            public double X;
+            public double Y;
+            public bool Pass;
+
+            public override string ToString()
+            {
+                return $"Region {Region}";
+            }
+        }
+
+        private FileInfo Path { get; set; }
         private Report.Entry[] Data { get; set; }
         private Report.Criteria[] Features { get; set; }
         private Report.Criteria SelectedFeature { get; set; }
         private bool ObjectHasBeenDropped { get; set; }
 
-        private List<ScatterPoint>[] ScatterPoints = new List<ScatterPoint>[2]; // Pass, Fail
+        private List<Plottable> Plottables = new List<Plottable>();
+        private double XMax, YMax;
 
         public ParseSEYR(string path)
         {
             InitializeComponent();
-            Path = path;
+            Path = new FileInfo(path);
             OpenReport();
 
             SimpleDragSource bufferSource = (SimpleDragSource)olvBuffer.DragSource;
@@ -103,8 +144,8 @@ namespace XferSuite
 
         private void OpenReport()
         {
-            Text = Path.Split('\\').Last().Replace(".txt", "");
-            Data = Report.data(Path);
+            Text = Path.Name;
+            Data = Report.data(Path.FullName);
             Features = Report.getFeatures(Data);
             InitObjects();
         }
@@ -113,9 +154,9 @@ namespace XferSuite
         {
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
-            lblSelectedFeature.Text = "N\\A";
+            lblSelectedFeature.Text = @"N\A";
             rtb.Text = "";
-            flowLayoutPanelCriteria.Enabled = false;
+            toolStripButtonSpecificRegion.Enabled = false;
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
@@ -202,28 +243,116 @@ namespace XferSuite
                 feature.Requirements = requirements.ToArray();
         }
 
-        private void Parse()
+        private void Parse(bool noPitches = false)
         {
+            if (Features.Where(x => x.Bucket == Report.Bucket.Buffer).Count() == Features.Length)
+            {
+                MessageBox.Show("All features are buffers. Parsing aborted.");
+                return;
+            }
+
+            // Reset
+            rtb.Text = "(RR, RC, R, C)\tYield\n";
+            Plottables = new List<Plottable>();
+            double distX = 0.0;
+            double distY = 0.0;
+
+            if (!noPitches)
+            {
+                using (PromptForInput input = new PromptForInput(
+                    prompt: "Enter X grid pitch in millimeters",
+                    textEntry: false,
+                    max: 100,
+                    title: $"SEYR Parser Grid Setup"))
+                {
+                    var result = input.ShowDialog();
+                    if (result == DialogResult.OK)
+                        distX = (double)((NumericUpDown)input.Control).Value;
+                }
+                using (PromptForInput input = new PromptForInput(
+                    prompt: "Enter Y grid pitch in millimeters",
+                    textEntry: false,
+                    max: 100,
+                    title: $"SEYR Parser Grid Setup"))
+                {
+                    var result = input.ShowDialog();
+                    if (result == DialogResult.OK)
+                        distY = (double)((NumericUpDown)input.Control).Value;
+                }
+            }
+
             using (new HourGlass(UsePlexiglass: false))
             {
-                List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
+                // Filter out buffer data
+                string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
+                var filteredData = Report.removeBuffers(Data, bufferStrings);
+                string[] regions = Report.getRegions(filteredData);
 
-                // Reset
-                rtb.Text = "RR\tRC\tR\tC\tYield\n";
-                ScatterPoints[0] = new List<ScatterPoint>();
-                ScatterPoints[1] = new List<ScatterPoint>();
-                int fieldNum = 0;
+                if (Features.Where(x => x.Bucket == Report.Bucket.Required).Count() == 1 &&
+                    Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() == 0)
+                    ParseSingle(distX, distY, filteredData, regions);
+                else
+                    ParseMulti(distX, distY, filteredData, regions);
+
+                if (Plottables.Count > 0)
+                {
+                    rtb.Text += $"\nTotal\t{Plottables.Where(p => p.Pass).Count() / (double)(Plottables.Count()):P}";
+
+                    XMax = Plottables.Select(p => p.X).Max();
+                    YMax = Plottables.Select(p => p.Y).Max();
+
+                    ConfigurePlot();
+                    toolStripButtonSpecificRegion.Enabled = true;
+                }
+            }
+        }
+
+        private void ParseSingle(double distX, double distY, Report.Entry[] filteredData, string[] regions)
+        {
+            for (int l = 0; l < regions.Length; l++)
+            {
                 double passNum = 0;
                 double failNum = 0;
+                Report.Entry[] regionData = Report.getRegion(filteredData, regions[l]);
 
-                // Parse
-                int num = Report.getNumImages(Data) + 1;
-                int numX = Report.getNumX(Data);
-                int numY = Report.getNumY(Data);
-                int[] lastRegion = Report.getRegion(Report.getImage(Data, 1));
-                for (int k = 1; k < num; k++)
+                foreach (Report.Entry entry in regionData)
                 {
-                    var thisImg = Report.getImage(Data, k);
+                    bool pass = CheckCriteria(new Report.Entry[] {entry}, new List<string>());
+
+                    Plottables.Add(new Plottable
+                    {
+                        Region = regions[l],
+                        X = entry.X + (entry.XCopy * distX),
+                        Y = entry.Y + (entry.YCopy * distY),
+                        Pass = pass
+                    });
+
+                    if (pass)
+                        passNum++;
+                    else
+                        failNum++;
+                }
+
+                rtb.Text += $"{regions[l]}\t{passNum / (passNum + failNum):P}\n";
+            };
+        }
+
+        private void ParseMulti(double distX, double distY, Report.Entry[] filteredData, string[] regions)
+        {
+            int numX = Report.getNumX(filteredData);
+            int numY = Report.getNumY(filteredData);
+            List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
+
+            for (int l = 0; l < regions.Length; l++)
+            {
+                double passNum = 0;
+                double failNum = 0;
+                Report.Entry[] regionData = Report.getRegion(filteredData, regions[l]);
+                int numRegionPics = Report.getNumImages(regionData);
+
+                for (int k = 1; k < numRegionPics + 1; k++)
+                {
+                    var thisImg = Report.getImage(regionData, k + l * numRegionPics);
 
                     for (int i = 0; i < numX; i++)
                     {
@@ -233,81 +362,39 @@ namespace XferSuite
                             if (thisCell.Length == 0) continue;
                             bool pass = CheckCriteria(thisCell, needOneParents);
 
-                            double thisX = thisCell[0].X;
-                            double thisY = thisCell[0].Y;
-
-                            string thisTag =
-                                $"X: {thisX}\n" +
-                                $"Y: {thisY}\n" +
-                                $"RR: {thisCell[0].RR}\n" +
-                                $"RC: {thisCell[0].RC}\n" +
-                                $"R: {thisCell[0].R}\n" +
-                                $"C: {thisCell[0].C}";
+                            Plottables.Add(new Plottable
+                            {
+                                Region = regions[l],
+                                X = thisCell[0].X + (i * distX),
+                                Y = thisCell[0].Y + (j * distY),
+                                Pass = pass
+                            });
 
                             if (pass)
-                            {
                                 passNum++;
-                                ScatterPoints[0].Add(new ScatterPoint(thisX, thisY, tag: thisTag));
-                            }
                             else
-                            {
                                 failNum++;
-                                ScatterPoints[1].Add(new ScatterPoint(thisX, thisY, tag: thisTag));
-                            }
                         }
-                    }
-
-                    int[] thisRegion = Report.getRegion(thisImg);
-                    if (!Enumerable.SequenceEqual(thisRegion, lastRegion))
-                    {
-                        lastRegion = thisRegion;
-                        fieldNum++;
-                        rtb.Text +=
-                            $"{thisRegion[0]}\t" +
-                            $"{thisRegion[1]}\t" +
-                            $"{thisRegion[2]}\t" +
-                            $"{thisRegion[3]}\t" +
-                            $"{passNum / (passNum + failNum):P}\n";
-                        passNum = 0;
-                        failNum = 0;
                     }
                 }
 
-                rtb.Text +=
-                    $"{lastRegion[0]}\t" +
-                    $"{lastRegion[1]}\t" +
-                    $"{lastRegion[2]}\t" +
-                    $"{lastRegion[3]}\t" +
-                    $"{passNum / (passNum + failNum):P}";
-
-                ConfigurePlot();
-            }
+                rtb.Text += $"{regions[l]}\t{passNum / (passNum + failNum):P}\n";
+            };
         }
 
         private void ConfigurePlot()
         {
-            PlotModel plotModel = new PlotModel()
-            {
-                Title = $"Total Yield   {ScatterPoints[0].Count() / (double)(ScatterPoints[0].Count() + ScatterPoints[1].Count()):P}",
-                TitleFontSize = 12
-            };
-
-            LinearAxis Xaxis = new LinearAxis()
+            PlotModel plotModel = new PlotModel();
+            plotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
-                Title = "X Position",
-                IsAxisVisible = ShowPlotAxes,
-                StartPosition = _FlipXAxis ? 1 : 0,
-                EndPosition = _FlipXAxis ? 0 : 1
-            };
-            LinearAxis Yaxis = new LinearAxis()
+                IsAxisVisible = false,
+            });
+            plotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
-                Title = "Y Position",
-                IsAxisVisible = ShowPlotAxes,
-                StartPosition = _FlipYAxis ? 1 : 0,
-                EndPosition = _FlipYAxis ? 0 : 1
-            };
+                IsAxisVisible = false,
+            });
 
             ScatterSeries passScatter = new ScatterSeries()
             {
@@ -315,20 +402,118 @@ namespace XferSuite
                 MarkerSize = _PointSize,
                 TrackerFormatString = "{Tag}"
             };
-            passScatter.Points.AddRange(ScatterPoints[0]);
             ScatterSeries failScatter = new ScatterSeries()
             {
                 MarkerFill = OxyColors.Red,
                 MarkerSize = _PointSize,
                 TrackerFormatString = "{Tag}"
             };
-            failScatter.Points.AddRange(ScatterPoints[1]);
 
-            plotModel.Axes.Add(Xaxis);
-            plotModel.Axes.Add(Yaxis);
-            plotModel.Series.Add(failScatter);
-            plotModel.Series.Add(passScatter);
+            foreach (Plottable p in Plottables)
+            {
+                ScatterPoint scatterPoint = new ScatterPoint(
+                    _FlipXAxis ? Math.Abs(XMax - p.X) : p.X,
+                    _FlipYAxis ? Math.Abs(YMax - p.Y) : p.Y,
+                    tag: p.ToString());
+
+                if (p.Pass)
+                    passScatter.Points.Add(scatterPoint);
+                else
+                    failScatter.Points.Add(scatterPoint);
+            }
+
+            if (_PlotOrder)
+            {
+                plotModel.Series.Add(failScatter);
+                plotModel.Series.Add(passScatter);
+            }
+            else
+            {
+                plotModel.Series.Add(passScatter);
+                plotModel.Series.Add(failScatter);
+            }
+
             plotView.Model = plotModel;
+        }
+
+        private void toolStripButtonSpecificRegion_Click(object sender, EventArgs e)
+        {
+            string region = string.Empty;
+            
+            using (PromptForInput input = new PromptForInput(
+                prompt: "Enter region string to be plotted (RR, RC, R, C)",
+                title: $"SEYR Parser Specific Region Plotting"))
+            {
+                var result = input.ShowDialog();
+                if (result == DialogResult.OK)
+                    region = ((TextBox)input.Control).Text;
+            }
+
+            if (!Plottables.Where(p => p.Region == region).Any())
+            {
+                MessageBox.Show("Specified region not found");
+                return;
+            }
+
+            Rectangle bounds = Screen.FromControl(this).Bounds;
+            int size = (int)(Math.Min(bounds.Width, bounds.Height) * 0.95);
+            Form form = new Form()
+            {
+                Width = size,
+                Height = size,
+                FormBorderStyle = FormBorderStyle.SizableToolWindow,
+                StartPosition = FormStartPosition.CenterScreen,
+                Text = region
+            };
+
+            PlotView plot = new PlotView() { Dock = DockStyle.Fill };
+            PlotModel plotModel = new PlotModel();
+            plotModel.Axes.Add(new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                TickStyle = OxyPlot.Axes.TickStyle.None
+            });
+            plotModel.Axes.Add(new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                TickStyle = OxyPlot.Axes.TickStyle.None
+            });
+
+            ScatterSeries passSeries = (ScatterSeries)plotView.Model.Series[_PlotOrder ? 1 : 0];
+
+            ScatterSeries passScatter = new ScatterSeries()
+            {
+                MarkerFill = OxyColors.LawnGreen,
+                MarkerSize = _PointSize,
+                TrackerFormatString = "{Tag}"
+            };
+            passScatter.Points.AddRange(
+                ((ScatterSeries)plotView.Model.Series[_PlotOrder ? 1 : 0]).Points.Where(
+                    x => x.Tag.ToString().Contains(region)));
+            ScatterSeries failScatter = new ScatterSeries()
+            {
+                MarkerFill = OxyColors.Red,
+                MarkerSize = _PointSize,
+                TrackerFormatString = "{Tag}"
+            };
+            failScatter.Points.AddRange(
+                ((ScatterSeries)plotView.Model.Series[_PlotOrder ? 0 : 1]).Points.Where(
+                    x => x.Tag.ToString().Contains(region)));
+
+            if (_PlotOrder)
+            {
+                plotModel.Series.Add(failScatter);
+                plotModel.Series.Add(passScatter);
+            }
+            else
+            {
+                plotModel.Series.Add(passScatter);
+                plotModel.Series.Add(failScatter);
+            }
+
+            plot.Model = plotModel;
+            form.Controls.Add(plot);
+            form.Show();
         }
 
         private bool CheckCriteria(Report.Entry[] thisCell, List<string> needOneParents)
@@ -371,10 +556,11 @@ namespace XferSuite
         private void toolStripButtonParse_Click(object sender, EventArgs e)
         {
             Parse();
+        }
 
-            toolStripButtonCopyText.Enabled = true;
-            toolStripButtonCopyPlot.Enabled = true;
-            toolStripButtonCopyForExcel.Enabled = true;
+        private void toolStripButtonParseNoPicthes_Click(object sender, EventArgs e)
+        {
+            Parse(noPitches: true);
         }
 
         private void toolStripButtonCopyText_Click(object sender, EventArgs e)
@@ -383,13 +569,6 @@ namespace XferSuite
                 Clipboard.SetText(rtb.Text);
             else
                 Clipboard.Clear();
-        }
-
-        private void toolStripButtonCopyPlot_Click(object sender, EventArgs e)
-        {
-            Bitmap bitmap = new Bitmap(plotView.Width, plotView.Height);
-            plotView.DrawToBitmap(bitmap, new Rectangle(0, 0, plotView.Width, plotView.Height));
-            Clipboard.SetImage(bitmap);
         }
 
         private void toolStripButtonSmartSort_Click(object sender, EventArgs e)
@@ -462,36 +641,69 @@ namespace XferSuite
             }   
         }
 
-        private void toolStripButtonCopyForExcel_Click(object sender, EventArgs e)
+        private void btnViewData_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(
-                    "This feature is currently only supported for SEYRDesktop generated data. Continue?",
-                    "Copy SEYR Plot for Excel", MessageBoxButtons.YesNoCancel);
-            if (dialogResult != DialogResult.Yes) return;
-
-            double xMin = Math.Floor(plotView.Model.Axes[0].DataMinimum);
-            double yMin = Math.Floor(plotView.Model.Axes[1].DataMinimum);
-            int xRange = (int)Math.Ceiling(plotView.Model.Axes[0].DataMaximum - xMin);
-            int yRange = (int)Math.Ceiling(plotView.Model.Axes[1].DataMaximum - yMin);
-
-            int[,] output = new int[xRange, yRange];
-            foreach (ScatterPoint pt in ScatterPoints[0])
+            double[] data = Report.getData(Data, SelectedFeature.Name);
+            if (data.Sum() == 0) return;
+            ScottPlot.FormsPlot control = new ScottPlot.FormsPlot() { Dock = DockStyle.Fill };
+            (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(
+                data, min: data.Min(), max: data.Max(), binSize: 1);
+            double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
+            ScottPlot.Plottable.BarPlot bar = control.Plot.AddBar(values: counts, positions: leftEdges);
+            bar.BarWidth = 1;
+            control.Plot.Title(SelectedFeature.Name);
+            control.Plot.XAxis.Label("Score");
+            control.Plot.YAxis.Label("Count");
+            control.Refresh();
+            Form form = new Form()
             {
-                int thisX = (int)Math.Floor(pt.X - xMin);
-                int thisY = (int)Math.Floor(pt.Y - yMin);
-                output[thisX, thisY] = 1;
+                Size = new Size(600, 400),
+                FormBorderStyle = FormBorderStyle.SizableToolWindow
+            };
+            form.Controls.Add(control);
+            form.Show();
+        }
+
+        private void toolStripButtonCopyWindow_Click(object sender, EventArgs e)
+        {
+            Bitmap bmp = new Bitmap(Width, Height);
+            DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
+            Clipboard.SetImage(bmp);
+        }
+
+        private void btnAdjustData_Click(object sender, EventArgs e)
+        {
+            int min = int.MinValue;
+            using (PromptForInput input = new PromptForInput(
+                prompt: "Enter new lower bound for passing score", 
+                textEntry: false,
+                title: $"Adjust {SelectedFeature.Name}"))
+            {
+                var result = input.ShowDialog();
+                if (result == DialogResult.OK)
+                    min = (int)((NumericUpDown)input.Control).Value;
+                else
+                    return;
             }
 
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < xRange; i++)
+            int max = int.MinValue;
+            using (PromptForInput input = new PromptForInput(
+                prompt: "Enter new upper bound for passing score",
+                textEntry: false,
+                max: (int)Report.getData(Data, SelectedFeature.Name).Max(),
+                title: $"Adjust {SelectedFeature.Name}"))
             {
-                for (int j = 0; j < yRange; j++)
-                {
-                    sb.Append($"{output[i, j]}\t");
-                }
-                sb.Append('\n');
+                var result = input.ShowDialog();
+                if (result == DialogResult.OK)
+                    max = (int)((NumericUpDown)input.Control).Value;
+                else
+                    return;
             }
-            Clipboard.SetText(sb.ToString());
+
+            if (max > min)
+                Report.rescoreFeature(Data, SelectedFeature.Name, min, max);
+            else
+                MessageBox.Show("Max must be greater than min.");
         }
     }
 }
