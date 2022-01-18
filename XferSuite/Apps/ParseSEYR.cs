@@ -11,6 +11,7 @@ using OxyPlot.WindowsForms;
 using System.Drawing;
 using System.ComponentModel;
 using Microsoft.FSharp.Collections;
+using System.IO;
 
 namespace XferSuite
 {
@@ -103,7 +104,7 @@ namespace XferSuite
             }
         }
 
-        private string Path { get; set; }
+        private FileInfo Path { get; set; }
         private Report.Entry[] Data { get; set; }
         private Report.Criteria[] Features { get; set; }
         private Report.Criteria SelectedFeature { get; set; }
@@ -115,7 +116,7 @@ namespace XferSuite
         public ParseSEYR(string path)
         {
             InitializeComponent();
-            Path = path;
+            Path = new FileInfo(path);
             OpenReport();
 
             SimpleDragSource bufferSource = (SimpleDragSource)olvBuffer.DragSource;
@@ -143,8 +144,8 @@ namespace XferSuite
 
         private void OpenReport()
         {
-            Text = Path.Split('\\').Last().Replace(".txt", "");
-            Data = Report.data(Path);
+            Text = Path.Name;
+            Data = Report.data(Path.FullName);
             Features = Report.getFeatures(Data);
             InitObjects();
         }
@@ -153,7 +154,7 @@ namespace XferSuite
         {
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
-            lblSelectedFeature.Text = "N\\A";
+            lblSelectedFeature.Text = @"N\A";
             rtb.Text = "";
             toolStripButtonSpecificRegion.Enabled = false;
             olvBuffer.SetObjects(Features);
