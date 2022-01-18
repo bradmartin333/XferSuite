@@ -146,7 +146,6 @@ namespace XferSuite
         {
             Text = Path.Name;
             Data = Report.data(Path.FullName);
-            Features = Report.getFeatures(Data);
             InitObjects();
         }
 
@@ -155,8 +154,10 @@ namespace XferSuite
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
             lblSelectedFeature.Text = @"N\A";
+
             rtb.Text = "";
             toolStripButtonSpecificRegion.Enabled = false;
+
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
