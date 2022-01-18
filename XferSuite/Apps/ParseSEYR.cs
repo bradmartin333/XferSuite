@@ -146,7 +146,6 @@ namespace XferSuite
         {
             Text = Path.Name;
             Data = Report.data(Path.FullName);
-            Features = Report.getFeatures(Data);
             InitObjects();
         }
 
@@ -155,8 +154,10 @@ namespace XferSuite
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
             lblSelectedFeature.Text = @"N\A";
+
             rtb.Text = "";
             toolStripButtonSpecificRegion.Enabled = false;
+
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
@@ -673,7 +674,7 @@ namespace XferSuite
 
         private void btnAdjustData_Click(object sender, EventArgs e)
         {
-            int min = int.MinValue;
+            double min = 0.0;
             using (PromptForInput input = new PromptForInput(
                 prompt: "Enter new lower bound for passing score", 
                 textEntry: false,
@@ -681,12 +682,12 @@ namespace XferSuite
             {
                 var result = input.ShowDialog();
                 if (result == DialogResult.OK)
-                    min = (int)((NumericUpDown)input.Control).Value;
+                    min = (double)((NumericUpDown)input.Control).Value;
                 else
                     return;
             }
 
-            int max = int.MinValue;
+            double max = 0.0;
             using (PromptForInput input = new PromptForInput(
                 prompt: "Enter new upper bound for passing score",
                 textEntry: false,
@@ -695,7 +696,7 @@ namespace XferSuite
             {
                 var result = input.ShowDialog();
                 if (result == DialogResult.OK)
-                    max = (int)((NumericUpDown)input.Control).Value;
+                    max = (double)((NumericUpDown)input.Control).Value;
                 else
                     return;
             }
