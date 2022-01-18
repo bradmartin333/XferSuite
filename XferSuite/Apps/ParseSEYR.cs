@@ -119,7 +119,7 @@ namespace XferSuite
             Path = new FileInfo(path);
             Text = Path.Name;
             Data = Report.data(Path.FullName);
-            InitObjects();
+            ResetFeaturesAndUI();
 
             SimpleDragSource bufferSource = (SimpleDragSource)olvBuffer.DragSource;
             bufferSource.RefreshAfterDrop = true;
@@ -144,28 +144,15 @@ namespace XferSuite
             Show();
         }
 
-        private void InitObjects()
-        {
-            ResetUI();
-            InitFeatures();
-            InitOLV();
-        }
-
-        private void ResetUI()
-        {
-            rtb.Text = "";
-            toolStripButtonSpecificRegion.Enabled = false;
-        }
-
-        private void InitFeatures()
+        private void ResetFeaturesAndUI()
         {
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
             lblSelectedFeature.Text = @"N\A";
-        }
 
-        private void InitOLV()
-        {
+            rtb.Text = "";
+            toolStripButtonSpecificRegion.Enabled = false;
+
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
@@ -559,7 +546,7 @@ namespace XferSuite
 
         private void toolStripButtonReset_Click(object sender, EventArgs e)
         {
-            InitObjects();
+            ResetFeaturesAndUI();
         }
 
         private void toolStripButtonParse_Click(object sender, EventArgs e)
