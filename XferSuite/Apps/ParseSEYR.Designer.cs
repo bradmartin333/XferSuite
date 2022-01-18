@@ -53,11 +53,10 @@ namespace XferSuite
             this.toolStripButtonParse = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonCopyText = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonCopyPlot = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonCopyForExcel = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonFullscreenPlot = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonParseNoPicthes = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonCopyWindow = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSpecificRegion = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -86,6 +85,7 @@ namespace XferSuite
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(949, 441);
             this.tableLayoutPanel.TabIndex = 0;
             // 
@@ -308,7 +308,6 @@ namespace XferSuite
             // 
             // plotView
             // 
-            this.plotView.BackColor = System.Drawing.Color.White;
             this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plotView.Location = new System.Drawing.Point(507, 28);
             this.plotView.Name = "plotView";
@@ -351,65 +350,51 @@ namespace XferSuite
             this.toolStripButtonReset.Text = "Reset Columns";
             this.toolStripButtonReset.Click += new System.EventHandler(this.toolStripButtonReset_Click);
             // 
-            // toolStripButtonCopyText
-            // 
-            this.toolStripButtonCopyText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonCopyText.Enabled = false;
-            this.toolStripButtonCopyText.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyText.Image")));
-            this.toolStripButtonCopyText.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonCopyText.Name = "toolStripButtonCopyText";
-            this.toolStripButtonCopyText.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonCopyText.Text = "Copy Text";
-            this.toolStripButtonCopyText.Click += new System.EventHandler(this.toolStripButtonCopyText_Click);
-            // 
-            // toolStripButtonCopyPlot
-            // 
-            this.toolStripButtonCopyPlot.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonCopyPlot.Enabled = false;
-            this.toolStripButtonCopyPlot.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyPlot.Image")));
-            this.toolStripButtonCopyPlot.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonCopyPlot.Name = "toolStripButtonCopyPlot";
-            this.toolStripButtonCopyPlot.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonCopyPlot.Text = "Copy Plot";
-            this.toolStripButtonCopyPlot.Click += new System.EventHandler(this.toolStripButtonCopyPlot_Click);
-            // 
-            // toolStripButtonCopyForExcel
-            // 
-            this.toolStripButtonCopyForExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonCopyForExcel.Enabled = false;
-            this.toolStripButtonCopyForExcel.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyForExcel.Image")));
-            this.toolStripButtonCopyForExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonCopyForExcel.Name = "toolStripButtonCopyForExcel";
-            this.toolStripButtonCopyForExcel.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonCopyForExcel.Text = "Copy Plot For Excel";
-            this.toolStripButtonCopyForExcel.Click += new System.EventHandler(this.toolStripButtonCopyForExcel_Click);
-            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonParse,
+            this.toolStripButtonParseNoPicthes,
             this.toolStripButtonSmartSort,
             this.toolStripButtonReset,
-            this.toolStripButtonCopyText,
-            this.toolStripButtonFullscreenPlot,
-            this.toolStripButtonCopyPlot,
-            this.toolStripButtonCopyForExcel});
+            this.toolStripButtonCopyWindow,
+            this.toolStripButtonSpecificRegion});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(949, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButtonFullscreenPlot
+            // toolStripButtonParseNoPicthes
             // 
-            this.toolStripButtonFullscreenPlot.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFullscreenPlot.Enabled = false;
-            this.toolStripButtonFullscreenPlot.Image = global::XferSuite.Properties.Resources.iconmonstr_fullscreen_1_24;
-            this.toolStripButtonFullscreenPlot.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFullscreenPlot.Name = "toolStripButtonFullscreenPlot";
-            this.toolStripButtonFullscreenPlot.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonFullscreenPlot.Text = "toolStripButton1";
-            this.toolStripButtonFullscreenPlot.Click += new System.EventHandler(this.toolStripButtonFullscreenPlot_Click);
+            this.toolStripButtonParseNoPicthes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonParseNoPicthes.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonParseNoPicthes.Image")));
+            this.toolStripButtonParseNoPicthes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonParseNoPicthes.Name = "toolStripButtonParseNoPicthes";
+            this.toolStripButtonParseNoPicthes.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonParseNoPicthes.Text = "Parse Without Pitches";
+            this.toolStripButtonParseNoPicthes.Click += new System.EventHandler(this.toolStripButtonParseNoPicthes_Click);
+            // 
+            // toolStripButtonCopyWindow
+            // 
+            this.toolStripButtonCopyWindow.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCopyWindow.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyWindow.Image")));
+            this.toolStripButtonCopyWindow.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCopyWindow.Name = "toolStripButtonCopyWindow";
+            this.toolStripButtonCopyWindow.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonCopyWindow.Text = "Copy Window to Clipboard";
+            this.toolStripButtonCopyWindow.Click += new System.EventHandler(this.toolStripButtonCopyWindow_Click);
+            // 
+            // toolStripButtonSpecificRegion
+            // 
+            this.toolStripButtonSpecificRegion.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSpecificRegion.Enabled = false;
+            this.toolStripButtonSpecificRegion.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSpecificRegion.Image")));
+            this.toolStripButtonSpecificRegion.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSpecificRegion.Name = "toolStripButtonSpecificRegion";
+            this.toolStripButtonSpecificRegion.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonSpecificRegion.Text = "Plot Specific Region";
+            this.toolStripButtonSpecificRegion.Click += new System.EventHandler(this.toolStripButtonSpecificRegion_Click);
             // 
             // ParseSEYR
             // 
@@ -454,16 +439,15 @@ namespace XferSuite
         private System.Windows.Forms.Label lblSelectedFeature;
         private System.Windows.Forms.RichTextBox rtb;
         private System.Windows.Forms.Button btnApplyToAll;
-        private OxyPlot.WindowsForms.PlotView plotView;
         private System.Windows.Forms.Button btnViewData;
         private System.Windows.Forms.Button btnAdjustData;
         private System.Windows.Forms.ToolStripButton toolStripButtonParse;
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
-        private System.Windows.Forms.ToolStripButton toolStripButtonCopyText;
-        private System.Windows.Forms.ToolStripButton toolStripButtonCopyPlot;
-        private System.Windows.Forms.ToolStripButton toolStripButtonCopyForExcel;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFullscreenPlot;
+        private System.Windows.Forms.ToolStripButton toolStripButtonParseNoPicthes;
+        private OxyPlot.WindowsForms.PlotView plotView;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCopyWindow;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSpecificRegion;
     }
 }

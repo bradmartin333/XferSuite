@@ -52,7 +52,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(251, 123);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(327, 123);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // label
@@ -61,7 +61,7 @@
             this.label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label.Location = new System.Drawing.Point(13, 10);
             this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(225, 34);
+            this.label.Size = new System.Drawing.Size(301, 34);
             this.label.TabIndex = 0;
             this.label.Text = "label";
             this.label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -74,7 +74,7 @@
             this.btnContinue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnContinue.Location = new System.Drawing.Point(13, 81);
             this.btnContinue.Name = "btnContinue";
-            this.btnContinue.Size = new System.Drawing.Size(225, 28);
+            this.btnContinue.Size = new System.Drawing.Size(301, 28);
             this.btnContinue.TabIndex = 1;
             this.btnContinue.Text = "Continue";
             this.btnContinue.UseVisualStyleBackColor = true;
@@ -84,7 +84,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(251, 123);
+            this.ClientSize = new System.Drawing.Size(327, 123);
             this.Controls.Add(this.tableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
