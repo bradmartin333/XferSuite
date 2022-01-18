@@ -646,10 +646,10 @@ module Report =
         |> Array.filter (fun x -> x.Name = name)
         |> Array.map (fun x -> x.Score)
 
-    let rescoreFeature (data: Entry [], name: string, min: int, max: int) =
+    let rescoreFeature (data: Entry [], name: string, min: float, max: float) =
         for d in data do
             if d.Name = name then
-                if d.Score >= float min && d.Score <= float max then
+                if d.Score >= min && d.Score <= max then
                     d.State <- State.Pass
                 else
                     d.State <- State.Fail
