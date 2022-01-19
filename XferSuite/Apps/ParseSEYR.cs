@@ -17,6 +17,8 @@ namespace XferSuite
 {
     public partial class ParseSEYR : Form
     {
+        #region User Parameters
+
         private bool _FlipXAxis = true;
         [Category("User Parameters")]
         public bool FlipXAxis
@@ -91,6 +93,10 @@ namespace XferSuite
             }
         }
 
+        #endregion
+
+        #region Globals and Setup
+
         public struct Plottable
         {
             public string Region;
@@ -158,6 +164,10 @@ namespace XferSuite
             olvNeedOne.Objects = null;
             ObjectHasBeenDropped = false;
         }
+
+        #endregion
+
+        #region OLV Logic
 
         private void ModelCanDrop(object sender, ModelDropEventArgs e)
         {
@@ -238,6 +248,10 @@ namespace XferSuite
             foreach (Report.Criteria feature in Features)
                 feature.Requirements = requirements.ToArray();
         }
+
+        #endregion
+
+        #region Parse Methods
 
         private void Parse(bool noPitches = false)
         {
@@ -378,33 +392,66 @@ namespace XferSuite
             };
         }
 
-        private void ConfigurePlot()
+        #endregion
+
+        #region Plotting Methods
+
+        private PlotModel InitPlotModel(bool visible = true)
         {
             PlotModel plotModel = new PlotModel();
             plotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
-                IsAxisVisible = false,
+                TickStyle = OxyPlot.Axes.TickStyle.None,
+                IsAxisVisible = visible,
             });
             plotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
-                IsAxisVisible = false,
+                TickStyle = OxyPlot.Axes.TickStyle.None,
+                IsAxisVisible = visible,
             });
+            return plotModel;
+        }
 
-            ScatterSeries passScatter = new ScatterSeries()
-            {
-                MarkerFill = OxyColors.LawnGreen,
-                MarkerSize = _PointSize,
-                TrackerFormatString = "{Tag}"
-            };
-            ScatterSeries failScatter = new ScatterSeries()
-            {
-                MarkerFill = OxyColors.Red,
-                MarkerSize = _PointSize,
-                TrackerFormatString = "{Tag}"
-            };
+        private (ScatterSeries, ScatterSeries) InitScatterSeries()
+        {
+            return (
+                new ScatterSeries()
+                {
+                    MarkerFill = OxyColors.LawnGreen,
+                    MarkerSize = _PointSize,
+                    TrackerFormatString = "{Tag}"
+                },
+                new ScatterSeries()
+                {
+                    MarkerFill = OxyColors.Red,
+                    MarkerSize = _PointSize,
+                    TrackerFormatString = "{Tag}"
+                }
+            );
+        }
 
+        private void StackAndShowPlots(ref PlotView view, ref PlotModel model, ScatterSeries passSeries, ScatterSeries failSeries)
+        {
+            if (_PlotOrder)
+            {
+                model.Series.Add(failSeries);
+                model.Series.Add(passSeries);
+            }
+            else
+            {
+                model.Series.Add(passSeries);
+                model.Series.Add(failSeries);
+            }
+            view.Model = model;
+        }
+
+        private void ConfigurePlot()
+        {
+            PlotModel plotModel = InitPlotModel(visible: false);
+
+            (ScatterSeries passScatter,  ScatterSeries failScatter) = InitScatterSeries();
             foreach (Plottable p in Plottables)
             {
                 ScatterPoint scatterPoint = new ScatterPoint(
@@ -418,24 +465,100 @@ namespace XferSuite
                     failScatter.Points.Add(scatterPoint);
             }
 
-            if (_PlotOrder)
+            StackAndShowPlots(ref plotView, ref plotModel, passScatter, failScatter);
+        }
+
+        private void ConfigureSpecificRegionPlot(string region)
+        {
+            PlotView plot = new PlotView() { Dock = DockStyle.Fill };
+            PlotModel plotModel = plotModel = InitPlotModel();
+            (ScatterSeries passScatter, ScatterSeries failScatter) = InitScatterSeries();
+
+            passScatter.Points.AddRange(
+                ((ScatterSeries)plotView.Model.Series[_PlotOrder ? 1 : 0]).Points.Where(
+                    x => x.Tag.ToString().Contains(region)));
+            failScatter.Points.AddRange(
+                ((ScatterSeries)plotView.Model.Series[_PlotOrder ? 0 : 1]).Points.Where(
+                    x => x.Tag.ToString().Contains(region)));
+
+            StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter);
+
+            Form form = InitLargeForm(region);
+            form.Controls.Add(plot);
+            form.Show();
+        }
+
+        private Form InitLargeForm(string text)
+        {
+            Rectangle bounds = Screen.FromControl(this).Bounds;
+            int size = (int)(Math.Min(bounds.Width, bounds.Height) * 0.95);
+            return new Form()
             {
-                plotModel.Series.Add(failScatter);
-                plotModel.Series.Add(passScatter);
-            }
-            else
+                Width = size,
+                Height = size,
+                FormBorderStyle = FormBorderStyle.SizableToolWindow,
+                StartPosition = FormStartPosition.CenterScreen,
+                Text = text
+            };
+        }
+
+        #endregion
+
+        #region Tool Strip Methods
+
+        private void toolStripButtonReset_Click(object sender, EventArgs e)
+        {
+            ResetFeaturesAndUI();
+        }
+
+        private void toolStripButtonParse_Click(object sender, EventArgs e)
+        {
+            Parse();
+        }
+
+        private void toolStripButtonParseNoPicthes_Click(object sender, EventArgs e)
+        {
+            Parse(noPitches: true);
+        }
+
+        private void toolStripButtonCopyText_Click(object sender, EventArgs e)
+        {
+            if (rtb.Text != "") Clipboard.SetText(rtb.Text);
+        }
+
+        private void toolStripButtonCopyWindow_Click(object sender, EventArgs e)
+        {
+            Bitmap bmp = new Bitmap(Width, Height);
+            DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
+            Clipboard.SetImage(bmp);
+        }
+
+        private void toolStripButtonSmartSort_Click(object sender, EventArgs e)
+        {
+            Report.Criteria[] originalFeatures = Features; // Maintain requirements
+            ResetFeaturesAndUI();
+
+            // Alphabetical order looks better in the NeedOne bucket
+            var sortList = Features.ToList();
+            sortList.Sort();
+            Features = sortList.ToArray();
+
+            flowLayoutPanelCriteria.Enabled = false;
+            olvBuffer.Objects = null;
+
+            foreach (Report.Criteria feature in Features)
             {
-                plotModel.Series.Add(passScatter);
-                plotModel.Series.Add(failScatter);
+                feature.Requirements = originalFeatures.First(x => x.Name == feature.Name).Requirements;
+                FindHome(feature);
             }
 
-            plotView.Model = plotModel;
+            olvNeedOne.RebuildAll(true);
         }
 
         private void toolStripButtonSpecificRegion_Click(object sender, EventArgs e)
         {
             string region = string.Empty;
-            
+
             using (PromptForInput input = new PromptForInput(
                 prompt: "Enter region string to be plotted (RR, RC, R, C)",
                 title: $"SEYR Parser Specific Region Plotting"))
@@ -451,66 +574,12 @@ namespace XferSuite
                 return;
             }
 
-            Rectangle bounds = Screen.FromControl(this).Bounds;
-            int size = (int)(Math.Min(bounds.Width, bounds.Height) * 0.95);
-            Form form = new Form()
-            {
-                Width = size,
-                Height = size,
-                FormBorderStyle = FormBorderStyle.SizableToolWindow,
-                StartPosition = FormStartPosition.CenterScreen,
-                Text = region
-            };
-
-            PlotView plot = new PlotView() { Dock = DockStyle.Fill };
-            PlotModel plotModel = new PlotModel();
-            plotModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                TickStyle = OxyPlot.Axes.TickStyle.None
-            });
-            plotModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                TickStyle = OxyPlot.Axes.TickStyle.None
-            });
-
-            ScatterSeries passSeries = (ScatterSeries)plotView.Model.Series[_PlotOrder ? 1 : 0];
-
-            ScatterSeries passScatter = new ScatterSeries()
-            {
-                MarkerFill = OxyColors.LawnGreen,
-                MarkerSize = _PointSize,
-                TrackerFormatString = "{Tag}"
-            };
-            passScatter.Points.AddRange(
-                ((ScatterSeries)plotView.Model.Series[_PlotOrder ? 1 : 0]).Points.Where(
-                    x => x.Tag.ToString().Contains(region)));
-            ScatterSeries failScatter = new ScatterSeries()
-            {
-                MarkerFill = OxyColors.Red,
-                MarkerSize = _PointSize,
-                TrackerFormatString = "{Tag}"
-            };
-            failScatter.Points.AddRange(
-                ((ScatterSeries)plotView.Model.Series[_PlotOrder ? 0 : 1]).Points.Where(
-                    x => x.Tag.ToString().Contains(region)));
-
-            if (_PlotOrder)
-            {
-                plotModel.Series.Add(failScatter);
-                plotModel.Series.Add(passScatter);
-            }
-            else
-            {
-                plotModel.Series.Add(passScatter);
-                plotModel.Series.Add(failScatter);
-            }
-
-            plot.Model = plotModel;
-            form.Controls.Add(plot);
-            form.Show();
+            ConfigureSpecificRegionPlot(region);
         }
+
+        #endregion
+
+        #region Feature Manipulation Methods
 
         private bool CheckCriteria(Report.Entry[] thisCell, List<string> needOneParents)
         {
@@ -542,56 +611,6 @@ namespace XferSuite
                 if (needOneList.Count != 0 && !needOneList.Contains(true)) return false;
 
             return true;
-        }
-
-        private void toolStripButtonReset_Click(object sender, EventArgs e)
-        {
-            ResetFeaturesAndUI();
-        }
-
-        private void toolStripButtonParse_Click(object sender, EventArgs e)
-        {
-            Parse();
-        }
-
-        private void toolStripButtonParseNoPicthes_Click(object sender, EventArgs e)
-        {
-            Parse(noPitches: true);
-        }
-
-        private void toolStripButtonCopyText_Click(object sender, EventArgs e)
-        {
-            if (rtb.Text != "")
-                Clipboard.SetText(rtb.Text);
-            else
-                Clipboard.Clear();
-        }
-
-        private void toolStripButtonSmartSort_Click(object sender, EventArgs e)
-        {
-            Report.Criteria[] originalFeatures = Features;
-            Features = Report.getFeatures(Data);
-            var sortList = Features.ToList();
-            sortList.Sort();
-            Features = sortList.ToArray();
-
-            // Init
-            SelectedFeature = null;
-            lblSelectedFeature.Text = "N\\A";
-            rtb.Text = "";
-            flowLayoutPanelCriteria.Enabled = false;
-            olvBuffer.Objects = null;
-            olvRequire.Objects = null;
-            olvNeedOne.Objects = null;
-            ObjectHasBeenDropped = true;
-
-            foreach (Report.Criteria feature in Features)
-            {
-                feature.Requirements = originalFeatures.First(x => x.Name == feature.Name).Requirements;
-                FindHome(feature);
-            }
-
-            olvNeedOne.RebuildAll(true);
         }
 
         private void FindHome(Report.Criteria feature)
@@ -660,13 +679,6 @@ namespace XferSuite
             form.Show();
         }
 
-        private void toolStripButtonCopyWindow_Click(object sender, EventArgs e)
-        {
-            Bitmap bmp = new Bitmap(Width, Height);
-            DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
-            Clipboard.SetImage(bmp);
-        }
-
         private void btnAdjustData_Click(object sender, EventArgs e)
         {
             double min = 0.0;
@@ -701,5 +713,7 @@ namespace XferSuite
             else
                 MessageBox.Show("Max must be greater than min.");
         }
+
+        #endregion
     }
 }
