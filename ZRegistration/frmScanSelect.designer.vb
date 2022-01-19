@@ -51,7 +51,7 @@ Partial Class frmScanSelect
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(496, 372)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(733, 372)
         Me.TableLayoutPanel1.TabIndex = 1
         '
         'btnReload
@@ -60,7 +60,7 @@ Partial Class frmScanSelect
         Me.btnReload.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btnReload.Location = New System.Drawing.Point(3, 3)
         Me.btnReload.Name = "btnReload"
-        Me.btnReload.Size = New System.Drawing.Size(490, 27)
+        Me.btnReload.Size = New System.Drawing.Size(727, 27)
         Me.btnReload.TabIndex = 1
         Me.btnReload.Text = "Reload File"
         Me.btnReload.UseVisualStyleBackColor = True
@@ -83,7 +83,7 @@ Partial Class frmScanSelect
         Me.olv.Location = New System.Drawing.Point(3, 52)
         Me.olv.Name = "olv"
         Me.olv.ShowGroups = False
-        Me.olv.Size = New System.Drawing.Size(490, 317)
+        Me.olv.Size = New System.Drawing.Size(727, 317)
         Me.olv.TabIndex = 2
         Me.olv.UseCompatibleStateImageBehavior = False
         Me.olv.UseFilterIndicator = True
@@ -116,7 +116,7 @@ Partial Class frmScanSelect
         '
         Me.OlvColumn3.AspectName = "Name"
         Me.OlvColumn3.Text = "Name"
-        Me.OlvColumn3.Width = 136
+        Me.OlvColumn3.Width = 340
         '
         'OlvColumn4
         '
@@ -135,7 +135,7 @@ Partial Class frmScanSelect
         Me.ProgressBar.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ProgressBar.Location = New System.Drawing.Point(3, 36)
         Me.ProgressBar.Name = "ProgressBar"
-        Me.ProgressBar.Size = New System.Drawing.Size(490, 10)
+        Me.ProgressBar.Size = New System.Drawing.Size(727, 10)
         Me.ProgressBar.Step = 1
         Me.ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous
         Me.ProgressBar.TabIndex = 3
@@ -144,10 +144,11 @@ Partial Class frmScanSelect
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(496, 372)
+        Me.ClientSize = New System.Drawing.Size(733, 372)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MinimumSize = New System.Drawing.Size(749, 411)
         Me.Name = "frmScanSelect"
         Me.Text = "Double click a row to plot a scan"
         Me.TableLayoutPanel1.ResumeLayout(False)

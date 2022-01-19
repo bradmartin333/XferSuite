@@ -5,6 +5,10 @@ Public Class frmScanSelect
     <ComponentModel.Category("User Parameters")>
     Public Property UseCustomAxes As Boolean = False
 
+    <ComponentModel.Description("Percentage of borders to remove from data")>
+    <ComponentModel.Category("User Parameters")>
+    Public Property RemoveBorderPercentage As Double = 0.001
+
     <ComponentModel.Category("User Parameters")>
     Public Property XMin As Double = 0.0
 
@@ -50,7 +54,7 @@ Public Class frmScanSelect
     End Sub
 
     Private Sub ScanSelected(sender As Object, e As EventArgs) Handles olv.ItemActivate
-        Dim Zed As New frmZed(olv.SelectedObject, New Double() {XMin, XMax, YMin, YMax, ZMin, ZMax}, UseCustomAxes)
+        Dim Zed As New frmZed(olv.SelectedObject, New Double() {XMin, XMax, YMin, YMax, ZMin, ZMax}, UseCustomAxes, RemoveBorderPercentage)
     End Sub
 
     Private Sub FindScans()

@@ -308,6 +308,14 @@ module Zed =
            z.Minimum()
            z.Maximum() |]
 
+    let shrinkBounds (data: float [], factor: float) =
+        [| data.[0] * float (1. + factor)
+           data.[1] * float (1. - factor)
+           data.[2] * float (1. + factor)
+           data.[3] * float (1. - factor)
+           data.[4]
+           data.[5] |]
+
     type Vec2 = { X: float; Y: float }
 
     let toVec2 (x: float) (y: float) = { X = x; Y = y }
@@ -658,7 +666,7 @@ module Report =
         data
         |> Array.filter (fun x -> x.ImageNumber = num)
 
-    let getRegions (data: Entry[]) =
+    let getRegions (data: Entry []) =
         data
         |> Array.map (fun x -> x.RR, x.RC, x.R, x.C)
         |> Array.map (fun x -> x.ToString())
@@ -668,7 +676,7 @@ module Report =
 
     let getRegion (data: Entry [], region: string) =
         data
-        |> Array.filter(fun x -> (x.RR, x.RC, x.R, x.C).ToString() = region)
+        |> Array.filter (fun x -> (x.RR, x.RC, x.R, x.C).ToString() = region)
 
     let getCell (data: Entry [], row: int, col: int) =
         data

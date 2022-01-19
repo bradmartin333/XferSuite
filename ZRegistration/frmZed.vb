@@ -48,6 +48,17 @@ Public Class frmZed
         End Set
     End Property
 
+    Private _RemoveBorder As Boolean = False
+    Public Property RemoveBorder() As Boolean
+        Get
+            Return _RemoveBorder
+        End Get
+        Set(value As Boolean)
+            _RemoveBorder = value
+            CreatePlots()
+        End Set
+    End Property
+
     Dim Data As Zed.Position()
     Dim LastData As List(Of Zed.Position)
     Dim HistData As New List(Of Double)
@@ -62,11 +73,13 @@ Public Class frmZed
     Dim YPlaneAngle As Double
     Dim CustomAxes As Double()
     Dim UseCustomAxes As Boolean
+    Dim RemoveBorderPercentage As Double
 
-    Public Sub New(selectedObject As cScan, userSetAxes As Double(), userSetAxesEnabled As Boolean)
+    Public Sub New(selectedObject As cScan, userSetAxes As Double(), userSetAxesEnabled As Boolean, userRemoveBorderPercentage As Double)
         InitializeComponent()
         CustomAxes = userSetAxes
         UseCustomAxes = userSetAxesEnabled
+        RemoveBorderPercentage = userRemoveBorderPercentage
         Text = selectedObject.Name
         Data = selectedObject.Data.ToArray()
         CreatePlots(initialPlot:=True)
@@ -109,6 +122,16 @@ Public Class frmZed
             Dim adjX = d.X
             Dim adjY = d.Y
             Dim adjZ = d.Z
+
+            If RemoveBorder Then
+                Dim shrunkBounds = Zed.shrinkBounds(bounds, RemoveBorderPercentage)
+                If adjX < shrunkBounds(0) Or
+                    adjX > shrunkBounds(1) Or
+                    adjY < shrunkBounds(2) Or
+                    adjY > shrunkBounds(3) Then
+                    Continue For
+                End If
+            End If
 
             If FlipX Then adjX = bounds(1) - adjX
             If FlipY Then adjY = bounds(3) - adjY
@@ -314,9 +337,12 @@ Public Class frmZed
         RemoveTilt = Not RemoveTilt
     End Sub
 
+    Private Sub cbxRemoveBorder_CheckedChanged(sender As Object, e As EventArgs) Handles cbxRemoveBorder.CheckedChanged
+        RemoveBorder = Not RemoveBorder
+    End Sub
+
     Private Sub OutlierLevelScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles OutlierLevelScrollBar.Scroll
         CreatePlots()
-        lblOutlierRemovalLevel.Text = String.Format("Outlier Removal Level {0}", OutlierLevelScrollBar.Value)
     End Sub
 
     Private Sub btnThetaInfo_Click(sender As Object, e As EventArgs) Handles btnThetaInfo.Click
