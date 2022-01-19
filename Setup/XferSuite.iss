@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "XferSuite"
-#define MyAppVersion "2.15"
+#define MyAppVersion "2.16"
 #define MyAppPublisher "bradmartin333"
 #define MyAppURL "https://github.com/bradmartin333/XferSuite"
 #define MyAppExeName "XferSuite.exe"
@@ -57,6 +57,10 @@ Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.dll"; DestDir: "{app}"
 Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.WindowsForms.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.WindowsForms.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ScottPlot.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ScottPlot.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ScottPlot.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\Release\System.Drawing.Common.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Repos\XferSuite\XferSuite\bin\Release\System.ValueTuple.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Repos\XferSuite\XferSuite\bin\Release\System.ValueTuple.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
