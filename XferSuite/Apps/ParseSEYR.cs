@@ -425,7 +425,7 @@ namespace XferSuite
                 },
                 new ScatterSeries()
                 {
-                    MarkerFill = OxyColors.Red,
+                    MarkerFill = OxyColors.Firebrick,
                     MarkerSize = _PointSize,
                     TrackerFormatString = "{Tag}"
                 }
@@ -656,32 +656,75 @@ namespace XferSuite
             }   
         }
 
-        private void MakeFeatureDataHistogram(ref ScottPlot.FormsPlot control, bool passData)
+        private string MakeFeatureDataHistogram(ref ScottPlot.FormsPlot control, Report.State state)
         {
             double[] data = Report.getData(
-                Data.Where(x => passData ? x.State == Report.State.Pass : x.State != Report.State.Pass).ToArray(), SelectedFeature.Name);
-            if (data.Sum() < 3)
-            {
-                MessageBox.Show($"Less than 3 {(passData ? "passing" : "failing")} points. Skipping this data set.");
-                return;
-            }
+                Data.Where(x => x.State == state).ToArray(), SelectedFeature.Name);
+            if (data.Length < 3) return state.ToString();
             (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(
                 data, min: data.Min(), max: data.Max(), binSize: 1);
             double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
             ScottPlot.Plottable.BarPlot bar = control.Plot.AddBar(values: counts, positions: leftEdges);
             bar.BarWidth = 1;
             bar.BorderColor = Color.Transparent;
-            bar.FillColor = passData ? Color.LawnGreen : Color.Red;
+            switch (state)
+            {
+                case Report.State.Pass:
+                    bar.FillColor = Color.LawnGreen;
+                    ScottPlot.Plottable.HSpan hSpan = 
+                        control.Plot.AddHorizontalSpan(data.Min(), data.Max(), Color.FromArgb(50, Color.LawnGreen));
+                    hSpan.DragEnabled = true;
+                    hSpan.Dragged += HSpan_Dragged;
+                    break;
+                case Report.State.Fail:
+                    bar.FillColor = Color.Firebrick;
+                    break;
+                case Report.State.Null:
+                    bar.FillColor = Color.Blue;
+                    break;
+                case Report.State.Misaligned:
+                    bar.FillColor = Color.ForestGreen;
+                    break;
+                default:
+                    bar.FillColor = Color.Black;
+                    break;
+            }
+            return string.Empty;
+        }
+
+        private void HSpan_Dragged(object sender, EventArgs e)
+        {
+            ScottPlot.Plottable.HSpan hSpan = (ScottPlot.Plottable.HSpan)sender;
+            Report.rescoreFeature(Data, SelectedFeature.Name, hSpan.X1, hSpan.X2);
         }
 
         private void btnViewData_Click(object sender, EventArgs e)
         {
             ScottPlot.FormsPlot control = new ScottPlot.FormsPlot() { Dock = DockStyle.Fill };
-            MakeFeatureDataHistogram(ref control, false);
-            MakeFeatureDataHistogram(ref control, true);
+            List<string> skippedPlots = new List<string>();
+            foreach (Report.State state in Enum.GetValues(typeof(Report.State)))
+            {
+                if (state == Report.State.Other) continue;
+                string plotName = MakeFeatureDataHistogram(ref control, state);
+                if (plotName != string.Empty) skippedPlots.Add(plotName);
+            }
+            if (skippedPlots.Count > 0)
+            {
+                string message = "Plots not shown: ";
+                foreach (string item in skippedPlots)
+                    message += $"{item}, ";
+                ScottPlot.Plottable.Annotation annotation =
+                    control.Plot.AddAnnotation(message.Substring(0, message.Length - 2), -10, 10);
+                annotation.BackgroundColor = Color.Transparent;
+                annotation.BorderColor = Color.Transparent;
+                annotation.Font.Color = Color.Black;
+                annotation.Shadow = false;
+            }
+
             control.Plot.Title(SelectedFeature.Name);
             control.Plot.XAxis.Label("Score");
             control.Plot.YAxis.Label("Count");
+            control.Plot.Grid(false);
             control.Refresh();
             Form form = new Form()
             {
@@ -690,41 +733,6 @@ namespace XferSuite
             };
             form.Controls.Add(control);
             form.Show();
-        }
-
-        private void btnAdjustData_Click(object sender, EventArgs e)
-        {
-            double min = 0.0;
-            using (PromptForInput input = new PromptForInput(
-                prompt: "Enter new lower bound for passing score", 
-                textEntry: false,
-                title: $"Adjust {SelectedFeature.Name}"))
-            {
-                var result = input.ShowDialog();
-                if (result == DialogResult.OK)
-                    min = (double)((NumericUpDown)input.Control).Value;
-                else
-                    return;
-            }
-
-            double max = 0.0;
-            using (PromptForInput input = new PromptForInput(
-                prompt: "Enter new upper bound for passing score",
-                textEntry: false,
-                max: (int)Report.getData(Data, SelectedFeature.Name).Max(),
-                title: $"Adjust {SelectedFeature.Name}"))
-            {
-                var result = input.ShowDialog();
-                if (result == DialogResult.OK)
-                    max = (double)((NumericUpDown)input.Control).Value;
-                else
-                    return;
-            }
-
-            if (max > min)
-                Report.rescoreFeature(Data, SelectedFeature.Name, min, max);
-            else
-                MessageBox.Show("Max must be greater than min.");
         }
 
         #endregion

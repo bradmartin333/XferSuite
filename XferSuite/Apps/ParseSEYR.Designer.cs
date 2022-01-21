@@ -47,7 +47,6 @@ namespace XferSuite
             this.cbxMisaligned = new System.Windows.Forms.CheckBox();
             this.btnApplyToAll = new System.Windows.Forms.Button();
             this.btnViewData = new System.Windows.Forms.Button();
-            this.btnAdjustData = new System.Windows.Forms.Button();
             this.rtb = new System.Windows.Forms.RichTextBox();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
             this.toolStripButtonParse = new System.Windows.Forms.ToolStripButton();
@@ -80,13 +79,14 @@ namespace XferSuite
             this.tableLayoutPanel.Controls.Add(this.plotView, 3, 1);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 3;
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(949, 441);
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel.Size = new System.Drawing.Size(1265, 543);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // olvNeedOne
@@ -99,10 +99,11 @@ namespace XferSuite
             this.olvNeedOne.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvNeedOne.HideSelection = false;
             this.olvNeedOne.IsSimpleDropSink = true;
-            this.olvNeedOne.Location = new System.Drawing.Point(339, 28);
+            this.olvNeedOne.Location = new System.Drawing.Point(452, 35);
+            this.olvNeedOne.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.olvNeedOne.Name = "olvNeedOne";
             this.olvNeedOne.ShowGroups = false;
-            this.olvNeedOne.Size = new System.Drawing.Size(162, 200);
+            this.olvNeedOne.Size = new System.Drawing.Size(216, 223);
             this.olvNeedOne.TabIndex = 2;
             this.olvNeedOne.Tag = "2";
             this.olvNeedOne.UseCompatibleStateImageBehavior = false;
@@ -125,10 +126,11 @@ namespace XferSuite
             this.olvRequire.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvRequire.HideSelection = false;
             this.olvRequire.IsSimpleDropSink = true;
-            this.olvRequire.Location = new System.Drawing.Point(171, 28);
+            this.olvRequire.Location = new System.Drawing.Point(228, 35);
+            this.olvRequire.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.olvRequire.Name = "olvRequire";
             this.olvRequire.ShowGroups = false;
-            this.olvRequire.Size = new System.Drawing.Size(162, 200);
+            this.olvRequire.Size = new System.Drawing.Size(216, 223);
             this.olvRequire.TabIndex = 1;
             this.olvRequire.Tag = "1";
             this.olvRequire.UseCompatibleStateImageBehavior = false;
@@ -150,10 +152,11 @@ namespace XferSuite
             this.olvBuffer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvBuffer.HideSelection = false;
             this.olvBuffer.IsSimpleDragSource = true;
-            this.olvBuffer.Location = new System.Drawing.Point(3, 28);
+            this.olvBuffer.Location = new System.Drawing.Point(4, 35);
+            this.olvBuffer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.olvBuffer.Name = "olvBuffer";
             this.olvBuffer.ShowGroups = false;
-            this.olvBuffer.Size = new System.Drawing.Size(162, 200);
+            this.olvBuffer.Size = new System.Drawing.Size(216, 223);
             this.olvBuffer.TabIndex = 0;
             this.olvBuffer.Tag = "0";
             this.olvBuffer.UseCompatibleStateImageBehavior = false;
@@ -177,21 +180,22 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.Controls.Add(this.cbxMisaligned);
             this.flowLayoutPanelCriteria.Controls.Add(this.btnApplyToAll);
             this.flowLayoutPanelCriteria.Controls.Add(this.btnViewData);
-            this.flowLayoutPanelCriteria.Controls.Add(this.btnAdjustData);
             this.flowLayoutPanelCriteria.Enabled = false;
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(35, 234);
+            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(51, 266);
+            this.flowLayoutPanelCriteria.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
-            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(97, 204);
+            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(121, 273);
             this.flowLayoutPanelCriteria.TabIndex = 4;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(4, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.Size = new System.Drawing.Size(113, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "Functional Criteria";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -201,9 +205,10 @@ namespace XferSuite
             this.lblSelectedFeature.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSelectedFeature.AutoSize = true;
             this.lblSelectedFeature.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSelectedFeature.Location = new System.Drawing.Point(3, 13);
+            this.lblSelectedFeature.Location = new System.Drawing.Point(4, 16);
+            this.lblSelectedFeature.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSelectedFeature.Name = "lblSelectedFeature";
-            this.lblSelectedFeature.Size = new System.Drawing.Size(91, 12);
+            this.lblSelectedFeature.Size = new System.Drawing.Size(113, 15);
             this.lblSelectedFeature.TabIndex = 7;
             this.lblSelectedFeature.Text = "N/A";
             this.lblSelectedFeature.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -214,9 +219,10 @@ namespace XferSuite
             this.cbxPass.AutoSize = true;
             this.cbxPass.Checked = true;
             this.cbxPass.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbxPass.Location = new System.Drawing.Point(3, 28);
+            this.cbxPass.Location = new System.Drawing.Point(4, 35);
+            this.cbxPass.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbxPass.Name = "cbxPass";
-            this.cbxPass.Size = new System.Drawing.Size(91, 17);
+            this.cbxPass.Size = new System.Drawing.Size(113, 20);
             this.cbxPass.TabIndex = 2;
             this.cbxPass.Tag = "0";
             this.cbxPass.Text = "Pass";
@@ -227,9 +233,10 @@ namespace XferSuite
             // 
             this.cbxFail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxFail.AutoSize = true;
-            this.cbxFail.Location = new System.Drawing.Point(3, 51);
+            this.cbxFail.Location = new System.Drawing.Point(4, 63);
+            this.cbxFail.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbxFail.Name = "cbxFail";
-            this.cbxFail.Size = new System.Drawing.Size(91, 17);
+            this.cbxFail.Size = new System.Drawing.Size(113, 20);
             this.cbxFail.TabIndex = 3;
             this.cbxFail.Tag = "1";
             this.cbxFail.Text = "Fail";
@@ -240,9 +247,10 @@ namespace XferSuite
             // 
             this.cbxNull.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxNull.AutoSize = true;
-            this.cbxNull.Location = new System.Drawing.Point(3, 74);
+            this.cbxNull.Location = new System.Drawing.Point(4, 91);
+            this.cbxNull.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbxNull.Name = "cbxNull";
-            this.cbxNull.Size = new System.Drawing.Size(91, 17);
+            this.cbxNull.Size = new System.Drawing.Size(113, 20);
             this.cbxNull.TabIndex = 4;
             this.cbxNull.Tag = "2";
             this.cbxNull.Text = "Null";
@@ -253,9 +261,10 @@ namespace XferSuite
             // 
             this.cbxMisaligned.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxMisaligned.AutoSize = true;
-            this.cbxMisaligned.Location = new System.Drawing.Point(3, 97);
+            this.cbxMisaligned.Location = new System.Drawing.Point(4, 119);
+            this.cbxMisaligned.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbxMisaligned.Name = "cbxMisaligned";
-            this.cbxMisaligned.Size = new System.Drawing.Size(91, 17);
+            this.cbxMisaligned.Size = new System.Drawing.Size(113, 20);
             this.cbxMisaligned.TabIndex = 5;
             this.cbxMisaligned.Tag = "3";
             this.cbxMisaligned.Text = "Misaligned";
@@ -265,9 +274,10 @@ namespace XferSuite
             // btnApplyToAll
             // 
             this.btnApplyToAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnApplyToAll.Location = new System.Drawing.Point(3, 120);
+            this.btnApplyToAll.Location = new System.Drawing.Point(4, 147);
+            this.btnApplyToAll.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnApplyToAll.Name = "btnApplyToAll";
-            this.btnApplyToAll.Size = new System.Drawing.Size(91, 23);
+            this.btnApplyToAll.Size = new System.Drawing.Size(113, 28);
             this.btnApplyToAll.TabIndex = 8;
             this.btnApplyToAll.Text = "Apply To All";
             this.btnApplyToAll.UseVisualStyleBackColor = true;
@@ -276,44 +286,36 @@ namespace XferSuite
             // btnViewData
             // 
             this.btnViewData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnViewData.Location = new System.Drawing.Point(3, 149);
+            this.btnViewData.Location = new System.Drawing.Point(4, 183);
+            this.btnViewData.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnViewData.Name = "btnViewData";
-            this.btnViewData.Size = new System.Drawing.Size(91, 23);
+            this.btnViewData.Size = new System.Drawing.Size(113, 28);
             this.btnViewData.TabIndex = 9;
             this.btnViewData.Text = "View Data";
             this.btnViewData.UseVisualStyleBackColor = true;
             this.btnViewData.Click += new System.EventHandler(this.btnViewData_Click);
-            // 
-            // btnAdjustData
-            // 
-            this.btnAdjustData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdjustData.Location = new System.Drawing.Point(3, 178);
-            this.btnAdjustData.Name = "btnAdjustData";
-            this.btnAdjustData.Size = new System.Drawing.Size(91, 23);
-            this.btnAdjustData.TabIndex = 10;
-            this.btnAdjustData.Text = "Adjust Data";
-            this.btnAdjustData.UseVisualStyleBackColor = true;
-            this.btnAdjustData.Click += new System.EventHandler(this.btnAdjustData_Click);
             // 
             // rtb
             // 
             this.rtb.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tableLayoutPanel.SetColumnSpan(this.rtb, 2);
             this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtb.Location = new System.Drawing.Point(171, 234);
+            this.rtb.Location = new System.Drawing.Point(228, 266);
+            this.rtb.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.rtb.Name = "rtb";
-            this.rtb.Size = new System.Drawing.Size(330, 204);
+            this.rtb.Size = new System.Drawing.Size(440, 273);
             this.rtb.TabIndex = 6;
             this.rtb.Text = "";
             // 
             // plotView
             // 
             this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotView.Location = new System.Drawing.Point(507, 28);
+            this.plotView.Location = new System.Drawing.Point(676, 35);
+            this.plotView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.plotView.Name = "plotView";
             this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.tableLayoutPanel.SetRowSpan(this.plotView, 2);
-            this.plotView.Size = new System.Drawing.Size(439, 410);
+            this.plotView.Size = new System.Drawing.Size(585, 504);
             this.plotView.TabIndex = 7;
             this.plotView.Text = "plotView1";
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -326,7 +328,7 @@ namespace XferSuite
             this.toolStripButtonParse.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonParse.Image")));
             this.toolStripButtonParse.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonParse.Name = "toolStripButtonParse";
-            this.toolStripButtonParse.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonParse.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonParse.Text = "Parse";
             this.toolStripButtonParse.Click += new System.EventHandler(this.toolStripButtonParse_Click);
             // 
@@ -336,7 +338,7 @@ namespace XferSuite
             this.toolStripButtonSmartSort.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSmartSort.Image")));
             this.toolStripButtonSmartSort.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSmartSort.Name = "toolStripButtonSmartSort";
-            this.toolStripButtonSmartSort.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonSmartSort.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonSmartSort.Text = "Smart Sort";
             this.toolStripButtonSmartSort.Click += new System.EventHandler(this.toolStripButtonSmartSort_Click);
             // 
@@ -346,12 +348,13 @@ namespace XferSuite
             this.toolStripButtonReset.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonReset.Image")));
             this.toolStripButtonReset.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonReset.Name = "toolStripButtonReset";
-            this.toolStripButtonReset.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonReset.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonReset.Text = "Reset Columns";
             this.toolStripButtonReset.Click += new System.EventHandler(this.toolStripButtonReset_Click);
             // 
             // toolStrip1
             // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonParse,
             this.toolStripButtonParseNoPicthes,
@@ -361,7 +364,7 @@ namespace XferSuite
             this.toolStripButtonSpecificRegion});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(949, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1265, 27);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -371,7 +374,7 @@ namespace XferSuite
             this.toolStripButtonParseNoPicthes.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonParseNoPicthes.Image")));
             this.toolStripButtonParseNoPicthes.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonParseNoPicthes.Name = "toolStripButtonParseNoPicthes";
-            this.toolStripButtonParseNoPicthes.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonParseNoPicthes.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonParseNoPicthes.Text = "Parse Without Pitches";
             this.toolStripButtonParseNoPicthes.Click += new System.EventHandler(this.toolStripButtonParseNoPicthes_Click);
             // 
@@ -381,7 +384,7 @@ namespace XferSuite
             this.toolStripButtonCopyWindow.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyWindow.Image")));
             this.toolStripButtonCopyWindow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonCopyWindow.Name = "toolStripButtonCopyWindow";
-            this.toolStripButtonCopyWindow.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonCopyWindow.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonCopyWindow.Text = "Copy Window to Clipboard";
             this.toolStripButtonCopyWindow.Click += new System.EventHandler(this.toolStripButtonCopyWindow_Click);
             // 
@@ -392,19 +395,20 @@ namespace XferSuite
             this.toolStripButtonSpecificRegion.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSpecificRegion.Image")));
             this.toolStripButtonSpecificRegion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSpecificRegion.Name = "toolStripButtonSpecificRegion";
-            this.toolStripButtonSpecificRegion.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonSpecificRegion.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonSpecificRegion.Text = "Plot Specific Region";
             this.toolStripButtonSpecificRegion.Click += new System.EventHandler(this.toolStripButtonSpecificRegion_Click);
             // 
             // ParseSEYR
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(949, 441);
+            this.ClientSize = new System.Drawing.Size(1265, 543);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(965, 480);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(1281, 580);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
             this.tableLayoutPanel.ResumeLayout(false);
@@ -440,7 +444,6 @@ namespace XferSuite
         private System.Windows.Forms.RichTextBox rtb;
         private System.Windows.Forms.Button btnApplyToAll;
         private System.Windows.Forms.Button btnViewData;
-        private System.Windows.Forms.Button btnAdjustData;
         private System.Windows.Forms.ToolStripButton toolStripButtonParse;
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
