@@ -656,16 +656,29 @@ namespace XferSuite
             }   
         }
 
-        private void btnViewData_Click(object sender, EventArgs e)
+        private void MakeFeatureDataHistogram(ref ScottPlot.FormsPlot control, bool passData)
         {
-            double[] data = Report.getData(Data, SelectedFeature.Name);
-            if (data.Sum() == 0) return;
-            ScottPlot.FormsPlot control = new ScottPlot.FormsPlot() { Dock = DockStyle.Fill };
+            double[] data = Report.getData(
+                Data.Where(x => passData ? x.State == Report.State.Pass : x.State != Report.State.Pass).ToArray(), SelectedFeature.Name);
+            if (data.Sum() < 3)
+            {
+                MessageBox.Show($"Less than 3 {(passData ? "passing" : "failing")} points. Skipping this data set.");
+                return;
+            }
             (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(
                 data, min: data.Min(), max: data.Max(), binSize: 1);
             double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
             ScottPlot.Plottable.BarPlot bar = control.Plot.AddBar(values: counts, positions: leftEdges);
             bar.BarWidth = 1;
+            bar.BorderColor = Color.Transparent;
+            bar.FillColor = passData ? Color.LawnGreen : Color.Red;
+        }
+
+        private void btnViewData_Click(object sender, EventArgs e)
+        {
+            ScottPlot.FormsPlot control = new ScottPlot.FormsPlot() { Dock = DockStyle.Fill };
+            MakeFeatureDataHistogram(ref control, false);
+            MakeFeatureDataHistogram(ref control, true);
             control.Plot.Title(SelectedFeature.Name);
             control.Plot.XAxis.Label("Score");
             control.Plot.YAxis.Label("Count");
