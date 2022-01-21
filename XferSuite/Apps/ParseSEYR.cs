@@ -731,38 +731,43 @@ namespace XferSuite
 
         private string MakeFeatureDataHistogram(ref ScottPlot.FormsPlot control, Report.State state)
         {
-            double[] data = Report.getData(
-                Data.Where(x => x.State == state).ToArray(), SelectedFeature.Name);
-            if (data.Length < 3) return state.ToString();
-            (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(
-                data, min: data.Min(), max: data.Max(), binSize: 1);
-            double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
-            ScottPlot.Plottable.BarPlot bar = control.Plot.AddBar(values: counts, positions: leftEdges);
-            bar.BarWidth = 1;
-            bar.BorderColor = Color.Transparent;
-            switch (state)
+            try
             {
-                case Report.State.Pass:
-                    bar.FillColor = Color.LawnGreen;
-                    ScottPlot.Plottable.HSpan hSpan = 
-                        control.Plot.AddHorizontalSpan(data.Min(), data.Max(), Color.FromArgb(50, Color.LawnGreen));
-                    hSpan.DragEnabled = true;
-                    hSpan.Dragged += HSpan_Dragged;
-                    break;
-                case Report.State.Fail:
-                    bar.FillColor = Color.Firebrick;
-                    break;
-                case Report.State.Null:
-                    bar.FillColor = Color.Blue;
-                    break;
-                case Report.State.Misaligned:
-                    bar.FillColor = Color.ForestGreen;
-                    break;
-                default:
-                    bar.FillColor = Color.Black;
-                    break;
+                double[] data = Report.getData(
+                Data.Where(x => x.State == state).ToArray(), SelectedFeature.Name);
+                if (data.Length < 3) return state.ToString();
+                (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(
+                    data, min: data.Min(), max: data.Max(), binSize: 1);
+                double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
+                ScottPlot.Plottable.BarPlot bar = control.Plot.AddBar(values: counts, positions: leftEdges);
+                bar.BarWidth = 1;
+                bar.BorderColor = Color.Transparent;
+                switch (state)
+                {
+                    case Report.State.Pass:
+                        bar.FillColor = Color.LawnGreen;
+                        ScottPlot.Plottable.HSpan hSpan =
+                            control.Plot.AddHorizontalSpan(data.Min(), data.Max(), Color.FromArgb(50, Color.LawnGreen));
+                        hSpan.DragEnabled = true;
+                        hSpan.Dragged += HSpan_Dragged;
+                        break;
+                    case Report.State.Fail:
+                        bar.FillColor = Color.Firebrick;
+                        break;
+                    case Report.State.Null:
+                        bar.FillColor = Color.Blue;
+                        break;
+                    case Report.State.Misaligned:
+                        bar.FillColor = Color.ForestGreen;
+                        break;
+                    default:
+                        bar.FillColor = Color.Black;
+                        break;
+                }
+                return string.Empty;
             }
-            return string.Empty;
+            catch (Exception) { }
+            return state.ToString();
         }
 
         private void HSpan_Dragged(object sender, EventArgs e)
