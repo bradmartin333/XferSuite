@@ -125,7 +125,7 @@ namespace XferSuite
         {
             InitializeComponent();
             Path = new FileInfo(path);
-            Text = Path.Name;
+            Text = Path.Name.Replace(Path.Extension, string.Empty);
             Data = Report.data(Path.FullName);
             ResetFeaturesAndUI();
 
