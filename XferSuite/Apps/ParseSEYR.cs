@@ -118,6 +118,7 @@ namespace XferSuite
 
         private List<Plottable> Plottables = new List<Plottable>();
         private double XMax, YMax;
+        private ScatterSeries PassScatter, FailScatter;
 
         public ParseSEYR(string path)
         {
@@ -450,7 +451,6 @@ namespace XferSuite
         private void ConfigurePlot()
         {
             PlotModel plotModel = InitPlotModel(visible: false);
-
             (ScatterSeries passScatter,  ScatterSeries failScatter) = InitScatterSeries();
             foreach (Plottable p in Plottables)
             {
@@ -464,8 +464,13 @@ namespace XferSuite
                 else
                     failScatter.Points.Add(scatterPoint);
             }
-
-            StackAndShowPlots(ref plotView, ref plotModel, passScatter, failScatter);
+            PassScatter = passScatter;
+            FailScatter = failScatter;
+            PlotView plot = new PlotView() { Dock = DockStyle.Fill };
+            Form form = InitLargeForm(Text);
+            form.Controls.Add(plot);
+            StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter);
+            form.Show();
         }
 
         private void ConfigureSpecificRegionPlot(string region)
@@ -473,16 +478,9 @@ namespace XferSuite
             PlotView plot = new PlotView() { Dock = DockStyle.Fill };
             PlotModel plotModel = plotModel = InitPlotModel();
             (ScatterSeries passScatter, ScatterSeries failScatter) = InitScatterSeries();
-
-            passScatter.Points.AddRange(
-                ((ScatterSeries)plotView.Model.Series[_PlotOrder ? 1 : 0]).Points.Where(
-                    x => x.Tag.ToString().Contains(region)));
-            failScatter.Points.AddRange(
-                ((ScatterSeries)plotView.Model.Series[_PlotOrder ? 0 : 1]).Points.Where(
-                    x => x.Tag.ToString().Contains(region)));
-
+            passScatter.Points.AddRange(PassScatter.Points.Where(x => x.Tag.ToString().Contains(region)));
+            failScatter.Points.AddRange(FailScatter.Points.Where(x => x.Tag.ToString().Contains(region)));
             StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter);
-
             Form form = InitLargeForm(region);
             form.Controls.Add(plot);
             form.Show();
@@ -566,6 +564,8 @@ namespace XferSuite
                 var result = input.ShowDialog();
                 if (result == DialogResult.OK)
                     region = ((TextBox)input.Control).Text;
+                else
+                    return;
             }
 
             if (!Plottables.Where(p => p.Region == region).Any())
@@ -720,7 +720,6 @@ namespace XferSuite
                 annotation.Font.Color = Color.Black;
                 annotation.Shadow = false;
             }
-
             control.Plot.Title(SelectedFeature.Name);
             control.Plot.XAxis.Label("Score");
             control.Plot.YAxis.Label("Count");
