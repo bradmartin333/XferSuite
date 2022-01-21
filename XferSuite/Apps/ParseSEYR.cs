@@ -119,6 +119,7 @@ namespace XferSuite
         private List<Plottable> Plottables = new List<Plottable>();
         private double XMax, YMax;
         private ScatterSeries PassScatter, FailScatter;
+        private List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
 
         public ParseSEYR(string path)
         {
@@ -395,7 +396,79 @@ namespace XferSuite
 
         #endregion
 
+        #region Custom UI Elements
+        private (ContextMenu, int, int) InitContextMenu()
+        {
+            MenuItem savePlot = new MenuItem() { Text = "Save Plot" };
+            savePlot.Click += SavePlot_Click;
+            MenuItem copyPlot = new MenuItem() { Text = "Copy Plot" };
+            copyPlot.Click += CopyPlot_Click;
+            ContextMenu cm = new ContextMenu();
+            cm.MenuItems.Add(savePlot);
+            cm.MenuItems.Add(copyPlot);
+            return (cm, savePlot.GetHashCode(), copyPlot.GetHashCode());
+        }
+
+        private void SavePlot_Click(object sender, EventArgs e)
+        {
+            foreach (var entry in ContextMenuTable)
+            {
+                if (entry.Item2 == ((MenuItem)sender).GetHashCode())
+                {
+                    PlotView plotView = entry.Item1;
+                    using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                    {
+                        saveFileDialog.Title = "Save SEYR Plot";
+                        saveFileDialog.DefaultExt = ".png";
+                        saveFileDialog.Filter = "png file (*.png)|*.png";
+                        saveFileDialog.FileName = Text;
+                        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            var pngExporter = new PngExporter { Width = plotView.Width, Height = plotView.Width };
+                            Bitmap fg = pngExporter.ExportToBitmap(plotView.Model);
+                            Bitmap bg = new Bitmap(fg.Width, fg.Height);
+                            using (Graphics g = Graphics.FromImage(bg))
+                            {
+                                g.FillRectangle(Brushes.White, new Rectangle(Point.Empty, bg.Size));
+                                g.DrawImage(fg, new Point(0, 0));
+                            }
+                            bg.Save(saveFileDialog.FileName);
+                        }
+                    }
+                    return;
+                }
+            }
+            MessageBox.Show("Operation Failed", "XferSuite");
+        }
+
+        private void CopyPlot_Click(object sender, EventArgs e)
+        {
+            foreach (var entry in ContextMenuTable)
+            {
+                if (entry.Item3 == ((MenuItem)sender).GetHashCode())
+                {
+                    PlotView plotView = entry.Item1;
+                    Bitmap bitmap = new Bitmap(plotView.Width, plotView.Height);
+                    plotView.DrawToBitmap(bitmap, new Rectangle(0, 0, plotView.Width, plotView.Height));
+                    Clipboard.SetImage(bitmap);
+                    return;
+                }
+            }
+            MessageBox.Show("Operation Failed", "XferSuite");
+        }
+
+        #endregion
+
         #region Plotting Methods
+
+        private PlotView InitPlotView()
+        {
+            PlotView view = new PlotView() { Dock = DockStyle.Fill };
+            (ContextMenu cm, int saveId, int copyId) = InitContextMenu();
+            ContextMenuTable.Add((view, saveId, copyId));
+            view.ContextMenu = cm;
+            return view;
+        }
 
         private PlotModel InitPlotModel(bool visible = true)
         {
@@ -450,6 +523,7 @@ namespace XferSuite
 
         private void ConfigurePlot()
         {
+            PlotView plot = InitPlotView();
             PlotModel plotModel = InitPlotModel(visible: false);
             (ScatterSeries passScatter,  ScatterSeries failScatter) = InitScatterSeries();
             foreach (Plottable p in Plottables)
@@ -466,16 +540,15 @@ namespace XferSuite
             }
             PassScatter = passScatter;
             FailScatter = failScatter;
-            PlotView plot = new PlotView() { Dock = DockStyle.Fill };
+            StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter);
             Form form = InitLargeForm(Text);
             form.Controls.Add(plot);
-            StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter);
             form.Show();
         }
 
         private void ConfigureSpecificRegionPlot(string region)
         {
-            PlotView plot = new PlotView() { Dock = DockStyle.Fill };
+            PlotView plot = InitPlotView();
             PlotModel plotModel = plotModel = InitPlotModel();
             (ScatterSeries passScatter, ScatterSeries failScatter) = InitScatterSeries();
             passScatter.Points.AddRange(PassScatter.Points.Where(x => x.Tag.ToString().Contains(region)));
