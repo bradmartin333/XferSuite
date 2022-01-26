@@ -37,8 +37,6 @@ Partial Class frmZed
         Me.cbxView = New System.Windows.Forms.CheckBox()
         Me.cbxRemoveTilt = New System.Windows.Forms.CheckBox()
         Me.cbxRemoveBorder = New System.Windows.Forms.CheckBox()
-        Me.OutlierLevelScrollBar = New System.Windows.Forms.HScrollBar()
-        Me.lblNumData = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
@@ -197,11 +195,9 @@ Partial Class frmZed
         Me.FlowLayoutPanel2.Controls.Add(Me.cbxView)
         Me.FlowLayoutPanel2.Controls.Add(Me.cbxRemoveTilt)
         Me.FlowLayoutPanel2.Controls.Add(Me.cbxRemoveBorder)
-        Me.FlowLayoutPanel2.Controls.Add(Me.OutlierLevelScrollBar)
-        Me.FlowLayoutPanel2.Controls.Add(Me.lblNumData)
-        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(54, 284)
+        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(192, 284)
         Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(595, 31)
+        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(318, 31)
         Me.FlowLayoutPanel2.TabIndex = 10
         '
         'cbxView
@@ -248,28 +244,6 @@ Partial Class frmZed
         Me.cbxRemoveBorder.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.cbxRemoveBorder.UseVisualStyleBackColor = False
         '
-        'OutlierLevelScrollBar
-        '
-        Me.OutlierLevelScrollBar.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.OutlierLevelScrollBar.LargeChange = 1
-        Me.OutlierLevelScrollBar.Location = New System.Drawing.Point(343, 5)
-        Me.OutlierLevelScrollBar.Margin = New System.Windows.Forms.Padding(25, 0, 0, 0)
-        Me.OutlierLevelScrollBar.Name = "OutlierLevelScrollBar"
-        Me.OutlierLevelScrollBar.Size = New System.Drawing.Size(141, 20)
-        Me.OutlierLevelScrollBar.TabIndex = 7
-        Me.OutlierLevelScrollBar.Value = 1
-        '
-        'lblNumData
-        '
-        Me.lblNumData.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblNumData.AutoSize = True
-        Me.lblNumData.Location = New System.Drawing.Point(487, 9)
-        Me.lblNumData.Name = "lblNumData"
-        Me.lblNumData.Size = New System.Drawing.Size(105, 13)
-        Me.lblNumData.TabIndex = 6
-        Me.lblNumData.Text = "0/0 Points Removed"
-        Me.lblNumData.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'frmZed
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -285,7 +259,6 @@ Partial Class frmZed
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.FlowLayoutPanel3.PerformLayout()
         Me.FlowLayoutPanel2.ResumeLayout(False)
-        Me.FlowLayoutPanel2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -302,8 +275,6 @@ Partial Class frmZed
     Friend WithEvents cbxView As CheckBox
     Friend WithEvents cbxRemoveTilt As CheckBox
     Friend WithEvents btnCopyWindow As Button
-    Friend WithEvents lblNumData As Label
-    Friend WithEvents OutlierLevelScrollBar As HScrollBar
     Friend WithEvents btnThetaInfo As Button
     Friend WithEvents cbxRemoveBorder As CheckBox
 End Class

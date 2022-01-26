@@ -155,37 +155,12 @@ Public Class frmZed
             Next
         End If
 
-        Dim FilteredData = TiltData
-        Dim outlierRemovalLevel As Integer = OutlierLevelScrollBar.Value
-        If (outlierRemovalLevel > 0) Then
-            FilteredData = New List(Of Zed.Position)
-            Dim zData = Zed.getAxis(TiltData.ToArray(), 2)
-            Dim binningOptions = New BinningOptions(BinningOutlierMode.CountOutliers, BinningIntervalType.InclusiveLowerBound, BinningExtremeValueMode.IncludeExtremeValues)
-            Dim binBreaks = HistogramHelpers.CreateUniformBins(zData.Min() - 0.0001, zData.Max() + 0.0001, 10)
-            Dim histItems = HistogramHelpers.Collect(zData, binBreaks, binningOptions)
-            For Each d As Zed.Position In TiltData
-                For Each bin As HistogramItem In histItems
-                    If bin.RangeStart <= d.Z And bin.RangeEnd >= d.Z And bin.Count > 5 * outlierRemovalLevel Then
-                        FilteredData.Add(d)
-                    End If
-                Next
-            Next
-        End If
-
-        If FilteredData.Count = 0 Then
-            FilteredData = LastData
-        Else
-            LastData = FilteredData
-        End If
-
-        For Each d In FilteredData
+        For Each d In TiltData
             ScatterDataX.Add(New ScatterPoint(d.X, d.Z * 1000.0))
             ScatterDataY.Add(New ScatterPoint(d.Y, d.Z * 1000.0))
             ScatterDataZ.Add(New ScatterPoint(d.X, d.Y, 2, d.Z * 1000.0))
             HistData.Add(d.Z * 1000.0)
         Next
-
-        lblNumData.Text = String.Format("{0}/{1} Points Removed", Data.Count() - FilteredData.Count(), Data.Count())
     End Sub
 
     Private Sub CreateHeatmap()
@@ -341,7 +316,7 @@ Public Class frmZed
         RemoveBorder = Not RemoveBorder
     End Sub
 
-    Private Sub OutlierLevelScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles OutlierLevelScrollBar.Scroll
+    Private Sub OutlierLevelScrollBar_Scroll(sender As Object, e As ScrollEventArgs)
         CreatePlots()
     End Sub
 
