@@ -300,7 +300,7 @@ Public Class frmZed
         End If
 
         Dim yAxis As New LinearAxis With {
-            .Title = "Y Height (μm)",
+            .Title = "Height (μm)",
             .Position = AxisPosition.Left
         }
 
