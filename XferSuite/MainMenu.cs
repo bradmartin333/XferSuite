@@ -157,6 +157,7 @@ namespace XferSuite
                     desiredPath = directoryInfo.FullName.Replace("bin\\Release", "");
                 bmp.Save(desiredPath + "\\Main.png");
             }
+            _Settings.CheckForUpdates();
         }
     }
 }

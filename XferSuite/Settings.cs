@@ -27,7 +27,7 @@ namespace XferSuite
             }
         }
 
-        private void CheckForUpdates()
+        public void CheckForUpdates()
         {
             if (btnCheckForUpdates.BackColor == Color.PaleTurquoise)
                 System.Diagnostics.Process.Start(@"https://bradmartin333.github.io/utility/XferSuite");
@@ -52,6 +52,8 @@ namespace XferSuite
                 {
                     btnCheckForUpdates.Text = mostRecentVersion + " Is Available";
                     btnCheckForUpdates.BackColor = Color.PaleTurquoise;
+                    MainMenu mainMenu = Application.OpenForms.OfType<MainMenu>().First();
+                    mainMenu.Text += $"     {btnCheckForUpdates.Text}";
                 }
                 else
                 {
