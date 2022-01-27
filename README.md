@@ -9,29 +9,22 @@ Open the settings app to tinker with other open apps and check for updates
 ___
 ### Inlinepositions
 Automatic graphical and statistical data parsing for Inlinepositions files.
-
 ___
 ### XYZ Scan
 Load a HeightSensorLog.txt file and click on scans to see their graphical and statistical representation.
-
 ___
 ### SEYR Parser
 Load a SEYR report to conert raw data into yields.
-
 ___
 ### Camera Viewer
 Stream any available camera, use a crosshair, rotate image and save pictures.
-
 ___
-### Data File Tree
-Decide on your variables and let the app create the file structure for you.
-Just save and overwrite the generated documents and a time and brain-saving tasklist.
-
+### Pixelator
+Turn an image into CSV data based on edge detection
 ___
 ### Map Flip
 Excel doesn't seem to have a native tool for flipping and rotating grids of data.
 This is the solution!
-
 ___
 ### Position Calculator
 Quick way of finding position deltas for 9 axes in CSV format
