@@ -75,6 +75,9 @@ namespace XferSuite.XYZscan
             double[] xAxisData = XferHelper.Zed.getAxis(scan.Data.ToArray(), comboX.SelectedIndex);
             double[] yAxisData = XferHelper.Zed.getAxis(scan.Data.ToArray(), comboY.SelectedIndex);
             double[] zAxisData = XferHelper.Zed.getAxis(scan.Data.ToArray(), comboZ.SelectedIndex);
+            if (toolStripButtonFlipX.Checked) FlipAxis(ref xAxisData);
+            if (toolStripButtonFlipY.Checked) FlipAxis(ref yAxisData);
+            if (toolStripButtonFlipZ.Checked) FlipAxis(ref zAxisData);
             UpdateToolbars(new double[][] { xAxisData, yAxisData, zAxisData });
 
             switch (numAxes)
@@ -102,6 +105,13 @@ namespace XferSuite.XYZscan
                 default:
                     break;
             }
+        }
+
+        private void FlipAxis(ref double[] data)
+        {
+            double max = data.Max();
+            for (int i = 0; i < data.Length; i++)
+                data[i] = Math.Abs(data[i] - max);
         }
 
         private void UpdateToolbars(double[][] data)
@@ -189,7 +199,18 @@ namespace XferSuite.XYZscan
 
         private void toolStripButtonFlip_Click(object sender, EventArgs e)
         {
-
+            ToolStripButton button = (ToolStripButton)sender;
+            if (!button.Checked)
+            {
+                button.BackColor = System.Drawing.Color.LightGreen;
+                button.Checked = true;
+            }            
+            else
+            {
+                button.BackColor = System.Drawing.SystemColors.Control;
+                button.Checked = false;
+            }
+            MakePlots();
         }
     }
 }

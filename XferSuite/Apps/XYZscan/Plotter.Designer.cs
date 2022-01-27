@@ -48,33 +48,33 @@
             this.toolStripX = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.comboX = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripY = new System.Windows.Forms.ToolStrip();
-            this.toolStripZ = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-            this.comboY = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-            this.comboZ = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripButtonFlipX = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxMinX = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxMaxX = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButtonFlipX = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonApplyX = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabelStatsX = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripY = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.comboY = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonFlipY = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxMinY = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabel7 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxMaxY = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripButtonApplyY = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabelStatsY = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripZ = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.comboZ = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonFlipZ = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel9 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxMinZ = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabel10 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxMaxZ = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripLabelStatsZ = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripButtonApplyX = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonApplyY = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonApplyZ = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabelStatsZ = new System.Windows.Forms.ToolStripLabel();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -290,81 +290,16 @@
             this.comboX.Name = "comboX";
             this.comboX.Size = new System.Drawing.Size(121, 25);
             // 
-            // toolStripY
+            // toolStripButtonFlipX
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.toolStripY, 2);
-            this.toolStripY.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel2,
-            this.comboY,
-            this.toolStripButtonFlipY,
-            this.toolStripLabel6,
-            this.toolStripTextBoxMinY,
-            this.toolStripLabel7,
-            this.toolStripTextBoxMaxY,
-            this.toolStripButtonApplyY,
-            this.toolStripLabelStatsY});
-            this.toolStripY.Location = new System.Drawing.Point(369, 25);
-            this.toolStripY.Name = "toolStripY";
-            this.toolStripY.Size = new System.Drawing.Size(862, 25);
-            this.toolStripY.TabIndex = 10;
-            this.toolStripY.Text = "toolStrip1";
-            // 
-            // toolStripZ
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.toolStripZ, 2);
-            this.toolStripZ.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel3,
-            this.comboZ,
-            this.toolStripButtonFlipZ,
-            this.toolStripLabel9,
-            this.toolStripTextBoxMinZ,
-            this.toolStripLabel10,
-            this.toolStripTextBoxMaxZ,
-            this.toolStripButtonApplyZ,
-            this.toolStripLabelStatsZ});
-            this.toolStripZ.Location = new System.Drawing.Point(369, 50);
-            this.toolStripZ.Name = "toolStripZ";
-            this.toolStripZ.Size = new System.Drawing.Size(862, 25);
-            this.toolStripZ.TabIndex = 11;
-            this.toolStripZ.Text = "toolStrip2";
-            // 
-            // toolStripLabel2
-            // 
-            this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(39, 22);
-            this.toolStripLabel2.Text = "Y Axis";
-            // 
-            // comboY
-            // 
-            this.comboY.Items.AddRange(new object[] {
-            "None",
-            "X (mm)",
-            "Y (mm)",
-            "Z (mm)",
-            "Height (µm)",
-            "Intensity (%)",
-            "Z + Height (mm)"});
-            this.comboY.Name = "comboY";
-            this.comboY.Size = new System.Drawing.Size(121, 25);
-            // 
-            // toolStripLabel3
-            // 
-            this.toolStripLabel3.Name = "toolStripLabel3";
-            this.toolStripLabel3.Size = new System.Drawing.Size(39, 22);
-            this.toolStripLabel3.Text = "Z Axis";
-            // 
-            // comboZ
-            // 
-            this.comboZ.Items.AddRange(new object[] {
-            "None",
-            "X (mm)",
-            "Y (mm)",
-            "Z (mm)",
-            "Height (µm)",
-            "Intensity (%)",
-            "Z + Height (mm)"});
-            this.comboZ.Name = "comboZ";
-            this.comboZ.Size = new System.Drawing.Size(121, 25);
+            this.toolStripButtonFlipX.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFlipX.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFlipX.Image")));
+            this.toolStripButtonFlipX.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFlipX.Name = "toolStripButtonFlipX";
+            this.toolStripButtonFlipX.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonFlipX.Tag = "0";
+            this.toolStripButtonFlipX.Text = "Flip";
+            this.toolStripButtonFlipX.Click += new System.EventHandler(this.toolStripButtonFlip_Click);
             // 
             // toolStripLabel4
             // 
@@ -390,20 +325,58 @@
             this.toolStripTextBoxMaxX.Name = "toolStripTextBoxMaxX";
             this.toolStripTextBoxMaxX.Size = new System.Drawing.Size(100, 25);
             // 
-            // toolStripButtonFlipX
+            // toolStripButtonApplyX
             // 
-            this.toolStripButtonFlipX.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFlipX.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFlipX.Image")));
-            this.toolStripButtonFlipX.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFlipX.Name = "toolStripButtonFlipX";
-            this.toolStripButtonFlipX.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonFlipX.Text = "Flip";
-            this.toolStripButtonFlipX.Click += new System.EventHandler(this.toolStripButtonFlip_Click);
+            this.toolStripButtonApplyX.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonApplyX.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonApplyX.Image")));
+            this.toolStripButtonApplyX.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonApplyX.Name = "toolStripButtonApplyX";
+            this.toolStripButtonApplyX.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonApplyX.Text = "Apply";
+            this.toolStripButtonApplyX.Click += new System.EventHandler(this.toolStripButtonApply_Click);
             // 
             // toolStripLabelStatsX
             // 
             this.toolStripLabelStatsX.Name = "toolStripLabelStatsX";
             this.toolStripLabelStatsX.Size = new System.Drawing.Size(0, 22);
+            // 
+            // toolStripY
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.toolStripY, 2);
+            this.toolStripY.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel2,
+            this.comboY,
+            this.toolStripButtonFlipY,
+            this.toolStripLabel6,
+            this.toolStripTextBoxMinY,
+            this.toolStripLabel7,
+            this.toolStripTextBoxMaxY,
+            this.toolStripButtonApplyY,
+            this.toolStripLabelStatsY});
+            this.toolStripY.Location = new System.Drawing.Point(369, 25);
+            this.toolStripY.Name = "toolStripY";
+            this.toolStripY.Size = new System.Drawing.Size(862, 25);
+            this.toolStripY.TabIndex = 10;
+            this.toolStripY.Text = "toolStrip1";
+            // 
+            // toolStripLabel2
+            // 
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(39, 22);
+            this.toolStripLabel2.Text = "Y Axis";
+            // 
+            // comboY
+            // 
+            this.comboY.Items.AddRange(new object[] {
+            "None",
+            "X (mm)",
+            "Y (mm)",
+            "Z (mm)",
+            "Height (µm)",
+            "Intensity (%)",
+            "Z + Height (mm)"});
+            this.comboY.Name = "comboY";
+            this.comboY.Size = new System.Drawing.Size(121, 25);
             // 
             // toolStripButtonFlipY
             // 
@@ -412,6 +385,7 @@
             this.toolStripButtonFlipY.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonFlipY.Name = "toolStripButtonFlipY";
             this.toolStripButtonFlipY.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonFlipY.Tag = "1";
             this.toolStripButtonFlipY.Text = "Flip";
             this.toolStripButtonFlipY.Click += new System.EventHandler(this.toolStripButtonFlip_Click);
             // 
@@ -439,10 +413,58 @@
             this.toolStripTextBoxMaxY.Name = "toolStripTextBoxMaxY";
             this.toolStripTextBoxMaxY.Size = new System.Drawing.Size(100, 25);
             // 
+            // toolStripButtonApplyY
+            // 
+            this.toolStripButtonApplyY.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonApplyY.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonApplyY.Image")));
+            this.toolStripButtonApplyY.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonApplyY.Name = "toolStripButtonApplyY";
+            this.toolStripButtonApplyY.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonApplyY.Text = "Apply";
+            this.toolStripButtonApplyY.Click += new System.EventHandler(this.toolStripButtonApply_Click);
+            // 
             // toolStripLabelStatsY
             // 
             this.toolStripLabelStatsY.Name = "toolStripLabelStatsY";
             this.toolStripLabelStatsY.Size = new System.Drawing.Size(0, 22);
+            // 
+            // toolStripZ
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.toolStripZ, 2);
+            this.toolStripZ.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel3,
+            this.comboZ,
+            this.toolStripButtonFlipZ,
+            this.toolStripLabel9,
+            this.toolStripTextBoxMinZ,
+            this.toolStripLabel10,
+            this.toolStripTextBoxMaxZ,
+            this.toolStripButtonApplyZ,
+            this.toolStripLabelStatsZ});
+            this.toolStripZ.Location = new System.Drawing.Point(369, 50);
+            this.toolStripZ.Name = "toolStripZ";
+            this.toolStripZ.Size = new System.Drawing.Size(862, 25);
+            this.toolStripZ.TabIndex = 11;
+            this.toolStripZ.Text = "toolStrip2";
+            // 
+            // toolStripLabel3
+            // 
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(39, 22);
+            this.toolStripLabel3.Text = "Z Axis";
+            // 
+            // comboZ
+            // 
+            this.comboZ.Items.AddRange(new object[] {
+            "None",
+            "X (mm)",
+            "Y (mm)",
+            "Z (mm)",
+            "Height (µm)",
+            "Intensity (%)",
+            "Z + Height (mm)"});
+            this.comboZ.Name = "comboZ";
+            this.comboZ.Size = new System.Drawing.Size(121, 25);
             // 
             // toolStripButtonFlipZ
             // 
@@ -451,6 +473,7 @@
             this.toolStripButtonFlipZ.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonFlipZ.Name = "toolStripButtonFlipZ";
             this.toolStripButtonFlipZ.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonFlipZ.Tag = "2";
             this.toolStripButtonFlipZ.Text = "Flip";
             this.toolStripButtonFlipZ.Click += new System.EventHandler(this.toolStripButtonFlip_Click);
             // 
@@ -478,31 +501,6 @@
             this.toolStripTextBoxMaxZ.Name = "toolStripTextBoxMaxZ";
             this.toolStripTextBoxMaxZ.Size = new System.Drawing.Size(100, 25);
             // 
-            // toolStripLabelStatsZ
-            // 
-            this.toolStripLabelStatsZ.Name = "toolStripLabelStatsZ";
-            this.toolStripLabelStatsZ.Size = new System.Drawing.Size(0, 22);
-            // 
-            // toolStripButtonApplyX
-            // 
-            this.toolStripButtonApplyX.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonApplyX.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonApplyX.Image")));
-            this.toolStripButtonApplyX.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonApplyX.Name = "toolStripButtonApplyX";
-            this.toolStripButtonApplyX.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonApplyX.Text = "Apply";
-            this.toolStripButtonApplyX.Click += new System.EventHandler(this.toolStripButtonApply_Click);
-            // 
-            // toolStripButtonApplyY
-            // 
-            this.toolStripButtonApplyY.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonApplyY.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonApplyY.Image")));
-            this.toolStripButtonApplyY.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonApplyY.Name = "toolStripButtonApplyY";
-            this.toolStripButtonApplyY.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonApplyY.Text = "Apply";
-            this.toolStripButtonApplyY.Click += new System.EventHandler(this.toolStripButtonApply_Click);
-            // 
             // toolStripButtonApplyZ
             // 
             this.toolStripButtonApplyZ.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -512,6 +510,11 @@
             this.toolStripButtonApplyZ.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonApplyZ.Text = "Apply";
             this.toolStripButtonApplyZ.Click += new System.EventHandler(this.toolStripButtonApply_Click);
+            // 
+            // toolStripLabelStatsZ
+            // 
+            this.toolStripLabelStatsZ.Name = "toolStripLabelStatsZ";
+            this.toolStripLabelStatsZ.Size = new System.Drawing.Size(0, 22);
             // 
             // Plotter
             // 
