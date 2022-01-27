@@ -31,14 +31,14 @@ namespace XferSuite
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.btnSettings = new System.Windows.Forms.Button();
-            this.btnXYZscan = new System.Windows.Forms.Button();
-            this.btnInlinepositions = new System.Windows.Forms.Button();
             this.btnPositionCalc = new System.Windows.Forms.Button();
-            this.btnDataFileTree = new System.Windows.Forms.Button();
-            this.btnMapFlip = new System.Windows.Forms.Button();
+            this.btnXYZscan = new System.Windows.Forms.Button();
+            this.btnPixelator = new System.Windows.Forms.Button();
+            this.btnInlinepositions = new System.Windows.Forms.Button();
             this.btnParseSEYR = new System.Windows.Forms.Button();
             this.btnCameraViewer = new System.Windows.Forms.Button();
+            this.btnSettings = new System.Windows.Forms.Button();
+            this.btnMapFlip = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,7 +52,7 @@ namespace XferSuite
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel.Controls.Add(this.btnPositionCalc, 2, 1);
             this.tableLayoutPanel.Controls.Add(this.btnXYZscan, 1, 0);
-            this.tableLayoutPanel.Controls.Add(this.btnDataFileTree, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnPixelator, 0, 1);
             this.tableLayoutPanel.Controls.Add(this.btnInlinepositions, 0, 0);
             this.tableLayoutPanel.Controls.Add(this.btnParseSEYR, 2, 0);
             this.tableLayoutPanel.Controls.Add(this.btnCameraViewer, 3, 0);
@@ -68,65 +68,6 @@ namespace XferSuite
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.Size = new System.Drawing.Size(406, 170);
             this.tableLayoutPanel.TabIndex = 0;
-            // 
-            // btnSettings
-            // 
-            this.btnSettings.AccessibleName = "Settings";
-            this.btnSettings.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSettings.BackgroundImage")));
-            this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSettings.FlatAppearance.BorderSize = 0;
-            this.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PowderBlue;
-            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettings.Location = new System.Drawing.Point(313, 95);
-            this.btnSettings.Margin = new System.Windows.Forms.Padding(10);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(83, 65);
-            this.btnSettings.TabIndex = 11;
-            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
-            // 
-            // btnXYZscan
-            // 
-            this.btnXYZscan.AccessibleName = "XYZ Scans";
-            this.btnXYZscan.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnXYZscan.BackgroundImage")));
-            this.btnXYZscan.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnXYZscan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnXYZscan.FlatAppearance.BorderSize = 0;
-            this.btnXYZscan.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnXYZscan.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnXYZscan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnXYZscan.Location = new System.Drawing.Point(111, 10);
-            this.btnXYZscan.Margin = new System.Windows.Forms.Padding(10);
-            this.btnXYZscan.Name = "btnXYZscan";
-            this.btnXYZscan.Size = new System.Drawing.Size(81, 65);
-            this.btnXYZscan.TabIndex = 4;
-            this.btnXYZscan.Tag = "1";
-            this.btnXYZscan.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnXYZscan.UseVisualStyleBackColor = true;
-            this.btnXYZscan.Click += new System.EventHandler(this.btn_Click);
-            // 
-            // btnInlinepositions
-            // 
-            this.btnInlinepositions.AccessibleName = "Inlinepositions";
-            this.btnInlinepositions.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnInlinepositions.BackgroundImage")));
-            this.btnInlinepositions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnInlinepositions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnInlinepositions.FlatAppearance.BorderSize = 0;
-            this.btnInlinepositions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnInlinepositions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnInlinepositions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInlinepositions.Location = new System.Drawing.Point(10, 10);
-            this.btnInlinepositions.Margin = new System.Windows.Forms.Padding(10);
-            this.btnInlinepositions.Name = "btnInlinepositions";
-            this.btnInlinepositions.Size = new System.Drawing.Size(81, 65);
-            this.btnInlinepositions.TabIndex = 2;
-            this.btnInlinepositions.Tag = "0";
-            this.btnInlinepositions.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnInlinepositions.UseVisualStyleBackColor = true;
-            this.btnInlinepositions.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnPositionCalc
             // 
@@ -148,45 +89,65 @@ namespace XferSuite
             this.btnPositionCalc.UseVisualStyleBackColor = true;
             this.btnPositionCalc.Click += new System.EventHandler(this.btn_Click);
             // 
-            // btnDataFileTree
+            // btnXYZscan
             // 
-            this.btnDataFileTree.AccessibleName = "Data File Tree";
-            this.btnDataFileTree.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnDataFileTree.BackgroundImage")));
-            this.btnDataFileTree.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnDataFileTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDataFileTree.FlatAppearance.BorderSize = 0;
-            this.btnDataFileTree.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnDataFileTree.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnDataFileTree.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDataFileTree.Location = new System.Drawing.Point(10, 95);
-            this.btnDataFileTree.Margin = new System.Windows.Forms.Padding(10);
-            this.btnDataFileTree.Name = "btnDataFileTree";
-            this.btnDataFileTree.Size = new System.Drawing.Size(81, 65);
-            this.btnDataFileTree.TabIndex = 8;
-            this.btnDataFileTree.Tag = "4";
-            this.btnDataFileTree.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnDataFileTree.UseVisualStyleBackColor = true;
-            this.btnDataFileTree.Click += new System.EventHandler(this.btn_Click);
+            this.btnXYZscan.AccessibleName = "XYZ Scans";
+            this.btnXYZscan.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnXYZscan.BackgroundImage")));
+            this.btnXYZscan.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnXYZscan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnXYZscan.FlatAppearance.BorderSize = 0;
+            this.btnXYZscan.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnXYZscan.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnXYZscan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXYZscan.Location = new System.Drawing.Point(111, 10);
+            this.btnXYZscan.Margin = new System.Windows.Forms.Padding(10);
+            this.btnXYZscan.Name = "btnXYZscan";
+            this.btnXYZscan.Size = new System.Drawing.Size(81, 65);
+            this.btnXYZscan.TabIndex = 4;
+            this.btnXYZscan.Tag = "1";
+            this.btnXYZscan.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnXYZscan.UseVisualStyleBackColor = true;
+            this.btnXYZscan.Click += new System.EventHandler(this.btn_Click);
             // 
-            // btnMapFlip
+            // btnPixelator
             // 
-            this.btnMapFlip.AccessibleName = "Map Flip";
-            this.btnMapFlip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMapFlip.BackgroundImage")));
-            this.btnMapFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnMapFlip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnMapFlip.FlatAppearance.BorderSize = 0;
-            this.btnMapFlip.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnMapFlip.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnMapFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMapFlip.Location = new System.Drawing.Point(111, 95);
-            this.btnMapFlip.Margin = new System.Windows.Forms.Padding(10);
-            this.btnMapFlip.Name = "btnMapFlip";
-            this.btnMapFlip.Size = new System.Drawing.Size(81, 65);
-            this.btnMapFlip.TabIndex = 10;
-            this.btnMapFlip.Tag = "5";
-            this.btnMapFlip.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnMapFlip.UseVisualStyleBackColor = true;
-            this.btnMapFlip.Click += new System.EventHandler(this.btn_Click);
+            this.btnPixelator.AccessibleName = "Pixelator";
+            this.btnPixelator.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnPixelator.BackgroundImage")));
+            this.btnPixelator.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPixelator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnPixelator.FlatAppearance.BorderSize = 0;
+            this.btnPixelator.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnPixelator.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnPixelator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPixelator.Location = new System.Drawing.Point(10, 95);
+            this.btnPixelator.Margin = new System.Windows.Forms.Padding(10);
+            this.btnPixelator.Name = "btnPixelator";
+            this.btnPixelator.Size = new System.Drawing.Size(81, 65);
+            this.btnPixelator.TabIndex = 8;
+            this.btnPixelator.Tag = "4";
+            this.btnPixelator.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnPixelator.UseVisualStyleBackColor = true;
+            this.btnPixelator.Click += new System.EventHandler(this.btn_Click);
+            // 
+            // btnInlinepositions
+            // 
+            this.btnInlinepositions.AccessibleName = "Inlinepositions";
+            this.btnInlinepositions.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnInlinepositions.BackgroundImage")));
+            this.btnInlinepositions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnInlinepositions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnInlinepositions.FlatAppearance.BorderSize = 0;
+            this.btnInlinepositions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnInlinepositions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnInlinepositions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInlinepositions.Location = new System.Drawing.Point(10, 10);
+            this.btnInlinepositions.Margin = new System.Windows.Forms.Padding(10);
+            this.btnInlinepositions.Name = "btnInlinepositions";
+            this.btnInlinepositions.Size = new System.Drawing.Size(81, 65);
+            this.btnInlinepositions.TabIndex = 2;
+            this.btnInlinepositions.Tag = "0";
+            this.btnInlinepositions.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnInlinepositions.UseVisualStyleBackColor = true;
+            this.btnInlinepositions.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnParseSEYR
             // 
@@ -228,6 +189,45 @@ namespace XferSuite
             this.btnCameraViewer.UseVisualStyleBackColor = true;
             this.btnCameraViewer.Click += new System.EventHandler(this.btn_Click);
             // 
+            // btnSettings
+            // 
+            this.btnSettings.AccessibleName = "Settings";
+            this.btnSettings.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSettings.BackgroundImage")));
+            this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSettings.FlatAppearance.BorderSize = 0;
+            this.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PowderBlue;
+            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSettings.Location = new System.Drawing.Point(313, 95);
+            this.btnSettings.Margin = new System.Windows.Forms.Padding(10);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(83, 65);
+            this.btnSettings.TabIndex = 11;
+            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
+            // btnMapFlip
+            // 
+            this.btnMapFlip.AccessibleName = "Map Flip";
+            this.btnMapFlip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMapFlip.BackgroundImage")));
+            this.btnMapFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnMapFlip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnMapFlip.FlatAppearance.BorderSize = 0;
+            this.btnMapFlip.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnMapFlip.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnMapFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMapFlip.Location = new System.Drawing.Point(111, 95);
+            this.btnMapFlip.Margin = new System.Windows.Forms.Padding(10);
+            this.btnMapFlip.Name = "btnMapFlip";
+            this.btnMapFlip.Size = new System.Drawing.Size(81, 65);
+            this.btnMapFlip.TabIndex = 10;
+            this.btnMapFlip.Tag = "5";
+            this.btnMapFlip.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnMapFlip.UseVisualStyleBackColor = true;
+            this.btnMapFlip.Click += new System.EventHandler(this.btn_Click);
+            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -253,7 +253,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnInlinepositions;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnMapFlip;
-        private System.Windows.Forms.Button btnDataFileTree;
+        private System.Windows.Forms.Button btnPixelator;
         private System.Windows.Forms.Button btnParseSEYR;
         private System.Windows.Forms.Button btnXYZscan;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
