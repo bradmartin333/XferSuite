@@ -4,7 +4,6 @@ open MathNet.Numerics.Statistics
 open MathNet.Numerics.Distributions
 open System.IO
 open System
-open OxyPlot.Series
 
 module Stats =
     let mean (data: float []) = Math.Round(Statistics.Mean(data), 3)

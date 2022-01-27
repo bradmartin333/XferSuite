@@ -27,6 +27,7 @@ namespace XferSuite
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private FormsPlot[] Plots { get; set; }
         private ToolStripComboBox[] ComboBoxes { get; set; }
+
         public Plotter(string filePath)
         {
             InitializeComponent();
@@ -72,11 +73,20 @@ namespace XferSuite
         {
             if (olv.SelectedIndices.Count <= 4)
             {
+                List<double[]> bounds = new List<double[]> ();
                 for (int i = 0; i < olv.SelectedObjects.Count; i++)
                 {
                     Scan scan = (Scan)olv.SelectedObjects[i];
-                    if (scan.Data.Count > 3) CreatePlot(Plots[i], scan);
+                    if (scan.Data.Count > 3) bounds.Add(CreatePlot(Plots[i], scan));
                 }
+                for (int i = olv.SelectedObjects.Count; i < Plots.Length; i++)
+                {
+                    Plots[i].Plot.Clear();
+                    Plots[i].Plot.Title("");
+                    Plots[i].Plot.YAxis.Label();
+                    Plots[i].Refresh();
+                }
+                UpdateToolbars(bounds);
             }
             else
             {
@@ -84,9 +94,11 @@ namespace XferSuite
             }
         }
 
-        private void CreatePlot(FormsPlot formsPlot, Scan scan)
+        private double[] CreatePlot(FormsPlot formsPlot, Scan scan)
         {
             formsPlot.Plot.Clear();
+            formsPlot.Plot.YAxis.Label();
+
             Zed.Position[] data = new Zed.Position[scan.Data.Count];
             Zed.Plane plane = Zed.getPlane(scan.Data.ToArray());
             for (int i = 0; i < data.Length; i++)
@@ -103,7 +115,6 @@ namespace XferSuite
             if (toolStripButtonFlipX.Checked) FlipAxis(ref xAxisData);
             if (toolStripButtonFlipY.Checked) FlipAxis(ref yAxisData);
             if (toolStripButtonFlipZ.Checked) FlipAxis(ref zAxisData);
-            UpdateToolbars(new double[][] { xAxisData, yAxisData, zAxisData });
 
             int numAxes = 0;
             foreach (ToolStripComboBox cbx in ComboBoxes)
@@ -135,12 +146,8 @@ namespace XferSuite
                 case 3:
                     try
                     {
-                        var cmap = ScottPlot.Drawing.Colormap.Viridis;
-                        var cb = formsPlot.Plot.AddColorbar(cmap);
                         double minH = zAxisData.Min();
                         double maxH = zAxisData.Max();
-                        var ticksInfo = Zed.getTicks(zAxisData);
-                        cb.AddTicks(ticksInfo.Item1, ticksInfo.Item2);
                         for (int i = 0; i < data.Length; i++)
                         {
                             double colorFraction = (zAxisData[i] - minH) / (maxH - minH);
@@ -158,6 +165,7 @@ namespace XferSuite
             }
 
             formsPlot.Refresh();
+            return new double[] {xAxisData.Min(), xAxisData.Max(), yAxisData.Min(), yAxisData.Max(), zAxisData.Min(), zAxisData.Max()};
         }
 
         private void FlipAxis(ref double[] data)
@@ -167,30 +175,78 @@ namespace XferSuite
                 data[i] = Math.Abs(data[i] - max);
         }
 
-        private void UpdateToolbars(double[][] data)
+        private void UpdateToolbars(List<double[]> bounds)
         {
-            for (int i = 0; i < 3; i++)
+            double[] groupBounds = new double[] { double.MaxValue, double.MinValue, double.MaxValue, double.MinValue, double.MaxValue, double.MinValue };
+            for (int i = 0; i < bounds.Count; i++)
             {
-                if (data[i].Length > 3)
+                for (int j = 0; j < groupBounds.Length; j += 2)
                 {
-                    double min = Math.Round(data[i].Min(), 3);
-                    double max = Math.Round(data[i].Max(), 3);
-                    switch (i)
+                    if (bounds[i][j] != 0.0 && bounds[i][j + 1] != 0.0)
+                    {
+                        if (bounds[i][j] < groupBounds[j]) groupBounds[j] = bounds[i][j];
+                        if (bounds[i][j + 1] > groupBounds[j + 1]) groupBounds[j + 1] = bounds[i][j + 1];
+                    }
+                }
+            }
+            for (int i = 0; i < groupBounds.Length; i += 2)
+            {
+                if (groupBounds[i] != double.MaxValue && groupBounds[i + 1] != double.MinValue)
+                {
+                    switch (i/2)
                     {
                         case 0:
-                            toolStripTextBoxMinX.Text = min.ToString();
-                            toolStripTextBoxMaxX.Text = max.ToString();
+                            toolStripTextBoxMinX.Text = groupBounds[i].ToString();
+                            toolStripTextBoxMaxX.Text = groupBounds[i + 1].ToString();
                             break;
                         case 1:
-                            toolStripTextBoxMinY.Text = min.ToString();
-                            toolStripTextBoxMaxY.Text = max.ToString();
+                            toolStripTextBoxMinY.Text = groupBounds[i].ToString();
+                            toolStripTextBoxMaxY.Text = groupBounds[i + 1].ToString();
                             break;
                         case 2:
-                            toolStripTextBoxMinZ.Text = min.ToString();
-                            toolStripTextBoxMaxZ.Text = max.ToString();
+                            toolStripTextBoxMinZ.Text = groupBounds[i].ToString();
+                            toolStripTextBoxMaxZ.Text = groupBounds[i + 1].ToString();
+                            break;
+                        default:
                             break;
                     }
                 }
+            }
+
+            int numAxes = 0;
+            foreach (ToolStripComboBox cbx in ComboBoxes)
+                if (cbx.SelectedIndex > 0) numAxes++;
+
+            for (int i = 0; i < groupBounds.Length; i += 2)
+            {
+                groupBounds[i] = groupBounds[i] * 0.99;
+                groupBounds[i + 1] = groupBounds[i + 1] * 1.01;
+            }
+
+            for (int i = 0; i < olv.SelectedObjects.Count; i++)
+            {
+                switch (numAxes)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        Plots[i].Plot.SetAxisLimitsX(groupBounds[0], groupBounds[1]);
+                        break;
+                    case 2:
+                        Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
+                        break;
+                    case 3:
+                        Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
+                        var cmap = ScottPlot.Drawing.Colormap.Viridis;
+                        var cb = Plots[i].Plot.AddColorbar(cmap);
+                        cb.MinValue = groupBounds[4];
+                        cb.MaxValue = groupBounds[5];
+                        break;
+                    default:
+                        break;
+                }
+
+                Plots[i].Refresh();
             }
         }
 
