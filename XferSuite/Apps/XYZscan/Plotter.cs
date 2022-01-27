@@ -17,6 +17,7 @@ namespace XferSuite.XYZscan
         public Plotter(string filePath)
         {
             InitializeComponent();
+            olv.SelectionChanged += Olv_SelectionChanged;
             Plots = new FormsPlot[] { pA, pB, pC, pD };
             Path = filePath;
             Show();
@@ -50,7 +51,17 @@ namespace XferSuite.XYZscan
 
         private void CreatePlot(FormsPlot formsPlot, Scan scan)
         {
-            throw new NotImplementedException();
+            formsPlot.Plot.Clear();
+            var cmap = ScottPlot.Drawing.Colormap.Viridis;
+            formsPlot.Plot.AddColorbar(cmap);
+            double maxH = scan.Data.Select(x => x.H).Max();
+            foreach (XferHelper.Zed.Position p in scan.Data)
+            {
+                double colorFraction = p.H / maxH;
+                System.Drawing.Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
+                formsPlot.Plot.AddPoint(p.X, p.Y, c);
+            }
+            formsPlot.Refresh();
         }
 
         private void FindScans()
