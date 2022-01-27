@@ -21,6 +21,11 @@ namespace XferSuite.XYZscan
             olv.SelectionChanged += Olv_SelectionChanged;
             Plots = new FormsPlot[] { pA, pB, pC, pD };
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
+            foreach (ToolStripComboBox comboBox in ComboBoxes)
+            {
+                comboBox.SelectedIndex = 0;
+                comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
+            }
             Path = filePath;
             Show();
             MakeList();
