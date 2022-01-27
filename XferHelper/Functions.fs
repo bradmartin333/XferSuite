@@ -256,16 +256,30 @@ module Zed =
         { Time: System.DateTime
           X: float
           Y: float
-          Z: float }
+          Z: float
+          H: float
+          I: float }
 
     let toPosition (csvData: string) =
         let columns = csvData.Split('\t')
         let Time = System.DateTime.Parse(columns.[0])
         let X = float columns.[1]
         let Y = float columns.[2]
-        let mutable Z = float columns.[3]
-        if columns.[3] = "NaN" then Z <- 0.0
-        { Time = Time; X = X; Y = Y; Z = Z }
+        let mutable H = float columns.[3]
+        if columns.[3] = "NaN" then H <- 0.0
+        let mutable Z = 0.0
+        let mutable I = 0.0
+
+        if columns.Length > 4 then
+            Z <- float columns.[4]
+            I <- float columns.[5]
+
+        { Time = Time
+          X = X
+          Y = Y
+          Z = Z
+          H = H
+          I = I }
 
     let getAxis (data: Position []) (axis: int) =
         let output =

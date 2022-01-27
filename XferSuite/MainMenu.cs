@@ -75,8 +75,8 @@ namespace XferSuite
                         form = new MetroGraphs(path) { Text = new FileInfo(path).Name };
                         break;
                     case 1:
-                        // Internal file validation
-                        form = new XYZscan.frmScanSelect(path);
+                        // Make file validation
+                        form = new XYZscan.Plotter(path);
                         break;
                     case 2:
                         if (!VerifyPath(path, isMetro: false)) return;
