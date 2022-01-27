@@ -10,8 +10,8 @@ namespace XferSuite
 {
     public partial class MainMenu : Form
     {
-        public static int MajorVersion = 2;
-        public static int MinorVerson = 17;
+        public static int MajorVersion = 3;
+        public static int MinorVerson = 0;
 
         private static Settings _Settings = new Settings();
 
@@ -75,8 +75,8 @@ namespace XferSuite
                         form = new MetroGraphs(path) { Text = new FileInfo(path).Name };
                         break;
                     case 1:
-                        // Internal file validation
-                        form = new XYZscan.frmScanSelect(path);
+                        // Make file validation
+                        form = new XYZscan.Plotter(path);
                         break;
                     case 2:
                         if (!VerifyPath(path, isMetro: false)) return;
@@ -86,7 +86,7 @@ namespace XferSuite
                         form = new CameraViewer();
                         break;
                     case 4:
-                        form = new DataFileTree.frmDataFileTreeMain();
+                        // Add roux
                         break;
                     case 5:
                         form = new MapFlip();
