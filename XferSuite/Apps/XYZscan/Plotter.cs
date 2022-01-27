@@ -13,12 +13,14 @@ namespace XferSuite.XYZscan
         public string Path { get; set; }
         public List<Scan> Scans { get; set; } = new List<Scan>();
         public FormsPlot[] Plots { get; set; }
+        public ToolStripComboBox[] ComboBoxes { get; set; }
 
         public Plotter(string filePath)
         {
             InitializeComponent();
             olv.SelectionChanged += Olv_SelectionChanged;
             Plots = new FormsPlot[] { pA, pB, pC, pD };
+            ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
             Path = filePath;
             Show();
             MakeList();
