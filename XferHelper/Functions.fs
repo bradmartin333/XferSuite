@@ -300,6 +300,12 @@ module Zed =
         let y = scatter |> Array.map (fun x -> x.Y)
         MathNet.Numerics.Fit.Polynomial(x, y, 3)
 
+    let median (data: float[]) =
+        Math.Round(MathNet.Numerics.Statistics.Statistics.Median(data), 3);
+
+    let threeSigma (data: float[]) =
+        Math.Round(3.0 * MathNet.Numerics.Statistics.Statistics.StandardDeviation(data), 3);
+
     let rSquared (modelScatter: OxyPlot.DataPoint [], observedScatter: ScatterPoint []) =
         let model = modelScatter |> Array.map (fun x -> x.Y)
 

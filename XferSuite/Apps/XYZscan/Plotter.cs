@@ -110,21 +110,25 @@ namespace XferSuite.XYZscan
             {
                 if (data[i].Length > 3)
                 {
-                    string min = Math.Round(data[i].Min(), 3).ToString();
-                    string max = Math.Round(data[i].Max(), 3).ToString();
+                    double min = Math.Round(data[i].Min(), 3);
+                    double max = Math.Round(data[i].Max(), 3);
+                    string stats = max > min ? $" Range: {max - min}     Median = {XferHelper.Zed.median(data[i])}     3Sigma = {XferHelper.Zed.threeSigma(data[i])}" : "";
                     switch (i)
                     {
                         case 0:
-                            toolStripTextBoxMinX.Text = min;
-                            toolStripTextBoxMaxX.Text = max;
+                            toolStripTextBoxMinX.Text = min.ToString();
+                            toolStripTextBoxMaxX.Text = max.ToString();
+                            toolStripLabelStatsX.Text = stats;
                             break;
                         case 1:
-                            toolStripTextBoxMinY.Text = min;
-                            toolStripTextBoxMaxY.Text = max;
+                            toolStripTextBoxMinY.Text = min.ToString();
+                            toolStripTextBoxMaxY.Text = max.ToString();
+                            toolStripLabelStatsY.Text = stats;
                             break;
                         case 2:
-                            toolStripTextBoxMinZ.Text = min;
-                            toolStripTextBoxMaxZ.Text = max;
+                            toolStripTextBoxMinZ.Text = min.ToString();
+                            toolStripTextBoxMaxZ.Text = max.ToString();
+                            toolStripLabelStatsZ.Text = stats;
                             break;
                     }
                 }
