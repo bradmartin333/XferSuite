@@ -137,12 +137,14 @@ namespace XferSuite
                     {
                         var cmap = ScottPlot.Drawing.Colormap.Viridis;
                         var cb = formsPlot.Plot.AddColorbar(cmap);
+                        double minH = zAxisData.Min();
                         double maxH = zAxisData.Max();
                         var ticksInfo = Zed.getTicks(zAxisData);
                         cb.AddTicks(ticksInfo.Item1, ticksInfo.Item2);
                         for (int i = 0; i < data.Length; i++)
                         {
-                            double colorFraction = zAxisData[i] / maxH;
+                            double colorFraction = (zAxisData[i] - minH) / (maxH - minH);
+                            if (colorFraction > 1) colorFraction = maxH / zAxisData[i];
                             System.Drawing.Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
                             formsPlot.Plot.AddPoint(xAxisData[i], yAxisData[i], c);
                         }
