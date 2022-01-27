@@ -149,5 +149,15 @@ namespace XferSuite.XYZscan
                     }
             }
         }
+
+        private void toolStripButtonApply_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButtonFlip_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
