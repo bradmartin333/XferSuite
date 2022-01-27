@@ -76,7 +76,7 @@ namespace XferSuite
                         break;
                     case 1:
                         // Make file validation
-                        form = new XYZscan.Plotter(path);
+                        form = new Plotter(path);
                         break;
                     case 2:
                         if (!VerifyPath(path, isMetro: false)) return;

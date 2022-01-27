@@ -290,29 +290,12 @@ module Zed =
         | 5 -> data |> Array.map (fun x -> x.I)
         | _ -> [| 0.0 |]
 
-    let dataLineFit (data: Position []) (axis: int) =
-        let Z = getAxis data 2
-        let Q = getAxis data axis
-        MathNet.Numerics.Fit.Line(Q, Z)
-
-    let scatterPolynomial (scatter: ScatterPoint []) =
-        let x = scatter |> Array.map (fun x -> x.X)
-        let y = scatter |> Array.map (fun x -> x.Y)
-        MathNet.Numerics.Fit.Polynomial(x, y, 3)
-
-    let median (data: float[]) =
-        Math.Round(MathNet.Numerics.Statistics.Statistics.Median(data), 3);
-
-    let threeSigma (data: float[]) =
-        Math.Round(3.0 * MathNet.Numerics.Statistics.Statistics.StandardDeviation(data), 3);
-
-    let rSquared (modelScatter: OxyPlot.DataPoint [], observedScatter: ScatterPoint []) =
-        let model = modelScatter |> Array.map (fun x -> x.Y)
-
-        let observed =
-            observedScatter |> Array.map (fun x -> x.Y)
-
-        System.Math.Round(MathNet.Numerics.GoodnessOfFit.RSquared(model, observed), 3)
+    let threeSigma (data: float []) =
+        Math.Round(
+            3.0
+            * MathNet.Numerics.Statistics.Statistics.StandardDeviation(data),
+            3
+        )
 
     let getTicks (data: double []) =
         let labels =
@@ -321,33 +304,13 @@ module Zed =
 
         ([| 0.0; 0.25; 0.5; 0.75; 1.0 |], labels)
 
-    let bounds (data: Position []) =
-        let x = getAxis data 0
-        let y = getAxis data 1
-        let z = getAxis data 2
-
-        [| x.Minimum()
-           x.Maximum()
-           y.Minimum()
-           y.Maximum()
-           z.Minimum()
-           z.Maximum() |]
-
-    let shrinkBounds (data: float [], factor: float) =
-        [| data.[0] * float (1. + factor)
-           data.[1] * float (1. - factor)
-           data.[2] * float (1. + factor)
-           data.[3] * float (1. - factor)
-           data.[4]
-           data.[5] |]
-
     type Vec2 = { X: float; Y: float }
 
     let toVec2 (x: float) (y: float) = { X = x; Y = y }
 
     type Vec3 = { X: float; Y: float; Z: float }
 
-    let posToVec3 (p: Position) = { X = p.X; Y = p.Y; Z = p.Z }
+    let posToVec3 (p: Position) = { X = p.X; Y = p.Y; Z = p.H }
 
     let nVec3 (a: float) = { X = a; Y = a; Z = a }
 
@@ -501,12 +464,16 @@ module Zed =
 
         out
 
-    let dataPlaneFit (data: Position []) =
+    let getPlane (data: Position []) =
         let vecs = data |> Array.map (fun x -> posToVec3 x)
         let n = float vecs.Length
 
         if n < 3. then
-            (0., 0.)
+            let p: Plane =
+                { Centroid = zeroVec3
+                  Normal = normalizeVec3 (weightedDir defaultCovariance) }
+
+            p
         else
             let mutable sum = zeroVec3
 
@@ -527,8 +494,11 @@ module Zed =
                 { Centroid = centroid
                   Normal = normalizeVec3 (weightedDir covar) }
 
-            let theta = thetaDegrees p
-            (theta.X, theta.Y)
+            p
+
+    let dataPlaneFit (p: Plane) =
+        let theta = thetaDegrees p
+        (theta.X, theta.Y)
 
 module Report =
     type State =

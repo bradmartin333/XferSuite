@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XferSuite.XYZscan
+namespace XferSuite
 {
     public class Scan
     {
