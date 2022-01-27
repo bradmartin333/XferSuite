@@ -33,10 +33,12 @@ namespace XferSuite
             InitializeComponent();
             olv.SelectionChanged += Olv_SelectionChanged;
             Plots = new FormsPlot[] { pA, pB, pC, pD };
+            foreach (FormsPlot p in Plots)
+                p.Plot.Grid(false);
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
             foreach (ToolStripComboBox comboBox in ComboBoxes)
             {
-                comboBox.SelectedIndex = 0;
+                comboBox.SelectedIndex = int.Parse(comboBox.Tag.ToString());
                 comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
             }
             Path = filePath;
@@ -196,16 +198,16 @@ namespace XferSuite
                     switch (i/2)
                     {
                         case 0:
-                            toolStripTextBoxMinX.Text = groupBounds[i].ToString();
-                            toolStripTextBoxMaxX.Text = groupBounds[i + 1].ToString();
+                            toolStripTextBoxMinX.Text = Math.Round(groupBounds[i], 3).ToString();
+                            toolStripTextBoxMaxX.Text = Math.Round(groupBounds[i + 1], 3).ToString();
                             break;
                         case 1:
-                            toolStripTextBoxMinY.Text = groupBounds[i].ToString();
-                            toolStripTextBoxMaxY.Text = groupBounds[i + 1].ToString();
+                            toolStripTextBoxMinY.Text = Math.Round(groupBounds[i], 3).ToString();
+                            toolStripTextBoxMaxY.Text = Math.Round(groupBounds[i + 1], 3).ToString();
                             break;
                         case 2:
-                            toolStripTextBoxMinZ.Text = groupBounds[i].ToString();
-                            toolStripTextBoxMaxZ.Text = groupBounds[i + 1].ToString();
+                            toolStripTextBoxMinZ.Text = Math.Round(groupBounds[i], 3).ToString();
+                            toolStripTextBoxMaxZ.Text = Math.Round(groupBounds[i + 1], 3).ToString();
                             break;
                         default:
                             break;
