@@ -54,6 +54,24 @@
             this.comboY = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.comboZ = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxMinX = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxMaxX = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripButtonFlipX = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabelStatsX = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButtonFlipY = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxMinY = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel7 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxMaxY = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabelStatsY = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButtonFlipZ = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel9 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxMinZ = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel10 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxMaxZ = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabelStatsZ = new System.Windows.Forms.ToolStripLabel();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -235,7 +253,13 @@
             this.tableLayoutPanel1.SetColumnSpan(this.toolStripX, 2);
             this.toolStripX.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
-            this.comboX});
+            this.comboX,
+            this.toolStripButtonFlipX,
+            this.toolStripLabel4,
+            this.toolStripTextBoxMinX,
+            this.toolStripLabel5,
+            this.toolStripTextBoxMaxX,
+            this.toolStripLabelStatsX});
             this.toolStripX.Location = new System.Drawing.Point(369, 0);
             this.toolStripX.Name = "toolStripX";
             this.toolStripX.Size = new System.Drawing.Size(862, 25);
@@ -267,7 +291,13 @@
             this.tableLayoutPanel1.SetColumnSpan(this.toolStripY, 2);
             this.toolStripY.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel2,
-            this.comboY});
+            this.comboY,
+            this.toolStripButtonFlipY,
+            this.toolStripLabel6,
+            this.toolStripTextBoxMinY,
+            this.toolStripLabel7,
+            this.toolStripTextBoxMaxY,
+            this.toolStripLabelStatsY});
             this.toolStripY.Location = new System.Drawing.Point(369, 25);
             this.toolStripY.Name = "toolStripY";
             this.toolStripY.Size = new System.Drawing.Size(862, 25);
@@ -279,7 +309,13 @@
             this.tableLayoutPanel1.SetColumnSpan(this.toolStripZ, 2);
             this.toolStripZ.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel3,
-            this.comboZ});
+            this.comboZ,
+            this.toolStripButtonFlipZ,
+            this.toolStripLabel9,
+            this.toolStripTextBoxMinZ,
+            this.toolStripLabel10,
+            this.toolStripTextBoxMaxZ,
+            this.toolStripLabelStatsZ});
             this.toolStripZ.Location = new System.Drawing.Point(369, 50);
             this.toolStripZ.Name = "toolStripZ";
             this.toolStripZ.Size = new System.Drawing.Size(862, 25);
@@ -323,6 +359,120 @@
             "Z + Height (mm)"});
             this.comboZ.Name = "comboZ";
             this.comboZ.Size = new System.Drawing.Size(121, 25);
+            // 
+            // toolStripLabel4
+            // 
+            this.toolStripLabel4.Name = "toolStripLabel4";
+            this.toolStripLabel4.Size = new System.Drawing.Size(28, 22);
+            this.toolStripLabel4.Text = "Min";
+            // 
+            // toolStripTextBoxMinX
+            // 
+            this.toolStripTextBoxMinX.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBoxMinX.Name = "toolStripTextBoxMinX";
+            this.toolStripTextBoxMinX.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripLabel5
+            // 
+            this.toolStripLabel5.Name = "toolStripLabel5";
+            this.toolStripLabel5.Size = new System.Drawing.Size(30, 22);
+            this.toolStripLabel5.Text = "Max";
+            // 
+            // toolStripTextBoxMaxX
+            // 
+            this.toolStripTextBoxMaxX.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBoxMaxX.Name = "toolStripTextBoxMaxX";
+            this.toolStripTextBoxMaxX.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripButtonFlipX
+            // 
+            this.toolStripButtonFlipX.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFlipX.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFlipX.Image")));
+            this.toolStripButtonFlipX.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFlipX.Name = "toolStripButtonFlipX";
+            this.toolStripButtonFlipX.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonFlipX.Text = "Flip";
+            // 
+            // toolStripLabelStatsX
+            // 
+            this.toolStripLabelStatsX.Name = "toolStripLabelStatsX";
+            this.toolStripLabelStatsX.Size = new System.Drawing.Size(0, 22);
+            // 
+            // toolStripButtonFlipY
+            // 
+            this.toolStripButtonFlipY.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFlipY.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFlipY.Image")));
+            this.toolStripButtonFlipY.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFlipY.Name = "toolStripButtonFlipY";
+            this.toolStripButtonFlipY.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonFlipY.Text = "Flip";
+            // 
+            // toolStripLabel6
+            // 
+            this.toolStripLabel6.Name = "toolStripLabel6";
+            this.toolStripLabel6.Size = new System.Drawing.Size(28, 22);
+            this.toolStripLabel6.Text = "Min";
+            // 
+            // toolStripTextBoxMinY
+            // 
+            this.toolStripTextBoxMinY.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBoxMinY.Name = "toolStripTextBoxMinY";
+            this.toolStripTextBoxMinY.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripLabel7
+            // 
+            this.toolStripLabel7.Name = "toolStripLabel7";
+            this.toolStripLabel7.Size = new System.Drawing.Size(30, 22);
+            this.toolStripLabel7.Text = "Max";
+            // 
+            // toolStripTextBoxMaxY
+            // 
+            this.toolStripTextBoxMaxY.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBoxMaxY.Name = "toolStripTextBoxMaxY";
+            this.toolStripTextBoxMaxY.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripLabelStatsY
+            // 
+            this.toolStripLabelStatsY.Name = "toolStripLabelStatsY";
+            this.toolStripLabelStatsY.Size = new System.Drawing.Size(0, 22);
+            // 
+            // toolStripButtonFlipZ
+            // 
+            this.toolStripButtonFlipZ.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFlipZ.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFlipZ.Image")));
+            this.toolStripButtonFlipZ.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFlipZ.Name = "toolStripButtonFlipZ";
+            this.toolStripButtonFlipZ.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonFlipZ.Text = "Flip";
+            // 
+            // toolStripLabel9
+            // 
+            this.toolStripLabel9.Name = "toolStripLabel9";
+            this.toolStripLabel9.Size = new System.Drawing.Size(28, 22);
+            this.toolStripLabel9.Text = "Min";
+            // 
+            // toolStripTextBoxMinZ
+            // 
+            this.toolStripTextBoxMinZ.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBoxMinZ.Name = "toolStripTextBoxMinZ";
+            this.toolStripTextBoxMinZ.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripLabel10
+            // 
+            this.toolStripLabel10.Name = "toolStripLabel10";
+            this.toolStripLabel10.Size = new System.Drawing.Size(30, 22);
+            this.toolStripLabel10.Text = "Max";
+            // 
+            // toolStripTextBoxMaxZ
+            // 
+            this.toolStripTextBoxMaxZ.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBoxMaxZ.Name = "toolStripTextBoxMaxZ";
+            this.toolStripTextBoxMaxZ.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripLabelStatsZ
+            // 
+            this.toolStripLabelStatsZ.Name = "toolStripLabelStatsZ";
+            this.toolStripLabelStatsZ.Size = new System.Drawing.Size(0, 22);
             // 
             // Plotter
             // 
@@ -373,5 +523,23 @@
         private System.Windows.Forms.ToolStrip toolStripZ;
         private System.Windows.Forms.ToolStripLabel toolStripLabel3;
         private System.Windows.Forms.ToolStripComboBox comboZ;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFlipX;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel4;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxMinX;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel5;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxMaxX;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelStatsX;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFlipY;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel6;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxMinY;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel7;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxMaxY;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelStatsY;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFlipZ;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel9;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxMinZ;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel10;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxMaxZ;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelStatsZ;
     }
 }
