@@ -1,5 +1,4 @@
-﻿using BrightIdeasSoftware;
-using ScottPlot;
+﻿using ScottPlot;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,6 +50,8 @@ namespace XferSuite.XYZscan
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            toolStripY.Enabled = comboX.SelectedIndex > 0;
+            toolStripZ.Enabled = comboY.SelectedIndex > 0;
             MakePlots();
         }
 
@@ -85,26 +86,47 @@ namespace XferSuite.XYZscan
                 case 0:
                     break;
                 case 1:
+                    try
+                    {
+                        (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(xAxisData, min: xAxisData.Min(), max: xAxisData.Max(), binSize: 1);
+                        double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
+                        var bar = formsPlot.Plot.AddBar(values: counts, positions: leftEdges);
+                        bar.BarWidth = 1;
+                        formsPlot.Plot.YAxis.Label("Count (#)");
+                        formsPlot.Plot.SetAxisLimits(yMin: 0);
+                        formsPlot.Plot.Title(
+                            $"{scan.Name}\nRange: {xAxisData.Max() - xAxisData.Min()}   3Sigma = { XferHelper.Zed.threeSigma(xAxisData)}", false);
+                    }
+                    catch (Exception) { }
                     break;
                 case 2:
+                    formsPlot.Plot.AddScatterPoints(xAxisData, yAxisData);
+                    formsPlot.Plot.Title(
+                            $"{scan.Name}\nRange: {yAxisData.Max() - yAxisData.Min()}   3Sigma = { XferHelper.Zed.threeSigma(yAxisData)}", false);
                     break;
                 case 3:
-                    var cmap = ScottPlot.Drawing.Colormap.Viridis;
-                    var cb = formsPlot.Plot.AddColorbar(cmap);
-                    double maxH = zAxisData.Max();
-                    var ticksInfo = XferHelper.Zed.getTicks(zAxisData);
-                    cb.AddTicks(ticksInfo.Item1, ticksInfo.Item2);
-                    for (int i = 0; i < scan.Data.Count; i++)
+                    try
                     {
-                        double colorFraction = zAxisData[i] / maxH;
-                        System.Drawing.Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
-                        formsPlot.Plot.AddPoint(xAxisData[i], yAxisData[i], c);
+                        var cmap = ScottPlot.Drawing.Colormap.Viridis;
+                        var cb = formsPlot.Plot.AddColorbar(cmap);
+                        double maxH = zAxisData.Max();
+                        var ticksInfo = XferHelper.Zed.getTicks(zAxisData);
+                        cb.AddTicks(ticksInfo.Item1, ticksInfo.Item2);
+                        for (int i = 0; i < scan.Data.Count; i++)
+                        {
+                            double colorFraction = zAxisData[i] / maxH;
+                            System.Drawing.Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
+                            formsPlot.Plot.AddPoint(xAxisData[i], yAxisData[i], c);
+                        }
+                        formsPlot.Plot.Title(
+                            $"{scan.Name}\nRange: {zAxisData.Max() - zAxisData.Min()}   3Sigma = { XferHelper.Zed.threeSigma(zAxisData)}", false);
                     }
-                    formsPlot.Refresh();
+                    catch (Exception) { }
                     break;
                 default:
                     break;
             }
+            formsPlot.Refresh();
         }
 
         private void FlipAxis(ref double[] data)
@@ -122,23 +144,19 @@ namespace XferSuite.XYZscan
                 {
                     double min = Math.Round(data[i].Min(), 3);
                     double max = Math.Round(data[i].Max(), 3);
-                    string stats = max > min ? $" Range: {max - min}     Median = {XferHelper.Zed.median(data[i])}     3Sigma = {XferHelper.Zed.threeSigma(data[i])}" : "";
                     switch (i)
                     {
                         case 0:
                             toolStripTextBoxMinX.Text = min.ToString();
                             toolStripTextBoxMaxX.Text = max.ToString();
-                            toolStripLabelStatsX.Text = stats;
                             break;
                         case 1:
                             toolStripTextBoxMinY.Text = min.ToString();
                             toolStripTextBoxMaxY.Text = max.ToString();
-                            toolStripLabelStatsY.Text = stats;
                             break;
                         case 2:
                             toolStripTextBoxMinZ.Text = min.ToString();
                             toolStripTextBoxMaxZ.Text = max.ToString();
-                            toolStripLabelStatsZ.Text = stats;
                             break;
                     }
                 }
@@ -194,7 +212,7 @@ namespace XferSuite.XYZscan
 
         private void toolStripButtonApply_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void toolStripButtonFlip_Click(object sender, EventArgs e)
