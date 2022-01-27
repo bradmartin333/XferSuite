@@ -291,12 +291,11 @@
             // 
             this.toolStripButtonFlipX.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonFlipX.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFlipX.Image")));
-            this.toolStripButtonFlipX.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonFlipX.Name = "toolStripButtonFlipX";
             this.toolStripButtonFlipX.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonFlipX.Tag = "0";
             this.toolStripButtonFlipX.Text = "Flip";
-            this.toolStripButtonFlipX.Click += new System.EventHandler(this.toolStripButtonFlip_Click);
+            this.toolStripButtonFlipX.Click += new System.EventHandler(this.toolStripButtonFlipX_Click);
             // 
             // toolStripLabel4
             // 
@@ -379,7 +378,7 @@
             this.toolStripButtonFlipY.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonFlipY.Tag = "1";
             this.toolStripButtonFlipY.Text = "Flip";
-            this.toolStripButtonFlipY.Click += new System.EventHandler(this.toolStripButtonFlip_Click);
+            this.toolStripButtonFlipY.Click += new System.EventHandler(this.toolStripButtonFlipY_Click);
             // 
             // toolStripLabel6
             // 
@@ -463,7 +462,7 @@
             this.toolStripButtonFlipZ.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonFlipZ.Tag = "2";
             this.toolStripButtonFlipZ.Text = "Flip";
-            this.toolStripButtonFlipZ.Click += new System.EventHandler(this.toolStripButtonFlip_Click);
+            this.toolStripButtonFlipZ.Click += new System.EventHandler(this.toolStripButtonFlipZ_Click);
             // 
             // toolStripLabel9
             // 

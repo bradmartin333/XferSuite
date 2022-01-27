@@ -23,6 +23,9 @@ namespace XferSuite
             }
         }
 
+        public bool FlipX { get; set; } = false;
+        public bool FlipY { get; set; } = false;
+        public bool FlipZ { get; set; } = false;
         private string Path { get; set; }
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private FormsPlot[] Plots { get; set; }
@@ -114,10 +117,9 @@ namespace XferSuite
             double[] xAxisData = Zed.getAxis(data, comboX.SelectedIndex);
             double[] yAxisData = Zed.getAxis(data, comboY.SelectedIndex);
             double[] zAxisData = Zed.getAxis(data, comboZ.SelectedIndex);
-            if (toolStripButtonFlipX.Checked) FlipAxis(ref xAxisData);
-            if (toolStripButtonFlipY.Checked) FlipAxis(ref yAxisData);
-            if (toolStripButtonFlipZ.Checked) FlipAxis(ref zAxisData);
-
+            if (FlipX) FlipAxis(ref xAxisData);
+            if (FlipY) FlipAxis(ref yAxisData);
+            if (FlipZ) FlipAxis(ref zAxisData);
             int numAxes = 0;
             foreach (ToolStripComboBox cbx in ComboBoxes)
                 if (cbx.SelectedIndex > 0) numAxes++;
@@ -304,19 +306,24 @@ namespace XferSuite
             
         }
 
-        private void toolStripButtonFlip_Click(object sender, EventArgs e)
+        private void toolStripButtonFlipX_Click(object sender, EventArgs e)
         {
-            ToolStripButton button = (ToolStripButton)sender;
-            if (!button.Checked)
-            {
-                button.BackColor = System.Drawing.Color.LightGreen;
-                button.Checked = true;
-            }            
-            else
-            {
-                button.BackColor = System.Drawing.SystemColors.Control;
-                button.Checked = false;
-            }
+            FlipX = !FlipX;
+            ((ToolStripButton)sender).BackColor = FlipX ? System.Drawing.Color.LightGreen : System.Drawing.SystemColors.Control;
+            MakePlots();
+        }
+
+        private void toolStripButtonFlipY_Click(object sender, EventArgs e)
+        {
+            FlipY = !FlipY;
+            ((ToolStripButton)sender).BackColor = FlipY ? System.Drawing.Color.LightGreen : System.Drawing.SystemColors.Control;
+            MakePlots();
+        }
+
+        private void toolStripButtonFlipZ_Click(object sender, EventArgs e)
+        {
+            FlipZ = !FlipZ;
+            ((ToolStripButton)sender).BackColor = FlipZ ? System.Drawing.Color.LightGreen : System.Drawing.SystemColors.Control;
             MakePlots();
         }
     }

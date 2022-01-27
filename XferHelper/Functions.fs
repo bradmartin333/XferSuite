@@ -287,6 +287,7 @@ module Zed =
         | 3 -> data |> Array.map (fun x -> x.Z)
         | 4 -> data |> Array.map (fun x -> x.H)
         | 5 -> data |> Array.map (fun x -> x.I)
+        | 6 -> data |> Array.map (fun x -> x.Z + x.H)
         | _ -> [| 0.0 |]
 
     let threeSigma (data: float []) =
