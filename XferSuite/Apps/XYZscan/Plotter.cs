@@ -10,10 +10,10 @@ namespace XferSuite.XYZscan
 {
     public partial class Plotter : Form
     {
-        public string Path { get; set; }
-        public List<Scan> Scans { get; set; } = new List<Scan>();
-        public FormsPlot[] Plots { get; set; }
-        public ToolStripComboBox[] ComboBoxes { get; set; }
+        private string Path { get; set; }
+        private List<Scan> Scans { get; set; } = new List<Scan>();
+        private FormsPlot[] Plots { get; set; }
+        private ToolStripComboBox[] ComboBoxes { get; set; }
 
         public Plotter(string filePath)
         {
@@ -31,7 +31,7 @@ namespace XferSuite.XYZscan
             MakeList();
         }
 
-        public void MakeList()
+        private void MakeList()
         {
             ProgressBar.Style = ProgressBarStyle.Marquee;
             ProgressBar.MarqueeAnimationSpeed = 100;
@@ -75,6 +75,7 @@ namespace XferSuite.XYZscan
             double[] xAxisData = XferHelper.Zed.getAxis(scan.Data.ToArray(), comboX.SelectedIndex);
             double[] yAxisData = XferHelper.Zed.getAxis(scan.Data.ToArray(), comboY.SelectedIndex);
             double[] zAxisData = XferHelper.Zed.getAxis(scan.Data.ToArray(), comboZ.SelectedIndex);
+            UpdateToolbars(new double[][] { xAxisData, yAxisData, zAxisData });
 
             switch (numAxes)
             {
@@ -100,6 +101,33 @@ namespace XferSuite.XYZscan
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void UpdateToolbars(double[][] data)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (data[i].Length > 3)
+                {
+                    string min = Math.Round(data[i].Min(), 3).ToString();
+                    string max = Math.Round(data[i].Max(), 3).ToString();
+                    switch (i)
+                    {
+                        case 0:
+                            toolStripTextBoxMinX.Text = min;
+                            toolStripTextBoxMaxX.Text = max;
+                            break;
+                        case 1:
+                            toolStripTextBoxMinY.Text = min;
+                            toolStripTextBoxMaxY.Text = max;
+                            break;
+                        case 2:
+                            toolStripTextBoxMinZ.Text = min;
+                            toolStripTextBoxMaxZ.Text = max;
+                            break;
+                    }
+                }
             }
         }
 
