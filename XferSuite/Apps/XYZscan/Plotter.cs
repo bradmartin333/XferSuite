@@ -41,7 +41,16 @@ namespace XferSuite.XYZscan
 
         private void Olv_SelectionChanged(object sender, EventArgs e)
         {
-            FastDataListView olv = (FastDataListView)sender;
+            MakePlots();
+        }
+
+        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MakePlots();
+        }
+
+        private void MakePlots()
+        {
             if (olv.SelectedIndices.Count <= 4)
             {
                 for (int i = 0; i < olv.SelectedObjects.Count; i++)
@@ -54,16 +63,39 @@ namespace XferSuite.XYZscan
         private void CreatePlot(FormsPlot formsPlot, Scan scan)
         {
             formsPlot.Plot.Clear();
-            var cmap = ScottPlot.Drawing.Colormap.Viridis;
-            formsPlot.Plot.AddColorbar(cmap);
-            double maxH = scan.Data.Select(x => x.H).Max();
-            foreach (XferHelper.Zed.Position p in scan.Data)
+            int numAxes = 0;
+            foreach (ToolStripComboBox cbx in ComboBoxes)
+                if (cbx.SelectedIndex > 0) numAxes++;
+
+            double[] xAxisData = XferHelper.Zed.getAxis(scan.Data.ToArray(), comboX.SelectedIndex);
+            double[] yAxisData = XferHelper.Zed.getAxis(scan.Data.ToArray(), comboY.SelectedIndex);
+            double[] zAxisData = XferHelper.Zed.getAxis(scan.Data.ToArray(), comboZ.SelectedIndex);
+
+            switch (numAxes)
             {
-                double colorFraction = p.H / maxH;
-                System.Drawing.Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
-                formsPlot.Plot.AddPoint(p.X, p.Y, c);
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    var cmap = ScottPlot.Drawing.Colormap.Viridis;
+                    var cb = formsPlot.Plot.AddColorbar(cmap);
+                    double maxH = zAxisData.Max();
+                    var ticksInfo = XferHelper.Zed.getTicks(zAxisData);
+                    cb.AddTicks(ticksInfo.Item1, ticksInfo.Item2);
+                    for (int i = 0; i < scan.Data.Count; i++)
+                    {
+                        double colorFraction = zAxisData[i] / maxH;
+                        System.Drawing.Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
+                        formsPlot.Plot.AddPoint(xAxisData[i], yAxisData[i], c);
+                    }
+                    formsPlot.Refresh();
+                    break;
+                default:
+                    break;
             }
-            formsPlot.Refresh();
         }
 
         private void FindScans()

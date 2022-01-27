@@ -265,7 +265,7 @@ module Zed =
         let Time = System.DateTime.Parse(columns.[0])
         let X = float columns.[1]
         let Y = float columns.[2]
-        let mutable H = float columns.[3]
+        let mutable H = float columns.[3] * 1e3
         if columns.[3] = "NaN" then H <- 0.0
         let mutable Z = 0.0
         let mutable I = 0.0
@@ -282,15 +282,13 @@ module Zed =
           I = I }
 
     let getAxis (data: Position []) (axis: int) =
-        let output =
-            if axis = 0 then
-                data |> Array.map (fun x -> x.X)
-            elif axis = 1 then
-                data |> Array.map (fun x -> x.Y)
-            else
-                data |> Array.map (fun x -> x.Z)
-
-        output
+        match axis with
+        | 1 -> data |> Array.map (fun x -> x.X)
+        | 2 -> data |> Array.map (fun x -> x.Y)
+        | 3 -> data |> Array.map (fun x -> x.Z)
+        | 4 -> data |> Array.map (fun x -> x.H)
+        | 5 -> data |> Array.map (fun x -> x.I)
+        | _ -> [| 0.0 |]
 
     let dataLineFit (data: Position []) (axis: int) =
         let Z = getAxis data 2
@@ -309,6 +307,13 @@ module Zed =
             observedScatter |> Array.map (fun x -> x.Y)
 
         System.Math.Round(MathNet.Numerics.GoodnessOfFit.RSquared(model, observed), 3)
+
+    let getTicks (data: double []) =
+        let labels =
+            MathNet.Numerics.Statistics.ArrayStatistics.FiveNumberSummaryInplace(data)
+            |> Array.map (fun x -> string (Math.Round(x, 3)))
+
+        ([| 0.0; 0.25; 0.5; 0.75; 1.0 |], labels)
 
     let bounds (data: Position []) =
         let x = getAxis data 0
