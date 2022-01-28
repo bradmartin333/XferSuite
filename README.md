@@ -4,8 +4,7 @@
 
 ![image](/XferSuite/Main.png)
 
-A toolbox for MTP ☺
-Open the settings app to tinker with other open apps and check for updates
+A toolbox for MTP
 ___
 ### Inlinepositions
 Automatic graphical and statistical data parsing for Inlinepositions files.
@@ -25,3 +24,7 @@ This is the solution!
 ___
 ### Position Calculator
 Quick way of finding position deltas for 9 axes in CSV format
+___
+### Settings
+Click on an active app window to tinker with settings.
+Click the update banner to go to the download site.
