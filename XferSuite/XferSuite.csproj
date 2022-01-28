@@ -267,6 +267,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <None Include="Resources\iconmonstr-fullscreen-1-24.png" />
+    <None Include="Resources\help.txt" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -296,6 +297,7 @@
     <Error Condition="!Exists('packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Accord.3.8.0\build\Accord.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)\README.md" "$(TargetDir)" /Y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

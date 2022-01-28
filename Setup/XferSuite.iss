@@ -53,7 +53,6 @@ Source: "S:\XferSuite\XferSuite\bin\Release\OxyPlot.dll"; DestDir: "{app}"; Flag
 Source: "S:\XferSuite\XferSuite\bin\Release\OxyPlot.WindowsForms.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\OxyPlot.WindowsForms.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\OxyPlot.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "S:\XferSuite\XferSuite\bin\Release\README.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\ScottPlot.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\ScottPlot.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\ScottPlot.xml"; DestDir: "{app}"; Flags: ignoreversion
