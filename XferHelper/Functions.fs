@@ -4,7 +4,6 @@ open MathNet.Numerics.Statistics
 open MathNet.Numerics.Distributions
 open System.IO
 open System
-open OxyPlot.Series
 
 module Stats =
     let mean (data: float []) = Math.Round(Statistics.Mean(data), 3)
@@ -288,52 +287,26 @@ module Zed =
         | 3 -> data |> Array.map (fun x -> x.Z)
         | 4 -> data |> Array.map (fun x -> x.H)
         | 5 -> data |> Array.map (fun x -> x.I)
+        | 6 -> data |> Array.map (fun x -> x.Z + x.H)
         | _ -> [| 0.0 |]
 
-    let dataLineFit (data: Position []) (axis: int) =
-        let Z = getAxis data 2
-        let Q = getAxis data axis
-        MathNet.Numerics.Fit.Line(Q, Z)
+    let filterData (data: Position[]) (axis: int) (min: float) (max: float) =
+        if axis > 0 && (min <> 0.0 || max <> 0.0) then
+            match axis with
+            | 1 -> data |> Array.filter (fun x -> x.X >= min && max >= x.X)
+            | 2 -> data |> Array.filter (fun x -> x.Y >= min && max >= x.Y)
+            | 3 -> data |> Array.filter (fun x -> x.Z >= min && max >= x.Z)
+            | 5 -> data |> Array.filter (fun x -> x.I >= min && max >= x.I)
+            | _ -> data
+        else
+            data
 
-    let scatterPolynomial (scatter: ScatterPoint []) =
-        let x = scatter |> Array.map (fun x -> x.X)
-        let y = scatter |> Array.map (fun x -> x.Y)
-        MathNet.Numerics.Fit.Polynomial(x, y, 3)
-
-    let rSquared (modelScatter: OxyPlot.DataPoint [], observedScatter: ScatterPoint []) =
-        let model = modelScatter |> Array.map (fun x -> x.Y)
-
-        let observed =
-            observedScatter |> Array.map (fun x -> x.Y)
-
-        System.Math.Round(MathNet.Numerics.GoodnessOfFit.RSquared(model, observed), 3)
-
-    let getTicks (data: double []) =
-        let labels =
-            MathNet.Numerics.Statistics.ArrayStatistics.FiveNumberSummaryInplace(data)
-            |> Array.map (fun x -> string (Math.Round(x, 3)))
-
-        ([| 0.0; 0.25; 0.5; 0.75; 1.0 |], labels)
-
-    let bounds (data: Position []) =
-        let x = getAxis data 0
-        let y = getAxis data 1
-        let z = getAxis data 2
-
-        [| x.Minimum()
-           x.Maximum()
-           y.Minimum()
-           y.Maximum()
-           z.Minimum()
-           z.Maximum() |]
-
-    let shrinkBounds (data: float [], factor: float) =
-        [| data.[0] * float (1. + factor)
-           data.[1] * float (1. - factor)
-           data.[2] * float (1. + factor)
-           data.[3] * float (1. - factor)
-           data.[4]
-           data.[5] |]
+    let threeSigma (data: float []) =
+        Math.Round(
+            3.0
+            * MathNet.Numerics.Statistics.Statistics.StandardDeviation(data),
+            3
+        )
 
     type Vec2 = { X: float; Y: float }
 
@@ -341,7 +314,7 @@ module Zed =
 
     type Vec3 = { X: float; Y: float; Z: float }
 
-    let posToVec3 (p: Position) = { X = p.X; Y = p.Y; Z = p.Z }
+    let posToVec3 (p: Position) = { X = p.X; Y = p.Y; Z = p.H }
 
     let nVec3 (a: float) = { X = a; Y = a; Z = a }
 
@@ -495,12 +468,16 @@ module Zed =
 
         out
 
-    let dataPlaneFit (data: Position []) =
+    let getPlane (data: Position []) =
         let vecs = data |> Array.map (fun x -> posToVec3 x)
         let n = float vecs.Length
 
         if n < 3. then
-            (0., 0.)
+            let p: Plane =
+                { Centroid = zeroVec3
+                  Normal = normalizeVec3 (weightedDir defaultCovariance) }
+
+            p
         else
             let mutable sum = zeroVec3
 
@@ -521,8 +498,11 @@ module Zed =
                 { Centroid = centroid
                   Normal = normalizeVec3 (weightedDir covar) }
 
-            let theta = thetaDegrees p
-            (theta.X, theta.Y)
+            p
+
+    let dataPlaneFit (p: Plane) =
+        let theta = thetaDegrees p
+        (theta.X, theta.Y)
 
 module Report =
     type State =
