@@ -38,7 +38,7 @@
             this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtb.Location = new System.Drawing.Point(0, 0);
             this.rtb.Name = "rtb";
-            this.rtb.Size = new System.Drawing.Size(800, 450);
+            this.rtb.Size = new System.Drawing.Size(500, 299);
             this.rtb.TabIndex = 0;
             this.rtb.Text = "";
             // 
@@ -46,9 +46,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(500, 299);
             this.Controls.Add(this.rtb);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(516, 338);
             this.Name = "HelpForm";
             this.Text = "XferSuite Help";
             this.ResumeLayout(false);
