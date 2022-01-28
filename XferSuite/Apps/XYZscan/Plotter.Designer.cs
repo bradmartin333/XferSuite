@@ -85,6 +85,12 @@
             this.toolStripTextBoxCustomMaxZ = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonApplyZ = new System.Windows.Forms.ToolStripButton();
             this.checkBoxRemoveAngle = new System.Windows.Forms.CheckBox();
+            this.numX = new System.Windows.Forms.ToolStripLabel();
+            this.numY = new System.Windows.Forms.ToolStripLabel();
+            this.numZ = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButtonResetX = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonResetY = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonResetZ = new System.Windows.Forms.ToolStripButton();
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -279,7 +285,9 @@
             this.toolStripTextBoxCustomMinX,
             this.toolStripLabel5,
             this.toolStripTextBoxCustomMaxX,
-            this.toolStripButtonApplyX});
+            this.toolStripButtonApplyX,
+            this.toolStripButtonResetX,
+            this.numX});
             this.toolStripX.Location = new System.Drawing.Point(390, 0);
             this.toolStripX.Name = "toolStripX";
             this.toolStripX.Size = new System.Drawing.Size(841, 25);
@@ -352,9 +360,10 @@
             // 
             // toolStripTextBoxCustomMinX
             // 
+            this.toolStripTextBoxCustomMinX.AutoSize = false;
             this.toolStripTextBoxCustomMinX.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxCustomMinX.Name = "toolStripTextBoxCustomMinX";
-            this.toolStripTextBoxCustomMinX.Size = new System.Drawing.Size(100, 25);
+            this.toolStripTextBoxCustomMinX.Size = new System.Drawing.Size(75, 25);
             // 
             // toolStripLabel5
             // 
@@ -364,9 +373,10 @@
             // 
             // toolStripTextBoxCustomMaxX
             // 
+            this.toolStripTextBoxCustomMaxX.AutoSize = false;
             this.toolStripTextBoxCustomMaxX.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxCustomMaxX.Name = "toolStripTextBoxCustomMaxX";
-            this.toolStripTextBoxCustomMaxX.Size = new System.Drawing.Size(100, 25);
+            this.toolStripTextBoxCustomMaxX.Size = new System.Drawing.Size(75, 25);
             // 
             // toolStripButtonApplyX
             // 
@@ -394,7 +404,9 @@
             this.toolStripTextBoxCustomMinY,
             this.toolStripLabel7,
             this.toolStripTextBoxCustomMaxY,
-            this.toolStripButtonApplyY});
+            this.toolStripButtonApplyY,
+            this.toolStripButtonResetY,
+            this.numY});
             this.toolStripY.Location = new System.Drawing.Point(390, 29);
             this.toolStripY.Name = "toolStripY";
             this.toolStripY.Size = new System.Drawing.Size(841, 25);
@@ -467,9 +479,10 @@
             // 
             // toolStripTextBoxCustomMinY
             // 
+            this.toolStripTextBoxCustomMinY.AutoSize = false;
             this.toolStripTextBoxCustomMinY.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxCustomMinY.Name = "toolStripTextBoxCustomMinY";
-            this.toolStripTextBoxCustomMinY.Size = new System.Drawing.Size(100, 25);
+            this.toolStripTextBoxCustomMinY.Size = new System.Drawing.Size(75, 25);
             // 
             // toolStripLabel7
             // 
@@ -479,9 +492,10 @@
             // 
             // toolStripTextBoxCustomMaxY
             // 
+            this.toolStripTextBoxCustomMaxY.AutoSize = false;
             this.toolStripTextBoxCustomMaxY.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxCustomMaxY.Name = "toolStripTextBoxCustomMaxY";
-            this.toolStripTextBoxCustomMaxY.Size = new System.Drawing.Size(100, 25);
+            this.toolStripTextBoxCustomMaxY.Size = new System.Drawing.Size(75, 25);
             // 
             // toolStripButtonApplyY
             // 
@@ -509,7 +523,9 @@
             this.toolStripTextBoxCustomMinZ,
             this.toolStripLabel10,
             this.toolStripTextBoxCustomMaxZ,
-            this.toolStripButtonApplyZ});
+            this.toolStripButtonApplyZ,
+            this.toolStripButtonResetZ,
+            this.numZ});
             this.toolStripZ.Location = new System.Drawing.Point(390, 54);
             this.toolStripZ.Name = "toolStripZ";
             this.toolStripZ.Size = new System.Drawing.Size(841, 25);
@@ -582,9 +598,10 @@
             // 
             // toolStripTextBoxCustomMinZ
             // 
+            this.toolStripTextBoxCustomMinZ.AutoSize = false;
             this.toolStripTextBoxCustomMinZ.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxCustomMinZ.Name = "toolStripTextBoxCustomMinZ";
-            this.toolStripTextBoxCustomMinZ.Size = new System.Drawing.Size(100, 25);
+            this.toolStripTextBoxCustomMinZ.Size = new System.Drawing.Size(75, 25);
             // 
             // toolStripLabel10
             // 
@@ -594,9 +611,10 @@
             // 
             // toolStripTextBoxCustomMaxZ
             // 
+            this.toolStripTextBoxCustomMaxZ.AutoSize = false;
             this.toolStripTextBoxCustomMaxZ.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxCustomMaxZ.Name = "toolStripTextBoxCustomMaxZ";
-            this.toolStripTextBoxCustomMaxZ.Size = new System.Drawing.Size(100, 25);
+            this.toolStripTextBoxCustomMaxZ.Size = new System.Drawing.Size(75, 25);
             // 
             // toolStripButtonApplyZ
             // 
@@ -627,6 +645,51 @@
             this.checkBoxRemoveAngle.TabIndex = 12;
             this.checkBoxRemoveAngle.UseVisualStyleBackColor = true;
             this.checkBoxRemoveAngle.CheckedChanged += new System.EventHandler(this.checkBoxRemoveAngle_CheckedChanged);
+            // 
+            // numX
+            // 
+            this.numX.Name = "numX";
+            this.numX.Size = new System.Drawing.Size(0, 22);
+            // 
+            // numY
+            // 
+            this.numY.Name = "numY";
+            this.numY.Size = new System.Drawing.Size(0, 22);
+            // 
+            // numZ
+            // 
+            this.numZ.Name = "numZ";
+            this.numZ.Size = new System.Drawing.Size(0, 22);
+            // 
+            // toolStripButtonResetX
+            // 
+            this.toolStripButtonResetX.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonResetX.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonResetX.Image")));
+            this.toolStripButtonResetX.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonResetX.Name = "toolStripButtonResetX";
+            this.toolStripButtonResetX.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonResetX.Text = "Reset";
+            this.toolStripButtonResetX.Click += new System.EventHandler(this.toolStripButtonResetX_Click);
+            // 
+            // toolStripButtonResetY
+            // 
+            this.toolStripButtonResetY.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonResetY.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonResetY.Image")));
+            this.toolStripButtonResetY.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonResetY.Name = "toolStripButtonResetY";
+            this.toolStripButtonResetY.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonResetY.Text = "Reset";
+            this.toolStripButtonResetY.Click += new System.EventHandler(this.toolStripButtonResetY_Click);
+            // 
+            // toolStripButtonResetZ
+            // 
+            this.toolStripButtonResetZ.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonResetZ.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonResetZ.Image")));
+            this.toolStripButtonResetZ.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonResetZ.Name = "toolStripButtonResetZ";
+            this.toolStripButtonResetZ.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonResetZ.Text = "Reset";
+            this.toolStripButtonResetZ.Click += new System.EventHandler(this.toolStripButtonResetZ_Click);
             // 
             // Plotter
             // 
@@ -709,5 +772,11 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonApplyY;
         private System.Windows.Forms.ToolStripButton toolStripButtonApplyZ;
         private System.Windows.Forms.CheckBox checkBoxRemoveAngle;
+        private System.Windows.Forms.ToolStripLabel numX;
+        private System.Windows.Forms.ToolStripLabel numY;
+        private System.Windows.Forms.ToolStripLabel numZ;
+        private System.Windows.Forms.ToolStripButton toolStripButtonResetX;
+        private System.Windows.Forms.ToolStripButton toolStripButtonResetY;
+        private System.Windows.Forms.ToolStripButton toolStripButtonResetZ;
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -21,6 +22,7 @@ namespace XferSuite
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private FormsPlot[] Plots { get; set; }
         private ToolStripComboBox[] ComboBoxes { get; set; }
+        private ToolStripLabel[] toolStripLabels { get; set; }
         private double[] CustomAxes { get; set; } = new double[6];
 
         #endregion
@@ -37,6 +39,8 @@ namespace XferSuite
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
             foreach (ToolStripComboBox comboBox in ComboBoxes)
                 comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
+
+            toolStripLabels = new ToolStripLabel[] { numX, numY, numZ };
 
             Path = filePath;
             Show();
@@ -168,18 +172,30 @@ namespace XferSuite
             ClearAxisLabels(formsPlot.Plot);
 
             Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
+            double numPoints = data.Length;
             if (CustomAxes.Sum() != 0)
             {
                 try
                 {
                     data = Zed.filterData(data, comboX.SelectedIndex, CustomAxes[0], CustomAxes[1]);
+                    if (data.Length != numPoints) numX.Text = (data.Length / numPoints).ToString("P", CultureInfo.InvariantCulture);
+                    numPoints = data.Length;
                     data = Zed.filterData(data, comboY.SelectedIndex, CustomAxes[2], CustomAxes[3]);
+                    if (data.Length != numPoints) numY.Text = (data.Length / numPoints).ToString("P", CultureInfo.InvariantCulture);
+                    numPoints = data.Length;
                     data = Zed.filterData(data, comboZ.SelectedIndex, CustomAxes[4], CustomAxes[5]);
+                    if (data.Length != numPoints) numZ.Text = (data.Length / numPoints).ToString("P", CultureInfo.InvariantCulture);
+                    numPoints = data.Length;
                 }
                 catch (Exception)
                 {
                     MessageBox.Show("Invalid custom axes", "XferSuite");
                 }
+            }
+            else
+            {
+                foreach (ToolStripLabel label in toolStripLabels)
+                    label.Text = "";
             }
 
             if (3 > data.Length)
@@ -203,8 +219,12 @@ namespace XferSuite
                 {
                     int idx = int.Parse(comboBox.Tag.ToString());
                     if (CustomAxes[idx * 2] != 0 || CustomAxes[(idx * 2) + 1] != 0)
-                        data = data.Where(x => (idx == 6 ? x.Z : 0.0) + x.H >= CustomAxes[idx * 2] && 
+                    {
+                        data = data.Where(x => (idx == 6 ? x.Z : 0.0) + x.H >= CustomAxes[idx * 2] &&
                             CustomAxes[(idx * 2) + 1] > (idx == 6 ? x.Z : 0.0) + x.H).ToArray();
+                        if (data.Length != numPoints) 
+                            toolStripLabels[idx].Text = (data.Length / numPoints).ToString("P", CultureInfo.InvariantCulture);
+                    }
                 }
             }
 
@@ -380,10 +400,8 @@ namespace XferSuite
 
         #region Plot Customization
 
-        private void toolStripButtonApply_Click(object sender, EventArgs e)
+        private void CustomizeAxis(int axis)
         {
-            ToolStripButton button = (ToolStripButton)sender;
-            int axis = int.Parse(button.Tag.ToString());
             double min = 0.0;
             double max = 0.0;
             bool parseMin = false;
@@ -430,6 +448,31 @@ namespace XferSuite
             }
         }
 
+        private void toolStripButtonApply_Click(object sender, EventArgs e)
+        {
+            CustomizeAxis(int.Parse(((ToolStripButton)sender).Tag.ToString()));
+        }
+
+        private void toolStripButtonResetX_Click(object sender, EventArgs e)
+        {
+            toolStripTextBoxCustomMinX.Text = "";
+            toolStripTextBoxCustomMaxX.Text = "";
+            CustomizeAxis(0);
+        }
+
+        private void toolStripButtonResetY_Click(object sender, EventArgs e)
+        {
+            toolStripTextBoxCustomMinY.Text = "";
+            toolStripTextBoxCustomMaxY.Text = "";
+            CustomizeAxis(1);
+        }
+
+        private void toolStripButtonResetZ_Click(object sender, EventArgs e)
+        {
+            toolStripTextBoxCustomMinZ.Text = "";
+            toolStripTextBoxCustomMaxZ.Text = "";
+            CustomizeAxis(2);
+        }
         private void FlipAxis(ref double[] data)
         {
             double max = data.Max();
