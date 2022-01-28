@@ -180,7 +180,6 @@ namespace XferSuite
                     default:
                         break;
                 }
-                formsPlot.Refresh();
             }
             catch (Exception)
             {
@@ -199,8 +198,9 @@ namespace XferSuite
         private void FlipAxis(ref double[] data)
         {
             double max = data.Max();
+            double min = data.Min();
             for (int i = 0; i < data.Length; i++)
-                data[i] = Math.Abs(data[i] - max);
+                data[i] = Math.Abs(data[i] - max) - min;
         }
 
         private void UpdateToolbars(List<double[]> bounds)
