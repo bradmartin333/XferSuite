@@ -29,13 +29,25 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HelpForm));
+            this.rtb = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
+            // 
+            // rtb
+            // 
+            this.rtb.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtb.Location = new System.Drawing.Point(0, 0);
+            this.rtb.Name = "rtb";
+            this.rtb.Size = new System.Drawing.Size(800, 450);
+            this.rtb.TabIndex = 0;
+            this.rtb.Text = "";
             // 
             // HelpForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.rtb);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "HelpForm";
             this.Text = "XferSuite Help";
@@ -44,5 +56,7 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.RichTextBox rtb;
     }
 }

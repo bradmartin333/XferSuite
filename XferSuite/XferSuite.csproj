@@ -296,7 +296,6 @@
     <Error Condition="!Exists('packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Accord.3.8.0\build\Accord.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy "$(SolutionDir)\README.md" "$(TargetDir)" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

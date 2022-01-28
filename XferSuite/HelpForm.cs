@@ -7,6 +7,7 @@ namespace XferSuite
         public HelpForm()
         {
             InitializeComponent();
+            rtb.Text = System.IO.File.ReadAllText("README.md");
         }
     }
 }
