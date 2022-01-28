@@ -12,6 +12,8 @@ namespace XferSuite
 {
     public partial class Plotter : Form
     {
+        #region User Parameters and Globals
+
         private bool _RemoveAngle = true;
         [Category("User Parameters")]
         public bool RemoveAngle
@@ -31,6 +33,8 @@ namespace XferSuite
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private FormsPlot[] Plots { get; set; }
         private ToolStripComboBox[] ComboBoxes { get; set; }
+
+        #endregion
 
         public Plotter(string filePath)
         {
@@ -53,6 +57,8 @@ namespace XferSuite
             MakeList();
         }
 
+        #region Log Parsing
+
         private void MakeList()
         {
             ProgressBar.Style = ProgressBarStyle.Marquee;
@@ -65,6 +71,57 @@ namespace XferSuite
             ProgressBar.Style = ProgressBarStyle.Continuous;
             ProgressBar.MarqueeAnimationSpeed = 0;
         }
+
+        private void FindScans()
+        {
+            Scans.Clear();
+            int scanIdx = -1;
+            StreamReader reader = new StreamReader(Path);
+            while (reader.Peek() != -1)
+            {
+                Application.DoEvents();
+                var line = reader.ReadLine();
+                _ = reader.Peek();
+                if (line.Contains("NEWSCAN"))
+                {
+                    scanIdx += 1;
+                    var info = line.Split('\t');
+                    var thisScan = new Scan()
+                    {
+                        Index = scanIdx + 1,
+                        ShortDate = DateTime.Parse(info[0]).ToShortDateString(),
+                        Time = DateTime.Parse(info[0]).ToShortTimeString(),
+                        Name = info[2]
+                    };
+                    if (info.Length > 3)
+                    {
+                        thisScan.Temp = double.Parse(info[3]);
+                        thisScan.RH = double.Parse(info[4]);
+                    }
+                    if (info.Length > 5)
+                    {
+                        thisScan.ScanSpeed = int.Parse(info[5]);
+                        thisScan.NumPasses = int.Parse(info[6]);
+                        thisScan.Threshold = int.Parse(info[7]);
+                    }
+                    Scans.Add(thisScan);
+                }
+                else
+                    try
+                    {
+                        Scans[scanIdx].Data.Add(Zed.toPosition(line));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(text: $"Invalid File: {ex}", caption: "XYZscan");
+                        return;
+                    }
+            }
+        }
+
+        #endregion
+
+        #region Plot Selection
 
         private void Olv_SelectionChanged(object sender, EventArgs e)
         {
@@ -87,6 +144,8 @@ namespace XferSuite
             toolStripZ.Enabled = comboY.SelectedIndex > 0;
             MakePlots();
         }
+
+
 
         private void MakePlots()
         {
@@ -112,6 +171,10 @@ namespace XferSuite
                 olv.DeselectAll();
             }
         }
+
+        #endregion
+
+        #region Plotting
 
         private double[] CreatePlot(FormsPlot formsPlot, Scan scan)
         {
@@ -195,14 +258,6 @@ namespace XferSuite
             return new double[] {xAxisData.Min(), xAxisData.Max(), yAxisData.Min(), yAxisData.Max(), zAxisData.Min(), zAxisData.Max()};
         }
 
-        private void FlipAxis(ref double[] data)
-        {
-            double max = data.Max();
-            double min = data.Min();
-            for (int i = 0; i < data.Length; i++)
-                data[i] = Math.Abs(data[i] - max) - min;
-        }
-
         private void UpdateToolbars(List<double[]> bounds)
         {
             double[] groupBounds = new double[] { double.MaxValue, double.MinValue, double.MaxValue, double.MinValue, double.MaxValue, double.MinValue };
@@ -219,45 +274,29 @@ namespace XferSuite
             }
             for (int i = 0; i < groupBounds.Length; i += 2)
             {
+                string min = string.Empty;
+                string max = string.Empty;
                 if (groupBounds[i] != double.MaxValue && groupBounds[i + 1] != double.MinValue)
                 {
-                    switch (i/2)
-                    {
-                        case 0:
-                            toolStripTextBoxMinX.Text = Math.Round(groupBounds[i], 3).ToString();
-                            toolStripTextBoxMaxX.Text = Math.Round(groupBounds[i + 1], 3).ToString();
-                            break;
-                        case 1:
-                            toolStripTextBoxMinY.Text = Math.Round(groupBounds[i], 3).ToString();
-                            toolStripTextBoxMaxY.Text = Math.Round(groupBounds[i + 1], 3).ToString();
-                            break;
-                        case 2:
-                            toolStripTextBoxMinZ.Text = Math.Round(groupBounds[i], 3).ToString();
-                            toolStripTextBoxMaxZ.Text = Math.Round(groupBounds[i + 1], 3).ToString();
-                            break;
-                        default:
-                            break;
-                    }
+                    min = Math.Round(groupBounds[i], 3).ToString();
+                    max = Math.Round(groupBounds[i + 1], 3).ToString();
                 }
-                else
+                switch (i/2)
                 {
-                    switch (i / 2)
-                    {
-                        case 0:
-                            toolStripTextBoxMinX.Text = string.Empty;
-                            toolStripTextBoxMaxX.Text = string.Empty;
-                            break;
-                        case 1:
-                            toolStripTextBoxMinY.Text = string.Empty;
-                            toolStripTextBoxMaxY.Text = string.Empty;
-                            break;
-                        case 2:
-                            toolStripTextBoxMinZ.Text = string.Empty;
-                            toolStripTextBoxMaxZ.Text = string.Empty;
-                            break;
-                        default:
-                            break;
-                    }
+                    case 0:
+                        toolStripTextBoxMinX.Text = min;
+                        toolStripTextBoxMaxX.Text = max;
+                        break;
+                    case 1:
+                        toolStripTextBoxMinY.Text = min;
+                        toolStripTextBoxMaxY.Text = max;
+                        break;
+                    case 2:
+                        toolStripTextBoxMinZ.Text = min;
+                        toolStripTextBoxMaxZ.Text = max;
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -314,56 +353,21 @@ namespace XferSuite
             plot.YAxis2.Label("");
         }
 
-        private void FindScans()
-        {
-            Scans.Clear();
-            int scanIdx = -1;
-            StreamReader reader = new StreamReader(Path);
-            while (reader.Peek() != -1)
-            {
-                Application.DoEvents();
-                var line = reader.ReadLine();
-                _ = reader.Peek();
-                if (line.Contains("NEWSCAN"))
-                {
-                    scanIdx += 1;
-                    var info = line.Split('\t');
-                    var thisScan = new Scan()
-                    {
-                        Index = scanIdx + 1,
-                        ShortDate = DateTime.Parse(info[0]).ToShortDateString(),
-                        Time = DateTime.Parse(info[0]).ToShortTimeString(),
-                        Name = info[2]
-                    };
-                    if (info.Length > 3)
-                    {
-                        thisScan.Temp = double.Parse(info[3]);
-                        thisScan.RH = double.Parse(info[4]);
-                    }
-                    if (info.Length > 5)
-                    {
-                        thisScan.ScanSpeed = int.Parse(info[5]);
-                        thisScan.NumPasses = int.Parse(info[6]);
-                        thisScan.Threshold = int.Parse(info[7]);
-                    }
-                    Scans.Add(thisScan);
-                }
-                else
-                    try
-                    {
-                        Scans[scanIdx].Data.Add(Zed.toPosition(line));
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(text: $"Invalid File: {ex}", caption: "XYZscan");
-                        return;
-                    }
-            }
-        }
+        #endregion
+
+        #region Plot Customization
 
         private void toolStripButtonApply_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void FlipAxis(ref double[] data)
+        {
+            double max = data.Max();
+            double min = data.Min();
+            for (int i = 0; i < data.Length; i++)
+                data[i] = Math.Abs(data[i] - max) - min;
         }
 
         private void toolStripButtonFlipX_Click(object sender, EventArgs e)
@@ -386,5 +390,7 @@ namespace XferSuite
             ((ToolStripButton)sender).BackColor = FlipZ ? Color.LightGreen : SystemColors.Control;
             MakePlots();
         }
+
+        #endregion
     }
 }
