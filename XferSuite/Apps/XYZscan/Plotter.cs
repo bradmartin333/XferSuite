@@ -42,6 +42,13 @@ namespace XferSuite
 
             toolStripLabels = new ToolStripLabel[] { numX, numY, numZ };
 
+            ToolTip removeAngleTip = new ToolTip();
+            removeAngleTip.SetToolTip(checkBoxRemoveAngle, 
+"Remove Level:\n" +
+"When checked, the best fit plane of height data is removed\n" +
+"This corrects for chuck level\n" +
+"The best fit plane is removed twice when using custom axes on height data");
+
             Path = filePath;
             Show();
             MakeList();
@@ -222,8 +229,18 @@ namespace XferSuite
                     {
                         data = data.Where(x => (idx == 6 ? x.Z : 0.0) + x.H >= CustomAxes[idx * 2] &&
                             CustomAxes[(idx * 2) + 1] > (idx == 6 ? x.Z : 0.0) + x.H).ToArray();
-                        if (data.Length != numPoints) 
+                        if (data.Length != numPoints)
+                        {
                             toolStripLabels[idx].Text = (data.Length / numPoints).ToString("P", CultureInfo.InvariantCulture);
+                            Zed.Plane plane2 = Zed.getPlane(data);
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                Zed.Position p = data[i];
+                                data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z,
+                                    RemoveAngle ? p.H - Zed.projectPlane(plane2, Zed.posToVec3(data[i])).Z : p.H,
+                                    p.I);
+                            }
+                        }    
                     }
                 }
             }
