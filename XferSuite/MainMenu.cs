@@ -86,13 +86,13 @@ namespace XferSuite
                         form = new CameraViewer();
                         break;
                     case 4:
-                        // Add roux
-                        break;
-                    case 5:
                         form = new MapFlip();
                         break;
-                    case 6:
+                    case 5:
                         form = new PositionCalc();
+                        break;
+                    case 6:
+                        form = new HelpForm();
                         break;
                     default:
                         return;

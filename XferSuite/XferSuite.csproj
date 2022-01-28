@@ -154,6 +154,12 @@
       <DependentUpon>Plotter.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\XYZscan\Scan.cs" />
+    <Compile Include="HelpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HelpForm.Designer.cs">
+      <DependentUpon>HelpForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HourGlass.cs" />
     <Compile Include="MainMenu.cs">
       <SubType>Form</SubType>
@@ -212,6 +218,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\XYZscan\Plotter.resx">
       <DependentUpon>Plotter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HelpForm.resx">
+      <DependentUpon>HelpForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
@@ -286,4 +295,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Accord.3.8.0\build\Accord.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>
