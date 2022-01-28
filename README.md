@@ -4,7 +4,7 @@
 
 ![image](/XferSuite/Main.png)
 
-A toolbox for MTP.
+A toolbox for MTP ☺
 Open the settings app to tinker with other open apps and check for updates
 ___
 ### Inlinepositions
@@ -18,9 +18,6 @@ Load a SEYR report to conert raw data into yields.
 ___
 ### Camera Viewer
 Stream any available camera, use a crosshair, rotate image and save pictures.
-___
-### Pixelator
-Turn an image into CSV data based on edge detection
 ___
 ### Map Flip
 Excel doesn't seem to have a native tool for flipping and rotating grids of data.
