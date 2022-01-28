@@ -69,6 +69,16 @@ namespace XferSuite
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboX.SelectedIndex < 1)
+            {
+                toolStripY.Enabled = false;
+                comboY.SelectedIndex = 0;
+            }
+            if (comboY.SelectedIndex < 1)
+            {
+                toolStripZ.Enabled = false;
+                comboZ.SelectedIndex = 0;
+            }
             toolStripY.Enabled = comboX.SelectedIndex > 0;
             toolStripZ.Enabled = comboY.SelectedIndex > 0;
             MakePlots();
@@ -124,13 +134,13 @@ namespace XferSuite
             foreach (ToolStripComboBox cbx in ComboBoxes)
                 if (cbx.SelectedIndex > 0) numAxes++;
 
-            switch (numAxes)
+            try
             {
-                case 0:
-                    break;
-                case 1:
-                    try
-                    {
+                switch (numAxes)
+                {
+                    case 0:
+                        break;
+                    case 1:
                         (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(xAxisData, min: xAxisData.Min(), max: xAxisData.Max(), binSize: 1);
                         double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
                         var bar = formsPlot.Plot.AddBar(values: counts, positions: leftEdges);
@@ -139,17 +149,13 @@ namespace XferSuite
                         formsPlot.Plot.SetAxisLimits(yMin: 0);
                         formsPlot.Plot.Title(
                             $"{scan.Name}\nRange: {Math.Round(xAxisData.Max() - xAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(xAxisData)}", false);
-                    }
-                    catch (Exception) { }
-                    break;
-                case 2:
-                    formsPlot.Plot.AddScatterPoints(xAxisData, yAxisData);
-                    formsPlot.Plot.Title(
-                            $"{scan.Name}\nRange: {Math.Round(yAxisData.Max() - yAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(yAxisData)}", false);
-                    break;
-                case 3:
-                    try
-                    {
+                        break;
+                    case 2:
+                        formsPlot.Plot.AddScatterPoints(xAxisData, yAxisData);
+                        formsPlot.Plot.Title(
+                                $"{scan.Name}\nRange: {Math.Round(yAxisData.Max() - yAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(yAxisData)}", false);
+                        break;
+                    case 3:
                         double minH = zAxisData.Min();
                         double maxH = zAxisData.Max();
                         for (int i = 0; i < data.Length; i++)
@@ -161,14 +167,23 @@ namespace XferSuite
                         }
                         formsPlot.Plot.Title(
                             $"{scan.Name}\nRange: {Math.Round(zAxisData.Max() - zAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(zAxisData)}", false);
-                    }
-                    catch (Exception) { }
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
+                }
+                formsPlot.Refresh();
+            }
+            catch (Exception)
+            {
+                var msg = formsPlot.Plot.AddAnnotation("Insufficient Data", 10, 10);
+                msg.Font.Size = 24;
+                msg.Shadow = false;
+                msg.BackgroundColor = System.Drawing.Color.Transparent;
+                msg.BorderColor = System.Drawing.Color.Transparent;
+                formsPlot.Plot.Title(
+                    $"{scan.Name}\nRange: N/A   3Sigma = N/A", false);
             }
 
-            formsPlot.Refresh();
             return new double[] {xAxisData.Min(), xAxisData.Max(), yAxisData.Min(), yAxisData.Max(), zAxisData.Min(), zAxisData.Max()};
         }
 
@@ -215,6 +230,26 @@ namespace XferSuite
                             break;
                     }
                 }
+                else
+                {
+                    switch (i / 2)
+                    {
+                        case 0:
+                            toolStripTextBoxMinX.Text = string.Empty;
+                            toolStripTextBoxMaxX.Text = string.Empty;
+                            break;
+                        case 1:
+                            toolStripTextBoxMinY.Text = string.Empty;
+                            toolStripTextBoxMaxY.Text = string.Empty;
+                            break;
+                        case 2:
+                            toolStripTextBoxMinZ.Text = string.Empty;
+                            toolStripTextBoxMaxZ.Text = string.Empty;
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
 
             int numAxes = 0;
@@ -223,8 +258,8 @@ namespace XferSuite
 
             for (int i = 0; i < groupBounds.Length; i += 2)
             {
-                groupBounds[i] = groupBounds[i] * 0.99;
-                groupBounds[i + 1] = groupBounds[i + 1] * 1.01;
+                groupBounds[i] = groupBounds[i];
+                groupBounds[i + 1] = groupBounds[i + 1];
             }
 
             for (int i = 0; i < olv.SelectedObjects.Count; i++)
@@ -250,7 +285,14 @@ namespace XferSuite
                         break;
                 }
 
-                Plots[i].Refresh();
+                try
+                {
+                    Plots[i].Refresh();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex);
+                }
             }
         }
 
