@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Plotter));
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlp = new System.Windows.Forms.TableLayoutPanel();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.olv = new BrightIdeasSoftware.FastDataListView();
             this.OlvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -72,46 +72,47 @@
             this.toolStripLabel10 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxMaxZ = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonApplyZ = new System.Windows.Forms.ToolStripButton();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
             this.toolStripY.SuspendLayout();
             this.toolStripZ.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // tlp
             // 
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tableLayoutPanel1.Controls.Add(this.ProgressBar, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.olv, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.pA, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.pB, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.pC, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.pD, 2, 4);
-            this.tableLayoutPanel1.Controls.Add(this.toolStripX, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.toolStripY, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.toolStripZ, 1, 2);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1231, 784);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.tlp.ColumnCount = 3;
+            this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlp.Controls.Add(this.ProgressBar, 0, 0);
+            this.tlp.Controls.Add(this.olv, 0, 1);
+            this.tlp.Controls.Add(this.pA, 1, 3);
+            this.tlp.Controls.Add(this.pB, 2, 3);
+            this.tlp.Controls.Add(this.pC, 1, 4);
+            this.tlp.Controls.Add(this.pD, 2, 4);
+            this.tlp.Controls.Add(this.toolStripX, 1, 0);
+            this.tlp.Controls.Add(this.toolStripY, 1, 1);
+            this.tlp.Controls.Add(this.toolStripZ, 1, 2);
+            this.tlp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlp.Location = new System.Drawing.Point(0, 0);
+            this.tlp.Name = "tlp";
+            this.tlp.RowCount = 5;
+            this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlp.Size = new System.Drawing.Size(1231, 784);
+            this.tlp.TabIndex = 0;
             // 
             // ProgressBar
             // 
             this.ProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ProgressBar.Location = new System.Drawing.Point(3, 3);
             this.ProgressBar.Name = "ProgressBar";
-            this.ProgressBar.Size = new System.Drawing.Size(363, 19);
+            this.ProgressBar.Size = new System.Drawing.Size(363, 23);
             this.ProgressBar.Step = 1;
             this.ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.ProgressBar.TabIndex = 4;
@@ -143,11 +144,11 @@
             this.olv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olv.FullRowSelect = true;
             this.olv.HideSelection = false;
-            this.olv.Location = new System.Drawing.Point(3, 28);
+            this.olv.Location = new System.Drawing.Point(3, 32);
             this.olv.Name = "olv";
-            this.tableLayoutPanel1.SetRowSpan(this.olv, 4);
+            this.tlp.SetRowSpan(this.olv, 4);
             this.olv.ShowGroups = false;
-            this.olv.Size = new System.Drawing.Size(363, 753);
+            this.olv.Size = new System.Drawing.Size(363, 749);
             this.olv.TabIndex = 3;
             this.olv.UseCompatibleStateImageBehavior = false;
             this.olv.UseFilterIndicator = true;
@@ -215,42 +216,42 @@
             // pA
             // 
             this.pA.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pA.Location = new System.Drawing.Point(372, 78);
+            this.pA.Location = new System.Drawing.Point(372, 82);
             this.pA.Name = "pA";
-            this.pA.Size = new System.Drawing.Size(424, 348);
+            this.pA.Size = new System.Drawing.Size(424, 346);
             this.pA.TabIndex = 5;
             this.pA.Tag = "A";
             // 
             // pB
             // 
             this.pB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pB.Location = new System.Drawing.Point(802, 78);
+            this.pB.Location = new System.Drawing.Point(802, 82);
             this.pB.Name = "pB";
-            this.pB.Size = new System.Drawing.Size(426, 348);
+            this.pB.Size = new System.Drawing.Size(426, 346);
             this.pB.TabIndex = 6;
             this.pB.Tag = "B";
             // 
             // pC
             // 
             this.pC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pC.Location = new System.Drawing.Point(372, 432);
+            this.pC.Location = new System.Drawing.Point(372, 434);
             this.pC.Name = "pC";
-            this.pC.Size = new System.Drawing.Size(424, 349);
+            this.pC.Size = new System.Drawing.Size(424, 347);
             this.pC.TabIndex = 7;
             this.pC.Tag = "C";
             // 
             // pD
             // 
             this.pD.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pD.Location = new System.Drawing.Point(802, 432);
+            this.pD.Location = new System.Drawing.Point(802, 434);
             this.pD.Name = "pD";
-            this.pD.Size = new System.Drawing.Size(426, 349);
+            this.pD.Size = new System.Drawing.Size(426, 347);
             this.pD.TabIndex = 8;
             this.pD.Tag = "D";
             // 
             // toolStripX
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.toolStripX, 2);
+            this.tlp.SetColumnSpan(this.toolStripX, 2);
             this.toolStripX.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
             this.comboX,
@@ -333,7 +334,7 @@
             // 
             // toolStripY
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.toolStripY, 2);
+            this.tlp.SetColumnSpan(this.toolStripY, 2);
             this.toolStripY.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel2,
             this.comboY,
@@ -343,7 +344,7 @@
             this.toolStripLabel7,
             this.toolStripTextBoxMaxY,
             this.toolStripButtonApplyY});
-            this.toolStripY.Location = new System.Drawing.Point(369, 25);
+            this.toolStripY.Location = new System.Drawing.Point(369, 29);
             this.toolStripY.Name = "toolStripY";
             this.toolStripY.Size = new System.Drawing.Size(862, 25);
             this.toolStripY.TabIndex = 10;
@@ -417,7 +418,7 @@
             // 
             // toolStripZ
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.toolStripZ, 2);
+            this.tlp.SetColumnSpan(this.toolStripZ, 2);
             this.toolStripZ.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel3,
             this.comboZ,
@@ -427,7 +428,7 @@
             this.toolStripLabel10,
             this.toolStripTextBoxMaxZ,
             this.toolStripButtonApplyZ});
-            this.toolStripZ.Location = new System.Drawing.Point(369, 50);
+            this.toolStripZ.Location = new System.Drawing.Point(369, 54);
             this.toolStripZ.Name = "toolStripZ";
             this.toolStripZ.Size = new System.Drawing.Size(862, 25);
             this.toolStripZ.TabIndex = 11;
@@ -503,12 +504,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1231, 784);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.tlp);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Plotter";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XYZ Scan";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.tlp.ResumeLayout(false);
+            this.tlp.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).EndInit();
             this.toolStripX.ResumeLayout(false);
             this.toolStripX.PerformLayout();
@@ -522,7 +524,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tlp;
         internal BrightIdeasSoftware.FastDataListView olv;
         internal BrightIdeasSoftware.OLVColumn OlvColumn3;
         internal BrightIdeasSoftware.OLVColumn OlvColumn6;

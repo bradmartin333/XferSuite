@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -35,15 +36,18 @@ namespace XferSuite
         {
             InitializeComponent();
             olv.SelectionChanged += Olv_SelectionChanged;
+
             Plots = new FormsPlot[] { pA, pB, pC, pD };
             foreach (FormsPlot p in Plots)
                 p.Plot.Grid(false);
+
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
             foreach (ToolStripComboBox comboBox in ComboBoxes)
             {
                 comboBox.SelectedIndex = int.Parse(comboBox.Tag.ToString());
                 comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
             }
+
             Path = filePath;
             Show();
             MakeList();
@@ -98,7 +102,7 @@ namespace XferSuite
                 {
                     Plots[i].Plot.Clear();
                     Plots[i].Plot.Title("");
-                    Plots[i].Plot.YAxis.Label();
+                    ClearAxisLabels(Plots[i].Plot);
                     Plots[i].Refresh();
                 }
                 UpdateToolbars(bounds);
@@ -112,7 +116,7 @@ namespace XferSuite
         private double[] CreatePlot(FormsPlot formsPlot, Scan scan)
         {
             formsPlot.Plot.Clear();
-            formsPlot.Plot.YAxis.Label();
+            ClearAxisLabels(formsPlot.Plot);
 
             Zed.Position[] data = new Zed.Position[scan.Data.Count];
             Zed.Plane plane = Zed.getPlane(scan.Data.ToArray());
@@ -145,6 +149,7 @@ namespace XferSuite
                         double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
                         var bar = formsPlot.Plot.AddBar(values: counts, positions: leftEdges);
                         bar.BarWidth = 1;
+                        formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label("Count (#)");
                         formsPlot.Plot.SetAxisLimits(yMin: 0);
                         formsPlot.Plot.Title(
@@ -152,6 +157,8 @@ namespace XferSuite
                         break;
                     case 2:
                         formsPlot.Plot.AddScatterPoints(xAxisData, yAxisData);
+                        formsPlot.Plot.XAxis.Label(comboX.Text);
+                        formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
                                 $"{scan.Name}\nRange: {Math.Round(yAxisData.Max() - yAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(yAxisData)}", false);
                         break;
@@ -162,9 +169,11 @@ namespace XferSuite
                         {
                             double colorFraction = (zAxisData[i] - minH) / (maxH - minH);
                             if (colorFraction > 1) colorFraction = maxH / zAxisData[i];
-                            System.Drawing.Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
+                            Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
                             formsPlot.Plot.AddPoint(xAxisData[i], yAxisData[i], c);
                         }
+                        formsPlot.Plot.XAxis.Label(comboX.Text);
+                        formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
                             $"{scan.Name}\nRange: {Math.Round(zAxisData.Max() - zAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(zAxisData)}", false);
                         break;
@@ -178,8 +187,8 @@ namespace XferSuite
                 var msg = formsPlot.Plot.AddAnnotation("Insufficient Data", 10, 10);
                 msg.Font.Size = 24;
                 msg.Shadow = false;
-                msg.BackgroundColor = System.Drawing.Color.Transparent;
-                msg.BorderColor = System.Drawing.Color.Transparent;
+                msg.BackgroundColor = Color.Transparent;
+                msg.BorderColor = Color.Transparent;
                 formsPlot.Plot.Title(
                     $"{scan.Name}\nRange: N/A   3Sigma = N/A", false);
             }
@@ -278,6 +287,8 @@ namespace XferSuite
                         Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
                         var cmap = ScottPlot.Drawing.Colormap.Viridis;
                         var cb = Plots[i].Plot.AddColorbar(cmap);
+                        cb.YAxisIndex = i;
+                        Plots[i].Plot.YAxis2.Label(comboZ.Text);
                         cb.MinValue = groupBounds[4];
                         cb.MaxValue = groupBounds[5];
                         break;
@@ -294,6 +305,13 @@ namespace XferSuite
                     System.Diagnostics.Debug.WriteLine(ex);
                 }
             }
+        }
+
+        private void ClearAxisLabels(Plot plot)
+        {
+            plot.XAxis.Label("");
+            plot.YAxis.Label("");
+            plot.YAxis2.Label("");
         }
 
         private void FindScans()
@@ -351,21 +369,21 @@ namespace XferSuite
         private void toolStripButtonFlipX_Click(object sender, EventArgs e)
         {
             FlipX = !FlipX;
-            ((ToolStripButton)sender).BackColor = FlipX ? System.Drawing.Color.LightGreen : System.Drawing.SystemColors.Control;
+            ((ToolStripButton)sender).BackColor = FlipX ? Color.LightGreen : SystemColors.Control;
             MakePlots();
         }
 
         private void toolStripButtonFlipY_Click(object sender, EventArgs e)
         {
             FlipY = !FlipY;
-            ((ToolStripButton)sender).BackColor = FlipY ? System.Drawing.Color.LightGreen : System.Drawing.SystemColors.Control;
+            ((ToolStripButton)sender).BackColor = FlipY ? Color.LightGreen : SystemColors.Control;
             MakePlots();
         }
 
         private void toolStripButtonFlipZ_Click(object sender, EventArgs e)
         {
             FlipZ = !FlipZ;
-            ((ToolStripButton)sender).BackColor = FlipZ ? System.Drawing.Color.LightGreen : System.Drawing.SystemColors.Control;
+            ((ToolStripButton)sender).BackColor = FlipZ ? Color.LightGreen : SystemColors.Control;
             MakePlots();
         }
     }
