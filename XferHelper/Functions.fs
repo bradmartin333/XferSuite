@@ -290,19 +290,23 @@ module Zed =
         | 6 -> data |> Array.map (fun x -> x.Z + x.H)
         | _ -> [| 0.0 |]
 
+    let filterData (data: Position[]) (axis: int) (min: float) (max: float) =
+        if axis > 0 && (min <> 0.0 || max <> 0.0) then
+            match axis with
+            | 1 -> data |> Array.filter (fun x -> x.X >= min && max >= x.X)
+            | 2 -> data |> Array.filter (fun x -> x.Y >= min && max >= x.Y)
+            | 3 -> data |> Array.filter (fun x -> x.Z >= min && max >= x.Z)
+            | 5 -> data |> Array.filter (fun x -> x.I >= min && max >= x.I)
+            | _ -> data
+        else
+            data
+
     let threeSigma (data: float []) =
         Math.Round(
             3.0
             * MathNet.Numerics.Statistics.Statistics.StandardDeviation(data),
             3
         )
-
-    let getTicks (data: double []) =
-        let labels =
-            MathNet.Numerics.Statistics.ArrayStatistics.FiveNumberSummaryInplace(data)
-            |> Array.map (fun x -> string (Math.Round(x, 3)))
-
-        ([| 0.0; 0.25; 0.5; 0.75; 1.0 |], labels)
 
     type Vec2 = { X: float; Y: float }
 

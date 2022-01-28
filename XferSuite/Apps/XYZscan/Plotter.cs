@@ -12,20 +12,8 @@ namespace XferSuite
 {
     public partial class Plotter : Form
     {
-        #region User Parameters and Globals
-
-        private bool _RemoveAngle = true;
-        [Category("User Parameters")]
-        public bool RemoveAngle
-        {
-            get => _RemoveAngle;
-            set
-            {
-                _RemoveAngle = value;
-                MakePlots();
-            }
-        }
-
+        #region Globals
+        public bool RemoveAngle { get; set; } = true;
         public bool FlipX { get; set; } = false;
         public bool FlipY { get; set; } = false;
         public bool FlipZ { get; set; } = false;
@@ -33,6 +21,7 @@ namespace XferSuite
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private FormsPlot[] Plots { get; set; }
         private ToolStripComboBox[] ComboBoxes { get; set; }
+        private double[] CustomAxes { get; set; } = new double[6];
 
         #endregion
 
@@ -47,10 +36,7 @@ namespace XferSuite
 
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
             foreach (ToolStripComboBox comboBox in ComboBoxes)
-            {
-                comboBox.SelectedIndex = int.Parse(comboBox.Tag.ToString());
                 comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
-            }
 
             Path = filePath;
             Show();
@@ -181,14 +167,51 @@ namespace XferSuite
             formsPlot.Plot.Clear();
             ClearAxisLabels(formsPlot.Plot);
 
-            Zed.Position[] data = new Zed.Position[scan.Data.Count];
-            Zed.Plane plane = Zed.getPlane(scan.Data.ToArray());
+            Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
+            if (CustomAxes.Sum() != 0)
+            {
+                try
+                {
+                    data = Zed.filterData(data, comboX.SelectedIndex, CustomAxes[0], CustomAxes[1]);
+                    data = Zed.filterData(data, comboY.SelectedIndex, CustomAxes[2], CustomAxes[3]);
+                    data = Zed.filterData(data, comboZ.SelectedIndex, CustomAxes[4], CustomAxes[5]);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Invalid custom axes", "XferSuite");
+                }
+            }
+
+            if (3 > data.Length)
+            {
+                MessageBox.Show("Insufficient data.", "XferSuite");
+                return new double[6];
+            }
+
+            Zed.Plane plane = Zed.getPlane(data);
             for (int i = 0; i < data.Length; i++)
             {
-                Zed.Position p = scan.Data[i];
+                Zed.Position p = data[i];
                 data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z, 
-                    _RemoveAngle ? p.H - Zed.projectPlane(plane, Zed.posToVec3(scan.Data[i])).Z : p.H, 
+                    RemoveAngle ? p.H - Zed.projectPlane(plane, Zed.posToVec3(data[i])).Z : p.H, 
                     p.I);
+            }
+
+            foreach (ToolStripComboBox comboBox in ComboBoxes)
+            {
+                if (comboBox.SelectedIndex == 4 || comboBox.SelectedIndex == 6)
+                {
+                    int idx = int.Parse(comboBox.Tag.ToString());
+                    if (CustomAxes[idx * 2] != 0 || CustomAxes[(idx * 2) + 1] != 0)
+                        data = data.Where(x => (idx == 6 ? x.Z : 0.0) + x.H >= CustomAxes[idx * 2] && 
+                            CustomAxes[(idx * 2) + 1] > (idx == 6 ? x.Z : 0.0) + x.H).ToArray();
+                }
+            }
+
+            if (3 > data.Length)
+            {
+                MessageBox.Show("Insufficient data.", "XferSuite");
+                return new double[6];
             }
 
             double[] xAxisData = Zed.getAxis(data, comboX.SelectedIndex);
@@ -265,7 +288,7 @@ namespace XferSuite
             {
                 for (int j = 0; j < groupBounds.Length; j += 2)
                 {
-                    if (bounds[i][j] != 0.0 && bounds[i][j + 1] != 0.0)
+                    if (bounds[i][j] != 0.0 || bounds[i][j + 1] != 0.0)
                     {
                         if (bounds[i][j] < groupBounds[j]) groupBounds[j] = bounds[i][j];
                         if (bounds[i][j + 1] > groupBounds[j + 1]) groupBounds[j + 1] = bounds[i][j + 1];
@@ -274,8 +297,8 @@ namespace XferSuite
             }
             for (int i = 0; i < groupBounds.Length; i += 2)
             {
-                string min = string.Empty;
-                string max = string.Empty;
+                string min = "N/A";
+                string max = "N/A";
                 if (groupBounds[i] != double.MaxValue && groupBounds[i + 1] != double.MinValue)
                 {
                     min = Math.Round(groupBounds[i], 3).ToString();
@@ -284,16 +307,16 @@ namespace XferSuite
                 switch (i/2)
                 {
                     case 0:
-                        toolStripTextBoxMinX.Text = min;
-                        toolStripTextBoxMaxX.Text = max;
+                        toolStripLabelMinX.Text = min;
+                        toolStripLabelMaxX.Text = max;
                         break;
                     case 1:
-                        toolStripTextBoxMinY.Text = min;
-                        toolStripTextBoxMaxY.Text = max;
+                        toolStripLabelMinY.Text = min;
+                        toolStripLabelMaxY.Text = max;
                         break;
                     case 2:
-                        toolStripTextBoxMinZ.Text = min;
-                        toolStripTextBoxMaxZ.Text = max;
+                        toolStripLabelMinZ.Text = min;
+                        toolStripLabelMaxZ.Text = max;
                         break;
                     default:
                         break;
@@ -359,7 +382,52 @@ namespace XferSuite
 
         private void toolStripButtonApply_Click(object sender, EventArgs e)
         {
-            
+            ToolStripButton button = (ToolStripButton)sender;
+            int axis = int.Parse(button.Tag.ToString());
+            double min = 0.0;
+            double max = 0.0;
+            bool parseMin = false;
+            bool parseMax = false;
+            switch (axis)
+            {
+                case 0:
+                    if (comboX.SelectedIndex > 0)
+                    {
+                        parseMin = double.TryParse(toolStripTextBoxCustomMinX.Text, out min);
+                        parseMax = double.TryParse(toolStripTextBoxCustomMaxX.Text, out max);
+                    }
+                    if (toolStripTextBoxCustomMinX.Text == "") parseMin = true;
+                    if (toolStripTextBoxCustomMaxX.Text == "") parseMax = true;
+                    break;
+                case 1:
+                    if (comboY.SelectedIndex > 0)
+                    {
+                        parseMin = double.TryParse(toolStripTextBoxCustomMinY.Text, out min);
+                        parseMax = double.TryParse(toolStripTextBoxCustomMaxY.Text, out max);
+                    }
+                    if (toolStripTextBoxCustomMinY.Text == "") parseMin = true;
+                    if (toolStripTextBoxCustomMaxY.Text == "") parseMax = true;
+                    break;
+                case 2:
+                    if (comboZ.SelectedIndex > 0)
+                    {
+                        parseMin = double.TryParse(toolStripTextBoxCustomMinZ.Text, out min);
+                        parseMax = double.TryParse(toolStripTextBoxCustomMaxZ.Text, out max);
+                    }
+                    if (toolStripTextBoxCustomMinZ.Text == "") parseMin = true;
+                    if (toolStripTextBoxCustomMaxZ.Text == "") parseMax = true;
+                    break;
+            }
+            if (parseMin && parseMax)
+            {
+                CustomAxes[axis * 2] = min;
+                CustomAxes[(axis * 2) + 1] = max;
+                MakePlots();
+            }
+            else
+            {
+                MessageBox.Show("An axis must be selected and the min and max must be valid numbers.", "XferSuite");
+            }
         }
 
         private void FlipAxis(ref double[] data)
@@ -388,6 +456,12 @@ namespace XferSuite
         {
             FlipZ = !FlipZ;
             ((ToolStripButton)sender).BackColor = FlipZ ? Color.LightGreen : SystemColors.Control;
+            MakePlots();
+        }
+
+        private void checkBoxRemoveAngle_CheckedChanged(object sender, EventArgs e)
+        {
+            RemoveAngle = !RemoveAngle;
             MakePlots();
         }
 
