@@ -86,7 +86,7 @@ namespace XferSuite
                         form = new CameraViewer();
                         break;
                     case 4:
-                        // Add roux
+                        form = new RouxForm.Window();
                         break;
                     case 5:
                         form = new MapFlip();
@@ -98,8 +98,11 @@ namespace XferSuite
                         return;
                 }
             }
-            form.Activated += Form_Activated;
-            form.Show();
+            if (idx != 4)
+            {
+                form.Activated += Form_Activated;
+                form.Show();
+            }
         }
 
         public static void Form_Activated(object sender, EventArgs e)
