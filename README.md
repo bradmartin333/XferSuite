@@ -4,9 +4,7 @@
 
 ![image](/XferSuite/Main.png)
 
-•
-
-A toolbox for MTP.
+☺ A toolbox for MTP.
 Open the settings app to tinker with other open apps and check for updates
 ___
 ### Inlinepositions
