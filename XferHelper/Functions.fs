@@ -259,7 +259,7 @@ module Zed =
         else
             let firstLineCols = data.[0].Split('\t')
 
-            if firstLineCols.Length < 4 then
+            if firstLineCols.Length < 2 then
                 3 // Not enough cols
             else if firstLineCols.[1] = "NEWSCAN" then
                 1
