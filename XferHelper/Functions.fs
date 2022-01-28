@@ -251,6 +251,21 @@ module Metro =
         output
 
 module Zed =
+    let verify (path: string) =
+        let data = File.ReadAllLines path
+
+        if data.Length < 2 then
+            0 //Insufficient Data/Empty File
+        else
+            let firstLineCols = data.[0].Split('\t')
+
+            if firstLineCols.Length < 4 then
+                3 // Not enough cols
+            else if firstLineCols.[1] = "NEWSCAN" then
+                1
+            else
+                3
+
     type Position =
         { Time: System.DateTime
           X: float
@@ -290,13 +305,21 @@ module Zed =
         | 6 -> data |> Array.map (fun x -> x.Z + x.H)
         | _ -> [| 0.0 |]
 
-    let filterData (data: Position[]) (axis: int) (min: float) (max: float) =
+    let filterData (data: Position []) (axis: int) (min: float) (max: float) =
         if axis > 0 && (min <> 0.0 || max <> 0.0) then
             match axis with
-            | 1 -> data |> Array.filter (fun x -> x.X >= min && max >= x.X)
-            | 2 -> data |> Array.filter (fun x -> x.Y >= min && max >= x.Y)
-            | 3 -> data |> Array.filter (fun x -> x.Z >= min && max >= x.Z)
-            | 5 -> data |> Array.filter (fun x -> x.I >= min && max >= x.I)
+            | 1 ->
+                data
+                |> Array.filter (fun x -> x.X >= min && max >= x.X)
+            | 2 ->
+                data
+                |> Array.filter (fun x -> x.Y >= min && max >= x.Y)
+            | 3 ->
+                data
+                |> Array.filter (fun x -> x.Z >= min && max >= x.Z)
+            | 5 ->
+                data
+                |> Array.filter (fun x -> x.I >= min && max >= x.I)
             | _ -> data
         else
             data
