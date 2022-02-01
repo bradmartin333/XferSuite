@@ -87,8 +87,8 @@ namespace XferSuite
                     var thisScan = new Scan()
                     {
                         Index = scanIdx + 1,
-                        ShortDate = DateTime.Parse(info[0]).ToShortDateString(),
-                        Time = DateTime.Parse(info[0]).ToShortTimeString(),
+                        ShortDate = DateTime.Parse(info[0]).ToString("yyyy-MM-dd"),
+                        Time = DateTime.Parse(info[0]).ToString("HH:mm:ss"),
                         Name = info[2]
                     };
                     if (info.Length > 3)
@@ -163,10 +163,6 @@ namespace XferSuite
                     Plots[i].Refresh();
                 }
                 UpdateToolbars(bounds);
-            }
-            else
-            {
-                olv.DeselectAll();
             }
         }
 
@@ -564,5 +560,19 @@ namespace XferSuite
 
         #endregion
 
+        private void buttonExportSelected_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.Title = "Export Selected Scans";
+                saveFileDialog.DefaultExt = ".txt";
+                saveFileDialog.Filter = "Text file (*.txt)|*.txt";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)               
+                    using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName))
+                        for (int i = olv.SelectedObjects.Count - 1; i >= 0; i--)
+                            sw.Write(((Scan)olv.SelectedObjects[i]).ToString());
+            }
+        }
     }
 }

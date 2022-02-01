@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Text;
+using XferHelper;
 
 namespace XferSuite
 {
@@ -13,6 +15,13 @@ namespace XferSuite
         public int ScanSpeed { get; set; } = 0;
         public int NumPasses { get; set; } = 0;
         public int Threshold { get; set; } = 0;
-        public List<XferHelper.Zed.Position> Data { get; set; } = new List<XferHelper.Zed.Position>();
+        public List<Zed.Position> Data { get; set; } = new List<Zed.Position>();
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder($"{ShortDate} {Time}\tNEWSCAN\t{Name}\t{Temp}\t{RH}\t{ScanSpeed}\t{NumPasses}\t{Threshold}\n");
+            foreach (Zed.Position p in Data)
+                sb.Append($"{p.Time.ToString("yyyy-MM-dd")} {p.Time.ToString("HH:mm:ss")}\t{p.X}\t{p.Y}\t{p.H / 1e3}\t{p.Z}\t{p.I}\n");
+            return sb.ToString();
+        }
     }
 }

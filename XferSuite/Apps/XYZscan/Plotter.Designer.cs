@@ -709,6 +709,7 @@
             this.buttonExportSelected.Size = new System.Drawing.Size(24, 23);
             this.buttonExportSelected.TabIndex = 15;
             this.buttonExportSelected.UseVisualStyleBackColor = true;
+            this.buttonExportSelected.Click += new System.EventHandler(this.buttonExportSelected_Click);
             // 
             // checkBoxShowBestFit
             // 
