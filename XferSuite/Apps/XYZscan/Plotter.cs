@@ -14,10 +14,11 @@ namespace XferSuite
     public partial class Plotter : Form
     {
         #region Globals
-        public bool RemoveAngle { get; set; } = true;
-        public bool FlipX { get; set; } = false;
-        public bool FlipY { get; set; } = false;
-        public bool FlipZ { get; set; } = false;
+        private bool ShowBestFit { get; set; }
+        private bool RemoveAngle { get; set; } = true;
+        private bool FlipX { get; set; } = false;
+        private bool FlipY { get; set; } = false;
+        private bool FlipZ { get; set; } = false;
         private string Path { get; set; }
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private FormsPlot[] Plots { get; set; }
@@ -268,15 +269,23 @@ namespace XferSuite
                     case 0:
                         break;
                     case 1:
-                        (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(xAxisData, min: xAxisData.Min(), max: xAxisData.Max(), binSize: 1);
+                        (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(xAxisData, min: xAxisData.Min(), max: xAxisData.Max(), binSize: 0.25);
                         double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
                         var bar = formsPlot.Plot.AddBar(values: counts, positions: leftEdges);
-                        bar.BarWidth = 1;
+                        bar.BarWidth = 0.25;
+                        bar.BorderColor = Color.Transparent;
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label("Count (#)");
                         formsPlot.Plot.SetAxisLimits(yMin: 0);
                         formsPlot.Plot.Title(
                             $"{scan.Name}\nRange: {Math.Round(xAxisData.Max() - xAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(xAxisData)}", false);
+                        if (ShowBestFit)
+                        {
+                            double[] densities = ScottPlot.Statistics.Common.ProbabilityDensity(xAxisData, binEdges);
+                            var probPlot = formsPlot.Plot.AddScatterLines(binEdges, densities, Color.Black, 3, LineStyle.Dash);
+                            probPlot.YAxisIndex = 1;
+                            formsPlot.Plot.SetAxisLimits(yMin: 0, yAxisIndex: 1);
+                        }
                         break;
                     case 2:
                         formsPlot.Plot.AddScatterPoints(xAxisData, yAxisData);
@@ -284,6 +293,17 @@ namespace XferSuite
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
                                 $"{scan.Name}\nRange: {Math.Round(yAxisData.Max() - yAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(yAxisData)}", false);
+                        if (ShowBestFit)
+                        {
+                            double[] poly = Zed.scatterPolynomial(xAxisData, yAxisData);
+                            double[] polyData = xAxisData.Select(x => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)).ToArray();
+                            formsPlot.Plot.AddFunction(
+                                new Func<double, double?>((x) => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)),
+                                Color.Black, 3, LineStyle.Dash);
+                            var annotation = formsPlot.Plot.AddAnnotation($"R² = {Zed.rSquared(polyData, yAxisData)}", 5, 5);
+                            annotation.Shadow = false;
+                            annotation.BackgroundColor = Color.White;
+                        }
                         break;
                     case 3:
                         double minH = zAxisData.Min();
@@ -299,6 +319,17 @@ namespace XferSuite
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
                             $"{scan.Name}\nRange: {Math.Round(zAxisData.Max() - zAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(zAxisData)}", false);
+                        if (ShowBestFit)
+                        {
+                            double[] poly = Zed.scatterPolynomial(xAxisData, yAxisData);
+                            double[] polyData = xAxisData.Select(x => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)).ToArray();
+                            formsPlot.Plot.AddFunction(
+                                new Func<double, double?>((x) => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)),
+                                Color.Black, 3, LineStyle.Dash);
+                            var annotation = formsPlot.Plot.AddAnnotation($"R² = {Zed.rSquared(polyData, yAxisData)}", 5, 5);
+                            annotation.Shadow = false;
+                            annotation.BackgroundColor = Color.White;
+                        }
                         break;
                     default:
                         break;
@@ -370,7 +401,7 @@ namespace XferSuite
                 groupBounds[i + 1] = groupBounds[i + 1];
             }
 
-            for (int i = 0; i < olv.SelectedObjects.Count; i++)
+            for (int i = 0; i < 4; i++)
             {
                 switch (numAxes)
                 {
@@ -519,6 +550,12 @@ namespace XferSuite
             MakePlots();
         }
 
+        private void checkBoxShowBestFit_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowBestFit = !ShowBestFit;
+            MakePlots();
+        }
+
         private void checkBoxRemoveAngle_CheckedChanged(object sender, EventArgs e)
         {
             RemoveAngle = !RemoveAngle;
@@ -526,5 +563,6 @@ namespace XferSuite
         }
 
         #endregion
+
     }
 }
