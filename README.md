@@ -2,8 +2,6 @@
 
 # **[Download Here](https://bradmartin333.github.io/utility/XferSuite)** ![GitHub release (latest by date)](https://img.shields.io/github/v/release/bradmartin333/xfersuite)
 
-![image](/XferSuite/Main.png)
-
 A toolbox for MTP
 ___
 ### Inlinepositions
@@ -21,9 +19,6 @@ ___
 ### Map Flip
 Excel doesn't seem to have a native tool for flipping and rotating grids of data.
 This is the solution!
-___
-### Position Calculator
-Quick way of finding position deltas for 9 axes in CSV format
 ___
 ### Settings
 Click on an active app window to tinker with settings.
