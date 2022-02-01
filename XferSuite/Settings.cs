@@ -12,6 +12,8 @@ namespace XferSuite
 {
     public partial class Settings : Form
     {
+        private bool UpdateFound = false;
+
         public Settings()
         {
             InitializeComponent();
@@ -50,10 +52,11 @@ namespace XferSuite
                 int mostRecentMinorVersion = int.Parse(mostRecentVersion.Replace("v", "").Split('.').Last());
                 if (mostRecentMajorVersion > thisMajorVersion || (mostRecentMajorVersion >= thisMajorVersion && mostRecentMinorVersion > thisMinorVersion))
                 {
-                    btnCheckForUpdates.Text = mostRecentVersion + " Is Available";
+                    if (!UpdateFound) btnCheckForUpdates.Text = mostRecentVersion + " Is Available";
                     btnCheckForUpdates.BackColor = Color.PaleTurquoise;
                     MainMenu mainMenu = Application.OpenForms.OfType<MainMenu>().First();
                     mainMenu.Text += $"     {btnCheckForUpdates.Text}";
+                    UpdateFound = true;
                 }
                 else
                 {

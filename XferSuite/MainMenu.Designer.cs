@@ -31,8 +31,6 @@ namespace XferSuite
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.btnHelp = new System.Windows.Forms.Button();
-            this.btnPositionCalc = new System.Windows.Forms.Button();
             this.btnXYZscan = new System.Windows.Forms.Button();
             this.btnInlinepositions = new System.Windows.Forms.Button();
             this.btnParseSEYR = new System.Windows.Forms.Button();
@@ -44,20 +42,17 @@ namespace XferSuite
             // 
             // tableLayoutPanel
             // 
-            this.tableLayoutPanel.ColumnCount = 4;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel.ColumnCount = 3;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel.Controls.Add(this.btnHelp, 2, 1);
-            this.tableLayoutPanel.Controls.Add(this.btnPositionCalc, 1, 1);
             this.tableLayoutPanel.Controls.Add(this.btnXYZscan, 1, 0);
             this.tableLayoutPanel.Controls.Add(this.btnInlinepositions, 0, 0);
             this.tableLayoutPanel.Controls.Add(this.btnParseSEYR, 2, 0);
-            this.tableLayoutPanel.Controls.Add(this.btnCameraViewer, 3, 0);
-            this.tableLayoutPanel.Controls.Add(this.btnSettings, 3, 1);
-            this.tableLayoutPanel.Controls.Add(this.btnMapFlip, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnCameraViewer, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnSettings, 2, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnMapFlip, 1, 1);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2);
@@ -66,48 +61,8 @@ namespace XferSuite
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.Size = new System.Drawing.Size(406, 170);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(338, 170);
             this.tableLayoutPanel.TabIndex = 0;
-            // 
-            // btnHelp
-            // 
-            this.btnHelp.AccessibleName = "Help";
-            this.btnHelp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnHelp.BackgroundImage")));
-            this.btnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnHelp.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnHelp.FlatAppearance.BorderSize = 0;
-            this.btnHelp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnHelp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHelp.Location = new System.Drawing.Point(212, 95);
-            this.btnHelp.Margin = new System.Windows.Forms.Padding(10);
-            this.btnHelp.Name = "btnHelp";
-            this.btnHelp.Size = new System.Drawing.Size(81, 65);
-            this.btnHelp.TabIndex = 13;
-            this.btnHelp.Tag = "6";
-            this.btnHelp.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnHelp.UseVisualStyleBackColor = true;
-            this.btnHelp.Click += new System.EventHandler(this.btn_Click);
-            // 
-            // btnPositionCalc
-            // 
-            this.btnPositionCalc.AccessibleName = "Position Calculator";
-            this.btnPositionCalc.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnPositionCalc.BackgroundImage")));
-            this.btnPositionCalc.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnPositionCalc.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnPositionCalc.FlatAppearance.BorderSize = 0;
-            this.btnPositionCalc.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnPositionCalc.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnPositionCalc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPositionCalc.Location = new System.Drawing.Point(111, 95);
-            this.btnPositionCalc.Margin = new System.Windows.Forms.Padding(10);
-            this.btnPositionCalc.Name = "btnPositionCalc";
-            this.btnPositionCalc.Size = new System.Drawing.Size(81, 65);
-            this.btnPositionCalc.TabIndex = 12;
-            this.btnPositionCalc.Tag = "5";
-            this.btnPositionCalc.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnPositionCalc.UseVisualStyleBackColor = true;
-            this.btnPositionCalc.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnXYZscan
             // 
@@ -119,10 +74,10 @@ namespace XferSuite
             this.btnXYZscan.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
             this.btnXYZscan.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnXYZscan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnXYZscan.Location = new System.Drawing.Point(111, 10);
+            this.btnXYZscan.Location = new System.Drawing.Point(122, 10);
             this.btnXYZscan.Margin = new System.Windows.Forms.Padding(10);
             this.btnXYZscan.Name = "btnXYZscan";
-            this.btnXYZscan.Size = new System.Drawing.Size(81, 65);
+            this.btnXYZscan.Size = new System.Drawing.Size(92, 65);
             this.btnXYZscan.TabIndex = 4;
             this.btnXYZscan.Tag = "1";
             this.btnXYZscan.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -142,7 +97,7 @@ namespace XferSuite
             this.btnInlinepositions.Location = new System.Drawing.Point(10, 10);
             this.btnInlinepositions.Margin = new System.Windows.Forms.Padding(10);
             this.btnInlinepositions.Name = "btnInlinepositions";
-            this.btnInlinepositions.Size = new System.Drawing.Size(81, 65);
+            this.btnInlinepositions.Size = new System.Drawing.Size(92, 65);
             this.btnInlinepositions.TabIndex = 2;
             this.btnInlinepositions.Tag = "0";
             this.btnInlinepositions.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -159,10 +114,10 @@ namespace XferSuite
             this.btnParseSEYR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
             this.btnParseSEYR.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnParseSEYR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnParseSEYR.Location = new System.Drawing.Point(212, 10);
+            this.btnParseSEYR.Location = new System.Drawing.Point(234, 10);
             this.btnParseSEYR.Margin = new System.Windows.Forms.Padding(10);
             this.btnParseSEYR.Name = "btnParseSEYR";
-            this.btnParseSEYR.Size = new System.Drawing.Size(81, 65);
+            this.btnParseSEYR.Size = new System.Drawing.Size(94, 65);
             this.btnParseSEYR.TabIndex = 7;
             this.btnParseSEYR.Tag = "2";
             this.btnParseSEYR.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -179,10 +134,10 @@ namespace XferSuite
             this.btnCameraViewer.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
             this.btnCameraViewer.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnCameraViewer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCameraViewer.Location = new System.Drawing.Point(313, 10);
+            this.btnCameraViewer.Location = new System.Drawing.Point(10, 95);
             this.btnCameraViewer.Margin = new System.Windows.Forms.Padding(10);
             this.btnCameraViewer.Name = "btnCameraViewer";
-            this.btnCameraViewer.Size = new System.Drawing.Size(83, 65);
+            this.btnCameraViewer.Size = new System.Drawing.Size(92, 65);
             this.btnCameraViewer.TabIndex = 11;
             this.btnCameraViewer.Tag = "3";
             this.btnCameraViewer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -199,10 +154,10 @@ namespace XferSuite
             this.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSeaGreen;
             this.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PowderBlue;
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettings.Location = new System.Drawing.Point(313, 95);
+            this.btnSettings.Location = new System.Drawing.Point(234, 95);
             this.btnSettings.Margin = new System.Windows.Forms.Padding(10);
             this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(83, 65);
+            this.btnSettings.Size = new System.Drawing.Size(94, 65);
             this.btnSettings.TabIndex = 11;
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSettings.UseVisualStyleBackColor = true;
@@ -218,10 +173,10 @@ namespace XferSuite
             this.btnMapFlip.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
             this.btnMapFlip.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
             this.btnMapFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMapFlip.Location = new System.Drawing.Point(10, 95);
+            this.btnMapFlip.Location = new System.Drawing.Point(122, 95);
             this.btnMapFlip.Margin = new System.Windows.Forms.Padding(10);
             this.btnMapFlip.Name = "btnMapFlip";
-            this.btnMapFlip.Size = new System.Drawing.Size(81, 65);
+            this.btnMapFlip.Size = new System.Drawing.Size(92, 65);
             this.btnMapFlip.TabIndex = 10;
             this.btnMapFlip.Tag = "4";
             this.btnMapFlip.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -232,7 +187,7 @@ namespace XferSuite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(406, 170);
+            this.ClientSize = new System.Drawing.Size(338, 170);
             this.Controls.Add(this.tableLayoutPanel);
             this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.DoubleBuffered = true;
@@ -240,6 +195,7 @@ namespace XferSuite
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(354, 209);
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XferSuite v0.0";
@@ -256,9 +212,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnParseSEYR;
         private System.Windows.Forms.Button btnXYZscan;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
-        private System.Windows.Forms.Button btnPositionCalc;
         private System.Windows.Forms.Button btnCameraViewer;
-        private System.Windows.Forms.Button btnHelp;
     }
 }
 

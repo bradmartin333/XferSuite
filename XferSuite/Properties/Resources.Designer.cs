@@ -61,30 +61,6 @@ namespace XferSuite.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A toolbox for MTP
-        ///___
-        ///### Inlinepositions
-        ///Automatic graphical and statistical data parsing for Inlinepositions files.
-        ///___
-        ///### XYZ Scan
-        ///Load a HeightSensorLog.txt file and click on scans to see their graphical and statistical representation.
-        ///___
-        ///### SEYR Parser
-        ///Load a SEYR report to conert raw data into yields.
-        ///___
-        ///### Camera Viewer
-        ///Stream any available camera, use a crosshair, rotate image and save pictures.
-        ///___
-        ///### Map Flip
-        ///Excel doesn&apos;t seem to have a native tool for flipping and rotating g [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string help {
-            get {
-                return ResourceManager.GetString("help", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap iconmonstr_cursor_16_32 {

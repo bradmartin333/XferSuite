@@ -88,12 +88,6 @@ namespace XferSuite
                     case 4:
                         form = new MapFlip();
                         break;
-                    case 5:
-                        form = new PositionCalc();
-                        break;
-                    case 6:
-                        form = new HelpForm();
-                        break;
                     default:
                         return;
                 }
