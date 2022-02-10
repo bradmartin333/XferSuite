@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Plotter));
             this.tlp = new System.Windows.Forms.TableLayoutPanel();
+            this.checkBoxShowBestFit = new System.Windows.Forms.CheckBox();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.olv = new BrightIdeasSoftware.FastDataListView();
             this.OlvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -92,7 +93,6 @@
             this.numZ = new System.Windows.Forms.ToolStripLabel();
             this.checkBoxRemoveAngle = new System.Windows.Forms.CheckBox();
             this.buttonExportSelected = new System.Windows.Forms.Button();
-            this.checkBoxShowBestFit = new System.Windows.Forms.CheckBox();
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -132,6 +132,23 @@
             this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlp.Size = new System.Drawing.Size(1231, 784);
             this.tlp.TabIndex = 0;
+            // 
+            // checkBoxShowBestFit
+            // 
+            this.checkBoxShowBestFit.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxShowBestFit.AutoSize = true;
+            this.checkBoxShowBestFit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxShowBestFit.BackgroundImage")));
+            this.checkBoxShowBestFit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.checkBoxShowBestFit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxShowBestFit.FlatAppearance.BorderSize = 0;
+            this.checkBoxShowBestFit.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
+            this.checkBoxShowBestFit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxShowBestFit.Location = new System.Drawing.Point(375, 3);
+            this.checkBoxShowBestFit.Name = "checkBoxShowBestFit";
+            this.checkBoxShowBestFit.Size = new System.Drawing.Size(24, 23);
+            this.checkBoxShowBestFit.TabIndex = 14;
+            this.checkBoxShowBestFit.UseVisualStyleBackColor = true;
+            this.checkBoxShowBestFit.CheckedChanged += new System.EventHandler(this.checkBoxShowBestFit_CheckedChanged);
             // 
             // ProgressBar
             // 
@@ -225,7 +242,7 @@
             // OlvColumn7
             // 
             this.OlvColumn7.AspectName = "ScanSpeed";
-            this.OlvColumn7.AspectToStringFormat = "{0} m/s";
+            this.OlvColumn7.AspectToStringFormat = "{0} mm/s";
             this.OlvColumn7.Text = "Speed";
             // 
             // OlvColumn8
@@ -710,23 +727,6 @@
             this.buttonExportSelected.TabIndex = 15;
             this.buttonExportSelected.UseVisualStyleBackColor = true;
             this.buttonExportSelected.Click += new System.EventHandler(this.buttonExportSelected_Click);
-            // 
-            // checkBoxShowBestFit
-            // 
-            this.checkBoxShowBestFit.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxShowBestFit.AutoSize = true;
-            this.checkBoxShowBestFit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxShowBestFit.BackgroundImage")));
-            this.checkBoxShowBestFit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.checkBoxShowBestFit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxShowBestFit.FlatAppearance.BorderSize = 0;
-            this.checkBoxShowBestFit.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
-            this.checkBoxShowBestFit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxShowBestFit.Location = new System.Drawing.Point(375, 3);
-            this.checkBoxShowBestFit.Name = "checkBoxShowBestFit";
-            this.checkBoxShowBestFit.Size = new System.Drawing.Size(24, 23);
-            this.checkBoxShowBestFit.TabIndex = 14;
-            this.checkBoxShowBestFit.UseVisualStyleBackColor = true;
-            this.checkBoxShowBestFit.CheckedChanged += new System.EventHandler(this.checkBoxShowBestFit_CheckedChanged);
             // 
             // Plotter
             // 

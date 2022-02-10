@@ -501,6 +501,7 @@ namespace XferSuite
         {
             toolStripTextBoxCustomMinX.Text = "";
             toolStripTextBoxCustomMaxX.Text = "";
+            numX.Text = "";
             CustomizeAxis(0);
         }
 
@@ -508,6 +509,7 @@ namespace XferSuite
         {
             toolStripTextBoxCustomMinY.Text = "";
             toolStripTextBoxCustomMaxY.Text = "";
+            numY.Text = "";
             CustomizeAxis(1);
         }
 
@@ -515,6 +517,7 @@ namespace XferSuite
         {
             toolStripTextBoxCustomMinZ.Text = "";
             toolStripTextBoxCustomMaxZ.Text = "";
+            numZ.Text = "";
             CustomizeAxis(2);
         }
         private void FlipAxis(ref double[] data)
