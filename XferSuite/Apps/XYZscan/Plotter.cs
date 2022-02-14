@@ -1,7 +1,6 @@
 ﻿using ScottPlot;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -22,7 +21,11 @@ namespace XferSuite
         private bool FlipZ { get; set; } = false;
         private string Path { get; set; }
         private List<Scan> Scans { get; set; } = new List<Scan>();
+        private Scan[] ActiveScans { get; set; } = new Scan[4];
         private FormsPlot[] Plots { get; set; }
+        private ScottPlot.Plottable.ScatterPlot[] ErasePointPlots { get; set; } = new ScottPlot.Plottable.ScatterPlot[4];
+        private ScottPlot.Plottable.MarkerPlot[] HighlightPointPlots { get; set; } = new ScottPlot.Plottable.MarkerPlot[4];
+        private int[] LastHighlightedPoints { get; set; } = new int[4];
         private ToolStripComboBox[] ComboBoxes { get; set; }
         private ToolStripLabel[] toolStripLabels { get; set; }
         private double[] CustomAxes { get; set; } = new double[6];
@@ -40,7 +43,7 @@ namespace XferSuite
                 p.Plot.Grid(false);
                 p.MouseMove += P_MouseMove;
                 p.MouseUp += P_MouseUp;
-            } 
+            }
 
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
             foreach (ToolStripComboBox comboBox in ComboBoxes)
@@ -63,11 +66,36 @@ namespace XferSuite
         private void P_MouseUp(object sender, MouseEventArgs e)
         {
             if (!ErasePointEnabled) return;
+
+            FormsPlot p = (FormsPlot)sender;
+            int plotIdx = int.Parse(p.Tag.ToString());
+            if (ActiveScans[plotIdx] == null) return;
+
+            ActiveScans[plotIdx].Data.RemoveAt(LastHighlightedPoints[plotIdx]);
+            MakePlots();
         }
 
         private void P_MouseMove(object sender, MouseEventArgs e)
         {
             if (!ErasePointEnabled) return;
+
+            FormsPlot p = (FormsPlot)sender;
+            int plotIdx = int.Parse(p.Tag.ToString());
+            if (ErasePointPlots[plotIdx] == null) return;
+
+            (double mouseCoordX, double mouseCoordY) = p.GetMouseCoordinates();
+            double xyRatio = p.Plot.XAxis.Dims.PxPerUnit / p.Plot.YAxis.Dims.PxPerUnit;
+            (double pointX, double pointY, int pointIndex) = ErasePointPlots[plotIdx].GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
+
+            HighlightPointPlots[plotIdx].X = pointX;
+            HighlightPointPlots[plotIdx].Y = pointY;
+            HighlightPointPlots[plotIdx].IsVisible = true;
+
+            if (LastHighlightedPoints[plotIdx] != pointIndex)
+            {
+                LastHighlightedPoints[plotIdx] = pointIndex;
+                p.Refresh();
+            }
         }
 
         #region Log Parsing
@@ -153,9 +181,10 @@ namespace XferSuite
                 toolStripZ.Enabled = false;
                 comboZ.SelectedIndex = 0;
             }
+            if (comboZ.SelectedIndex < 1)
+                checkBoxEraseData.Visible = (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4;
             toolStripY.Enabled = comboX.SelectedIndex > 0;
             toolStripZ.Enabled = comboY.SelectedIndex > 0;
-            checkBoxEraseData.Visible = (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4;
             if (!checkBoxEraseData.Visible) checkBoxEraseData.Checked = false;
             MakePlots();
         }
@@ -168,7 +197,8 @@ namespace XferSuite
                 for (int i = 0; i < olv.SelectedObjects.Count; i++)
                 {
                     Scan scan = (Scan)olv.SelectedObjects[i];
-                    if (scan.Data.Count > 3) bounds.Add(CreatePlot(Plots[i], scan));
+                    ActiveScans[i] = scan;
+                    if (scan.Data.Count > 3) bounds.Add(CreatePlot(i, scan));
                 }
                 for (int i = olv.SelectedObjects.Count; i < Plots.Length; i++)
                 {
@@ -185,8 +215,9 @@ namespace XferSuite
 
         #region Plotting
 
-        private double[] CreatePlot(FormsPlot formsPlot, Scan scan)
+        private double[] CreatePlot(int plotIdx, Scan scan)
         {
+            FormsPlot formsPlot = Plots[plotIdx];
             formsPlot.Plot.Clear();
             ClearAxisLabels(formsPlot.Plot);
 
@@ -299,7 +330,7 @@ namespace XferSuite
                         }
                         break;
                     case 2:
-                        formsPlot.Plot.AddScatterPoints(xAxisData, yAxisData);
+                        ErasePointPlots[plotIdx] = formsPlot.Plot.AddScatterPoints(xAxisData, yAxisData);
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
@@ -314,6 +345,13 @@ namespace XferSuite
                             var annotation = formsPlot.Plot.AddAnnotation($"R² = {Zed.rSquared(polyData, yAxisData)}", 5, 5);
                             annotation.Shadow = false;
                             annotation.BackgroundColor = Color.White;
+                        }
+                        if (ErasePointEnabled)
+                        {
+                            HighlightPointPlots[plotIdx] = formsPlot.Plot.AddPoint(0, 0);
+                            HighlightPointPlots[plotIdx].Color = Color.Red;
+                            HighlightPointPlots[plotIdx].IsVisible = false;
+                            //formsPlot.Plot.AxisAuto();
                         }
                         break;
                     case 3:
@@ -414,27 +452,30 @@ namespace XferSuite
 
             for (int i = 0; i < 4; i++)
             {
-                switch (numAxes)
+                if (!ErasePointEnabled)
                 {
-                    case 0:
-                        break;
-                    case 1:
-                        Plots[i].Plot.SetAxisLimitsX(groupBounds[0], groupBounds[1]);
-                        break;
-                    case 2:
-                        Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
-                        break;
-                    case 3:
-                        Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
-                        var cmap = ScottPlot.Drawing.Colormap.Viridis;
-                        var cb = Plots[i].Plot.AddColorbar(cmap);
-                        cb.YAxisIndex = i;
-                        Plots[i].Plot.YAxis2.Label(comboZ.Text);
-                        cb.MinValue = groupBounds[4];
-                        cb.MaxValue = groupBounds[5];
-                        break;
-                    default:
-                        break;
+                    switch (numAxes)
+                    {
+                        case 0:
+                            break;
+                        case 1:
+                            Plots[i].Plot.SetAxisLimitsX(groupBounds[0], groupBounds[1]);
+                            break;
+                        case 2:
+                            Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
+                            break;
+                        case 3:
+                            Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
+                            var cmap = ScottPlot.Drawing.Colormap.Viridis;
+                            var cb = Plots[i].Plot.AddColorbar(cmap);
+                            cb.YAxisIndex = i;
+                            Plots[i].Plot.YAxis2.Label(comboZ.Text);
+                            cb.MinValue = groupBounds[4];
+                            cb.MaxValue = groupBounds[5];
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 try

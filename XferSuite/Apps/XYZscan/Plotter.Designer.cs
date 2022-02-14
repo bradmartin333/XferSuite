@@ -271,7 +271,7 @@
             this.pA.Name = "pA";
             this.pA.Size = new System.Drawing.Size(372, 346);
             this.pA.TabIndex = 5;
-            this.pA.Tag = "A";
+            this.pA.Tag = "0";
             // 
             // pB
             // 
@@ -280,7 +280,7 @@
             this.pB.Name = "pB";
             this.pB.Size = new System.Drawing.Size(373, 346);
             this.pB.TabIndex = 6;
-            this.pB.Tag = "B";
+            this.pB.Tag = "1";
             // 
             // pC
             // 
@@ -289,7 +289,7 @@
             this.pC.Name = "pC";
             this.pC.Size = new System.Drawing.Size(372, 347);
             this.pC.TabIndex = 7;
-            this.pC.Tag = "C";
+            this.pC.Tag = "2";
             // 
             // pD
             // 
@@ -298,7 +298,7 @@
             this.pD.Name = "pD";
             this.pD.Size = new System.Drawing.Size(373, 347);
             this.pD.TabIndex = 8;
-            this.pD.Tag = "D";
+            this.pD.Tag = "3";
             // 
             // toolStripX
             // 
