@@ -93,6 +93,7 @@
             this.numZ = new System.Windows.Forms.ToolStripLabel();
             this.checkBoxRemoveAngle = new System.Windows.Forms.CheckBox();
             this.buttonExportSelected = new System.Windows.Forms.Button();
+            this.checkBoxEraseData = new System.Windows.Forms.CheckBox();
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -102,25 +103,27 @@
             // 
             // tlp
             // 
-            this.tlp.ColumnCount = 6;
+            this.tlp.ColumnCount = 7;
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tlp.Controls.Add(this.checkBoxShowBestFit, 2, 0);
+            this.tlp.Controls.Add(this.checkBoxShowBestFit, 3, 0);
             this.tlp.Controls.Add(this.ProgressBar, 0, 0);
             this.tlp.Controls.Add(this.olv, 0, 1);
-            this.tlp.Controls.Add(this.pA, 4, 3);
-            this.tlp.Controls.Add(this.pB, 5, 3);
-            this.tlp.Controls.Add(this.pC, 4, 4);
-            this.tlp.Controls.Add(this.pD, 5, 4);
-            this.tlp.Controls.Add(this.toolStripX, 4, 0);
-            this.tlp.Controls.Add(this.toolStripY, 4, 1);
-            this.tlp.Controls.Add(this.toolStripZ, 4, 2);
-            this.tlp.Controls.Add(this.checkBoxRemoveAngle, 3, 0);
-            this.tlp.Controls.Add(this.buttonExportSelected, 1, 0);
+            this.tlp.Controls.Add(this.pA, 5, 3);
+            this.tlp.Controls.Add(this.pB, 6, 3);
+            this.tlp.Controls.Add(this.pC, 5, 4);
+            this.tlp.Controls.Add(this.pD, 6, 4);
+            this.tlp.Controls.Add(this.toolStripX, 5, 0);
+            this.tlp.Controls.Add(this.toolStripY, 5, 1);
+            this.tlp.Controls.Add(this.toolStripZ, 5, 2);
+            this.tlp.Controls.Add(this.checkBoxRemoveAngle, 4, 0);
+            this.tlp.Controls.Add(this.buttonExportSelected, 2, 0);
+            this.tlp.Controls.Add(this.checkBoxEraseData, 1, 0);
             this.tlp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlp.Location = new System.Drawing.Point(0, 0);
             this.tlp.Name = "tlp";
@@ -143,7 +146,7 @@
             this.checkBoxShowBestFit.FlatAppearance.BorderSize = 0;
             this.checkBoxShowBestFit.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.checkBoxShowBestFit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxShowBestFit.Location = new System.Drawing.Point(375, 3);
+            this.checkBoxShowBestFit.Location = new System.Drawing.Point(396, 3);
             this.checkBoxShowBestFit.Name = "checkBoxShowBestFit";
             this.checkBoxShowBestFit.Size = new System.Drawing.Size(24, 23);
             this.checkBoxShowBestFit.TabIndex = 14;
@@ -155,7 +158,7 @@
             this.ProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ProgressBar.Location = new System.Drawing.Point(3, 3);
             this.ProgressBar.Name = "ProgressBar";
-            this.ProgressBar.Size = new System.Drawing.Size(336, 23);
+            this.ProgressBar.Size = new System.Drawing.Size(327, 23);
             this.ProgressBar.Step = 1;
             this.ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.ProgressBar.TabIndex = 4;
@@ -182,7 +185,7 @@
             this.OlvColumn7,
             this.OlvColumn8,
             this.OlvColumn9});
-            this.tlp.SetColumnSpan(this.olv, 4);
+            this.tlp.SetColumnSpan(this.olv, 5);
             this.olv.Cursor = System.Windows.Forms.Cursors.Default;
             this.olv.DataSource = null;
             this.olv.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -192,7 +195,7 @@
             this.olv.Name = "olv";
             this.tlp.SetRowSpan(this.olv, 4);
             this.olv.ShowGroups = false;
-            this.olv.Size = new System.Drawing.Size(426, 749);
+            this.olv.Size = new System.Drawing.Size(447, 749);
             this.olv.TabIndex = 3;
             this.olv.UseCompatibleStateImageBehavior = false;
             this.olv.UseFilterIndicator = true;
@@ -260,36 +263,36 @@
             // pA
             // 
             this.pA.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pA.Location = new System.Drawing.Point(435, 82);
+            this.pA.Location = new System.Drawing.Point(456, 82);
             this.pA.Name = "pA";
-            this.pA.Size = new System.Drawing.Size(393, 346);
+            this.pA.Size = new System.Drawing.Size(382, 346);
             this.pA.TabIndex = 5;
             this.pA.Tag = "A";
             // 
             // pB
             // 
             this.pB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pB.Location = new System.Drawing.Point(834, 82);
+            this.pB.Location = new System.Drawing.Point(844, 82);
             this.pB.Name = "pB";
-            this.pB.Size = new System.Drawing.Size(394, 346);
+            this.pB.Size = new System.Drawing.Size(384, 346);
             this.pB.TabIndex = 6;
             this.pB.Tag = "B";
             // 
             // pC
             // 
             this.pC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pC.Location = new System.Drawing.Point(435, 434);
+            this.pC.Location = new System.Drawing.Point(456, 434);
             this.pC.Name = "pC";
-            this.pC.Size = new System.Drawing.Size(393, 347);
+            this.pC.Size = new System.Drawing.Size(382, 347);
             this.pC.TabIndex = 7;
             this.pC.Tag = "C";
             // 
             // pD
             // 
             this.pD.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pD.Location = new System.Drawing.Point(834, 434);
+            this.pD.Location = new System.Drawing.Point(844, 434);
             this.pD.Name = "pD";
-            this.pD.Size = new System.Drawing.Size(394, 347);
+            this.pD.Size = new System.Drawing.Size(384, 347);
             this.pD.TabIndex = 8;
             this.pD.Tag = "D";
             // 
@@ -311,9 +314,9 @@
             this.toolStripButtonApplyX,
             this.toolStripButtonResetX,
             this.numX});
-            this.toolStripX.Location = new System.Drawing.Point(432, 0);
+            this.toolStripX.Location = new System.Drawing.Point(453, 0);
             this.toolStripX.Name = "toolStripX";
-            this.toolStripX.Size = new System.Drawing.Size(799, 25);
+            this.toolStripX.Size = new System.Drawing.Size(778, 25);
             this.toolStripX.TabIndex = 9;
             this.toolStripX.Text = "toolStrip1";
             // 
@@ -445,9 +448,9 @@
             this.toolStripButtonApplyY,
             this.toolStripButtonResetY,
             this.numY});
-            this.toolStripY.Location = new System.Drawing.Point(432, 29);
+            this.toolStripY.Location = new System.Drawing.Point(453, 29);
             this.toolStripY.Name = "toolStripY";
-            this.toolStripY.Size = new System.Drawing.Size(799, 25);
+            this.toolStripY.Size = new System.Drawing.Size(778, 25);
             this.toolStripY.TabIndex = 10;
             this.toolStripY.Text = "toolStrip1";
             // 
@@ -579,9 +582,9 @@
             this.toolStripButtonApplyZ,
             this.toolStripButtonResetZ,
             this.numZ});
-            this.toolStripZ.Location = new System.Drawing.Point(432, 54);
+            this.toolStripZ.Location = new System.Drawing.Point(453, 54);
             this.toolStripZ.Name = "toolStripZ";
-            this.toolStripZ.Size = new System.Drawing.Size(799, 25);
+            this.toolStripZ.Size = new System.Drawing.Size(778, 25);
             this.toolStripZ.TabIndex = 11;
             this.toolStripZ.Text = "toolStrip2";
             // 
@@ -707,7 +710,7 @@
             this.checkBoxRemoveAngle.FlatAppearance.BorderSize = 0;
             this.checkBoxRemoveAngle.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.checkBoxRemoveAngle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxRemoveAngle.Location = new System.Drawing.Point(405, 3);
+            this.checkBoxRemoveAngle.Location = new System.Drawing.Point(426, 3);
             this.checkBoxRemoveAngle.Name = "checkBoxRemoveAngle";
             this.checkBoxRemoveAngle.Size = new System.Drawing.Size(24, 23);
             this.checkBoxRemoveAngle.TabIndex = 12;
@@ -721,12 +724,30 @@
             this.buttonExportSelected.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonExportSelected.FlatAppearance.BorderSize = 0;
             this.buttonExportSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExportSelected.Location = new System.Drawing.Point(345, 3);
+            this.buttonExportSelected.Location = new System.Drawing.Point(366, 3);
             this.buttonExportSelected.Name = "buttonExportSelected";
             this.buttonExportSelected.Size = new System.Drawing.Size(24, 23);
             this.buttonExportSelected.TabIndex = 15;
             this.buttonExportSelected.UseVisualStyleBackColor = true;
             this.buttonExportSelected.Click += new System.EventHandler(this.buttonExportSelected_Click);
+            // 
+            // checkBoxEraseData
+            // 
+            this.checkBoxEraseData.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxEraseData.AutoSize = true;
+            this.checkBoxEraseData.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxEraseData.BackgroundImage")));
+            this.checkBoxEraseData.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.checkBoxEraseData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxEraseData.FlatAppearance.BorderSize = 0;
+            this.checkBoxEraseData.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightCoral;
+            this.checkBoxEraseData.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxEraseData.Location = new System.Drawing.Point(336, 3);
+            this.checkBoxEraseData.Name = "checkBoxEraseData";
+            this.checkBoxEraseData.Size = new System.Drawing.Size(24, 23);
+            this.checkBoxEraseData.TabIndex = 16;
+            this.checkBoxEraseData.UseVisualStyleBackColor = true;
+            this.checkBoxEraseData.Visible = false;
+            this.checkBoxEraseData.CheckedChanged += new System.EventHandler(this.checkBoxEraseData_CheckedChanged);
             // 
             // Plotter
             // 
@@ -817,5 +838,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonResetZ;
         private System.Windows.Forms.Button buttonExportSelected;
         private System.Windows.Forms.CheckBox checkBoxShowBestFit;
+        private System.Windows.Forms.CheckBox checkBoxEraseData;
     }
 }

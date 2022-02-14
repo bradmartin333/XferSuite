@@ -16,6 +16,7 @@ namespace XferSuite
         #region Globals
         private bool ShowBestFit { get; set; }
         private bool RemoveAngle { get; set; } = true;
+        private bool EraseData { get; set; } = false;
         private bool FlipX { get; set; } = false;
         private bool FlipY { get; set; } = false;
         private bool FlipZ { get; set; } = false;
@@ -140,10 +141,10 @@ namespace XferSuite
             }
             toolStripY.Enabled = comboX.SelectedIndex > 0;
             toolStripZ.Enabled = comboY.SelectedIndex > 0;
+            checkBoxEraseData.Visible = (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4;
+            if (!checkBoxEraseData.Visible) checkBoxEraseData.Checked = false;
             MakePlots();
         }
-
-
 
         private void MakePlots()
         {
@@ -274,7 +275,7 @@ namespace XferSuite
                         formsPlot.Plot.YAxis.Label("Count (#)");
                         formsPlot.Plot.SetAxisLimits(yMin: 0);
                         formsPlot.Plot.Title(
-                            $"{scan.Name}\nRange: {Math.Round(xAxisData.Max() - xAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(xAxisData)}", false);
+                            $"{scan.Name}\nRange: {Math.Round(xAxisData.Max() - xAxisData.Min(), 3)}   3Sigma = {Zed.threeSigma(xAxisData)}", false);
                         if (ShowBestFit)
                         {
                             double[] densities = ScottPlot.Statistics.Common.ProbabilityDensity(xAxisData, binEdges);
@@ -558,6 +559,12 @@ namespace XferSuite
         private void checkBoxRemoveAngle_CheckedChanged(object sender, EventArgs e)
         {
             RemoveAngle = !RemoveAngle;
+            MakePlots();
+        }
+
+        private void checkBoxEraseData_CheckedChanged(object sender, EventArgs e)
+        {
+            EraseData = !EraseData;
             MakePlots();
         }
 

@@ -330,11 +330,11 @@ module Zed =
             * MathNet.Numerics.Statistics.Statistics.StandardDeviation(data),
             3
         )
-    
-    let scatterPolynomial (xData: double[]) (yData: double[]) =
+
+    let scatterPolynomial (xData: double []) (yData: double []) =
         MathNet.Numerics.Fit.Polynomial(xData, yData, 3)
-        
-    let rSquared (model: double[]) (observed: double[]) =
+
+    let rSquared (model: double []) (observed: double []) =
         System.Math.Round(MathNet.Numerics.GoodnessOfFit.RSquared(model, observed), 3)
 
     type Vec2 = { X: float; Y: float }
