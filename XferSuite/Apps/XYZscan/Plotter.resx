@@ -118,6 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttonAutoscale.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE5SURBVFhH7ZdRjsIwDERR2wP0AHsSDsGBuGe/OEa/+AKn
+        8lTBOyF2Win7sSM9UlmJZ0TSFi6il4N1HMerjC7p3FVgvSy0mBMyhwIhaBE0mUPOELS4MQzDXcZD0h60
+        v0KL4CkNbjI2Sdc+BdYb0GJOUwineYIWLaEQAfPEfrHKwrRfpYWuEBXz1CN55Adz+9hPu6NBMYR3rbk7
+        ft9qLSGia/YQ1hyqNFzmeZ5k3KTXi8DmFr+1kveuQojHNE0/Mn5Iaw8hn/t1y1wyIag5ZEIcN4e00fLN
+        HNI5y2nmUL7nNUXm/sutrlvQ9RBqoz63oTEH5z6I/sKjuO/LSJQmdH0dY0LXHyQ1XOZQJYSFFnNC5lAg
+        BC2CJnPIGYIWN6RB2q9D0h60v0KLoO9fM6UphNM8QYuWUAi/+eX1BoiZt0iPSITYAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="checkBoxShowBestFit.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO

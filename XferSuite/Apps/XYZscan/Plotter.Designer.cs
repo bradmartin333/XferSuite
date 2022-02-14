@@ -94,6 +94,7 @@
             this.checkBoxRemoveAngle = new System.Windows.Forms.CheckBox();
             this.buttonExportSelected = new System.Windows.Forms.Button();
             this.checkBoxEraseData = new System.Windows.Forms.CheckBox();
+            this.buttonAutoscale = new System.Windows.Forms.Button();
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -103,25 +104,27 @@
             // 
             // tlp
             // 
-            this.tlp.ColumnCount = 7;
+            this.tlp.ColumnCount = 8;
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tlp.Controls.Add(this.buttonAutoscale, 4, 0);
             this.tlp.Controls.Add(this.checkBoxShowBestFit, 3, 0);
             this.tlp.Controls.Add(this.ProgressBar, 0, 0);
             this.tlp.Controls.Add(this.olv, 0, 1);
-            this.tlp.Controls.Add(this.pA, 5, 3);
-            this.tlp.Controls.Add(this.pB, 6, 3);
-            this.tlp.Controls.Add(this.pC, 5, 4);
-            this.tlp.Controls.Add(this.pD, 6, 4);
-            this.tlp.Controls.Add(this.toolStripX, 5, 0);
-            this.tlp.Controls.Add(this.toolStripY, 5, 1);
-            this.tlp.Controls.Add(this.toolStripZ, 5, 2);
-            this.tlp.Controls.Add(this.checkBoxRemoveAngle, 4, 0);
+            this.tlp.Controls.Add(this.pA, 6, 3);
+            this.tlp.Controls.Add(this.pB, 7, 3);
+            this.tlp.Controls.Add(this.pC, 6, 4);
+            this.tlp.Controls.Add(this.pD, 7, 4);
+            this.tlp.Controls.Add(this.toolStripX, 6, 0);
+            this.tlp.Controls.Add(this.toolStripY, 6, 1);
+            this.tlp.Controls.Add(this.toolStripZ, 6, 2);
+            this.tlp.Controls.Add(this.checkBoxRemoveAngle, 5, 0);
             this.tlp.Controls.Add(this.buttonExportSelected, 2, 0);
             this.tlp.Controls.Add(this.checkBoxEraseData, 1, 0);
             this.tlp.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -133,6 +136,7 @@
             this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlp.Size = new System.Drawing.Size(1231, 784);
             this.tlp.TabIndex = 0;
             // 
@@ -146,7 +150,7 @@
             this.checkBoxShowBestFit.FlatAppearance.BorderSize = 0;
             this.checkBoxShowBestFit.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.checkBoxShowBestFit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxShowBestFit.Location = new System.Drawing.Point(396, 3);
+            this.checkBoxShowBestFit.Location = new System.Drawing.Point(387, 3);
             this.checkBoxShowBestFit.Name = "checkBoxShowBestFit";
             this.checkBoxShowBestFit.Size = new System.Drawing.Size(24, 23);
             this.checkBoxShowBestFit.TabIndex = 14;
@@ -158,7 +162,7 @@
             this.ProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ProgressBar.Location = new System.Drawing.Point(3, 3);
             this.ProgressBar.Name = "ProgressBar";
-            this.ProgressBar.Size = new System.Drawing.Size(327, 23);
+            this.ProgressBar.Size = new System.Drawing.Size(318, 23);
             this.ProgressBar.Step = 1;
             this.ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.ProgressBar.TabIndex = 4;
@@ -185,7 +189,7 @@
             this.OlvColumn7,
             this.OlvColumn8,
             this.OlvColumn9});
-            this.tlp.SetColumnSpan(this.olv, 5);
+            this.tlp.SetColumnSpan(this.olv, 6);
             this.olv.Cursor = System.Windows.Forms.Cursors.Default;
             this.olv.DataSource = null;
             this.olv.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -195,7 +199,7 @@
             this.olv.Name = "olv";
             this.tlp.SetRowSpan(this.olv, 4);
             this.olv.ShowGroups = false;
-            this.olv.Size = new System.Drawing.Size(447, 749);
+            this.olv.Size = new System.Drawing.Size(468, 749);
             this.olv.TabIndex = 3;
             this.olv.UseCompatibleStateImageBehavior = false;
             this.olv.UseFilterIndicator = true;
@@ -263,36 +267,36 @@
             // pA
             // 
             this.pA.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pA.Location = new System.Drawing.Point(456, 82);
+            this.pA.Location = new System.Drawing.Point(477, 82);
             this.pA.Name = "pA";
-            this.pA.Size = new System.Drawing.Size(382, 346);
+            this.pA.Size = new System.Drawing.Size(372, 346);
             this.pA.TabIndex = 5;
             this.pA.Tag = "A";
             // 
             // pB
             // 
             this.pB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pB.Location = new System.Drawing.Point(844, 82);
+            this.pB.Location = new System.Drawing.Point(855, 82);
             this.pB.Name = "pB";
-            this.pB.Size = new System.Drawing.Size(384, 346);
+            this.pB.Size = new System.Drawing.Size(373, 346);
             this.pB.TabIndex = 6;
             this.pB.Tag = "B";
             // 
             // pC
             // 
             this.pC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pC.Location = new System.Drawing.Point(456, 434);
+            this.pC.Location = new System.Drawing.Point(477, 434);
             this.pC.Name = "pC";
-            this.pC.Size = new System.Drawing.Size(382, 347);
+            this.pC.Size = new System.Drawing.Size(372, 347);
             this.pC.TabIndex = 7;
             this.pC.Tag = "C";
             // 
             // pD
             // 
             this.pD.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pD.Location = new System.Drawing.Point(844, 434);
+            this.pD.Location = new System.Drawing.Point(855, 434);
             this.pD.Name = "pD";
-            this.pD.Size = new System.Drawing.Size(384, 347);
+            this.pD.Size = new System.Drawing.Size(373, 347);
             this.pD.TabIndex = 8;
             this.pD.Tag = "D";
             // 
@@ -314,9 +318,9 @@
             this.toolStripButtonApplyX,
             this.toolStripButtonResetX,
             this.numX});
-            this.toolStripX.Location = new System.Drawing.Point(453, 0);
+            this.toolStripX.Location = new System.Drawing.Point(474, 0);
             this.toolStripX.Name = "toolStripX";
-            this.toolStripX.Size = new System.Drawing.Size(778, 25);
+            this.toolStripX.Size = new System.Drawing.Size(757, 25);
             this.toolStripX.TabIndex = 9;
             this.toolStripX.Text = "toolStrip1";
             // 
@@ -448,9 +452,9 @@
             this.toolStripButtonApplyY,
             this.toolStripButtonResetY,
             this.numY});
-            this.toolStripY.Location = new System.Drawing.Point(453, 29);
+            this.toolStripY.Location = new System.Drawing.Point(474, 29);
             this.toolStripY.Name = "toolStripY";
-            this.toolStripY.Size = new System.Drawing.Size(778, 25);
+            this.toolStripY.Size = new System.Drawing.Size(757, 25);
             this.toolStripY.TabIndex = 10;
             this.toolStripY.Text = "toolStrip1";
             // 
@@ -582,9 +586,9 @@
             this.toolStripButtonApplyZ,
             this.toolStripButtonResetZ,
             this.numZ});
-            this.toolStripZ.Location = new System.Drawing.Point(453, 54);
+            this.toolStripZ.Location = new System.Drawing.Point(474, 54);
             this.toolStripZ.Name = "toolStripZ";
-            this.toolStripZ.Size = new System.Drawing.Size(778, 25);
+            this.toolStripZ.Size = new System.Drawing.Size(757, 25);
             this.toolStripZ.TabIndex = 11;
             this.toolStripZ.Text = "toolStrip2";
             // 
@@ -710,7 +714,7 @@
             this.checkBoxRemoveAngle.FlatAppearance.BorderSize = 0;
             this.checkBoxRemoveAngle.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.checkBoxRemoveAngle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxRemoveAngle.Location = new System.Drawing.Point(426, 3);
+            this.checkBoxRemoveAngle.Location = new System.Drawing.Point(447, 3);
             this.checkBoxRemoveAngle.Name = "checkBoxRemoveAngle";
             this.checkBoxRemoveAngle.Size = new System.Drawing.Size(24, 23);
             this.checkBoxRemoveAngle.TabIndex = 12;
@@ -724,7 +728,7 @@
             this.buttonExportSelected.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonExportSelected.FlatAppearance.BorderSize = 0;
             this.buttonExportSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExportSelected.Location = new System.Drawing.Point(366, 3);
+            this.buttonExportSelected.Location = new System.Drawing.Point(357, 3);
             this.buttonExportSelected.Name = "buttonExportSelected";
             this.buttonExportSelected.Size = new System.Drawing.Size(24, 23);
             this.buttonExportSelected.TabIndex = 15;
@@ -741,13 +745,27 @@
             this.checkBoxEraseData.FlatAppearance.BorderSize = 0;
             this.checkBoxEraseData.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightCoral;
             this.checkBoxEraseData.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEraseData.Location = new System.Drawing.Point(336, 3);
+            this.checkBoxEraseData.Location = new System.Drawing.Point(327, 3);
             this.checkBoxEraseData.Name = "checkBoxEraseData";
             this.checkBoxEraseData.Size = new System.Drawing.Size(24, 23);
             this.checkBoxEraseData.TabIndex = 16;
             this.checkBoxEraseData.UseVisualStyleBackColor = true;
             this.checkBoxEraseData.Visible = false;
             this.checkBoxEraseData.CheckedChanged += new System.EventHandler(this.checkBoxEraseData_CheckedChanged);
+            // 
+            // buttonAutoscale
+            // 
+            this.buttonAutoscale.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonAutoscale.BackgroundImage")));
+            this.buttonAutoscale.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonAutoscale.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonAutoscale.FlatAppearance.BorderSize = 0;
+            this.buttonAutoscale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAutoscale.Location = new System.Drawing.Point(417, 3);
+            this.buttonAutoscale.Name = "buttonAutoscale";
+            this.buttonAutoscale.Size = new System.Drawing.Size(24, 23);
+            this.buttonAutoscale.TabIndex = 17;
+            this.buttonAutoscale.UseVisualStyleBackColor = true;
+            this.buttonAutoscale.Click += new System.EventHandler(this.buttonAutoscale_Click);
             // 
             // Plotter
             // 
@@ -839,5 +857,6 @@
         private System.Windows.Forms.Button buttonExportSelected;
         private System.Windows.Forms.CheckBox checkBoxShowBestFit;
         private System.Windows.Forms.CheckBox checkBoxEraseData;
+        private System.Windows.Forms.Button buttonAutoscale;
     }
 }

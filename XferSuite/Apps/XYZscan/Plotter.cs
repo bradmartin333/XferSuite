@@ -16,7 +16,7 @@ namespace XferSuite
         #region Globals
         private bool ShowBestFit { get; set; }
         private bool RemoveAngle { get; set; } = true;
-        private bool EraseData { get; set; } = false;
+        private bool ErasePointEnabled { get; set; } = false;
         private bool FlipX { get; set; } = false;
         private bool FlipY { get; set; } = false;
         private bool FlipZ { get; set; } = false;
@@ -36,7 +36,11 @@ namespace XferSuite
 
             Plots = new FormsPlot[] { pA, pB, pC, pD };
             foreach (FormsPlot p in Plots)
+            {
                 p.Plot.Grid(false);
+                p.MouseMove += P_MouseMove;
+                p.MouseUp += P_MouseUp;
+            } 
 
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
             foreach (ToolStripComboBox comboBox in ComboBoxes)
@@ -54,6 +58,16 @@ namespace XferSuite
             Path = filePath;
             Show();
             MakeList();
+        }
+
+        private void P_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (!ErasePointEnabled) return;
+        }
+
+        private void P_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!ErasePointEnabled) return;
         }
 
         #region Log Parsing
@@ -564,8 +578,17 @@ namespace XferSuite
 
         private void checkBoxEraseData_CheckedChanged(object sender, EventArgs e)
         {
-            EraseData = !EraseData;
+            ErasePointEnabled = !ErasePointEnabled;
             MakePlots();
+        }
+
+        private void buttonAutoscale_Click(object sender, EventArgs e)
+        {
+            foreach (FormsPlot plot in Plots)
+            {
+                plot.Plot.AxisAuto();
+                plot.Refresh();
+            } 
         }
 
         #endregion
