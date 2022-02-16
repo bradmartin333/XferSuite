@@ -34,7 +34,7 @@ namespace XferSuite
             set
             {
                 _EraseOnClickEnabled = value;
-                if (_EraseOnClickEnabled) checkBoxEraseData.BackColor = Color.LightCoral;
+                checkBoxEraseData.FlatAppearance.CheckedBackColor = _EraseOnClickEnabled ? Color.LightCoral : Color.Gold;
             }
         }
 
@@ -72,7 +72,7 @@ namespace XferSuite
 
         private void P_MouseUp(object sender, MouseEventArgs e)
         {
-            if (!ErasePointEnabled) return;
+            if (!EraseOnClickEnabled) return;
 
             FormsPlot p = (FormsPlot)sender;
             int plotIdx = int.Parse(p.Tag.ToString());
@@ -86,7 +86,7 @@ namespace XferSuite
 
         private void P_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!ErasePointEnabled) return;
+            if (!EraseOnClickEnabled) return;
 
             FormsPlot p = (FormsPlot)sender;
             int plotIdx = int.Parse(p.Tag.ToString());
@@ -198,6 +198,7 @@ namespace XferSuite
 
         private void MakePlots()
         {
+            UpdateEraseDataMode();
             if (olv.SelectedIndices.Count <= 4)
             {
                 List<double[]> bounds = new List<double[]> ();
@@ -310,7 +311,7 @@ namespace XferSuite
                             annotation.Shadow = false;
                             annotation.BackgroundColor = Color.White;
                         }
-                        if (ErasePointEnabled)
+                        if (EraseOnClickEnabled)
                         {
                             HighlightPointPlots[plotIdx] = formsPlot.Plot.AddPoint(0, 0);
                             HighlightPointPlots[plotIdx].Color = Color.Red;
@@ -498,9 +499,14 @@ namespace XferSuite
 
         private void checkBoxEraseData_CheckedChanged(object sender, EventArgs e)
         {
-            ErasePointEnabled = !ErasePointEnabled;
-            EraseOnClickEnabled = (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1;
-            MakePlots();
+            UpdateEraseDataMode(redraw: true);
+        }
+
+        private void UpdateEraseDataMode(bool redraw = false)
+        {
+            ErasePointEnabled = checkBoxEraseData.Checked;
+            EraseOnClickEnabled = ErasePointEnabled ? (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1 : false;
+            if (redraw) MakePlots();
         }
 
         private void buttonAutoscale_Click(object sender, EventArgs e)
