@@ -281,9 +281,11 @@ namespace XferSuite
             double[] xAxisData = Zed.getAxis(data, comboX.SelectedIndex);
             double[] yAxisData = Zed.getAxis(data, comboY.SelectedIndex);
             double[] zAxisData = Zed.getAxis(data, comboZ.SelectedIndex);
-            if (FlipX) FlipAxis(ref xAxisData);
-            if (FlipY) FlipAxis(ref yAxisData);
-            if (FlipZ) FlipAxis(ref zAxisData);
+
+            if (FlipX) for (int i = 0; i < xAxisData.Length; i++) xAxisData[i] *= -1;
+            if (FlipY) for (int i = 0; i < yAxisData.Length; i++) yAxisData[i] *= -1;
+            if (FlipZ) for (int i = 0; i < zAxisData.Length; i++) zAxisData[i] *= -1;
+
             int numAxes = 0;
             foreach (ToolStripComboBox cbx in ComboBoxes)
                 if (cbx.SelectedIndex > 0) numAxes++;
@@ -443,9 +445,12 @@ namespace XferSuite
                             break;
                         case 1:
                             Plots[i].Plot.SetAxisLimitsX(groupBounds[0], groupBounds[1]);
+                            Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
                             break;
                         case 2:
                             Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
+                            Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
+                            Plots[i].Plot.YAxis.TickLabelNotation(invertSign: FlipY);
                             break;
                         case 3:
                             Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
@@ -455,6 +460,9 @@ namespace XferSuite
                             Plots[i].Plot.YAxis2.Label(comboZ.Text);
                             cb.MinValue = groupBounds[4];
                             cb.MaxValue = groupBounds[5];
+                            Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
+                            Plots[i].Plot.YAxis.TickLabelNotation(invertSign: FlipY);
+                            Plots[i].Plot.YAxis2.TickLabelNotation(invertSign: FlipZ);
                             break;
                         default:
                             break;
@@ -482,14 +490,6 @@ namespace XferSuite
         #endregion
 
         #region Plot Customization
-
-        private void FlipAxis(ref double[] data)
-        {
-            double max = data.Max();
-            double min = data.Min();
-            for (int i = 0; i < data.Length; i++)
-                data[i] = Math.Abs(data[i] - max) - min;
-        }
 
         private void toolStripButtonFlipX_Click(object sender, EventArgs e)
         {
