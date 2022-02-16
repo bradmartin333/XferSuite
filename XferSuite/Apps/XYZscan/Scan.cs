@@ -16,6 +16,19 @@ namespace XferSuite
         public int NumPasses { get; set; } = 0;
         public int Threshold { get; set; } = 0;
         public List<Zed.Position> Data { get; set; } = new List<Zed.Position>();
+
+        private bool _Edited;
+        public bool Edited
+        {
+            get => _Edited;
+            set
+            {
+                _Edited = value;
+                EditedIcon = _Edited ? "edit" : "";
+            }
+        }
+        public string EditedIcon { get; set; } = "edit";
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder($"{ShortDate} {Time}\tNEWSCAN\t{Name}\t{Temp}\t{RH}\t{ScanSpeed}\t{NumPasses}\t{Threshold}\n");

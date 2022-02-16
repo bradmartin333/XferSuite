@@ -107,7 +107,7 @@ namespace XferSuite
 
             FindScans();
             olv.SetObjects(Scans);
-            olv.Sort(OlvColumn6, SortOrder.Descending);
+            olv.Sort(OlvColumnIndex, SortOrder.Descending);
 
             ProgressBar.Style = ProgressBarStyle.Continuous;
             ProgressBar.MarqueeAnimationSpeed = 0;

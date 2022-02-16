@@ -28,20 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Plotter));
             this.tlp = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonAutoscale = new System.Windows.Forms.Button();
             this.checkBoxShowBestFit = new System.Windows.Forms.CheckBox();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.olv = new BrightIdeasSoftware.FastDataListView();
-            this.OlvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.OlvColumn6 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.OlvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.OlvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.OlvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.OlvColumn5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.OlvColumn7 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.OlvColumn8 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.OlvColumn9 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OlvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OlvColumnIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OlvColumnDate = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OlvColumnTime = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OlvColumnTemp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OlvColumnRH = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OlvColumnSpeed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OlvColumnPasses = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OlvColumnThreshold = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.pA = new ScottPlot.FormsPlot();
             this.pB = new ScottPlot.FormsPlot();
             this.pC = new ScottPlot.FormsPlot();
@@ -94,7 +96,8 @@
             this.checkBoxRemoveAngle = new System.Windows.Forms.CheckBox();
             this.buttonExportSelected = new System.Windows.Forms.Button();
             this.checkBoxEraseData = new System.Windows.Forms.CheckBox();
-            this.buttonAutoscale = new System.Windows.Forms.Button();
+            this.olvColumnEdited = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -140,6 +143,20 @@
             this.tlp.Size = new System.Drawing.Size(1231, 784);
             this.tlp.TabIndex = 0;
             // 
+            // buttonAutoscale
+            // 
+            this.buttonAutoscale.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonAutoscale.BackgroundImage")));
+            this.buttonAutoscale.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonAutoscale.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonAutoscale.FlatAppearance.BorderSize = 0;
+            this.buttonAutoscale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAutoscale.Location = new System.Drawing.Point(417, 3);
+            this.buttonAutoscale.Name = "buttonAutoscale";
+            this.buttonAutoscale.Size = new System.Drawing.Size(24, 23);
+            this.buttonAutoscale.TabIndex = 17;
+            this.buttonAutoscale.UseVisualStyleBackColor = true;
+            this.buttonAutoscale.Click += new System.EventHandler(this.buttonAutoscale_Click);
+            // 
             // checkBoxShowBestFit
             // 
             this.checkBoxShowBestFit.Appearance = System.Windows.Forms.Appearance.Button;
@@ -169,26 +186,28 @@
             // 
             // olv
             // 
-            this.olv.AllColumns.Add(this.OlvColumn3);
-            this.olv.AllColumns.Add(this.OlvColumn6);
-            this.olv.AllColumns.Add(this.OlvColumn1);
-            this.olv.AllColumns.Add(this.OlvColumn2);
-            this.olv.AllColumns.Add(this.OlvColumn4);
-            this.olv.AllColumns.Add(this.OlvColumn5);
-            this.olv.AllColumns.Add(this.OlvColumn7);
-            this.olv.AllColumns.Add(this.OlvColumn8);
-            this.olv.AllColumns.Add(this.OlvColumn9);
+            this.olv.AllColumns.Add(this.olvColumnEdited);
+            this.olv.AllColumns.Add(this.OlvColumnName);
+            this.olv.AllColumns.Add(this.OlvColumnIndex);
+            this.olv.AllColumns.Add(this.OlvColumnDate);
+            this.olv.AllColumns.Add(this.OlvColumnTime);
+            this.olv.AllColumns.Add(this.OlvColumnTemp);
+            this.olv.AllColumns.Add(this.OlvColumnRH);
+            this.olv.AllColumns.Add(this.OlvColumnSpeed);
+            this.olv.AllColumns.Add(this.OlvColumnPasses);
+            this.olv.AllColumns.Add(this.OlvColumnThreshold);
             this.olv.CellEditUseWholeCell = false;
             this.olv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.OlvColumn3,
-            this.OlvColumn6,
-            this.OlvColumn1,
-            this.OlvColumn2,
-            this.OlvColumn4,
-            this.OlvColumn5,
-            this.OlvColumn7,
-            this.OlvColumn8,
-            this.OlvColumn9});
+            this.olvColumnEdited,
+            this.OlvColumnName,
+            this.OlvColumnIndex,
+            this.OlvColumnDate,
+            this.OlvColumnTime,
+            this.OlvColumnTemp,
+            this.OlvColumnRH,
+            this.OlvColumnSpeed,
+            this.OlvColumnPasses,
+            this.OlvColumnThreshold});
             this.tlp.SetColumnSpan(this.olv, 6);
             this.olv.Cursor = System.Windows.Forms.Cursors.Default;
             this.olv.DataSource = null;
@@ -200,6 +219,7 @@
             this.tlp.SetRowSpan(this.olv, 4);
             this.olv.ShowGroups = false;
             this.olv.Size = new System.Drawing.Size(468, 749);
+            this.olv.SmallImageList = this.imageList;
             this.olv.TabIndex = 3;
             this.olv.UseCompatibleStateImageBehavior = false;
             this.olv.UseFilterIndicator = true;
@@ -207,62 +227,62 @@
             this.olv.View = System.Windows.Forms.View.Details;
             this.olv.VirtualMode = true;
             // 
-            // OlvColumn3
+            // OlvColumnName
             // 
-            this.OlvColumn3.AspectName = "Name";
-            this.OlvColumn3.Text = "Name";
-            this.OlvColumn3.Width = 375;
+            this.OlvColumnName.AspectName = "Name";
+            this.OlvColumnName.Text = "Name";
+            this.OlvColumnName.Width = 375;
             // 
-            // OlvColumn6
+            // OlvColumnIndex
             // 
-            this.OlvColumn6.AspectName = "Index";
-            this.OlvColumn6.AspectToStringFormat = "{0}";
-            this.OlvColumn6.Text = "Index";
-            this.OlvColumn6.Width = 44;
+            this.OlvColumnIndex.AspectName = "Index";
+            this.OlvColumnIndex.AspectToStringFormat = "{0}";
+            this.OlvColumnIndex.Text = "Index";
+            this.OlvColumnIndex.Width = 44;
             // 
-            // OlvColumn1
+            // OlvColumnDate
             // 
-            this.OlvColumn1.AspectName = "ShortDate";
-            this.OlvColumn1.AspectToStringFormat = "{0:d}";
-            this.OlvColumn1.Text = "Date";
-            this.OlvColumn1.Width = 82;
+            this.OlvColumnDate.AspectName = "ShortDate";
+            this.OlvColumnDate.AspectToStringFormat = "{0:d}";
+            this.OlvColumnDate.Text = "Date";
+            this.OlvColumnDate.Width = 82;
             // 
-            // OlvColumn2
+            // OlvColumnTime
             // 
-            this.OlvColumn2.AspectName = "Time";
-            this.OlvColumn2.AspectToStringFormat = "{0:d}";
-            this.OlvColumn2.Text = "Time";
-            this.OlvColumn2.Width = 83;
+            this.OlvColumnTime.AspectName = "Time";
+            this.OlvColumnTime.AspectToStringFormat = "{0:d}";
+            this.OlvColumnTime.Text = "Time";
+            this.OlvColumnTime.Width = 83;
             // 
-            // OlvColumn4
+            // OlvColumnTemp
             // 
-            this.OlvColumn4.AspectName = "Temp";
-            this.OlvColumn4.AspectToStringFormat = "{0}°C";
-            this.OlvColumn4.Text = "Temp";
+            this.OlvColumnTemp.AspectName = "Temp";
+            this.OlvColumnTemp.AspectToStringFormat = "{0}°C";
+            this.OlvColumnTemp.Text = "Temp";
             // 
-            // OlvColumn5
+            // OlvColumnRH
             // 
-            this.OlvColumn5.AspectName = "RH";
-            this.OlvColumn5.AspectToStringFormat = "{0}%";
-            this.OlvColumn5.Text = "RH";
+            this.OlvColumnRH.AspectName = "RH";
+            this.OlvColumnRH.AspectToStringFormat = "{0}%";
+            this.OlvColumnRH.Text = "RH";
             // 
-            // OlvColumn7
+            // OlvColumnSpeed
             // 
-            this.OlvColumn7.AspectName = "ScanSpeed";
-            this.OlvColumn7.AspectToStringFormat = "{0} mm/s";
-            this.OlvColumn7.Text = "Speed";
+            this.OlvColumnSpeed.AspectName = "ScanSpeed";
+            this.OlvColumnSpeed.AspectToStringFormat = "{0} mm/s";
+            this.OlvColumnSpeed.Text = "Speed";
             // 
-            // OlvColumn8
+            // OlvColumnPasses
             // 
-            this.OlvColumn8.AspectName = "NumPasses";
-            this.OlvColumn8.AspectToStringFormat = "{0}";
-            this.OlvColumn8.Text = "# Passes";
+            this.OlvColumnPasses.AspectName = "NumPasses";
+            this.OlvColumnPasses.AspectToStringFormat = "{0}";
+            this.OlvColumnPasses.Text = "# Passes";
             // 
-            // OlvColumn9
+            // OlvColumnThreshold
             // 
-            this.OlvColumn9.AspectName = "Threshold";
-            this.OlvColumn9.AspectToStringFormat = "{0}%";
-            this.OlvColumn9.Text = "Threshold";
+            this.OlvColumnThreshold.AspectName = "Threshold";
+            this.OlvColumnThreshold.AspectToStringFormat = "{0}%";
+            this.OlvColumnThreshold.Text = "Threshold";
             // 
             // pA
             // 
@@ -753,19 +773,17 @@
             this.checkBoxEraseData.Visible = false;
             this.checkBoxEraseData.CheckedChanged += new System.EventHandler(this.checkBoxEraseData_CheckedChanged);
             // 
-            // buttonAutoscale
+            // olvColumnEdited
             // 
-            this.buttonAutoscale.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonAutoscale.BackgroundImage")));
-            this.buttonAutoscale.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonAutoscale.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonAutoscale.FlatAppearance.BorderSize = 0;
-            this.buttonAutoscale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonAutoscale.Location = new System.Drawing.Point(417, 3);
-            this.buttonAutoscale.Name = "buttonAutoscale";
-            this.buttonAutoscale.Size = new System.Drawing.Size(24, 23);
-            this.buttonAutoscale.TabIndex = 17;
-            this.buttonAutoscale.UseVisualStyleBackColor = true;
-            this.buttonAutoscale.Click += new System.EventHandler(this.buttonAutoscale_Click);
+            this.olvColumnEdited.ImageAspectName = "EditedIcon";
+            this.olvColumnEdited.Text = "Edited";
+            this.olvColumnEdited.Width = 45;
+            // 
+            // imageList
+            // 
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName(0, "edit");
             // 
             // Plotter
             // 
@@ -794,16 +812,9 @@
 
         private System.Windows.Forms.TableLayoutPanel tlp;
         internal BrightIdeasSoftware.FastDataListView olv;
-        internal BrightIdeasSoftware.OLVColumn OlvColumn3;
-        internal BrightIdeasSoftware.OLVColumn OlvColumn6;
-        internal BrightIdeasSoftware.OLVColumn OlvColumn1;
-        internal BrightIdeasSoftware.OLVColumn OlvColumn2;
-        internal BrightIdeasSoftware.OLVColumn OlvColumn4;
-        internal BrightIdeasSoftware.OLVColumn OlvColumn5;
-        internal BrightIdeasSoftware.OLVColumn OlvColumn7;
-        private BrightIdeasSoftware.OLVColumn OlvColumn8;
+        private BrightIdeasSoftware.OLVColumn OlvColumnPasses;
         internal System.Windows.Forms.ProgressBar ProgressBar;
-        private BrightIdeasSoftware.OLVColumn OlvColumn9;
+        private BrightIdeasSoftware.OLVColumn OlvColumnThreshold;
         private ScottPlot.FormsPlot pA;
         private ScottPlot.FormsPlot pB;
         private ScottPlot.FormsPlot pC;
@@ -858,5 +869,14 @@
         private System.Windows.Forms.CheckBox checkBoxShowBestFit;
         private System.Windows.Forms.CheckBox checkBoxEraseData;
         private System.Windows.Forms.Button buttonAutoscale;
+        private System.Windows.Forms.ImageList imageList;
+        private BrightIdeasSoftware.OLVColumn olvColumnEdited;
+        private BrightIdeasSoftware.OLVColumn OlvColumnName;
+        private BrightIdeasSoftware.OLVColumn OlvColumnIndex;
+        private BrightIdeasSoftware.OLVColumn OlvColumnDate;
+        private BrightIdeasSoftware.OLVColumn OlvColumnTime;
+        private BrightIdeasSoftware.OLVColumn OlvColumnTemp;
+        private BrightIdeasSoftware.OLVColumn OlvColumnRH;
+        private BrightIdeasSoftware.OLVColumn OlvColumnSpeed;
     }
 }
