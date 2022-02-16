@@ -343,7 +343,7 @@
             "Z (mm)",
             "Height (µm)",
             "Intensity (%)",
-            "Z + Height (mm)"});
+            "Z - Height (mm)"});
             this.comboX.MaxDropDownItems = 6;
             this.comboX.Name = "comboX";
             this.comboX.Size = new System.Drawing.Size(121, 25);
@@ -408,7 +408,7 @@
             "Z (mm)",
             "Height (µm)",
             "Intensity (%)",
-            "Z + Height (mm)"});
+            "Z - Height (mm)"});
             this.comboY.Name = "comboY";
             this.comboY.Size = new System.Drawing.Size(121, 25);
             this.comboY.Tag = "1";
@@ -473,7 +473,7 @@
             "Z (mm)",
             "Height (µm)",
             "Intensity (%)",
-            "Z + Height (mm)"});
+            "Z - Height (mm)"});
             this.comboZ.Name = "comboZ";
             this.comboZ.Size = new System.Drawing.Size(121, 25);
             this.comboZ.Tag = "2";
