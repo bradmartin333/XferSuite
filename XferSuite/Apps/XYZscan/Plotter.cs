@@ -14,7 +14,6 @@ namespace XferSuite
         #region Globals
         private bool ShowBestFit { get; set; }
         private bool RemoveAngle { get; set; } = true;
-        private bool ErasePointEnabled { get; set; } = false;
         private bool FlipX { get; set; } = false;
         private bool FlipY { get; set; } = false;
         private bool FlipZ { get; set; } = false;
@@ -27,6 +26,17 @@ namespace XferSuite
         private int[] LastHighlightedPoints { get; set; } = new int[4];
         private ToolStripComboBox[] ComboBoxes { get; set; }
         private double[] CustomAxes { get; set; } = new double[6];
+        public bool ErasePointEnabled { get; set; }
+        private bool _EraseOnClickEnabled = false;
+        private bool EraseOnClickEnabled
+        {
+            get => _EraseOnClickEnabled;
+            set
+            {
+                _EraseOnClickEnabled = value;
+                if (_EraseOnClickEnabled) checkBoxEraseData.BackColor = Color.LightCoral;
+            }
+        }
 
         #endregion
 
@@ -47,15 +57,17 @@ namespace XferSuite
             foreach (ToolStripComboBox comboBox in ComboBoxes)
                 comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
 
-            ToolTip removeAngleTip = new ToolTip();
-            removeAngleTip.SetToolTip(checkBoxRemoveAngle, 
-"Remove Level:\n" +
-"When checked, the best fit plane of height data is removed\n" +
-"This corrects for chuck level.");
+            Control[] toolTipContols = tlp.Controls.Cast<Control>().Where(x => x.GetType() == typeof(CheckBox) || x.GetType() == typeof(Button)).ToArray();
+            foreach (Control control in toolTipContols)
+            {
+                ToolTip tip = new ToolTip() { InitialDelay = 1 };
+                if (control.AccessibleDescription != null) tip.SetToolTip(control, control.AccessibleDescription.Replace('_', '\n'));
+            }
 
             Path = filePath;
             Show();
             MakeList();
+            MakePlots();
         }
 
         private void P_MouseUp(object sender, MouseEventArgs e)
@@ -179,16 +191,13 @@ namespace XferSuite
                 toolStripZ.Enabled = false;
                 comboZ.SelectedIndex = 0;
             }
-            checkBoxEraseData.Visible = (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1;
             toolStripY.Enabled = comboX.SelectedIndex > 0;
             toolStripZ.Enabled = comboY.SelectedIndex > 0;
-            if (!checkBoxEraseData.Visible) checkBoxEraseData.Checked = false;
             MakePlots();
         }
 
         private void MakePlots()
         {
-            UpdateRevertVisibility();
             if (olv.SelectedIndices.Count <= 4)
             {
                 List<double[]> bounds = new List<double[]> ();
@@ -490,6 +499,7 @@ namespace XferSuite
         private void checkBoxEraseData_CheckedChanged(object sender, EventArgs e)
         {
             ErasePointEnabled = !ErasePointEnabled;
+            EraseOnClickEnabled = (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1;
             MakePlots();
         }
 
@@ -504,19 +514,11 @@ namespace XferSuite
 
         private void btnRevert_Click(object sender, EventArgs e)
         {
-            ((Scan)olv.SelectedObject).RevertData();
-            MakePlots();
-        }
-
-        private void UpdateRevertVisibility()
-        {
             if (olv.SelectedObject != null)
             {
-                Scan scan = (Scan)olv.SelectedObject;
-                btnRevert.Visible = scan.Edited;
+                ((Scan)olv.SelectedObject).RevertData();
+                MakePlots();
             }
-            else
-                btnRevert.Visible = false;
         }
 
         #endregion

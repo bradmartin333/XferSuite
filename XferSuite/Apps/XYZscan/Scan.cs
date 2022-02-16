@@ -46,8 +46,11 @@ namespace XferSuite
 
         public void RevertData()
         {
-            Data = OriginalData.ToList();
-            Edited = false;
+            if (Edited)
+            {
+                Data = OriginalData.ToList();
+                Edited = false;
+            }
         }
     }
 }

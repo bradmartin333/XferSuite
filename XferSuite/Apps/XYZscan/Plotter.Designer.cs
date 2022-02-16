@@ -35,6 +35,7 @@
             this.checkBoxShowBestFit = new System.Windows.Forms.CheckBox();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.olv = new BrightIdeasSoftware.FastDataListView();
+            this.olvColumnEdited = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.OlvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.OlvColumnIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.OlvColumnDate = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -44,6 +45,7 @@
             this.OlvColumnSpeed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.OlvColumnPasses = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.OlvColumnThreshold = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.pA = new ScottPlot.FormsPlot();
             this.pB = new ScottPlot.FormsPlot();
             this.pC = new ScottPlot.FormsPlot();
@@ -52,28 +54,26 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.comboX = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonFlipX = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel8 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabelRangeX = new System.Windows.Forms.ToolStripLabel();
             this.toolStripY = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.comboY = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonFlipY = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel12 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabelRangeY = new System.Windows.Forms.ToolStripLabel();
             this.toolStripZ = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.comboZ = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonFlipZ = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel14 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabelRangeZ = new System.Windows.Forms.ToolStripLabel();
             this.checkBoxRemoveAngle = new System.Windows.Forms.CheckBox();
             this.buttonExportSelected = new System.Windows.Forms.Button();
             this.checkBoxEraseData = new System.Windows.Forms.CheckBox();
-            this.olvColumnEdited = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.imageList = new System.Windows.Forms.ImageList(this.components);
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnRevert = new System.Windows.Forms.Button();
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
@@ -123,6 +123,7 @@
             // 
             // buttonAutoscale
             // 
+            this.buttonAutoscale.AccessibleDescription = "Autoscale:_Discard equalized axes and autoscale all plots";
             this.buttonAutoscale.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonAutoscale.BackgroundImage")));
             this.buttonAutoscale.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonAutoscale.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -137,6 +138,7 @@
             // 
             // checkBoxShowBestFit
             // 
+            this.checkBoxShowBestFit.AccessibleDescription = "Show Best Fit:_Show a third order polynomial trendline and R² value";
             this.checkBoxShowBestFit.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxShowBestFit.AutoSize = true;
             this.checkBoxShowBestFit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxShowBestFit.BackgroundImage")));
@@ -205,6 +207,12 @@
             this.olv.View = System.Windows.Forms.View.Details;
             this.olv.VirtualMode = true;
             // 
+            // olvColumnEdited
+            // 
+            this.olvColumnEdited.ImageAspectName = "EditedIcon";
+            this.olvColumnEdited.Text = "";
+            this.olvColumnEdited.Width = 25;
+            // 
             // OlvColumnName
             // 
             this.OlvColumnName.AspectName = "Name";
@@ -261,6 +269,12 @@
             this.OlvColumnThreshold.AspectName = "Threshold";
             this.OlvColumnThreshold.AspectToStringFormat = "{0}%";
             this.OlvColumnThreshold.Text = "Threshold";
+            // 
+            // imageList
+            // 
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName(0, "edit");
             // 
             // pA
             // 
@@ -345,6 +359,11 @@
             this.toolStripButtonFlipX.Text = "Flip";
             this.toolStripButtonFlipX.Click += new System.EventHandler(this.toolStripButtonFlipX_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
             // toolStripLabel8
             // 
             this.toolStripLabel8.Name = "toolStripLabel8";
@@ -404,6 +423,11 @@
             this.toolStripButtonFlipY.Tag = "1";
             this.toolStripButtonFlipY.Text = "Flip";
             this.toolStripButtonFlipY.Click += new System.EventHandler(this.toolStripButtonFlipY_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripLabel12
             // 
@@ -465,6 +489,11 @@
             this.toolStripButtonFlipZ.Text = "Flip";
             this.toolStripButtonFlipZ.Click += new System.EventHandler(this.toolStripButtonFlipZ_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
             // toolStripLabel14
             // 
             this.toolStripLabel14.Name = "toolStripLabel14";
@@ -480,6 +509,8 @@
             // 
             // checkBoxRemoveAngle
             // 
+            this.checkBoxRemoveAngle.AccessibleDescription = "Remove Level:_When checked, the best fit plane of height data is removed_This cor" +
+    "rects for chuck level";
             this.checkBoxRemoveAngle.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxRemoveAngle.AutoSize = true;
             this.checkBoxRemoveAngle.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxRemoveAngle.BackgroundImage")));
@@ -499,6 +530,8 @@
             // 
             // buttonExportSelected
             // 
+            this.buttonExportSelected.AccessibleDescription = "Export Selected Scans:_Create a new file with the data contained in the selected " +
+    "scans";
             this.buttonExportSelected.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExportSelected.BackgroundImage")));
             this.buttonExportSelected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonExportSelected.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -513,51 +546,26 @@
             // 
             // checkBoxEraseData
             // 
+            this.checkBoxEraseData.AccessibleDescription = "Erase Data:_Remove data by axis sliders _Special case to remove by clicking point" +
+    "s with X vs. Height vs. Null";
             this.checkBoxEraseData.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxEraseData.AutoSize = true;
             this.checkBoxEraseData.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxEraseData.BackgroundImage")));
             this.checkBoxEraseData.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.checkBoxEraseData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.checkBoxEraseData.FlatAppearance.BorderSize = 0;
-            this.checkBoxEraseData.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightCoral;
+            this.checkBoxEraseData.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gold;
             this.checkBoxEraseData.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxEraseData.Location = new System.Drawing.Point(243, 3);
             this.checkBoxEraseData.Name = "checkBoxEraseData";
             this.checkBoxEraseData.Size = new System.Drawing.Size(24, 23);
             this.checkBoxEraseData.TabIndex = 16;
             this.checkBoxEraseData.UseVisualStyleBackColor = true;
-            this.checkBoxEraseData.Visible = false;
             this.checkBoxEraseData.CheckedChanged += new System.EventHandler(this.checkBoxEraseData_CheckedChanged);
-            // 
-            // olvColumnEdited
-            // 
-            this.olvColumnEdited.ImageAspectName = "EditedIcon";
-            this.olvColumnEdited.Text = "";
-            this.olvColumnEdited.Width = 25;
-            // 
-            // imageList
-            // 
-            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
-            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList.Images.SetKeyName(0, "edit");
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // btnRevert
             // 
+            this.btnRevert.AccessibleDescription = "Revert data:_Selected scan is reverted to original, unedited state";
             this.btnRevert.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnRevert.BackgroundImage")));
             this.btnRevert.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnRevert.FlatAppearance.BorderSize = 0;
@@ -567,7 +575,6 @@
             this.btnRevert.Size = new System.Drawing.Size(24, 23);
             this.btnRevert.TabIndex = 18;
             this.btnRevert.UseVisualStyleBackColor = true;
-            this.btnRevert.Visible = false;
             this.btnRevert.Click += new System.EventHandler(this.btnRevert_Click);
             // 
             // Plotter
