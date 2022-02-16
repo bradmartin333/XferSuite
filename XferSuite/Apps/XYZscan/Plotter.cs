@@ -179,8 +179,7 @@ namespace XferSuite
                 toolStripZ.Enabled = false;
                 comboZ.SelectedIndex = 0;
             }
-            if (comboZ.SelectedIndex < 1)
-                checkBoxEraseData.Visible = (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4;
+            checkBoxEraseData.Visible = (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1;
             toolStripY.Enabled = comboX.SelectedIndex > 0;
             toolStripZ.Enabled = comboY.SelectedIndex > 0;
             if (!checkBoxEraseData.Visible) checkBoxEraseData.Checked = false;
