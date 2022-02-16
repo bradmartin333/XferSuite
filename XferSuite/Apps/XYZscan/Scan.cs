@@ -27,7 +27,7 @@ namespace XferSuite
                 EditedIcon = _Edited ? "edit" : "";
             }
         }
-        public string EditedIcon { get; set; } = "edit";
+        public string EditedIcon { get; set; } = "";
 
         public override string ToString()
         {

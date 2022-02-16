@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -27,7 +26,6 @@ namespace XferSuite
         private ScottPlot.Plottable.MarkerPlot[] HighlightPointPlots { get; set; } = new ScottPlot.Plottable.MarkerPlot[4];
         private int[] LastHighlightedPoints { get; set; } = new int[4];
         private ToolStripComboBox[] ComboBoxes { get; set; }
-        private ToolStripLabel[] toolStripLabels { get; set; }
         private double[] CustomAxes { get; set; } = new double[6];
 
         #endregion
@@ -49,14 +47,11 @@ namespace XferSuite
             foreach (ToolStripComboBox comboBox in ComboBoxes)
                 comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
 
-            toolStripLabels = new ToolStripLabel[] { numX, numY, numZ };
-
             ToolTip removeAngleTip = new ToolTip();
             removeAngleTip.SetToolTip(checkBoxRemoveAngle, 
 "Remove Level:\n" +
 "When checked, the best fit plane of height data is removed\n" +
-"This corrects for chuck level\n" +
-"The best fit plane is removed twice when using custom axes on height data");
+"This corrects for chuck level.");
 
             Path = filePath;
             Show();
@@ -222,30 +217,18 @@ namespace XferSuite
             ClearAxisLabels(formsPlot.Plot);
 
             Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
-            double numPoints = data.Length;
             if (CustomAxes.Sum() != 0)
             {
                 try
                 {
                     data = Zed.filterData(data, comboX.SelectedIndex, CustomAxes[0], CustomAxes[1]);
-                    if (data.Length != numPoints) numX.Text = (data.Length / numPoints).ToString("P", CultureInfo.InvariantCulture);
-                    numPoints = data.Length;
                     data = Zed.filterData(data, comboY.SelectedIndex, CustomAxes[2], CustomAxes[3]);
-                    if (data.Length != numPoints) numY.Text = (data.Length / numPoints).ToString("P", CultureInfo.InvariantCulture);
-                    numPoints = data.Length;
                     data = Zed.filterData(data, comboZ.SelectedIndex, CustomAxes[4], CustomAxes[5]);
-                    if (data.Length != numPoints) numZ.Text = (data.Length / numPoints).ToString("P", CultureInfo.InvariantCulture);
-                    numPoints = data.Length;
                 }
                 catch (Exception)
                 {
                     MessageBox.Show("Invalid custom axes", "XferSuite");
                 }
-            }
-            else
-            {
-                foreach (ToolStripLabel label in toolStripLabels)
-                    label.Text = "";
             }
 
             if (3 > data.Length)
@@ -261,37 +244,6 @@ namespace XferSuite
                 data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z, 
                     RemoveAngle ? p.H - Zed.projectPlane(plane, Zed.posToVec3(data[i])).Z : p.H, 
                     p.I);
-            }
-
-            foreach (ToolStripComboBox comboBox in ComboBoxes)
-            {
-                if (comboBox.SelectedIndex == 4 || comboBox.SelectedIndex == 6)
-                {
-                    int idx = int.Parse(comboBox.Tag.ToString());
-                    if (CustomAxes[idx * 2] != 0 || CustomAxes[(idx * 2) + 1] != 0)
-                    {
-                        data = data.Where(x => (idx == 6 ? x.Z : 0.0) + x.H >= CustomAxes[idx * 2] &&
-                            CustomAxes[(idx * 2) + 1] > (idx == 6 ? x.Z : 0.0) + x.H).ToArray();
-                        if (data.Length != numPoints)
-                        {
-                            toolStripLabels[idx].Text = (data.Length / numPoints).ToString("P", CultureInfo.InvariantCulture);
-                            Zed.Plane plane2 = Zed.getPlane(data);
-                            for (int i = 0; i < data.Length; i++)
-                            {
-                                Zed.Position p = data[i];
-                                data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z,
-                                    RemoveAngle ? p.H - Zed.projectPlane(plane2, Zed.posToVec3(data[i])).Z : p.H,
-                                    p.I);
-                            }
-                        }    
-                    }
-                }
-            }
-
-            if (3 > data.Length)
-            {
-                MessageBox.Show("Insufficient data.", "XferSuite");
-                return new double[6];
             }
 
             double[] xAxisData = Zed.getAxis(data, comboX.SelectedIndex);
@@ -351,7 +303,6 @@ namespace XferSuite
                             HighlightPointPlots[plotIdx] = formsPlot.Plot.AddPoint(0, 0);
                             HighlightPointPlots[plotIdx].Color = Color.Red;
                             HighlightPointPlots[plotIdx].IsVisible = false;
-                            //formsPlot.Plot.AxisAuto();
                         }
                         break;
                     case 3:
@@ -414,26 +365,18 @@ namespace XferSuite
             }
             for (int i = 0; i < groupBounds.Length; i += 2)
             {
-                string min = "N/A";
-                string max = "N/A";
-                if (groupBounds[i] != double.MaxValue && groupBounds[i + 1] != double.MinValue)
-                {
-                    min = Math.Round(groupBounds[i], 3).ToString();
-                    max = Math.Round(groupBounds[i + 1], 3).ToString();
-                }
+                string range = (groupBounds[i] != double.MaxValue && groupBounds[i + 1] != double.MinValue) ?
+                    Math.Round(groupBounds[i + 1] - groupBounds[i], 3).ToString() : "N/A";
                 switch (i/2)
                 {
                     case 0:
-                        toolStripLabelMinX.Text = min;
-                        toolStripLabelMaxX.Text = max;
+                        toolStripLabelRangeX.Text = range;
                         break;
                     case 1:
-                        toolStripLabelMinY.Text = min;
-                        toolStripLabelMaxY.Text = max;
+                        toolStripLabelRangeY.Text = range;
                         break;
                     case 2:
-                        toolStripLabelMinZ.Text = min;
-                        toolStripLabelMaxZ.Text = max;
+                        toolStripLabelRangeZ.Text = range;
                         break;
                     default:
                         break;
@@ -500,82 +443,6 @@ namespace XferSuite
 
         #region Plot Customization
 
-        private void CustomizeAxis(int axis)
-        {
-            double min = 0.0;
-            double max = 0.0;
-            bool parseMin = false;
-            bool parseMax = false;
-            switch (axis)
-            {
-                case 0:
-                    if (comboX.SelectedIndex > 0)
-                    {
-                        parseMin = double.TryParse(toolStripTextBoxCustomMinX.Text, out min);
-                        parseMax = double.TryParse(toolStripTextBoxCustomMaxX.Text, out max);
-                    }
-                    if (toolStripTextBoxCustomMinX.Text == "") parseMin = true;
-                    if (toolStripTextBoxCustomMaxX.Text == "") parseMax = true;
-                    break;
-                case 1:
-                    if (comboY.SelectedIndex > 0)
-                    {
-                        parseMin = double.TryParse(toolStripTextBoxCustomMinY.Text, out min);
-                        parseMax = double.TryParse(toolStripTextBoxCustomMaxY.Text, out max);
-                    }
-                    if (toolStripTextBoxCustomMinY.Text == "") parseMin = true;
-                    if (toolStripTextBoxCustomMaxY.Text == "") parseMax = true;
-                    break;
-                case 2:
-                    if (comboZ.SelectedIndex > 0)
-                    {
-                        parseMin = double.TryParse(toolStripTextBoxCustomMinZ.Text, out min);
-                        parseMax = double.TryParse(toolStripTextBoxCustomMaxZ.Text, out max);
-                    }
-                    if (toolStripTextBoxCustomMinZ.Text == "") parseMin = true;
-                    if (toolStripTextBoxCustomMaxZ.Text == "") parseMax = true;
-                    break;
-            }
-            if (parseMin && parseMax)
-            {
-                CustomAxes[axis * 2] = min;
-                CustomAxes[(axis * 2) + 1] = max;
-                MakePlots();
-            }
-            else
-            {
-                MessageBox.Show("An axis must be selected and the min and max must be valid numbers.", "XferSuite");
-            }
-        }
-
-        private void toolStripButtonApply_Click(object sender, EventArgs e)
-        {
-            CustomizeAxis(int.Parse(((ToolStripButton)sender).Tag.ToString()));
-        }
-
-        private void toolStripButtonResetX_Click(object sender, EventArgs e)
-        {
-            toolStripTextBoxCustomMinX.Text = "";
-            toolStripTextBoxCustomMaxX.Text = "";
-            numX.Text = "";
-            CustomizeAxis(0);
-        }
-
-        private void toolStripButtonResetY_Click(object sender, EventArgs e)
-        {
-            toolStripTextBoxCustomMinY.Text = "";
-            toolStripTextBoxCustomMaxY.Text = "";
-            numY.Text = "";
-            CustomizeAxis(1);
-        }
-
-        private void toolStripButtonResetZ_Click(object sender, EventArgs e)
-        {
-            toolStripTextBoxCustomMinZ.Text = "";
-            toolStripTextBoxCustomMaxZ.Text = "";
-            numZ.Text = "";
-            CustomizeAxis(2);
-        }
         private void FlipAxis(ref double[] data)
         {
             double max = data.Max();
@@ -630,6 +497,11 @@ namespace XferSuite
                 plot.Plot.AxisAuto();
                 plot.Refresh();
             } 
+        }
+
+        private void btnRevert_Click(object sender, EventArgs e)
+        {
+
         }
 
         #endregion
