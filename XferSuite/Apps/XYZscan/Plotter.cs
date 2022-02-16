@@ -72,7 +72,6 @@ namespace XferSuite
             Path = filePath;
             Show();
             MakeList();
-            MakePlots();
         }
 
         private void CheckBoxEraseData_MouseUp(object sender, MouseEventArgs e)
@@ -92,13 +91,12 @@ namespace XferSuite
             {
                 ActiveScans[plotIdx].Data.RemoveAt(LastHighlightedPoints[plotIdx]);
                 ActiveScans[plotIdx].Edited = true;
+                MakePlots();
             }
             catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("Exception in P_MouseUp");
             }
-            
-            MakePlots();
         }
 
         private void P_MouseMove(object sender, MouseEventArgs e)
@@ -234,7 +232,7 @@ namespace XferSuite
                     ClearAxisLabels(Plots[i].Plot);
                     Plots[i].Refresh();
                 }
-                UpdateToolbars(bounds);
+                ApplyBounds(bounds);
             }
         }
 
@@ -371,9 +369,9 @@ namespace XferSuite
 
                 if (EraseDataEnabled && !ErasePointEnabled)
                 {
-                    HSpan[plotIdx] = formsPlot.Plot.AddHorizontalSpan(xAxisData.Min() * 1.1, xAxisData.Max() * 0.9, Color.FromArgb(100, Color.Red));
+                    HSpan[plotIdx] = formsPlot.Plot.AddHorizontalSpan(xAxisData.Min(), xAxisData.Max(), Color.FromArgb(100, Color.Red));
                     HSpan[plotIdx].DragEnabled = true;
-                    VSpan[plotIdx] = formsPlot.Plot.AddVerticalSpan(yAxisData.Min() * 1.1, yAxisData.Max() * 0.9, Color.FromArgb(100, Color.Purple));
+                    VSpan[plotIdx] = formsPlot.Plot.AddVerticalSpan(yAxisData.Min(), yAxisData.Max(), Color.FromArgb(100, Color.Purple));
                     VSpan[plotIdx].DragEnabled = true;
                 }
             }
@@ -391,7 +389,7 @@ namespace XferSuite
             return new double[] {xAxisData.Min(), xAxisData.Max(), yAxisData.Min(), yAxisData.Max(), zAxisData.Min(), zAxisData.Max()};
         }
 
-        private void UpdateToolbars(List<double[]> bounds)
+        private void ApplyBounds(List<double[]> bounds)
         {
             double[] groupBounds = new double[] { double.MaxValue, double.MinValue, double.MaxValue, double.MinValue, double.MaxValue, double.MinValue };
             for (int i = 0; i < bounds.Count; i++)
@@ -446,11 +444,14 @@ namespace XferSuite
                         case 1:
                             Plots[i].Plot.SetAxisLimitsX(groupBounds[0], groupBounds[1]);
                             Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
+                            Plots[i].Plot.XAxis.TickLabelFormat(customTickFormatter);
                             break;
                         case 2:
                             Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
                             Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
                             Plots[i].Plot.YAxis.TickLabelNotation(invertSign: FlipY);
+                            Plots[i].Plot.XAxis.TickLabelFormat(customTickFormatter);
+                            Plots[i].Plot.YAxis.TickLabelFormat(customTickFormatter);
                             break;
                         case 3:
                             Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
@@ -463,6 +464,9 @@ namespace XferSuite
                             Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
                             Plots[i].Plot.YAxis.TickLabelNotation(invertSign: FlipY);
                             Plots[i].Plot.YAxis2.TickLabelNotation(invertSign: FlipZ);
+                            Plots[i].Plot.XAxis.TickLabelFormat(customTickFormatter);
+                            Plots[i].Plot.YAxis.TickLabelFormat(customTickFormatter);
+                            Plots[i].Plot.YAxis2.TickLabelFormat(customTickFormatter);
                             break;
                         default:
                             break;
@@ -478,6 +482,11 @@ namespace XferSuite
                     System.Diagnostics.Debug.WriteLine(ex);
                 }
             }
+        }
+
+        private string customTickFormatter(double position)
+        {
+            return $"{position:F3}";
         }
 
         private void ClearAxisLabels(Plot plot)
@@ -526,7 +535,7 @@ namespace XferSuite
 
         private void checkBoxEraseData_CheckedChanged(object sender, EventArgs e)
         {
-            if (!checkBoxEraseData.Checked && EraseDataEnabled) CreateCustomAxes();
+            if (!checkBoxEraseData.Checked && EraseDataEnabled && !ErasePointEnabled) CreateCustomAxes();
             UpdateEraseDataMode(redraw: true);
         }
 
@@ -537,8 +546,12 @@ namespace XferSuite
                 try
                 {
                     int originalNumPoints = ActiveScans[i].Data.Count;
-                    ActiveScans[i].Data.RemoveAll(s => HSpan[i].X1 > s.X && s.X > HSpan[i].X2 && VSpan[i].Y1 > s.Y && s.Y > VSpan[i].Y2);
-                    ActiveScans[i].Edited = originalNumPoints > ActiveScans[i].Data.Count;
+                    ActiveScans[i].Data.RemoveAll(s => 
+                        (HSpan[i].X1 <= (s.X * (FlipX ? -1 : 1))) && 
+                        ((s.X * (FlipX ? -1 : 1)) <= HSpan[i].X2) && 
+                        (VSpan[i].Y1 <= (s.Y * (FlipY ? -1 : 1))) && 
+                        ((s.Y * (FlipY ? -1 : 1)) <= VSpan[i].Y2));
+                    ActiveScans[i].Edited = ActiveScans[i].Edited ? true : originalNumPoints > ActiveScans[i].Data.Count;
                 }
                 catch (Exception)
                 {
@@ -550,8 +563,7 @@ namespace XferSuite
 
         private void UpdateEraseDataMode(bool redraw = false)
         {
-            EraseDataEnabled = checkBoxEraseData.Checked && !FlipX && !FlipY && !FlipZ;
-            if (checkBoxEraseData.Checked && !EraseDataEnabled) checkBoxEraseData.Checked = false;
+            EraseDataEnabled = checkBoxEraseData.Checked;
             ErasePointEnabled = EraseDataEnabled ? (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1 : false;
             if (redraw) MakePlots();
         }
