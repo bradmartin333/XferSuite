@@ -22,6 +22,7 @@ namespace XferSuite
         private string Path { get; set; }
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private Scan[] ActiveScans { get; set; } = new Scan[4];
+        private int LastActiveScans { get; set; } = -1;
         private FormsPlot[] Plots { get; set; }
         private ScatterPlot[] ErasePointPlots { get; set; } = new ScatterPlot[4];
         private MarkerPlot[] HighlightPointPlots { get; set; } = new MarkerPlot[4];
@@ -224,14 +225,10 @@ namespace XferSuite
                     Scan scan = (Scan)olv.SelectedObjects[i];
                     ActiveScans[i] = scan;
                     if (scan.Data.Count > 3) bounds.Add(CreatePlot(i, scan));
+                    Plots[i].Visible = true;
                 }
-                for (int i = olv.SelectedObjects.Count; i < Plots.Length; i++)
-                {
-                    Plots[i].Plot.Clear();
-                    Plots[i].Plot.Title("");
-                    ClearAxisLabels(Plots[i].Plot);
-                    Plots[i].Refresh();
-                }
+                if (olv.SelectedObjects.Count != LastActiveScans) for (int i = olv.SelectedObjects.Count; i < Plots.Length; i++) Plots[i].Visible = false;
+                LastActiveScans = olv.SelectedObjects.Count;
                 ApplyBounds(bounds);
             }
         }
@@ -369,9 +366,9 @@ namespace XferSuite
 
                 if (EraseDataEnabled && !ErasePointEnabled)
                 {
-                    HSpan[plotIdx] = formsPlot.Plot.AddHorizontalSpan(xAxisData.Min(), xAxisData.Max(), Color.FromArgb(100, Color.Red));
+                    HSpan[plotIdx] = formsPlot.Plot.AddHorizontalSpan(xAxisData.Min() - 2, xAxisData.Min() - 1, Color.FromArgb(150, Color.DarkRed));
                     HSpan[plotIdx].DragEnabled = true;
-                    VSpan[plotIdx] = formsPlot.Plot.AddVerticalSpan(yAxisData.Min(), yAxisData.Max(), Color.FromArgb(100, Color.Purple));
+                    VSpan[plotIdx] = formsPlot.Plot.AddVerticalSpan(yAxisData.Min() - 2, yAxisData.Min() - 1, Color.FromArgb(150, Color.DarkViolet));
                     VSpan[plotIdx].DragEnabled = true;
                 }
             }
@@ -525,18 +522,21 @@ namespace XferSuite
         {
             ShowBestFit = !ShowBestFit;
             MakePlots();
+            ProgressBar.Focus();
         }
 
         private void CheckBoxRemoveAngle_CheckedChanged(object sender, EventArgs e)
         {
             RemoveAngle = !RemoveAngle;
             MakePlots();
+            ProgressBar.Focus();
         }
 
         private void CheckBoxEraseData_CheckedChanged(object sender, EventArgs e)
         {
             if (!checkBoxEraseData.Checked && EraseDataEnabled && !ErasePointEnabled) CreateCustomAxes();
             UpdateEraseDataMode(redraw: true);
+            ProgressBar.Focus();
         }
 
         private void CreateCustomAxes()
@@ -583,16 +583,15 @@ namespace XferSuite
             {
                 plot.Plot.AxisAuto();
                 plot.Refresh();
-            } 
+            }
+            ProgressBar.Focus();
         }
 
         private void BtnRevert_Click(object sender, EventArgs e)
         {
-            if (olv.SelectedObject != null)
-            {
-                ((Scan)olv.SelectedObject).RevertData();
-                MakePlots();
-            }
+            for (int i = 0; i < olv.SelectedObjects.Count; i++) ((Scan)olv.SelectedObjects[i]).RevertData();
+            MakePlots();
+            ProgressBar.Focus();
         }
 
         #endregion
@@ -610,6 +609,7 @@ namespace XferSuite
                         for (int i = olv.SelectedObjects.Count - 1; i >= 0; i--)
                             sw.Write(((Scan)olv.SelectedObjects[i]).ToString());
             }
+            ProgressBar.Focus();
         }
     }
 }
