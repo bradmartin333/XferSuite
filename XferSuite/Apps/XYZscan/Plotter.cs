@@ -564,6 +564,7 @@ namespace XferSuite
         private void UpdateEraseDataMode(bool redraw = false)
         {
             EraseDataEnabled = checkBoxEraseData.Checked;
+            if (EraseDataEnabled && (comboX.SelectedIndex == 4 || comboY.SelectedIndex == 4) && comboZ.SelectedIndex > 1) TurnOffEraseMode();
             ErasePointEnabled = EraseDataEnabled && (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1;
             if (redraw) MakePlots();
         }
