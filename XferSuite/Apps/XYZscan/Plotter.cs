@@ -1,4 +1,5 @@
 ﻿using ScottPlot;
+using ScottPlot.Plottable;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,6 +13,7 @@ namespace XferSuite
     public partial class Plotter : Form
     {
         #region Globals
+        private ToolStripComboBox[] ComboBoxes { get; set; }
         private bool ShowBestFit { get; set; }
         private bool RemoveAngle { get; set; } = true;
         private bool FlipX { get; set; } = false;
@@ -21,14 +23,15 @@ namespace XferSuite
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private Scan[] ActiveScans { get; set; } = new Scan[4];
         private FormsPlot[] Plots { get; set; }
-        private ScottPlot.Plottable.ScatterPlot[] ErasePointPlots { get; set; } = new ScottPlot.Plottable.ScatterPlot[4];
-        private ScottPlot.Plottable.MarkerPlot[] HighlightPointPlots { get; set; } = new ScottPlot.Plottable.MarkerPlot[4];
+        private ScatterPlot[] ErasePointPlots { get; set; } = new ScatterPlot[4];
+        private MarkerPlot[] HighlightPointPlots { get; set; } = new MarkerPlot[4];
         private int[] LastHighlightedPoints { get; set; } = new int[4];
-        private ToolStripComboBox[] ComboBoxes { get; set; }
+        private HSpan[] HSpan { get; set; } = new HSpan[4];
+        private VSpan[] VSpan { get; set; } = new VSpan[4];
         private double[] CustomAxes { get; set; } = new double[6];
-        public bool ErasePointEnabled { get; set; }
+        public bool EraseDataEnabled { get; set; }
         private bool _EraseOnClickEnabled = false;
-        private bool EraseOnClickEnabled
+        private bool ErasePointEnabled
         {
             get => _EraseOnClickEnabled;
             set
@@ -57,12 +60,14 @@ namespace XferSuite
             foreach (ToolStripComboBox comboBox in ComboBoxes)
                 comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
 
-            Control[] toolTipContols = tlp.Controls.Cast<Control>().Where(x => x.GetType() == typeof(CheckBox) || x.GetType() == typeof(Button)).ToArray();
+            Control[] toolTipContols = tlp.Controls.Cast<Control>().Where(c => c.GetType() == typeof(CheckBox) || c.GetType() == typeof(Button)).ToArray();
             foreach (Control control in toolTipContols)
             {
                 ToolTip tip = new ToolTip() { InitialDelay = 1 };
                 if (control.AccessibleDescription != null) tip.SetToolTip(control, control.AccessibleDescription.Replace('_', '\n'));
             }
+
+            checkBoxEraseData.MouseUp += CheckBoxEraseData_MouseUp;
 
             Path = filePath;
             Show();
@@ -70,23 +75,35 @@ namespace XferSuite
             MakePlots();
         }
 
+        private void CheckBoxEraseData_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) TurnOffEraseMode();
+        }
+
         private void P_MouseUp(object sender, MouseEventArgs e)
         {
-            if (!EraseOnClickEnabled) return;
+            if (!ErasePointEnabled) return;
 
             FormsPlot p = (FormsPlot)sender;
             int plotIdx = int.Parse(p.Tag.ToString());
             if (ActiveScans[plotIdx] == null) return;
 
-            ActiveScans[plotIdx].Data.RemoveAt(LastHighlightedPoints[plotIdx]);
-            ActiveScans[plotIdx].Edited = true;
-            olv.Refresh();
+            try
+            {
+                ActiveScans[plotIdx].Data.RemoveAt(LastHighlightedPoints[plotIdx]);
+                ActiveScans[plotIdx].Edited = true;
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception in P_MouseUp");
+            }
+            
             MakePlots();
         }
 
         private void P_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!EraseOnClickEnabled) return;
+            if (!ErasePointEnabled) return;
 
             FormsPlot p = (FormsPlot)sender;
             int plotIdx = int.Parse(p.Tag.ToString());
@@ -198,7 +215,9 @@ namespace XferSuite
 
         private void MakePlots()
         {
+            olv.Refresh();
             UpdateEraseDataMode();
+
             if (olv.SelectedIndices.Count <= 4)
             {
                 List<double[]> bounds = new List<double[]> ();
@@ -311,7 +330,7 @@ namespace XferSuite
                             annotation.Shadow = false;
                             annotation.BackgroundColor = Color.White;
                         }
-                        if (EraseOnClickEnabled)
+                        if (ErasePointEnabled)
                         {
                             HighlightPointPlots[plotIdx] = formsPlot.Plot.AddPoint(0, 0);
                             HighlightPointPlots[plotIdx].Color = Color.Red;
@@ -346,6 +365,14 @@ namespace XferSuite
                         break;
                     default:
                         break;
+                }
+
+                if (EraseDataEnabled && !ErasePointEnabled)
+                {
+                    HSpan[plotIdx] = formsPlot.Plot.AddHorizontalSpan(xAxisData.Min() * 1.1, xAxisData.Max() * 0.9, Color.FromArgb(100, Color.Red));
+                    HSpan[plotIdx].DragEnabled = true;
+                    VSpan[plotIdx] = formsPlot.Plot.AddVerticalSpan(yAxisData.Min() * 1.1, yAxisData.Max() * 0.9, Color.FromArgb(100, Color.Purple));
+                    VSpan[plotIdx].DragEnabled = true;
                 }
             }
             catch (Exception)
@@ -408,7 +435,7 @@ namespace XferSuite
 
             for (int i = 0; i < 4; i++)
             {
-                if (!ErasePointEnabled)
+                if (!EraseDataEnabled)
                 {
                     switch (numAxes)
                     {
@@ -499,14 +526,42 @@ namespace XferSuite
 
         private void checkBoxEraseData_CheckedChanged(object sender, EventArgs e)
         {
+            if (!checkBoxEraseData.Checked && EraseDataEnabled) CreateCustomAxes();
             UpdateEraseDataMode(redraw: true);
+        }
+
+        private void CreateCustomAxes()
+        {
+            for (int i = 0; i < olv.SelectedIndices.Count; i++)
+            {
+                try
+                {
+                    int originalNumPoints = ActiveScans[i].Data.Count;
+                    ActiveScans[i].Data.RemoveAll(s => HSpan[i].X1 > s.X && s.X > HSpan[i].X2 && VSpan[i].Y1 > s.Y && s.Y > VSpan[i].Y2);
+                    ActiveScans[i].Edited = originalNumPoints > ActiveScans[i].Data.Count;
+                }
+                catch (Exception)
+                {
+                    System.Diagnostics.Debug.WriteLine("Exception in CreateCustomAxes");
+                }
+            }
+            MakePlots();
         }
 
         private void UpdateEraseDataMode(bool redraw = false)
         {
-            ErasePointEnabled = checkBoxEraseData.Checked;
-            EraseOnClickEnabled = ErasePointEnabled ? (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1 : false;
+            EraseDataEnabled = checkBoxEraseData.Checked && !FlipX && !FlipY && !FlipZ;
+            if (checkBoxEraseData.Checked && !EraseDataEnabled) checkBoxEraseData.Checked = false;
+            ErasePointEnabled = EraseDataEnabled ? (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1 : false;
             if (redraw) MakePlots();
+        }
+
+        private void TurnOffEraseMode()
+        {
+            EraseDataEnabled = false;
+            ErasePointEnabled = false;
+            checkBoxEraseData.Checked = false;
+            MakePlots();
         }
 
         private void buttonAutoscale_Click(object sender, EventArgs e)
