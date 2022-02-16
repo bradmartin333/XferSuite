@@ -134,7 +134,7 @@
             this.buttonAutoscale.Size = new System.Drawing.Size(24, 23);
             this.buttonAutoscale.TabIndex = 17;
             this.buttonAutoscale.UseVisualStyleBackColor = true;
-            this.buttonAutoscale.Click += new System.EventHandler(this.buttonAutoscale_Click);
+            this.buttonAutoscale.Click += new System.EventHandler(this.ButtonAutoscale_Click);
             // 
             // checkBoxShowBestFit
             // 
@@ -152,7 +152,7 @@
             this.checkBoxShowBestFit.Size = new System.Drawing.Size(24, 23);
             this.checkBoxShowBestFit.TabIndex = 14;
             this.checkBoxShowBestFit.UseVisualStyleBackColor = true;
-            this.checkBoxShowBestFit.CheckedChanged += new System.EventHandler(this.checkBoxShowBestFit_CheckedChanged);
+            this.checkBoxShowBestFit.CheckedChanged += new System.EventHandler(this.CheckBoxShowBestFit_CheckedChanged);
             // 
             // ProgressBar
             // 
@@ -357,7 +357,7 @@
             this.toolStripButtonFlipX.Size = new System.Drawing.Size(30, 22);
             this.toolStripButtonFlipX.Tag = "0";
             this.toolStripButtonFlipX.Text = "Flip";
-            this.toolStripButtonFlipX.Click += new System.EventHandler(this.toolStripButtonFlipX_Click);
+            this.toolStripButtonFlipX.Click += new System.EventHandler(this.ToolStripButtonFlipX_Click);
             // 
             // toolStripSeparator3
             // 
@@ -422,7 +422,7 @@
             this.toolStripButtonFlipY.Size = new System.Drawing.Size(30, 22);
             this.toolStripButtonFlipY.Tag = "1";
             this.toolStripButtonFlipY.Text = "Flip";
-            this.toolStripButtonFlipY.Click += new System.EventHandler(this.toolStripButtonFlipY_Click);
+            this.toolStripButtonFlipY.Click += new System.EventHandler(this.ToolStripButtonFlipY_Click);
             // 
             // toolStripSeparator1
             // 
@@ -487,7 +487,7 @@
             this.toolStripButtonFlipZ.Size = new System.Drawing.Size(30, 22);
             this.toolStripButtonFlipZ.Tag = "2";
             this.toolStripButtonFlipZ.Text = "Flip";
-            this.toolStripButtonFlipZ.Click += new System.EventHandler(this.toolStripButtonFlipZ_Click);
+            this.toolStripButtonFlipZ.Click += new System.EventHandler(this.ToolStripButtonFlipZ_Click);
             // 
             // toolStripSeparator2
             // 
@@ -526,7 +526,7 @@
             this.checkBoxRemoveAngle.Size = new System.Drawing.Size(24, 23);
             this.checkBoxRemoveAngle.TabIndex = 12;
             this.checkBoxRemoveAngle.UseVisualStyleBackColor = true;
-            this.checkBoxRemoveAngle.CheckedChanged += new System.EventHandler(this.checkBoxRemoveAngle_CheckedChanged);
+            this.checkBoxRemoveAngle.CheckedChanged += new System.EventHandler(this.CheckBoxRemoveAngle_CheckedChanged);
             // 
             // buttonExportSelected
             // 
@@ -542,7 +542,7 @@
             this.buttonExportSelected.Size = new System.Drawing.Size(24, 23);
             this.buttonExportSelected.TabIndex = 15;
             this.buttonExportSelected.UseVisualStyleBackColor = true;
-            this.buttonExportSelected.Click += new System.EventHandler(this.buttonExportSelected_Click);
+            this.buttonExportSelected.Click += new System.EventHandler(this.ButtonExportSelected_Click);
             // 
             // checkBoxEraseData
             // 
@@ -561,7 +561,7 @@
             this.checkBoxEraseData.Size = new System.Drawing.Size(24, 23);
             this.checkBoxEraseData.TabIndex = 16;
             this.checkBoxEraseData.UseVisualStyleBackColor = true;
-            this.checkBoxEraseData.CheckedChanged += new System.EventHandler(this.checkBoxEraseData_CheckedChanged);
+            this.checkBoxEraseData.CheckedChanged += new System.EventHandler(this.CheckBoxEraseData_CheckedChanged);
             // 
             // btnRevert
             // 
@@ -575,7 +575,7 @@
             this.btnRevert.Size = new System.Drawing.Size(24, 23);
             this.btnRevert.TabIndex = 18;
             this.btnRevert.UseVisualStyleBackColor = true;
-            this.btnRevert.Click += new System.EventHandler(this.btnRevert_Click);
+            this.btnRevert.Click += new System.EventHandler(this.BtnRevert_Click);
             // 
             // Plotter
             // 

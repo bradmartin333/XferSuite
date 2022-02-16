@@ -444,14 +444,14 @@ namespace XferSuite
                         case 1:
                             Plots[i].Plot.SetAxisLimitsX(groupBounds[0], groupBounds[1]);
                             Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
-                            Plots[i].Plot.XAxis.TickLabelFormat(customTickFormatter);
+                            Plots[i].Plot.XAxis.TickLabelFormat(CustomTickFormatter);
                             break;
                         case 2:
                             Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
                             Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
                             Plots[i].Plot.YAxis.TickLabelNotation(invertSign: FlipY);
-                            Plots[i].Plot.XAxis.TickLabelFormat(customTickFormatter);
-                            Plots[i].Plot.YAxis.TickLabelFormat(customTickFormatter);
+                            Plots[i].Plot.XAxis.TickLabelFormat(CustomTickFormatter);
+                            Plots[i].Plot.YAxis.TickLabelFormat(CustomTickFormatter);
                             break;
                         case 3:
                             Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
@@ -464,9 +464,9 @@ namespace XferSuite
                             Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
                             Plots[i].Plot.YAxis.TickLabelNotation(invertSign: FlipY);
                             Plots[i].Plot.YAxis2.TickLabelNotation(invertSign: FlipZ);
-                            Plots[i].Plot.XAxis.TickLabelFormat(customTickFormatter);
-                            Plots[i].Plot.YAxis.TickLabelFormat(customTickFormatter);
-                            Plots[i].Plot.YAxis2.TickLabelFormat(customTickFormatter);
+                            Plots[i].Plot.XAxis.TickLabelFormat(CustomTickFormatter);
+                            Plots[i].Plot.YAxis.TickLabelFormat(CustomTickFormatter);
+                            Plots[i].Plot.YAxis2.TickLabelFormat(CustomTickFormatter);
                             break;
                         default:
                             break;
@@ -484,7 +484,7 @@ namespace XferSuite
             }
         }
 
-        private string customTickFormatter(double position)
+        private string CustomTickFormatter(double position)
         {
             return $"{position:F3}";
         }
@@ -500,40 +500,40 @@ namespace XferSuite
 
         #region Plot Customization
 
-        private void toolStripButtonFlipX_Click(object sender, EventArgs e)
+        private void ToolStripButtonFlipX_Click(object sender, EventArgs e)
         {
             FlipX = !FlipX;
             ((ToolStripButton)sender).BackColor = FlipX ? Color.LightGreen : SystemColors.Control;
             MakePlots();
         }
 
-        private void toolStripButtonFlipY_Click(object sender, EventArgs e)
+        private void ToolStripButtonFlipY_Click(object sender, EventArgs e)
         {
             FlipY = !FlipY;
             ((ToolStripButton)sender).BackColor = FlipY ? Color.LightGreen : SystemColors.Control;
             MakePlots();
         }
 
-        private void toolStripButtonFlipZ_Click(object sender, EventArgs e)
+        private void ToolStripButtonFlipZ_Click(object sender, EventArgs e)
         {
             FlipZ = !FlipZ;
             ((ToolStripButton)sender).BackColor = FlipZ ? Color.LightGreen : SystemColors.Control;
             MakePlots();
         }
 
-        private void checkBoxShowBestFit_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxShowBestFit_CheckedChanged(object sender, EventArgs e)
         {
             ShowBestFit = !ShowBestFit;
             MakePlots();
         }
 
-        private void checkBoxRemoveAngle_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxRemoveAngle_CheckedChanged(object sender, EventArgs e)
         {
             RemoveAngle = !RemoveAngle;
             MakePlots();
         }
 
-        private void checkBoxEraseData_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxEraseData_CheckedChanged(object sender, EventArgs e)
         {
             if (!checkBoxEraseData.Checked && EraseDataEnabled && !ErasePointEnabled) CreateCustomAxes();
             UpdateEraseDataMode(redraw: true);
@@ -551,7 +551,7 @@ namespace XferSuite
                         ((s.X * (FlipX ? -1 : 1)) <= HSpan[i].X2) && 
                         (VSpan[i].Y1 <= (s.Y * (FlipY ? -1 : 1))) && 
                         ((s.Y * (FlipY ? -1 : 1)) <= VSpan[i].Y2));
-                    ActiveScans[i].Edited = ActiveScans[i].Edited ? true : originalNumPoints > ActiveScans[i].Data.Count;
+                    ActiveScans[i].Edited = ActiveScans[i].Edited || originalNumPoints > ActiveScans[i].Data.Count;
                 }
                 catch (Exception)
                 {
@@ -564,7 +564,7 @@ namespace XferSuite
         private void UpdateEraseDataMode(bool redraw = false)
         {
             EraseDataEnabled = checkBoxEraseData.Checked;
-            ErasePointEnabled = EraseDataEnabled ? (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1 : false;
+            ErasePointEnabled = EraseDataEnabled && (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1;
             if (redraw) MakePlots();
         }
 
@@ -576,7 +576,7 @@ namespace XferSuite
             MakePlots();
         }
 
-        private void buttonAutoscale_Click(object sender, EventArgs e)
+        private void ButtonAutoscale_Click(object sender, EventArgs e)
         {
             foreach (FormsPlot plot in Plots)
             {
@@ -585,7 +585,7 @@ namespace XferSuite
             } 
         }
 
-        private void btnRevert_Click(object sender, EventArgs e)
+        private void BtnRevert_Click(object sender, EventArgs e)
         {
             if (olv.SelectedObject != null)
             {
@@ -596,7 +596,7 @@ namespace XferSuite
 
         #endregion
 
-        private void buttonExportSelected_Click(object sender, EventArgs e)
+        private void ButtonExportSelected_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
