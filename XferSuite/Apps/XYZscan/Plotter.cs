@@ -67,6 +67,8 @@ namespace XferSuite
             if (ActiveScans[plotIdx] == null) return;
 
             ActiveScans[plotIdx].Data.RemoveAt(LastHighlightedPoints[plotIdx]);
+            ActiveScans[plotIdx].Edited = true;
+            olv.Refresh();
             MakePlots();
         }
 
@@ -146,6 +148,7 @@ namespace XferSuite
                     try
                     {
                         Scans[scanIdx].Data.Add(Zed.toPosition(line));
+                        Scans[scanIdx].BackupData();
                     }
                     catch (Exception ex)
                     {
@@ -186,6 +189,7 @@ namespace XferSuite
 
         private void MakePlots()
         {
+            UpdateRevertVisibility();
             if (olv.SelectedIndices.Count <= 4)
             {
                 List<double[]> bounds = new List<double[]> ();
@@ -501,7 +505,19 @@ namespace XferSuite
 
         private void btnRevert_Click(object sender, EventArgs e)
         {
+            ((Scan)olv.SelectedObject).RevertData();
+            MakePlots();
+        }
 
+        private void UpdateRevertVisibility()
+        {
+            if (olv.SelectedObject != null)
+            {
+                Scan scan = (Scan)olv.SelectedObject;
+                btnRevert.Visible = scan.Edited;
+            }
+            else
+                btnRevert.Visible = false;
         }
 
         #endregion

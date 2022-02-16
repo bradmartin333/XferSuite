@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using XferHelper;
 
@@ -15,6 +16,7 @@ namespace XferSuite
         public int ScanSpeed { get; set; } = 0;
         public int NumPasses { get; set; } = 0;
         public int Threshold { get; set; } = 0;
+        private Zed.Position[] OriginalData { get; set; }
         public List<Zed.Position> Data { get; set; } = new List<Zed.Position>();
 
         private bool _Edited;
@@ -35,6 +37,17 @@ namespace XferSuite
             foreach (Zed.Position p in Data)
                 sb.Append($"{p.Time.ToString("yyyy-MM-dd")} {p.Time.ToString("HH:mm:ss")}\t{p.X}\t{p.Y}\t{p.H / 1e3}\t{p.Z}\t{p.I}\n");
             return sb.ToString();
+        }
+
+        public void BackupData()
+        {
+            OriginalData = (Zed.Position[])Data.ToArray().Clone();
+        }
+
+        public void RevertData()
+        {
+            Data = OriginalData.ToList();
+            Edited = false;
         }
     }
 }
