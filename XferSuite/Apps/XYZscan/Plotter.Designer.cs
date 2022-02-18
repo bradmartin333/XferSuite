@@ -541,9 +541,7 @@
             // 
             // checkBoxEraseData
             // 
-            this.checkBoxEraseData.AccessibleDescription = "Erase Data:_Remove data by axis sliders _Special case to remove by clicking point" +
-    "s with X vs. Height vs. Null_Cannot use special case with an enabled Z Axis_Righ" +
-    "t click to exit without modifying data";
+            this.checkBoxEraseData.AccessibleDescription = resources.GetString("checkBoxEraseData.AccessibleDescription");
             this.checkBoxEraseData.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxEraseData.AutoSize = true;
             this.checkBoxEraseData.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxEraseData.BackgroundImage")));

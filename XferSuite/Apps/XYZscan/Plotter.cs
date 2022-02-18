@@ -251,7 +251,7 @@ namespace XferSuite
                 {
                     Scan scan = (Scan)olv.SelectedObjects[i];
                     ActiveScans[i] = scan;
-                    if (scan.Data.Count > 3) bounds.Add(CreatePlot(i, scan, colorScaling));
+                    bounds.Add(CreatePlot(i, scan, colorScaling));
                     Plots[i].Visible = true;
                 }
                 if (olv.SelectedObjects.Count != LastActiveScans) for (int i = olv.SelectedObjects.Count; i < Plots.Length; i++) Plots[i].Visible = false;
@@ -291,9 +291,9 @@ namespace XferSuite
             ClearAxisLabels(formsPlot.Plot);
 
             Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
-            if (3 > data.Length && RemoveAngle)
+            if (3 > data.Length)
             {
-                MessageBox.Show("Insufficient data.", "XferSuite");
+                formsPlot.Plot.Title($"{scan.Name}\nInsufficient Data", false);
                 return new double[6];
             }
             data = ApplyFilters(data);
@@ -593,7 +593,8 @@ namespace XferSuite
         private void UpdateEraseDataMode(bool redraw = false)
         {
             EraseDataEnabled = checkBoxEraseData.Checked;
-            if (EraseDataEnabled && (comboX.SelectedIndex == (int)Axes.H || comboY.SelectedIndex == (int)Axes.H) && 
+            if (EraseDataEnabled && (comboX.SelectedIndex == (int)Axes.H || comboY.SelectedIndex == (int)Axes.H || 
+                comboX.SelectedIndex == (int)Axes.ZH || comboY.SelectedIndex == (int)Axes.ZH) && 
                 comboZ.SelectedIndex != (int)Axes.Null) TurnOffEraseMode();
             ErasePointEnabled = EraseDataEnabled && (comboX.SelectedIndex == (int)Axes.X || comboX.SelectedIndex == (int)Axes.Y) && 
                 comboY.SelectedIndex == (int)Axes.H && comboZ.SelectedIndex == (int)Axes.Null;
