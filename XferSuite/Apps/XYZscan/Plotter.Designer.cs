@@ -141,7 +141,7 @@
             this.checkBoxEqualize.Size = new System.Drawing.Size(24, 23);
             this.checkBoxEqualize.TabIndex = 19;
             this.checkBoxEqualize.UseVisualStyleBackColor = true;
-            this.checkBoxEqualize.CheckedChanged += new System.EventHandler(this.checkBoxEqualize_CheckedChanged);
+            this.checkBoxEqualize.CheckedChanged += new System.EventHandler(this.CheckBoxEqualize_CheckedChanged);
             // 
             // buttonAutoscale
             // 

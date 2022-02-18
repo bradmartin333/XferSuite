@@ -41,7 +41,7 @@ namespace XferSuite
                 checkBoxEraseData.FlatAppearance.CheckedBackColor = _EraseOnClickEnabled ? Color.LightCoral : Color.Gold;
             }
         }
-        private string[] AxesStrings = new string[] { "None", "X (mm)", "Y (mm)", "Z (mm)", "Height (µm)", "Intensity (%)", "Z - Height (mm)" };
+        private readonly string[] AxesStrings = new string[] { "None", "X (mm)", "Y (mm)", "Z (mm)", "Height (µm)", "Intensity (%)", "Z - Height (mm)" };
         private enum Axes { Null, X, Y, Z, H, I, ZH }
 
         #endregion
@@ -82,6 +82,8 @@ namespace XferSuite
             Show();
             MakeList();
         }
+
+        #region Mouse Handlers
 
         private void CheckBoxEraseData_MouseUp(object sender, MouseEventArgs e)
         {
@@ -130,6 +132,8 @@ namespace XferSuite
                 p.Refresh();
             }
         }
+
+        #endregion
 
         #region Log Parsing
 
@@ -548,7 +552,7 @@ namespace XferSuite
             ProgressBar.Focus();
         }
 
-        private void checkBoxEqualize_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxEqualize_CheckedChanged(object sender, EventArgs e)
         {
             Equalize = !Equalize;
             MakePlots();
