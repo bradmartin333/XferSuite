@@ -41,6 +41,8 @@ namespace XferSuite
                 checkBoxEraseData.FlatAppearance.CheckedBackColor = _EraseOnClickEnabled ? Color.LightCoral : Color.Gold;
             }
         }
+        private string[] AxesStrings = new string[] { "None", "X (mm)", "Y (mm)", "Z (mm)", "Height (µm)", "Intensity (%)", "Z - Height (mm)" };
+        private enum Axes { Null, X, Y, Z, H, I, ZH }
 
         #endregion
 
@@ -59,8 +61,14 @@ namespace XferSuite
 
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
             foreach (ToolStripComboBox comboBox in ComboBoxes)
+            {
                 comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
-
+                comboBox.Items.AddRange(AxesStrings);
+            }
+            comboX.SelectedIndex = (int)Axes.X;
+            comboY.SelectedIndex = (int)Axes.Y;
+            comboZ.SelectedIndex = (int)Axes.H;
+                
             Control[] toolTipContols = tlp.Controls.Cast<Control>().Where(c => c.GetType() == typeof(CheckBox) || c.GetType() == typeof(Button)).ToArray();
             foreach (Control control in toolTipContols)
             {
@@ -197,18 +205,18 @@ namespace XferSuite
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboX.SelectedIndex < 1)
+            if (comboX.SelectedIndex == (int)Axes.Null)
             {
                 toolStripY.Enabled = false;
-                comboY.SelectedIndex = 0;
+                comboY.SelectedIndex = (int)Axes.Null;
             }
-            if (comboY.SelectedIndex < 1)
+            if (comboY.SelectedIndex == (int)Axes.Null)
             {
                 toolStripZ.Enabled = false;
-                comboZ.SelectedIndex = 0;
+                comboZ.SelectedIndex = (int)Axes.Null;
             }
-            toolStripY.Enabled = comboX.SelectedIndex > 0;
-            toolStripZ.Enabled = comboY.SelectedIndex > 0;
+            toolStripY.Enabled = comboX.SelectedIndex != (int)Axes.Null;
+            toolStripZ.Enabled = comboY.SelectedIndex != (int)Axes.Null;
             MakePlots();
         }
 
@@ -220,7 +228,7 @@ namespace XferSuite
             if (olv.SelectedIndices.Count <= 4)
             {
                 (double, double) colorScaling = (double.MaxValue, double.MinValue);
-                if (comboZ.SelectedIndex > 0)
+                if (comboZ.SelectedIndex != (int)Axes.Null)
                 {
                     for (int i = 0; i < olv.SelectedObjects.Count; i++)
                     {
@@ -296,13 +304,9 @@ namespace XferSuite
             if (FlipY) for (int i = 0; i < yAxisData.Length; i++) yAxisData[i] *= -1;
             if (FlipZ) for (int i = 0; i < zAxisData.Length; i++) zAxisData[i] *= -1;
 
-            int numAxes = 0;
-            foreach (ToolStripComboBox cbx in ComboBoxes)
-                if (cbx.SelectedIndex > 0) numAxes++;
-
             try
             {
-                switch (numAxes)
+                switch (ComboBoxes.Where(x => x.SelectedIndex != (int)Axes.Null).Count())
                 {
                     case 0:
                         break;
@@ -434,7 +438,7 @@ namespace XferSuite
 
             int numAxes = 0;
             foreach (ToolStripComboBox cbx in ComboBoxes)
-                if (cbx.SelectedIndex > 0) numAxes++;
+                if (cbx.SelectedIndex != (int)Axes.Null) numAxes++;
 
             for (int i = 0; i < groupBounds.Length; i += 2)
             {
@@ -585,8 +589,10 @@ namespace XferSuite
         private void UpdateEraseDataMode(bool redraw = false)
         {
             EraseDataEnabled = checkBoxEraseData.Checked;
-            if (EraseDataEnabled && (comboX.SelectedIndex == 4 || comboY.SelectedIndex == 4) && comboZ.SelectedIndex > 1) TurnOffEraseMode();
-            ErasePointEnabled = EraseDataEnabled && (comboX.SelectedIndex == 1 || comboX.SelectedIndex == 2) && comboY.SelectedIndex == 4 && comboZ.SelectedIndex < 1;
+            if (EraseDataEnabled && (comboX.SelectedIndex == (int)Axes.H || comboY.SelectedIndex == (int)Axes.H) && 
+                comboZ.SelectedIndex != (int)Axes.Null) TurnOffEraseMode();
+            ErasePointEnabled = EraseDataEnabled && (comboX.SelectedIndex == (int)Axes.X || comboX.SelectedIndex == (int)Axes.Y) && 
+                comboY.SelectedIndex == (int)Axes.H && comboZ.SelectedIndex == (int)Axes.Null;
             if (redraw) MakePlots();
         }
 

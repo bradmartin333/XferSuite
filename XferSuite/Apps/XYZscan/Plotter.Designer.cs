@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Plotter));
             this.tlp = new System.Windows.Forms.TableLayoutPanel();
+            this.checkBoxEqualize = new System.Windows.Forms.CheckBox();
             this.buttonAutoscale = new System.Windows.Forms.Button();
             this.checkBoxShowBestFit = new System.Windows.Forms.CheckBox();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
@@ -75,7 +76,6 @@
             this.buttonExportSelected = new System.Windows.Forms.Button();
             this.checkBoxEraseData = new System.Windows.Forms.CheckBox();
             this.btnRevert = new System.Windows.Forms.Button();
-            this.checkBoxEqualize = new System.Windows.Forms.CheckBox();
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -124,6 +124,24 @@
             this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlp.Size = new System.Drawing.Size(1231, 784);
             this.tlp.TabIndex = 0;
+            // 
+            // checkBoxEqualize
+            // 
+            this.checkBoxEqualize.AccessibleDescription = "Equalize:_Height axes share a common lower bound";
+            this.checkBoxEqualize.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxEqualize.AutoSize = true;
+            this.checkBoxEqualize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxEqualize.BackgroundImage")));
+            this.checkBoxEqualize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.checkBoxEqualize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxEqualize.FlatAppearance.BorderSize = 0;
+            this.checkBoxEqualize.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
+            this.checkBoxEqualize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxEqualize.Location = new System.Drawing.Point(357, 3);
+            this.checkBoxEqualize.Name = "checkBoxEqualize";
+            this.checkBoxEqualize.Size = new System.Drawing.Size(24, 23);
+            this.checkBoxEqualize.TabIndex = 19;
+            this.checkBoxEqualize.UseVisualStyleBackColor = true;
+            this.checkBoxEqualize.CheckedChanged += new System.EventHandler(this.checkBoxEqualize_CheckedChanged);
             // 
             // buttonAutoscale
             // 
@@ -340,19 +358,10 @@
             // 
             // comboX
             // 
-            this.comboX.Items.AddRange(new object[] {
-            "None",
-            "X (mm)",
-            "Y (mm)",
-            "Z (mm)",
-            "Height (µm)",
-            "Intensity (%)",
-            "Z - Height (mm)"});
             this.comboX.MaxDropDownItems = 6;
             this.comboX.Name = "comboX";
             this.comboX.Size = new System.Drawing.Size(121, 25);
             this.comboX.Tag = "0";
-            this.comboX.Text = "X (mm)";
             // 
             // toolStripButtonFlipX
             // 
@@ -405,18 +414,9 @@
             // 
             // comboY
             // 
-            this.comboY.Items.AddRange(new object[] {
-            "None",
-            "X (mm)",
-            "Y (mm)",
-            "Z (mm)",
-            "Height (µm)",
-            "Intensity (%)",
-            "Z - Height (mm)"});
             this.comboY.Name = "comboY";
             this.comboY.Size = new System.Drawing.Size(121, 25);
             this.comboY.Tag = "1";
-            this.comboY.Text = "Y (mm)";
             // 
             // toolStripButtonFlipY
             // 
@@ -470,18 +470,9 @@
             // 
             // comboZ
             // 
-            this.comboZ.Items.AddRange(new object[] {
-            "None",
-            "X (mm)",
-            "Y (mm)",
-            "Z (mm)",
-            "Height (µm)",
-            "Intensity (%)",
-            "Z - Height (mm)"});
             this.comboZ.Name = "comboZ";
             this.comboZ.Size = new System.Drawing.Size(121, 25);
             this.comboZ.Tag = "2";
-            this.comboZ.Text = "Height (µm)";
             // 
             // toolStripButtonFlipZ
             // 
@@ -581,24 +572,6 @@
             this.btnRevert.TabIndex = 18;
             this.btnRevert.UseVisualStyleBackColor = true;
             this.btnRevert.Click += new System.EventHandler(this.BtnRevert_Click);
-            // 
-            // checkBoxEqualize
-            // 
-            this.checkBoxEqualize.AccessibleDescription = "Equalize:_Height axes share a common lower bound";
-            this.checkBoxEqualize.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEqualize.AutoSize = true;
-            this.checkBoxEqualize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxEqualize.BackgroundImage")));
-            this.checkBoxEqualize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.checkBoxEqualize.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxEqualize.FlatAppearance.BorderSize = 0;
-            this.checkBoxEqualize.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
-            this.checkBoxEqualize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEqualize.Location = new System.Drawing.Point(357, 3);
-            this.checkBoxEqualize.Name = "checkBoxEqualize";
-            this.checkBoxEqualize.Size = new System.Drawing.Size(24, 23);
-            this.checkBoxEqualize.TabIndex = 19;
-            this.checkBoxEqualize.UseVisualStyleBackColor = true;
-            this.checkBoxEqualize.CheckedChanged += new System.EventHandler(this.checkBoxEqualize_CheckedChanged);
             // 
             // Plotter
             // 
