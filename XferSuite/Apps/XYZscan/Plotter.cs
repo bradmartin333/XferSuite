@@ -555,12 +555,14 @@ namespace XferSuite
             {
                 try
                 {
+                    (double, double) HSpanVals = (Math.Min(HSpan[i].X1, HSpan[i].X2), Math.Max(HSpan[i].X1, HSpan[i].X2));
+                    (double, double) VSpanVals = (Math.Min(VSpan[i].Y1, VSpan[i].Y2), Math.Max(VSpan[i].Y1, VSpan[i].Y2));
                     int originalNumPoints = ActiveScans[i].Data.Count;
                     ActiveScans[i].Data.RemoveAll(s => 
-                        (HSpan[i].X1 <= (s.X * (FlipX ? -1 : 1))) && 
-                        ((s.X * (FlipX ? -1 : 1)) <= HSpan[i].X2) && 
-                        (VSpan[i].Y1 <= (s.Y * (FlipY ? -1 : 1))) && 
-                        ((s.Y * (FlipY ? -1 : 1)) <= VSpan[i].Y2));
+                        (HSpanVals.Item1 <= (s.X * (FlipX ? -1 : 1))) && 
+                        ((s.X * (FlipX ? -1 : 1)) <= HSpanVals.Item2) && 
+                        (VSpanVals.Item1 <= (s.Y * (FlipY ? -1 : 1))) && 
+                        ((s.Y * (FlipY ? -1 : 1)) <= VSpanVals.Item2));
                     ActiveScans[i].Edited = ActiveScans[i].Edited || originalNumPoints > ActiveScans[i].Data.Count;
                 }
                 catch (Exception)
