@@ -16,6 +16,7 @@ namespace XferSuite
         private ToolStripComboBox[] ComboBoxes { get; set; }
         private bool ShowBestFit { get; set; }
         private bool RemoveAngle { get; set; } = true;
+        private bool Equalize { get; set; } = false;
         private bool FlipX { get; set; } = false;
         private bool FlipY { get; set; } = false;
         private bool FlipZ { get; set; } = false;
@@ -227,12 +228,22 @@ namespace XferSuite
                         Zed.Position[] scanData = (Zed.Position[])scan.Data.ToArray().Clone();
                         double[] data = Zed.getAxis(scanData, comboZ.SelectedIndex);
 
-                        if (RemoveAngle && (comboZ.SelectedIndex == 4 || comboZ.SelectedIndex == 6))
+                        if (comboZ.SelectedIndex == 4 || comboZ.SelectedIndex == 6)
                         {
-                            if (3 > data.Length) continue;
-                            Zed.Plane plane = Zed.getPlane(scanData);
-                            for (int j = 0; j < data.Length; j++)
-                                data[j] -= Zed.projectPlane(plane, Zed.posToVec3(scanData[j])).Z;
+                            if (RemoveAngle)
+                            {
+                                if (3 > data.Length) continue;
+                                Zed.Plane plane = Zed.getPlane(scanData);
+                                for (int j = 0; j < data.Length; j++)
+                                    data[j] -= Zed.projectPlane(plane, Zed.posToVec3(scanData[j])).Z;
+                            }
+                            
+                            if (Equalize)
+                            {
+                                double equalizer = data.Min();
+                                for (int j = 0; j < data.Length; j++)
+                                    data[j] -= equalizer;
+                            }
                         }
 
                         double scanMin = data.Min();
@@ -270,7 +281,7 @@ namespace XferSuite
 
             if (RemoveAngle)
             {
-                if (3 > data.Length)
+                if (3 > data.Length && RemoveAngle)
                 {
                     MessageBox.Show("Insufficient data.", "XferSuite");
                     return new double[6];
@@ -280,10 +291,15 @@ namespace XferSuite
                 for (int i = 0; i < data.Length; i++)
                 {
                     Zed.Position p = data[i];
-                    data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z,
-                        RemoveAngle ? p.H - Zed.projectPlane(plane, Zed.posToVec3(data[i])).Z : p.H,
-                        p.I);
+                    data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z, p.H - Zed.projectPlane(plane, Zed.posToVec3(data[i])).Z, p.I);
                 }
+            }
+
+            if (Equalize)
+            {
+                double equalizer = Zed.getAxis(data, 4).Min();
+                for (int i = 0; i < data.Length; i++)
+                    data[i] = new Zed.Position(data[i].Time, data[i].X, data[i].Y, data[i].Z, data[i].H - equalizer, data[i].I);
             }
 
             double[] xAxisData = Zed.getAxis(data, comboX.SelectedIndex);
@@ -348,9 +364,11 @@ namespace XferSuite
                         }
                         break;
                     case 3:
+                        double colorMin = Equalize ? 0 : colorScaling.Item1;
+                        double colorMax = Equalize ? colorScaling.Item2 - colorScaling.Item1 : colorScaling.Item2;
                         for (int i = 0; i < data.Length; i++)
                         {
-                            double colorFraction = (zAxisData[i] - colorScaling.Item1) / (colorScaling.Item2 - colorScaling.Item1);
+                            double colorFraction = (zAxisData[i] - colorMin) / (colorMax - colorMin);
                             Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
                             formsPlot.Plot.AddPoint(xAxisData[i], yAxisData[i], c);
                         }
@@ -538,6 +556,13 @@ namespace XferSuite
         private void CheckBoxRemoveAngle_CheckedChanged(object sender, EventArgs e)
         {
             RemoveAngle = !RemoveAngle;
+            MakePlots();
+            ProgressBar.Focus();
+        }
+
+        private void checkBoxEqualize_CheckedChanged(object sender, EventArgs e)
+        {
+            Equalize = !Equalize;
             MakePlots();
             ProgressBar.Focus();
         }
