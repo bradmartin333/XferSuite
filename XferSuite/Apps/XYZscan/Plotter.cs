@@ -29,7 +29,6 @@ namespace XferSuite
         private int[] LastHighlightedPoints { get; set; } = new int[4];
         private HSpan[] HSpan { get; set; } = new HSpan[4];
         private VSpan[] VSpan { get; set; } = new VSpan[4];
-        private double[] CustomAxes { get; set; } = new double[6];
         public bool EraseDataEnabled { get; set; }
         private bool _EraseOnClickEnabled = false;
         private bool ErasePointEnabled
@@ -219,12 +218,32 @@ namespace XferSuite
 
             if (olv.SelectedIndices.Count <= 4)
             {
+                (double, double) colorScaling = (double.MaxValue, double.MinValue);
+                if (comboZ.SelectedIndex > 1)
+                {
+                    for (int i = 0; i < olv.SelectedObjects.Count; i++)
+                    {
+                        Scan scan = (Scan)olv.SelectedObjects[i];
+                        Zed.Position[] scanData = (Zed.Position[])scan.Data.ToArray().Clone();
+                        Zed.Plane plane = Zed.getPlane(scanData);
+                        double[] data = Zed.getAxis(scanData, comboZ.SelectedIndex);
+                        if (3 > data.Length) continue;
+                        if (RemoveAngle)
+                            for (int j = 0; j < data.Length; j++)
+                                data[j] -= Zed.projectPlane(plane, Zed.posToVec3(scanData[j])).Z;
+                        double scanMin = data.Min();
+                        double scanMax = data.Max();
+                        if (scanMin < colorScaling.Item1) colorScaling.Item1 = scanMin;
+                        if (scanMax > colorScaling.Item2) colorScaling.Item2 = scanMax;
+                    }
+                }
+
                 List<double[]> bounds = new List<double[]> ();
                 for (int i = 0; i < olv.SelectedObjects.Count; i++)
                 {
                     Scan scan = (Scan)olv.SelectedObjects[i];
                     ActiveScans[i] = scan;
-                    if (scan.Data.Count > 3) bounds.Add(CreatePlot(i, scan));
+                    if (scan.Data.Count > 3) bounds.Add(CreatePlot(i, scan, colorScaling));
                     Plots[i].Visible = true;
                 }
                 if (olv.SelectedObjects.Count != LastActiveScans) for (int i = olv.SelectedObjects.Count; i < Plots.Length; i++) Plots[i].Visible = false;
@@ -237,40 +256,30 @@ namespace XferSuite
 
         #region Plotting
 
-        private double[] CreatePlot(int plotIdx, Scan scan)
+        private double[] CreatePlot(int plotIdx, Scan scan, (double, double) colorScaling)
         {
             FormsPlot formsPlot = Plots[plotIdx];
             formsPlot.Plot.Clear();
             ClearAxisLabels(formsPlot.Plot);
 
             Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
-            if (CustomAxes.Sum() != 0)
-            {
-                try
-                {
-                    data = Zed.filterData(data, comboX.SelectedIndex, CustomAxes[0], CustomAxes[1]);
-                    data = Zed.filterData(data, comboY.SelectedIndex, CustomAxes[2], CustomAxes[3]);
-                    data = Zed.filterData(data, comboZ.SelectedIndex, CustomAxes[4], CustomAxes[5]);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Invalid custom axes", "XferSuite");
-                }
-            }
 
-            if (3 > data.Length)
+            if (RemoveAngle)
             {
-                MessageBox.Show("Insufficient data.", "XferSuite");
-                return new double[6];
-            }
+                if (3 > data.Length)
+                {
+                    MessageBox.Show("Insufficient data.", "XferSuite");
+                    return new double[6];
+                }
 
-            Zed.Plane plane = Zed.getPlane(data);
-            for (int i = 0; i < data.Length; i++)
-            {
-                Zed.Position p = data[i];
-                data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z, 
-                    RemoveAngle ? p.H - Zed.projectPlane(plane, Zed.posToVec3(data[i])).Z : p.H, 
-                    p.I);
+                Zed.Plane plane = Zed.getPlane(data);
+                for (int i = 0; i < data.Length; i++)
+                {
+                    Zed.Position p = data[i];
+                    data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z,
+                        RemoveAngle ? p.H - Zed.projectPlane(plane, Zed.posToVec3(data[i])).Z : p.H,
+                        p.I);
+                }
             }
 
             double[] xAxisData = Zed.getAxis(data, comboX.SelectedIndex);
@@ -335,12 +344,10 @@ namespace XferSuite
                         }
                         break;
                     case 3:
-                        double minH = zAxisData.Min();
-                        double maxH = zAxisData.Max();
                         for (int i = 0; i < data.Length; i++)
                         {
-                            double colorFraction = (zAxisData[i] - minH) / (maxH - minH);
-                            if (colorFraction > 1) colorFraction = maxH / zAxisData[i];
+                            double colorFraction = (zAxisData[i] - colorScaling.Item1) / (colorScaling.Item2 - colorScaling.Item1);
+                            if (colorFraction > 1) colorFraction = colorScaling.Item2 / zAxisData[i];
                             Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
                             formsPlot.Plot.AddPoint(xAxisData[i], yAxisData[i], c);
                         }
