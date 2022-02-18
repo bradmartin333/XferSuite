@@ -305,6 +305,16 @@ module Zed =
         | 6 -> data |> Array.map (fun x -> x.Z + (x.H / 1e3))
         | _ -> [| 0.0 |]
 
+    let getAxisSingle (p: Position) (axis: int) =
+        match axis with
+        | 1 -> p.X
+        | 2 -> p.Y
+        | 3 -> p.Z
+        | 4 -> p.H
+        | 5 -> p.I
+        | 6 -> p.Z + (p.H / 1e3)
+        | _ -> 0.0
+
     let filterData (data: Position []) (axis: int) (min: float) (max: float) =
         if axis > 0 && (min <> 0.0 || max <> 0.0) then
             match axis with

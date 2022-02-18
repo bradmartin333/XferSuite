@@ -576,10 +576,10 @@ namespace XferSuite
                     (double, double) VSpanVals = (Math.Min(VSpan[i].Y1, VSpan[i].Y2), Math.Max(VSpan[i].Y1, VSpan[i].Y2));
                     int originalNumPoints = ActiveScans[i].Data.Count;
                     ActiveScans[i].Data.RemoveAll(s => 
-                        (HSpanVals.Item1 <= (s.X * (FlipX ? -1 : 1))) && 
-                        ((s.X * (FlipX ? -1 : 1)) <= HSpanVals.Item2) && 
-                        (VSpanVals.Item1 <= (s.Y * (FlipY ? -1 : 1))) && 
-                        ((s.Y * (FlipY ? -1 : 1)) <= VSpanVals.Item2));
+                        (HSpanVals.Item1 <= (Zed.getAxisSingle(s, comboX.SelectedIndex) * (FlipX ? -1 : 1))) && 
+                        ((Zed.getAxisSingle(s, comboX.SelectedIndex) * (FlipX ? -1 : 1)) <= HSpanVals.Item2) && 
+                        (VSpanVals.Item1 <= (Zed.getAxisSingle(s, comboY.SelectedIndex) * (FlipY ? -1 : 1))) && 
+                        ((Zed.getAxisSingle(s, comboY.SelectedIndex) * (FlipY ? -1 : 1)) <= VSpanVals.Item2));
                     ActiveScans[i].Edited = ActiveScans[i].Edited || originalNumPoints > ActiveScans[i].Data.Count;
                 }
                 catch (Exception)
