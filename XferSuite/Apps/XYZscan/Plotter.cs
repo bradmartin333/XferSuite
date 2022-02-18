@@ -225,31 +225,12 @@ namespace XferSuite
                     for (int i = 0; i < olv.SelectedObjects.Count; i++)
                     {
                         Scan scan = (Scan)olv.SelectedObjects[i];
-                        Zed.Position[] scanData = (Zed.Position[])scan.Data.ToArray().Clone();
-                        double[] data = Zed.getAxis(scanData, comboZ.SelectedIndex);
-
-                        if (comboZ.SelectedIndex == 4 || comboZ.SelectedIndex == 6)
-                        {
-                            if (RemoveAngle)
-                            {
-                                if (3 > data.Length) continue;
-                                Zed.Plane plane = Zed.getPlane(scanData);
-                                for (int j = 0; j < data.Length; j++)
-                                    data[j] -= Zed.projectPlane(plane, Zed.posToVec3(scanData[j])).Z;
-                            }
-                            
-                            if (Equalize)
-                            {
-                                double equalizer = data.Min();
-                                for (int j = 0; j < data.Length; j++)
-                                    data[j] -= equalizer;
-                            }
-                        }
-
-                        double scanMin = data.Min();
-                        double scanMax = data.Max();
-                        if (scanMin < colorScaling.Item1) colorScaling.Item1 = scanMin;
-                        if (scanMax > colorScaling.Item2) colorScaling.Item2 = scanMax;
+                        Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
+                        if (3 > data.Length && RemoveAngle) continue;
+                        data = ApplyFilters(data);
+                        double[] plotData = Zed.getAxis(data, comboZ.SelectedIndex);
+                        if (plotData.Min() < colorScaling.Item1) colorScaling.Item1 = plotData.Min();
+                        if (plotData.Max() > colorScaling.Item2) colorScaling.Item2 = plotData.Max();
                     }
                 }
 
@@ -271,22 +252,10 @@ namespace XferSuite
 
         #region Plotting
 
-        private double[] CreatePlot(int plotIdx, Scan scan, (double, double) colorScaling)
+        private Zed.Position[] ApplyFilters(Zed.Position[] data)
         {
-            FormsPlot formsPlot = Plots[plotIdx];
-            formsPlot.Plot.Clear();
-            ClearAxisLabels(formsPlot.Plot);
-
-            Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
-
             if (RemoveAngle)
             {
-                if (3 > data.Length && RemoveAngle)
-                {
-                    MessageBox.Show("Insufficient data.", "XferSuite");
-                    return new double[6];
-                }
-
                 Zed.Plane plane = Zed.getPlane(data);
                 for (int i = 0; i < data.Length; i++)
                 {
@@ -294,13 +263,30 @@ namespace XferSuite
                     data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z, p.H - Zed.projectPlane(plane, Zed.posToVec3(data[i])).Z, p.I);
                 }
             }
-
             if (Equalize)
             {
                 double equalizer = Zed.getAxis(data, 4).Min();
                 for (int i = 0; i < data.Length; i++)
                     data[i] = new Zed.Position(data[i].Time, data[i].X, data[i].Y, data[i].Z, data[i].H - equalizer, data[i].I);
             }
+            return data;
+        }
+
+        private double[] CreatePlot(int plotIdx, Scan scan, (double, double) colorScaling)
+        {
+            FormsPlot formsPlot = Plots[plotIdx];
+            formsPlot.Plot.Clear();
+            ClearAxisLabels(formsPlot.Plot);
+
+            Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
+            if (3 > data.Length && RemoveAngle)
+            {
+                MessageBox.Show("Insufficient data.", "XferSuite");
+                return new double[6];
+            }
+            data = ApplyFilters(data);
+
+            (double colorMin, double colorMax) = colorScaling;
 
             double[] xAxisData = Zed.getAxis(data, comboX.SelectedIndex);
             double[] yAxisData = Zed.getAxis(data, comboY.SelectedIndex);
@@ -364,8 +350,6 @@ namespace XferSuite
                         }
                         break;
                     case 3:
-                        double colorMin = Equalize ? 0 : colorScaling.Item1;
-                        double colorMax = Equalize ? colorScaling.Item2 - colorScaling.Item1 : colorScaling.Item2;
                         for (int i = 0; i < data.Length; i++)
                         {
                             double colorFraction = (zAxisData[i] - colorMin) / (colorMax - colorMin);
@@ -411,7 +395,7 @@ namespace XferSuite
                     $"{scan.Name}\nRange: N/A   3Sigma = N/A", false);
             }
 
-            return new double[] {xAxisData.Min(), xAxisData.Max(), yAxisData.Min(), yAxisData.Max(), zAxisData.Min(), zAxisData.Max()};
+            return new double[] { xAxisData.Min(), xAxisData.Max(), yAxisData.Min(), yAxisData.Max(), colorMin, colorMax };
         }
 
         private void ApplyBounds(List<double[]> bounds)
