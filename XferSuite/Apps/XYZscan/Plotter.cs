@@ -219,18 +219,22 @@ namespace XferSuite
             if (olv.SelectedIndices.Count <= 4)
             {
                 (double, double) colorScaling = (double.MaxValue, double.MinValue);
-                if (comboZ.SelectedIndex > 1)
+                if (comboZ.SelectedIndex > 0)
                 {
                     for (int i = 0; i < olv.SelectedObjects.Count; i++)
                     {
                         Scan scan = (Scan)olv.SelectedObjects[i];
                         Zed.Position[] scanData = (Zed.Position[])scan.Data.ToArray().Clone();
-                        Zed.Plane plane = Zed.getPlane(scanData);
                         double[] data = Zed.getAxis(scanData, comboZ.SelectedIndex);
-                        if (3 > data.Length) continue;
-                        if (RemoveAngle)
+
+                        if (RemoveAngle && (comboZ.SelectedIndex == 4 || comboZ.SelectedIndex == 6))
+                        {
+                            if (3 > data.Length) continue;
+                            Zed.Plane plane = Zed.getPlane(scanData);
                             for (int j = 0; j < data.Length; j++)
                                 data[j] -= Zed.projectPlane(plane, Zed.posToVec3(scanData[j])).Z;
+                        }
+
                         double scanMin = data.Min();
                         double scanMax = data.Max();
                         if (scanMin < colorScaling.Item1) colorScaling.Item1 = scanMin;
@@ -347,7 +351,6 @@ namespace XferSuite
                         for (int i = 0; i < data.Length; i++)
                         {
                             double colorFraction = (zAxisData[i] - colorScaling.Item1) / (colorScaling.Item2 - colorScaling.Item1);
-                            if (colorFraction > 1) colorFraction = colorScaling.Item2 / zAxisData[i];
                             Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
                             formsPlot.Plot.AddPoint(xAxisData[i], yAxisData[i], c);
                         }
