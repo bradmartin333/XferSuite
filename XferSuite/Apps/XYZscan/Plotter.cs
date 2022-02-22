@@ -57,6 +57,7 @@ namespace XferSuite
                 p.Plot.Grid(false);
                 p.MouseMove += P_MouseMove;
                 p.MouseUp += P_MouseUp;
+                p.Configuration.DoubleClickBenchmark = false;
             }
 
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
