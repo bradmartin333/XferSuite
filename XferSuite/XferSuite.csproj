@@ -141,6 +141,9 @@
     <Compile Include="Apps\CameraViewer\CameraViewer.Designer.cs">
       <DependentUpon>CameraViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\XYZscan\Configuration.cs" />
+    <Compile Include="Apps\XYZscan\GroupBounds.cs" />
+    <Compile Include="Apps\XYZscan\PlotData.cs" />
     <Compile Include="Apps\XYZscan\Plotter.cs">
       <SubType>Form</SubType>
     </Compile>

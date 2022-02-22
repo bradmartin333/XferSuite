@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using XferHelper;
+using XferSuite.Apps.XYZscan;
+using static XferSuite.Apps.XYZscan.Configuration;
 
 namespace XferSuite
 {
@@ -15,11 +17,6 @@ namespace XferSuite
         #region Globals
         private ToolStripComboBox[] ComboBoxes { get; set; }
         private bool ShowBestFit { get; set; }
-        private bool RemoveAngle { get; set; } = true;
-        private bool Equalize { get; set; } = false;
-        private bool FlipX { get; set; } = false;
-        private bool FlipY { get; set; } = false;
-        private bool FlipZ { get; set; } = false;
         private string Path { get; set; }
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private Scan[] ActiveScans { get; set; } = new Scan[4];
@@ -42,7 +39,6 @@ namespace XferSuite
             }
         }
         private readonly string[] AxesStrings = new string[] { "None", "X (mm)", "Y (mm)", "Z (mm)", "Height (µm)", "Intensity (%)", "Z - Height (mm)" };
-        private enum Axes { Null, X, Y, Z, H, I, ZH }
 
         #endregion
 
@@ -66,9 +62,9 @@ namespace XferSuite
                 comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
                 comboBox.Items.AddRange(AxesStrings);
             }
-            comboX.SelectedIndex = (int)Axes.X;
-            comboY.SelectedIndex = (int)Axes.Y;
-            comboZ.SelectedIndex = (int)Axes.H;
+            comboX.SelectedIndex = (int)Zed.Axes.X;
+            comboY.SelectedIndex = (int)Zed.Axes.Y;
+            comboZ.SelectedIndex = (int)Zed.Axes.H;
                 
             Control[] toolTipContols = tlp.Controls.Cast<Control>().Where(c => c.GetType() == typeof(CheckBox) || c.GetType() == typeof(Button)).ToArray();
             foreach (Control control in toolTipContols)
@@ -210,113 +206,74 @@ namespace XferSuite
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboX.SelectedIndex == (int)Axes.Null)
+            if (comboX.SelectedIndex == (int)Zed.Axes.None)
             {
                 toolStripY.Enabled = false;
-                comboY.SelectedIndex = (int)Axes.Null;
+                comboY.SelectedIndex = (int)Zed.Axes.None;
             }
-            if (comboY.SelectedIndex == (int)Axes.Null)
+            if (comboY.SelectedIndex == (int)Zed.Axes.None)
             {
                 toolStripZ.Enabled = false;
-                comboZ.SelectedIndex = (int)Axes.Null;
+                comboZ.SelectedIndex = (int)Zed.Axes.None;
             }
-            toolStripY.Enabled = comboX.SelectedIndex != (int)Axes.Null;
-            toolStripZ.Enabled = comboY.SelectedIndex != (int)Axes.Null;
+            toolStripY.Enabled = comboX.SelectedIndex != (int)Zed.Axes.None;
+            toolStripZ.Enabled = comboY.SelectedIndex != (int)Zed.Axes.None;
             MakePlots();
         }
 
         private void MakePlots()
         {
+            // Housekeeping methods
             olv.Refresh();
+            ProgressBar.Focus();
             UpdateEraseDataMode();
 
             if (olv.SelectedIndices.Count <= 4)
             {
-                (double, double) colorScaling = (double.MaxValue, double.MinValue);
-                if (comboZ.SelectedIndex != (int)Axes.Null)
+                PlotData[] groupData = new PlotData[olv.SelectedIndices.Count];
+                GroupBounds.Reset();
+
+                for (int i = 0; i < olv.SelectedObjects.Count; i++)
                 {
-                    for (int i = 0; i < olv.SelectedObjects.Count; i++)
+                    try
                     {
+                        Plots[i].Visible = true;
                         Scan scan = (Scan)olv.SelectedObjects[i];
-                        Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
-                        if (3 > data.Length && RemoveAngle) continue;
-                        data = ApplyFilters(data);
-                        double[] plotData = Zed.getAxis(data, comboZ.SelectedIndex);
-                        if (plotData.Min() < colorScaling.Item1) colorScaling.Item1 = plotData.Min();
-                        if (plotData.Max() > colorScaling.Item2) colorScaling.Item2 = plotData.Max();
+                        ActiveScans[i] = scan;
+                        groupData[i] = new PlotData(scan, comboX.SelectedIndex, comboY.SelectedIndex, comboZ.SelectedIndex, compare: true);
+                        CreatePlot(scan.Name, i, groupData[i]);
+                    }
+                    catch (Exception)
+                    {
+                        System.Diagnostics.Debug.WriteLine("User changed selecetd scans before plotting completed");
                     }
                 }
 
-                List<double[]> bounds = new List<double[]> ();
-                for (int i = 0; i < olv.SelectedObjects.Count; i++)
-                {
-                    Scan scan = (Scan)olv.SelectedObjects[i];
-                    ActiveScans[i] = scan;
-                    bounds.Add(CreatePlot(i, scan, colorScaling));
-                    Plots[i].Visible = true;
-                }
                 if (olv.SelectedObjects.Count != LastActiveScans) for (int i = olv.SelectedObjects.Count; i < Plots.Length; i++) Plots[i].Visible = false;
                 LastActiveScans = olv.SelectedObjects.Count;
-                ApplyBounds(bounds);
             }
+
+            UpdateToolStripRange();
         }
 
         #endregion
 
         #region Plotting
 
-        private Zed.Position[] ApplyFilters(Zed.Position[] data)
-        {
-            if (RemoveAngle)
-            {
-                Zed.Plane plane = Zed.getPlane(data);
-                for (int i = 0; i < data.Length; i++)
-                {
-                    Zed.Position p = data[i];
-                    data[i] = new Zed.Position(p.Time, p.X, p.Y, p.Z, p.H - Zed.projectPlane(plane, Zed.posToVec3(data[i])).Z, p.I);
-                }
-            }
-            if (Equalize)
-            {
-                double equalizer = Zed.getAxis(data, 4).Min();
-                for (int i = 0; i < data.Length; i++)
-                    data[i] = new Zed.Position(data[i].Time, data[i].X, data[i].Y, data[i].Z, data[i].H - equalizer, data[i].I);
-            }
-            return data;
-        }
-
-        private double[] CreatePlot(int plotIdx, Scan scan, (double, double) colorScaling)
+        private void CreatePlot(string name, int plotIdx, PlotData plotData)
         {
             FormsPlot formsPlot = Plots[plotIdx];
             formsPlot.Plot.Clear();
             ClearAxisLabels(formsPlot.Plot);
 
-            Zed.Position[] data = (Zed.Position[])scan.Data.ToArray().Clone();
-            if (3 > data.Length)
-            {
-                formsPlot.Plot.Title($"{scan.Name}\nInsufficient Data", false);
-                return new double[6];
-            }
-            data = ApplyFilters(data);
-
-            (double colorMin, double colorMax) = colorScaling;
-
-            double[] xAxisData = Zed.getAxis(data, comboX.SelectedIndex);
-            double[] yAxisData = Zed.getAxis(data, comboY.SelectedIndex);
-            double[] zAxisData = Zed.getAxis(data, comboZ.SelectedIndex);
-
-            if (FlipX) for (int i = 0; i < xAxisData.Length; i++) xAxisData[i] *= -1;
-            if (FlipY) for (int i = 0; i < yAxisData.Length; i++) yAxisData[i] *= -1;
-            if (FlipZ) for (int i = 0; i < zAxisData.Length; i++) zAxisData[i] *= -1;
-
             try
             {
-                switch (ComboBoxes.Where(x => x.SelectedIndex != (int)Axes.Null).Count())
+                switch (ComboBoxes.Where(x => x.SelectedIndex != (int)Zed.Axes.None).Count())
                 {
                     case 0:
                         break;
                     case 1:
-                        (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(xAxisData, min: xAxisData.Min(), max: xAxisData.Max(), binSize: 0.25);
+                        (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(plotData.X, min: plotData.X.Min(), max: plotData.X.Max(), binSize: 0.25);
                         double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
                         var bar = formsPlot.Plot.AddBar(values: counts, positions: leftEdges);
                         bar.BarWidth = 0.25;
@@ -325,29 +282,32 @@ namespace XferSuite
                         formsPlot.Plot.YAxis.Label("Count (#)");
                         formsPlot.Plot.SetAxisLimits(yMin: 0);
                         formsPlot.Plot.Title(
-                            $"{scan.Name}\nRange: {Math.Round(xAxisData.Max() - xAxisData.Min(), 3)}   3Sigma = {Zed.threeSigma(xAxisData)}", false);
+                            $"{name}\nRange: {Math.Round(plotData.X.Max() - plotData.X.Min(), 3)}   3Sigma = {Zed.threeSigma(plotData.X)}", false);
                         if (ShowBestFit)
                         {
-                            double[] densities = ScottPlot.Statistics.Common.ProbabilityDensity(xAxisData, binEdges);
+                            double[] densities = ScottPlot.Statistics.Common.ProbabilityDensity(plotData.X, binEdges);
                             var probPlot = formsPlot.Plot.AddScatterLines(binEdges, densities, Color.Black, 3, LineStyle.Dash);
                             probPlot.YAxisIndex = 1;
                             formsPlot.Plot.SetAxisLimits(yMin: 0, yAxisIndex: 1);
                         }
+                        formsPlot.Plot.SetAxisLimitsX(GroupBounds.XMin, GroupBounds.XMax);
+                        formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
+                        formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
                         break;
                     case 2:
-                        ErasePointPlots[plotIdx] = formsPlot.Plot.AddScatterPoints(xAxisData, yAxisData);
+                        ErasePointPlots[plotIdx] = formsPlot.Plot.AddScatterPoints(plotData.X, plotData.Y);
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
-                                $"{scan.Name}\nRange: {Math.Round(yAxisData.Max() - yAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(yAxisData)}", false);
+                                $"{name}\nRange: {Math.Round(plotData.Y.Max() - plotData.Y.Min(), 3)}   3Sigma = { Zed.threeSigma(plotData.Y)}", false);
                         if (ShowBestFit)
                         {
-                            double[] poly = Zed.scatterPolynomial(xAxisData, yAxisData);
-                            double[] polyData = xAxisData.Select(x => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)).ToArray();
+                            double[] poly = Zed.scatterPolynomial(plotData.X, plotData.Y);
+                            double[] polyData = plotData.X.Select(x => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)).ToArray();
                             formsPlot.Plot.AddFunction(
                                 new Func<double, double?>((x) => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)),
                                 Color.Black, 3, LineStyle.Dash);
-                            var annotation = formsPlot.Plot.AddAnnotation($"R² = {Zed.rSquared(polyData, yAxisData)}", 5, 5);
+                            var annotation = formsPlot.Plot.AddAnnotation($"R² = {Zed.rSquared(polyData, plotData.Y)}", 5, 5);
                             annotation.Shadow = false;
                             annotation.BackgroundColor = Color.White;
                         }
@@ -357,28 +317,52 @@ namespace XferSuite
                             HighlightPointPlots[plotIdx].Color = Color.Red;
                             HighlightPointPlots[plotIdx].IsVisible = false;
                         }
+                        if (!EraseDataEnabled)
+                        {
+                            formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
+                            formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
+                            formsPlot.Plot.YAxis.TickLabelNotation(invertSign: FlipY);
+                            formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
+                            formsPlot.Plot.YAxis.TickLabelFormat(CustomTickFormatter);
+                        }
                         break;
                     case 3:
-                        for (int i = 0; i < data.Length; i++)
+                        for (int i = 0; i < plotData.Z.Length; i++)
                         {
-                            double colorFraction = (zAxisData[i] - colorMin) / (colorMax - colorMin);
+                            double colorFraction = (plotData.Z[i] - GroupBounds.ZMin) / (GroupBounds.ZMax - GroupBounds.ZMin);
                             Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
-                            formsPlot.Plot.AddPoint(xAxisData[i], yAxisData[i], c);
+                            formsPlot.Plot.AddPoint(plotData.X[i], plotData.Y[i], c);
                         }
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
-                            $"{scan.Name}\nRange: {Math.Round(zAxisData.Max() - zAxisData.Min(), 3)}   3Sigma = { Zed.threeSigma(zAxisData)}", false);
+                            $"{name}\nRange: {Math.Round(plotData.Z.Max() - plotData.Z.Min(), 3)}   3Sigma = { Zed.threeSigma(plotData.Z)}", false);
                         if (ShowBestFit)
                         {
-                            double[] poly = Zed.scatterPolynomial(xAxisData, yAxisData);
-                            double[] polyData = xAxisData.Select(x => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)).ToArray();
+                            double[] poly = Zed.scatterPolynomial(plotData.X, plotData.Y);
+                            double[] polyData = plotData.X.Select(x => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)).ToArray();
                             formsPlot.Plot.AddFunction(
                                 new Func<double, double?>((x) => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)),
                                 Color.Black, 3, LineStyle.Dash);
-                            var annotation = formsPlot.Plot.AddAnnotation($"R² = {Zed.rSquared(polyData, yAxisData)}", 5, 5);
+                            var annotation = formsPlot.Plot.AddAnnotation($"R² = {Zed.rSquared(polyData, plotData.Y)}", 5, 5);
                             annotation.Shadow = false;
                             annotation.BackgroundColor = Color.White;
+                        }
+                        if (!EraseDataEnabled)
+                        {
+                            formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
+                            var cmap = ScottPlot.Drawing.Colormap.Viridis;
+                            var cb = formsPlot.Plot.AddColorbar(cmap);
+                            cb.YAxisIndex = 3;
+                            formsPlot.Plot.YAxis2.Label(comboZ.Text);
+                            cb.MinValue = GroupBounds.ZMin;
+                            cb.MaxValue = GroupBounds.ZMax;
+                            formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
+                            formsPlot.Plot.YAxis.TickLabelNotation(invertSign: FlipY);
+                            formsPlot.Plot.YAxis2.TickLabelNotation(invertSign: FlipZ);
+                            formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
+                            formsPlot.Plot.YAxis.TickLabelFormat(CustomTickFormatter);
+                            formsPlot.Plot.YAxis2.TickLabelFormat(CustomTickFormatter);
                         }
                         break;
                     default:
@@ -387,11 +371,13 @@ namespace XferSuite
 
                 if (EraseDataEnabled && !ErasePointEnabled)
                 {
-                    HSpan[plotIdx] = formsPlot.Plot.AddHorizontalSpan(xAxisData.Min() - 2, xAxisData.Min() - 1, Color.FromArgb(150, Color.DarkRed));
+                    HSpan[plotIdx] = formsPlot.Plot.AddHorizontalSpan(plotData.X.Min() - 2, plotData.X.Min() - 1, Color.FromArgb(150, Color.DarkRed));
                     HSpan[plotIdx].DragEnabled = true;
-                    VSpan[plotIdx] = formsPlot.Plot.AddVerticalSpan(yAxisData.Min() - 2, yAxisData.Min() - 1, Color.FromArgb(150, Color.DarkViolet));
+                    VSpan[plotIdx] = formsPlot.Plot.AddVerticalSpan(plotData.Y.Min() - 2, plotData.Y.Min() - 1, Color.FromArgb(150, Color.DarkViolet));
                     VSpan[plotIdx].DragEnabled = true;
                 }
+
+                formsPlot.Refresh();
             }
             catch (Exception)
             {
@@ -401,105 +387,16 @@ namespace XferSuite
                 msg.BackgroundColor = Color.Transparent;
                 msg.BorderColor = Color.Transparent;
                 formsPlot.Plot.Title(
-                    $"{scan.Name}\nRange: N/A   3Sigma = N/A", false);
+                    $"{name}\nRange: N/A   3Sigma = N/A", false);
             }
-
-            return new double[] { xAxisData.Min(), xAxisData.Max(), yAxisData.Min(), yAxisData.Max(), colorMin, colorMax };
         }
 
-        private void ApplyBounds(List<double[]> bounds)
+        private void UpdateToolStripRange()
         {
-            double[] groupBounds = new double[] { double.MaxValue, double.MinValue, double.MaxValue, double.MinValue, double.MaxValue, double.MinValue };
-            for (int i = 0; i < bounds.Count; i++)
-            {
-                for (int j = 0; j < groupBounds.Length; j += 2)
-                {
-                    if (bounds[i][j] != 0.0 || bounds[i][j + 1] != 0.0)
-                    {
-                        if (bounds[i][j] < groupBounds[j]) groupBounds[j] = bounds[i][j];
-                        if (bounds[i][j + 1] > groupBounds[j + 1]) groupBounds[j + 1] = bounds[i][j + 1];
-                    }
-                }
-            }
-            for (int i = 0; i < groupBounds.Length; i += 2)
-            {
-                string range = (groupBounds[i] != double.MaxValue && groupBounds[i + 1] != double.MinValue) ?
-                    Math.Round(groupBounds[i + 1] - groupBounds[i], 3).ToString() : "N/A";
-                switch (i/2)
-                {
-                    case 0:
-                        toolStripLabelRangeX.Text = range;
-                        break;
-                    case 1:
-                        toolStripLabelRangeY.Text = range;
-                        break;
-                    case 2:
-                        toolStripLabelRangeZ.Text = range;
-                        break;
-                    default:
-                        break;
-                }
-            }
 
-            int numAxes = 0;
-            foreach (ToolStripComboBox cbx in ComboBoxes)
-                if (cbx.SelectedIndex != (int)Axes.Null) numAxes++;
-
-            for (int i = 0; i < groupBounds.Length; i += 2)
-            {
-                groupBounds[i] = groupBounds[i];
-                groupBounds[i + 1] = groupBounds[i + 1];
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                if (!EraseDataEnabled)
-                {
-                    switch (numAxes)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            Plots[i].Plot.SetAxisLimitsX(groupBounds[0], groupBounds[1]);
-                            Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
-                            Plots[i].Plot.XAxis.TickLabelFormat(CustomTickFormatter);
-                            break;
-                        case 2:
-                            Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
-                            Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
-                            Plots[i].Plot.YAxis.TickLabelNotation(invertSign: FlipY);
-                            Plots[i].Plot.XAxis.TickLabelFormat(CustomTickFormatter);
-                            Plots[i].Plot.YAxis.TickLabelFormat(CustomTickFormatter);
-                            break;
-                        case 3:
-                            Plots[i].Plot.SetAxisLimits(groupBounds[0], groupBounds[1], groupBounds[2], groupBounds[3]);
-                            var cmap = ScottPlot.Drawing.Colormap.Viridis;
-                            var cb = Plots[i].Plot.AddColorbar(cmap);
-                            cb.YAxisIndex = i;
-                            Plots[i].Plot.YAxis2.Label(comboZ.Text);
-                            cb.MinValue = groupBounds[4];
-                            cb.MaxValue = groupBounds[5];
-                            Plots[i].Plot.XAxis.TickLabelNotation(invertSign: FlipX);
-                            Plots[i].Plot.YAxis.TickLabelNotation(invertSign: FlipY);
-                            Plots[i].Plot.YAxis2.TickLabelNotation(invertSign: FlipZ);
-                            Plots[i].Plot.XAxis.TickLabelFormat(CustomTickFormatter);
-                            Plots[i].Plot.YAxis.TickLabelFormat(CustomTickFormatter);
-                            Plots[i].Plot.YAxis2.TickLabelFormat(CustomTickFormatter);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                try
-                {
-                    Plots[i].Refresh();
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex);
-                }
-            }
+            toolStripLabelRangeX.Text = GroupBounds.GetRangeString(GroupBounds.Axis.X);
+            toolStripLabelRangeY.Text = GroupBounds.GetRangeString(GroupBounds.Axis.Y);
+            toolStripLabelRangeZ.Text = GroupBounds.GetRangeString(GroupBounds.Axis.Z);
         }
 
         private string CustomTickFormatter(double position)
@@ -543,28 +440,24 @@ namespace XferSuite
         {
             ShowBestFit = !ShowBestFit;
             MakePlots();
-            ProgressBar.Focus();
         }
 
         private void CheckBoxRemoveAngle_CheckedChanged(object sender, EventArgs e)
         {
             RemoveAngle = !RemoveAngle;
             MakePlots();
-            ProgressBar.Focus();
         }
 
         private void CheckBoxEqualize_CheckedChanged(object sender, EventArgs e)
         {
             Equalize = !Equalize;
             MakePlots();
-            ProgressBar.Focus();
         }
 
         private void CheckBoxEraseData_CheckedChanged(object sender, EventArgs e)
         {
             if (!checkBoxEraseData.Checked && EraseDataEnabled && !ErasePointEnabled) CreateCustomAxes();
             UpdateEraseDataMode(redraw: true);
-            ProgressBar.Focus();
         }
 
         private void CreateCustomAxes()
@@ -594,11 +487,12 @@ namespace XferSuite
         private void UpdateEraseDataMode(bool redraw = false)
         {
             EraseDataEnabled = checkBoxEraseData.Checked;
-            if (EraseDataEnabled && (comboX.SelectedIndex == (int)Axes.H || comboY.SelectedIndex == (int)Axes.H || 
-                comboX.SelectedIndex == (int)Axes.ZH || comboY.SelectedIndex == (int)Axes.ZH) && 
-                comboZ.SelectedIndex != (int)Axes.Null) TurnOffEraseMode();
-            ErasePointEnabled = EraseDataEnabled && (comboX.SelectedIndex == (int)Axes.X || comboX.SelectedIndex == (int)Axes.Y) && 
-                comboY.SelectedIndex == (int)Axes.H && comboZ.SelectedIndex == (int)Axes.Null;
+            if (EraseDataEnabled && (comboX.SelectedIndex == (int)Zed.Axes.H || comboY.SelectedIndex == (int)Zed.Axes.H || 
+                comboX.SelectedIndex == (int)Zed.Axes.ZH || comboY.SelectedIndex == (int)Zed.Axes.ZH) 
+                && comboZ.SelectedIndex != (int)Zed.Axes.None) TurnOffEraseMode();
+            if (EraseDataEnabled && comboY.SelectedIndex == (int)Zed.Axes.None) TurnOffEraseMode();
+            ErasePointEnabled = EraseDataEnabled && (comboX.SelectedIndex == (int)Zed.Axes.X || comboX.SelectedIndex == (int)Zed.Axes.Y) && 
+                comboY.SelectedIndex == (int)Zed.Axes.H && comboZ.SelectedIndex == (int)Zed.Axes.None;
             if (redraw) MakePlots();
         }
 

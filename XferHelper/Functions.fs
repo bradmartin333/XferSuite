@@ -15,8 +15,7 @@ module Stats =
     let threeSig (data: float []) = Math.Round(stdDev (data) * 3.0, 3)
 
     let normVal (data: float []) (i: float) : float =
-        let norm =
-            Normal.WithMeanStdDev(mean (data), stdDev (data))
+        let norm = Normal.WithMeanStdDev(mean (data), stdDev (data))
 
         norm.Density(i)
 
@@ -166,7 +165,7 @@ module Metro =
         |> Array.map (fun x -> string x)
 
     let getPrint (index: string) (data: Position []) =
-        let info = index.[1..index.Length - 2].Split(',')
+        let info = index.[1 .. index.Length - 2].Split(',')
         let RR = int info.[0]
         let RC = int info.[1]
         let R = int info.[2]
@@ -215,32 +214,31 @@ module Metro =
 
     let applyFilter (filter: string []) (data: Position []) =
         data
-        |> Array.filter
-            (fun x ->
-                let a =
-                    match filter.[0] with
-                    | "X" -> x.X
-                    | "Y" -> x.Y
-                    | "RR" -> float x.RR
-                    | "RC" -> float x.RC
-                    | "R" -> float x.R
-                    | "C" -> float x.C
-                    | "SR" -> float x.SR
-                    | "SC" -> float x.SC
-                    | "XE" -> x.XE
-                    | "YE" -> x.YE
-                    | "AE" -> x.AE
-                    | _ -> float x.Num
+        |> Array.filter (fun x ->
+            let a =
+                match filter.[0] with
+                | "X" -> x.X
+                | "Y" -> x.Y
+                | "RR" -> float x.RR
+                | "RC" -> float x.RC
+                | "R" -> float x.R
+                | "C" -> float x.C
+                | "SR" -> float x.SR
+                | "SC" -> float x.SC
+                | "XE" -> x.XE
+                | "YE" -> x.YE
+                | "AE" -> x.AE
+                | _ -> float x.Num
 
-                let b = float filter.[2]
+            let b = float filter.[2]
 
-                match filter.[1] with
-                | "<" -> a < b
-                | ">" -> a > b
-                | "<=" -> a <= b
-                | ">=" -> a >= b
-                | "==" -> a = b
-                | _ -> a <> b)
+            match filter.[1] with
+            | "<" -> a < b
+            | ">" -> a > b
+            | "<=" -> a <= b
+            | ">=" -> a >= b
+            | "==" -> a = b
+            | _ -> a <> b)
 
     let filterData (filters: string [] []) (data: Position []) =
         let mutable output = data
@@ -251,6 +249,15 @@ module Metro =
         output
 
 module Zed =
+    type Axes =
+        | None = 0
+        | X = 1
+        | Y = 2
+        | Z = 3
+        | H = 4
+        | I = 5
+        | ZH = 6
+
     let verify (path: string) =
         let data = File.ReadAllLines path
 
@@ -295,14 +302,24 @@ module Zed =
           H = H
           I = I }
 
-    let getAxis (data: Position []) (axis: int) =
+    let getAxisMinMax (data: double[]) =
+        (data.Minimum(), data.Maximum())
+
+    let getAxis (data: Position []) (axis: int) (flip: bool) =
+        let orientation =
+            match flip with
+            | true -> -1.0
+            | false -> 1.0
+
         match axis with
-        | 1 -> data |> Array.map (fun x -> x.X)
-        | 2 -> data |> Array.map (fun x -> x.Y)
-        | 3 -> data |> Array.map (fun x -> x.Z)
-        | 4 -> data |> Array.map (fun x -> x.H)
-        | 5 -> data |> Array.map (fun x -> x.I)
-        | 6 -> data |> Array.map (fun x -> x.Z + (x.H / 1e3))
+        | 1 -> data |> Array.map (fun x -> x.X * orientation)
+        | 2 -> data |> Array.map (fun x -> x.Y * orientation)
+        | 3 -> data |> Array.map (fun x -> x.Z * orientation)
+        | 4 -> data |> Array.map (fun x -> x.H * orientation)
+        | 5 -> data |> Array.map (fun x -> x.I * orientation)
+        | 6 ->
+            data
+            |> Array.map (fun x -> (x.Z + (x.H / 1e3)) * orientation)
         | _ -> [| 0.0 |]
 
     let getAxisSingle (p: Position) (axis: int) =
@@ -404,8 +421,7 @@ module Zed =
     let projectPlane (p: Plane) (v: Vec3) =
         let num = dotVec3 p.Normal v
 
-        let vec =
-            multiplyVec3 p.Normal (nVec3 (num + (distPlane p)))
+        let vec = multiplyVec3 p.Normal (nVec3 (num + (distPlane p)))
 
         subtractVec3 v vec
 

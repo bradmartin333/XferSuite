@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using XferHelper;
 
-namespace XferSuite
+namespace XferSuite.Apps.XYZscan
 {
     public class Scan
     {
@@ -35,7 +35,7 @@ namespace XferSuite
         {
             StringBuilder sb = new StringBuilder($"{ShortDate} {Time}\tNEWSCAN\t{Name}\t{Temp}\t{RH}\t{ScanSpeed}\t{NumPasses}\t{Threshold}\n");
             foreach (Zed.Position p in Data)
-                sb.Append($"{p.Time.ToString("yyyy-MM-dd")} {p.Time.ToString("HH:mm:ss")}\t{p.X}\t{p.Y}\t{p.H / 1e3}\t{p.Z}\t{p.I}\n");
+                sb.Append($"{p.Time:yyyy-MM-dd} {p.Time:HH:mm:ss}\t{p.X}\t{p.Y}\t{p.H / 1e3}\t{p.Z}\t{p.I}\n");
             return sb.ToString();
         }
 
