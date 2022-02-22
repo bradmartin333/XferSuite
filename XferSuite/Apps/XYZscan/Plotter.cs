@@ -15,18 +15,23 @@ namespace XferSuite
     public partial class Plotter : Form
     {
         #region Globals
+
+        // Controls
+        private readonly string[] AxesStrings = new string[] { "None", "X (mm)", "Y (mm)", "Z (mm)", "Height (µm)", "Intensity (%)", "Z - Height (mm)" };
         private ToolStripComboBox[] ComboBoxes { get; set; }
-        private bool ShowBestFit { get; set; }
-        private string Path { get; set; }
+        private FormsPlot[] Plots { get; set; }
+
+        // Plottables
+        private ScatterPlot[] ErasePointPlots { get; set; } = new ScatterPlot[4];
+        private MarkerPlot[] HighlightPointPlots { get; set; } = new MarkerPlot[4];
+        private HSpan[] HSpan { get; set; } = new HSpan[4];
+        private VSpan[] VSpan { get; set; } = new VSpan[4];
+
+        // Data
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private Scan[] ActiveScans { get; set; } = new Scan[4];
         private int LastActiveScans { get; set; } = -1;
-        private FormsPlot[] Plots { get; set; }
-        private ScatterPlot[] ErasePointPlots { get; set; } = new ScatterPlot[4];
-        private MarkerPlot[] HighlightPointPlots { get; set; } = new MarkerPlot[4];
         private int[] LastHighlightedPoints { get; set; } = new int[4];
-        private HSpan[] HSpan { get; set; } = new HSpan[4];
-        private VSpan[] VSpan { get; set; } = new VSpan[4];
         public bool EraseDataEnabled { get; set; }
         private bool _EraseOnClickEnabled = false;
         private bool ErasePointEnabled
@@ -38,7 +43,6 @@ namespace XferSuite
                 checkBoxEraseData.FlatAppearance.CheckedBackColor = _EraseOnClickEnabled ? Color.LightCoral : Color.Gold;
             }
         }
-        private readonly string[] AxesStrings = new string[] { "None", "X (mm)", "Y (mm)", "Z (mm)", "Height (µm)", "Intensity (%)", "Z - Height (mm)" };
 
         #endregion
 
@@ -75,9 +79,8 @@ namespace XferSuite
 
             checkBoxEraseData.MouseUp += CheckBoxEraseData_MouseUp;
 
-            Path = filePath;
             Show();
-            MakeList();
+            MakeList(filePath);
         }
 
         #region Mouse Handlers
@@ -134,12 +137,12 @@ namespace XferSuite
 
         #region Log Parsing
 
-        private void MakeList()
+        private void MakeList(string filePath)
         {
             ProgressBar.Style = ProgressBarStyle.Marquee;
             ProgressBar.MarqueeAnimationSpeed = 100;
 
-            FindScans();
+            FindScans(filePath);
             olv.SetObjects(Scans);
             olv.Sort(OlvColumnIndex, SortOrder.Descending);
 
@@ -147,11 +150,11 @@ namespace XferSuite
             ProgressBar.MarqueeAnimationSpeed = 0;
         }
 
-        private void FindScans()
+        private void FindScans(string filePath)
         {
             Scans.Clear();
             int scanIdx = -1;
-            StreamReader reader = new StreamReader(Path);
+            StreamReader reader = new StreamReader(filePath);
             while (reader.Peek() != -1)
             {
                 Application.DoEvents();
@@ -273,16 +276,23 @@ namespace XferSuite
                     case 0:
                         break;
                     case 1:
+                        // Make histogram
                         (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(plotData.X, min: plotData.X.Min(), max: plotData.X.Max(), binSize: 0.25);
                         double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
                         var bar = formsPlot.Plot.AddBar(values: counts, positions: leftEdges);
                         bar.BarWidth = 0.25;
                         bar.BorderColor = Color.Transparent;
+
+                        // Format plot
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label("Count (#)");
                         formsPlot.Plot.SetAxisLimits(yMin: 0);
                         formsPlot.Plot.Title(
                             $"{name}\nRange: {Math.Round(plotData.X.Max() - plotData.X.Min(), 3)}   3Sigma = {Zed.threeSigma(plotData.X)}", false);
+                        formsPlot.Plot.SetAxisLimitsX(GroupBounds.XMin, GroupBounds.XMax);
+                        formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
+                        formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
+
                         if (ShowBestFit)
                         {
                             double[] densities = ScottPlot.Statistics.Common.ProbabilityDensity(plotData.X, binEdges);
@@ -290,34 +300,17 @@ namespace XferSuite
                             probPlot.YAxisIndex = 1;
                             formsPlot.Plot.SetAxisLimits(yMin: 0, yAxisIndex: 1);
                         }
-                        formsPlot.Plot.SetAxisLimitsX(GroupBounds.XMin, GroupBounds.XMax);
-                        formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
-                        formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
                         break;
                     case 2:
+                        // Plot and save data for custom erase plot
                         ErasePointPlots[plotIdx] = formsPlot.Plot.AddScatterPoints(plotData.X, plotData.Y);
+
+                        // Format plot
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
                                 $"{name}\nRange: {Math.Round(plotData.Y.Max() - plotData.Y.Min(), 3)}   3Sigma = { Zed.threeSigma(plotData.Y)}", false);
-                        if (ShowBestFit)
-                        {
-                            double[] poly = Zed.scatterPolynomial(plotData.X, plotData.Y);
-                            double[] polyData = plotData.X.Select(x => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)).ToArray();
-                            formsPlot.Plot.AddFunction(
-                                new Func<double, double?>((x) => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)),
-                                Color.Black, 3, LineStyle.Dash);
-                            var annotation = formsPlot.Plot.AddAnnotation($"R² = {Zed.rSquared(polyData, plotData.Y)}", 5, 5);
-                            annotation.Shadow = false;
-                            annotation.BackgroundColor = Color.White;
-                        }
-                        if (ErasePointEnabled)
-                        {
-                            HighlightPointPlots[plotIdx] = formsPlot.Plot.AddPoint(0, 0);
-                            HighlightPointPlots[plotIdx].Color = Color.Red;
-                            HighlightPointPlots[plotIdx].IsVisible = false;
-                        }
-                        if (!EraseDataEnabled)
+                        if (!EraseDataEnabled) // Want data easier to see if enabled
                         {
                             formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
                             formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
@@ -325,18 +318,14 @@ namespace XferSuite
                             formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
                             formsPlot.Plot.YAxis.TickLabelFormat(CustomTickFormatter);
                         }
-                        break;
-                    case 3:
-                        for (int i = 0; i < plotData.Z.Length; i++)
+
+                        if (ErasePointEnabled)
                         {
-                            double colorFraction = (plotData.Z[i] - GroupBounds.ZMin) / (GroupBounds.ZMax - GroupBounds.ZMin);
-                            Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
-                            formsPlot.Plot.AddPoint(plotData.X[i], plotData.Y[i], c);
+                            HighlightPointPlots[plotIdx] = formsPlot.Plot.AddPoint(0, 0);
+                            HighlightPointPlots[plotIdx].Color = Color.Red;
+                            HighlightPointPlots[plotIdx].IsVisible = false;
                         }
-                        formsPlot.Plot.XAxis.Label(comboX.Text);
-                        formsPlot.Plot.YAxis.Label(comboY.Text);
-                        formsPlot.Plot.Title(
-                            $"{name}\nRange: {Math.Round(plotData.Z.Max() - plotData.Z.Min(), 3)}   3Sigma = { Zed.threeSigma(plotData.Z)}", false);
+
                         if (ShowBestFit)
                         {
                             double[] poly = Zed.scatterPolynomial(plotData.X, plotData.Y);
@@ -348,7 +337,22 @@ namespace XferSuite
                             annotation.Shadow = false;
                             annotation.BackgroundColor = Color.White;
                         }
-                        if (!EraseDataEnabled)
+                        break;
+                    case 3:
+                        // Add 3D points
+                        for (int i = 0; i < plotData.Z.Length; i++)
+                        {
+                            double colorFraction = (plotData.Z[i] - GroupBounds.ZMin) / (GroupBounds.ZMax - GroupBounds.ZMin);
+                            Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
+                            formsPlot.Plot.AddPoint(plotData.X[i], plotData.Y[i], c);
+                        }
+
+                        // Format plot
+                        formsPlot.Plot.XAxis.Label(comboX.Text);
+                        formsPlot.Plot.YAxis.Label(comboY.Text);
+                        formsPlot.Plot.Title(
+                            $"{name}\nRange: {Math.Round(plotData.Z.Max() - plotData.Z.Min(), 3)}   3Sigma = { Zed.threeSigma(plotData.Z)}", false);
+                        if (!EraseDataEnabled) // Want data easier to see if enabled
                         {
                             formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
                             var cmap = ScottPlot.Drawing.Colormap.Viridis;
@@ -363,6 +367,18 @@ namespace XferSuite
                             formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
                             formsPlot.Plot.YAxis.TickLabelFormat(CustomTickFormatter);
                             formsPlot.Plot.YAxis2.TickLabelFormat(CustomTickFormatter);
+                        }
+
+                        if (ShowBestFit)
+                        {
+                            double[] poly = Zed.scatterPolynomial(plotData.X, plotData.Y);
+                            double[] polyData = plotData.X.Select(x => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)).ToArray();
+                            formsPlot.Plot.AddFunction(
+                                new Func<double, double?>((x) => poly[0] + poly[1] * x + poly[2] * Math.Pow(x, 2) + poly[3] * Math.Pow(x, 3)),
+                                Color.Black, 3, LineStyle.Dash);
+                            var annotation = formsPlot.Plot.AddAnnotation($"R² = {Zed.rSquared(polyData, plotData.Y)}", 5, 5);
+                            annotation.Shadow = false;
+                            annotation.BackgroundColor = Color.White;
                         }
                         break;
                     default:
