@@ -7,25 +7,18 @@ namespace XferSuite.Apps.XYZscan
 {
     public class PlotData
     {
+        public string Name { get; set; }
         public double[] X { get; set; }
         public double[] Y { get; set; }
         public double[] Z { get; set; }
 
-        public PlotData(Scan scan, Zed.Axes xAxis, Zed.Axes yAxis, Zed.Axes zAxis, bool compare = false)
+        public PlotData(Scan scan, Zed.Axes xAxis, Zed.Axes yAxis, Zed.Axes zAxis, bool compare = true)
         {
+            Name = scan.Name;
             Zed.Position[] data = ApplyFilters((Zed.Position[])scan.Data.ToArray().Clone());
             X = Zed.getAxis(data, (int)xAxis, FlipX);
             Y = Zed.getAxis(data, (int)yAxis, FlipY);
             Z = Zed.getAxis(data, (int)zAxis, FlipZ);
-            if (compare) CompareBounds();
-        }
-
-        public PlotData(Scan scan, int xAxis, int yAxis, int zAxis, bool compare = false)
-        {
-            Zed.Position[] data = ApplyFilters((Zed.Position[])scan.Data.ToArray().Clone());
-            X = Zed.getAxis(data, xAxis, FlipX);
-            Y = Zed.getAxis(data, yAxis, FlipY);
-            Z = Zed.getAxis(data, zAxis, FlipZ);
             if (compare) CompareBounds();
         }
 

@@ -238,26 +238,36 @@ namespace XferSuite
 
             if (olv.SelectedIndices.Count <= 4)
             {
-                PlotData[] groupData = new PlotData[olv.SelectedIndices.Count];
-                GroupBounds.Reset();
 
-                for (int i = 0; i < olv.SelectedObjects.Count; i++)
+                int numPlots = olv.SelectedObjects.Count;
+                PlotData[] groupData = new PlotData[numPlots];
+                GroupBounds.Reset();
+                Scan[] scans = olv.SelectedObjects.Cast<Scan>().ToArray();
+
+                int numAxes = ComboBoxes.Where(x => x.SelectedIndex != (int)Zed.Axes.None).Count();
+                Zed.Axes X = (Zed.Axes)comboX.SelectedIndex;
+                Zed.Axes Y = (Zed.Axes)comboY.SelectedIndex;
+                Zed.Axes Z = (Zed.Axes)comboZ.SelectedIndex;
+
+                try
                 {
-                    try
+                    for (int i = 0; i < numPlots; i++)
                     {
-                        Plots[i].Visible = true;
-                        Scan scan = (Scan)olv.SelectedObjects[i];
-                        ActiveScans[i] = scan;
-                        groupData[i] = new PlotData(scan, comboX.SelectedIndex, comboY.SelectedIndex, comboZ.SelectedIndex, compare: true);
-                        CreatePlot(scan.Name, i, groupData[i]);
+                        ActiveScans[i] = scans[i];
+                        groupData[i] = new PlotData(scans[i], X, Y, Z);
                     }
-                    catch (Exception)
-                    {
-                        System.Diagnostics.Debug.WriteLine("User changed selecetd scans before plotting completed");
-                    }
+                    for (int i = 0; i < numPlots; i++) CreatePlot(i, groupData[i], numAxes);
+                }
+                catch (Exception)
+                {
+                    System.Diagnostics.Debug.WriteLine("User changed scan indices before plotting completed");
                 }
 
-                if (olv.SelectedObjects.Count != LastActiveScans) for (int i = olv.SelectedObjects.Count; i < Plots.Length; i++) Plots[i].Visible = false;
+                if (olv.SelectedObjects.Count != LastActiveScans)
+                {
+                    for (int i = 0; i < numPlots; i++) Plots[i].Visible = true;
+                    for (int i = numPlots; i < Plots.Length; i++) Plots[i].Visible = false;
+                }
                 LastActiveScans = olv.SelectedObjects.Count;
             }
 
@@ -268,7 +278,7 @@ namespace XferSuite
 
         #region Plotting
 
-        private void CreatePlot(string name, int plotIdx, PlotData plotData)
+        private void CreatePlot(int plotIdx, PlotData plotData, int numAxes)
         {
             FormsPlot formsPlot = Plots[plotIdx];
             formsPlot.Plot.Clear();
@@ -276,7 +286,7 @@ namespace XferSuite
 
             try
             {
-                switch (ComboBoxes.Where(x => x.SelectedIndex != (int)Zed.Axes.None).Count())
+                switch (numAxes)
                 {
                     case 0:
                         break;
@@ -293,7 +303,7 @@ namespace XferSuite
                         formsPlot.Plot.YAxis.Label("Count (#)");
                         formsPlot.Plot.SetAxisLimits(yMin: 0);
                         formsPlot.Plot.Title(
-                            $"{name}\nRange: {Math.Round(plotData.X.Max() - plotData.X.Min(), 3)}   3Sigma = {Stats.threeSig(plotData.X)}", false);
+                            $"{plotData.Name}\nRange: {Math.Round(plotData.X.Max() - plotData.X.Min(), 3)}   3Sigma = {Stats.threeSig(plotData.X)}", false);
                         formsPlot.Plot.SetAxisLimitsX(GroupBounds.XMin, GroupBounds.XMax);
                         formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
                         formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
@@ -314,7 +324,7 @@ namespace XferSuite
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
-                                $"{name}\nRange: {Math.Round(plotData.Y.Max() - plotData.Y.Min(), 3)}   3Sigma = { Stats.threeSig(plotData.Y)}", false);
+                                $"{plotData.Name}\nRange: {Math.Round(plotData.Y.Max() - plotData.Y.Min(), 3)}   3Sigma = { Stats.threeSig(plotData.Y)}", false);
                         if (!EraseDataEnabled) // Want data easier to see if enabled
                         {
                             formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
@@ -356,7 +366,7 @@ namespace XferSuite
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
-                            $"{name}\nRange: {Math.Round(plotData.Z.Max() - plotData.Z.Min(), 3)}   3Sigma = { Stats.threeSig(plotData.Z)}", false);
+                            $"{plotData.Name}\nRange: {Math.Round(plotData.Z.Max() - plotData.Z.Min(), 3)}   3Sigma = { Stats.threeSig(plotData.Z)}", false);
                         if (!EraseDataEnabled) // Want data easier to see if enabled
                         {
                             formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
@@ -408,7 +418,7 @@ namespace XferSuite
                 msg.BackgroundColor = Color.Transparent;
                 msg.BorderColor = Color.Transparent;
                 formsPlot.Plot.Title(
-                    $"{name}\nRange: N/A   3Sigma = N/A", false);
+                    $"{plotData.Name}\nRange: N/A   3Sigma = N/A", false);
             }
         }
 
