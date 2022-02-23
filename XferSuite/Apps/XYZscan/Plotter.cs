@@ -46,7 +46,7 @@ namespace XferSuite
 
         #endregion
 
-        public Plotter(string filePath)
+        public Plotter(string path)
         {
             InitializeComponent();
             olv.SelectionChanged += Olv_SelectionChanged;
@@ -80,7 +80,7 @@ namespace XferSuite
             checkBoxEraseData.MouseUp += CheckBoxEraseData_MouseUp;
 
             Show();
-            MakeList(filePath);
+            MakeList(path);
         }
 
         #region Mouse Handlers
@@ -137,12 +137,12 @@ namespace XferSuite
 
         #region Log Parsing
 
-        private void MakeList(string filePath)
+        private void MakeList(string path)
         {
             ProgressBar.Style = ProgressBarStyle.Marquee;
             ProgressBar.MarqueeAnimationSpeed = 100;
 
-            FindScans(filePath);
+            FindScans(path);
             olv.SetObjects(Scans);
             olv.Sort(OlvColumnIndex, SortOrder.Descending);
 
@@ -150,51 +150,54 @@ namespace XferSuite
             ProgressBar.MarqueeAnimationSpeed = 0;
         }
 
-        private void FindScans(string filePath)
+        private void FindScans(string path)
         {
             Scans.Clear();
             int scanIdx = -1;
-            StreamReader reader = new StreamReader(filePath);
-            while (reader.Peek() != -1)
+
+            using (StreamReader reader = new StreamReader(path))
             {
-                Application.DoEvents();
-                var line = reader.ReadLine();
-                _ = reader.Peek();
-                if (line.Contains("NEWSCAN"))
+                while (reader.Peek() != -1)
                 {
-                    scanIdx += 1;
-                    var info = line.Split('\t');
-                    var thisScan = new Scan()
+                    Application.DoEvents();
+                    var line = reader.ReadLine();
+                    _ = reader.Peek();
+                    if (line.Contains("NEWSCAN"))
                     {
-                        Index = scanIdx + 1,
-                        ShortDate = DateTime.Parse(info[0]).ToString("yyyy-MM-dd"),
-                        Time = DateTime.Parse(info[0]).ToString("HH:mm:ss"),
-                        Name = info[2]
-                    };
-                    if (info.Length > 3)
-                    {
-                        thisScan.Temp = double.Parse(info[3]);
-                        thisScan.RH = double.Parse(info[4]);
+                        scanIdx += 1;
+                        var info = line.Split('\t');
+                        var thisScan = new Scan()
+                        {
+                            Index = scanIdx + 1,
+                            ShortDate = DateTime.Parse(info[0]).ToString("yyyy-MM-dd"),
+                            Time = DateTime.Parse(info[0]).ToString("HH:mm:ss"),
+                            Name = info[2]
+                        };
+                        if (info.Length > 3)
+                        {
+                            thisScan.Temp = double.Parse(info[3]);
+                            thisScan.RH = double.Parse(info[4]);
+                        }
+                        if (info.Length > 5)
+                        {
+                            thisScan.ScanSpeed = int.Parse(info[5]);
+                            thisScan.NumPasses = int.Parse(info[6]);
+                            thisScan.Threshold = int.Parse(info[7]);
+                        }
+                        Scans.Add(thisScan);
                     }
-                    if (info.Length > 5)
-                    {
-                        thisScan.ScanSpeed = int.Parse(info[5]);
-                        thisScan.NumPasses = int.Parse(info[6]);
-                        thisScan.Threshold = int.Parse(info[7]);
-                    }
-                    Scans.Add(thisScan);
+                    else
+                        try
+                        {
+                            Scans[scanIdx].Data.Add(Zed.toPosition(line));
+                            Scans[scanIdx].BackupData();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(text: $"Invalid File: {ex}", caption: "XYZscan");
+                            return;
+                        }
                 }
-                else
-                    try
-                    {
-                        Scans[scanIdx].Data.Add(Zed.toPosition(line));
-                        Scans[scanIdx].BackupData();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(text: $"Invalid File: {ex}", caption: "XYZscan");
-                        return;
-                    }
             }
         }
 
