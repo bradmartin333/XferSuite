@@ -263,12 +263,8 @@ namespace XferSuite
                     System.Diagnostics.Debug.WriteLine("User changed scan indices before plotting completed");
                 }
 
-                if (olv.SelectedObjects.Count != LastActiveScans)
-                {
-                    for (int i = 0; i < numPlots; i++) Plots[i].Visible = true;
-                    for (int i = numPlots; i < Plots.Length; i++) Plots[i].Visible = false;
-                }
-                LastActiveScans = olv.SelectedObjects.Count;
+                for (int i = 0; i < numPlots; i++) Plots[i].Visible = true;
+                for (int i = numPlots; i < Plots.Length; i++) Plots[i].Visible = false;
             }
 
             UpdateToolStripRange();
@@ -372,7 +368,7 @@ namespace XferSuite
                             formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
                             var cmap = ScottPlot.Drawing.Colormap.Viridis;
                             var cb = formsPlot.Plot.AddColorbar(cmap);
-                            cb.YAxisIndex = 3;
+                            //cb.YAxisIndex = 3;
                             formsPlot.Plot.YAxis2.Label(comboZ.Text);
                             cb.MinValue = GroupBounds.ZMin;
                             cb.MaxValue = GroupBounds.ZMax;
