@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using XferHelper;
-using static XferSuite.Apps.XYZscan.Configuration;
+using static XferSuite.Apps.XYZplotter.Configuration;
 
-namespace XferSuite.Apps.XYZscan
+namespace XferSuite.Apps.XYZplotter
 {
     public class PlotData
     {

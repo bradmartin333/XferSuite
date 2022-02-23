@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Plotter));
             this.tlp = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonReloadFile = new System.Windows.Forms.Button();
             this.checkBoxEqualize = new System.Windows.Forms.CheckBox();
             this.buttonAutoscale = new System.Windows.Forms.Button();
             this.checkBoxShowBestFit = new System.Windows.Forms.CheckBox();
@@ -76,7 +77,6 @@
             this.buttonExportSelected = new System.Windows.Forms.Button();
             this.checkBoxEraseData = new System.Windows.Forms.CheckBox();
             this.btnRevert = new System.Windows.Forms.Button();
-            this.buttonReloadFile = new System.Windows.Forms.Button();
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -127,6 +127,20 @@
             this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlp.Size = new System.Drawing.Size(1231, 784);
             this.tlp.TabIndex = 0;
+            // 
+            // buttonReloadFile
+            // 
+            this.buttonReloadFile.AccessibleDescription = "Reload File:_Opens new window from same file_Closes current window";
+            this.buttonReloadFile.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonReloadFile.BackgroundImage")));
+            this.buttonReloadFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonReloadFile.FlatAppearance.BorderSize = 0;
+            this.buttonReloadFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonReloadFile.Location = new System.Drawing.Point(201, 3);
+            this.buttonReloadFile.Name = "buttonReloadFile";
+            this.buttonReloadFile.Size = new System.Drawing.Size(24, 23);
+            this.buttonReloadFile.TabIndex = 20;
+            this.buttonReloadFile.UseVisualStyleBackColor = true;
+            this.buttonReloadFile.Click += new System.EventHandler(this.ButtonReloadFile_Click);
             // 
             // checkBoxEqualize
             // 
@@ -573,20 +587,6 @@
             this.btnRevert.TabIndex = 18;
             this.btnRevert.UseVisualStyleBackColor = true;
             this.btnRevert.Click += new System.EventHandler(this.BtnRevert_Click);
-            // 
-            // buttonReloadFile
-            // 
-            this.buttonReloadFile.AccessibleDescription = "Reload File:_Opens new window from same file_Closes current window";
-            this.buttonReloadFile.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonReloadFile.BackgroundImage")));
-            this.buttonReloadFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonReloadFile.FlatAppearance.BorderSize = 0;
-            this.buttonReloadFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonReloadFile.Location = new System.Drawing.Point(201, 3);
-            this.buttonReloadFile.Name = "buttonReloadFile";
-            this.buttonReloadFile.Size = new System.Drawing.Size(24, 23);
-            this.buttonReloadFile.TabIndex = 20;
-            this.buttonReloadFile.UseVisualStyleBackColor = true;
-            this.buttonReloadFile.Click += new System.EventHandler(this.ButtonReloadFile_Click);
             // 
             // Plotter
             // 

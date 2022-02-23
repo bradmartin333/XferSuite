@@ -141,16 +141,16 @@
     <Compile Include="Apps\CameraViewer\CameraViewer.Designer.cs">
       <DependentUpon>CameraViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\XYZscan\Configuration.cs" />
-    <Compile Include="Apps\XYZscan\GroupBounds.cs" />
-    <Compile Include="Apps\XYZscan\PlotData.cs" />
-    <Compile Include="Apps\XYZscan\Plotter.cs">
+    <Compile Include="Apps\XYZplotter\Configuration.cs" />
+    <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
+    <Compile Include="Apps\XYZplotter\PlotData.cs" />
+    <Compile Include="Apps\XYZplotter\Plotter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\XYZscan\Plotter.Designer.cs">
+    <Compile Include="Apps\XYZplotter\Plotter.Designer.cs">
       <DependentUpon>Plotter.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\XYZscan\Scan.cs" />
+    <Compile Include="Apps\XYZplotter\Scan.cs" />
     <Compile Include="HourGlass.cs" />
     <Compile Include="MainMenu.cs">
       <SubType>Form</SubType>
@@ -204,7 +204,7 @@
     <EmbeddedResource Include="Apps\CameraViewer\CameraViewer.resx">
       <DependentUpon>CameraViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\XYZscan\Plotter.resx">
+    <EmbeddedResource Include="Apps\XYZplotter\Plotter.resx">
       <DependentUpon>Plotter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">

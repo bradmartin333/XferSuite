@@ -293,6 +293,8 @@ module Zed =
 
         if columns.Length > 4 then
             Z <- -1.0 * float columns.[4]
+
+        if columns.Length > 5 then
             I <- float columns.[5]
 
         { Time = Time
@@ -302,8 +304,7 @@ module Zed =
           H = H
           I = I }
 
-    let getAxisMinMax (data: double[]) =
-        (data.Minimum(), data.Maximum())
+    let getAxisMinMax (data: double []) = (data.Minimum(), data.Maximum())
 
     let getAxis (data: Position []) (axis: int) (flip: bool) =
         let orientation =

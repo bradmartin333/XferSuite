@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using XferHelper;
 
-namespace XferSuite.Apps.XYZscan
+namespace XferSuite.Apps.XYZplotter
 {
     public class Scan
     {

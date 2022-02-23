@@ -31,7 +31,7 @@ namespace XferSuite
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.btnXYZscan = new System.Windows.Forms.Button();
+            this.btnXYZplotter = new System.Windows.Forms.Button();
             this.btnInlinepositions = new System.Windows.Forms.Button();
             this.btnParseSEYR = new System.Windows.Forms.Button();
             this.btnCameraViewer = new System.Windows.Forms.Button();
@@ -47,7 +47,7 @@ namespace XferSuite
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel.Controls.Add(this.btnXYZscan, 1, 0);
+            this.tableLayoutPanel.Controls.Add(this.btnXYZplotter, 1, 0);
             this.tableLayoutPanel.Controls.Add(this.btnInlinepositions, 0, 0);
             this.tableLayoutPanel.Controls.Add(this.btnParseSEYR, 2, 0);
             this.tableLayoutPanel.Controls.Add(this.btnCameraViewer, 0, 1);
@@ -64,25 +64,25 @@ namespace XferSuite
             this.tableLayoutPanel.Size = new System.Drawing.Size(338, 170);
             this.tableLayoutPanel.TabIndex = 0;
             // 
-            // btnXYZscan
+            // btnXYZplotter
             // 
-            this.btnXYZscan.AccessibleName = "XYZ Scans";
-            this.btnXYZscan.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnXYZscan.BackgroundImage")));
-            this.btnXYZscan.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnXYZscan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnXYZscan.FlatAppearance.BorderSize = 0;
-            this.btnXYZscan.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnXYZscan.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnXYZscan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnXYZscan.Location = new System.Drawing.Point(122, 10);
-            this.btnXYZscan.Margin = new System.Windows.Forms.Padding(10);
-            this.btnXYZscan.Name = "btnXYZscan";
-            this.btnXYZscan.Size = new System.Drawing.Size(92, 65);
-            this.btnXYZscan.TabIndex = 4;
-            this.btnXYZscan.Tag = "1";
-            this.btnXYZscan.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnXYZscan.UseVisualStyleBackColor = true;
-            this.btnXYZscan.Click += new System.EventHandler(this.btn_Click);
+            this.btnXYZplotter.AccessibleName = "XYZ Plotter";
+            this.btnXYZplotter.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnXYZplotter.BackgroundImage")));
+            this.btnXYZplotter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnXYZplotter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnXYZplotter.FlatAppearance.BorderSize = 0;
+            this.btnXYZplotter.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnXYZplotter.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnXYZplotter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXYZplotter.Location = new System.Drawing.Point(122, 10);
+            this.btnXYZplotter.Margin = new System.Windows.Forms.Padding(10);
+            this.btnXYZplotter.Name = "btnXYZplotter";
+            this.btnXYZplotter.Size = new System.Drawing.Size(92, 65);
+            this.btnXYZplotter.TabIndex = 4;
+            this.btnXYZplotter.Tag = "1";
+            this.btnXYZplotter.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnXYZplotter.UseVisualStyleBackColor = true;
+            this.btnXYZplotter.Click += new System.EventHandler(this.btn_Click);
             // 
             // btnInlinepositions
             // 
@@ -210,7 +210,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnMapFlip;
         private System.Windows.Forms.Button btnParseSEYR;
-        private System.Windows.Forms.Button btnXYZscan;
+        private System.Windows.Forms.Button btnXYZplotter;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.Button btnCameraViewer;
     }

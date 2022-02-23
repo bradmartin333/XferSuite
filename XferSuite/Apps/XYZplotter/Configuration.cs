@@ -1,4 +1,4 @@
-﻿namespace XferSuite.Apps.XYZscan
+﻿namespace XferSuite.Apps.XYZplotter
 {
     public static class Configuration
     {

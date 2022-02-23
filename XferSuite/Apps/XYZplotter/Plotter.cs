@@ -7,8 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using XferHelper;
-using XferSuite.Apps.XYZscan;
-using static XferSuite.Apps.XYZscan.Configuration;
+using XferSuite.Apps.XYZplotter;
+using static XferSuite.Apps.XYZplotter.Configuration;
 
 namespace XferSuite
 {
@@ -196,7 +196,7 @@ namespace XferSuite
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(text: $"Invalid File: {ex}", caption: "XYZscan");
+                            MessageBox.Show(text: $"Invalid File: {ex}", caption: "XYZ Plotter");
                             return;
                         }
                 }
@@ -540,6 +540,7 @@ namespace XferSuite
             EraseDataEnabled = false;
             ErasePointEnabled = false;
             checkBoxEraseData.Checked = false;
+            MessageBox.Show("Erase mode unavailable with current axes selection", "XYZ Plotter");
             MakePlots();
         }
 
