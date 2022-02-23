@@ -28,6 +28,7 @@ namespace XferSuite
         private VSpan[] VSpan { get; set; } = new VSpan[4];
 
         // Data
+        private string Path { get; set; }
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private Scan[] ActiveScans { get; set; } = new Scan[4];
         private int LastActiveScans { get; set; } = -1;
@@ -49,6 +50,7 @@ namespace XferSuite
         public Plotter(string path)
         {
             InitializeComponent();
+            Path = path;
             olv.SelectionChanged += Olv_SelectionChanged;
 
             Plots = new FormsPlot[] { pA, pB, pC, pD };
@@ -80,7 +82,7 @@ namespace XferSuite
             checkBoxEraseData.MouseUp += CheckBoxEraseData_MouseUp;
 
             Show();
-            MakeList(path);
+            MakeList();
         }
 
         #region Mouse Handlers
@@ -137,12 +139,12 @@ namespace XferSuite
 
         #region Log Parsing
 
-        private void MakeList(string path)
+        private void MakeList()
         {
             ProgressBar.Style = ProgressBarStyle.Marquee;
             ProgressBar.MarqueeAnimationSpeed = 100;
 
-            FindScans(path);
+            FindScans();
             olv.SetObjects(Scans);
             olv.Sort(OlvColumnIndex, SortOrder.Descending);
 
@@ -150,12 +152,12 @@ namespace XferSuite
             ProgressBar.MarqueeAnimationSpeed = 0;
         }
 
-        private void FindScans(string path)
+        private void FindScans()
         {
             Scans.Clear();
             int scanIdx = -1;
 
-            using (StreamReader reader = new StreamReader(path))
+            using (StreamReader reader = new StreamReader(Path))
             {
                 while (reader.Peek() != -1)
                 {
@@ -364,12 +366,12 @@ namespace XferSuite
                             formsPlot.Plot.YAxis2.Label(comboZ.Text);
                             cb.MinValue = GroupBounds.ZMin;
                             cb.MaxValue = GroupBounds.ZMax;
+                            cb.AutomaticTicks(formatter: ColorbarFormatter);
                             formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
                             formsPlot.Plot.YAxis.TickLabelNotation(invertSign: FlipY);
                             formsPlot.Plot.YAxis2.TickLabelNotation(invertSign: FlipZ);
                             formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
                             formsPlot.Plot.YAxis.TickLabelFormat(CustomTickFormatter);
-                            formsPlot.Plot.YAxis2.TickLabelFormat(CustomTickFormatter);
                         }
 
                         if (ShowBestFit)
@@ -420,7 +422,15 @@ namespace XferSuite
 
         private string CustomTickFormatter(double position)
         {
-            return $"{position:F3}";
+            if ((position - (int)position) > 1e-3)
+                return $"{position:F3}";
+            else
+                return $"{(int)position}";
+        }
+
+        private string ColorbarFormatter(double position)
+        {
+            return $"{Math.Round(position, 4 - ((int)position).ToString().Length)}";
         }
 
         private void ClearAxisLabels(Plot plot)
@@ -538,6 +548,13 @@ namespace XferSuite
             for (int i = 0; i < olv.SelectedObjects.Count; i++) ((Scan)olv.SelectedObjects[i]).RevertData();
             MakePlots();
             ProgressBar.Focus();
+        }
+
+        private void ButtonReloadFile_Click(object sender, EventArgs e)
+        {
+            Hide();
+            _ = new Plotter(Path);
+            Close();
         }
 
         #endregion
