@@ -351,13 +351,6 @@ module Zed =
         else
             data
 
-    let threeSigma (data: float []) =
-        Math.Round(
-            3.0
-            * MathNet.Numerics.Statistics.Statistics.StandardDeviation(data),
-            3
-        )
-
     let scatterPolynomial (xData: double []) (yData: double []) =
         MathNet.Numerics.Fit.Polynomial(xData, yData, 3)
 

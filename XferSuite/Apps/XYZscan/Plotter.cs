@@ -288,7 +288,7 @@ namespace XferSuite
                         formsPlot.Plot.YAxis.Label("Count (#)");
                         formsPlot.Plot.SetAxisLimits(yMin: 0);
                         formsPlot.Plot.Title(
-                            $"{name}\nRange: {Math.Round(plotData.X.Max() - plotData.X.Min(), 3)}   3Sigma = {Zed.threeSigma(plotData.X)}", false);
+                            $"{name}\nRange: {Math.Round(plotData.X.Max() - plotData.X.Min(), 3)}   3Sigma = {Stats.threeSig(plotData.X)}", false);
                         formsPlot.Plot.SetAxisLimitsX(GroupBounds.XMin, GroupBounds.XMax);
                         formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
                         formsPlot.Plot.XAxis.TickLabelFormat(CustomTickFormatter);
@@ -309,7 +309,7 @@ namespace XferSuite
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
-                                $"{name}\nRange: {Math.Round(plotData.Y.Max() - plotData.Y.Min(), 3)}   3Sigma = { Zed.threeSigma(plotData.Y)}", false);
+                                $"{name}\nRange: {Math.Round(plotData.Y.Max() - plotData.Y.Min(), 3)}   3Sigma = { Stats.threeSig(plotData.Y)}", false);
                         if (!EraseDataEnabled) // Want data easier to see if enabled
                         {
                             formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
@@ -351,7 +351,7 @@ namespace XferSuite
                         formsPlot.Plot.XAxis.Label(comboX.Text);
                         formsPlot.Plot.YAxis.Label(comboY.Text);
                         formsPlot.Plot.Title(
-                            $"{name}\nRange: {Math.Round(plotData.Z.Max() - plotData.Z.Min(), 3)}   3Sigma = { Zed.threeSigma(plotData.Z)}", false);
+                            $"{name}\nRange: {Math.Round(plotData.Z.Max() - plotData.Z.Min(), 3)}   3Sigma = { Stats.threeSig(plotData.Z)}", false);
                         if (!EraseDataEnabled) // Want data easier to see if enabled
                         {
                             formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
