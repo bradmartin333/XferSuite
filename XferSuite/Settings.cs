@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -32,7 +31,10 @@ namespace XferSuite
         public void CheckForUpdates()
         {
             if (btnCheckForUpdates.BackColor != Color.White && btnCheckForUpdates.BackColor != Color.LightYellow)
-                System.Diagnostics.Process.Start(@"https://bradmartin333.github.io/utility/XferSuite");
+            {
+                PerformUpdate();
+                Application.Exit();
+            }
             btnCheckForUpdates.Text = "Checking For Updates...";
             btnCheckForUpdates.BackColor = Color.White;
             try
@@ -69,6 +71,17 @@ namespace XferSuite
                 btnCheckForUpdates.Text = "Check Network Connection";
                 btnCheckForUpdates.BackColor = Color.LightYellow;
             }
+        }
+
+        private void PerformUpdate()
+        {
+            string tempPath = Path.GetTempPath() + "XferSuiteSetup.exe";
+            using (WebClient web = new WebClient())
+            {
+                web.Headers.Add("User-Agent: Other");
+                web.DownloadFile(@"https://github.com/bradmartin333/XferSuite/raw/master/Setup/XferSuiteSetup.exe", tempPath);
+            }
+            System.Diagnostics.Process.Start(tempPath);
         }
 
         private void btnCheckForUpdates_Click(object sender, EventArgs e)
