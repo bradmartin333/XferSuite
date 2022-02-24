@@ -32,8 +32,15 @@ namespace XferSuite
         {
             if (btnCheckForUpdates.BackColor != Color.White && btnCheckForUpdates.BackColor != Color.LightYellow)
             {
-                PerformUpdate();
-                Application.Exit();
+                try
+                {
+                    PerformUpdate();
+                    Application.Exit();
+                }
+                catch (Exception)
+                {
+                    System.Diagnostics.Process.Start(@"https://bradmartin333.github.io/utility/XferSuite");
+                }
             }
             btnCheckForUpdates.Text = "Checking For Updates...";
             btnCheckForUpdates.BackColor = Color.White;
