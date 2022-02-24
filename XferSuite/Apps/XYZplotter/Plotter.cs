@@ -2,6 +2,7 @@
 using ScottPlot.Plottable;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,24 @@ namespace XferSuite
 {
     public partial class Plotter : Form
     {
+        private int _ColorRounding = 2;
+        [Category("User Parameters")]
+        [Description("The higher the number, the more colors are shown in the Z axis and the longer it will take to create the plot. Default = 2, Min = 0, Max = 10")]
+        public int ColorRounding
+        {
+            get => _ColorRounding;
+            set
+            {
+                if (value < 0)
+                    _ColorRounding = 0;
+                else if (value > 10)
+                    _ColorRounding = 10;
+                else
+                    _ColorRounding = value;
+                MakePlots();
+            }
+        }
+
         #region Globals
 
         // Controls
@@ -355,7 +374,7 @@ namespace XferSuite
                         List<List<PlotPoint>> points = new List<List<PlotPoint>>();
                         for (int i = 0; i < plotData.Z.Length; i++)
                         {
-                            double colorFraction = Math.Round((plotData.Z[i] - GroupBounds.ZMin) / (GroupBounds.ZMax - GroupBounds.ZMin), 2);
+                            double colorFraction = Math.Round((plotData.Z[i] - GroupBounds.ZMin) / (GroupBounds.ZMax - GroupBounds.ZMin), _ColorRounding);
                             int fractionIdx = fractions.IndexOf(colorFraction);
                             if (fractionIdx != -1)
                                 points[fractionIdx].Add(new PlotPoint { X = plotData.X[i], Y = plotData.Y[i], C = colors[fractionIdx] });
