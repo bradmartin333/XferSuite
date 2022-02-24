@@ -98,10 +98,11 @@
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlp.Controls.Add(this.buttonReloadFile, 1, 0);
-            this.tlp.Controls.Add(this.checkBoxEqualize, 7, 0);
-            this.tlp.Controls.Add(this.buttonAutoscale, 6, 0);
-            this.tlp.Controls.Add(this.checkBoxShowBestFit, 5, 0);
+            this.tlp.Controls.Add(this.checkBoxEqualize, 6, 0);
+            this.tlp.Controls.Add(this.buttonAutoscale, 5, 0);
+            this.tlp.Controls.Add(this.checkBoxShowBestFit, 4, 0);
             this.tlp.Controls.Add(this.ProgressBar, 0, 0);
             this.tlp.Controls.Add(this.olv, 0, 1);
             this.tlp.Controls.Add(this.pA, 9, 3);
@@ -111,9 +112,9 @@
             this.tlp.Controls.Add(this.toolStripX, 9, 0);
             this.tlp.Controls.Add(this.toolStripY, 9, 1);
             this.tlp.Controls.Add(this.toolStripZ, 9, 2);
-            this.tlp.Controls.Add(this.checkBoxRemoveAngle, 8, 0);
-            this.tlp.Controls.Add(this.buttonExportSelected, 4, 0);
-            this.tlp.Controls.Add(this.checkBoxEraseData, 3, 0);
+            this.tlp.Controls.Add(this.checkBoxRemoveAngle, 7, 0);
+            this.tlp.Controls.Add(this.buttonExportSelected, 3, 0);
+            this.tlp.Controls.Add(this.checkBoxEraseData, 8, 0);
             this.tlp.Controls.Add(this.btnRevert, 2, 0);
             this.tlp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlp.Location = new System.Drawing.Point(0, 0);
@@ -124,7 +125,6 @@
             this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlp.Size = new System.Drawing.Size(1231, 784);
             this.tlp.TabIndex = 0;
             // 
@@ -153,7 +153,7 @@
             this.checkBoxEqualize.FlatAppearance.BorderSize = 0;
             this.checkBoxEqualize.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.checkBoxEqualize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEqualize.Location = new System.Drawing.Point(381, 3);
+            this.checkBoxEqualize.Location = new System.Drawing.Point(351, 3);
             this.checkBoxEqualize.Name = "checkBoxEqualize";
             this.checkBoxEqualize.Size = new System.Drawing.Size(24, 23);
             this.checkBoxEqualize.TabIndex = 19;
@@ -168,7 +168,7 @@
             this.buttonAutoscale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonAutoscale.FlatAppearance.BorderSize = 0;
             this.buttonAutoscale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonAutoscale.Location = new System.Drawing.Point(351, 3);
+            this.buttonAutoscale.Location = new System.Drawing.Point(321, 3);
             this.buttonAutoscale.Name = "buttonAutoscale";
             this.buttonAutoscale.Size = new System.Drawing.Size(24, 23);
             this.buttonAutoscale.TabIndex = 17;
@@ -186,7 +186,7 @@
             this.checkBoxShowBestFit.FlatAppearance.BorderSize = 0;
             this.checkBoxShowBestFit.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.checkBoxShowBestFit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxShowBestFit.Location = new System.Drawing.Point(321, 3);
+            this.checkBoxShowBestFit.Location = new System.Drawing.Point(291, 3);
             this.checkBoxShowBestFit.Name = "checkBoxShowBestFit";
             this.checkBoxShowBestFit.Size = new System.Drawing.Size(24, 23);
             this.checkBoxShowBestFit.TabIndex = 14;
@@ -533,7 +533,7 @@
             this.checkBoxRemoveAngle.FlatAppearance.BorderSize = 0;
             this.checkBoxRemoveAngle.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.checkBoxRemoveAngle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxRemoveAngle.Location = new System.Drawing.Point(411, 3);
+            this.checkBoxRemoveAngle.Location = new System.Drawing.Point(381, 3);
             this.checkBoxRemoveAngle.Name = "checkBoxRemoveAngle";
             this.checkBoxRemoveAngle.Size = new System.Drawing.Size(24, 23);
             this.checkBoxRemoveAngle.TabIndex = 12;
@@ -549,7 +549,7 @@
             this.buttonExportSelected.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonExportSelected.FlatAppearance.BorderSize = 0;
             this.buttonExportSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExportSelected.Location = new System.Drawing.Point(291, 3);
+            this.buttonExportSelected.Location = new System.Drawing.Point(261, 3);
             this.buttonExportSelected.Name = "buttonExportSelected";
             this.buttonExportSelected.Size = new System.Drawing.Size(24, 23);
             this.buttonExportSelected.TabIndex = 15;
@@ -567,7 +567,7 @@
             this.checkBoxEraseData.FlatAppearance.BorderSize = 0;
             this.checkBoxEraseData.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gold;
             this.checkBoxEraseData.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEraseData.Location = new System.Drawing.Point(261, 3);
+            this.checkBoxEraseData.Location = new System.Drawing.Point(411, 3);
             this.checkBoxEraseData.Name = "checkBoxEraseData";
             this.checkBoxEraseData.Size = new System.Drawing.Size(24, 23);
             this.checkBoxEraseData.TabIndex = 16;
