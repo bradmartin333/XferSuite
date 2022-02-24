@@ -30,7 +30,7 @@ namespace XferSuite
 
         public void CheckForUpdates()
         {
-            if (btnCheckForUpdates.BackColor != Color.White && btnCheckForUpdates.BackColor != Color.LightYellow)
+            if (btnCheckForUpdates.BackColor == Color.PaleTurquoise)
             {
                 try
                 {
@@ -108,5 +108,11 @@ namespace XferSuite
             form.Controls.Add(textBox);
             form.Show();
         }
+
+        private void btnViewDocs_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"https://github.com/bradmartin333/XferSuite/wiki");
+        }
     }
 }
+
