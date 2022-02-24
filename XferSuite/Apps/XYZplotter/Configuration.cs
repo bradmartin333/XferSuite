@@ -8,5 +8,6 @@
         public static bool FlipX { get; set; } = false;
         public static bool FlipY { get; set; } = false;
         public static bool FlipZ { get; set; } = false;
+        public static bool OverrideCheckbox { get; set; } = false;
     }
 }

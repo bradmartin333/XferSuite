@@ -31,7 +31,6 @@ namespace XferSuite
         private string Path { get; set; }
         private List<Scan> Scans { get; set; } = new List<Scan>();
         private Scan[] ActiveScans { get; set; } = new Scan[4];
-        private int LastActiveScans { get; set; } = -1;
         private int[] LastHighlightedPoints { get; set; } = new int[4];
         public bool EraseDataEnabled { get; set; }
         private bool _EraseOnClickEnabled = false;
@@ -89,7 +88,9 @@ namespace XferSuite
 
         private void CheckBoxEraseData_MouseUp(object sender, MouseEventArgs e)
         {
+            bool lastEraseDataEnabled = EraseDataEnabled;
             if (e.Button == MouseButtons.Right) TurnOffEraseMode();
+            if (lastEraseDataEnabled) MakePlots();
         }
 
         private void P_MouseUp(object sender, MouseEventArgs e)
@@ -104,6 +105,7 @@ namespace XferSuite
             {
                 ActiveScans[plotIdx].Data.RemoveAt(LastHighlightedPoints[plotIdx]);
                 ActiveScans[plotIdx].Edited = true;
+                olv.Refresh();
                 MakePlots();
             }
             catch (Exception)
@@ -226,16 +228,12 @@ namespace XferSuite
             }
             toolStripY.Enabled = comboX.SelectedIndex != (int)Zed.Axes.None;
             toolStripZ.Enabled = comboY.SelectedIndex != (int)Zed.Axes.None;
+            UpdateEraseDataMode();
             MakePlots();
         }
 
         private void MakePlots()
         {
-            // Housekeeping methods
-            olv.Refresh();
-            ProgressBar.Focus();
-            UpdateEraseDataMode();
-
             if (olv.SelectedIndices.Count <= 4)
             {
 
@@ -491,8 +489,9 @@ namespace XferSuite
 
         private void CheckBoxEraseData_CheckedChanged(object sender, EventArgs e)
         {
+            if (OverrideCheckbox) return;
             if (!checkBoxEraseData.Checked && EraseDataEnabled && !ErasePointEnabled) CreateCustomAxes();
-            UpdateEraseDataMode(redraw: true);
+            UpdateEraseDataMode();
         }
 
         private void CreateCustomAxes()
@@ -519,25 +518,40 @@ namespace XferSuite
             MakePlots();
         }
 
-        private void UpdateEraseDataMode(bool redraw = false)
+        private void UpdateEraseDataMode()
         {
+            bool lastEraseDataEnabled = EraseDataEnabled;
             EraseDataEnabled = checkBoxEraseData.Checked;
-            if (EraseDataEnabled && (comboX.SelectedIndex == (int)Zed.Axes.H || comboY.SelectedIndex == (int)Zed.Axes.H || 
-                comboX.SelectedIndex == (int)Zed.Axes.ZH || comboY.SelectedIndex == (int)Zed.Axes.ZH) 
-                && comboZ.SelectedIndex != (int)Zed.Axes.None) TurnOffEraseMode();
-            if (EraseDataEnabled && comboY.SelectedIndex == (int)Zed.Axes.None) TurnOffEraseMode();
-            ErasePointEnabled = EraseDataEnabled && (comboX.SelectedIndex == (int)Zed.Axes.X || comboX.SelectedIndex == (int)Zed.Axes.Y) && 
+
+            bool allowEraseData = true;
+            if ((comboX.SelectedIndex == (int)Zed.Axes.H || comboY.SelectedIndex == (int)Zed.Axes.H ||
+                comboX.SelectedIndex == (int)Zed.Axes.ZH || comboY.SelectedIndex == (int)Zed.Axes.ZH)
+                && comboZ.SelectedIndex != (int)Zed.Axes.None)
+            {
+                TurnOffEraseMode();
+                allowEraseData = false;
+            }
+            if (comboY.SelectedIndex == (int)Zed.Axes.None) 
+            {
+                TurnOffEraseMode();
+                allowEraseData = false;
+            }
+            ErasePointEnabled = allowEraseData && EraseDataEnabled && 
+                (comboX.SelectedIndex == (int)Zed.Axes.X || comboX.SelectedIndex == (int)Zed.Axes.Y) &&
                 comboY.SelectedIndex == (int)Zed.Axes.H && comboZ.SelectedIndex == (int)Zed.Axes.None;
-            if (redraw) MakePlots();
+
+            checkBoxEraseData.Visible = allowEraseData;
+            if (lastEraseDataEnabled != EraseDataEnabled) MakePlots();
         }
 
         private void TurnOffEraseMode()
         {
+            OverrideCheckbox = true;
             EraseDataEnabled = false;
             ErasePointEnabled = false;
             checkBoxEraseData.Checked = false;
-            MessageBox.Show("Erase mode unavailable with current axes selection", "XYZ Plotter");
-            MakePlots();
+            checkBoxEraseData.Visible = false;
+            OverrideCheckbox = false;
         }
 
         private void ButtonAutoscale_Click(object sender, EventArgs e)
@@ -547,14 +561,12 @@ namespace XferSuite
                 plot.Plot.AxisAuto();
                 plot.Refresh();
             }
-            ProgressBar.Focus();
         }
 
         private void BtnRevert_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < olv.SelectedObjects.Count; i++) ((Scan)olv.SelectedObjects[i]).RevertData();
             MakePlots();
-            ProgressBar.Focus();
         }
 
         private void ButtonReloadFile_Click(object sender, EventArgs e)
@@ -579,7 +591,6 @@ namespace XferSuite
                         for (int i = olv.SelectedObjects.Count - 1; i >= 0; i--)
                             sw.Write(((Scan)olv.SelectedObjects[i]).ToString());
             }
-            ProgressBar.Focus();
         }
     }
 }
