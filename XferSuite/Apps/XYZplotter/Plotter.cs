@@ -348,13 +348,28 @@ namespace XferSuite
                         }
                         break;
                     case 3:
-                        // Add 3D points
+                        // Create point lists grouped by color
+                        // This is a lot faster than adding points individually
+                        List<double> fractions = new List<double>();
+                        List<Color> colors = new List<Color>();
+                        List<List<PlotPoint>> points = new List<List<PlotPoint>>();
                         for (int i = 0; i < plotData.Z.Length; i++)
                         {
-                            double colorFraction = (plotData.Z[i] - GroupBounds.ZMin) / (GroupBounds.ZMax - GroupBounds.ZMin);
-                            Color c = ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction);
-                            formsPlot.Plot.AddPoint(plotData.X[i], plotData.Y[i], c);
+                            double colorFraction = Math.Round((plotData.Z[i] - GroupBounds.ZMin) / (GroupBounds.ZMax - GroupBounds.ZMin), 2);
+                            int fractionIdx = fractions.IndexOf(colorFraction);
+                            if (fractionIdx != -1)
+                                points[fractionIdx].Add(new PlotPoint { X = plotData.X[i], Y = plotData.Y[i], C = colors[fractionIdx] });
+                            else
+                            {
+                                fractions.Add(colorFraction);
+                                colors.Add(ScottPlot.Drawing.Colormap.Viridis.GetColor(colorFraction));
+                                points.Add(new List<PlotPoint>() { new PlotPoint { X = plotData.X[i], Y = plotData.Y[i], C = colors.Last() } });
+                            }
                         }
+
+                        // Add lists as individual scatterplots
+                        foreach (List<PlotPoint> pointList in points)
+                            formsPlot.Plot.AddScatter(pointList.Select(p => p.X).ToArray(), pointList.Select(p => p.Y).ToArray(), pointList[0].C, lineStyle: LineStyle.None);
 
                         // Format plot
                         formsPlot.Plot.XAxis.Label(comboX.Text);

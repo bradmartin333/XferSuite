@@ -144,6 +144,7 @@
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
     <Compile Include="Apps\XYZplotter\PlotData.cs" />
+    <Compile Include="Apps\XYZplotter\PlotPoint.cs" />
     <Compile Include="Apps\XYZplotter\Plotter.cs">
       <SubType>Form</SubType>
     </Compile>
