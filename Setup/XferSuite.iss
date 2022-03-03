@@ -38,7 +38,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "S:\XferSuite\XferSuite\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\Accord.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "S:\XferSuite\XferSuite\bin\Release\Accord.dll.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\Accord.Video.DirectShow.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\Accord.Video.DirectShow.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\Release\Accord.Video.dll"; DestDir: "{app}"; Flags: ignoreversion
