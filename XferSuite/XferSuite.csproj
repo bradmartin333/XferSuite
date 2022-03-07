@@ -153,6 +153,12 @@
     <Compile Include="Apps\CameraViewer\CameraViewer.Designer.cs">
       <DependentUpon>CameraViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\PrintLogParser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\PrintLogParser.Designer.cs">
+      <DependentUpon>PrintLogParser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
     <Compile Include="Apps\XYZplotter\PlotData.cs" />
@@ -222,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\CameraViewer\CameraViewer.resx">
       <DependentUpon>CameraViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\PrintLogParser.resx">
+      <DependentUpon>PrintLogParser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\XYZplotter\Plotter.resx">
       <DependentUpon>Plotter.cs</DependentUpon>

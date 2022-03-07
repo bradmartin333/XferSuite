@@ -57,8 +57,7 @@
             this.ListBox.Items.AddRange(new object[] {
             "10Zone 2DCal Generator",
             "uTP Log Parser",
-            "roux",
-            "Camera Network Refresh"});
+            "roux"});
             this.ListBox.Location = new System.Drawing.Point(3, 3);
             this.ListBox.Name = "ListBox";
             this.ListBox.Size = new System.Drawing.Size(274, 82);

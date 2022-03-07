@@ -11,7 +11,6 @@ namespace XferSuite
             TenZone2Dcal,
             uTPlogParser,
             roux,
-            CamNetRefresh,
         }
 
         public AdvancedTools()
@@ -35,12 +34,13 @@ namespace XferSuite
                         Close();
                         break;
                     case AdvancedForm.uTPlogParser:
-                        MessageBox.Show("Coming soon!", "XferSuite Advanced Tools");
+                        if (Application.OpenForms.OfType<PrintLogParser>().Any())
+                            Application.OpenForms.OfType<PrintLogParser>().First().BringToFront();
+                        else
+                            _ = new PrintLogParser();
+                        Close();
                         break;
                     case AdvancedForm.roux:
-                        MessageBox.Show("Coming soon!", "XferSuite Advanced Tools");
-                        break;
-                    case AdvancedForm.CamNetRefresh:
                         MessageBox.Show("Coming soon!", "XferSuite Advanced Tools");
                         break;
                     default:
