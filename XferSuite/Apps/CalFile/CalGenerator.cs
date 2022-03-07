@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using XferHelper;
 
 namespace XferSuite
 {
@@ -19,38 +21,17 @@ namespace XferSuite
         public CalGenerator()
         {
             InitializeComponent();
+            NumXRange.Value = 500;
+            NumYRange.Value = 500;
+            ComboXAxis.SelectedIndex = 0;
+            ComboYAxis.SelectedIndex = 1;
+            ComboZAxis.SelectedIndex = 2;
+            ComboZCAxis.SelectedIndex = 3;
+            ComboIncrement.SelectedIndex = 0;
             Show();
         }
 
-        #region Cal File Generation
-
-        private void SaveA3200CalFile(string path)
-        {
-            XSteps = XRange / Increment;
-            YSteps = YRange / Increment;
-
-            string header = string.Format(":START2D {0} {1} {2} {3} -{4} -{4} {5}\n:START2D POSUNIT=METRIC CORUNIT=METRIC\n\n",
-                XAxis,
-                YAxis,
-                ZAxis,
-                ZCAxis,
-                Increment, XSteps + 2);
-
-            string body = BorderLine();
-            for (int j = 0; j < YSteps; j++)
-            {
-                body += CalStr(0.0);
-                for (int i = 0; i < XSteps; i++)
-                    body += CalStr(Data[j, i]);
-                body += CalStr(0.0);
-                TabToLine(ref body);
-            }
-            body += BorderLine();
-
-            string footer = "\n:END";
-
-            string output = header + body + footer;
-        }
+        #region Cal File Helpers
 
         private string CalStr(double z)
         {
@@ -152,7 +133,11 @@ namespace XferSuite
         private void BtnAddPosition_Click(object sender, EventArgs e)
         {
             string paste = Clipboard.GetText();
-            if (ValidatePosition(paste)) RTBPositions.Text += paste;
+            if (ValidatePosition(paste))
+            {
+                RTBPositions.Text += paste;
+                UpdateAll();
+            }
         }
 
         private void BtnClearPositions_Click(object sender, EventArgs e)
@@ -174,7 +159,76 @@ namespace XferSuite
 
         private void UpdateAll()
         {
-            //throw new NotImplementedException();
+            if (XRange <= 0 || YRange <= 0 || 
+                ComboXAxis.SelectedIndex == -1 || ComboYAxis.SelectedIndex == -1 || ComboZAxis.SelectedIndex == -1 || ComboZCAxis.SelectedIndex == -1 ||
+                ComboIncrement.SelectedIndex == -1) return;
+
+            ClearOutput();
+            CreateDataArray();
+            if (CreateHeatplot()) CreateCalOutput();
+        }
+
+        private void CreateDataArray()
+        {
+            // Parse pasted positions
+            List<Zed.Vec3> positions = new List<Zed.Vec3>();
+            string[] pastes = RTBPositions.Text.Split('\n');
+            foreach (string paste in pastes)
+            {
+                if (string.IsNullOrEmpty(paste)) break;
+                string[] cols = paste.Split(',');
+                positions.Add(new Zed.Vec3(double.Parse(cols[0]), double.Parse(cols[1]), double.Parse(cols[5])));
+            }
+
+            // Create blank data array
+            XSteps = XRange / Increment;
+            YSteps = YRange / Increment;
+            Data = new double[XSteps, YSteps];
+
+            // Fit data to plane and generate data
+            Zed.Plane plane = Zed.getPlaneVec(positions.ToArray());
+            for (int i = 0; i < XRange; i += Increment)
+                for (int j = 0; j < YRange; j += Increment)
+                    Data[i / Increment, j / Increment] = Zed.projectPlane(plane, new Zed.Vec3(i, j, 0)).Z;
+        }
+
+        private void CreateCalOutput()
+        {
+            string header = $":START2D {XAxis} {YAxis} {ZAxis} {ZCAxis} -{Increment} -{Increment} {XSteps + 2}\n:START2D POSUNIT=METRIC CORUNIT=METRIC\n\n";
+
+            string body = BorderLine();
+            for (int j = 0; j < YSteps; j++)
+            {
+                body += CalStr(0.0);
+                for (int i = 0; i < XSteps; i++)
+                    body += CalStr(Data[j, i]);
+                body += CalStr(0.0);
+                TabToLine(ref body);
+            }
+            body += BorderLine();
+
+            RTBOutput.Text = header + body + "\n:END";
+        }
+
+        private bool CreateHeatplot()
+        {
+            try
+            {
+                ScottPlot.Plottable.Heatmap hm = FormsPlot.Plot.AddHeatmap(Data, lockScales: false);
+                hm.Smooth = true;
+                FormsPlot.Update();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void ClearOutput()
+        {
+            RTBOutput.Clear();
+            FormsPlot.Plot.Clear();
         }
 
         private bool ValidatePosition(string paste) => paste.Split(',').Length == 10;

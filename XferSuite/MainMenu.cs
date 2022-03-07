@@ -27,8 +27,7 @@ namespace XferSuite
             }
 
             // For quick dev
-            var x = new CalGenerator();
-            x.BringToFront();
+            _ = new CalGenerator();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)

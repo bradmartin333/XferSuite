@@ -517,8 +517,7 @@ module Zed =
 
         out
 
-    let getPlane (data: Position []) =
-        let vecs = data |> Array.map (fun x -> posToVec3 x)
+    let getPlaneVec (vecs: Vec3[]) =
         let n = float vecs.Length
 
         if n < 3. then
@@ -548,6 +547,9 @@ module Zed =
                   Normal = normalizeVec3 (weightedDir covar) }
 
             p
+
+    let getPlane (data: Position []) =
+        getPlaneVec (data |> Array.map (fun x -> posToVec3 x))
 
     let dataPlaneFit (p: Plane) =
         let theta = thetaDegrees p
