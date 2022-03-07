@@ -371,17 +371,20 @@
             this.RTBPositions.Size = new System.Drawing.Size(482, 197);
             this.RTBPositions.TabIndex = 15;
             this.RTBPositions.Text = "";
+            this.RTBPositions.WordWrap = false;
             // 
             // RTBOutput
             // 
             this.tableLayoutPanel.SetColumnSpan(this.RTBOutput, 4);
             this.RTBOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RTBOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RTBOutput.Location = new System.Drawing.Point(13, 354);
             this.RTBOutput.Name = "RTBOutput";
             this.RTBOutput.ReadOnly = true;
             this.RTBOutput.Size = new System.Drawing.Size(482, 197);
             this.RTBOutput.TabIndex = 16;
             this.RTBOutput.Text = "";
+            this.RTBOutput.WordWrap = false;
             // 
             // FormsPlot
             // 

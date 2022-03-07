@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
 using XferHelper;
 
 namespace XferSuite
@@ -27,7 +28,8 @@ namespace XferSuite
             ComboYAxis.SelectedIndex = 1;
             ComboZAxis.SelectedIndex = 2;
             ComboZCAxis.SelectedIndex = 3;
-            ComboIncrement.SelectedIndex = 0;
+            ComboIncrement.SelectedIndex = 2;
+            FormsPlot.Plot.Frameless();
             Show();
         }
 
@@ -62,11 +64,13 @@ namespace XferSuite
         private void NumXRange_ValueChanged(object sender, EventArgs e)
         {
             XRange = (int)NumXRange.Value;
+            UpdateAll();
         }
 
         private void NumYRange_ValueChanged(object sender, EventArgs e)
         {
             YRange = (int)NumYRange.Value;
+            UpdateAll();
         }
 
         private void ComboXAxis_SelectedIndexChanged(object sender, EventArgs e)
@@ -128,21 +132,25 @@ namespace XferSuite
         private void ComboIncrement_SelectedIndexChanged(object sender, EventArgs e)
         {
             Increment = int.Parse(ComboIncrement.Text);
+            UpdateAll();
         }
 
         private void BtnAddPosition_Click(object sender, EventArgs e)
         {
-            string paste = Clipboard.GetText();
-            if (ValidatePosition(paste))
+            string clipboard = Clipboard.GetText();
+            string[] pastes = clipboard.Split('\n');
+            foreach (string paste in pastes)
             {
-                RTBPositions.Text += paste;
-                UpdateAll();
+                string cleanPaste = paste.Trim('\r');
+                if (ValidatePosition(cleanPaste)) RTBPositions.Text += $"{cleanPaste}\n";
             }
+            UpdateAll();
         }
 
         private void BtnClearPositions_Click(object sender, EventArgs e)
         {
             RTBPositions.Clear();
+            ClearOutput();
         }
 
         private void BtnCopyOutput_Click(object sender, EventArgs e)
@@ -180,6 +188,10 @@ namespace XferSuite
                 positions.Add(new Zed.Vec3(double.Parse(cols[0]), double.Parse(cols[1]), double.Parse(cols[5])));
             }
 
+            // Find data bounds
+            (double xmin, double xmax) = Zed.getAxisMinMax(positions.Select(x => x.X).ToArray());
+            (double ymin, double ymax) = Zed.getAxisMinMax(positions.Select(y => y.Y).ToArray());
+
             // Create blank data array
             XSteps = XRange / Increment;
             YSteps = YRange / Increment;
@@ -189,7 +201,12 @@ namespace XferSuite
             Zed.Plane plane = Zed.getPlaneVec(positions.ToArray());
             for (int i = 0; i < XRange; i += Increment)
                 for (int j = 0; j < YRange; j += Increment)
-                    Data[i / Increment, j / Increment] = Zed.projectPlane(plane, new Zed.Vec3(i, j, 0)).Z;
+                {
+                    if (i > xmin && xmax > i && j > ymin && ymax > j)
+                        Data[i / Increment, j / Increment] = Zed.projectPlane(plane, new Zed.Vec3(i, j, 0)).Z;
+                    else
+                        Data[i / Increment, j / Increment] = 0;
+                }    
         }
 
         private void CreateCalOutput()
@@ -214,9 +231,16 @@ namespace XferSuite
         {
             try
             {
-                ScottPlot.Plottable.Heatmap hm = FormsPlot.Plot.AddHeatmap(Data, lockScales: false);
+                // Flip Y-Axis for plot
+                double[,] data = new double[XSteps, YSteps];
+                for (int i = 0; i < XSteps; i++)
+                    for (int j = 0; j < YSteps; j++)
+                        data[XSteps - 1 - i, j] = Data[i, j];
+
+                ScottPlot.Plottable.Heatmap hm = FormsPlot.Plot.AddHeatmap(data, lockScales: false);
                 hm.Smooth = true;
-                FormsPlot.Update();
+                FormsPlot.PerformAutoScale();
+                FormsPlot.Refresh();
             }
             catch (Exception)
             {
@@ -229,9 +253,16 @@ namespace XferSuite
         {
             RTBOutput.Clear();
             FormsPlot.Plot.Clear();
+            FormsPlot.Refresh();
         }
 
-        private bool ValidatePosition(string paste) => paste.Split(',').Length == 10;
+        private bool ValidatePosition(string paste)
+        {
+            string[] vals = paste.Split(',');
+            if (vals.Length < 9) return false;
+            // Special PositionMemory.txt parser
+            return !(double.Parse(vals[0]) == 1000000.0 || double.Parse(vals[1]) == 1000000.0 || double.Parse(vals[5]) == 1000000.0);
+        }
 
         private bool ValidateAxes(string value) => !(XAxis == value || YAxis == value || ZAxis == value || ZCAxis == value);
     }
