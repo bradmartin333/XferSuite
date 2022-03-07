@@ -48,30 +48,37 @@ namespace XferSuite
 
         private void FindPrints()
         {
-            using (StreamReader reader = new StreamReader(LabelPath.Text))
+            try
             {
-                _ = reader.ReadLine(); // Discard header
-                while (reader.Peek() != -1)
+                using (StreamReader reader = new StreamReader(LabelPath.Text))
                 {
-                    var line = reader.ReadLine();
-                    _ = reader.Peek();
-                    string[] data = line.Split(',');
-                    if (data.Length == 2)
+                    _ = reader.ReadLine(); // Discard header
+                    while (reader.Peek() != -1)
                     {
-                        if (line.Contains("STARTED")) Prints.Add(new Print() { Start = DateTime.Parse(data[0]) });
+                        var line = reader.ReadLine();
+                        _ = reader.Peek();
+                        string[] data = line.Split(',');
+                        if (data.Length == 2)
+                        {
+                            if (line.Contains("STARTED")) Prints.Add(new Print() { Start = DateTime.Parse(data[0]) });
+                            else
+                            {
+                                Prints.Last().Stop = DateTime.Parse(data[0]);
+                                if (line.Contains("FINISHED"))
+                                    Prints.Last().Finished = true;
+                            }
+                        }
                         else
                         {
-                            Prints.Last().Stop = DateTime.Parse(data[0]);
-                            if (line.Contains("FINISHED"))
-                                Prints.Last().Finished = true;
+                            if (Prints.Last().Recipe == string.Empty) Prints.Last().Recipe = data[19].Split('\\').Last();
+                            Prints.Last().Cycles++;
                         }
                     }
-                    else
-                    {
-                        if (Prints.Last().Recipe == string.Empty) Prints.Last().Recipe = data[19].Split('\\').Last();
-                        Prints.Last().Cycles++;
-                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Invalid File\n\n{ex}", "XferSuite Advanced Tools");
             }
         }
 
