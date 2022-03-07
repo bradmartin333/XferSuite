@@ -110,6 +110,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedTools.Designer.cs">
+      <DependentUpon>AdvancedTools.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\CameraViewer\CameraLayout.cs" />
     <Compile Include="Apps\Angleprinting.cs">
       <SubType>Form</SubType>
@@ -190,6 +196,9 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AdvancedTools.resx">
+      <DependentUpon>AdvancedTools.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Apps\Angleprinting.resx">
       <DependentUpon>Angleprinting.cs</DependentUpon>
     </EmbeddedResource>
