@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace XferSuite
 {
@@ -20,6 +21,8 @@ namespace XferSuite
             InitializeComponent();
             Show();
         }
+
+        #region Cal File Generation
 
         private void SaveA3200CalFile(string path)
         {
@@ -70,5 +73,112 @@ namespace XferSuite
             TabToLine(ref line);
             return line;
         }
+
+        #endregion
+
+        #region UI Handlers
+
+        private void NumXRange_ValueChanged(object sender, EventArgs e)
+        {
+            XRange = (int)NumXRange.Value;
+        }
+
+        private void NumYRange_ValueChanged(object sender, EventArgs e)
+        {
+            YRange = (int)NumYRange.Value;
+        }
+
+        private void ComboXAxis_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ComboXAxis.SelectedIndex != -1)
+            {
+                if (ValidateAxes(ComboXAxis.Text))
+                {
+                    XAxis = ComboXAxis.Text;
+                    UpdateAll();
+                }
+                else
+                    ComboXAxis.SelectedIndex = -1;
+            }
+        }
+
+        private void ComboYAxis_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ComboYAxis.SelectedIndex != -1)
+            {
+                if (ValidateAxes(ComboYAxis.Text))
+                {
+                    YAxis = ComboYAxis.Text;
+                    UpdateAll();
+                }
+                else
+                    ComboYAxis.SelectedIndex = -1;
+            }
+        }
+
+        private void ComboZAxis_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ComboZAxis.SelectedIndex != -1)
+            {
+                if (ValidateAxes(ComboZAxis.Text))
+                {
+                    ZAxis = ComboZAxis.Text;
+                    UpdateAll();
+                }
+                else
+                    ComboZAxis.SelectedIndex = -1;
+            }
+        }
+
+        private void ComboZCAxis_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ComboZCAxis.SelectedIndex != -1)
+            {
+                if (ValidateAxes(ComboZCAxis.Text))
+                {
+                    ZCAxis = ComboZCAxis.Text;
+                    UpdateAll();
+                }
+                else
+                    ComboZCAxis.SelectedIndex = -1;
+            }
+        }
+
+        private void ComboIncrement_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Increment = int.Parse(ComboIncrement.Text);
+        }
+
+        private void BtnAddPosition_Click(object sender, EventArgs e)
+        {
+            string paste = Clipboard.GetText();
+            if (ValidatePosition(paste)) RTBPositions.Text += paste;
+        }
+
+        private void BtnClearPositions_Click(object sender, EventArgs e)
+        {
+            RTBPositions.Clear();
+        }
+
+        private void BtnCopyOutput_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(RTBOutput.Text);
+        }
+
+        private void BtnHelp_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        private void UpdateAll()
+        {
+            //throw new NotImplementedException();
+        }
+
+        private bool ValidatePosition(string paste) => paste.Split(',').Length == 10;
+
+        private bool ValidateAxes(string value) => !(XAxis == value || YAxis == value || ZAxis == value || ZCAxis == value);
     }
 }

@@ -122,6 +122,7 @@
             this.BtnClearPositions.TabIndex = 22;
             this.BtnClearPositions.Text = "Clear";
             this.BtnClearPositions.UseVisualStyleBackColor = false;
+            this.BtnClearPositions.Click += new System.EventHandler(this.BtnClearPositions_Click);
             // 
             // BtnAddPosition
             // 
@@ -134,6 +135,7 @@
             this.BtnAddPosition.TabIndex = 21;
             this.BtnAddPosition.Text = "Add";
             this.BtnAddPosition.UseVisualStyleBackColor = false;
+            this.BtnAddPosition.Click += new System.EventHandler(this.BtnAddPosition_Click);
             // 
             // ComboZCAxis
             // 
@@ -153,6 +155,7 @@
             this.ComboZCAxis.Name = "ComboZCAxis";
             this.ComboZCAxis.Size = new System.Drawing.Size(116, 21);
             this.ComboZCAxis.TabIndex = 13;
+            this.ComboZCAxis.SelectedIndexChanged += new System.EventHandler(this.ComboZCAxis_SelectedIndexChanged);
             // 
             // ComboZAxis
             // 
@@ -172,6 +175,7 @@
             this.ComboZAxis.Name = "ComboZAxis";
             this.ComboZAxis.Size = new System.Drawing.Size(116, 21);
             this.ComboZAxis.TabIndex = 12;
+            this.ComboZAxis.SelectedIndexChanged += new System.EventHandler(this.ComboZAxis_SelectedIndexChanged);
             // 
             // ComboYAxis
             // 
@@ -191,6 +195,7 @@
             this.ComboYAxis.Name = "ComboYAxis";
             this.ComboYAxis.Size = new System.Drawing.Size(116, 21);
             this.ComboYAxis.TabIndex = 11;
+            this.ComboYAxis.SelectedIndexChanged += new System.EventHandler(this.ComboYAxis_SelectedIndexChanged);
             // 
             // NumYRange
             // 
@@ -209,6 +214,7 @@
             this.NumYRange.Name = "NumYRange";
             this.NumYRange.Size = new System.Drawing.Size(116, 20);
             this.NumYRange.TabIndex = 9;
+            this.NumYRange.ValueChanged += new System.EventHandler(this.NumYRange_ValueChanged);
             // 
             // label7
             // 
@@ -300,6 +306,7 @@
             this.BtnHelp.TabIndex = 7;
             this.BtnHelp.Text = "Help";
             this.BtnHelp.UseVisualStyleBackColor = false;
+            this.BtnHelp.Click += new System.EventHandler(this.BtnHelp_Click);
             // 
             // NumXRange
             // 
@@ -318,6 +325,7 @@
             this.NumXRange.Name = "NumXRange";
             this.NumXRange.Size = new System.Drawing.Size(116, 20);
             this.NumXRange.TabIndex = 8;
+            this.NumXRange.ValueChanged += new System.EventHandler(this.NumXRange_ValueChanged);
             // 
             // ComboXAxis
             // 
@@ -337,6 +345,7 @@
             this.ComboXAxis.Name = "ComboXAxis";
             this.ComboXAxis.Size = new System.Drawing.Size(116, 21);
             this.ComboXAxis.TabIndex = 10;
+            this.ComboXAxis.SelectedIndexChanged += new System.EventHandler(this.ComboXAxis_SelectedIndexChanged);
             // 
             // ComboIncrement
             // 
@@ -350,6 +359,7 @@
             this.ComboIncrement.Name = "ComboIncrement";
             this.ComboIncrement.Size = new System.Drawing.Size(116, 21);
             this.ComboIncrement.TabIndex = 14;
+            this.ComboIncrement.SelectedIndexChanged += new System.EventHandler(this.ComboIncrement_SelectedIndexChanged);
             // 
             // RTBPositions
             // 
@@ -420,6 +430,7 @@
             this.BtnCopyOutput.TabIndex = 20;
             this.BtnCopyOutput.Text = "Copy";
             this.BtnCopyOutput.UseVisualStyleBackColor = false;
+            this.BtnCopyOutput.Click += new System.EventHandler(this.BtnCopyOutput_Click);
             // 
             // CalGenerator
             // 
