@@ -2,103 +2,39 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
-using XferHelper;
 
 namespace XferSuite
 {
     public partial class CalGenerator : Form
     {
-        // 0 1 2
-        // 3 4 5
-        // 6 7 8
-
-        // in a cal file becomes
-
-        // 6 3 0
-        // 7 4 1
-        // 8 5 2
-
-        // in tool space facing front
-        // AKA 1 clockwise rotation
-        // AKA transpose and flip row
-
         private int XRange = 450;
-        private int YRange = 450; 
-        private int Increment, XSteps, YSteps;
+        private int YRange = 450;
         private string XAxis, YAxis, ZAxis, ZCAxis;
-        private double[,] Data;
-        private double Average;
+        private double[] Data = new double[4];
 
         public CalGenerator()
         {
             InitializeComponent();
-            ComboIncrement.SelectedIndex = 6;
-            NumXRange.Value = 450;
-            NumYRange.Value = 450;
+            NumXRange.Value = XRange;
+            NumYRange.Value = YRange;
             ComboXAxis.SelectedIndex = 0;
             ComboYAxis.SelectedIndex = 1;
             ComboZAxis.SelectedIndex = 3;
             ComboZCAxis.SelectedIndex = 5;
-            FormsPlot.Plot.Frameless();
-            FormsPlot.Plot.Grid(enable: false);
             Show();
         }
-
-        #region Cal File Helpers
-
-        private string CalStr(double z)
-        {
-            return string.Format("{0:#,0.000}\t{0:#,0.000}\t", z);
-        }
-
-        private void TabToLine(ref string s)
-        {
-            int place = s.LastIndexOf('\t');
-            if (place == -1)
-                return;
-            s = s.Remove(place, 1).Insert(place, "\n");
-        }
-
-        private string BorderLine()
-        {
-            string line = "";
-            for (int i = 0; i < XSteps + 1; i++)
-                line += CalStr(0.0);
-            TabToLine(ref line);
-            return line;
-        }
-
-        #endregion
 
         #region UI Handlers
 
         private void NumXRange_ValueChanged(object sender, EventArgs e)
         {
-            if ((int)NumXRange.Value % Increment == 0)
-            {
-                XRange = (int)NumXRange.Value;
-                ComboIncrement.BackColor = System.Drawing.Color.White;
-            }
-            else
-            {
-                NumXRange.Value = XRange;
-                ComboIncrement.BackColor = System.Drawing.Color.Gold;
-            }
+            XRange = (int)NumXRange.Value;
             UpdateAll();
         }
 
         private void NumYRange_ValueChanged(object sender, EventArgs e)
         {
-            if ((int)NumYRange.Value % Increment == 0)
-            {
-                YRange = (int)NumYRange.Value;
-                ComboIncrement.BackColor = System.Drawing.Color.White;
-            }
-            else
-            {
-                NumYRange.Value = YRange;
-                ComboIncrement.BackColor = System.Drawing.Color.Gold;
-            }
+            YRange = (int)NumYRange.Value;
             UpdateAll();
         }
 
@@ -150,25 +86,6 @@ namespace XferSuite
             UpdateAll();
         }
 
-        private void ComboIncrement_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ComboIncrement.SelectedIndex != -1)
-            {
-                int testIncrement = int.Parse(ComboIncrement.Text);
-                if (XRange % testIncrement == 0 && YRange % testIncrement == 0)
-                {
-                    Increment = testIncrement;
-                    ComboIncrement.BackColor = System.Drawing.Color.White;
-                } 
-                else
-                {
-                    ComboIncrement.SelectedIndex = -1;
-                    ComboIncrement.BackColor = System.Drawing.Color.Gold;
-                }
-            }
-            UpdateAll();
-        }
-
         private void BtnAddPosition_Click(object sender, EventArgs e)
         {
             string clipboard = Clipboard.GetText();
@@ -205,10 +122,15 @@ namespace XferSuite
 
             if (XRange <= 0 || YRange <= 0 || 
                 ComboXAxis.SelectedIndex == -1 || ComboYAxis.SelectedIndex == -1 || ComboZAxis.SelectedIndex == -1 || ComboZCAxis.SelectedIndex == -1 ||
-                ComboIncrement.SelectedIndex == -1 || string.IsNullOrEmpty(RTBPositions.Text)) return;
+                string.IsNullOrEmpty(RTBPositions.Text)) return;
 
             CreateDataArray();
-            if (CreateHeatplot()) CreateCalOutput();
+
+            RTBOutput.Text = $":START2D {XAxis} {YAxis} {ZAxis} {ZCAxis} -{XRange:f3} -{YRange:f3} 3"
+                + $"\n:START2D POSUNIT=METRIC CORUNIT=METRIC/1000\n\n"
+                + $"{Data[1]:f3}\t{Data[1]:f3}\t{Data[3]:f3}\t{Data[3]:f3}\t0.000\t0.000\n"
+                + $"{Data[0]:f3}\t{Data[0]:f3}\t{Data[2]:f3}\t{Data[2]:f3}\t0.000\t0.000\n"
+                + $"0.000\t0.000\t0.000\t0.000\t0.000\t0.000\n\n:END";
         }
 
         private void CreateDataArray()
@@ -216,112 +138,41 @@ namespace XferSuite
             try
             {
                 // Parse pasted positions
-                List<Zed.Vec3> positions = new List<Zed.Vec3>();
+                // NW NE SW SE
+                List<double> positions = new List<double>();
                 string[] pastes = RTBPositions.Text.Split('\n');
                 foreach (string paste in pastes)
                 {
                     if (string.IsNullOrEmpty(paste)) break;
-                    string[] cols = paste.Split(',');
-                    positions.Add(new Zed.Vec3(double.Parse(cols[0]), double.Parse(cols[1]), double.Parse(cols[5])));
+                    positions.Add(double.Parse(paste.Split(',')[5]));
                 }
 
-                // Find data bounds
-                (double xmin, double xmax) = Zed.getAxisMinMax(positions.Select(x => x.X).ToArray());
-                (double ymin, double ymax) = Zed.getAxisMinMax(positions.Select(y => y.Y).ToArray());
-
-                // Create blank data array
-                XSteps = XRange / Increment + 1;
-                YSteps = YRange / Increment + 1;
-                Data = new double[YSteps, XSteps];
-
-                // Fit data to plane and generate data
-                double sum = 0;
-                double count = 0;
-                Zed.Plane plane = Zed.getPlaneVec(positions.ToArray());
-                for (int i = 0; i <= XRange; i += Increment)
-                    for (int j = 0; j <= YRange; j += Increment)
-                    {
-                        Data[j / Increment, i / Increment] = Zed.projectPlane(plane, new Zed.Vec3(i, j, 0)).Z;
-                        sum += Data[j / Increment, i / Increment];
-                        count++;
-                    }
-
-                // Remove average projection
-                Average = sum / count;
-                for (int i = 0; i < XSteps; i++)
-                    for (int j = 0; j < YSteps; j++)
-                    {
-                        Data[j, i] -= Average;
-                        //Data[j, i] *= -1;
-                    }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex);
-            }
-        }
-
-        private void CreateCalOutput()
-        {
-            try
-            {
-                string header = $":START2D {XAxis} {YAxis} {ZAxis} {ZCAxis} -{Increment} -{Increment} {XSteps + 1}\n:START2D POSUNIT=METRIC CORUNIT=METRIC\n\n";
-
-                string body = string.Empty;
-                for (int j = 0; j < YSteps; j++)
+                Data = new double[4]
                 {
-                    // Transpose and flip row
-                    for (int i = 0; i < XSteps; i++)
-                        body += CalStr(Data[XSteps - i - 1, j]); 
-                    body += CalStr(0.0);
-                    TabToLine(ref body);
+                    0.0,
+                    (positions[1] - positions[0]) * 1e3,
+                    (positions[2] - positions[0]) * 1e3,
+                    (positions[3] - positions[0]) * 1e3
+                };
+
+                LabelRange.Text = $"Range = {Math.Round((Data.Max() - Data.Min()) * 1e3, 3)} mm";
+
+                // Remove min projection and convert to microns
+                double min = Data.Min();
+                for (int i = 0; i < 4; i++)
+                {
+                    Data[i] -= min;
                 }
-                body += BorderLine();
-
-                RTBOutput.Text = header + body + "\n:END";
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex);
             }
-        }
-
-        private bool CreateHeatplot()
-        {
-            try
-            {
-                // Flip Y-Axis for plot
-                double min = double.MaxValue;
-                double max = double.MinValue;
-                double[,] flipped = new double[YSteps, XSteps];
-                for (int i = 0; i < XSteps; i++)
-                    for (int j = 0; j < YSteps; j++)
-                    {
-                        flipped[j, XSteps - 1 - i] = Data[j, i];
-                        if (Data[j, i] < min) min = Data[j, i];
-                        if (Data[j, i] > max) max = Data[j, i];
-                    }
-
-                ScottPlot.Plottable.Heatmap hm = FormsPlot.Plot.AddHeatmap(flipped, lockScales: false);
-                hm.Smooth = true;
-                FormsPlot.PerformAutoScale();
-                FormsPlot.Refresh();
-
-                LabelRange.Text = $"Range = {Math.Round((max - min) * 1e3, 3)} µm";
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex);
-                return false;
-            }
-            return true;
         }
 
         private void ClearOutput()
         {
             RTBOutput.Clear();
-            FormsPlot.Plot.Clear();
-            FormsPlot.Refresh();
             LabelRange.Text = "Range = N/A";
         }
 
