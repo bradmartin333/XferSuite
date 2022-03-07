@@ -97,7 +97,7 @@ namespace XferSuite
         public static void Form_Activated(object sender, EventArgs e)
         {
             if (!_Settings.IsDisposed) // Prevents error on app close
-                _Settings.propertyGrid.SelectedObject = sender;
+                _Settings.PropertyGrid.SelectedObject = sender;
         }
 
         private void btnSettings_Click(object sender, EventArgs e)

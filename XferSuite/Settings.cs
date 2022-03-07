@@ -16,7 +16,7 @@ namespace XferSuite
         public Settings()
         {
             InitializeComponent();
-            propertyGrid.BrowsableAttributes = new AttributeCollection(new CategoryAttribute("User Parameters"));
+            PropertyGrid.BrowsableAttributes = new AttributeCollection(new CategoryAttribute("User Parameters"));
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -30,7 +30,7 @@ namespace XferSuite
 
         public void CheckForUpdates()
         {
-            if (btnCheckForUpdates.BackColor == Color.PaleTurquoise)
+            if (BtnCheckForUpdates.BackColor == Color.PaleTurquoise)
             {
                 try
                 {
@@ -42,8 +42,8 @@ namespace XferSuite
                     System.Diagnostics.Process.Start(@"https://bradmartin333.github.io/utility/XferSuite");
                 }
             }
-            btnCheckForUpdates.Text = "Checking For Updates...";
-            btnCheckForUpdates.BackColor = Color.White;
+            BtnCheckForUpdates.Text = "Checking For Updates...";
+            BtnCheckForUpdates.BackColor = Color.White;
             try
             {
                 int thisMajorVersion = MainMenu.MajorVersion;
@@ -61,22 +61,22 @@ namespace XferSuite
                 int mostRecentMinorVersion = int.Parse(mostRecentVersion.Replace("v", "").Split('.').Last());
                 if (mostRecentMajorVersion > thisMajorVersion || (mostRecentMajorVersion >= thisMajorVersion && mostRecentMinorVersion > thisMinorVersion))
                 {
-                    btnCheckForUpdates.Text = mostRecentVersion + " Available";
-                    btnCheckForUpdates.BackColor = Color.PaleTurquoise;
+                    BtnCheckForUpdates.Text = mostRecentVersion + " Available";
+                    BtnCheckForUpdates.BackColor = Color.PaleTurquoise;
                     MainMenu mainMenu = Application.OpenForms.OfType<MainMenu>().First();
-                    if (!UpdateFound) mainMenu.Text += $"   {btnCheckForUpdates.Text}";
+                    if (!UpdateFound) mainMenu.Text += $"   {BtnCheckForUpdates.Text}";
                     UpdateFound = true;
                 }
                 else
                 {
-                    btnCheckForUpdates.Text = "Up To Date";
-                    btnCheckForUpdates.BackColor = Color.LightGreen;
+                    BtnCheckForUpdates.Text = "Up To Date";
+                    BtnCheckForUpdates.BackColor = Color.LightGreen;
                 }
             }
             catch (Exception)
             {
-                btnCheckForUpdates.Text = "Check Network Connection";
-                btnCheckForUpdates.BackColor = Color.LightYellow;
+                BtnCheckForUpdates.Text = "Check Network Connection";
+                BtnCheckForUpdates.BackColor = Color.LightYellow;
             }
         }
 
