@@ -116,6 +116,12 @@
     <Compile Include="AdvancedTools.Designer.cs">
       <DependentUpon>AdvancedTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\CalFile\CalGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\CalFile\CalGenerator.Designer.cs">
+      <DependentUpon>CalGenerator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\CameraViewer\CameraLayout.cs" />
     <Compile Include="Apps\Angleprinting.cs">
       <SubType>Form</SubType>
@@ -201,6 +207,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\Angleprinting.resx">
       <DependentUpon>Angleprinting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\CalFile\CalGenerator.resx">
+      <DependentUpon>CalGenerator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\Fingerprinting.resx">
       <DependentUpon>Fingerprinting.cs</DependentUpon>

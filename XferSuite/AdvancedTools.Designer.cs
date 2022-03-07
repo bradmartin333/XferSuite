@@ -55,7 +55,7 @@
             this.ListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListBox.FormattingEnabled = true;
             this.ListBox.Items.AddRange(new object[] {
-            "10Zone 2Dcal Generator",
+            "10Zone 2DCal Generator",
             "uTP Log Parser",
             "roux",
             "Camera Network Refresh"});

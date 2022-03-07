@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace XferSuite
@@ -27,6 +28,10 @@ namespace XferSuite
                 switch (form)
                 {
                     case AdvancedForm.TenZone2Dcal:
+                        if (Application.OpenForms.OfType<CalGenerator>().Any())
+                            Application.OpenForms.OfType<CalGenerator>().First().BringToFront();
+                        else
+                            _ = new CalGenerator();
                         Close();
                         break;
                     case AdvancedForm.uTPlogParser:
