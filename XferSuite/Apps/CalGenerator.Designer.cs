@@ -373,7 +373,11 @@
             this.ComboIncrement.Items.AddRange(new object[] {
             "5",
             "25",
-            "100"});
+            "50",
+            "100",
+            "125",
+            "150",
+            "225"});
             this.ComboIncrement.Location = new System.Drawing.Point(989, 32);
             this.ComboIncrement.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ComboIncrement.Name = "ComboIncrement";

@@ -8,8 +8,8 @@ namespace XferSuite
 {
     public partial class CalGenerator : Form
     {
-        private int XRange = 500;
-        private int YRange = 500; 
+        private int XRange = 450;
+        private int YRange = 450; 
         private int Increment, XSteps, YSteps;
         private string XAxis, YAxis, ZAxis, ZCAxis;
         private double[,] Data;
@@ -18,7 +18,7 @@ namespace XferSuite
         public CalGenerator()
         {
             InitializeComponent();
-            ComboIncrement.SelectedIndex = 1;
+            ComboIncrement.SelectedIndex = 6;
             NumXRange.Value = 450;
             NumYRange.Value = 450;
             ComboXAxis.SelectedIndex = 0;
