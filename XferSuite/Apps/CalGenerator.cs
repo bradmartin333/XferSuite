@@ -13,18 +13,20 @@ namespace XferSuite
         private int Increment, XSteps, YSteps;
         private string XAxis, YAxis, ZAxis, ZCAxis;
         private double[,] Data;
+        private double Average;
 
         public CalGenerator()
         {
             InitializeComponent();
-            ComboIncrement.SelectedIndex = 2;
-            NumXRange.Value = 500;
-            NumYRange.Value = 500;
+            ComboIncrement.SelectedIndex = 1;
+            NumXRange.Value = 450;
+            NumYRange.Value = 450;
             ComboXAxis.SelectedIndex = 0;
             ComboYAxis.SelectedIndex = 1;
-            ComboZAxis.SelectedIndex = 2;
-            ComboZCAxis.SelectedIndex = 3;
+            ComboZAxis.SelectedIndex = 3;
+            ComboZCAxis.SelectedIndex = 5;
             FormsPlot.Plot.Frameless();
+            FormsPlot.Plot.Grid(enable: false);
             Show();
         }
 
@@ -189,7 +191,7 @@ namespace XferSuite
 
             if (XRange <= 0 || YRange <= 0 || 
                 ComboXAxis.SelectedIndex == -1 || ComboYAxis.SelectedIndex == -1 || ComboZAxis.SelectedIndex == -1 || ComboZCAxis.SelectedIndex == -1 ||
-                ComboIncrement.SelectedIndex == -1) return;
+                ComboIncrement.SelectedIndex == -1 || string.IsNullOrEmpty(RTBPositions.Text)) return;
 
             CreateDataArray();
             if (CreateHeatplot()) CreateCalOutput();
@@ -219,15 +221,22 @@ namespace XferSuite
                 Data = new double[YSteps, XSteps];
 
                 // Fit data to plane and generate data
+                double sum = 0;
+                double count = 0;
                 Zed.Plane plane = Zed.getPlaneVec(positions.ToArray());
                 for (int i = 0; i < XRange; i += Increment)
                     for (int j = 0; j < YRange; j += Increment)
                     {
-                        if (i > xmin && xmax > i && j > ymin && ymax > j)
-                            Data[j / Increment, i / Increment] = Zed.projectPlane(plane, new Zed.Vec3(i, j, 0)).Z;
-                        else
-                            Data[j / Increment, i / Increment] = 0;
+                        Data[j / Increment, i / Increment] = Zed.projectPlane(plane, new Zed.Vec3(i, j, 0)).Z;
+                        sum += Data[j / Increment, i / Increment];
+                        count++;
                     }
+
+                // Remove average projection
+                Average = sum / count;
+                for (int i = 0; i < XSteps; i++)
+                    for (int j = 0; j < YSteps; j++)
+                        Data[j, i] -= Average; 
             }
             catch (Exception ex)
             {
@@ -265,15 +274,23 @@ namespace XferSuite
             try
             {
                 // Flip Y-Axis for plot
+                double min = double.MaxValue;
+                double max = double.MinValue;
                 double[,] data = new double[YSteps, XSteps];
                 for (int i = 0; i < XSteps; i++)
                     for (int j = 0; j < YSteps; j++)
+                    {
                         data[j, XSteps - 1 - i] = Data[j, i];
+                        if (Data[j, i] < min) min = Data[j, i];
+                        if (Data[j, i] > max) max = Data[j, i];
+                    }
 
                 ScottPlot.Plottable.Heatmap hm = FormsPlot.Plot.AddHeatmap(data, lockScales: false);
                 hm.Smooth = true;
                 FormsPlot.PerformAutoScale();
                 FormsPlot.Refresh();
+
+                LabelRange.Text = $"Range = {Math.Round((max - min) * 1e3, 3)} µm";
             }
             catch (Exception ex)
             {
@@ -288,6 +305,7 @@ namespace XferSuite
             RTBOutput.Clear();
             FormsPlot.Plot.Clear();
             FormsPlot.Refresh();
+            LabelRange.Text = "Range = N/A";
         }
 
         private bool ValidatePosition(string paste)
