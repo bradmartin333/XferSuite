@@ -8,6 +8,20 @@ namespace XferSuite
 {
     public partial class CalGenerator : Form
     {
+        // 0 1 2
+        // 3 4 5
+        // 6 7 8
+
+        // in a cal file becomes
+
+        // 6 3 0
+        // 7 4 1
+        // 8 5 2
+
+        // in tool space facing front
+        // AKA 1 clockwise rotation
+        // AKA transpose and flip row
+
         private int XRange = 450;
         private int YRange = 450; 
         private int Increment, XSteps, YSteps;
@@ -48,7 +62,7 @@ namespace XferSuite
         private string BorderLine()
         {
             string line = "";
-            for (int i = 0; i < XSteps + 2; i++)
+            for (int i = 0; i < XSteps + 1; i++)
                 line += CalStr(0.0);
             TabToLine(ref line);
             return line;
@@ -216,16 +230,16 @@ namespace XferSuite
                 (double ymin, double ymax) = Zed.getAxisMinMax(positions.Select(y => y.Y).ToArray());
 
                 // Create blank data array
-                XSteps = XRange / Increment;
-                YSteps = YRange / Increment;
+                XSteps = XRange / Increment + 1;
+                YSteps = YRange / Increment + 1;
                 Data = new double[YSteps, XSteps];
 
                 // Fit data to plane and generate data
                 double sum = 0;
                 double count = 0;
                 Zed.Plane plane = Zed.getPlaneVec(positions.ToArray());
-                for (int i = 0; i < XRange; i += Increment)
-                    for (int j = 0; j < YRange; j += Increment)
+                for (int i = 0; i <= XRange; i += Increment)
+                    for (int j = 0; j <= YRange; j += Increment)
                     {
                         Data[j / Increment, i / Increment] = Zed.projectPlane(plane, new Zed.Vec3(i, j, 0)).Z;
                         sum += Data[j / Increment, i / Increment];
@@ -236,7 +250,10 @@ namespace XferSuite
                 Average = sum / count;
                 for (int i = 0; i < XSteps; i++)
                     for (int j = 0; j < YSteps; j++)
-                        Data[j, i] -= Average; 
+                    {
+                        Data[j, i] -= Average;
+                        //Data[j, i] *= -1;
+                    }
             }
             catch (Exception ex)
             {
@@ -248,14 +265,14 @@ namespace XferSuite
         {
             try
             {
-                string header = $":START2D {XAxis} {YAxis} {ZAxis} {ZCAxis} -{Increment} -{Increment} {XSteps + 2}\n:START2D POSUNIT=METRIC CORUNIT=METRIC\n\n";
+                string header = $":START2D {XAxis} {YAxis} {ZAxis} {ZCAxis} -{Increment} -{Increment} {XSteps + 1}\n:START2D POSUNIT=METRIC CORUNIT=METRIC\n\n";
 
-                string body = BorderLine();
+                string body = string.Empty;
                 for (int j = 0; j < YSteps; j++)
                 {
-                    body += CalStr(0.0);
+                    // Transpose and flip row
                     for (int i = 0; i < XSteps; i++)
-                        body += CalStr(Data[j, i]);
+                        body += CalStr(Data[XSteps - i - 1, j]); 
                     body += CalStr(0.0);
                     TabToLine(ref body);
                 }
@@ -276,16 +293,16 @@ namespace XferSuite
                 // Flip Y-Axis for plot
                 double min = double.MaxValue;
                 double max = double.MinValue;
-                double[,] data = new double[YSteps, XSteps];
+                double[,] flipped = new double[YSteps, XSteps];
                 for (int i = 0; i < XSteps; i++)
                     for (int j = 0; j < YSteps; j++)
                     {
-                        data[j, XSteps - 1 - i] = Data[j, i];
+                        flipped[j, XSteps - 1 - i] = Data[j, i];
                         if (Data[j, i] < min) min = Data[j, i];
                         if (Data[j, i] > max) max = Data[j, i];
                     }
 
-                ScottPlot.Plottable.Heatmap hm = FormsPlot.Plot.AddHeatmap(data, lockScales: false);
+                ScottPlot.Plottable.Heatmap hm = FormsPlot.Plot.AddHeatmap(flipped, lockScales: false);
                 hm.Smooth = true;
                 FormsPlot.PerformAutoScale();
                 FormsPlot.Refresh();
