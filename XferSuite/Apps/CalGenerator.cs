@@ -111,7 +111,7 @@ namespace XferSuite
 
         private void BtnHelp_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(@"https://github.com/bradmartin333/XferSuite/wiki/10Zone-2DCal-Generator");
+            System.Diagnostics.Process.Start(@"https://github.com/bradmartin333/XferSuite/wiki/10Zone-Calibration-Generator");
         }
 
         #endregion
@@ -143,6 +143,11 @@ namespace XferSuite
 
             LabelRange.Text = $"Range = {Math.Round(positions.Select(x => x.Z).Max() - positions.Select(x => x.Z).Min(), 3)} mm";
 
+            RTBOutput.Text = 
+                  $";***************************************************************************\n"
+                + $";10Zone Height Calibration\t{DateTime.Today.ToLongDateString()}\n"
+                + $"****************************************************************************\n";
+
             Create1DCal(new double[] { positions[0].X, positions[1].X }, new double[] { positions[0].Z, positions[1].Z }, XAxis, XRange);
             Create1DCal(new double[] { positions[0].Y, positions[2].Y }, new double[] { positions[0].Z, positions[2].Z }, YAxis, YRange);
         }
@@ -152,10 +157,10 @@ namespace XferSuite
             (double b, double m) = Zed.linearFit(A, B);
             RTBOutput.Text += $":START {ZAxis} MASTER={axis} POSUNIT=METRIC CORUNIT=METRIC/1000 SAMPLEDIST=-{range}\n"
                 + $"{(m * range) + b:f3}\t{b:f3}\t0.000\n"
-                + $":END\n\n";
+                + $":END\n";
             RTBOutput.Text += $":START {ZCAxis} MASTER={axis} POSUNIT=METRIC CORUNIT=METRIC/1000 SAMPLEDIST=-{range}\n"
                 + $"{(m * range) + b:f3}\t{b:f3}\t0.000\n"
-                + $":END\n\n";
+                + $":END\n";
         }
 
         private void ClearOutput()

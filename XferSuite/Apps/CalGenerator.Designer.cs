@@ -67,7 +67,7 @@
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tableLayoutPanel.Controls.Add(this.BtnClearPositions, 7, 4);
             this.tableLayoutPanel.Controls.Add(this.BtnAddPosition, 6, 4);
             this.tableLayoutPanel.Controls.Add(this.ComboZCAxis, 6, 2);
@@ -102,7 +102,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(571, 375);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(571, 385);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // BtnClearPositions
@@ -337,7 +337,7 @@
             this.RTBPositions.Location = new System.Drawing.Point(13, 108);
             this.RTBPositions.Name = "RTBPositions";
             this.RTBPositions.ReadOnly = true;
-            this.RTBPositions.Size = new System.Drawing.Size(540, 63);
+            this.RTBPositions.Size = new System.Drawing.Size(540, 66);
             this.RTBPositions.TabIndex = 15;
             this.RTBPositions.Text = "";
             this.RTBPositions.WordWrap = false;
@@ -347,10 +347,10 @@
             this.tableLayoutPanel.SetColumnSpan(this.RTBOutput, 7);
             this.RTBOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RTBOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RTBOutput.Location = new System.Drawing.Point(13, 206);
+            this.RTBOutput.Location = new System.Drawing.Point(13, 209);
             this.RTBOutput.Name = "RTBOutput";
             this.RTBOutput.ReadOnly = true;
-            this.RTBOutput.Size = new System.Drawing.Size(540, 155);
+            this.RTBOutput.Size = new System.Drawing.Size(540, 162);
             this.RTBOutput.TabIndex = 16;
             this.RTBOutput.Text = "";
             this.RTBOutput.WordWrap = false;
@@ -365,7 +365,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(384, 29);
             this.label8.TabIndex = 18;
-            this.label8.Text = "Copied Positions";
+            this.label8.Text = "Copied Positions (NW, NE, SE)";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label9
@@ -374,7 +374,7 @@
             this.tableLayoutPanel.SetColumnSpan(this.label9, 6);
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(13, 174);
+            this.label9.Location = new System.Drawing.Point(13, 177);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(462, 29);
             this.label9.TabIndex = 19;
@@ -386,7 +386,7 @@
             this.BtnCopyOutput.BackColor = System.Drawing.Color.LightBlue;
             this.BtnCopyOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnCopyOutput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnCopyOutput.Location = new System.Drawing.Point(481, 177);
+            this.BtnCopyOutput.Location = new System.Drawing.Point(481, 180);
             this.BtnCopyOutput.Name = "BtnCopyOutput";
             this.BtnCopyOutput.Size = new System.Drawing.Size(72, 23);
             this.BtnCopyOutput.TabIndex = 20;
@@ -412,7 +412,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(571, 375);
+            this.ClientSize = new System.Drawing.Size(571, 385);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CalGenerator";
