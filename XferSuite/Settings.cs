@@ -113,5 +113,14 @@ namespace XferSuite
         {
             System.Diagnostics.Process.Start(@"https://github.com/bradmartin333/XferSuite/wiki");
         }
+
+        private void BtnAdvancedTools_Click(object sender, EventArgs e)
+        {
+            if (Application.OpenForms.OfType<AdvancedTools>().Any())
+                Application.OpenForms.OfType<AdvancedTools>().First().BringToFront();
+            else
+                _ = new AdvancedTools();
+            Close();
+        }
     }
 }

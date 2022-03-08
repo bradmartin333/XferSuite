@@ -110,6 +110,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedTools.Designer.cs">
+      <DependentUpon>AdvancedTools.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\CalGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\CalGenerator.Designer.cs">
+      <DependentUpon>CalGenerator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\CameraViewer\CameraLayout.cs" />
     <Compile Include="Apps\Angleprinting.cs">
       <SubType>Form</SubType>
@@ -140,6 +152,12 @@
     </Compile>
     <Compile Include="Apps\CameraViewer\CameraViewer.Designer.cs">
       <DependentUpon>CameraViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\PrintLogParser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\PrintLogParser.Designer.cs">
+      <DependentUpon>PrintLogParser.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
@@ -190,8 +208,14 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AdvancedTools.resx">
+      <DependentUpon>AdvancedTools.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Apps\Angleprinting.resx">
       <DependentUpon>Angleprinting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\CalGenerator.resx">
+      <DependentUpon>CalGenerator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\Fingerprinting.resx">
       <DependentUpon>Fingerprinting.cs</DependentUpon>
@@ -204,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\CameraViewer\CameraViewer.resx">
       <DependentUpon>CameraViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\PrintLogParser.resx">
+      <DependentUpon>PrintLogParser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\XYZplotter\Plotter.resx">
       <DependentUpon>Plotter.cs</DependentUpon>

@@ -126,6 +126,7 @@ namespace XferSuite
             this.BtnAdvancedTools.TabIndex = 4;
             this.BtnAdvancedTools.Text = "Advanced Tools";
             this.BtnAdvancedTools.UseVisualStyleBackColor = false;
+            this.BtnAdvancedTools.Click += new System.EventHandler(this.BtnAdvancedTools_Click);
             // 
             // Settings
             // 
