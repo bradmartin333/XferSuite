@@ -25,9 +25,6 @@ namespace XferSuite
                 };
                 tip.SetToolTip(b, b.AccessibleName);
             }
-
-            // For quick dev
-            _ = new CalGenerator();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
