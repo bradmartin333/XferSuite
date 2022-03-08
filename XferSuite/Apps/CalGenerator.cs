@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
+using XferHelper;
 
 namespace XferSuite
 {
@@ -10,7 +11,6 @@ namespace XferSuite
         private int XRange = 450;
         private int YRange = 450;
         private string XAxis, YAxis, ZAxis, ZCAxis;
-        private double[] Data = new double[4];
 
         public CalGenerator()
         {
@@ -90,9 +90,9 @@ namespace XferSuite
         {
             string clipboard = Clipboard.GetText();
             string[] pastes = clipboard.Split('\n');
-            foreach (string paste in pastes)
+            for (int i = 0; i < 3; i++)
             {
-                string cleanPaste = paste.Trim('\r');
+                string cleanPaste = pastes[i].Trim('\r');
                 if (ValidatePosition(cleanPaste)) RTBPositions.Text += $"{cleanPaste}\n";
             }
             UpdateAll();
@@ -124,50 +124,38 @@ namespace XferSuite
                 ComboXAxis.SelectedIndex == -1 || ComboYAxis.SelectedIndex == -1 || ComboZAxis.SelectedIndex == -1 || ComboZCAxis.SelectedIndex == -1 ||
                 string.IsNullOrEmpty(RTBPositions.Text)) return;
 
-            CreateDataArray();
+            // Parse pasted positions
+            // NW NE SW
+            Zed.Vec3[] rawPositions = new Zed.Vec3[3];
+            string[] pastes = RTBPositions.Text.Split('\n');
+            for (int i = 0; i < 3; i++)
+            {
+                if (string.IsNullOrEmpty(pastes[i])) break;
+                string[] cols = pastes[i].Split(',');
+                rawPositions[i] = new Zed.Vec3(double.Parse(cols[0]), double.Parse(cols[1]), double.Parse(cols[5]));
+            }
 
-            RTBOutput.Text = $":START2D {XAxis} {YAxis} {ZAxis} {ZCAxis} -{XRange:f3} -{YRange:f3} 3"
-                + $"\n:START2D POSUNIT=METRIC CORUNIT=METRIC/1000\n\n"
-                + $"{Data[1]:f3}\t{Data[1]:f3}\t{Data[3]:f3}\t{Data[3]:f3}\t0.000\t0.000\n"
-                + $"{Data[0]:f3}\t{Data[0]:f3}\t{Data[2]:f3}\t{Data[2]:f3}\t0.000\t0.000\n"
-                + $"0.000\t0.000\t0.000\t0.000\t0.000\t0.000\n\n:END";
+            // Remove average projection and convert to mm
+            double avg = rawPositions.Select(x => x.Z).Average();
+            Zed.Vec3[] positions = new Zed.Vec3[3];
+            for (int i = 0; i < 3; i++)
+                positions[i] = new Zed.Vec3(rawPositions[i].X, rawPositions[i].Y, (rawPositions[i].Z - avg) * 1e3);
+
+            LabelRange.Text = $"Range = {Math.Round(positions.Select(x => x.Z).Max() - positions.Select(x => x.Z).Min(), 3)} mm";
+
+            Create1DCal(new double[] { positions[0].X, positions[1].X }, new double[] { positions[0].Z, positions[1].Z }, XAxis, XRange);
+            Create1DCal(new double[] { positions[0].Y, positions[2].Y }, new double[] { positions[0].Z, positions[2].Z }, YAxis, YRange);
         }
 
-        private void CreateDataArray()
+        private void Create1DCal(double[] A, double[] B, string axis, int range)
         {
-            try
-            {
-                // Parse pasted positions
-                // NW NE SW SE
-                List<double> positions = new List<double>();
-                string[] pastes = RTBPositions.Text.Split('\n');
-                foreach (string paste in pastes)
-                {
-                    if (string.IsNullOrEmpty(paste)) break;
-                    positions.Add(double.Parse(paste.Split(',')[5]));
-                }
-
-                Data = new double[4]
-                {
-                    0.0,
-                    (positions[1] - positions[0]) * 1e3,
-                    (positions[2] - positions[0]) * 1e3,
-                    (positions[3] - positions[0]) * 1e3
-                };
-
-                LabelRange.Text = $"Range = {Math.Round((Data.Max() - Data.Min()) * 1e3, 3)} mm";
-
-                // Remove min projection and convert to microns
-                double min = Data.Min();
-                for (int i = 0; i < 4; i++)
-                {
-                    Data[i] -= min;
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex);
-            }
+            (double b, double m) = Zed.linearFit(A, B);
+            RTBOutput.Text += $":START {ZAxis} MASTER={axis} POSUNIT=METRIC CORUNIT=METRIC/1000 SAMPLEDIST=-{range}\n"
+                + $"{(m * range) + b:f3}\t{b:f3}\t0.000\n"
+                + $":END\n\n";
+            RTBOutput.Text += $":START {ZCAxis} MASTER={axis} POSUNIT=METRIC CORUNIT=METRIC/1000 SAMPLEDIST=-{range}\n"
+                + $"{(m * range) + b:f3}\t{b:f3}\t0.000\n"
+                + $":END\n\n";
         }
 
         private void ClearOutput()

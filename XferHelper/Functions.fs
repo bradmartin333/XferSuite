@@ -358,6 +358,9 @@ module Zed =
     let rSquared (model: double []) (observed: double []) =
         System.Math.Round(MathNet.Numerics.GoodnessOfFit.RSquared(model, observed), 3)
 
+    let linearFit (xData: double []) (yData: double []) =
+        MathNet.Numerics.Fit.Line(xData, yData)
+
     type Vec2 = { X: float; Y: float }
 
     let toVec2 (x: float) (y: float) = { X = x; Y = y }

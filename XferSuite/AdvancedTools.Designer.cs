@@ -55,9 +55,8 @@
             this.ListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListBox.FormattingEnabled = true;
             this.ListBox.Items.AddRange(new object[] {
-            "10Zone 2DCal Generator",
-            "uTP Log Parser",
-            "roux"});
+            "10Zone Calibration Generator",
+            "uTP Log Parser"});
             this.ListBox.Location = new System.Drawing.Point(3, 3);
             this.ListBox.Name = "ListBox";
             this.ListBox.Size = new System.Drawing.Size(274, 82);

@@ -8,9 +8,8 @@ namespace XferSuite
     {
         enum AdvancedForm
         {
-            TenZone2Dcal,
+            TenZoneCal,
             uTPlogParser,
-            roux,
         }
 
         public AdvancedTools()
@@ -26,7 +25,7 @@ namespace XferSuite
                 AdvancedForm form = (AdvancedForm)ListBox.SelectedIndices[0];
                 switch (form)
                 {
-                    case AdvancedForm.TenZone2Dcal:
+                    case AdvancedForm.TenZoneCal:
                         if (Application.OpenForms.OfType<CalGenerator>().Any())
                             Application.OpenForms.OfType<CalGenerator>().First().BringToFront();
                         else
@@ -39,9 +38,6 @@ namespace XferSuite
                         else
                             _ = new PrintLogParser();
                         Close();
-                        break;
-                    case AdvancedForm.roux:
-                        MessageBox.Show("Coming soon!", "XferSuite Advanced Tools");
                         break;
                     default:
                         MessageBox.Show("Invalid Selection", "XferSuite Advanced Tools");
