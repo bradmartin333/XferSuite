@@ -143,11 +143,6 @@ namespace XferSuite
 
             LabelRange.Text = $"Range = {Math.Round(positions.Select(x => x.Z).Max() - positions.Select(x => x.Z).Min(), 3)} mm";
 
-            RTBOutput.Text = 
-                  $";***************************************************************************\n"
-                + $";10Zone Height Calibration\t{DateTime.Today.ToLongDateString()}\n"
-                + $"****************************************************************************\n";
-
             Create1DCal(new double[] { positions[0].X, positions[1].X }, new double[] { positions[0].Z, positions[1].Z }, XAxis, XRange);
             Create1DCal(new double[] { positions[0].Y, positions[2].Y }, new double[] { positions[0].Z, positions[2].Z }, YAxis, YRange);
         }
@@ -165,7 +160,10 @@ namespace XferSuite
 
         private void ClearOutput()
         {
-            RTBOutput.Clear();
+            RTBOutput.Text =
+                  $";***************************************************************************\n"
+                + $";10Zone Height Calibration\t{DateTime.Today.ToLongDateString()}\n"
+                + $"****************************************************************************\n";
             LabelRange.Text = "Range = N/A";
         }
 
