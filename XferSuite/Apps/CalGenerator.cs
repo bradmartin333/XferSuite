@@ -90,6 +90,7 @@ namespace XferSuite
         {
             string clipboard = Clipboard.GetText();
             string[] pastes = clipboard.Split('\n');
+            if (pastes.Length < 3) return;
             for (int i = 0; i < 3; i++)
             {
                 string cleanPaste = pastes[i].Trim('\r');
