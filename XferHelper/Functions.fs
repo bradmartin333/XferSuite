@@ -323,14 +323,19 @@ module Zed =
             |> Array.map (fun x -> (x.Z + (x.H / 1e3)) * orientation)
         | _ -> [| 0.0 |]
 
-    let getAxisSingle (p: Position) (axis: int) =
+    let getAxisSingle (p: Position) (axis: int) (flip: bool) =
+        let orientation =
+            match flip with
+            | true -> -1.0
+            | false -> 1.0
+
         match axis with
-        | 1 -> p.X
-        | 2 -> p.Y
-        | 3 -> p.Z
-        | 4 -> p.H
-        | 5 -> p.I
-        | 6 -> p.Z + (p.H / 1e3)
+        | 1 -> p.X * orientation
+        | 2 -> p.Y * orientation
+        | 3 -> p.Z * orientation
+        | 4 -> p.H * orientation
+        | 5 -> p.I * orientation
+        | 6 -> p.Z + ((p.H / 1e3)) * orientation
         | _ -> 0.0
 
     let filterData (data: Position []) (axis: int) (min: float) (max: float) =

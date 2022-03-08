@@ -275,9 +275,9 @@ namespace XferSuite
                     }
                     for (int i = 0; i < numPlots; i++) CreatePlot(i, groupData[i], numAxes);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine("User changed scan indices before plotting completed");
+                    System.Diagnostics.Debug.WriteLine($"Exception in MakePlots: {ex}");
                 }
 
                 for (int i = 0; i < numPlots; i++) Plots[i].Visible = true;
@@ -447,6 +447,8 @@ namespace XferSuite
                 msg.BorderColor = Color.Transparent;
                 formsPlot.Plot.Title(
                     $"{plotData.Name}\nRange: N/A   3Sigma = N/A", false);
+
+                formsPlot.Refresh();
             }
         }
 
@@ -468,7 +470,7 @@ namespace XferSuite
 
         private string ColorbarFormatter(double position)
         {
-            return $"{Math.Round(position, 4 - ((int)position).ToString().Length)}";
+            return $"{Math.Round(position, 5 - ((int)position).ToString().Length)}";
         }
 
         private void ClearAxisLabels(Plot plot)
@@ -538,10 +540,10 @@ namespace XferSuite
                     (double, double) VSpanVals = (Math.Min(VSpan[i].Y1, VSpan[i].Y2), Math.Max(VSpan[i].Y1, VSpan[i].Y2));
                     int originalNumPoints = ActiveScans[i].Data.Count;
                     ActiveScans[i].Data.RemoveAll(s => 
-                        (HSpanVals.Item1 <= (Zed.getAxisSingle(s, comboX.SelectedIndex) * (FlipX ? -1 : 1))) && 
-                        ((Zed.getAxisSingle(s, comboX.SelectedIndex) * (FlipX ? -1 : 1)) <= HSpanVals.Item2) && 
-                        (VSpanVals.Item1 <= (Zed.getAxisSingle(s, comboY.SelectedIndex) * (FlipY ? -1 : 1))) && 
-                        ((Zed.getAxisSingle(s, comboY.SelectedIndex) * (FlipY ? -1 : 1)) <= VSpanVals.Item2));
+                        Zed.getAxisSingle(s, comboX.SelectedIndex, FlipX) >= HSpanVals.Item1 && 
+                        Zed.getAxisSingle(s, comboX.SelectedIndex, FlipX) <= HSpanVals.Item2 && 
+                        Zed.getAxisSingle(s, comboY.SelectedIndex, FlipY) >= VSpanVals.Item1 && 
+                        Zed.getAxisSingle(s, comboY.SelectedIndex, FlipY) <= VSpanVals.Item2);
                     ActiveScans[i].Edited = ActiveScans[i].Edited || originalNumPoints > ActiveScans[i].Data.Count;
                 }
                 catch (Exception)
