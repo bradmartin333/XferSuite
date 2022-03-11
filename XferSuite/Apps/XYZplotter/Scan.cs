@@ -15,7 +15,7 @@ namespace XferSuite.Apps.XYZplotter
         public double RH { get; set; } = 0.0;
         public int ScanSpeed { get; set; } = 0;
         public int NumPasses { get; set; } = 0;
-        public int Threshold { get; set; } = 0;
+        public double Threshold { get; set; } = 0.0;
         private Zed.Position[] OriginalData { get; set; }
         public List<Zed.Position> Data { get; set; } = new List<Zed.Position>();
 

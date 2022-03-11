@@ -205,7 +205,7 @@ namespace XferSuite
                         {
                             thisScan.ScanSpeed = int.Parse(info[5]);
                             thisScan.NumPasses = int.Parse(info[6]);
-                            thisScan.Threshold = int.Parse(info[7]);
+                            thisScan.Threshold = double.Parse(info[7]);
                         }
                         Scans.Add(thisScan);
                     }
