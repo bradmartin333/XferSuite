@@ -223,7 +223,7 @@ namespace XferSuite
             this.cbxPass.Tag = "0";
             this.cbxPass.Text = "Pass";
             this.cbxPass.UseVisualStyleBackColor = true;
-            this.cbxPass.CheckedChanged += new System.EventHandler(this.cbx_CheckedChanged);
+            this.cbxPass.CheckedChanged += new System.EventHandler(this.Cbx_CheckedChanged);
             // 
             // cbxFail
             // 
@@ -237,7 +237,7 @@ namespace XferSuite
             this.cbxFail.Tag = "1";
             this.cbxFail.Text = "Fail";
             this.cbxFail.UseVisualStyleBackColor = true;
-            this.cbxFail.CheckedChanged += new System.EventHandler(this.cbx_CheckedChanged);
+            this.cbxFail.CheckedChanged += new System.EventHandler(this.Cbx_CheckedChanged);
             // 
             // cbxNull
             // 
@@ -251,7 +251,7 @@ namespace XferSuite
             this.cbxNull.Tag = "2";
             this.cbxNull.Text = "Null";
             this.cbxNull.UseVisualStyleBackColor = true;
-            this.cbxNull.CheckedChanged += new System.EventHandler(this.cbx_CheckedChanged);
+            this.cbxNull.CheckedChanged += new System.EventHandler(this.Cbx_CheckedChanged);
             // 
             // cbxMisaligned
             // 
@@ -265,7 +265,7 @@ namespace XferSuite
             this.cbxMisaligned.Tag = "3";
             this.cbxMisaligned.Text = "Misaligned";
             this.cbxMisaligned.UseVisualStyleBackColor = true;
-            this.cbxMisaligned.CheckedChanged += new System.EventHandler(this.cbx_CheckedChanged);
+            this.cbxMisaligned.CheckedChanged += new System.EventHandler(this.Cbx_CheckedChanged);
             // 
             // btnApplyToAll
             // 
@@ -277,7 +277,7 @@ namespace XferSuite
             this.btnApplyToAll.TabIndex = 8;
             this.btnApplyToAll.Text = "Apply To All";
             this.btnApplyToAll.UseVisualStyleBackColor = true;
-            this.btnApplyToAll.Click += new System.EventHandler(this.btnApplyToAll_Click);
+            this.btnApplyToAll.Click += new System.EventHandler(this.BtnApplyToAll_Click);
             // 
             // btnViewData
             // 
@@ -289,7 +289,7 @@ namespace XferSuite
             this.btnViewData.TabIndex = 9;
             this.btnViewData.Text = "View Data";
             this.btnViewData.UseVisualStyleBackColor = true;
-            this.btnViewData.Click += new System.EventHandler(this.btnViewData_Click);
+            this.btnViewData.Click += new System.EventHandler(this.BtnViewData_Click);
             // 
             // rtb
             // 
@@ -311,7 +311,7 @@ namespace XferSuite
             this.toolStripButtonParse.Name = "toolStripButtonParse";
             this.toolStripButtonParse.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonParse.Text = "Parse";
-            this.toolStripButtonParse.Click += new System.EventHandler(this.toolStripButtonParse_Click);
+            this.toolStripButtonParse.Click += new System.EventHandler(this.ToolStripButtonParse_Click);
             // 
             // toolStripButtonSmartSort
             // 
@@ -321,7 +321,7 @@ namespace XferSuite
             this.toolStripButtonSmartSort.Name = "toolStripButtonSmartSort";
             this.toolStripButtonSmartSort.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonSmartSort.Text = "Smart Sort";
-            this.toolStripButtonSmartSort.Click += new System.EventHandler(this.toolStripButtonSmartSort_Click);
+            this.toolStripButtonSmartSort.Click += new System.EventHandler(this.ToolStripButtonSmartSort_Click);
             // 
             // toolStripButtonReset
             // 
@@ -331,7 +331,7 @@ namespace XferSuite
             this.toolStripButtonReset.Name = "toolStripButtonReset";
             this.toolStripButtonReset.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonReset.Text = "Reset Columns";
-            this.toolStripButtonReset.Click += new System.EventHandler(this.toolStripButtonReset_Click);
+            this.toolStripButtonReset.Click += new System.EventHandler(this.ToolStripButtonReset_Click);
             // 
             // toolStrip1
             // 
@@ -357,7 +357,7 @@ namespace XferSuite
             this.toolStripButtonParseNoPicthes.Name = "toolStripButtonParseNoPicthes";
             this.toolStripButtonParseNoPicthes.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonParseNoPicthes.Text = "Parse Without Pitches";
-            this.toolStripButtonParseNoPicthes.Click += new System.EventHandler(this.toolStripButtonParseNoPicthes_Click);
+            this.toolStripButtonParseNoPicthes.Click += new System.EventHandler(this.ToolStripButtonParseNoPicthes_Click);
             // 
             // toolStripButtonCopyWindow
             // 
@@ -367,7 +367,7 @@ namespace XferSuite
             this.toolStripButtonCopyWindow.Name = "toolStripButtonCopyWindow";
             this.toolStripButtonCopyWindow.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonCopyWindow.Text = "Copy Window to Clipboard";
-            this.toolStripButtonCopyWindow.Click += new System.EventHandler(this.toolStripButtonCopyWindow_Click);
+            this.toolStripButtonCopyWindow.Click += new System.EventHandler(this.ToolStripButtonCopyWindow_Click);
             // 
             // toolStripButtonSpecificRegion
             // 
@@ -378,7 +378,7 @@ namespace XferSuite
             this.toolStripButtonSpecificRegion.Name = "toolStripButtonSpecificRegion";
             this.toolStripButtonSpecificRegion.Size = new System.Drawing.Size(29, 24);
             this.toolStripButtonSpecificRegion.Text = "Plot Specific Region";
-            this.toolStripButtonSpecificRegion.Click += new System.EventHandler(this.toolStripButtonSpecificRegion_Click);
+            this.toolStripButtonSpecificRegion.Click += new System.EventHandler(this.ToolStripButtonSpecificRegion_Click);
             // 
             // ParseSEYR
             // 

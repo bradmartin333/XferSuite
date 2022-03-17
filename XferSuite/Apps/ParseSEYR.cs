@@ -80,7 +80,7 @@ namespace XferSuite
             }
         }
 
-        private bool _PlotOrder = true;
+        private bool _PlotOrder = false;
         [Category("User Parameters")]
         [Description("True: Fail beneath Pass, False: Pass beneath Fail")]
         public bool PlotOrder
@@ -93,6 +93,32 @@ namespace XferSuite
             }
         }
 
+        private bool _ZoomAndPan = true;
+        [Category("User Parameters")]
+        [Description("Scatterplots allow for zooming and panning")]
+        public bool ZoomAndPan
+        {
+            get => _ZoomAndPan;
+            set
+            {
+                _ZoomAndPan = value;
+                ConfigurePlot();
+            }
+        }
+
+        private bool _DetailedScatterInfo = true;
+        [Category("User Parameters")]
+        [Description("Show more information when a scatterpoint is clicked on")]
+        public bool DetailedScatterInfo
+        {
+            get => _DetailedScatterInfo;
+            set
+            {
+                _DetailedScatterInfo = value;
+                ConfigurePlot();
+            }
+        }
+
         #endregion
 
         #region Globals and Setup
@@ -100,6 +126,7 @@ namespace XferSuite
         public struct Plottable
         {
             public string Region;
+            public string DetailString;
             public double X;
             public double Y;
             public bool Pass;
@@ -119,7 +146,7 @@ namespace XferSuite
         private List<Plottable> Plottables = new List<Plottable>();
         private double XMax, YMax;
         private ScatterSeries PassScatter, FailScatter;
-        private List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
+        private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
 
         public ParseSEYR(string path)
         {
@@ -234,7 +261,7 @@ namespace XferSuite
             }
         }
 
-        private void cbx_CheckedChanged(object sender, EventArgs e)
+        private void Cbx_CheckedChanged(object sender, EventArgs e)
         {
             List<Report.State> requirements = new List<Report.State>();
             foreach (CheckBox cbx in flowLayoutPanelCriteria.Controls.OfType<CheckBox>())
@@ -242,7 +269,7 @@ namespace XferSuite
             Features.First(x => x.Name == SelectedFeature.Name).Requirements = requirements.ToArray();
         }
 
-        private void btnApplyToAll_Click(object sender, EventArgs e)
+        private void BtnApplyToAll_Click(object sender, EventArgs e)
         {
             List<Report.State> requirements = new List<Report.State>();
             foreach (CheckBox cbx in flowLayoutPanelCriteria.Controls.OfType<CheckBox>())
@@ -330,12 +357,15 @@ namespace XferSuite
                 foreach (Report.Entry entry in regionData)
                 {
                     bool pass = CheckCriteria(new Report.Entry[] {entry}, new List<string>());
+                    double thisX = entry.X + (entry.XCopy * distX);
+                    double thisY = entry.Y + (entry.YCopy * distY);
 
                     Plottables.Add(new Plottable
                     {
                         Region = regions[l],
-                        X = entry.X + (entry.XCopy * distX),
-                        Y = entry.Y + (entry.YCopy * distY),
+                        DetailString = $"\nCopy ({entry.XCopy}, {entry.YCopy})\nLocation ({thisX}, {thisY})",
+                        X = thisX,
+                        Y = thisY,
                         Pass = pass
                     });
 
@@ -373,12 +403,15 @@ namespace XferSuite
                             var thisCell = Report.getCell(thisImg, i, j);
                             if (thisCell.Length == 0) continue;
                             bool pass = CheckCriteria(thisCell, needOneParents);
+                            double thisX = thisCell[0].X + (i * distX);
+                            double thisY = thisCell[0].Y + (j * distY);
 
                             Plottables.Add(new Plottable
                             {
                                 Region = regions[l],
-                                X = thisCell[0].X + (i * distX),
-                                Y = thisCell[0].Y + (j * distY),
+                                DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})",
+                                X = thisX,
+                                Y = thisY,
                                 Pass = pass
                             });
 
@@ -470,20 +503,22 @@ namespace XferSuite
             return view;
         }
 
-        private PlotModel InitPlotModel(bool visible = true)
+        private PlotModel InitPlotModel()
         {
             PlotModel plotModel = new PlotModel();
             plotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
                 TickStyle = OxyPlot.Axes.TickStyle.None,
-                IsAxisVisible = visible,
+                IsAxisVisible = _ZoomAndPan,
+                TextColor = OxyColors.White,
             });
             plotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 TickStyle = OxyPlot.Axes.TickStyle.None,
-                IsAxisVisible = visible,
+                IsAxisVisible = _ZoomAndPan,
+                TextColor = OxyColors.White,
             });
             return plotModel;
         }
@@ -524,14 +559,14 @@ namespace XferSuite
         private void ConfigurePlot()
         {
             PlotView plot = InitPlotView();
-            PlotModel plotModel = InitPlotModel(visible: false);
+            PlotModel plotModel = InitPlotModel();
             (ScatterSeries passScatter,  ScatterSeries failScatter) = InitScatterSeries();
             foreach (Plottable p in Plottables)
             {
                 ScatterPoint scatterPoint = new ScatterPoint(
                     _FlipXAxis ? Math.Abs(XMax - p.X) : p.X,
                     _FlipYAxis ? Math.Abs(YMax - p.Y) : p.Y,
-                    tag: p.ToString());
+                    tag: _DetailedScatterInfo ? $"{p}{p.DetailString}" : p.ToString());
 
                 if (p.Pass)
                     passScatter.Points.Add(scatterPoint);
@@ -577,34 +612,34 @@ namespace XferSuite
 
         #region Tool Strip Methods
 
-        private void toolStripButtonReset_Click(object sender, EventArgs e)
+        private void ToolStripButtonReset_Click(object sender, EventArgs e)
         {
             ResetFeaturesAndUI();
         }
 
-        private void toolStripButtonParse_Click(object sender, EventArgs e)
+        private void ToolStripButtonParse_Click(object sender, EventArgs e)
         {
             Parse();
         }
 
-        private void toolStripButtonParseNoPicthes_Click(object sender, EventArgs e)
+        private void ToolStripButtonParseNoPicthes_Click(object sender, EventArgs e)
         {
             Parse(noPitches: true);
         }
 
-        private void toolStripButtonCopyText_Click(object sender, EventArgs e)
+        private void ToolStripButtonCopyText_Click(object sender, EventArgs e)
         {
             if (rtb.Text != "") Clipboard.SetText(rtb.Text);
         }
 
-        private void toolStripButtonCopyWindow_Click(object sender, EventArgs e)
+        private void ToolStripButtonCopyWindow_Click(object sender, EventArgs e)
         {
             Bitmap bmp = new Bitmap(Width, Height);
             DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
             Clipboard.SetImage(bmp);
         }
 
-        private void toolStripButtonSmartSort_Click(object sender, EventArgs e)
+        private void ToolStripButtonSmartSort_Click(object sender, EventArgs e)
         {
             Report.Criteria[] originalFeatures = Features; // Maintain requirements
             ResetFeaturesAndUI();
@@ -626,7 +661,7 @@ namespace XferSuite
             olvNeedOne.RebuildAll(true);
         }
 
-        private void toolStripButtonSpecificRegion_Click(object sender, EventArgs e)
+        private void ToolStripButtonSpecificRegion_Click(object sender, EventArgs e)
         {
             string region = string.Empty;
 
@@ -776,7 +811,7 @@ namespace XferSuite
             Report.rescoreFeature(Data, SelectedFeature.Name, hSpan.X1, hSpan.X2);
         }
 
-        private void btnViewData_Click(object sender, EventArgs e)
+        private void BtnViewData_Click(object sender, EventArgs e)
         {
             ScottPlot.FormsPlot control = new ScottPlot.FormsPlot() { Dock = DockStyle.Fill };
             List<string> skippedPlots = new List<string>();
