@@ -747,7 +747,7 @@ namespace XferSuite
                     case Report.State.Pass:
                         bar.FillColor = Color.LawnGreen;
                         ScottPlot.Plottable.HSpan hSpan =
-                            control.Plot.AddHorizontalSpan(data.Min(), data.Max(), Color.FromArgb(50, Color.LawnGreen));
+                            control.Plot.AddHorizontalSpan(data.Min(), data.Max(), Color.FromArgb(75, Color.SlateGray));
                         hSpan.DragEnabled = true;
                         hSpan.Dragged += HSpan_Dragged;
                         break;
