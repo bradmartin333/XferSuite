@@ -265,7 +265,7 @@ namespace XferSuite
             LinearAxis myXaxis2 = new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
-                Title = "X Error Distance (microns)",
+                Title = "Y Error Distance (microns)",
                 Minimum = -Threshold,
                 Maximum = Threshold
             };

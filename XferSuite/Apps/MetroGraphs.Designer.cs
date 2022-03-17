@@ -56,10 +56,10 @@ namespace XferSuite
             this.btnShowAnglePlots = new System.Windows.Forms.Button();
             this.btnShowFingerprintPlots = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.btnApplyDataFilters = new System.Windows.Forms.Button();
             this.Field = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Operator = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnApplyDataFilters = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -87,7 +87,7 @@ namespace XferSuite
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(859, 381);
+            this.tabControl.Size = new System.Drawing.Size(894, 381);
             this.tabControl.TabIndex = 0;
             // 
             // tabPage1
@@ -97,7 +97,7 @@ namespace XferSuite
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(851, 355);
+            this.tabPage1.Size = new System.Drawing.Size(886, 355);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Scatter";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -115,7 +115,7 @@ namespace XferSuite
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 349F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(845, 349);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(880, 349);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // scatterPlot
@@ -124,7 +124,7 @@ namespace XferSuite
             this.scatterPlot.Location = new System.Drawing.Point(3, 3);
             this.scatterPlot.Name = "scatterPlot";
             this.scatterPlot.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.scatterPlot.Size = new System.Drawing.Size(416, 343);
+            this.scatterPlot.Size = new System.Drawing.Size(434, 343);
             this.scatterPlot.TabIndex = 1;
             this.scatterPlot.Tag = "1";
             this.scatterPlot.Text = "Position Scatter Plot";
@@ -135,10 +135,10 @@ namespace XferSuite
             // errorScatterPlot
             // 
             this.errorScatterPlot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.errorScatterPlot.Location = new System.Drawing.Point(425, 3);
+            this.errorScatterPlot.Location = new System.Drawing.Point(443, 3);
             this.errorScatterPlot.Name = "errorScatterPlot";
             this.errorScatterPlot.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.errorScatterPlot.Size = new System.Drawing.Size(417, 343);
+            this.errorScatterPlot.Size = new System.Drawing.Size(434, 343);
             this.errorScatterPlot.TabIndex = 2;
             this.errorScatterPlot.Tag = "1";
             this.errorScatterPlot.Text = "Error Scatter Plot";
@@ -423,19 +423,6 @@ namespace XferSuite
             this.dataGridView.Size = new System.Drawing.Size(342, 276);
             this.dataGridView.TabIndex = 3;
             // 
-            // btnApplyDataFilters
-            // 
-            this.btnApplyDataFilters.AutoSize = true;
-            this.btnApplyDataFilters.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnApplyDataFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnApplyDataFilters.Location = new System.Drawing.Point(496, 13);
-            this.btnApplyDataFilters.Name = "btnApplyDataFilters";
-            this.btnApplyDataFilters.Size = new System.Drawing.Size(342, 47);
-            this.btnApplyDataFilters.TabIndex = 4;
-            this.btnApplyDataFilters.Text = "Apply Data Filters";
-            this.btnApplyDataFilters.UseVisualStyleBackColor = true;
-            this.btnApplyDataFilters.Click += new System.EventHandler(this.btnApplyDataFilters_Click);
-            // 
             // Field
             // 
             this.Field.HeaderText = "Field";
@@ -473,11 +460,24 @@ namespace XferSuite
             this.Value.HeaderText = "Value";
             this.Value.Name = "Value";
             // 
+            // btnApplyDataFilters
+            // 
+            this.btnApplyDataFilters.AutoSize = true;
+            this.btnApplyDataFilters.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnApplyDataFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnApplyDataFilters.Location = new System.Drawing.Point(496, 13);
+            this.btnApplyDataFilters.Name = "btnApplyDataFilters";
+            this.btnApplyDataFilters.Size = new System.Drawing.Size(342, 47);
+            this.btnApplyDataFilters.TabIndex = 4;
+            this.btnApplyDataFilters.Text = "Apply Data Filters";
+            this.btnApplyDataFilters.UseVisualStyleBackColor = true;
+            this.btnApplyDataFilters.Click += new System.EventHandler(this.btnApplyDataFilters_Click);
+            // 
             // MetroGraphs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(859, 381);
+            this.ClientSize = new System.Drawing.Size(894, 381);
             this.Controls.Add(this.tabControl);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MetroGraphs";
