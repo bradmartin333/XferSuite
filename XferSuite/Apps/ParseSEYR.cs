@@ -758,9 +758,8 @@ namespace XferSuite
         {
             try
             {
-                double[] data = Report.getData(
-                Data.Where(x => x.State == state).ToArray(), SelectedFeature.Name);
-                if (data.Length < 3) return state.ToString();
+                double[] data = Report.getData(Data.Where(x => x.State == state).ToArray(), SelectedFeature.Name);
+                if (data.Count() == 0 || data.Max() == 0) return state.ToString();
                 (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(
                     data, min: data.Min(), max: data.Max(), binSize: 1);
                 double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
