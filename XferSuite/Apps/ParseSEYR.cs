@@ -802,6 +802,7 @@ namespace XferSuite
             control.Plot.XAxis.Label("Score");
             control.Plot.YAxis.Label("Count");
             control.Plot.Grid(false);
+            control.Configuration.DoubleClickBenchmark = false;
             control.Refresh();
             Form form = new Form()
             {
