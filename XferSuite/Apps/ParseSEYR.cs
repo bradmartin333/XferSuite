@@ -93,28 +93,14 @@ namespace XferSuite
             }
         }
 
-        private bool _ZoomAndPan = true;
+        private bool _ShowAxesNames = false;
         [Category("User Parameters")]
-        [Description("Scatterplots allow for zooming and panning")]
-        public bool ZoomAndPan
+        public bool ShowAxesNames
         {
-            get => _ZoomAndPan;
+            get => _ShowAxesNames;
             set
             {
-                _ZoomAndPan = value;
-                ConfigurePlot();
-            }
-        }
-
-        private bool _DetailedScatterInfo = true;
-        [Category("User Parameters")]
-        [Description("Show more information when a scatterpoint is clicked on")]
-        public bool DetailedScatterInfo
-        {
-            get => _DetailedScatterInfo;
-            set
-            {
-                _DetailedScatterInfo = value;
+                _ShowAxesNames = value;
                 ConfigurePlot();
             }
         }
@@ -133,7 +119,7 @@ namespace XferSuite
 
             public override string ToString()
             {
-                return $"Region {Region}";
+                return $"Region {Region}{DetailString}";
             }
         }
 
@@ -363,7 +349,7 @@ namespace XferSuite
                     Plottables.Add(new Plottable
                     {
                         Region = regions[l],
-                        DetailString = $"\nCopy ({entry.XCopy}, {entry.YCopy})\nLocation ({thisX}, {thisY})",
+                        DetailString = $"\nCopy ({entry.XCopy}, {entry.YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}",
                         X = thisX,
                         Y = thisY,
                         Pass = pass
@@ -409,7 +395,7 @@ namespace XferSuite
                             Plottables.Add(new Plottable
                             {
                                 Region = regions[l],
-                                DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})",
+                                DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}",
                                 X = thisX,
                                 Y = thisY,
                                 Pass = pass
@@ -510,15 +496,17 @@ namespace XferSuite
             {
                 Position = AxisPosition.Bottom,
                 TickStyle = OxyPlot.Axes.TickStyle.None,
-                IsAxisVisible = _ZoomAndPan,
-                TextColor = OxyColors.White,
+                StartPosition = _FlipXAxis ? 1 : 0,
+                EndPosition = _FlipXAxis ? 0 : 1,
+                Title = _ShowAxesNames ? "X Position (mm)" : null,
             });
             plotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 TickStyle = OxyPlot.Axes.TickStyle.None,
-                IsAxisVisible = _ZoomAndPan,
-                TextColor = OxyColors.White,
+                StartPosition = _FlipYAxis ? 1 : 0,
+                EndPosition = _FlipYAxis ? 0 : 1,
+                Title = _ShowAxesNames ? "Y Position (mm)" : null,
             });
             return plotModel;
         }
@@ -563,11 +551,7 @@ namespace XferSuite
             (ScatterSeries passScatter,  ScatterSeries failScatter) = InitScatterSeries();
             foreach (Plottable p in Plottables)
             {
-                ScatterPoint scatterPoint = new ScatterPoint(
-                    _FlipXAxis ? Math.Abs(XMax - p.X) : p.X,
-                    _FlipYAxis ? Math.Abs(YMax - p.Y) : p.Y,
-                    tag: _DetailedScatterInfo ? $"{p}{p.DetailString}" : p.ToString());
-
+                ScatterPoint scatterPoint = new ScatterPoint(p.X, p.Y, tag: p.ToString());
                 if (p.Pass)
                     passScatter.Points.Add(scatterPoint);
                 else
