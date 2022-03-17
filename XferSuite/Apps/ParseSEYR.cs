@@ -580,12 +580,23 @@ namespace XferSuite
 
         private Form InitLargeForm(string text)
         {
+            var xData = Plottables.Select(p => p.X);
+            var yData = Plottables.Select(p => p.Y);
+            double xRange = xData.Max() - xData.Min();
+            double yRange = yData.Max() - yData.Min();
+            double xScale = 1.0;
+            double yScale = 1.0;
+            if (xRange > yRange)
+                yScale = yRange / xRange;
+            else
+                xScale = xRange / yRange;
+
             Rectangle bounds = Screen.FromControl(this).Bounds;
             int size = (int)(Math.Min(bounds.Width, bounds.Height) * 0.95);
             return new Form()
             {
-                Width = size,
-                Height = size,
+                Width = (int)(size * xScale),
+                Height = (int)(size * yScale),
                 FormBorderStyle = FormBorderStyle.SizableToolWindow,
                 StartPosition = FormStartPosition.CenterScreen,
                 Text = text
