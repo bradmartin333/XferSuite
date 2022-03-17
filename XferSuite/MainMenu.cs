@@ -11,7 +11,7 @@ namespace XferSuite
         public static int MajorVersion = 3;
         public static int MinorVerson = 9;
 
-        private static Settings _Settings = new Settings();
+        private static readonly Settings _Settings = new Settings();
 
         public MainMenu()
         {
@@ -32,7 +32,7 @@ namespace XferSuite
             foreach (CameraViewer cameraViewer in Application.OpenForms.OfType<CameraViewer>()) cameraViewer.EndStream();
         }
 
-        private void btn_Click(object sender, EventArgs e)
+        private void Btn_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
             int idx = int.Parse(btn.Tag.ToString());
@@ -92,6 +92,7 @@ namespace XferSuite
             }
             form.Activated += Form_Activated;
             form.Show();
+            _Settings.PropertyGrid.SelectedObject = form;
         }
 
         public static void Form_Activated(object sender, EventArgs e)
@@ -100,7 +101,7 @@ namespace XferSuite
                 _Settings.PropertyGrid.SelectedObject = sender;
         }
 
-        private void btnSettings_Click(object sender, EventArgs e)
+        private void BtnSettings_Click(object sender, EventArgs e)
         {
             _Settings.Show();
             _Settings.BringToFront();

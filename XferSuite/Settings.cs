@@ -61,10 +61,10 @@ namespace XferSuite
                 int mostRecentMinorVersion = int.Parse(mostRecentVersion.Replace("v", "").Split('.').Last());
                 if (mostRecentMajorVersion > thisMajorVersion || (mostRecentMajorVersion >= thisMajorVersion && mostRecentMinorVersion > thisMinorVersion))
                 {
-                    BtnCheckForUpdates.Text = mostRecentVersion + " Available";
+                    BtnCheckForUpdates.Text = $"Click here to update to {mostRecentVersion}";
                     BtnCheckForUpdates.BackColor = Color.PaleTurquoise;
                     MainMenu mainMenu = Application.OpenForms.OfType<MainMenu>().First();
-                    if (!UpdateFound) mainMenu.Text += $"   {BtnCheckForUpdates.Text}";
+                    if (!UpdateFound) mainMenu.Text += $"   {mostRecentVersion} Available";
                     UpdateFound = true;
                 }
                 else

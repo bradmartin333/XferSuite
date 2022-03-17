@@ -82,7 +82,7 @@ namespace XferSuite
             this.btnXYZplotter.Tag = "1";
             this.btnXYZplotter.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnXYZplotter.UseVisualStyleBackColor = true;
-            this.btnXYZplotter.Click += new System.EventHandler(this.btn_Click);
+            this.btnXYZplotter.Click += new System.EventHandler(this.Btn_Click);
             // 
             // btnInlinepositions
             // 
@@ -102,7 +102,7 @@ namespace XferSuite
             this.btnInlinepositions.Tag = "0";
             this.btnInlinepositions.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnInlinepositions.UseVisualStyleBackColor = true;
-            this.btnInlinepositions.Click += new System.EventHandler(this.btn_Click);
+            this.btnInlinepositions.Click += new System.EventHandler(this.Btn_Click);
             // 
             // btnParseSEYR
             // 
@@ -122,7 +122,7 @@ namespace XferSuite
             this.btnParseSEYR.Tag = "2";
             this.btnParseSEYR.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnParseSEYR.UseVisualStyleBackColor = true;
-            this.btnParseSEYR.Click += new System.EventHandler(this.btn_Click);
+            this.btnParseSEYR.Click += new System.EventHandler(this.Btn_Click);
             // 
             // btnCameraViewer
             // 
@@ -142,7 +142,7 @@ namespace XferSuite
             this.btnCameraViewer.Tag = "3";
             this.btnCameraViewer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCameraViewer.UseVisualStyleBackColor = true;
-            this.btnCameraViewer.Click += new System.EventHandler(this.btn_Click);
+            this.btnCameraViewer.Click += new System.EventHandler(this.Btn_Click);
             // 
             // btnSettings
             // 
@@ -161,7 +161,7 @@ namespace XferSuite
             this.btnSettings.TabIndex = 11;
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            this.btnSettings.Click += new System.EventHandler(this.BtnSettings_Click);
             // 
             // btnMapFlip
             // 
@@ -181,7 +181,7 @@ namespace XferSuite
             this.btnMapFlip.Tag = "4";
             this.btnMapFlip.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnMapFlip.UseVisualStyleBackColor = true;
-            this.btnMapFlip.Click += new System.EventHandler(this.btn_Click);
+            this.btnMapFlip.Click += new System.EventHandler(this.Btn_Click);
             // 
             // MainMenu
             // 
