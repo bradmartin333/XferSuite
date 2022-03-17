@@ -78,7 +78,7 @@
             this.btnContinue.TabIndex = 1;
             this.btnContinue.Text = "Continue";
             this.btnContinue.UseVisualStyleBackColor = true;
-            this.btnContinue.Click += new System.EventHandler(this.btnContinue_Click);
+            this.btnContinue.Click += new System.EventHandler(this.BtnContinue_Click);
             // 
             // PromptForInput
             // 
