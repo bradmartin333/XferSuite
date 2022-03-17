@@ -130,7 +130,6 @@ namespace XferSuite
         private bool ObjectHasBeenDropped { get; set; }
 
         private List<Plottable> Plottables = new List<Plottable>();
-        private double XMax, YMax;
         private ScatterSeries PassScatter, FailScatter;
         private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
 
@@ -322,10 +321,6 @@ namespace XferSuite
                 if (Plottables.Count > 0)
                 {
                     rtb.Text += $"\nTotal\t{Plottables.Where(p => p.Pass).Count() / (double)(Plottables.Count()):P}";
-
-                    XMax = Plottables.Select(p => p.X).Max();
-                    YMax = Plottables.Select(p => p.Y).Max();
-
                     ConfigurePlot();
                     toolStripButtonSpecificRegion.Enabled = true;
                 }
