@@ -283,25 +283,34 @@ namespace XferSuite
 
             if (!noPitches)
             {
-                using (PromptForInput input = new PromptForInput(
-                    prompt: "Enter X grid pitch in millimeters",
-                    textEntry: false,
-                    max: 100,
-                    title: $"SEYR Parser Grid Setup"))
+                if (Path.FullName.Contains("_CP_"))
                 {
-                    var result = input.ShowDialog();
-                    if (result == DialogResult.OK)
-                        distX = (double)((NumericUpDown)input.Control).Value;
+                    string[] slice = Path.FullName.Replace(".txt", "").Split('_');
+                    distX = double.Parse(slice[slice.Length - 2]);
+                    distY = double.Parse(slice[slice.Length - 1]);
                 }
-                using (PromptForInput input = new PromptForInput(
-                    prompt: "Enter Y grid pitch in millimeters",
-                    textEntry: false,
-                    max: 100,
-                    title: $"SEYR Parser Grid Setup"))
+                else
                 {
-                    var result = input.ShowDialog();
-                    if (result == DialogResult.OK)
-                        distY = (double)((NumericUpDown)input.Control).Value;
+                    using (PromptForInput input = new PromptForInput(
+                        prompt: "Enter X grid pitch in millimeters",
+                        textEntry: false,
+                        max: 100,
+                        title: $"SEYR Parser Grid Setup"))
+                    {
+                        var result = input.ShowDialog();
+                        if (result == DialogResult.OK)
+                            distX = (double)((NumericUpDown)input.Control).Value;
+                    }
+                    using (PromptForInput input = new PromptForInput(
+                        prompt: "Enter Y grid pitch in millimeters",
+                        textEntry: false,
+                        max: 100,
+                        title: $"SEYR Parser Grid Setup"))
+                    {
+                        var result = input.ShowDialog();
+                        if (result == DialogResult.OK)
+                            distY = (double)((NumericUpDown)input.Control).Value;
+                    }
                 }
             }
 
