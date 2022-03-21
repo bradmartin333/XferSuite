@@ -826,6 +826,7 @@ namespace XferSuite
             control.Plot.XAxis.Label("Score");
             control.Plot.YAxis.Label("Count");
             control.Plot.Grid(false);
+            control.MouseWheel += Control_MouseWheel;
             control.Configuration.DoubleClickBenchmark = false;
             control.Refresh();
             Form form = new Form()
@@ -835,6 +836,36 @@ namespace XferSuite
             };
             form.Controls.Add(control);
             form.Show();
+        }
+
+        private void Control_MouseWheel(object sender, MouseEventArgs e)
+        {
+            ScottPlot.FormsPlot control = (ScottPlot.FormsPlot)sender;
+            switch(GetControlAxis(control, e.Location))
+            {
+                case 0:
+                    control.Plot.XAxis.LockLimits(true);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
+                case 1:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(true);
+                    break;
+                default:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
+            }
+        }
+
+        private int GetControlAxis(ScottPlot.FormsPlot control, Point location)
+        {
+            if (location.X < 60) // At XAxis
+                return 0;
+            else if (location.Y > control.Height - 60) // At YAxis
+                return 1;
+            else
+                return -1;
         }
 
         #endregion
