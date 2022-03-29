@@ -131,6 +131,8 @@ namespace XferSuite
 
         private List<Plottable> Plottables = new List<Plottable>();
         private ScatterSeries PassScatter, FailScatter;
+        private ScottPlot.Plottable.Annotation ViewDataAnnotation;
+        private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
 
         public ParseSEYR(string path)
@@ -765,42 +767,49 @@ namespace XferSuite
 
         private string MakeFeatureDataHistogram(ref ScottPlot.FormsPlot control, Report.State state)
         {
-            try
+            ScottPlot.Plottable.BarPlot bar;
+            double[] data = Report.getData(Data.Where(x => x.State == state).ToArray(), SelectedFeature.Name);
+            if (data.Count() == 0)
+                return state.ToString();
+            else if (data.Max() == 0)
+                bar = control.Plot.AddBar(values: new double[] { data.Count() }, positions: new double[] { 0 });
+            else if (data.Count() == 1)
+                bar = control.Plot.AddBar(values: new double[] {1}, positions: new double[] {data[0]});
+            else
             {
-                double[] data = Report.getData(Data.Where(x => x.State == state).ToArray(), SelectedFeature.Name);
-                if (data.Count() == 0 || data.Max() == 0) return state.ToString();
-                (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(
-                    data, min: data.Min(), max: data.Max(), binSize: 1);
+                (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(data, min: data.Min(), max: data.Max(), binSize: 1);
                 double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
-                ScottPlot.Plottable.BarPlot bar = control.Plot.AddBar(values: counts, positions: leftEdges);
-                bar.BarWidth = 1;
-                bar.BorderColor = Color.Transparent;
-                switch (state)
-                {
-                    case Report.State.Pass:
-                        bar.FillColor = Color.LawnGreen;
-                        ScottPlot.Plottable.HSpan hSpan =
-                            control.Plot.AddHorizontalSpan(data.Min(), data.Max(), Color.FromArgb(75, Color.SlateGray));
-                        hSpan.DragEnabled = true;
-                        hSpan.Dragged += HSpan_Dragged;
-                        break;
-                    case Report.State.Fail:
-                        bar.FillColor = Color.Firebrick;
-                        break;
-                    case Report.State.Null:
-                        bar.FillColor = Color.Blue;
-                        break;
-                    case Report.State.Misaligned:
-                        bar.FillColor = Color.ForestGreen;
-                        break;
-                    default:
-                        bar.FillColor = Color.Black;
-                        break;
-                }
-                return string.Empty;
+                bar = control.Plot.AddBar(values: counts, positions: leftEdges);
             }
-            catch (Exception) { }
-            return state.ToString();
+            bar.BarWidth = 1;
+            bar.BorderColor = Color.Transparent;
+            bar.Label = state.ToString();
+
+            switch (state)
+            {
+                case Report.State.Pass:
+                    bar.FillColor = Color.LawnGreen;
+                    ScottPlot.Plottable.HSpan hSpan =
+                        control.Plot.AddHorizontalSpan(data.Min(), data.Max(), Color.FromArgb(75, Color.SlateGray));
+                    hSpan.DragEnabled = true;
+                    hSpan.Dragged += HSpan_Dragged;
+                    break;
+                case Report.State.Fail:
+                    bar.FillColor = Color.Firebrick;
+                    break;
+                case Report.State.Null:
+                    bar.FillColor = Color.Blue;
+                    break;
+                case Report.State.Misaligned:
+                    bar.FillColor = Color.ForestGreen;
+                    break;
+                default:
+                    bar.FillColor = Color.Black;
+                    break;
+            }
+
+            ViewDataPlots.Add(bar);
+            return string.Empty;
         }
 
         private void HSpan_Dragged(object sender, EventArgs e)
@@ -812,6 +821,7 @@ namespace XferSuite
         private void BtnViewData_Click(object sender, EventArgs e)
         {
             ScottPlot.FormsPlot control = new ScottPlot.FormsPlot() { Dock = DockStyle.Fill };
+            ViewDataPlots.Clear();
             List<string> skippedPlots = new List<string>();
             foreach (Report.State state in Enum.GetValues(typeof(Report.State)))
             {
@@ -821,22 +831,30 @@ namespace XferSuite
             }
             if (skippedPlots.Count > 0)
             {
-                string message = "Plots not shown: ";
+                string message = "Plots without data: ";
                 foreach (string item in skippedPlots)
                     message += $"{item}, ";
                 ScottPlot.Plottable.Annotation annotation =
                     control.Plot.AddAnnotation(message.Substring(0, message.Length - 2), -10, 10);
-                annotation.BackgroundColor = Color.Transparent;
+                annotation.BackgroundColor = Color.FromArgb(200, Color.White);
                 annotation.BorderColor = Color.Transparent;
                 annotation.Font.Color = Color.Black;
                 annotation.Shadow = false;
             }
+
+            ViewDataAnnotation = control.Plot.AddAnnotation("Score = N/A", 10, 10);
+            ViewDataAnnotation.BackgroundColor = Color.FromArgb(200, Color.White);
+            ViewDataAnnotation.BorderColor = Color.Transparent;
+            ViewDataAnnotation.Font.Color = Color.Black;
+            ViewDataAnnotation.Shadow = false;
+
             control.Plot.Title(SelectedFeature.Name);
             control.Plot.XAxis.Label("Score");
             control.Plot.YAxis.Label("Count");
             control.Plot.Grid(false);
             control.MouseWheel += Control_MouseWheel;
             control.Configuration.DoubleClickBenchmark = false;
+            control.MouseUp += Control_MouseUp;
             control.Refresh();
             Form form = new Form()
             {
@@ -845,6 +863,20 @@ namespace XferSuite
             };
             form.Controls.Add(control);
             form.Show();
+        }
+
+        private void Control_MouseUp(object sender, MouseEventArgs e)
+        {
+            ScottPlot.FormsPlot p = (ScottPlot.FormsPlot)sender;
+            (double mX, _) = p.GetMouseCoordinates();
+            int x = (int)Math.Floor(mX);
+            string message = $"Score = {x}\n";
+            foreach (ScottPlot.Plottable.BarPlot barPlot in ViewDataPlots)
+                for (int i = 0; i < barPlot.Positions.Length; i++)
+                    if (Math.Floor(barPlot.Positions[i]) == x && barPlot.Values[i] > 0)
+                        message += $"{barPlot.Label} Count = {barPlot.Values[i]}\n";
+            ViewDataAnnotation.Label = message;
+            p.Refresh();
         }
 
         private void Control_MouseWheel(object sender, MouseEventArgs e)
