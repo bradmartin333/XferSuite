@@ -18,6 +18,7 @@ namespace XferSuite.Apps.XYZplotter
         public double Threshold { get; set; } = 0.0;
         private Zed.Position[] OriginalData { get; set; }
         public List<Zed.Position> Data { get; set; } = new List<Zed.Position>();
+        public int SelectedIdx { get; set; } = -1;
 
         private bool _Edited;
         public bool Edited
@@ -49,6 +50,7 @@ namespace XferSuite.Apps.XYZplotter
             if (Edited)
             {
                 Data = OriginalData.ToList();
+                SelectedIdx = -1;
                 Edited = false;
             }
         }

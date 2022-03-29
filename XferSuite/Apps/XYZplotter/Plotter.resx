@@ -121,7 +121,7 @@
   <data name="buttonReloadFile.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wQAADsEBuJFr7QAAAmxJREFUWEftlr+LE0EUxze/TGISOcRCLOSQQyws/AuEWIiFXCWHiIiFfRoRcqS1
+        vwAADr8BOAVTJAAAAmxJREFUWEftlr+LE0EUxze/TGISOcRCLOSQQyws/AuEWIiFXCWHiIiFfRoRcqS1
         sLSwtLA8rrrCMpW1hRwpxeIKETlEQgo5gn6+s2/CKMlmZ9cyX/jyfft25s28N7Ozk2ywQQzq9fpOpVIZ
         YY7hNzg3yh7zbp8217D/LxSU4IeYGuz3Gs5pe0CfbezyqFarT5AZDAf5BT/CI6Ns+cI2U/o+QouDAC+Q
         MOgxvsftdruL/Rfk0zvMCVz0wfccjQcdlbkPpLKOut1uXe+yoDa2T9xyYR8NBoOqe5kXtpF82edM5qH8
@@ -137,7 +137,7 @@
   <data name="checkBoxEqualize.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vgAADr4B6kKxwAAAAJFJREFUWEftlcENgCAQBKnLQizEtixSuS8P5jE5QMMm97lJdjcBsXxFV527mdgN
+        vAAADrwBlbxySQAAAJFJREFUWEftlcENgCAQBKnLQizEtixSuS8P5jE5QMMm97lJdjcBsXxFV527mdgN
         UwQ+zcRumKYX2DrqnM3Ebpj2JaQC6e9EGPYKENdavkC60gvQd04F9DtBAZajbABxlD0CXYD0/wI2wHJt
         YLk2II4/q1j0DCxH2QDiKBtAfPoRENcGlmsDy7WB5XhJsvkslfIC4IBi+Gv9ta8AAAAASUVORK5CYII=
 </value>
@@ -178,7 +178,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAw
-        CAAAAk1TRnQBSQFMAwEBAAFIAQABSAEAARABAAEQAQAE/wEJAQAI/wFCAU0BNgEEBgABNgEEAgABKAMA
+        CAAAAk1TRnQBSQFMAwEBAAFYAQABWAEAARABAAEQAQAE/wEJAQAI/wFCAU0BNgEEBgABNgEEAgABKAMA
         AUADAAEQAwABAQEAAQgGAAEEGAABgAIAAYADAAKAAQABgAMAAYABAAGAAQACgAIAA8ABAAHAAdwBwAEA
         AfABygGmAQABMwUAATMBAAEzAQABMwEAAjMCAAMWAQADHAEAAyIBAAMpAQADVQEAA00BAANCAQADOQEA
         AYABfAH/AQACUAH/AQABkwEAAdYBAAH/AewBzAEAAcYB1gHvAQAB1gLnAQABkAGpAa0CAAH/ATMDAAFm
@@ -253,19 +253,7 @@
 </value>
   </data>
   <data name="checkBoxEraseData.AccessibleDescription" xml:space="preserve">
-    <value>Erase Data:_Remove data by axis sliders _Special case to remove by clicking points with X vs. Height vs. None_Cannot use special case with an enabled Z Axis_Can only edit H data with special case_Right click to exit without modifying data</value>
-  </data>
-  <data name="checkBoxEraseData.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAAVpJREFUWEfdljtqw0AURfUZQhASkvosIQvIClwLV15BFmHcZhEpQhaQImXWkdpl
-        CuPChStjXDh3xLxghCTPe2+sIhcu88Hjc5BH4OjfJUmS5ziO39I0fXBb0wXgFYaz63pSiQ58WokBOPW2
-        EvjNx+DU20h4wqlhJZhwahgJIZyqk1DCqTKJQHDq2hjjLxEY3hav7zfG6+nAT+jhYq3pBh1PF471HJ1h
-        rpXY4x48YRxOH9zu2ygldHCKUCIMnMKUCAuneEqw4WccWNh9n1yR4MNt8Z5+Zll2h7lXBiT4jx3d0Zoj
-        UVVVgs9/YcqCLzH8wbGe49Aj5lva95Fw8HdM/eEuR7Q95GTacCQ0cPt36hVD70Efibqu5XCbPM/N2BeM
-        SajhlKIo2BIQvw8Cp5RlyZJAfy7me9wfOZwikAgHp/TcaFWbpjEYeem5XOKKBGzck3jB9ENTscA0iaJf
-        r2ONmwUtgasAAAAASUVORK5CYII=
-</value>
+    <value>Erase Data:_Remove data by axis sliders _Special case to remove by clicking points with X vs. Height vs. None_Can also tag points in the special configuration_Cannot use special case with an enabled Z Axis_Can only edit H data with special case_Right click to exit without modifying data</value>
   </data>
   <data name="btnRevert.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

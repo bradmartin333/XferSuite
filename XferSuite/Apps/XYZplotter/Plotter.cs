@@ -52,15 +52,30 @@ namespace XferSuite
         private Scan[] ActiveScans { get; set; } = new Scan[4];
         private int[] LastHighlightedPoints { get; set; } = new int[4];
         public bool EraseDataEnabled { get; set; }
-        private bool _EraseOnClickEnabled = false;
+        private bool _ErasePointEnabled = false;
         private bool ErasePointEnabled
         {
-            get => _EraseOnClickEnabled;
+            get => _ErasePointEnabled;
             set
             {
-                _EraseOnClickEnabled = value;
-                checkBoxEraseData.FlatAppearance.CheckedBackColor = _EraseOnClickEnabled ? Color.LightCoral : Color.Gold;
+                _ErasePointEnabled = value;
+                checkBoxEraseData.FlatAppearance.CheckedBackColor = _ErasePointEnabled ? Color.LightCoral : Color.Gold;
             }
+        }
+        private bool _MagicSelectEnabled = false;
+        private bool MagicSelectEnabled
+        {
+            get => _MagicSelectEnabled;
+            set
+            {
+                _MagicSelectEnabled = value;
+                checkBoxEraseData.BackgroundImage = _MagicSelectEnabled ? Properties.Resources.magic_select : Properties.Resources.eraser;
+                checkBoxEraseData.BackColor = _MagicSelectEnabled ? Color.LightGreen : SystemColors.Control;
+            }
+        }
+        public bool HoverScatterEnabled
+        {
+            get => _ErasePointEnabled || _MagicSelectEnabled;
         }
 
         #endregion
@@ -114,7 +129,7 @@ namespace XferSuite
 
         private void P_MouseUp(object sender, MouseEventArgs e)
         {
-            if (!ErasePointEnabled) return;
+            if (!HoverScatterEnabled) return;
 
             FormsPlot p = (FormsPlot)sender;
             int plotIdx = int.Parse(p.Tag.ToString());
@@ -122,9 +137,21 @@ namespace XferSuite
 
             try
             {
-                ActiveScans[plotIdx].Data.RemoveAt(LastHighlightedPoints[plotIdx]);
-                ActiveScans[plotIdx].Edited = true;
-                olv.Refresh();
+                if (ErasePointEnabled)
+                {
+                    ActiveScans[plotIdx].Data.RemoveAt(LastHighlightedPoints[plotIdx]);
+                    ActiveScans[plotIdx].Edited = true;
+                    ActiveScans[plotIdx].SelectedIdx = -1;
+                    olv.Refresh();
+                }
+                if (MagicSelectEnabled)
+                {
+                    if (ActiveScans[plotIdx].SelectedIdx == LastHighlightedPoints[plotIdx])
+                        ActiveScans[plotIdx].SelectedIdx = -1;
+                    else
+                        ActiveScans[plotIdx].SelectedIdx = LastHighlightedPoints[plotIdx];
+                }
+                    
                 MakePlots();
             }
             catch (Exception)
@@ -135,7 +162,7 @@ namespace XferSuite
 
         private void P_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!ErasePointEnabled) return;
+            if (!HoverScatterEnabled) return;
 
             FormsPlot p = (FormsPlot)sender;
             int plotIdx = int.Parse(p.Tag.ToString());
@@ -347,10 +374,10 @@ namespace XferSuite
                             formsPlot.Plot.YAxis.TickLabelFormat(CustomTickFormatter);
                         }
 
-                        if (ErasePointEnabled)
+                        if (HoverScatterEnabled)
                         {
                             HighlightPointPlots[plotIdx] = formsPlot.Plot.AddPoint(0, 0);
-                            HighlightPointPlots[plotIdx].Color = Color.Red;
+                            HighlightPointPlots[plotIdx].Color = ErasePointEnabled ? Color.Red : Color.LawnGreen;
                             HighlightPointPlots[plotIdx].IsVisible = false;
                         }
 
@@ -365,6 +392,10 @@ namespace XferSuite
                             annotation.Shadow = false;
                             annotation.BackgroundColor = Color.White;
                         }
+
+                        if (plotData.SelectedPoint != null) 
+                            formsPlot.Plot.AddPoint(plotData.SelectedPoint.X, plotData.SelectedPoint.Y, Color.Black, 20, MarkerShape.asterisk);
+
                         break;
                     case 3:
                         // Create point lists grouped by color
@@ -400,7 +431,6 @@ namespace XferSuite
                             formsPlot.Plot.SetAxisLimits(GroupBounds.XMin, GroupBounds.XMax, GroupBounds.YMin, GroupBounds.YMax);
                             var cmap = ScottPlot.Drawing.Colormap.Viridis;
                             var cb = formsPlot.Plot.AddColorbar(cmap);
-                            //cb.YAxisIndex = 3;
                             formsPlot.Plot.YAxis2.Label(comboZ.Text);
                             cb.MinValue = GroupBounds.ZMin;
                             cb.MaxValue = GroupBounds.ZMax;
@@ -423,6 +453,10 @@ namespace XferSuite
                             annotation.Shadow = false;
                             annotation.BackgroundColor = Color.White;
                         }
+
+                        if (plotData.SelectedPoint != null)
+                            formsPlot.Plot.AddPoint(plotData.SelectedPoint.X, plotData.SelectedPoint.Y, Color.Black, 20, MarkerShape.asterisk);
+
                         break;
                     default:
                         break;
@@ -557,27 +591,25 @@ namespace XferSuite
         private void UpdateEraseDataMode()
         {
             bool lastEraseDataEnabled = EraseDataEnabled;
+            bool lastMagicSelectEnabled = MagicSelectEnabled;
             EraseDataEnabled = checkBoxEraseData.Checked;
 
             bool allowEraseData = true;
-            if ((comboX.SelectedIndex == (int)Zed.Axes.H || comboY.SelectedIndex == (int)Zed.Axes.H ||
+            if (((comboX.SelectedIndex == (int)Zed.Axes.H || comboY.SelectedIndex == (int)Zed.Axes.H ||
                 comboX.SelectedIndex == (int)Zed.Axes.ZH || comboY.SelectedIndex == (int)Zed.Axes.ZH)
-                && comboZ.SelectedIndex != (int)Zed.Axes.None)
+                && comboZ.SelectedIndex != (int)Zed.Axes.None) || comboY.SelectedIndex == (int)Zed.Axes.None)
             {
                 TurnOffEraseMode();
                 allowEraseData = false;
             }
-            if (comboY.SelectedIndex == (int)Zed.Axes.None) 
-            {
-                TurnOffEraseMode();
-                allowEraseData = false;
-            }
-            ErasePointEnabled = allowEraseData && EraseDataEnabled && 
-                (comboX.SelectedIndex == (int)Zed.Axes.X || comboX.SelectedIndex == (int)Zed.Axes.Y) &&
-                comboY.SelectedIndex == (int)Zed.Axes.H && comboZ.SelectedIndex == (int)Zed.Axes.None;
 
+            bool erasePointPermitted = allowEraseData && (comboX.SelectedIndex == (int)Zed.Axes.X || comboX.SelectedIndex == (int)Zed.Axes.Y) &&
+                comboY.SelectedIndex == (int)Zed.Axes.H && comboZ.SelectedIndex == (int)Zed.Axes.None;
+            ErasePointEnabled = EraseDataEnabled && erasePointPermitted;
             checkBoxEraseData.Visible = allowEraseData;
-            if (lastEraseDataEnabled != EraseDataEnabled) MakePlots();
+            MagicSelectEnabled = erasePointPermitted && !ErasePointEnabled && allowEraseData;
+
+            if (lastEraseDataEnabled != EraseDataEnabled || lastMagicSelectEnabled != MagicSelectEnabled) MakePlots();
         }
 
         private void TurnOffEraseMode()

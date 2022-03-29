@@ -63,6 +63,16 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap eraser {
+            get {
+                object obj = ResourceManager.GetObject("eraser", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap iconmonstr_cursor_16_32 {
             get {
                 object obj = ResourceManager.GetObject("iconmonstr-cursor-16-32", resourceCulture);
@@ -110,8 +120,6 @@ namespace XferSuite.Properties {
         ///
         ///
         ///
-        ///Plot Library from OxyPlot
-        ///
         ///The MIT License (MIT)
         ///
         ///Copyright (c) 2014 OxyPlot contributors
@@ -120,11 +128,21 @@ namespace XferSuite.Properties {
         ///copy of this software and associated documentation files (the
         ///&quot;Software&quot;), to deal in the Software without restriction, including
         ///without limitation the rights to use, copy, modify, merge, publish,
-        ///distribute, sub [rest of string was truncated]&quot;;.
+        ///distribute, sublicense, and/or sell copies o [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LicenseInfo {
             get {
                 return ResourceManager.GetString("LicenseInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap magic_select {
+            get {
+                object obj = ResourceManager.GetObject("magic_select", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

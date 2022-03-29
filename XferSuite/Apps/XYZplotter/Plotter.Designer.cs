@@ -561,7 +561,7 @@
             this.checkBoxEraseData.AccessibleDescription = resources.GetString("checkBoxEraseData.AccessibleDescription");
             this.checkBoxEraseData.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxEraseData.AutoSize = true;
-            this.checkBoxEraseData.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxEraseData.BackgroundImage")));
+            this.checkBoxEraseData.BackgroundImage = global::XferSuite.Properties.Resources.eraser;
             this.checkBoxEraseData.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.checkBoxEraseData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.checkBoxEraseData.FlatAppearance.BorderSize = 0;

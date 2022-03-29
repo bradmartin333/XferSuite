@@ -11,6 +11,7 @@ namespace XferSuite.Apps.XYZplotter
         public double[] X { get; set; }
         public double[] Y { get; set; }
         public double[] Z { get; set; }
+        public Zed.Position SelectedPoint { get; set; } = null;
 
         public PlotData(Scan scan, Zed.Axes xAxis, Zed.Axes yAxis, Zed.Axes zAxis, bool compare = true)
         {
@@ -20,6 +21,12 @@ namespace XferSuite.Apps.XYZplotter
             Y = Zed.getAxis(data, (int)yAxis, FlipY);
             Z = Zed.getAxis(data, (int)zAxis, FlipZ);
             if (compare) CompareBounds();
+            SelectedPoint = scan.SelectedIdx == -1 ? null : new Zed.Position(
+                data[scan.SelectedIdx].Time,
+                xAxis == Zed.Axes.None ? 0 : X[scan.SelectedIdx],
+                yAxis == Zed.Axes.None ? 0 : Y[scan.SelectedIdx],
+                zAxis == Zed.Axes.None ? 0 : Z[scan.SelectedIdx],
+                0, 0);
         }
 
         private Zed.Position[] ApplyFilters(Zed.Position[] data)
