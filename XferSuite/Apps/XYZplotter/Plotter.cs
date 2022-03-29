@@ -278,6 +278,20 @@ namespace XferSuite
             MakePlots();
         }
 
+        private void toolStripButtonViewSpecial_Click(object sender, EventArgs e)
+        {
+            comboX.SelectedIndex = (int)Zed.Axes.X;
+            comboY.SelectedIndex = (int)Zed.Axes.H;
+            comboZ.SelectedIndex = (int)Zed.Axes.None;
+        }
+
+        private void toolStripButtonViewStandard_Click(object sender, EventArgs e)
+        {
+            comboX.SelectedIndex = (int)Zed.Axes.X;
+            comboY.SelectedIndex = (int)Zed.Axes.Y;
+            comboZ.SelectedIndex = (int)Zed.Axes.H;
+        }
+
         private void MakePlots()
         {
             if (olv.SelectedIndices.Count <= 4)

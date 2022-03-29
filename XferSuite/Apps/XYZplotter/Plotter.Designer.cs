@@ -59,6 +59,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel8 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabelRangeX = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButtonViewSpecial = new System.Windows.Forms.ToolStripButton();
             this.toolStripY = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.comboY = new System.Windows.Forms.ToolStripComboBox();
@@ -77,6 +78,7 @@
             this.buttonExportSelected = new System.Windows.Forms.Button();
             this.checkBoxEraseData = new System.Windows.Forms.CheckBox();
             this.btnRevert = new System.Windows.Forms.Button();
+            this.toolStripButtonViewStandard = new System.Windows.Forms.ToolStripButton();
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -360,7 +362,8 @@
             this.toolStripButtonFlipX,
             this.toolStripSeparator3,
             this.toolStripLabel8,
-            this.toolStripLabelRangeX});
+            this.toolStripLabelRangeX,
+            this.toolStripButtonViewSpecial});
             this.toolStripX.Location = new System.Drawing.Point(438, 0);
             this.toolStripX.Name = "toolStripX";
             this.toolStripX.Size = new System.Drawing.Size(793, 25);
@@ -407,6 +410,17 @@
             this.toolStripLabelRangeX.Text = "N/A";
             this.toolStripLabelRangeX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // toolStripButtonViewSpecial
+            // 
+            this.toolStripButtonViewSpecial.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripButtonViewSpecial.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonViewSpecial.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonViewSpecial.Image")));
+            this.toolStripButtonViewSpecial.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonViewSpecial.Name = "toolStripButtonViewSpecial";
+            this.toolStripButtonViewSpecial.Size = new System.Drawing.Size(76, 22);
+            this.toolStripButtonViewSpecial.Text = "View Special";
+            this.toolStripButtonViewSpecial.Click += new System.EventHandler(this.toolStripButtonViewSpecial_Click);
+            // 
             // toolStripY
             // 
             this.tlp.SetColumnSpan(this.toolStripY, 2);
@@ -416,7 +430,8 @@
             this.toolStripButtonFlipY,
             this.toolStripSeparator1,
             this.toolStripLabel12,
-            this.toolStripLabelRangeY});
+            this.toolStripLabelRangeY,
+            this.toolStripButtonViewStandard});
             this.toolStripY.Location = new System.Drawing.Point(438, 29);
             this.toolStripY.Name = "toolStripY";
             this.toolStripY.Size = new System.Drawing.Size(793, 25);
@@ -588,6 +603,17 @@
             this.btnRevert.UseVisualStyleBackColor = true;
             this.btnRevert.Click += new System.EventHandler(this.BtnRevert_Click);
             // 
+            // toolStripButtonViewStandard
+            // 
+            this.toolStripButtonViewStandard.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripButtonViewStandard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonViewStandard.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonViewStandard.Image")));
+            this.toolStripButtonViewStandard.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonViewStandard.Name = "toolStripButtonViewStandard";
+            this.toolStripButtonViewStandard.Size = new System.Drawing.Size(86, 22);
+            this.toolStripButtonViewStandard.Text = "View Standard";
+            this.toolStripButtonViewStandard.Click += new System.EventHandler(this.toolStripButtonViewStandard_Click);
+            // 
             // Plotter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -660,5 +686,7 @@
         private System.Windows.Forms.Button btnRevert;
         private System.Windows.Forms.CheckBox checkBoxEqualize;
         private System.Windows.Forms.Button buttonReloadFile;
+        private System.Windows.Forms.ToolStripButton toolStripButtonViewSpecial;
+        private System.Windows.Forms.ToolStripButton toolStripButtonViewStandard;
     }
 }
