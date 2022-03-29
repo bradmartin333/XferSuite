@@ -552,6 +552,7 @@ namespace XferSuite
 
         private void ConfigurePlot()
         {
+            if (Plottables.Count == 0) return;
             PlotView plot = InitPlotView();
             PlotModel plotModel = InitPlotModel();
             (ScatterSeries passScatter,  ScatterSeries failScatter) = InitScatterSeries();
