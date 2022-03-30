@@ -4,6 +4,7 @@ namespace XferSuite
 {
     public partial class PromptForInput : Form
     {
+        private readonly bool TextEntry;
         public Control Control { get; set; }
 
         /// <summary>
@@ -20,13 +21,26 @@ namespace XferSuite
             InitializeComponent();
             Text = title;
             label.Text = prompt;
-            if (textEntry)
+            TextEntry = textEntry;
+            if (TextEntry)
                 Control = new TextBox() { TextAlign = HorizontalAlignment.Center };
             else
                 Control = new NumericUpDown() { TextAlign = HorizontalAlignment.Center, Maximum = max, DecimalPlaces = 3 };
             Control.Dock = DockStyle.Fill;
             Control.KeyDown += Control_KeyDown;
+            Shown += PromptForInput_Shown;
             tableLayoutPanel.Controls.Add(Control, 1, 2);
+        }
+
+        private void PromptForInput_Shown(object sender, System.EventArgs e)
+        {
+            if (TextEntry)
+                ((TextBox)Control).Focus();
+            else
+            {
+                ((NumericUpDown)Control).Select();
+                ((NumericUpDown)Control).Select(0, Control.Text.Length);
+            }
         }
 
         private void Control_KeyDown(object sender, KeyEventArgs e)
