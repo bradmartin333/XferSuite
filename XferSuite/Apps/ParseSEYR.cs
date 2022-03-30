@@ -302,6 +302,8 @@ namespace XferSuite
                         var result = input.ShowDialog();
                         if (result == DialogResult.OK)
                             distX = (double)((NumericUpDown)input.Control).Value;
+                        else
+                            return;
                     }
                     using (PromptForInput input = new PromptForInput(
                         prompt: "Enter Y grid pitch in millimeters",
@@ -312,6 +314,8 @@ namespace XferSuite
                         var result = input.ShowDialog();
                         if (result == DialogResult.OK)
                             distY = (double)((NumericUpDown)input.Control).Value;
+                        else
+                            return;
                     }
                 }
             }
