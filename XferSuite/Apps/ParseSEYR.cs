@@ -134,6 +134,7 @@ namespace XferSuite
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
+        private readonly BackgroundWorker ParseWorker = new BackgroundWorker();
 
         public ParseSEYR(string path)
         {
@@ -141,6 +142,10 @@ namespace XferSuite
             Path = new FileInfo(path);
             Text = Path.Name.Replace(Path.Extension, string.Empty);
             Data = Report.data(Path.FullName);
+            ParseWorker.WorkerReportsProgress = true;
+            ParseWorker.DoWork += ParseWorker_DoWork;
+            ParseWorker.ProgressChanged += ParseWorker_ProgressChanged;
+            ParseWorker.RunWorkerCompleted += ParseWorker_RunWorkerCompleted;
             ResetFeaturesAndUI();
 
             SimpleDragSource bufferSource = (SimpleDragSource)olvBuffer.DragSource;
@@ -269,6 +274,23 @@ namespace XferSuite
 
         #region Parse Methods
 
+        private void ParseWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Parse();
+        }
+
+        private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ConfigurePlot();
+            toolStripProgressBar.Value = 0;
+        }
+
+        private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            rtb.Text += e.UserState.ToString();
+            toolStripProgressBar.Value = e.ProgressPercentage;
+        }
+
         private void Parse(bool noPitches = false)
         {
             if (Features.Where(x => x.Bucket == Report.Bucket.Buffer).Count() == Features.Length)
@@ -278,7 +300,7 @@ namespace XferSuite
             }
 
             // Reset
-            rtb.Text = "(RR, RC, R, C)\tYield\n";
+            ParseWorker.ReportProgress(0, "(RR, RC, R, C)\tYield\n");
             Plottables = new List<Plottable>();
             double distX = 0.0;
             double distY = 0.0;
@@ -320,26 +342,16 @@ namespace XferSuite
                 }
             }
 
-            using (new HourGlass(UsePlexiglass: false))
-            {
-                // Filter out buffer data
-                string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
-                var filteredData = Report.removeBuffers(Data, bufferStrings);
-                string[] regions = Report.getRegions(filteredData);
+            //using (new HourGlass(UsePlexiglass: false))
+            string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
+            var filteredData = Report.removeBuffers(Data, bufferStrings);
+            string[] regions = Report.getRegions(filteredData);
 
-                if (Features.Where(x => x.Bucket == Report.Bucket.Required).Count() == 1 &&
-                    Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() == 0)
-                    ParseSingle(distX, distY, filteredData, regions);
-                else
-                    ParseMulti(distX, distY, filteredData, regions);
-
-                if (Plottables.Count > 0)
-                {
-                    rtb.Text += $"\nTotal\t{Plottables.Where(p => p.Pass).Count() / (double)(Plottables.Count()):P}";
-                    ConfigurePlot();
-                    toolStripButtonSpecificRegion.Enabled = true;
-                }
-            }
+            if (Features.Where(x => x.Bucket == Report.Bucket.Required).Count() == 1 &&
+                Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() == 0)
+                ParseSingle(distX, distY, filteredData, regions);
+            else
+                ParseMulti(distX, distY, filteredData, regions);
         }
 
         private void ParseSingle(double distX, double distY, Report.Entry[] filteredData, string[] regions)
@@ -371,7 +383,7 @@ namespace XferSuite
                         failNum++;
                 }
 
-                rtb.Text += $"{regions[l]}\t{passNum / (passNum + failNum):P}\n";
+                ParseWorker.ReportProgress((int)((l + 1) / (double)regions.Length * 100), $"{regions[l]}\t{passNum / (passNum + failNum):P}\n");
             };
         }
 
@@ -419,7 +431,7 @@ namespace XferSuite
                     }
                 }
 
-                rtb.Text += $"{regions[l]}\t{passNum / (passNum + failNum):P}\n";
+                ParseWorker.ReportProgress((int)((l + 1) / (double)regions.Length * 100), $"{regions[l]}\t{passNum / (passNum + failNum):P}\n");
             };
         }
 
@@ -574,6 +586,7 @@ namespace XferSuite
             Form form = InitLargeForm(Text);
             form.Controls.Add(plot);
             form.Show();
+            form.BringToFront();
         }
 
         private void ConfigureSpecificRegionPlot(string region)
@@ -625,12 +638,12 @@ namespace XferSuite
 
         private void ToolStripButtonParse_Click(object sender, EventArgs e)
         {
-            Parse();
-        }
-
-        private void ToolStripButtonParseNoPicthes_Click(object sender, EventArgs e)
-        {
-            Parse(noPitches: true);
+            if (!ParseWorker.IsBusy)
+            {
+                toolStripProgressBar.Value = 0;
+                rtb.Text = "";
+                ParseWorker.RunWorkerAsync();
+            }    
         }
 
         private void ToolStripButtonCopyText_Click(object sender, EventArgs e)
