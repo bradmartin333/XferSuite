@@ -346,7 +346,6 @@ namespace XferSuite
                 }
             }
 
-            //using (new HourGlass(UsePlexiglass: false))
             string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
             var filteredData = Report.removeBuffers(Data, bufferStrings);
             string[] regions = Report.getRegions(filteredData);
@@ -683,10 +682,19 @@ namespace XferSuite
             flowLayoutPanelCriteria.Enabled = false;
             olvBuffer.Objects = null;
 
-            foreach (Report.Criteria feature in Features)
+            Report.Criteria[] criteria = Features.Where(x => !x.Name.Contains("pat")).ToArray();
+            if (criteria.Length == 1)
             {
-                feature.Requirements = originalFeatures.First(x => x.Name == feature.Name).Requirements;
-                FindHome(feature);
+                criteria[0].Bucket = Report.Bucket.Required;
+                olvRequire.AddObject(criteria[0]);
+            }
+            else
+            {
+                foreach (Report.Criteria feature in Features)
+                {
+                    feature.Requirements = originalFeatures.First(x => x.Name == feature.Name).Requirements;
+                    FindHome(feature);
+                }
             }
 
             olvNeedOne.RebuildAll(true);
