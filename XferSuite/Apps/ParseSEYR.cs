@@ -283,6 +283,10 @@ namespace XferSuite
         {
             ConfigurePlot();
             toolStripProgressBar.Value = 0;
+            olvBuffer.Enabled = true;
+            olvRequire.Enabled = true;
+            olvNeedOne.Enabled = true;
+            flowLayoutPanelCriteria.Enabled = true;
         }
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -300,7 +304,7 @@ namespace XferSuite
             }
 
             // Reset
-            ParseWorker.ReportProgress(0, "(RR, RC, R, C)\tYield\n");
+            ParseWorker.ReportProgress(1, "(RR, RC, R, C)\tYield\n");
             Plottables = new List<Plottable>();
             double distX = 0.0;
             double distY = 0.0;
@@ -633,13 +637,18 @@ namespace XferSuite
 
         private void ToolStripButtonReset_Click(object sender, EventArgs e)
         {
-            ResetFeaturesAndUI();
+            if (!ParseWorker.IsBusy)
+                ResetFeaturesAndUI();
         }
 
         private void ToolStripButtonParse_Click(object sender, EventArgs e)
         {
             if (!ParseWorker.IsBusy)
             {
+                olvBuffer.Enabled = false;
+                olvRequire.Enabled = false;
+                olvNeedOne.Enabled = false;
+                flowLayoutPanelCriteria.Enabled = false;
                 toolStripProgressBar.Value = 0;
                 rtb.Text = "";
                 ParseWorker.RunWorkerAsync();
@@ -653,6 +662,7 @@ namespace XferSuite
 
         private void ToolStripButtonCopyWindow_Click(object sender, EventArgs e)
         {
+            if (ParseWorker.IsBusy) return;
             Bitmap bmp = new Bitmap(Width, Height);
             DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
             Clipboard.SetImage(bmp);
@@ -660,6 +670,8 @@ namespace XferSuite
 
         private void ToolStripButtonSmartSort_Click(object sender, EventArgs e)
         {
+            if (ParseWorker.IsBusy) return;
+            
             Report.Criteria[] originalFeatures = Features; // Maintain requirements
             ResetFeaturesAndUI();
 
@@ -682,6 +694,8 @@ namespace XferSuite
 
         private void ToolStripButtonSpecificRegion_Click(object sender, EventArgs e)
         {
+            if (ParseWorker.IsBusy) return;
+
             string region = string.Empty;
 
             using (PromptForInput input = new PromptForInput(
