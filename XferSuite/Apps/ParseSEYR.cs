@@ -27,7 +27,7 @@ namespace XferSuite
             set
             {
                 _FlipXAxis = value;
-                ConfigurePlot();
+                RunParseWorker();
             }
         }
 
@@ -39,7 +39,7 @@ namespace XferSuite
             set
             {
                 _FlipYAxis = value;
-                ConfigurePlot();
+                RunParseWorker();
             }
         }
 
@@ -274,6 +274,18 @@ namespace XferSuite
 
         #region Parse Methods
 
+        private void RunParseWorker()
+        {
+            if (ParseWorker.IsBusy) return;
+            olvBuffer.Enabled = false;
+            olvRequire.Enabled = false;
+            olvNeedOne.Enabled = false;
+            flowLayoutPanelCriteria.Enabled = false;
+            toolStripProgressBar.Value = 0;
+            rtb.Text = "";
+            ParseWorker.RunWorkerAsync();
+        }
+
         private void ParseWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             Parse();
@@ -368,8 +380,8 @@ namespace XferSuite
                 foreach (Report.Entry entry in regionData)
                 {
                     bool pass = CheckCriteria(new Report.Entry[] {entry}, new List<string>());
-                    double thisX = entry.X + (entry.XCopy * distX);
-                    double thisY = entry.Y + (entry.YCopy * distY);
+                    double thisX = entry.X + entry.XCopy * distX * (_FlipXAxis ? -1 : 1);
+                    double thisY = entry.Y + entry.YCopy * distY * (_FlipYAxis ? 1 : -1);
 
                     Plottables.Add(new Plottable
                     {
@@ -414,8 +426,8 @@ namespace XferSuite
                             var thisCell = Report.getCell(thisImg, i, j);
                             if (thisCell.Length == 0) continue;
                             bool pass = CheckCriteria(thisCell, needOneParents);
-                            double thisX = thisCell[0].X + (i * distX);
-                            double thisY = thisCell[0].Y + (j * distY);
+                            double thisX = thisCell[0].X + i * distX * (_FlipXAxis ? -1 : 1);
+                            double thisY = thisCell[0].Y + j * distY * (_FlipYAxis ? 1 : -1);
 
                             Plottables.Add(new Plottable
                             {
@@ -636,22 +648,13 @@ namespace XferSuite
 
         private void ToolStripButtonReset_Click(object sender, EventArgs e)
         {
-            if (!ParseWorker.IsBusy)
-                ResetFeaturesAndUI();
+            if (ParseWorker.IsBusy) return;
+            ResetFeaturesAndUI();
         }
 
         private void ToolStripButtonParse_Click(object sender, EventArgs e)
         {
-            if (!ParseWorker.IsBusy)
-            {
-                olvBuffer.Enabled = false;
-                olvRequire.Enabled = false;
-                olvNeedOne.Enabled = false;
-                flowLayoutPanelCriteria.Enabled = false;
-                toolStripProgressBar.Value = 0;
-                rtb.Text = "";
-                ParseWorker.RunWorkerAsync();
-            }    
+            RunParseWorker();  
         }
 
         private void ToolStripButtonCopyText_Click(object sender, EventArgs e)
