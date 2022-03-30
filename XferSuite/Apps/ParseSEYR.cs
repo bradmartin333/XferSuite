@@ -12,6 +12,7 @@ using System.Drawing;
 using System.ComponentModel;
 using Microsoft.FSharp.Collections;
 using System.IO;
+using System.Text;
 
 namespace XferSuite
 {
@@ -179,6 +180,7 @@ namespace XferSuite
 
             rtb.Text = "";
             toolStripButtonSpecificRegion.Enabled = false;
+            toolStripButtonCopyParsedCSV.Enabled = false;
 
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
@@ -299,6 +301,8 @@ namespace XferSuite
             olvRequire.Enabled = true;
             olvNeedOne.Enabled = true;
             flowLayoutPanelCriteria.Enabled = true;
+            toolStripButtonSpecificRegion.Enabled = true;
+            toolStripButtonCopyParsedCSV.Enabled = true;
         }
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -701,6 +705,19 @@ namespace XferSuite
             }
 
             olvNeedOne.RebuildAll(true);
+        }
+
+        private void toolStripButtonCopyParsedCSV_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("X\tY\tRR\tRC\tR\tC\tState\n");
+            foreach (Plottable p in Plottables)
+            {
+                string regionCSV = p.Region.Substring(1, p.Region.Length - 2).Replace(", ", "\t");
+                sb.Append($"{p.X}\t{p.Y}\t{regionCSV}\t{(p.Pass ? "Pass" : "Fail")}\n");
+            }
+            Clipboard.SetText(sb.ToString());
+            MessageBox.Show("Data copied to clipboard", "XferSuite");
         }
 
         private void ToolStripButtonSpecificRegion_Click(object sender, EventArgs e)

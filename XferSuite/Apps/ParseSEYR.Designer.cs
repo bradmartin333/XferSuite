@@ -55,6 +55,7 @@ namespace XferSuite
             this.toolStripButtonCopyWindow = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSpecificRegion = new System.Windows.Forms.ToolStripButton();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripButtonCopyParsedCSV = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -327,6 +328,7 @@ namespace XferSuite
             this.toolStripButtonSmartSort,
             this.toolStripButtonReset,
             this.toolStripButtonCopyWindow,
+            this.toolStripButtonCopyParsedCSV,
             this.toolStripButtonSpecificRegion,
             this.toolStripProgressBar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -360,7 +362,18 @@ namespace XferSuite
             // 
             this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(230, 24);
+            this.toolStripProgressBar.Size = new System.Drawing.Size(200, 24);
+            // 
+            // toolStripButtonCopyParsedCSV
+            // 
+            this.toolStripButtonCopyParsedCSV.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCopyParsedCSV.Enabled = false;
+            this.toolStripButtonCopyParsedCSV.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyParsedCSV.Image")));
+            this.toolStripButtonCopyParsedCSV.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCopyParsedCSV.Name = "toolStripButtonCopyParsedCSV";
+            this.toolStripButtonCopyParsedCSV.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonCopyParsedCSV.Text = "Copy Parsed Data as CSV";
+            this.toolStripButtonCopyParsedCSV.Click += new System.EventHandler(this.toolStripButtonCopyParsedCSV_Click);
             // 
             // ParseSEYR
             // 
@@ -413,5 +426,6 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyWindow;
         private System.Windows.Forms.ToolStripButton toolStripButtonSpecificRegion;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCopyParsedCSV;
     }
 }
