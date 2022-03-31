@@ -636,14 +636,26 @@ namespace XferSuite
 
             Rectangle bounds = Screen.FromControl(this).Bounds;
             int size = (int)(Math.Min(bounds.Width, bounds.Height) * 0.95);
-            return new Form()
+            Form form = new Form()
             {
                 Width = (int)(size * xScale),
                 Height = (int)(size * yScale),
                 FormBorderStyle = FormBorderStyle.SizableToolWindow,
                 StartPosition = FormStartPosition.CenterScreen,
-                Text = text
+                Text = text,
+                Tag = (xScale/yScale).ToString()
             };
+            form.Resize += Form_Resize;
+            return form;
+        }
+
+        private void Form_Resize(object sender, EventArgs e)
+        {
+            if (ModifierKeys.HasFlag(Keys.Control) || ModifierKeys.HasFlag(Keys.Alt) || ModifierKeys.HasFlag(Keys.Shift))
+            {
+                Form form = (Form)sender;
+                form.Size = new Size((int)(form.Height * double.Parse(form.Tag.ToString())), form.Height);
+            }
         }
 
         #endregion
