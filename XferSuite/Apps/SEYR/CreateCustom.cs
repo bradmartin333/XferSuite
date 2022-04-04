@@ -14,6 +14,7 @@ namespace XferSuite
         {
             InitializeComponent();
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
+            comboBoxType.SelectedIndex = 0;
         }
 
         private void BtnConfirm_Click(object sender, EventArgs e)
@@ -31,19 +32,15 @@ namespace XferSuite
 
         #region File Management
 
-        private List<string[]> ParseDataGrid()
+        private List<(string, Report.State)> ParseDataGrid()
         {
-            List<string[]> filters = new List<string[]>();
+            List<(string, Report.State)> filters = new List<(string, Report.State)>();
             try
             {
                 foreach (DataGridViewRow row in dataGridView.Rows)
-                {
-                    List<string> cols = new List<string>();
-                    foreach (DataGridViewCell cell in row.Cells)
-                        if (cell.Value != null) cols.Add(cell.Value.ToString());
-                    // Make sure all cols are valid
-                    if (cols.Count == 2) filters.Add(cols.ToArray());
-                }
+                    for (int i = 0; i < 2; i++)
+                        if (row.Cells[0].Value != null && row.Cells[1].Value != null)
+                            filters.Add(((string, Report.State))(row.Cells[0].Value.ToString(), Enum.Parse(typeof(Report.State), row.Cells[1].Value.ToString())));
             }
             catch (Exception)
             {
@@ -54,10 +51,10 @@ namespace XferSuite
 
         private string GetDataGridAsString()
         {
-            List<string[]> filters = ParseDataGrid();
+            List<(string, Report.State)> filters = ParseDataGrid();
             string output = string.Empty;
-            foreach (string[] filter in filters)
-                output += string.Join("\t", filter) + '\n';
+            foreach ((string, Report.State) filter in filters)
+                output += $"{filter.Item1}\t{filter.Item2}\n";
             return output;
         }
 

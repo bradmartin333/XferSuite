@@ -279,6 +279,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(94, 20);
             this.txtName.TabIndex = 14;
+            this.txtName.Text = "Custom";
             // 
             // CreateCustom
             // 

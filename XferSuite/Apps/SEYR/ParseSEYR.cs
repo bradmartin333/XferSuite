@@ -74,7 +74,6 @@ namespace XferSuite
                         X = p.Y,
                         Y = p.X,
                         Pass = p.Pass,
-                        Color = p.Color,
                     });
                 }
                 Plottables = PlottablesRotated;
@@ -118,7 +117,6 @@ namespace XferSuite
             public double X;
             public double Y;
             public bool Pass;
-            public OxyColor Color;
 
             public override string ToString()
             {
@@ -365,11 +363,12 @@ namespace XferSuite
             }
 
             string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
-            var filteredData = Report.removeBuffers(Data, bufferStrings);
+            var filteredData = CustomFeatures.Count == 0 ? Report.removeBuffers(Data, bufferStrings) : Data;
             string[] regions = Report.getRegions(filteredData);
 
             if (Features.Where(x => x.Bucket == Report.Bucket.Required).Count() == 1 &&
-                Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() == 0)
+                Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() == 0 &&
+                CustomFeatures.Count == 0)
                 ParseSingle(distX, distY, filteredData, regions);
             else
                 ParseMulti(distX, distY, filteredData, regions);
@@ -434,6 +433,24 @@ namespace XferSuite
                             bool pass = CheckCriteria(thisCell, needOneParents);
                             double thisX = thisCell[0].X + i * distX * (_FlipXAxis ? -1 : 1);
                             double thisY = thisCell[0].Y + j * distY * (_FlipYAxis ? 1 : -1);
+
+                            foreach (CustomFeature custom in CustomFeatures)
+                            {
+                                bool matchesFilter = false;      
+                                foreach ((string, Report.State) filter in custom.Filters)
+                                    matchesFilter = thisCell.Where(x => x.Name == filter.Item1).First().State == filter.Item2;
+                                if (matchesFilter)
+                                {
+                                    Plottables.Add(new Plottable
+                                    {
+                                        Region = regions[l],
+                                        DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}\nCustom: {custom.Name}",
+                                        X = thisX + custom.Offset.X,
+                                        Y = thisY + custom.Offset.Y,
+                                        Pass = custom.Type == Report.State.Pass,
+                                    });
+                                }
+                            }
 
                             Plottables.Add(new Plottable
                             {
