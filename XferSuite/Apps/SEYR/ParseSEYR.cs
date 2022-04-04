@@ -73,7 +73,8 @@ namespace XferSuite
                         Region = p.Region,
                         X = p.Y,
                         Y = p.X,
-                        Pass = p.Pass
+                        Pass = p.Pass,
+                        Color = p.Color,
                     });
                 }
                 Plottables = PlottablesRotated;
@@ -117,6 +118,7 @@ namespace XferSuite
             public double X;
             public double Y;
             public bool Pass;
+            public OxyColor Color;
 
             public override string ToString()
             {
@@ -132,6 +134,7 @@ namespace XferSuite
 
         private List<Plottable> Plottables = new List<Plottable>();
         private ScatterSeries PassScatter, FailScatter;
+        private List<CustomFeature> CustomFeatures = new List<CustomFeature>();
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
@@ -172,7 +175,7 @@ namespace XferSuite
             Show();
         }
 
-        private void ResetFeaturesAndUI()
+        private void ResetFeaturesAndUI(bool preserveCustom = false)
         {
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
@@ -184,8 +187,10 @@ namespace XferSuite
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
-            olvCustom.Objects = null;
+            if (!preserveCustom) olvCustom.Objects = null;
             ObjectHasBeenDropped = false;
+
+            toolStripButtonAddCustom.Enabled = Features.Length > 1;
         }
 
         #endregion
@@ -279,9 +284,8 @@ namespace XferSuite
         private void RunParseWorker()
         {
             if (ParseWorker.IsBusy) return;
-            olvBuffer.Enabled = false;
-            olvRequire.Enabled = false;
-            olvNeedOne.Enabled = false;
+            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
+                olv.Enabled = false;
             flowLayoutPanelCriteria.Enabled = false;
             toolStripProgressBar.Value = 0;
             ParseWorker.RunWorkerAsync();
@@ -296,9 +300,8 @@ namespace XferSuite
         {
             ConfigurePlot();
             toolStripProgressBar.Value = 0;
-            olvBuffer.Enabled = true;
-            olvRequire.Enabled = true;
-            olvNeedOne.Enabled = true;
+            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
+                olv.Enabled = true;
             flowLayoutPanelCriteria.Enabled = true;
             toolStripButtonSpecificRegion.Enabled = true;
             toolStripButtonCopyParsedCSV.Enabled = true;
@@ -306,13 +309,13 @@ namespace XferSuite
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            //rtb.Text += e.UserState.ToString();
+            //rtb.Text += e.UserState.ToString(); // TODO ADD TO PLOT
             toolStripProgressBar.Value = e.ProgressPercentage;
         }
 
         private void Parse(bool noPitches = false)
         {
-            if (Features.Where(x => x.Bucket == Report.Bucket.Buffer).Count() == Features.Length)
+            if (Features.Where(x => x.Bucket == Report.Bucket.Buffer).Count() == Features.Length && CustomFeatures.Count == 0)
             {
                 MessageBox.Show("All features are buffers. Parsing aborted.");
                 return;
@@ -392,7 +395,7 @@ namespace XferSuite
                         DetailString = $"\nCopy ({entry.XCopy}, {entry.YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}",
                         X = thisX,
                         Y = thisY,
-                        Pass = pass
+                        Pass = pass,
                     });
 
                     if (pass)
@@ -438,7 +441,7 @@ namespace XferSuite
                                 DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}",
                                 X = thisX,
                                 Y = thisY,
-                                Pass = pass
+                                Pass = pass,
                             });
 
                             if (pass)
@@ -677,7 +680,7 @@ namespace XferSuite
             if (ParseWorker.IsBusy) return;
             
             Report.Feature[] originalFeatures = Features; // Maintain requirements
-            ResetFeaturesAndUI();
+            ResetFeaturesAndUI(preserveCustom: true);
 
             // Alphabetical order looks better in the NeedOne bucket
             var sortList = Features.ToList();
@@ -711,7 +714,10 @@ namespace XferSuite
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
-                    olvCustom.AddObject(cc.CustomPlottable);
+                {
+                    olvCustom.AddObject(cc.CustomFeature);
+                    CustomFeatures.Add(cc.CustomFeature);
+                }
                 else
                     return;
             }

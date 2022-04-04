@@ -147,7 +147,7 @@
     <Compile Include="Apps\SEYR\CreateCustom.Designer.cs">
       <DependentUpon>CreateCustom.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\SEYR\CustomPlottable.cs" />
+    <Compile Include="Apps\SEYR\CustomFeature.cs" />
     <Compile Include="Apps\SEYR\ParseSEYR.cs">
       <SubType>Form</SubType>
     </Compile>

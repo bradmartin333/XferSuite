@@ -10,7 +10,7 @@ namespace XferSuite
 {
     public partial class CreateCustom : Form
     {
-        public CustomPlottable CustomPlottable { get; set; }
+        public CustomFeature CustomFeature { get; set; }
 
         public CreateCustom(Report.Feature[] features)
         {
@@ -21,7 +21,7 @@ namespace XferSuite
 
         private void BtnConfirm_Click(object sender, EventArgs e)
         {
-            CustomPlottable = new CustomPlottable(this, ParseDataGrid());
+            CustomFeature = new CustomFeature(this, ParseDataGrid());
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -38,7 +38,8 @@ namespace XferSuite
             {
                 AllowFullOpen = true,
                 ShowHelp = true,
-                Color = lblColor.BackColor
+                Color = lblColor.BackColor,
+                CustomColors = new int[] { Color.LawnGreen.ToArgb(), Color.Firebrick.ToArgb() },
             };
             if (MyDialog.ShowDialog() == DialogResult.OK)
                 lblColor.BackColor = MyDialog.Color;
@@ -62,7 +63,7 @@ namespace XferSuite
             }
             catch (Exception)
             {
-                MessageBox.Show("Error in data filter entries", "Create Custom SEYR Plottable");
+                MessageBox.Show("Error in data filter entries", "Create Custom SEYR Feature");
             }
             return filters;
         }
@@ -83,7 +84,7 @@ namespace XferSuite
 
         private void BtnSaveAs_Click(object sender, EventArgs e)
         {
-            string pathBuffer = MainMenu.SaveFile("Save Custom SEYR Plottable", "Text File (*.txt) | *.txt");
+            string pathBuffer = MainMenu.SaveFile("Save Custom SEYR Feature", "Text File (*.txt) | *.txt");
             if (pathBuffer == null)
                 return;
             else
@@ -92,7 +93,7 @@ namespace XferSuite
 
         private void BtnLoad_Click(object sender, EventArgs e)
         {
-            string pathBuffer = MainMenu.OpenFile("Open Custom SEYR Plottable", "Text File (*.txt) | *.txt");
+            string pathBuffer = MainMenu.OpenFile("Open Custom SEYR Feature", "Text File (*.txt) | *.txt");
             if (pathBuffer == null)
                 return;
             else
@@ -122,7 +123,7 @@ namespace XferSuite
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Corrupt save:\n\n{ex}", "Create Custom SEYR Plottable");
+                MessageBox.Show($"Corrupt save:\n\n{ex}", "Create Custom SEYR Feature");
             }
         }
 

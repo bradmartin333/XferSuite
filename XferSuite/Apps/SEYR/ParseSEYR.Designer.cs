@@ -32,6 +32,8 @@ namespace XferSuite
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParseSEYR));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.olvCustom = new BrightIdeasSoftware.ObjectListView();
+            this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvNeedOne = new BrightIdeasSoftware.TreeListView();
             this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvRequire = new BrightIdeasSoftware.ObjectListView();
@@ -55,15 +57,13 @@ namespace XferSuite
             this.toolStripButtonCopyParsedCSV = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSpecificRegion = new System.Windows.Forms.ToolStripButton();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.olvCustom = new BrightIdeasSoftware.ObjectListView();
-            this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tableLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvBuffer)).BeginInit();
             this.flowLayoutPanelCriteria.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel
@@ -86,8 +86,33 @@ namespace XferSuite
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.Size = new System.Drawing.Size(574, 227);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(574, 270);
             this.tableLayoutPanel.TabIndex = 0;
+            // 
+            // olvCustom
+            // 
+            this.olvCustom.AllColumns.Add(this.olvColumn4);
+            this.olvCustom.CellEditUseWholeCell = false;
+            this.olvCustom.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumn4});
+            this.olvCustom.Cursor = System.Windows.Forms.Cursors.Default;
+            this.olvCustom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.olvCustom.HideSelection = false;
+            this.olvCustom.IsSimpleDragSource = true;
+            this.olvCustom.Location = new System.Drawing.Point(459, 33);
+            this.olvCustom.Name = "olvCustom";
+            this.olvCustom.ShowGroups = false;
+            this.olvCustom.Size = new System.Drawing.Size(112, 234);
+            this.olvCustom.TabIndex = 5;
+            this.olvCustom.Tag = "0";
+            this.olvCustom.UseCompatibleStateImageBehavior = false;
+            this.olvCustom.View = System.Windows.Forms.View.Details;
+            // 
+            // olvColumn4
+            // 
+            this.olvColumn4.AspectName = "Name";
+            this.olvColumn4.Text = "Custom";
+            this.olvColumn4.Width = 90;
             // 
             // olvNeedOne
             // 
@@ -102,7 +127,7 @@ namespace XferSuite
             this.olvNeedOne.Location = new System.Drawing.Point(345, 33);
             this.olvNeedOne.Name = "olvNeedOne";
             this.olvNeedOne.ShowGroups = false;
-            this.olvNeedOne.Size = new System.Drawing.Size(108, 191);
+            this.olvNeedOne.Size = new System.Drawing.Size(108, 234);
             this.olvNeedOne.TabIndex = 2;
             this.olvNeedOne.Tag = "2";
             this.olvNeedOne.UseCompatibleStateImageBehavior = false;
@@ -128,7 +153,7 @@ namespace XferSuite
             this.olvRequire.Location = new System.Drawing.Point(231, 33);
             this.olvRequire.Name = "olvRequire";
             this.olvRequire.ShowGroups = false;
-            this.olvRequire.Size = new System.Drawing.Size(108, 191);
+            this.olvRequire.Size = new System.Drawing.Size(108, 234);
             this.olvRequire.TabIndex = 1;
             this.olvRequire.Tag = "1";
             this.olvRequire.UseCompatibleStateImageBehavior = false;
@@ -153,7 +178,7 @@ namespace XferSuite
             this.olvBuffer.Location = new System.Drawing.Point(117, 33);
             this.olvBuffer.Name = "olvBuffer";
             this.olvBuffer.ShowGroups = false;
-            this.olvBuffer.Size = new System.Drawing.Size(108, 191);
+            this.olvBuffer.Size = new System.Drawing.Size(108, 234);
             this.olvBuffer.TabIndex = 0;
             this.olvBuffer.Tag = "0";
             this.olvBuffer.UseCompatibleStateImageBehavior = false;
@@ -179,7 +204,7 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.Controls.Add(this.btnViewData);
             this.flowLayoutPanelCriteria.Enabled = false;
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(3, 41);
+            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(3, 62);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
             this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(108, 175);
             this.flowLayoutPanelCriteria.TabIndex = 4;
@@ -296,6 +321,7 @@ namespace XferSuite
             // toolStripButtonAddCustom
             // 
             this.toolStripButtonAddCustom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAddCustom.Enabled = false;
             this.toolStripButtonAddCustom.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddCustom.Image")));
             this.toolStripButtonAddCustom.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAddCustom.Name = "toolStripButtonAddCustom";
@@ -368,36 +394,11 @@ namespace XferSuite
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(380, 24);
             // 
-            // olvCustom
-            // 
-            this.olvCustom.AllColumns.Add(this.olvColumn4);
-            this.olvCustom.CellEditUseWholeCell = false;
-            this.olvCustom.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumn4});
-            this.olvCustom.Cursor = System.Windows.Forms.Cursors.Default;
-            this.olvCustom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.olvCustom.HideSelection = false;
-            this.olvCustom.IsSimpleDragSource = true;
-            this.olvCustom.Location = new System.Drawing.Point(459, 33);
-            this.olvCustom.Name = "olvCustom";
-            this.olvCustom.ShowGroups = false;
-            this.olvCustom.Size = new System.Drawing.Size(112, 191);
-            this.olvCustom.TabIndex = 5;
-            this.olvCustom.Tag = "0";
-            this.olvCustom.UseCompatibleStateImageBehavior = false;
-            this.olvCustom.View = System.Windows.Forms.View.Details;
-            // 
-            // olvColumn4
-            // 
-            this.olvColumn4.AspectName = "Name";
-            this.olvColumn4.Text = "Custom";
-            this.olvColumn4.Width = 90;
-            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(574, 227);
+            this.ClientSize = new System.Drawing.Size(574, 270);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -406,6 +407,7 @@ namespace XferSuite
             this.Text = "Parse SEYR";
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvBuffer)).EndInit();
@@ -413,7 +415,6 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
