@@ -184,6 +184,7 @@ namespace XferSuite
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
+            olvCustom.Objects = null;
             ObjectHasBeenDropped = false;
         }
 
@@ -706,11 +707,11 @@ namespace XferSuite
 
         private void ToolStripButtonAddCustom_Click(object sender, EventArgs e)
         {
-            using (CreateCustom cc = new CreateCustom(Data))
+            using (CreateCustom cc = new CreateCustom(Features))
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
-                    return;
+                    olvCustom.AddObject(cc.CustomPlottable);
                 else
                     return;
             }

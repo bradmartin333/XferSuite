@@ -32,8 +32,6 @@ namespace XferSuite
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParseSEYR));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.olvCustom = new BrightIdeasSoftware.TreeListView();
-            this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvNeedOne = new BrightIdeasSoftware.TreeListView();
             this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvRequire = new BrightIdeasSoftware.ObjectListView();
@@ -57,13 +55,15 @@ namespace XferSuite
             this.toolStripButtonCopyParsedCSV = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSpecificRegion = new System.Windows.Forms.ToolStripButton();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.olvCustom = new BrightIdeasSoftware.ObjectListView();
+            this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tableLayoutPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvBuffer)).BeginInit();
             this.flowLayoutPanelCriteria.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel
@@ -88,32 +88,6 @@ namespace XferSuite
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.Size = new System.Drawing.Size(574, 227);
             this.tableLayoutPanel.TabIndex = 0;
-            // 
-            // olvCustom
-            // 
-            this.olvCustom.AllColumns.Add(this.olvColumn4);
-            this.olvCustom.CellEditUseWholeCell = false;
-            this.olvCustom.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumn4});
-            this.olvCustom.Cursor = System.Windows.Forms.Cursors.Default;
-            this.olvCustom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.olvCustom.HideSelection = false;
-            this.olvCustom.IsSimpleDropSink = true;
-            this.olvCustom.Location = new System.Drawing.Point(459, 33);
-            this.olvCustom.Name = "olvCustom";
-            this.olvCustom.ShowGroups = false;
-            this.olvCustom.Size = new System.Drawing.Size(112, 191);
-            this.olvCustom.TabIndex = 7;
-            this.olvCustom.Tag = "2";
-            this.olvCustom.UseCompatibleStateImageBehavior = false;
-            this.olvCustom.View = System.Windows.Forms.View.Details;
-            this.olvCustom.VirtualMode = true;
-            // 
-            // olvColumn4
-            // 
-            this.olvColumn4.AspectName = "Name";
-            this.olvColumn4.Text = "Custom";
-            this.olvColumn4.Width = 90;
             // 
             // olvNeedOne
             // 
@@ -394,6 +368,31 @@ namespace XferSuite
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(380, 24);
             // 
+            // olvCustom
+            // 
+            this.olvCustom.AllColumns.Add(this.olvColumn4);
+            this.olvCustom.CellEditUseWholeCell = false;
+            this.olvCustom.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumn4});
+            this.olvCustom.Cursor = System.Windows.Forms.Cursors.Default;
+            this.olvCustom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.olvCustom.HideSelection = false;
+            this.olvCustom.IsSimpleDragSource = true;
+            this.olvCustom.Location = new System.Drawing.Point(459, 33);
+            this.olvCustom.Name = "olvCustom";
+            this.olvCustom.ShowGroups = false;
+            this.olvCustom.Size = new System.Drawing.Size(112, 191);
+            this.olvCustom.TabIndex = 5;
+            this.olvCustom.Tag = "0";
+            this.olvCustom.UseCompatibleStateImageBehavior = false;
+            this.olvCustom.View = System.Windows.Forms.View.Details;
+            // 
+            // olvColumn4
+            // 
+            this.olvColumn4.AspectName = "Name";
+            this.olvColumn4.Text = "Custom";
+            this.olvColumn4.Width = 90;
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -407,7 +406,6 @@ namespace XferSuite
             this.Text = "Parse SEYR";
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvBuffer)).EndInit();
@@ -415,6 +413,7 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -430,8 +429,6 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonSpecificRegion;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyParsedCSV;
-        private BrightIdeasSoftware.TreeListView olvCustom;
-        private BrightIdeasSoftware.OLVColumn olvColumn4;
         private BrightIdeasSoftware.TreeListView olvNeedOne;
         private BrightIdeasSoftware.OLVColumn olvColumn3;
         private BrightIdeasSoftware.ObjectListView olvRequire;
@@ -448,5 +445,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnApplyToAll;
         private System.Windows.Forms.Button btnViewData;
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
+        private BrightIdeasSoftware.ObjectListView olvCustom;
+        private BrightIdeasSoftware.OLVColumn olvColumn4;
     }
 }

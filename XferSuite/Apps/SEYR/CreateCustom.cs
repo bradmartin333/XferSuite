@@ -1,5 +1,4 @@
 ﻿using OxyPlot;
-using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,21 +10,18 @@ namespace XferSuite
 {
     public partial class CreateCustom : Form
     {
-        public CreateCustom(Report.Entry[] data)
+        public CustomPlottable CustomPlottable { get; set; }
+
+        public CreateCustom(Report.Feature[] features)
         {
             InitializeComponent();
             comboBoxShape.DataSource = Enum.GetValues(typeof(MarkerType));
-            ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = data.Select(x => x.Name).Distinct().ToList();
-        }
-
-        private void BtnTest_Click(object sender, EventArgs e)
-        {
-            var x = ParseDataGrid();
-            ScatterSeries series = new ScatterSeries();
+            ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
         }
 
         private void BtnConfirm_Click(object sender, EventArgs e)
         {
+            CustomPlottable = new CustomPlottable(this, ParseDataGrid());
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -42,10 +38,10 @@ namespace XferSuite
             {
                 AllowFullOpen = true,
                 ShowHelp = true,
-                Color = labelColor.BackColor
+                Color = lblColor.BackColor
             };
             if (MyDialog.ShowDialog() == DialogResult.OK)
-                labelColor.BackColor = MyDialog.Color;
+                lblColor.BackColor = MyDialog.Color;
         }
 
         #region File Management
@@ -61,7 +57,7 @@ namespace XferSuite
                     foreach (DataGridViewCell cell in row.Cells)
                         if (cell.Value != null) cols.Add(cell.Value.ToString());
                     // Make sure all cols are valid
-                    if (cols.Count == 3) filters.Add(cols.ToArray());
+                    if (cols.Count == 2) filters.Add(cols.ToArray());
                 }
             }
             catch (Exception)
@@ -82,7 +78,7 @@ namespace XferSuite
 
         private string GetParameters()
         {
-            return $"{labelColor.BackColor.ToArgb()}\t{comboBoxShape.Text}\t{numSize.Value}\t{numOffsetX.Value}\t{numOffsetY.Value}\n";
+            return $"{txtName.Text}\t{lblColor.BackColor.ToArgb()}\t{comboBoxShape.Text}\t{numSize.Value}\t{numOffsetX.Value}\t{numOffsetY.Value}\n";
         }
 
         private void BtnSaveAs_Click(object sender, EventArgs e)
@@ -113,11 +109,12 @@ namespace XferSuite
                     string[] cols = lines[i].Split('\t');
                     if (i == 0)
                     {
-                        labelColor.BackColor = Color.FromArgb(int.Parse(cols[0]));
-                        comboBoxShape.Text = cols[1];
-                        numSize.Value = decimal.Parse(cols[2]);
-                        numOffsetX.Value = decimal.Parse(cols[3]);
-                        numOffsetY.Value = decimal.Parse(cols[4]);
+                        txtName.Text = cols[0];
+                        lblColor.BackColor = Color.FromArgb(int.Parse(cols[1]));
+                        comboBoxShape.Text = cols[2];
+                        numSize.Value = decimal.Parse(cols[3]);
+                        numOffsetX.Value = decimal.Parse(cols[4]);
+                        numOffsetY.Value = decimal.Parse(cols[5]);
                     }
                     else
                         dataGridView.Rows.Add(cols);
@@ -125,7 +122,7 @@ namespace XferSuite
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Corrupt save:\n{ex}", "Create Custom SEYR Plottable");
+                MessageBox.Show($"Corrupt save:\n\n{ex}", "Create Custom SEYR Plottable");
             }
         }
 
