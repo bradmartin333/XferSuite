@@ -32,8 +32,6 @@ namespace XferSuite
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParseSEYR));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.olvCustom = new BrightIdeasSoftware.ObjectListView();
-            this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvNeedOne = new BrightIdeasSoftware.TreeListView();
             this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvRequire = new BrightIdeasSoftware.ObjectListView();
@@ -57,8 +55,9 @@ namespace XferSuite
             this.toolStripButtonCopyParsedCSV = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSpecificRegion = new System.Windows.Forms.ToolStripButton();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkedListBox = new System.Windows.Forms.CheckedListBox();
             this.tableLayoutPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvBuffer)).BeginInit();
@@ -74,45 +73,22 @@ namespace XferSuite
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel.Controls.Add(this.olvCustom, 4, 1);
             this.tableLayoutPanel.Controls.Add(this.olvNeedOne, 3, 1);
             this.tableLayoutPanel.Controls.Add(this.olvRequire, 2, 1);
             this.tableLayoutPanel.Controls.Add(this.olvBuffer, 1, 1);
             this.tableLayoutPanel.Controls.Add(this.flowLayoutPanelCriteria, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.label2, 4, 1);
+            this.tableLayoutPanel.Controls.Add(this.checkedListBox, 4, 2);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 3;
+            this.tableLayoutPanel.RowCount = 4;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.Size = new System.Drawing.Size(574, 270);
             this.tableLayoutPanel.TabIndex = 0;
-            // 
-            // olvCustom
-            // 
-            this.olvCustom.AllColumns.Add(this.olvColumn4);
-            this.olvCustom.CellEditUseWholeCell = false;
-            this.olvCustom.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumn4});
-            this.olvCustom.Cursor = System.Windows.Forms.Cursors.Default;
-            this.olvCustom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.olvCustom.HideSelection = false;
-            this.olvCustom.IsSimpleDragSource = true;
-            this.olvCustom.Location = new System.Drawing.Point(459, 33);
-            this.olvCustom.Name = "olvCustom";
-            this.olvCustom.ShowGroups = false;
-            this.olvCustom.Size = new System.Drawing.Size(112, 234);
-            this.olvCustom.TabIndex = 5;
-            this.olvCustom.Tag = "0";
-            this.olvCustom.UseCompatibleStateImageBehavior = false;
-            this.olvCustom.View = System.Windows.Forms.View.Details;
-            // 
-            // olvColumn4
-            // 
-            this.olvColumn4.AspectName = "Name";
-            this.olvColumn4.Text = "Custom";
-            this.olvColumn4.Width = 90;
             // 
             // olvNeedOne
             // 
@@ -126,6 +102,7 @@ namespace XferSuite
             this.olvNeedOne.IsSimpleDropSink = true;
             this.olvNeedOne.Location = new System.Drawing.Point(345, 33);
             this.olvNeedOne.Name = "olvNeedOne";
+            this.tableLayoutPanel.SetRowSpan(this.olvNeedOne, 2);
             this.olvNeedOne.ShowGroups = false;
             this.olvNeedOne.Size = new System.Drawing.Size(108, 234);
             this.olvNeedOne.TabIndex = 2;
@@ -152,6 +129,7 @@ namespace XferSuite
             this.olvRequire.IsSimpleDropSink = true;
             this.olvRequire.Location = new System.Drawing.Point(231, 33);
             this.olvRequire.Name = "olvRequire";
+            this.tableLayoutPanel.SetRowSpan(this.olvRequire, 2);
             this.olvRequire.ShowGroups = false;
             this.olvRequire.Size = new System.Drawing.Size(108, 234);
             this.olvRequire.TabIndex = 1;
@@ -177,6 +155,7 @@ namespace XferSuite
             this.olvBuffer.IsSimpleDragSource = true;
             this.olvBuffer.Location = new System.Drawing.Point(117, 33);
             this.olvBuffer.Name = "olvBuffer";
+            this.tableLayoutPanel.SetRowSpan(this.olvBuffer, 2);
             this.olvBuffer.ShowGroups = false;
             this.olvBuffer.Size = new System.Drawing.Size(108, 234);
             this.olvBuffer.TabIndex = 0;
@@ -206,6 +185,7 @@ namespace XferSuite
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(3, 62);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
+            this.tableLayoutPanel.SetRowSpan(this.flowLayoutPanelCriteria, 2);
             this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(108, 175);
             this.flowLayoutPanelCriteria.TabIndex = 4;
             // 
@@ -394,6 +374,27 @@ namespace XferSuite
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(380, 24);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Location = new System.Drawing.Point(459, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(112, 20);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Custom";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // checkedListBox
+            // 
+            this.checkedListBox.CheckOnClick = true;
+            this.checkedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBox.FormattingEnabled = true;
+            this.checkedListBox.Location = new System.Drawing.Point(459, 53);
+            this.checkedListBox.Name = "checkedListBox";
+            this.checkedListBox.Size = new System.Drawing.Size(112, 214);
+            this.checkedListBox.TabIndex = 6;
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -407,7 +408,6 @@ namespace XferSuite
             this.Text = "Parse SEYR";
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.olvCustom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvBuffer)).EndInit();
@@ -446,7 +446,7 @@ namespace XferSuite
         private System.Windows.Forms.Button btnApplyToAll;
         private System.Windows.Forms.Button btnViewData;
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
-        private BrightIdeasSoftware.ObjectListView olvCustom;
-        private BrightIdeasSoftware.OLVColumn olvColumn4;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckedListBox checkedListBox;
     }
 }

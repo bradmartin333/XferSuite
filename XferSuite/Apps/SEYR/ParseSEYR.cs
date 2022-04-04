@@ -185,7 +185,7 @@ namespace XferSuite
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
-            if (!preserveCustom) olvCustom.Objects = null;
+            if (!preserveCustom) checkedListBox.Items.Clear();
             ObjectHasBeenDropped = false;
 
             toolStripButtonAddCustom.Enabled = Features.Length > 1;
@@ -732,7 +732,7 @@ namespace XferSuite
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    olvCustom.AddObject(cc.CustomFeature);
+                    checkedListBox.Items.Add(cc.CustomFeature.Name);
                     CustomFeatures.Add(cc.CustomFeature);
                 }
                 else
