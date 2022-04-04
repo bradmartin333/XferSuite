@@ -47,6 +47,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
+            this.labelColor = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numOffsetX)).BeginInit();
@@ -61,30 +62,30 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.label5, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.comboBoxType, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.numOffsetX, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.numOffsetY, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxType, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.numOffsetX, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.numOffsetY, 2, 4);
             this.tableLayoutPanel1.Controls.Add(this.dataGridView, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 7);
             this.tableLayoutPanel1.Controls.Add(this.label6, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtName, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.labelColor, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(428, 222);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -128,7 +129,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(255, 26);
+            this.label2.Location = new System.Drawing.Point(255, 46);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 27);
             this.label2.TabIndex = 1;
@@ -139,7 +140,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(255, 53);
+            this.label4.Location = new System.Drawing.Point(255, 73);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(70, 26);
             this.label4.TabIndex = 3;
@@ -150,7 +151,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(255, 79);
+            this.label5.Location = new System.Drawing.Point(255, 99);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(70, 26);
             this.label5.TabIndex = 4;
@@ -164,7 +165,7 @@
             this.comboBoxType.Items.AddRange(new object[] {
             "Pass",
             "Fail"});
-            this.comboBoxType.Location = new System.Drawing.Point(331, 29);
+            this.comboBoxType.Location = new System.Drawing.Point(331, 49);
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(94, 21);
             this.comboBoxType.TabIndex = 6;
@@ -178,7 +179,17 @@
             0,
             0,
             196608});
-            this.numOffsetX.Location = new System.Drawing.Point(331, 56);
+            this.numOffsetX.Location = new System.Drawing.Point(331, 76);
+            this.numOffsetX.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numOffsetX.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
             this.numOffsetX.Name = "numOffsetX";
             this.numOffsetX.Size = new System.Drawing.Size(94, 20);
             this.numOffsetX.TabIndex = 8;
@@ -192,7 +203,17 @@
             0,
             0,
             196608});
-            this.numOffsetY.Location = new System.Drawing.Point(331, 82);
+            this.numOffsetY.Location = new System.Drawing.Point(331, 102);
+            this.numOffsetY.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numOffsetY.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
             this.numOffsetY.Name = "numOffsetY";
             this.numOffsetY.Size = new System.Drawing.Size(94, 20);
             this.numOffsetY.TabIndex = 9;
@@ -206,7 +227,7 @@
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(3, 3);
             this.dataGridView.Name = "dataGridView";
-            this.tableLayoutPanel1.SetRowSpan(this.dataGridView, 7);
+            this.tableLayoutPanel1.SetRowSpan(this.dataGridView, 8);
             this.dataGridView.Size = new System.Drawing.Size(246, 216);
             this.dataGridView.TabIndex = 10;
             // 
@@ -281,6 +302,17 @@
             this.txtName.TabIndex = 14;
             this.txtName.Text = "Custom";
             // 
+            // labelColor
+            // 
+            this.labelColor.AutoSize = true;
+            this.labelColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelColor.Location = new System.Drawing.Point(255, 26);
+            this.labelColor.Name = "labelColor";
+            this.labelColor.Size = new System.Drawing.Size(70, 20);
+            this.labelColor.TabIndex = 15;
+            this.labelColor.Text = "Color";
+            this.labelColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // CreateCustom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -322,5 +354,6 @@
         public System.Windows.Forms.NumericUpDown numOffsetX;
         public System.Windows.Forms.NumericUpDown numOffsetY;
         public System.Windows.Forms.TextBox txtName;
+        private System.Windows.Forms.Label labelColor;
     }
 }
