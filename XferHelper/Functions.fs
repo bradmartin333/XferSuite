@@ -630,11 +630,11 @@ module Report =
 
     let toBucket (num: int) = enum<Bucket> num
 
-    type Criteria =
+    type Feature =
         { Name: string
           mutable Bucket: Bucket
           mutable Requirements: State []
-          mutable Children: List<Criteria>
+          mutable Children: List<Feature>
           mutable FamilyName: string
           mutable IsChild: bool
           mutable IsParent: bool }

@@ -126,8 +126,8 @@ namespace XferSuite
 
         private FileInfo Path { get; set; }
         private Report.Entry[] Data { get; set; }
-        private Report.Criteria[] Features { get; set; }
-        private Report.Criteria SelectedFeature { get; set; }
+        private Report.Feature[] Features { get; set; }
+        private Report.Feature SelectedFeature { get; set; }
         private bool ObjectHasBeenDropped { get; set; }
 
         private List<Plottable> Plottables = new List<Plottable>();
@@ -166,8 +166,8 @@ namespace XferSuite
             olvRequire.ModelDropped += ModelDropped;
             olvNeedOne.ModelCanDrop += ModelCanDrop;
             olvNeedOne.ModelDropped += ModelDropped;
-            olvNeedOne.CanExpandGetter = delegate (object x) { return ((Report.Criteria)x).IsParent; };
-            olvNeedOne.ChildrenGetter = delegate (object x) { return ((Report.Criteria)x).Children; };
+            olvNeedOne.CanExpandGetter = delegate (object x) { return ((Report.Feature)x).IsParent; };
+            olvNeedOne.ChildrenGetter = delegate (object x) { return ((Report.Feature)x).Children; };
 
             Show();
         }
@@ -198,7 +198,7 @@ namespace XferSuite
             if (e.TargetModel != null) 
             {
                 // Only one branch
-                if (!((Report.Criteria)e.TargetModel).IsChild)
+                if (!((Report.Feature)e.TargetModel).IsChild)
                     e.Effect = DragDropEffects.Link;
             }
             else
@@ -207,7 +207,7 @@ namespace XferSuite
 
         private void ModelDropped(object sender, ModelDropEventArgs e)
         {
-            foreach (Report.Criteria m in e.SourceModels)
+            foreach (Report.Feature m in e.SourceModels)
             {
                 m.Bucket = Report.toBucket(int.Parse(e.ListView.Tag.ToString()));
                 if ((ObjectListView)sender == olvNeedOne)
@@ -215,11 +215,11 @@ namespace XferSuite
                     if (e.DropTargetLocation == DropTargetLocation.Item)
                     {
                         m.IsChild = true;
-                        Report.Criteria targ = (Report.Criteria)e.TargetModel;
+                        Report.Feature targ = (Report.Feature)e.TargetModel;
                         m.FamilyName = targ.Name;
 
                         // Converting between F# and C# lists
-                        List<Report.Criteria> children = targ.Children.ToList();
+                        List<Report.Feature> children = targ.Children.ToList();
                         children.Add(m);
                         targ.Children = ListModule.OfSeq(children);
                     }
@@ -267,7 +267,7 @@ namespace XferSuite
             List<Report.State> requirements = new List<Report.State>();
             foreach (CheckBox cbx in flowLayoutPanelCriteria.Controls.OfType<CheckBox>())
                 if (cbx.Checked) requirements.Add(Report.toState(int.Parse(cbx.Tag.ToString())));
-            foreach (Report.Criteria feature in Features)
+            foreach (Report.Feature feature in Features)
                 feature.Requirements = requirements.ToArray();
         }
 
@@ -675,7 +675,7 @@ namespace XferSuite
         {
             if (ParseWorker.IsBusy) return;
             
-            Report.Criteria[] originalFeatures = Features; // Maintain requirements
+            Report.Feature[] originalFeatures = Features; // Maintain requirements
             ResetFeaturesAndUI();
 
             // Alphabetical order looks better in the NeedOne bucket
@@ -686,7 +686,7 @@ namespace XferSuite
             flowLayoutPanelCriteria.Enabled = false;
             olvBuffer.Objects = null;
 
-            Report.Criteria[] criteria = Features.Where(x => !x.Name.Contains("pat")).ToArray();
+            Report.Feature[] criteria = Features.Where(x => !x.Name.Contains("pat")).ToArray();
             if (criteria.Length == 1)
             {
                 criteria[0].Bucket = Report.Bucket.Required;
@@ -694,7 +694,7 @@ namespace XferSuite
             }
             else
             {
-                foreach (Report.Criteria feature in Features)
+                foreach (Report.Feature feature in Features)
                 {
                     feature.Requirements = originalFeatures.First(x => x.Name == feature.Name).Requirements;
                     FindHome(feature);
@@ -759,7 +759,7 @@ namespace XferSuite
             for (int i = 0; i < thisCell.Length; i++)
             {
                 Report.Entry item = thisCell[i];
-                Report.Criteria criteria = Features.First(x => x.Name == item.Name);
+                Report.Feature criteria = Features.First(x => x.Name == item.Name);
                 switch (criteria.Bucket)
                 {
                     case Report.Bucket.Buffer:
@@ -784,7 +784,7 @@ namespace XferSuite
             return true;
         }
 
-        private void FindHome(Report.Criteria feature)
+        private void FindHome(Report.Feature feature)
         {
             char[] digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
             if (feature.Name.Any(char.IsDigit))
@@ -794,14 +794,14 @@ namespace XferSuite
                 bool foundParent = false;
                 foreach (var item in olvNeedOne.Objects)
                 {
-                    Report.Criteria targ = (Report.Criteria)item;
+                    Report.Feature targ = (Report.Feature)item;
                     if (targ.Name.Contains(rootName) && targ.IsParent)
                     {
                         feature.IsChild = true;
                         feature.FamilyName = targ.Name;
 
                         // Converting between F# and C# lists
-                        List<Report.Criteria> children = targ.Children.ToList();
+                        List<Report.Feature> children = targ.Children.ToList();
                         children.Add(feature);
                         targ.Children = ListModule.OfSeq(children);
                         foundParent = true;
