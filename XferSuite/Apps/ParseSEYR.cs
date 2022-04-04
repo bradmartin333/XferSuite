@@ -178,7 +178,6 @@ namespace XferSuite
             SelectedFeature = null;
             lblSelectedFeature.Text = @"N\A";
 
-            rtb.Text = "";
             toolStripButtonSpecificRegion.Enabled = false;
             toolStripButtonCopyParsedCSV.Enabled = false;
 
@@ -284,7 +283,6 @@ namespace XferSuite
             olvNeedOne.Enabled = false;
             flowLayoutPanelCriteria.Enabled = false;
             toolStripProgressBar.Value = 0;
-            rtb.Text = "";
             ParseWorker.RunWorkerAsync();
         }
 
@@ -307,7 +305,7 @@ namespace XferSuite
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            rtb.Text += e.UserState.ToString();
+            //rtb.Text += e.UserState.ToString();
             toolStripProgressBar.Value = e.ProgressPercentage;
         }
 
@@ -673,19 +671,6 @@ namespace XferSuite
             RunParseWorker();  
         }
 
-        private void ToolStripButtonCopyText_Click(object sender, EventArgs e)
-        {
-            if (rtb.Text != "") Clipboard.SetText(rtb.Text);
-        }
-
-        private void ToolStripButtonCopyWindow_Click(object sender, EventArgs e)
-        {
-            if (ParseWorker.IsBusy) return;
-            Bitmap bmp = new Bitmap(Width, Height);
-            DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
-            Clipboard.SetImage(bmp);
-        }
-
         private void ToolStripButtonSmartSort_Click(object sender, EventArgs e)
         {
             if (ParseWorker.IsBusy) return;
@@ -717,6 +702,11 @@ namespace XferSuite
             }
 
             olvNeedOne.RebuildAll(true);
+        }
+
+        private void toolStripButtonAddCustom_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void toolStripButtonCopyParsedCSV_Click(object sender, EventArgs e)
