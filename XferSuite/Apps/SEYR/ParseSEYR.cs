@@ -704,12 +704,19 @@ namespace XferSuite
             olvNeedOne.RebuildAll(true);
         }
 
-        private void toolStripButtonAddCustom_Click(object sender, EventArgs e)
+        private void ToolStripButtonAddCustom_Click(object sender, EventArgs e)
         {
-
+            using (CreateCustom cc = new CreateCustom(Features))
+            {
+                var result = cc.ShowDialog();
+                if (result == DialogResult.OK)
+                    return;
+                else
+                    return;
+            }
         }
 
-        private void toolStripButtonCopyParsedCSV_Click(object sender, EventArgs e)
+        private void ToolStripButtonCopyParsedCSV_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("X\tY\tRR\tRC\tR\tC\tState\n");

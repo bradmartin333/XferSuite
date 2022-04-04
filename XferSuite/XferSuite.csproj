@@ -141,6 +141,12 @@
     <Compile Include="Apps\MapFlip.designer.cs">
       <DependentUpon>MapFlip.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\SEYR\CreateCustom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\SEYR\CreateCustom.Designer.cs">
+      <DependentUpon>CreateCustom.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\SEYR\ParseSEYR.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -222,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\MapFlip.resx">
       <DependentUpon>MapFlip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\SEYR\CreateCustom.resx">
+      <DependentUpon>CreateCustom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\ParseSEYR.resx">
       <DependentUpon>ParseSEYR.cs</DependentUpon>

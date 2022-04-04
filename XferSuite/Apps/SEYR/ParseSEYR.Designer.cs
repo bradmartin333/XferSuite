@@ -327,7 +327,7 @@ namespace XferSuite
             this.toolStripButtonAddCustom.Name = "toolStripButtonAddCustom";
             this.toolStripButtonAddCustom.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonAddCustom.Text = "Add Custom";
-            this.toolStripButtonAddCustom.Click += new System.EventHandler(this.toolStripButtonAddCustom_Click);
+            this.toolStripButtonAddCustom.Click += new System.EventHandler(this.ToolStripButtonAddCustom_Click);
             // 
             // toolStripButtonReset
             // 
@@ -375,7 +375,7 @@ namespace XferSuite
             this.toolStripButtonCopyParsedCSV.Name = "toolStripButtonCopyParsedCSV";
             this.toolStripButtonCopyParsedCSV.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonCopyParsedCSV.Text = "Copy Parsed Data as CSV";
-            this.toolStripButtonCopyParsedCSV.Click += new System.EventHandler(this.toolStripButtonCopyParsedCSV_Click);
+            this.toolStripButtonCopyParsedCSV.Click += new System.EventHandler(this.ToolStripButtonCopyParsedCSV_Click);
             // 
             // toolStripButtonSpecificRegion
             // 
