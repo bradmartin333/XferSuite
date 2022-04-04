@@ -64,7 +64,7 @@ namespace XferSuite
                     BtnCheckForUpdates.Text = $"Click here to update to {mostRecentVersion}";
                     BtnCheckForUpdates.BackColor = Color.PaleTurquoise;
                     MainMenu mainMenu = Application.OpenForms.OfType<MainMenu>().First();
-                    if (!UpdateFound) mainMenu.Text += $"   {mostRecentVersion} Available";
+                    if (!UpdateFound) mainMenu.btnSettings.BackgroundImage = Properties.Resources.UpdateAvailable;
                     UpdateFound = true;
                 }
                 else

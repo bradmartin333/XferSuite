@@ -293,6 +293,7 @@
     <None Include="Resources\help.txt" />
     <None Include="Resources\magic_select.png" />
     <None Include="Resources\eraser.png" />
+    <None Include="Resources\UpdateAvailable.png" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>
