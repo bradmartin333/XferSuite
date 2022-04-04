@@ -706,7 +706,7 @@ namespace XferSuite
 
         private void ToolStripButtonAddCustom_Click(object sender, EventArgs e)
         {
-            using (CreateCustom cc = new CreateCustom(Features))
+            using (CreateCustom cc = new CreateCustom(Data))
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)

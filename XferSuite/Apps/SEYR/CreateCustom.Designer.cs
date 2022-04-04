@@ -30,6 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateCustom));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnSaveAs = new System.Windows.Forms.Button();
+            this.btnLoad = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -40,15 +43,16 @@
             this.numOffsetX = new System.Windows.Forms.NumericUpDown();
             this.numOffsetY = new System.Windows.Forms.NumericUpDown();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.Feature = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Criteria = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Operator = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnTest = new System.Windows.Forms.Button();
             this.btnConfirm = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.labelColor = new System.Windows.Forms.Label();
+            this.Feature = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Criteria = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Operator = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.tableLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOffsetX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOffsetY)).BeginInit();
@@ -62,6 +66,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.label1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label3, 1, 2);
@@ -72,12 +77,12 @@
             this.tableLayoutPanel1.Controls.Add(this.numOffsetX, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.numOffsetY, 2, 4);
             this.tableLayoutPanel1.Controls.Add(this.dataGridView, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 7);
             this.tableLayoutPanel1.Controls.Add(this.labelColor, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -85,9 +90,47 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(532, 187);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(532, 213);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.flowLayoutPanel2.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.flowLayoutPanel2, 2);
+            this.flowLayoutPanel2.Controls.Add(this.btnSaveAs);
+            this.flowLayoutPanel2.Controls.Add(this.btnLoad);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(381, 142);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(125, 31);
+            this.flowLayoutPanel2.TabIndex = 12;
+            // 
+            // btnSaveAs
+            // 
+            this.btnSaveAs.AutoSize = true;
+            this.btnSaveAs.BackColor = System.Drawing.Color.White;
+            this.btnSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveAs.Location = new System.Drawing.Point(3, 3);
+            this.btnSaveAs.Name = "btnSaveAs";
+            this.btnSaveAs.Size = new System.Drawing.Size(59, 25);
+            this.btnSaveAs.TabIndex = 2;
+            this.btnSaveAs.Text = "Save As";
+            this.btnSaveAs.UseVisualStyleBackColor = false;
+            this.btnSaveAs.Click += new System.EventHandler(this.BtnSaveAs_Click);
+            // 
+            // btnLoad
+            // 
+            this.btnLoad.AutoSize = true;
+            this.btnLoad.BackColor = System.Drawing.Color.White;
+            this.btnLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLoad.Location = new System.Drawing.Point(68, 3);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(54, 25);
+            this.btnLoad.TabIndex = 0;
+            this.btnLoad.Text = "Load";
+            this.btnLoad.UseVisualStyleBackColor = false;
+            this.btnLoad.Click += new System.EventHandler(this.BtnLoad_Click);
             // 
             // label1
             // 
@@ -209,32 +252,9 @@
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(3, 3);
             this.dataGridView.Name = "dataGridView";
-            this.tableLayoutPanel1.SetRowSpan(this.dataGridView, 7);
-            this.dataGridView.Size = new System.Drawing.Size(350, 181);
+            this.tableLayoutPanel1.SetRowSpan(this.dataGridView, 8);
+            this.dataGridView.Size = new System.Drawing.Size(350, 207);
             this.dataGridView.TabIndex = 10;
-            // 
-            // Feature
-            // 
-            this.Feature.HeaderText = "Feature";
-            this.Feature.Name = "Feature";
-            // 
-            // Criteria
-            // 
-            this.Criteria.HeaderText = "Passing Criteria";
-            this.Criteria.Items.AddRange(new object[] {
-            "Pass",
-            "Fail",
-            "Null",
-            "Misaligned"});
-            this.Criteria.Name = "Criteria";
-            // 
-            // Operator
-            // 
-            this.Operator.HeaderText = "Operator";
-            this.Operator.Items.AddRange(new object[] {
-            "And",
-            "Or"});
-            this.Operator.Name = "Operator";
             // 
             // flowLayoutPanel1
             // 
@@ -244,7 +264,7 @@
             this.flowLayoutPanel1.Controls.Add(this.btnTest);
             this.flowLayoutPanel1.Controls.Add(this.btnConfirm);
             this.flowLayoutPanel1.Controls.Add(this.btnCancel);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(361, 153);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(361, 179);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(166, 31);
             this.flowLayoutPanel1.TabIndex = 11;
@@ -298,11 +318,35 @@
             this.labelColor.TabIndex = 12;
             this.labelColor.Click += new System.EventHandler(this.LabelColor_Click);
             // 
+            // Feature
+            // 
+            this.Feature.HeaderText = "Feature";
+            this.Feature.Name = "Feature";
+            // 
+            // Criteria
+            // 
+            this.Criteria.HeaderText = "Passing Criteria";
+            this.Criteria.Items.AddRange(new object[] {
+            "Pass",
+            "Fail",
+            "Null",
+            "Misaligned"});
+            this.Criteria.Name = "Criteria";
+            // 
+            // Operator
+            // 
+            this.Operator.HeaderText = "Operator";
+            this.Operator.Items.AddRange(new object[] {
+            "And",
+            "Or",
+            "Done"});
+            this.Operator.Name = "Operator";
+            // 
             // CreateCustom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(532, 187);
+            this.ClientSize = new System.Drawing.Size(532, 213);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CreateCustom";
@@ -310,6 +354,8 @@
             this.Text = "Create Custom";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOffsetX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOffsetY)).EndInit();
@@ -337,9 +383,12 @@
         private System.Windows.Forms.Button btnConfirm;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label labelColor;
+        private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.Button btnSaveAs;
+        private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.DataGridViewComboBoxColumn Feature;
         private System.Windows.Forms.DataGridViewComboBoxColumn Criteria;
         private System.Windows.Forms.DataGridViewComboBoxColumn Operator;
-        private System.Windows.Forms.Button btnTest;
     }
 }

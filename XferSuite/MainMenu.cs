@@ -107,7 +107,7 @@ namespace XferSuite
             _Settings.BringToFront();
         }
 
-        private string OpenFile(string title, string filter)
+        public static string OpenFile(string title, string filter)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -116,6 +116,19 @@ namespace XferSuite
                 openFileDialog.Filter = filter;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                     return openFileDialog.FileName;
+            }
+            return null;
+        }
+
+        public static string SaveFile(string title, string filter)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.Title = title;
+                saveFileDialog.Filter = filter;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    return saveFileDialog.FileName;
             }
             return null;
         }
