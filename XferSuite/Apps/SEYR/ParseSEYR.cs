@@ -134,7 +134,7 @@ namespace XferSuite
 
         private List<Plottable> Plottables = new List<Plottable>();
         private ScatterSeries PassScatter, FailScatter;
-        private List<CustomFeature> CustomFeatures = new List<CustomFeature>();
+        private readonly List<CustomFeature> CustomFeatures = new List<CustomFeature>();
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();

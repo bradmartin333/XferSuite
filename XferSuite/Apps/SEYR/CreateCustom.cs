@@ -1,7 +1,5 @@
-﻿using OxyPlot;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using XferHelper;
@@ -15,7 +13,6 @@ namespace XferSuite
         public CreateCustom(Report.Feature[] features)
         {
             InitializeComponent();
-            comboBoxShape.DataSource = Enum.GetValues(typeof(MarkerType));
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
         }
 
@@ -30,19 +27,6 @@ namespace XferSuite
         {
             DialogResult = DialogResult.Cancel;
             Close();
-        }
-
-        private void LabelColor_Click(object sender, EventArgs e)
-        {
-            ColorDialog MyDialog = new ColorDialog
-            {
-                AllowFullOpen = true,
-                ShowHelp = true,
-                Color = lblColor.BackColor,
-                CustomColors = new int[] { Color.LawnGreen.ToArgb(), Color.Firebrick.ToArgb() },
-            };
-            if (MyDialog.ShowDialog() == DialogResult.OK)
-                lblColor.BackColor = MyDialog.Color;
         }
 
         #region File Management
@@ -79,7 +63,7 @@ namespace XferSuite
 
         private string GetParameters()
         {
-            return $"{txtName.Text}\t{lblColor.BackColor.ToArgb()}\t{comboBoxShape.Text}\t{numSize.Value}\t{numOffsetX.Value}\t{numOffsetY.Value}\n";
+            return $"{txtName.Text}\t{comboBoxType.Text}\t{numOffsetX.Value}\t{numOffsetY.Value}\n";
         }
 
         private void BtnSaveAs_Click(object sender, EventArgs e)
@@ -111,11 +95,9 @@ namespace XferSuite
                     if (i == 0)
                     {
                         txtName.Text = cols[0];
-                        lblColor.BackColor = Color.FromArgb(int.Parse(cols[1]));
-                        comboBoxShape.Text = cols[2];
-                        numSize.Value = decimal.Parse(cols[3]);
-                        numOffsetX.Value = decimal.Parse(cols[4]);
-                        numOffsetY.Value = decimal.Parse(cols[5]);
+                        comboBoxType.Text = cols[1];
+                        numOffsetX.Value = decimal.Parse(cols[2]);
+                        numOffsetY.Value = decimal.Parse(cols[3]);
                     }
                     else
                         dataGridView.Rows.Add(cols);
