@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using XferHelper;
@@ -15,6 +16,7 @@ namespace XferSuite
             InitializeComponent();
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
             comboBoxType.SelectedIndex = 0;
+            panelColor.Click += PanelColor_Click;
         }
 
         private void BtnConfirm_Click(object sender, EventArgs e)
@@ -30,6 +32,23 @@ namespace XferSuite
             Close();
         }
 
+        private void PanelColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog
+            {
+                AllowFullOpen = true,
+                ShowHelp = true,
+                Color = panelColor.BackColor,
+                CustomColors = new int[] { 
+                    ColorTranslator.ToOle(Color.LawnGreen),
+                    ColorTranslator.ToOle(Color.Firebrick),
+                    ColorTranslator.ToOle(Color.Blue),
+                    ColorTranslator.ToOle(Color.Orange), },
+            };
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                panelColor.BackColor = MyDialog.Color;
+        }
+
         #region File Management
 
         private List<(string, Report.State)> ParseDataGrid()
@@ -38,9 +57,8 @@ namespace XferSuite
             try
             {
                 foreach (DataGridViewRow row in dataGridView.Rows)
-                    for (int i = 0; i < 2; i++)
-                        if (row.Cells[0].Value != null && row.Cells[1].Value != null)
-                            filters.Add(((string, Report.State))(row.Cells[0].Value.ToString(), Enum.Parse(typeof(Report.State), row.Cells[1].Value.ToString())));
+                    if (row.Cells[0].Value != null && row.Cells[1].Value != null)
+                        filters.Add(((string, Report.State))(row.Cells[0].Value.ToString(), Enum.Parse(typeof(Report.State), row.Cells[1].Value.ToString())));
             }
             catch (Exception)
             {
@@ -60,7 +78,7 @@ namespace XferSuite
 
         private string GetParameters()
         {
-            return $"{txtName.Text}\t{comboBoxType.Text}\t{numOffsetX.Value}\t{numOffsetY.Value}\n";
+            return $"{txtName.Text}\t{panelColor.BackColor.ToArgb()}\t{numSize.Value}\t{comboBoxType.Text}\t{numOffsetX.Value}\t{numOffsetY.Value}\n";
         }
 
         private void BtnSaveAs_Click(object sender, EventArgs e)
@@ -92,9 +110,11 @@ namespace XferSuite
                     if (i == 0)
                     {
                         txtName.Text = cols[0];
-                        comboBoxType.Text = cols[1];
-                        numOffsetX.Value = decimal.Parse(cols[2]);
-                        numOffsetY.Value = decimal.Parse(cols[3]);
+                        panelColor.BackColor = Color.FromArgb(int.Parse(cols[1]));
+                        numSize.Value = decimal.Parse(cols[2]);
+                        comboBoxType.Text = cols[3];
+                        numOffsetX.Value = decimal.Parse(cols[4]);
+                        numOffsetY.Value = decimal.Parse(cols[5]);
                     }
                     else
                         dataGridView.Rows.Add(cols);
