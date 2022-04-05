@@ -784,11 +784,11 @@ namespace XferSuite
         private void ToolStripButtonCopyParsedCSV_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("X\tY\tRR\tRC\tR\tC\tState\n");
+            sb.Append("X\tY\tRR\tRC\tR\tC\tState\tCustomTag\n");
             foreach (Plottable p in Plottables)
             {
                 string regionCSV = p.Region.Substring(1, p.Region.Length - 2).Replace(", ", "\t");
-                sb.Append($"{p.X}\t{p.Y}\t{regionCSV}\t{(p.Pass ? "Pass" : "Fail")}\n");
+                sb.Append($"{Math.Round(p.X, 3)}\t{Math.Round(p.Y, 3)}\t{regionCSV}\t{(p.Pass ? "Pass" : "Fail")}\t{p.CustomTag}\n");
             }
             Clipboard.SetText(sb.ToString());
             MessageBox.Show("Data copied to clipboard", "XferSuite");
