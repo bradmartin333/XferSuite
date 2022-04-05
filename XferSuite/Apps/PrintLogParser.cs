@@ -103,7 +103,7 @@ namespace XferSuite
         }
     }
 
-    public class Print
+    public partial class Print
     {
         public DateTime Start { get; set; }
         public DateTime Stop { get; set; }
