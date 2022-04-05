@@ -54,9 +54,6 @@
             // 
             this.ListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListBox.FormattingEnabled = true;
-            this.ListBox.Items.AddRange(new object[] {
-            "10Zone Calibration Generator",
-            "uTP Log Parser"});
             this.ListBox.Location = new System.Drawing.Point(3, 3);
             this.ListBox.Name = "ListBox";
             this.ListBox.Size = new System.Drawing.Size(274, 82);
@@ -76,7 +73,7 @@
             this.BtnOpen.UseVisualStyleBackColor = false;
             this.BtnOpen.Click += new System.EventHandler(this.BtnOpen_Click);
             // 
-            // AdvancedTools
+            // SelectTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -84,7 +81,7 @@
             this.Controls.Add(this.tableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "AdvancedTools";
+            this.Name = "SelectTool";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Advanced Tools";
             this.tableLayoutPanel.ResumeLayout(false);
