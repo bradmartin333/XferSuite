@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace XferSuite
+namespace XferSuite.Utility
 {
     public partial class PlexiGlass : Form
     {

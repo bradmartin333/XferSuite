@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace XferSuite
+namespace XferSuite.Apps.SEYR
 {
     public partial class EditPlotOrder : Form
     {

@@ -29,7 +29,8 @@ namespace XferSuite
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            foreach (CameraViewer cameraViewer in Application.OpenForms.OfType<CameraViewer>()) cameraViewer.EndStream();
+            foreach (Apps.CameraViewer cameraViewer in Application.OpenForms.OfType<Apps.CameraViewer>()) 
+                cameraViewer.EndStream();
         }
 
         private void Btn_Click(object sender, EventArgs e)
@@ -64,27 +65,27 @@ namespace XferSuite
         private void CreateForm(int idx, string path)
         {
             Form form = new Form();
-            using (new HourGlass())
+            using (new Utility.HourGlass())
             {
                 switch (idx)
                 {
                     case 0:
                         if (!VerifyPath(path, idx)) return;
-                        form = new MetroGraphs(path) { Text = new FileInfo(path).Name };
+                        form = new Apps.InlinePositions.MetroGraphs(path) { Text = new FileInfo(path).Name };
                         break;
                     case 1:
                         if (!VerifyPath(path, idx)) return;
-                        form = new Plotter(path);
+                        form = new Apps.XYZplotter.Plotter(path);
                         break;
                     case 2:
                         if (!VerifyPath(path, idx)) return;
-                        form = new ParseSEYR(path);
+                        form = new Apps.SEYR.ParseSEYR(path);
                         break;
                     case 3:
-                        form = new CameraViewer();
+                        form = new Apps.CameraViewer();
                         break;
                     case 4:
-                        form = new MapFlip();
+                        form = new Apps.MapFlip();
                         break;
                     default:
                         return;

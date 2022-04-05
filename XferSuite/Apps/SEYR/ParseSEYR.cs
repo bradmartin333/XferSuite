@@ -14,7 +14,7 @@ using Microsoft.FSharp.Collections;
 using System.IO;
 using System.Text;
 
-namespace XferSuite
+namespace XferSuite.Apps.SEYR
 {
     public partial class ParseSEYR : Form
     {
@@ -329,7 +329,7 @@ namespace XferSuite
                 }
                 else
                 {
-                    using (PromptForInput input = new PromptForInput(
+                    using (Utility.PromptForInput input = new Utility.PromptForInput(
                         prompt: "Enter X grid pitch in millimeters",
                         textEntry: false,
                         max: 100,
@@ -341,7 +341,7 @@ namespace XferSuite
                         else
                             return;
                     }
-                    using (PromptForInput input = new PromptForInput(
+                    using (Utility.PromptForInput input = new Utility.PromptForInput(
                         prompt: "Enter Y grid pitch in millimeters",
                         textEntry: false,
                         max: 100,

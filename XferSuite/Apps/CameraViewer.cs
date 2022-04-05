@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-namespace XferSuite
+namespace XferSuite.Apps
 {
     public partial class CameraViewer : Form
     {
@@ -227,11 +227,22 @@ namespace XferSuite
 
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream fs = File.Open(filename, FileMode.Open);
-            object obj = formatter.Deserialize(fs);
-            CameraLayout = (CameraLayout)obj;
-            fs.Flush();
-            fs.Close();
-            fs.Dispose();
+            try
+            {
+                object obj = formatter.Deserialize(fs);
+                CameraLayout = (CameraLayout)obj;
+                fs.Flush();
+                fs.Close();
+                fs.Dispose();
+            }
+            catch (Exception)
+            {
+                fs.Flush();
+                fs.Close();
+                fs.Dispose();
+                File.Delete(MemoryPath);
+                return;
+            }
 
             // Start Video
             foreach (FilterInfo device in VideoDevices)
@@ -252,5 +263,17 @@ namespace XferSuite
         }
 
         #endregion
+    }
+
+    [Serializable]
+    public class CameraLayout
+    {
+        public string CamID { get; set; } = string.Empty;
+        public bool ShowListView { get; set; } = true;
+        public bool ShowCrosshair { get; set; } = false;
+        public Color CrosshairColor { get; set; } = Color.LawnGreen;
+        public int Rotation { get; set; } = 0;
+        public Size WindowSize { get; set; } = Size.Empty;
+        public Point WindowLocation { get; set; } = Point.Empty;
     }
 }

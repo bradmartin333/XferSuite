@@ -110,29 +110,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdvancedTools.cs">
+    <Compile Include="AdvancedTools\SelectTool.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AdvancedTools.Designer.cs">
-      <DependentUpon>AdvancedTools.cs</DependentUpon>
+    <Compile Include="AdvancedTools\SelectTool.Designer.cs">
+      <DependentUpon>SelectTool.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\CalGenerator.cs">
+    <Compile Include="AdvancedTools\CalGenerator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\CalGenerator.Designer.cs">
+    <Compile Include="AdvancedTools\CalGenerator.Designer.cs">
       <DependentUpon>CalGenerator.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\CameraViewer\CameraLayout.cs" />
-    <Compile Include="Apps\Angleprinting.cs">
+    <Compile Include="Apps\InlinePositions\Angleprinting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\Angleprinting.Designer.cs">
+    <Compile Include="Apps\InlinePositions\Angleprinting.Designer.cs">
       <DependentUpon>Angleprinting.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\Fingerprinting.cs">
+    <Compile Include="Apps\InlinePositions\Fingerprinting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\Fingerprinting.Designer.cs">
+    <Compile Include="Apps\InlinePositions\Fingerprinting.Designer.cs">
       <DependentUpon>Fingerprinting.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\MapFlip.cs">
@@ -160,17 +159,23 @@
     <Compile Include="Apps\SEYR\ParseSEYR.Designer.cs">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\CameraViewer\CameraViewer.cs">
+    <Compile Include="Apps\CameraViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\CameraViewer\CameraViewer.Designer.cs">
+    <Compile Include="Apps\CameraViewer.Designer.cs">
       <DependentUpon>CameraViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\PrintLogParser.cs">
+    <Compile Include="AdvancedTools\PrintLogParser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\PrintLogParser.Designer.cs">
+    <Compile Include="AdvancedTools\PrintLogParser.Designer.cs">
       <DependentUpon>PrintLogParser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\SEYR\Scatter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\SEYR\Scatter.Designer.cs">
+      <DependentUpon>Scatter.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
@@ -183,30 +188,30 @@
       <DependentUpon>Plotter.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\XYZplotter\Scan.cs" />
-    <Compile Include="HourGlass.cs" />
+    <Compile Include="Utility\HourGlass.cs" />
     <Compile Include="MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\MetroGraphs.cs">
+    <Compile Include="Apps\InlinePositions\MetroGraphs.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\MetroGraphs.Designer.cs">
+    <Compile Include="Apps\InlinePositions\MetroGraphs.Designer.cs">
       <DependentUpon>MetroGraphs.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlexiGlass.cs">
+    <Compile Include="Utility\PlexiGlass.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlexiGlass.Designer.cs">
+    <Compile Include="Utility\PlexiGlass.Designer.cs">
       <DependentUpon>PlexiGlass.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="PromptForInput.cs">
+    <Compile Include="Utility\PromptForInput.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PromptForInput.Designer.cs">
+    <Compile Include="Utility\PromptForInput.Designer.cs">
       <DependentUpon>PromptForInput.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -221,16 +226,16 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AdvancedTools.resx">
-      <DependentUpon>AdvancedTools.cs</DependentUpon>
+    <EmbeddedResource Include="AdvancedTools\SelectTool.resx">
+      <DependentUpon>SelectTool.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\Angleprinting.resx">
+    <EmbeddedResource Include="Apps\InlinePositions\Angleprinting.resx">
       <DependentUpon>Angleprinting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\CalGenerator.resx">
+    <EmbeddedResource Include="AdvancedTools\CalGenerator.resx">
       <DependentUpon>CalGenerator.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\Fingerprinting.resx">
+    <EmbeddedResource Include="Apps\InlinePositions\Fingerprinting.resx">
       <DependentUpon>Fingerprinting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\MapFlip.resx">
@@ -245,10 +250,10 @@
     <EmbeddedResource Include="Apps\SEYR\ParseSEYR.resx">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\CameraViewer\CameraViewer.resx">
+    <EmbeddedResource Include="Apps\CameraViewer.resx">
       <DependentUpon>CameraViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\PrintLogParser.resx">
+    <EmbeddedResource Include="AdvancedTools\PrintLogParser.resx">
       <DependentUpon>PrintLogParser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\XYZplotter\Plotter.resx">
@@ -257,14 +262,14 @@
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\MetroGraphs.resx">
+    <EmbeddedResource Include="Apps\InlinePositions\MetroGraphs.resx">
       <DependentUpon>MetroGraphs.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PlexiGlass.resx">
+    <EmbeddedResource Include="Utility\PlexiGlass.resx">
       <DependentUpon>PlexiGlass.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PromptForInput.resx">
+    <EmbeddedResource Include="Utility\PromptForInput.resx">
       <DependentUpon>PromptForInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

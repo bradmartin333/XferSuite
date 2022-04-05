@@ -116,10 +116,10 @@ namespace XferSuite
 
         private void BtnAdvancedTools_Click(object sender, EventArgs e)
         {
-            if (Application.OpenForms.OfType<AdvancedTools>().Any())
-                Application.OpenForms.OfType<AdvancedTools>().First().BringToFront();
+            if (Application.OpenForms.OfType<AdvancedTools.SelectTool > ().Any())
+                Application.OpenForms.OfType<AdvancedTools.SelectTool>().First().BringToFront();
             else
-                _ = new AdvancedTools();
+                _ = new AdvancedTools.SelectTool();
             Close();
         }
     }

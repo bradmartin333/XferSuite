@@ -1,4 +1,4 @@
-﻿namespace XferSuite
+﻿namespace XferSuite.Apps.XYZplotter
 {
     partial class Plotter
     {

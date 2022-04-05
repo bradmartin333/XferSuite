@@ -1,6 +1,6 @@
 ﻿using XferHelper;
 
-namespace XferSuite
+namespace XferSuite.Apps.SEYR
 {
     public class CustomFeature
     {

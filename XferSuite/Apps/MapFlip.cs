@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace XferSuite
+namespace XferSuite.Apps
 {
     public partial class MapFlip : Form
     {

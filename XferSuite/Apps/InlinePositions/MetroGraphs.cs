@@ -11,7 +11,7 @@ using System.Linq;
 using System.Windows.Forms;
 using XferHelper;
 
-namespace XferSuite
+namespace XferSuite.Apps.InlinePositions
 {
     public partial class MetroGraphs : Form
     {

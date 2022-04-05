@@ -1,4 +1,4 @@
-﻿namespace XferSuite
+﻿namespace XferSuite.AdvancedTools
 {
     partial class CalGenerator
     {

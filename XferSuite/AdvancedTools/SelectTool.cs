@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace XferSuite
+namespace XferSuite.AdvancedTools
 {
-    public partial class AdvancedTools : Form
+    public partial class SelectTool : Form
     {
         enum AdvancedForm
         {
@@ -12,7 +12,7 @@ namespace XferSuite
             uTPlogParser,
         }
 
-        public AdvancedTools()
+        public SelectTool()
         {
             InitializeComponent();
             Show();

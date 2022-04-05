@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace XferSuite
+namespace XferSuite.Utility
 {
     public class HourGlass : IDisposable
     {

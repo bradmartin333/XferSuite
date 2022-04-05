@@ -1,6 +1,6 @@
-﻿namespace XferSuite
+﻿namespace XferSuite.AdvancedTools
 {
-    partial class AdvancedTools
+    partial class SelectTool
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdvancedTools));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectTool));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ListBox = new System.Windows.Forms.ListBox();
             this.BtnOpen = new System.Windows.Forms.Button();

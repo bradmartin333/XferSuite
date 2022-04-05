@@ -1,4 +1,4 @@
-﻿namespace XferSuite
+﻿namespace XferSuite.Utility
 {
     partial class PromptForInput
     {

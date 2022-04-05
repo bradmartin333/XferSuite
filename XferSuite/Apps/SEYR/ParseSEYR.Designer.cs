@@ -1,5 +1,5 @@
 ﻿
-namespace XferSuite
+namespace XferSuite.Apps.SEYR
 {
     partial class ParseSEYR
     {

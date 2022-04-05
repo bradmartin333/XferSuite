@@ -1,5 +1,5 @@
 ﻿
-namespace XferSuite
+namespace XferSuite.Apps.InlinePositions
 {
     partial class Fingerprinting
     {

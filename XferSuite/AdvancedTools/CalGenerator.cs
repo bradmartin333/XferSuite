@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.Linq;
 using XferHelper;
 
-namespace XferSuite
+namespace XferSuite.AdvancedTools
 {
     public partial class CalGenerator : Form
     {

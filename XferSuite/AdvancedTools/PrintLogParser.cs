@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace XferSuite
+namespace XferSuite.AdvancedTools
 {
     public partial class PrintLogParser : Form
     {
