@@ -4,6 +4,9 @@ using System.Windows.Forms;
 
 namespace XferSuite.Utility
 {
+    /// <summary>
+    /// Handy way to use a wait cursor and a loading screen overlay
+    /// </summary>
     public class HourGlass : IDisposable
     {
         public HourGlass(bool UsePlexiglass = true)

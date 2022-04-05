@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace XferSuite.AdvancedTools
 {
+    /// <summary>
+    /// Calculates duration of print sessions from a uTP log
+    /// </summary>
     public partial class PrintLogParser : Form
     {
         readonly List<Print> Prints = new List<Print>();

@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace XferSuite.AdvancedTools
 {
+    /// <summary>
+    /// Landing page to open Advanced Tools
+    /// </summary>
     public partial class SelectTool : Form
     {
         // Add enum for form as well as a human readable decription

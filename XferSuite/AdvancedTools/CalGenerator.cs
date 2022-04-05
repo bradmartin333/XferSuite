@@ -5,6 +5,9 @@ using XferHelper;
 
 namespace XferSuite.AdvancedTools
 {
+    /// <summary>
+    /// Generates a 1D cal file from linear stage data
+    /// </summary>
     public partial class CalGenerator : Form
     {
         private int XRange = 450;
