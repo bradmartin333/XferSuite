@@ -10,17 +10,25 @@ namespace XferSuite
     public partial class CreateCustom : Form
     {
         public CustomFeature CustomFeature { get; set; }
+        private List<CustomFeature> ExistingCustomFeatures;
 
-        public CreateCustom(Report.Feature[] features)
+        public CreateCustom(Report.Feature[] features, List<CustomFeature> customFeatures)
         {
             InitializeComponent();
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
             comboBoxType.SelectedIndex = 0;
             panelColor.Click += PanelColor_Click;
+            txtName.Text = Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
+            ExistingCustomFeatures = customFeatures;
         }
 
         private void BtnConfirm_Click(object sender, EventArgs e)
         {
+            if (ExistingCustomFeatures.Select(x => x.Name).Contains(txtName.Text))
+            {
+                MessageBox.Show("Custom feature name already taken.", "Create Custom SEYR Feature");
+                return;
+            }
             CustomFeature = new CustomFeature(this, ParseDataGrid());
             DialogResult = DialogResult.OK;
             Close();

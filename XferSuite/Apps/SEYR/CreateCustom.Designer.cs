@@ -212,6 +212,7 @@
             this.numOffsetX.Name = "numOffsetX";
             this.numOffsetX.Size = new System.Drawing.Size(94, 20);
             this.numOffsetX.TabIndex = 8;
+            this.numOffsetX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // numOffsetY
             // 
@@ -236,6 +237,7 @@
             this.numOffsetY.Name = "numOffsetY";
             this.numOffsetY.Size = new System.Drawing.Size(94, 20);
             this.numOffsetY.TabIndex = 9;
+            this.numOffsetY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // dataGridView
             // 
@@ -320,6 +322,7 @@
             this.txtName.Size = new System.Drawing.Size(94, 20);
             this.txtName.TabIndex = 14;
             this.txtName.Text = "Custom";
+            this.txtName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // labelColor
             // 
@@ -352,6 +355,7 @@
             this.numSize.Name = "numSize";
             this.numSize.Size = new System.Drawing.Size(94, 20);
             this.numSize.TabIndex = 18;
+            this.numSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numSize.Value = new decimal(new int[] {
             1,
             0,

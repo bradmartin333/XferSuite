@@ -74,6 +74,9 @@ namespace XferSuite
                         X = p.Y,
                         Y = p.X,
                         Pass = p.Pass,
+                        Color = p.Color,
+                        Size = p.Size,
+                        CustomTag = p.CustomTag,
                     });
                 }
                 Plottables = PlottablesRotated;
@@ -117,6 +120,9 @@ namespace XferSuite
             public double X;
             public double Y;
             public bool Pass;
+            public OxyColor Color;
+            public int Size;
+            public string CustomTag;
 
             public override string ToString()
             {
@@ -131,8 +137,7 @@ namespace XferSuite
         private bool ObjectHasBeenDropped { get; set; }
 
         private List<Plottable> Plottables = new List<Plottable>();
-        private ScatterSeries PassScatter, FailScatter;
-        private readonly List<CustomFeature> CustomFeatures = new List<CustomFeature>();
+        private List<CustomFeature> CustomFeatures = new List<CustomFeature>();
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
@@ -170,24 +175,23 @@ namespace XferSuite
             olvNeedOne.CanExpandGetter = delegate (object x) { return ((Report.Feature)x).IsParent; };
             olvNeedOne.ChildrenGetter = delegate (object x) { return ((Report.Feature)x).Children; };
 
+            checkedListBox.ItemCheck += CheckedListBox_ItemCheck;
+
             Show();
         }
 
         private void ResetFeaturesAndUI(bool preserveCustom = false)
         {
+            CustomFeatures = new List<CustomFeature>();
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
             lblSelectedFeature.Text = @"N\A";
-
-            toolStripButtonSpecificRegion.Enabled = false;
             toolStripButtonCopyParsedCSV.Enabled = false;
-
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
             if (!preserveCustom) checkedListBox.Items.Clear();
             ObjectHasBeenDropped = false;
-
             toolStripButtonAddCustom.Enabled = Features.Length > 1;
         }
 
@@ -301,7 +305,6 @@ namespace XferSuite
             foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
                 olv.Enabled = true;
             flowLayoutPanelCriteria.Enabled = true;
-            toolStripButtonSpecificRegion.Enabled = true;
             toolStripButtonCopyParsedCSV.Enabled = true;
         }
 
@@ -371,7 +374,9 @@ namespace XferSuite
                 CustomFeatures.Count == 0)
                 ParseSingle(distX, distY, filteredData, regions);
             else
-                ParseMulti(distX, distY, filteredData, regions);
+                ParseMulti(distX, distY, filteredData, regions, 
+                    !(Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0 ||
+                    Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() > 0));
         }
 
         private void ParseSingle(double distX, double distY, Report.Entry[] filteredData, string[] regions)
@@ -395,6 +400,9 @@ namespace XferSuite
                         X = thisX,
                         Y = thisY,
                         Pass = pass,
+                        Color = pass ? OxyColors.LawnGreen : OxyColors.Firebrick,
+                        Size = _PointSize,
+                        CustomTag = string.Empty,
                     });
 
                     if (pass)
@@ -407,7 +415,7 @@ namespace XferSuite
             };
         }
 
-        private void ParseMulti(double distX, double distY, Report.Entry[] filteredData, string[] regions)
+        private void ParseMulti(double distX, double distY, Report.Entry[] filteredData, string[] regions, bool onlyCustom)
         {
             int numX = Report.getNumX(filteredData);
             int numY = Report.getNumY(filteredData);
@@ -441,30 +449,46 @@ namespace XferSuite
                                     matchesFilter = thisCell.Where(x => x.Name == filter.Item1).First().State == filter.Item2;
                                 if (matchesFilter)
                                 {
-                                    Plottables.Add(new Plottable
+                                    Plottable customPlottable = new Plottable
                                     {
                                         Region = regions[l],
                                         DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}\nCustom: {custom.Name}",
                                         X = thisX + custom.Offset.X,
                                         Y = thisY + custom.Offset.Y,
                                         Pass = custom.Type == Report.State.Pass,
-                                    });
+                                        Color = custom.Color,
+                                        Size = custom.Size,
+                                        CustomTag = custom.Name,
+                                    };
+
+                                    Plottables.Add(customPlottable);
+
+                                    if (customPlottable.Pass)
+                                        passNum++;
+                                    else
+                                        failNum++;
                                 }
                             }
 
-                            Plottables.Add(new Plottable
+                            if (!onlyCustom)
                             {
-                                Region = regions[l],
-                                DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}",
-                                X = thisX,
-                                Y = thisY,
-                                Pass = pass,
-                            });
+                                Plottables.Add(new Plottable
+                                {
+                                    Region = regions[l],
+                                    DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}",
+                                    X = thisX,
+                                    Y = thisY,
+                                    Pass = pass,
+                                    Color = pass ? OxyColors.LawnGreen : OxyColors.Firebrick,
+                                    Size = _PointSize,
+                                    CustomTag = string.Empty,
+                                });
 
-                            if (pass)
-                                passNum++;
-                            else
-                                failNum++;
+                                if (pass)
+                                    passNum++;
+                                else
+                                    failNum++;
+                            }
                         }
                     }
                 }
@@ -604,13 +628,18 @@ namespace XferSuite
             view.Model = model;
         }
 
+        private void CheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            CustomFeatures[e.Index].Checked = e.NewValue == CheckState.Checked;
+        }
+
         private void ConfigurePlot()
         {
             if (Plottables.Count == 0) return;
             PlotView plot = InitPlotView();
             PlotModel plotModel = InitPlotModel();
             (ScatterSeries passScatter,  ScatterSeries failScatter) = InitScatterSeries();
-            foreach (Plottable p in Plottables)
+            foreach (Plottable p in Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag)))
             {
                 ScatterPoint scatterPoint = new ScatterPoint(p.X, p.Y, tag: p.ToString());
                 if (p.Pass)
@@ -618,26 +647,24 @@ namespace XferSuite
                 else
                     failScatter.Points.Add(scatterPoint);
             }
-            PassScatter = passScatter;
-            FailScatter = failScatter;
+            foreach (CustomFeature customFeature in CustomFeatures.Where(x => x.Checked))
+            {
+                ScatterSeries scatter = new ScatterSeries()
+                {
+                    MarkerFill = customFeature.Color,
+                    MarkerSize = customFeature.Size,
+                    TrackerFormatString = "{Tag}"
+                };
+                Plottable[] customPlottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();
+                foreach (Plottable p in customPlottables)
+                    scatter.Points.Add(new ScatterPoint(p.X, p.Y, tag: p.ToString()));
+                plotModel.Series.Add(scatter);
+            }
             StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter);
             Form form = InitLargeForm(Text);
             form.Controls.Add(plot);
             form.Show();
             form.BringToFront();
-        }
-
-        private void ConfigureSpecificRegionPlot(string region)
-        {
-            PlotView plot = InitPlotView();
-            PlotModel plotModel = plotModel = InitPlotModel();
-            (ScatterSeries passScatter, ScatterSeries failScatter) = InitScatterSeries();
-            passScatter.Points.AddRange(PassScatter.Points.Where(x => x.Tag.ToString().Contains(region)));
-            failScatter.Points.AddRange(FailScatter.Points.Where(x => x.Tag.ToString().Contains(region)));
-            StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter);
-            Form form = InitLargeForm(region);
-            form.Controls.Add(plot);
-            form.Show();
         }
 
         private Form InitLargeForm(string text)
@@ -727,13 +754,14 @@ namespace XferSuite
 
         private void ToolStripButtonAddCustom_Click(object sender, EventArgs e)
         {
-            using (CreateCustom cc = new CreateCustom(Features))
+            using (CreateCustom cc = new CreateCustom(Features, CustomFeatures))
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    checkedListBox.Items.Add(cc.CustomFeature.Name);
                     CustomFeatures.Add(cc.CustomFeature);
+                    checkedListBox.Items.Add(cc.CustomFeature.Name);
+                    checkedListBox.SetItemChecked(CustomFeatures.Count - 1, true);
                 }
                 else
                     return;
@@ -751,32 +779,6 @@ namespace XferSuite
             }
             Clipboard.SetText(sb.ToString());
             MessageBox.Show("Data copied to clipboard", "XferSuite");
-        }
-
-        private void ToolStripButtonSpecificRegion_Click(object sender, EventArgs e)
-        {
-            if (ParseWorker.IsBusy) return;
-
-            string region = string.Empty;
-
-            using (PromptForInput input = new PromptForInput(
-                prompt: "Enter region string to be plotted (RR, RC, R, C)",
-                title: $"SEYR Parser Specific Region Plotting"))
-            {
-                var result = input.ShowDialog();
-                if (result == DialogResult.OK)
-                    region = ((TextBox)input.Control).Text;
-                else
-                    return;
-            }
-
-            if (!Plottables.Where(p => p.Region == region).Any())
-            {
-                MessageBox.Show("Specified region not found");
-                return;
-            }
-
-            ConfigureSpecificRegionPlot(region);
         }
 
         #endregion

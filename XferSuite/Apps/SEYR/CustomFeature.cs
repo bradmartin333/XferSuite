@@ -10,6 +10,7 @@ namespace XferSuite
         public Report.State Type { get; set; }
         public System.Drawing.PointF Offset { get; set; }
         public System.Collections.Generic.List<(string, Report.State)> Filters { get; set; }
+        public bool Checked { get; set; } = true;
         public CustomFeature(CreateCustom form, System.Collections.Generic.List<(string, Report.State)> filters)
         {
             Name = form.txtName.Text;

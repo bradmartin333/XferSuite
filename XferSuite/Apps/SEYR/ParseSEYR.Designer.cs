@@ -47,16 +47,15 @@ namespace XferSuite
             this.cbxMisaligned = new System.Windows.Forms.CheckBox();
             this.btnApplyToAll = new System.Windows.Forms.Button();
             this.btnViewData = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkedListBox = new System.Windows.Forms.CheckedListBox();
             this.toolStripButtonParse = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddCustom = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyParsedCSV = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonSpecificRegion = new System.Windows.Forms.ToolStripButton();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.checkedListBox = new System.Windows.Forms.CheckedListBox();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -288,6 +287,27 @@ namespace XferSuite
             this.btnViewData.UseVisualStyleBackColor = true;
             this.btnViewData.Click += new System.EventHandler(this.BtnViewData_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Location = new System.Drawing.Point(459, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(112, 20);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Custom";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // checkedListBox
+            // 
+            this.checkedListBox.CheckOnClick = true;
+            this.checkedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBox.FormattingEnabled = true;
+            this.checkedListBox.Location = new System.Drawing.Point(459, 53);
+            this.checkedListBox.Name = "checkedListBox";
+            this.checkedListBox.Size = new System.Drawing.Size(112, 214);
+            this.checkedListBox.TabIndex = 6;
+            // 
             // toolStripButtonParse
             // 
             this.toolStripButtonParse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -328,7 +348,6 @@ namespace XferSuite
             this.toolStripButtonAddCustom,
             this.toolStripButtonReset,
             this.toolStripButtonCopyParsedCSV,
-            this.toolStripButtonSpecificRegion,
             this.toolStripProgressBar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -357,43 +376,11 @@ namespace XferSuite
             this.toolStripButtonCopyParsedCSV.Text = "Copy Parsed Data as CSV";
             this.toolStripButtonCopyParsedCSV.Click += new System.EventHandler(this.ToolStripButtonCopyParsedCSV_Click);
             // 
-            // toolStripButtonSpecificRegion
-            // 
-            this.toolStripButtonSpecificRegion.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonSpecificRegion.Enabled = false;
-            this.toolStripButtonSpecificRegion.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSpecificRegion.Image")));
-            this.toolStripButtonSpecificRegion.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonSpecificRegion.Name = "toolStripButtonSpecificRegion";
-            this.toolStripButtonSpecificRegion.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonSpecificRegion.Text = "Plot Specific Region";
-            this.toolStripButtonSpecificRegion.Click += new System.EventHandler(this.ToolStripButtonSpecificRegion_Click);
-            // 
             // toolStripProgressBar
             // 
             this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(380, 24);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(459, 30);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 20);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Custom";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // checkedListBox
-            // 
-            this.checkedListBox.CheckOnClick = true;
-            this.checkedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkedListBox.FormattingEnabled = true;
-            this.checkedListBox.Location = new System.Drawing.Point(459, 53);
-            this.checkedListBox.Name = "checkedListBox";
-            this.checkedListBox.Size = new System.Drawing.Size(112, 214);
-            this.checkedListBox.TabIndex = 6;
             // 
             // ParseSEYR
             // 
@@ -427,7 +414,6 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonAddCustom;
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonSpecificRegion;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ToolStripButton toolStripButtonCopyParsedCSV;
         private BrightIdeasSoftware.TreeListView olvNeedOne;
