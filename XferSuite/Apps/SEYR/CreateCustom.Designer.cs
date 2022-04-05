@@ -369,6 +369,7 @@
             this.ClientSize = new System.Drawing.Size(428, 277);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(444, 316);
             this.Name = "CreateCustom";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create Custom SEYR Feature";

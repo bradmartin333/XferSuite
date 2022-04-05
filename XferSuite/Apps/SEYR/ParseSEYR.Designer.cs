@@ -56,6 +56,7 @@ namespace XferSuite
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyParsedCSV = new System.Windows.Forms.ToolStripButton();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripButtonEditPlotOrder = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -347,6 +348,7 @@ namespace XferSuite
             this.toolStripButtonSmartSort,
             this.toolStripButtonAddCustom,
             this.toolStripButtonReset,
+            this.toolStripButtonEditPlotOrder,
             this.toolStripButtonCopyParsedCSV,
             this.toolStripProgressBar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -381,6 +383,16 @@ namespace XferSuite
             this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(380, 24);
+            // 
+            // toolStripButtonEditPlotOrder
+            // 
+            this.toolStripButtonEditPlotOrder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEditPlotOrder.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonEditPlotOrder.Image")));
+            this.toolStripButtonEditPlotOrder.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEditPlotOrder.Name = "toolStripButtonEditPlotOrder";
+            this.toolStripButtonEditPlotOrder.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonEditPlotOrder.Text = "Edit Plot Order";
+            this.toolStripButtonEditPlotOrder.Click += new System.EventHandler(this.ToolStripButtonEditPlotOrder_Click);
             // 
             // ParseSEYR
             // 
@@ -434,5 +446,6 @@ namespace XferSuite
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckedListBox checkedListBox;
+        private System.Windows.Forms.ToolStripButton toolStripButtonEditPlotOrder;
     }
 }

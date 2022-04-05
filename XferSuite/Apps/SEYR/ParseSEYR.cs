@@ -84,19 +84,6 @@ namespace XferSuite
             }
         }
 
-        private bool _PlotOrder = false;
-        [Category("User Parameters")]
-        [Description("True: Fail beneath Pass, False: Pass beneath Fail")]
-        public bool PlotOrder
-        {
-            get => _PlotOrder;
-            set
-            {
-                _PlotOrder = value;
-                ConfigurePlot();
-            }
-        }
-
         private bool _ShowAxesNames = false;
         [Category("User Parameters")]
         public bool ShowAxesNames
@@ -138,6 +125,7 @@ namespace XferSuite
 
         private List<Plottable> Plottables = new List<Plottable>();
         private List<CustomFeature> CustomFeatures = new List<CustomFeature>();
+        private List<string> PlotOrder = new List<string>();
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
@@ -182,7 +170,6 @@ namespace XferSuite
 
         private void ResetFeaturesAndUI(bool preserveCustom = false)
         {
-            CustomFeatures = new List<CustomFeature>();
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
             lblSelectedFeature.Text = @"N\A";
@@ -190,9 +177,13 @@ namespace XferSuite
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
-            if (!preserveCustom) checkedListBox.Items.Clear();
             ObjectHasBeenDropped = false;
             toolStripButtonAddCustom.Enabled = Features.Length > 1;
+            if (!preserveCustom)
+            {
+                CustomFeatures = new List<CustomFeature>();
+                checkedListBox.Items.Clear();
+            }
         }
 
         #endregion
@@ -613,19 +604,27 @@ namespace XferSuite
             );
         }
 
-        private void StackAndShowPlots(ref PlotView view, ref PlotModel model, ScatterSeries passSeries, ScatterSeries failSeries)
+        private void StackAndShowPlots(ref PlotView view, ref PlotModel model, ScatterSeries passSeries, ScatterSeries failSeries, List<ScatterSeries> customScatters)
         {
-            if (_PlotOrder)
+            if (PlotOrder.Count != 2 + CustomFeatures.Where(x => x.Checked).Select(x => x.Name).Count()) AutoPlotOrder();
+            foreach (string plotName in PlotOrder)
             {
-                model.Series.Add(failSeries);
-                model.Series.Add(passSeries);
-            }
-            else
-            {
-                model.Series.Add(passSeries);
-                model.Series.Add(failSeries);
+                if (plotName == "Pass")
+                    model.Series.Add(passSeries);
+                else if (plotName == "Fail")
+                    model.Series.Add(failSeries);
+                else
+                    model.Series.Add(customScatters[
+                        CustomFeatures.Where(x => x.Checked).ToList().
+                        IndexOf(CustomFeatures.Where(x => x.Name == plotName).First())]);
             }
             view.Model = model;
+        }
+
+        private void AutoPlotOrder()
+        {
+            PlotOrder = new List<string>() { "Pass", "Fail" };
+            PlotOrder.AddRange(CustomFeatures.Where(x => x.Checked).Select(x => x.Name));
         }
 
         private void CheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -647,6 +646,7 @@ namespace XferSuite
                 else
                     failScatter.Points.Add(scatterPoint);
             }
+            List<ScatterSeries> customScatters = new List<ScatterSeries>();
             foreach (CustomFeature customFeature in CustomFeatures.Where(x => x.Checked))
             {
                 ScatterSeries scatter = new ScatterSeries()
@@ -658,9 +658,9 @@ namespace XferSuite
                 Plottable[] customPlottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();
                 foreach (Plottable p in customPlottables)
                     scatter.Points.Add(new ScatterPoint(p.X, p.Y, tag: p.ToString()));
-                plotModel.Series.Add(scatter);
+                customScatters.Add(scatter);
             }
-            StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter);
+            StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter, customScatters);
             Form form = InitLargeForm(Text);
             form.Controls.Add(plot);
             form.Show();
@@ -763,6 +763,19 @@ namespace XferSuite
                     checkedListBox.Items.Add(cc.CustomFeature.Name);
                     checkedListBox.SetItemChecked(CustomFeatures.Count - 1, true);
                 }
+                else
+                    return;
+            }
+        }
+
+        private void ToolStripButtonEditPlotOrder_Click(object sender, EventArgs e)
+        {
+            AutoPlotOrder();
+            using (EditPlotOrder edit = new EditPlotOrder(PlotOrder))
+            {
+                var result = edit.ShowDialog();
+                if (result == DialogResult.OK)
+                    PlotOrder = edit.PlotOrder;
                 else
                     return;
             }

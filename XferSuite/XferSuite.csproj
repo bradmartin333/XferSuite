@@ -148,6 +148,12 @@
       <DependentUpon>CreateCustom.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\SEYR\CustomFeature.cs" />
+    <Compile Include="Apps\SEYR\EditPlotOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\SEYR\EditPlotOrder.Designer.cs">
+      <DependentUpon>EditPlotOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\SEYR\ParseSEYR.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -233,6 +239,9 @@
     <EmbeddedResource Include="Apps\SEYR\CreateCustom.resx">
       <DependentUpon>CreateCustom.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Apps\SEYR\EditPlotOrder.resx">
+      <DependentUpon>EditPlotOrder.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\ParseSEYR.resx">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
     </EmbeddedResource>
@@ -294,6 +303,7 @@
     <None Include="Resources\magic_select.png" />
     <None Include="Resources\eraser.png" />
     <None Include="Resources\UpdateAvailable.png" />
+    <None Include="Resources\iconmonstr-check-mark-1-64.png" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>
