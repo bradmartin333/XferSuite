@@ -55,7 +55,6 @@ namespace XferSuite.Apps.SEYR
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEditPlotOrder = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonCopyParsedCSV = new System.Windows.Forms.ToolStripButton();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
@@ -366,7 +365,6 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonAddCustom,
             this.toolStripButtonReset,
             this.toolStripButtonEditPlotOrder,
-            this.toolStripButtonCopyParsedCSV,
             this.toolStripProgressBar});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
@@ -394,22 +392,11 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonEditPlotOrder.Text = "Edit Plot Order";
             this.toolStripButtonEditPlotOrder.Click += new System.EventHandler(this.ToolStripButtonEditPlotOrder_Click);
             // 
-            // toolStripButtonCopyParsedCSV
-            // 
-            this.toolStripButtonCopyParsedCSV.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonCopyParsedCSV.Enabled = false;
-            this.toolStripButtonCopyParsedCSV.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCopyParsedCSV.Image")));
-            this.toolStripButtonCopyParsedCSV.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonCopyParsedCSV.Name = "toolStripButtonCopyParsedCSV";
-            this.toolStripButtonCopyParsedCSV.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonCopyParsedCSV.Text = "Copy Parsed Data as CSV";
-            this.toolStripButtonCopyParsedCSV.Click += new System.EventHandler(this.ToolStripButtonCopyParsedCSV_Click);
-            // 
             // toolStripProgressBar
             // 
             this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(380, 24);
+            this.toolStripProgressBar.Size = new System.Drawing.Size(400, 24);
             // 
             // ParseSEYR
             // 
@@ -445,7 +432,6 @@ namespace XferSuite.Apps.SEYR
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
-        private System.Windows.Forms.ToolStripButton toolStripButtonCopyParsedCSV;
         private BrightIdeasSoftware.TreeListView olvNeedOne;
         private BrightIdeasSoftware.OLVColumn olvColumn3;
         private BrightIdeasSoftware.ObjectListView olvRequire;

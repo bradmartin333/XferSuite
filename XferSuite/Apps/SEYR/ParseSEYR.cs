@@ -62,12 +62,12 @@ namespace XferSuite.Apps.SEYR
         public List<PlotOrderElement> PlotOrder = PlotOrderElement.GenerateDefaults();
         public readonly List<CustomFeature> CustomFeatures = new List<CustomFeature>();
 
-        private FileInfo Path;
-        private Report.Entry[] Data;
+        private readonly FileInfo Path;
+        private readonly Report.Entry[] Data;
         private Report.Feature[] Features;
         private Report.Feature SelectedFeature;
         private bool ObjectHasBeenDropped; // For criteria selector - possibly unecessary
-        private Results Results;
+        private readonly Results Results;
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly BackgroundWorker ParseWorker = new BackgroundWorker();
@@ -118,7 +118,6 @@ namespace XferSuite.Apps.SEYR
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
             lblSelectedFeature.Text = @"N\A";
-            toolStripButtonCopyParsedCSV.Enabled = false;
             olvBuffer.SetObjects(Features);
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
@@ -253,7 +252,6 @@ namespace XferSuite.Apps.SEYR
             foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
                 olv.Enabled = true;
             flowLayoutPanelCriteria.Enabled = true;
-            toolStripButtonCopyParsedCSV.Enabled = true;
         }
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -515,7 +513,10 @@ namespace XferSuite.Apps.SEYR
             {
                 var result = edit.ShowDialog();
                 if (result == DialogResult.OK)
+                {
                     PlotOrder = edit.PlotOrder;
+                    Results.UpdatePlot("Plot order updated");
+                } 
                 else
                     return;
             }
