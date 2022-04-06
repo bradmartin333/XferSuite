@@ -121,10 +121,10 @@
   <data name="toolStripButtonParse.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACqSURBVEhLYxheQC+PZ7dhnoAelEt9oFvA818viOevXgH3
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACqSURBVEhLYxheQC+PZ7dhnoAelEt9oFvA818vgOevXgH3
         fMNSYSmoMPUAyAIYVivg+apfwNuolSXKA5WmHCBbAMN6+TzPgXSKfT0DC1QZ+QDdcGSsXcBzWa+QzwOq
         lDyAzWB0TFFCwGYgNkx2QsBmGD5MckLAZggxmOiEgK6RVEwwIWDTRAqmmQU0CyKaRTJNkynNMhrNigqa
-        FXY0K65pWuHQvMocgoCBAQANczvMYYN/RwAAAABJRU5ErkJggg==
+        FXY0K65pWuHQvMocgoCBAQDooDvEH5ssYwAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="toolStripButtonAddCustom.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -157,7 +157,7 @@
         oh+aSYyKmwC2gAAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="toolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
   <data name="toolStripButtonSmartSort.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

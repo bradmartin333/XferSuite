@@ -124,7 +124,6 @@ namespace XferSuite.Apps.SEYR
         private bool ObjectHasBeenDropped { get; set; } // For criteria selector - possibly unecessary
 
         private List<Plottable> Plottables = new List<Plottable>();
-        private List<CustomFeature> CustomFeatures = new List<CustomFeature>();
         private List<string> PlotOrder = new List<string>();
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
@@ -165,12 +164,12 @@ namespace XferSuite.Apps.SEYR
             olvNeedOne.CanExpandGetter = delegate (object x) { return ((Report.Feature)x).IsParent; };
             olvNeedOne.ChildrenGetter = delegate (object x) { return ((Report.Feature)x).Children; };
 
-            checkedListBox.ItemCheck += CheckedListBox_ItemCheck;
+            olvCustom.DoubleClick += OlvCustom_DoubleClick;
 
             Show();
         }
 
-        private void ResetFeaturesAndUI(bool preserveCustom = false)
+        private void ResetFeaturesAndUI()
         {
             Features = Report.getFeatures(Data);
             SelectedFeature = null;
@@ -181,11 +180,6 @@ namespace XferSuite.Apps.SEYR
             olvNeedOne.Objects = null;
             ObjectHasBeenDropped = false;
             toolStripButtonAddCustom.Enabled = Features.Length > 1;
-            if (!preserveCustom)
-            {
-                CustomFeatures = new List<CustomFeature>();
-                checkedListBox.Items.Clear();
-            }
         }
 
         #endregion
@@ -266,6 +260,18 @@ namespace XferSuite.Apps.SEYR
                 feature.Requirements = requirements.ToArray();
         }
 
+        private void OlvCustom_DoubleClick(object sender, EventArgs e)
+        {
+            if (olvCustom.SelectedIndex == -1) return;
+            CustomFeature customFeature = (CustomFeature)olvCustom.SelectedObject;
+            MessageBox.Show(customFeature.Name);
+        }
+
+        private CustomFeature GetOLVCustomObject(string name)
+        {
+            return olvCustom.CheckedObjectsEnumerable.OfType<CustomFeature>().Where(x => x.Name == name).First();
+        }
+
         #endregion
 
         #region Parse Methods
@@ -303,12 +309,6 @@ namespace XferSuite.Apps.SEYR
 
         private void Parse(bool noPitches = false)
         {
-            if (Features.Where(x => x.Bucket == Report.Bucket.Buffer).Count() == Features.Length && CustomFeatures.Count == 0)
-            {
-                MessageBox.Show("All features are buffers. Parsing aborted.");
-                return;
-            }
-
             // Reset
             ParseWorker.ReportProgress(1, "(RR, RC, R, C)\tYield\n"); // Header
             Plottables = new List<Plottable>();
@@ -353,12 +353,12 @@ namespace XferSuite.Apps.SEYR
             }
 
             string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
-            var filteredData = CustomFeatures.Count == 0 ? Report.removeBuffers(Data, bufferStrings) : Data;
+            var filteredData = olvCustom.CheckedObjects.Count == 0 ? Report.removeBuffers(Data, bufferStrings) : Data;
             string[] regions = Report.getRegions(filteredData);
 
             if (Features.Where(x => x.Bucket == Report.Bucket.Required).Count() == 1 &&
                 Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() == 0 &&
-                CustomFeatures.Count == 0)
+                olvCustom.CheckedObjects.Count == 0)
                 ParseSingle(distX, distY, filteredData, regions);
             else
                 ParseMulti(distX, distY, filteredData, regions, 
@@ -431,7 +431,7 @@ namespace XferSuite.Apps.SEYR
                             double thisX = thisCell[0].X + i * distX * (_FlipXAxis ? -1 : 1);
                             double thisY = thisCell[0].Y + j * distY * (_FlipYAxis ? 1 : -1);
 
-                            foreach (CustomFeature custom in CustomFeatures)
+                            foreach (CustomFeature custom in olvCustom.CheckedObjects)
                             {
                                 bool matchesFilter = false;      
                                 foreach ((string, Report.State) filter in custom.Filters)
@@ -588,93 +588,59 @@ namespace XferSuite.Apps.SEYR
             return plotModel;
         }
 
-        private (ScatterSeries, ScatterSeries) InitScatterSeries()
+        private void StackAndShowPlots(ref PlotView view, ref PlotModel model, List<ScatterSeries> scatters)
         {
-            return (
-                new ScatterSeries()
-                {
-                    MarkerFill = OxyColors.LawnGreen,
-                    MarkerSize = _PointSize,
-                    TrackerFormatString = "{Tag}"
-                },
-                new ScatterSeries()
-                {
-                    MarkerFill = OxyColors.Firebrick,
-                    MarkerSize = _PointSize,
-                    TrackerFormatString = "{Tag}"
-                }
-            );
-        }
-
-        private void StackAndShowPlots(ref PlotView view, ref PlotModel model, ScatterSeries passSeries, ScatterSeries failSeries, List<ScatterSeries> customScatters)
-        {
-            if (PlotOrder.Count != 2 + CustomFeatures.Where(x => x.Checked).Select(x => x.Name).Count()) AutoPlotOrder();
-            foreach (string plotName in PlotOrder)
+            foreach (ScatterSeries series in scatters)
             {
-                if (plotName == "Pass")
-                    if (passSeries.Points.Count > 0)
-                        model.Series.Add(passSeries);
-                    else
-                        System.Diagnostics.Debug.WriteLine($"Skipped plotting pass");
-                else if (plotName == "Fail")
-                    if (failSeries.Points.Count > 0)
-                        model.Series.Add(failSeries); 
-                    else
-                        System.Diagnostics.Debug.WriteLine($"Skipped plotting fail");
+                if (series != null && series.Points.Count > 0)
+                    model.Series.Add(series);
                 else
-                {
-                    ScatterSeries series = customScatters[
-                        CustomFeatures.Where(x => x.Checked).ToList().
-                        IndexOf(CustomFeatures.Where(x => x.Name == plotName).First())];
-                    if (series != null && series.Points.Count > 0)
-                        model.Series.Add(series);
-                    else
-                        System.Diagnostics.Debug.WriteLine($"Skipped plotting Custom: {plotName}");
-                }     
+                    System.Diagnostics.Debug.WriteLine($"Skipped plotting {series.Tag}");   
             }
             view.Model = model;
-        }
-
-        private void AutoPlotOrder()
-        {
-            PlotOrder = new List<string>() { "Pass", "Fail" };
-            PlotOrder.AddRange(CustomFeatures.Where(x => x.Checked).Select(x => x.Name));
-        }
-
-        private void CheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            CustomFeatures[e.Index].Checked = e.NewValue == CheckState.Checked;
         }
 
         private void ConfigurePlot()
         {
             if (Plottables.Count == 0) return;
+
             PlotView plot = InitPlotView();
             PlotModel plotModel = InitPlotModel();
-            (ScatterSeries passScatter,  ScatterSeries failScatter) = InitScatterSeries();
-            foreach (Plottable p in Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag)))
+            List<ScatterSeries> scatters = new List<ScatterSeries>();
+
+            foreach (string plotName in PlotOrder)
             {
-                ScatterPoint scatterPoint = new ScatterPoint(p.X, p.Y, tag: p.ToString());
-                if (p.Pass)
-                    passScatter.Points.Add(scatterPoint);
-                else
-                    failScatter.Points.Add(scatterPoint);
-            }
-            List<ScatterSeries> customScatters = new List<ScatterSeries>();
-            foreach (CustomFeature customFeature in CustomFeatures.Where(x => x.Checked))
-            {
-                ScatterSeries scatter = new ScatterSeries()
+                ScatterSeries series = new ScatterSeries() { Tag = plotName };
+                Plottable[] plottables;
+
+                switch (plotName)
                 {
-                    MarkerFill = customFeature.Color,
-                    MarkerSize = customFeature.Size,
-                    TrackerFormatString = "{Tag}"
-                };
-                Plottable[] customPlottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();
-                foreach (Plottable p in customPlottables)
-                    scatter.Points.Add(new ScatterPoint(p.X, p.Y, tag: p.ToString()));
-                customScatters.Add(scatter);
+                    case "Pass":
+                        series.MarkerFill = OxyColors.LawnGreen;
+                        series.MarkerSize = _PointSize;
+                        series.TrackerFormatString = "{Tag}";
+                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass).ToArray();
+                        break;
+                    case "Fail":
+                        series.MarkerFill = OxyColors.Firebrick;
+                        series.MarkerSize = _PointSize;
+                        series.TrackerFormatString = "{Tag}";
+                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
+                        break;
+                    default:
+                        CustomFeature customFeature = GetOLVCustomObject(plotName);
+                        series.MarkerFill = customFeature.Color;
+                        series.MarkerSize = customFeature.Size;
+                        series.TrackerFormatString = "{Tag}";
+                        plottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();
+                        break;
+                }
+
+                foreach (Plottable p in Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag)))
+                    series.Points.Add(new ScatterPoint(p.X, p.Y, tag: p.ToString()));
             }
-            StackAndShowPlots(ref plot, ref plotModel, passScatter, failScatter, customScatters);
+
+            StackAndShowPlots(ref plot, ref plotModel, scatters);
             Form form = InitLargeForm(Text);
             form.Controls.Add(plot);
             form.Show();
@@ -738,7 +704,7 @@ namespace XferSuite.Apps.SEYR
             if (ParseWorker.IsBusy) return;
             
             Report.Feature[] originalFeatures = Features; // Maintain requirements
-            ResetFeaturesAndUI(preserveCustom: true);
+            ResetFeaturesAndUI();
 
             // Alphabetical order looks better in the NeedOne bucket
             var sortList = Features.ToList();
@@ -768,15 +734,11 @@ namespace XferSuite.Apps.SEYR
 
         private void ToolStripButtonAddCustom_Click(object sender, EventArgs e)
         {
-            using (CreateCustom cc = new CreateCustom(Features, CustomFeatures))
+            using (CreateCustom cc = new CreateCustom(Features))
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
-                {
-                    CustomFeatures.Add(cc.CustomFeature);
-                    checkedListBox.Items.Add(cc.CustomFeature.Name);
-                    checkedListBox.SetItemChecked(CustomFeatures.Count - 1, true);
-                }
+                    olvCustom.AddObject(cc.CustomFeature);
                 else
                     return;
             }
@@ -784,7 +746,6 @@ namespace XferSuite.Apps.SEYR
 
         private void ToolStripButtonEditPlotOrder_Click(object sender, EventArgs e)
         {
-            AutoPlotOrder();
             using (EditPlotOrder edit = new EditPlotOrder(PlotOrder))
             {
                 var result = edit.ShowDialog();
