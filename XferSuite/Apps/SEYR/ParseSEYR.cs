@@ -174,6 +174,7 @@ namespace XferSuite.Apps.SEYR
             olvNeedOne.ChildrenGetter = delegate (object x) { return ((Report.Feature)x).Children; };
 
             olvCustom.DoubleClick += OlvCustom_DoubleClick;
+            olvCustom.FormatRow += OlvCustom_FormatRow;
 
             Show();
         }
@@ -281,6 +282,13 @@ namespace XferSuite.Apps.SEYR
                 else
                     return;
             }
+        }
+
+        private void OlvCustom_FormatRow(object sender, FormatRowEventArgs e)
+        {
+            CustomFeature customFeature = (CustomFeature)e.Model;
+            e.Item.BackColor = customFeature.Color;
+            e.Item.ForeColor = customFeature.ContrastColor;
         }
 
         #endregion

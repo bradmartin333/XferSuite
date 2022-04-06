@@ -127,6 +127,11 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        public Color ContrastColor
+        {
+            get => ((0.299 * _Color.R + 0.587 * _Color.G + 0.114 * _Color.B) / 255) > 0.5 ? Color.Black : Color.White;
+        }
+
         public CustomFeature() 
         { 
             _Name = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(); // Random string
