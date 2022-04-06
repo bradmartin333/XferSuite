@@ -44,14 +44,26 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _PointSize = 1;
+        private int _PassPointSize = 1;
         [Category("User Parameters")]
-        public int PointSize
+        public int PassPointSize
         {
-            get => _PointSize;
+            get => _PassPointSize;
             set
             {
-                _PointSize = value;
+                _PassPointSize = value;
+                ConfigurePlot();
+            }
+        }
+
+        private int _FailPointSize = 1;
+        [Category("User Parameters")]
+        public int FailPointSize
+        {
+            get => _FailPointSize;
+            set
+            {
+                _FailPointSize = value;
                 ConfigurePlot();
             }
         }
@@ -74,8 +86,6 @@ namespace XferSuite.Apps.SEYR
                         X = p.Y,
                         Y = p.X,
                         Pass = p.Pass,
-                        Color = p.Color,
-                        Size = p.Size,
                         CustomTag = p.CustomTag,
                     });
                 }
@@ -107,8 +117,6 @@ namespace XferSuite.Apps.SEYR
             public double X;
             public double Y;
             public bool Pass;
-            public OxyColor Color;
-            public int Size;
             public string CustomTag;
 
             public override string ToString()
@@ -125,7 +133,7 @@ namespace XferSuite.Apps.SEYR
 
         private List<Plottable> Plottables = new List<Plottable>();
         private List<PlotOrderElement> PlotOrder = PlotOrderElement.GenerateDefaults();
-        private List<CustomFeature> CustomFeatures = new List<CustomFeature>();
+        private readonly List<CustomFeature> CustomFeatures = new List<CustomFeature>();
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>(); // Will be replaced when upgraded to Scottplot
@@ -382,8 +390,6 @@ namespace XferSuite.Apps.SEYR
                         X = thisX,
                         Y = thisY,
                         Pass = pass,
-                        Color = pass ? OxyColors.LawnGreen : OxyColors.Firebrick,
-                        Size = _PointSize,
                         CustomTag = string.Empty,
                     });
 
@@ -447,8 +453,6 @@ namespace XferSuite.Apps.SEYR
                                         X = thisX + custom.Offset.X,
                                         Y = thisY + custom.Offset.Y,
                                         Pass = custom.Type == Report.State.Pass,
-                                        Color = custom.Color,
-                                        Size = custom.Size,
                                         CustomTag = custom.Name,
                                     };
 
@@ -470,8 +474,6 @@ namespace XferSuite.Apps.SEYR
                                     X = thisX,
                                     Y = thisY,
                                     Pass = pass,
-                                    Color = pass ? OxyColors.LawnGreen : OxyColors.Firebrick,
-                                    Size = _PointSize,
                                     CustomTag = string.Empty,
                                 });
 
@@ -619,13 +621,13 @@ namespace XferSuite.Apps.SEYR
                 {
                     case "Pass":
                         series.MarkerFill = OxyColors.LawnGreen;
-                        series.MarkerSize = _PointSize;
+                        series.MarkerSize = _PassPointSize;
                         series.TrackerFormatString = "{Tag}";
                         plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass).ToArray();
                         break;
                     case "Fail":
                         series.MarkerFill = OxyColors.Firebrick;
-                        series.MarkerSize = _PointSize;
+                        series.MarkerSize = _FailPointSize;
                         series.TrackerFormatString = "{Tag}";
                         plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
                         break;
