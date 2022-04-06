@@ -246,6 +246,7 @@
             this.Feature,
             this.Criteria});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridView.Location = new System.Drawing.Point(3, 3);
             this.dataGridView.Name = "dataGridView";
             this.tableLayoutPanel1.SetRowSpan(this.dataGridView, 9);

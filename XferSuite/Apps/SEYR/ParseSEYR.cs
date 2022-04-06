@@ -272,12 +272,12 @@ namespace XferSuite.Apps.SEYR
         private void OlvCustom_DoubleClick(object sender, EventArgs e)
         {
             if (olvCustom.SelectedIndex == -1) return;
-            CustomFeature customFeature = (CustomFeature)olvCustom.SelectedObject;
-            using (CreateCustom cc = new CreateCustom(Features, customFeature))
+            CustomFeature feature = (CustomFeature)olvCustom.SelectedObject;
+            using (CreateCustom cc = new CreateCustom(Features, CustomFeatures, feature))
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
-                    CustomFeatures[CustomFeatures.IndexOf(CustomFeatures.Where(x => x.Name == customFeature.Name).First())] = cc.CustomFeature;
+                    CustomFeatures[olvCustom.SelectedIndex] = cc.CustomFeature;
                 else
                     return;
             }
@@ -747,7 +747,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ToolStripButtonAddCustom_Click(object sender, EventArgs e)
         {
-            using (CreateCustom cc = new CreateCustom(Features))
+            using (CreateCustom cc = new CreateCustom(Features, CustomFeatures))
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)

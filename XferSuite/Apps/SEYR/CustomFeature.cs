@@ -137,5 +137,22 @@ namespace XferSuite.Apps.SEYR
             _Offset = new PointF((float)form.numOffsetX.Value, (float)form.numOffsetY.Value);
             _Filters = filters;
         }
+
+        public CustomFeature() { }
+
+        public CustomFeature Clone()
+        {
+            return new CustomFeature()
+            {
+                Name = _Name,
+                Color = _Color,
+                OxyColor = _OxyColor,
+                Size = _Size,
+                Type = _Type,
+                Offset = _Offset,
+                Filters = _Filters,
+                Visible = _Visible
+            };
+        }
     }
 }

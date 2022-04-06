@@ -13,19 +13,23 @@ namespace XferSuite.Apps.SEYR
     public partial class CreateCustom : Form
     {
         public CustomFeature CustomFeature { get; set; }
+        private List<CustomFeature> ExistingCustomFeatures;
 
-        public CreateCustom(Report.Feature[] features)
+        public CreateCustom(Report.Feature[] features, List<CustomFeature> customFeatures)
         {
             InitializeComponent();
+            ExistingCustomFeatures = customFeatures;
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
             comboBoxType.SelectedIndex = 0;
             panelColor.Click += PanelColor_Click;
             txtName.Text = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(); // Random string
         }
 
-        public CreateCustom(Report.Feature[] features, CustomFeature feature)
+        public CreateCustom(Report.Feature[] features, List<CustomFeature> customFeatures, CustomFeature feature)
         {
             InitializeComponent();
+            ExistingCustomFeatures = customFeatures;
+            Text = Text.Replace("Create", "Edit");
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
             txtName.Text = feature.Name;
             panelColor.BackColor = Color.FromArgb(feature.Color.A, feature.Color.R, feature.Color.G, feature.Color.B);
@@ -40,11 +44,11 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnConfirm_Click(object sender, EventArgs e)
         {
-            //if (ExistingCustomFeatures.Select(x => x.Name).Contains(txtName.Text))
-            //{
-            //    MessageBox.Show("Custom feature name already taken.", "Create Custom SEYR Feature");
-            //    return;
-            //}
+            if (ExistingCustomFeatures.Select(x => x.Name).Contains(txtName.Text))
+            {
+                MessageBox.Show("Custom feature name already taken.", "Create Custom SEYR Feature");
+                return;
+            }
             CustomFeature = new CustomFeature(this, ParseDataGrid());
             DialogResult = DialogResult.OK;
             Close();
