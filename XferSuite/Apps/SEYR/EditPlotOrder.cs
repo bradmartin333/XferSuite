@@ -1,55 +1,56 @@
-﻿using System.Collections.Generic;
+﻿using BrightIdeasSoftware;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace XferSuite.Apps.SEYR
 {
     public partial class EditPlotOrder : Form
     {
-        public List<string> PlotOrder { get; set; } = new List<string>();
-        public EditPlotOrder(List<string> plotOrder)
+        public List<PlotOrderElement> PlotOrder { get; set; } = new List<PlotOrderElement>();
+        public EditPlotOrder(List<PlotOrderElement> plotOrder)
         {
             InitializeComponent();
-            listBox1.Items.AddRange(plotOrder.ToArray());
-            listBox1.KeyUp += ListBox1_KeyUp;
+            PlotOrder = plotOrder;
+            SimpleDropSink sink = (SimpleDropSink)olv.DropSink;
+            sink.AcceptExternal = false;
+            sink.CanDropBetween = true;
+            sink.CanDropOnBackground = false;
+            sink.AcceptableLocations = DropTargetLocation.BetweenItems | DropTargetLocation.AboveItem | DropTargetLocation.BelowItem;
+            olv.ModelCanDrop += Olv_ModelCanDrop;
+            olv.ModelDropped += Olv_ModelDropped;
+            olv.AddObjects(PlotOrder);
         }
 
-        private void ListBox1_KeyUp(object sender, KeyEventArgs e)
+        private void Olv_ModelCanDrop(object sender, ModelDropEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                if (ModifierKeys.HasFlag(Keys.Shift))
-                    btnMoveAll.PerformClick();
-                else
-                    btnMove.PerformClick();
-            }   
+            e.Handled = true;
+            e.Effect = DragDropEffects.Move;
         }
 
-        private void BtnMove_Click(object sender, System.EventArgs e)
+        private void Olv_ModelDropped(object sender, ModelDropEventArgs e)
         {
-            if (listBox1.Items.Count == 0)
-                Confirm();
-            if (listBox1.SelectedIndex != -1)
+            e.Effect = DragDropEffects.Move;
+            int index = e.DropTargetIndex;
+            OLVListItem node = olv.GetItem(index);
+            if (node != null && index != -1)
             {
-                listBox2.Items.Add(listBox1.SelectedItem);
-                listBox1.Items.RemoveAt(listBox1.SelectedIndex);
+                if (index != 0) index++;
+                olv.MoveObjects(index, e.SourceModels);
+                olv.Refresh();
             }
         }
 
-        private void btnMoveAll_Click(object sender, System.EventArgs e)
+        private void UpdatePlotOrder()
         {
-            listBox1.Items.AddRange(listBox1.Items);
-            listBox2.Items.Clear();
+            int count = PlotOrder.Count;
+            PlotOrder.Clear();
+            for (int i = 0; i < count; i++)
+                PlotOrder.Add((PlotOrderElement)olv.GetModelObject(i));
         }
 
-        private void btnDone_Click(object sender, System.EventArgs e)
+        private void BtnDone_Click(object sender, System.EventArgs e)
         {
-            Confirm();
-        }
-
-        private void Confirm()
-        {
-            foreach (string item in listBox2.Items)
-                PlotOrder.Add(item);
+            UpdatePlotOrder();
             DialogResult = DialogResult.OK;
             Close();
         }

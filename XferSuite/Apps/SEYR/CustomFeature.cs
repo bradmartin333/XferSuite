@@ -85,7 +85,18 @@ namespace XferSuite.Apps.SEYR
         }
 
         public System.Collections.Generic.List<(string, Report.State)> _Filters;
-        public System.Collections.Generic.List<(string, Report.State)> Filters { get; set; }
+        public System.Collections.Generic.List<(string, Report.State)> Filters
+        {
+            get => _Filters;
+            set
+            {
+                if (value != _Filters)
+                {
+                    _Filters = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         private bool _Visible = true;
         public bool Visible

@@ -173,6 +173,7 @@
     <Compile Include="AdvancedTools\uTP\PrintLogParser.Designer.cs">
       <DependentUpon>PrintLogParser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\SEYR\PlotOrderElement.cs" />
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
     <Compile Include="Apps\XYZplotter\PlotData.cs" />

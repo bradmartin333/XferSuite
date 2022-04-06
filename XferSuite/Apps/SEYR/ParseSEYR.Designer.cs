@@ -47,7 +47,6 @@ namespace XferSuite.Apps.SEYR
             this.cbxMisaligned = new System.Windows.Forms.CheckBox();
             this.btnApplyToAll = new System.Windows.Forms.Button();
             this.btnViewData = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.olvCustom = new BrightIdeasSoftware.FastDataListView();
             this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStripButtonParse = new System.Windows.Forms.ToolStripButton();
@@ -79,16 +78,15 @@ namespace XferSuite.Apps.SEYR
             this.tableLayoutPanel.Controls.Add(this.olvRequire, 2, 1);
             this.tableLayoutPanel.Controls.Add(this.olvBuffer, 1, 1);
             this.tableLayoutPanel.Controls.Add(this.flowLayoutPanelCriteria, 0, 1);
-            this.tableLayoutPanel.Controls.Add(this.label2, 4, 1);
-            this.tableLayoutPanel.Controls.Add(this.olvCustom, 4, 2);
+            this.tableLayoutPanel.Controls.Add(this.olvCustom, 4, 1);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 4;
+            this.tableLayoutPanel.RowCount = 3;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(574, 270);
             this.tableLayoutPanel.TabIndex = 0;
             // 
@@ -104,7 +102,6 @@ namespace XferSuite.Apps.SEYR
             this.olvNeedOne.IsSimpleDropSink = true;
             this.olvNeedOne.Location = new System.Drawing.Point(345, 33);
             this.olvNeedOne.Name = "olvNeedOne";
-            this.tableLayoutPanel.SetRowSpan(this.olvNeedOne, 2);
             this.olvNeedOne.ShowGroups = false;
             this.olvNeedOne.Size = new System.Drawing.Size(108, 234);
             this.olvNeedOne.TabIndex = 2;
@@ -116,6 +113,8 @@ namespace XferSuite.Apps.SEYR
             // olvColumn3
             // 
             this.olvColumn3.AspectName = "Name";
+            this.olvColumn3.FillsFreeSpace = true;
+            this.olvColumn3.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumn3.Text = "Need One";
             this.olvColumn3.Width = 90;
             // 
@@ -131,7 +130,6 @@ namespace XferSuite.Apps.SEYR
             this.olvRequire.IsSimpleDropSink = true;
             this.olvRequire.Location = new System.Drawing.Point(231, 33);
             this.olvRequire.Name = "olvRequire";
-            this.tableLayoutPanel.SetRowSpan(this.olvRequire, 2);
             this.olvRequire.ShowGroups = false;
             this.olvRequire.Size = new System.Drawing.Size(108, 234);
             this.olvRequire.TabIndex = 1;
@@ -142,6 +140,8 @@ namespace XferSuite.Apps.SEYR
             // olvColumn2
             // 
             this.olvColumn2.AspectName = "Name";
+            this.olvColumn2.FillsFreeSpace = true;
+            this.olvColumn2.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumn2.Text = "Require";
             this.olvColumn2.Width = 90;
             // 
@@ -157,7 +157,6 @@ namespace XferSuite.Apps.SEYR
             this.olvBuffer.IsSimpleDragSource = true;
             this.olvBuffer.Location = new System.Drawing.Point(117, 33);
             this.olvBuffer.Name = "olvBuffer";
-            this.tableLayoutPanel.SetRowSpan(this.olvBuffer, 2);
             this.olvBuffer.ShowGroups = false;
             this.olvBuffer.Size = new System.Drawing.Size(108, 234);
             this.olvBuffer.TabIndex = 0;
@@ -168,6 +167,8 @@ namespace XferSuite.Apps.SEYR
             // olvColumn1
             // 
             this.olvColumn1.AspectName = "Name";
+            this.olvColumn1.FillsFreeSpace = true;
+            this.olvColumn1.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumn1.Text = "Buffer";
             this.olvColumn1.Width = 90;
             // 
@@ -187,7 +188,6 @@ namespace XferSuite.Apps.SEYR
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(3, 62);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
-            this.tableLayoutPanel.SetRowSpan(this.flowLayoutPanelCriteria, 2);
             this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(108, 175);
             this.flowLayoutPanelCriteria.TabIndex = 4;
             // 
@@ -290,17 +290,6 @@ namespace XferSuite.Apps.SEYR
             this.btnViewData.UseVisualStyleBackColor = true;
             this.btnViewData.Click += new System.EventHandler(this.BtnViewData_Click);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(459, 30);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 20);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Custom";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // olvCustom
             // 
             this.olvCustom.AllColumns.Add(this.olvColumnName);
@@ -313,14 +302,14 @@ namespace XferSuite.Apps.SEYR
             this.olvCustom.DataSource = null;
             this.olvCustom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olvCustom.FullRowSelect = true;
-            this.olvCustom.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.olvCustom.HideSelection = false;
-            this.olvCustom.Location = new System.Drawing.Point(459, 53);
+            this.olvCustom.Location = new System.Drawing.Point(459, 33);
             this.olvCustom.MultiSelect = false;
             this.olvCustom.Name = "olvCustom";
             this.olvCustom.SelectAllOnControlA = false;
             this.olvCustom.ShowGroups = false;
-            this.olvCustom.Size = new System.Drawing.Size(112, 214);
+            this.olvCustom.ShowImagesOnSubItems = true;
+            this.olvCustom.Size = new System.Drawing.Size(112, 234);
             this.olvCustom.TabIndex = 6;
             this.olvCustom.UseCompatibleStateImageBehavior = false;
             this.olvCustom.UseNotifyPropertyChanged = true;
@@ -332,7 +321,9 @@ namespace XferSuite.Apps.SEYR
             this.olvColumnName.AspectName = "Name";
             this.olvColumnName.AspectToStringFormat = "";
             this.olvColumnName.FillsFreeSpace = true;
+            this.olvColumnName.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnName.ImageAspectName = "Visible";
+            this.olvColumnName.Text = "Custom";
             this.olvColumnName.Width = 80;
             // 
             // toolStripButtonParse
@@ -471,7 +462,6 @@ namespace XferSuite.Apps.SEYR
         private System.Windows.Forms.Button btnApplyToAll;
         private System.Windows.Forms.Button btnViewData;
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripButton toolStripButtonEditPlotOrder;
         private BrightIdeasSoftware.FastDataListView olvCustom;
         private BrightIdeasSoftware.OLVColumn olvColumnName;

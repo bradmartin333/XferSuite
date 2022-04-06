@@ -124,7 +124,8 @@ namespace XferSuite.Apps.SEYR
         private bool ObjectHasBeenDropped { get; set; } // For criteria selector - possibly unecessary
 
         private List<Plottable> Plottables = new List<Plottable>();
-        private List<string> PlotOrder = new List<string>();
+        private List<PlotOrderElement> PlotOrder = PlotOrderElement.GenerateDefaults();
+        private List<CustomFeature> CustomFeatures = new List<CustomFeature>();
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>(); // Will be replaced when upgraded to Scottplot
@@ -267,11 +268,6 @@ namespace XferSuite.Apps.SEYR
             MessageBox.Show(customFeature.Name);
         }
 
-        private CustomFeature GetOLVCustomObject(string name)
-        {
-            return olvCustom.CheckedObjectsEnumerable.OfType<CustomFeature>().Where(x => x.Name == name).First();
-        }
-
         #endregion
 
         #region Parse Methods
@@ -307,7 +303,7 @@ namespace XferSuite.Apps.SEYR
             toolStripProgressBar.Value = e.ProgressPercentage;
         }
 
-        private void Parse(bool noPitches = false)
+        private void Parse()
         {
             // Reset
             ParseWorker.ReportProgress(1, "(RR, RC, R, C)\tYield\n"); // Header
@@ -315,50 +311,47 @@ namespace XferSuite.Apps.SEYR
             double distX = 0.0;
             double distY = 0.0;
 
-            if (!noPitches)
+            if (Path.FullName.Contains("_CP_"))
             {
-                if (Path.FullName.Contains("_CP_"))
+                string[] slice = Path.FullName.Replace(".txt", "").Split('_');
+                distX = double.Parse(slice[slice.Length - 2]);
+                distY = double.Parse(slice[slice.Length - 1]);
+            }
+            else
+            {
+                using (Utility.PromptForInput input = new Utility.PromptForInput(
+                    prompt: "Enter X grid pitch in millimeters",
+                    textEntry: false,
+                    max: 100,
+                    title: $"SEYR Parser Grid Setup"))
                 {
-                    string[] slice = Path.FullName.Replace(".txt", "").Split('_');
-                    distX = double.Parse(slice[slice.Length - 2]);
-                    distY = double.Parse(slice[slice.Length - 1]);
+                    var result = input.ShowDialog();
+                    if (result == DialogResult.OK)
+                        distX = (double)((NumericUpDown)input.Control).Value;
+                    else
+                        return;
                 }
-                else
+                using (Utility.PromptForInput input = new Utility.PromptForInput(
+                    prompt: "Enter Y grid pitch in millimeters",
+                    textEntry: false,
+                    max: 100,
+                    title: $"SEYR Parser Grid Setup"))
                 {
-                    using (Utility.PromptForInput input = new Utility.PromptForInput(
-                        prompt: "Enter X grid pitch in millimeters",
-                        textEntry: false,
-                        max: 100,
-                        title: $"SEYR Parser Grid Setup"))
-                    {
-                        var result = input.ShowDialog();
-                        if (result == DialogResult.OK)
-                            distX = (double)((NumericUpDown)input.Control).Value;
-                        else
-                            return;
-                    }
-                    using (Utility.PromptForInput input = new Utility.PromptForInput(
-                        prompt: "Enter Y grid pitch in millimeters",
-                        textEntry: false,
-                        max: 100,
-                        title: $"SEYR Parser Grid Setup"))
-                    {
-                        var result = input.ShowDialog();
-                        if (result == DialogResult.OK)
-                            distY = (double)((NumericUpDown)input.Control).Value;
-                        else
-                            return;
-                    }
+                    var result = input.ShowDialog();
+                    if (result == DialogResult.OK)
+                        distY = (double)((NumericUpDown)input.Control).Value;
+                    else
+                        return;
                 }
             }
 
             string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
-            var filteredData = olvCustom.CheckedObjects.Count == 0 ? Report.removeBuffers(Data, bufferStrings) : Data;
+            var filteredData = CustomFeatures.Where(x => x.Visible).Count() > 0 ? Data : Report.removeBuffers(Data, bufferStrings);
             string[] regions = Report.getRegions(filteredData);
 
             if (Features.Where(x => x.Bucket == Report.Bucket.Required).Count() == 1 &&
                 Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() == 0 &&
-                olvCustom.CheckedObjects.Count == 0)
+                CustomFeatures.Where(x => x.Visible).Count() == 0)
                 ParseSingle(distX, distY, filteredData, regions);
             else
                 ParseMulti(distX, distY, filteredData, regions, 
@@ -431,11 +424,20 @@ namespace XferSuite.Apps.SEYR
                             double thisX = thisCell[0].X + i * distX * (_FlipXAxis ? -1 : 1);
                             double thisY = thisCell[0].Y + j * distY * (_FlipYAxis ? 1 : -1);
 
-                            foreach (CustomFeature custom in olvCustom.CheckedObjects)
+                            foreach (CustomFeature custom in CustomFeatures.Where(x => x.Visible))
                             {
                                 bool matchesFilter = false;      
                                 foreach ((string, Report.State) filter in custom.Filters)
-                                    matchesFilter = thisCell.Where(x => x.Name == filter.Item1).First().State == filter.Item2;
+                                {
+                                    Report.Entry[] matchingEntry = thisCell.Where(x => x.Name == filter.Item1).ToArray();
+                                    if (matchingEntry.Count() == 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("Something went wrong");
+                                        continue;
+                                    }
+                                    matchesFilter = matchingEntry[0].State == filter.Item2;
+                                }
+                                    
                                 if (matchesFilter)
                                 {
                                     Plottable customPlottable = new Plottable
@@ -608,12 +610,12 @@ namespace XferSuite.Apps.SEYR
             PlotModel plotModel = InitPlotModel();
             List<ScatterSeries> scatters = new List<ScatterSeries>();
 
-            foreach (string plotName in PlotOrder)
+            foreach (PlotOrderElement plotOrderElement in PlotOrder)
             {
-                ScatterSeries series = new ScatterSeries() { Tag = plotName };
+                ScatterSeries series = new ScatterSeries() { Tag = plotOrderElement.Name };
                 Plottable[] plottables;
 
-                switch (plotName)
+                switch (plotOrderElement.Name)
                 {
                     case "Pass":
                         series.MarkerFill = OxyColors.LawnGreen;
@@ -628,7 +630,7 @@ namespace XferSuite.Apps.SEYR
                         plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
                         break;
                     default:
-                        CustomFeature customFeature = GetOLVCustomObject(plotName);
+                        CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
                         series.MarkerFill = customFeature.Color;
                         series.MarkerSize = customFeature.Size;
                         series.TrackerFormatString = "{Tag}";
@@ -636,8 +638,9 @@ namespace XferSuite.Apps.SEYR
                         break;
                 }
 
-                foreach (Plottable p in Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag)))
+                foreach (Plottable p in plottables)
                     series.Points.Add(new ScatterPoint(p.X, p.Y, tag: p.ToString()));
+                scatters.Add(series);
             }
 
             StackAndShowPlots(ref plot, ref plotModel, scatters);
@@ -719,6 +722,7 @@ namespace XferSuite.Apps.SEYR
             {
                 criteria[0].Bucket = Report.Bucket.Required;
                 olvRequire.AddObject(criteria[0]);
+                olvBuffer.AddObjects(Features.Where(x => x.Name.Contains("pat")).ToArray());
             }
             else
             {
@@ -738,7 +742,11 @@ namespace XferSuite.Apps.SEYR
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
+                {
                     olvCustom.AddObject(cc.CustomFeature);
+                    CustomFeatures.Add(cc.CustomFeature);
+                    PlotOrder.Add(new PlotOrderElement() { Name = cc.CustomFeature.Name });
+                }
                 else
                     return;
             }
