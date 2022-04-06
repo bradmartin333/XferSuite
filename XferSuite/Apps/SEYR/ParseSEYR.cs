@@ -4,10 +4,6 @@ using BrightIdeasSoftware;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using OxyPlot;
-using OxyPlot.Series;
-using OxyPlot.Axes;
-using OxyPlot.WindowsForms;
 using System.Drawing;
 using System.ComponentModel;
 using Microsoft.FSharp.Collections;
@@ -28,7 +24,6 @@ namespace XferSuite.Apps.SEYR
             set
             {
                 _FlipXAxis = value;
-                RunParseWorker();
             }
         }
 
@@ -40,69 +35,6 @@ namespace XferSuite.Apps.SEYR
             set
             {
                 _FlipYAxis = value;
-                RunParseWorker();
-            }
-        }
-
-        private int _PassPointSize = 1;
-        [Category("User Parameters")]
-        public int PassPointSize
-        {
-            get => _PassPointSize;
-            set
-            {
-                _PassPointSize = value;
-                ConfigurePlot();
-            }
-        }
-
-        private int _FailPointSize = 1;
-        [Category("User Parameters")]
-        public int FailPointSize
-        {
-            get => _FailPointSize;
-            set
-            {
-                _FailPointSize = value;
-                ConfigurePlot();
-            }
-        }
-
-        private bool _TransposePlot = false;
-        [Category("User Parameters")]
-        [Description("Flip X and Y coords of scatterpoints")]
-        public bool TransposePlot
-        {
-            get => _TransposePlot;
-            set
-            {
-                _TransposePlot = value;
-                List<Plottable> PlottablesRotated = new List<Plottable>();
-                foreach (Plottable p in Plottables)
-                {
-                    PlottablesRotated.Add(new Plottable
-                    {
-                        Region = p.Region,
-                        X = p.Y,
-                        Y = p.X,
-                        Pass = p.Pass,
-                        CustomTag = p.CustomTag,
-                    });
-                }
-                Plottables = PlottablesRotated;
-                ConfigurePlot();
-            }
-        }
-
-        private bool _ShowAxesNames = false;
-        [Category("User Parameters")]
-        public bool ShowAxesNames
-        {
-            get => _ShowAxesNames;
-            set
-            {
-                _ShowAxesNames = value;
-                ConfigurePlot();
             }
         }
 
@@ -118,6 +50,7 @@ namespace XferSuite.Apps.SEYR
             public double Y;
             public bool Pass;
             public string CustomTag;
+            public Color Color;
 
             public override string ToString()
             {
@@ -125,18 +58,18 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private FileInfo Path { get; set; }
-        private Report.Entry[] Data { get; set; }
-        private Report.Feature[] Features { get; set; }
-        private Report.Feature SelectedFeature { get; set; }
-        private bool ObjectHasBeenDropped { get; set; } // For criteria selector - possibly unecessary
+        public List<Plottable> Plottables = new List<Plottable>();
+        public List<PlotOrderElement> PlotOrder = PlotOrderElement.GenerateDefaults();
+        public readonly List<CustomFeature> CustomFeatures = new List<CustomFeature>();
 
-        private List<Plottable> Plottables = new List<Plottable>();
-        private List<PlotOrderElement> PlotOrder = PlotOrderElement.GenerateDefaults();
-        private readonly List<CustomFeature> CustomFeatures = new List<CustomFeature>();
+        private FileInfo Path;
+        private Report.Entry[] Data;
+        private Report.Feature[] Features;
+        private Report.Feature SelectedFeature;
+        private bool ObjectHasBeenDropped; // For criteria selector - possibly unecessary
+        private Results Results;
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
-        private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>(); // Will be replaced when upgraded to Scottplot
         private readonly BackgroundWorker ParseWorker = new BackgroundWorker();
 
         public ParseSEYR(string path)
@@ -144,6 +77,7 @@ namespace XferSuite.Apps.SEYR
             InitializeComponent();
             Path = new FileInfo(path);
             Text = Path.Name.Replace(Path.Extension, string.Empty);
+            Results = new Results(Text);
             Data = Report.data(Path.FullName);
 
             ParseWorker.WorkerReportsProgress = true;
@@ -312,7 +246,9 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            ConfigurePlot();
+            Results.UpdateData(this);
+            Results.Show();
+            Results.BringToFront();
             toolStripProgressBar.Value = 0;
             foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
                 olv.Enabled = true;
@@ -322,7 +258,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            //rtb.Text += e.UserState.ToString(); // TODO ADD TO PLOT
+            Results.RTB.Text += e.UserState;
             toolStripProgressBar.Value = e.ProgressPercentage;
         }
 
@@ -406,6 +342,7 @@ namespace XferSuite.Apps.SEYR
                         Y = thisY,
                         Pass = pass,
                         CustomTag = string.Empty,
+                        Color = pass ? Color.LawnGreen : Color.Firebrick,
                     });
 
                     if (pass)
@@ -469,6 +406,7 @@ namespace XferSuite.Apps.SEYR
                                         Y = thisY - custom.Offset.Y,
                                         Pass = custom.Type == Report.State.Pass,
                                         CustomTag = custom.Name,
+                                        Color = custom.Color,
                                     };
 
                                     Plottables.Add(customPlottable);
@@ -490,6 +428,7 @@ namespace XferSuite.Apps.SEYR
                                     Y = thisY,
                                     Pass = pass,
                                     CustomTag = string.Empty,
+                                    Color = pass ? Color.LawnGreen : Color.Firebrick,
                                 });
 
                                 if (pass)
@@ -503,205 +442,6 @@ namespace XferSuite.Apps.SEYR
 
                 ParseWorker.ReportProgress((int)((l + 1) / (double)regions.Length * 100), $"{regions[l]}\t{passNum / (passNum + failNum):P}\n");
             };
-        }
-
-        #endregion
-
-        #region Custom UI Elements
-
-        // This region will dissapear after upgrading to Scottplot
-        private (ContextMenu, int, int) InitContextMenu()
-        {
-            MenuItem savePlot = new MenuItem() { Text = "Save Plot" };
-            savePlot.Click += SavePlot_Click;
-            MenuItem copyPlot = new MenuItem() { Text = "Copy Plot" };
-            copyPlot.Click += CopyPlot_Click;
-            ContextMenu cm = new ContextMenu();
-            cm.MenuItems.Add(savePlot);
-            cm.MenuItems.Add(copyPlot);
-            return (cm, savePlot.GetHashCode(), copyPlot.GetHashCode());
-        }
-
-        private void SavePlot_Click(object sender, EventArgs e)
-        {
-            foreach (var entry in ContextMenuTable)
-            {
-                if (entry.Item2 == ((MenuItem)sender).GetHashCode())
-                {
-                    PlotView plotView = entry.Item1;
-                    using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-                    {
-                        saveFileDialog.Title = "Save SEYR Plot";
-                        saveFileDialog.DefaultExt = ".png";
-                        saveFileDialog.Filter = "png file (*.png)|*.png";
-                        saveFileDialog.FileName = Text;
-                        if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                        {
-                            var pngExporter = new PngExporter { Width = plotView.Width, Height = plotView.Width };
-                            Bitmap fg = pngExporter.ExportToBitmap(plotView.Model);
-                            Bitmap bg = new Bitmap(fg.Width, fg.Height);
-                            using (Graphics g = Graphics.FromImage(bg))
-                            {
-                                g.FillRectangle(Brushes.White, new Rectangle(Point.Empty, bg.Size));
-                                g.DrawImage(fg, new Point(0, 0));
-                            }
-                            bg.Save(saveFileDialog.FileName);
-                        }
-                    }
-                    return;
-                }
-            }
-            MessageBox.Show("Operation Failed", "XferSuite");
-        }
-
-        private void CopyPlot_Click(object sender, EventArgs e)
-        {
-            foreach (var entry in ContextMenuTable)
-            {
-                if (entry.Item3 == ((MenuItem)sender).GetHashCode())
-                {
-                    PlotView plotView = entry.Item1;
-                    Bitmap bitmap = new Bitmap(plotView.Width, plotView.Height);
-                    plotView.DrawToBitmap(bitmap, new Rectangle(0, 0, plotView.Width, plotView.Height));
-                    Clipboard.SetImage(bitmap);
-                    return;
-                }
-            }
-            MessageBox.Show("Operation Failed", "XferSuite");
-        }
-
-        #endregion
-
-        #region Plotting Methods
-
-        // This region will move to it's own class/form during Scottplot upgrade
-
-        private PlotView InitPlotView()
-        {
-            PlotView view = new PlotView() { Dock = DockStyle.Fill };
-            (ContextMenu cm, int saveId, int copyId) = InitContextMenu();
-            ContextMenuTable.Add((view, saveId, copyId));
-            view.ContextMenu = cm;
-            return view;
-        }
-
-        private PlotModel InitPlotModel()
-        {
-            PlotModel plotModel = new PlotModel();
-            plotModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                TickStyle = OxyPlot.Axes.TickStyle.None,
-                StartPosition = _FlipXAxis ? 1 : 0,
-                EndPosition = _FlipXAxis ? 0 : 1,
-                Title = _ShowAxesNames ? "X Position (mm)" : null,
-            });
-            plotModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                TickStyle = OxyPlot.Axes.TickStyle.None,
-                StartPosition = _FlipYAxis ? 1 : 0,
-                EndPosition = _FlipYAxis ? 0 : 1,
-                Title = _ShowAxesNames ? "Y Position (mm)" : null,
-            });
-            return plotModel;
-        }
-
-        private void StackAndShowPlots(ref PlotView view, ref PlotModel model, List<ScatterSeries> scatters)
-        {
-            foreach (ScatterSeries series in scatters)
-            {
-                if (series != null && series.Points.Count > 0)
-                    model.Series.Add(series);
-                else
-                    System.Diagnostics.Debug.WriteLine($"Skipped plotting {series.Tag}");   
-            }
-            view.Model = model;
-        }
-
-        private void ConfigurePlot()
-        {
-            if (Plottables.Count == 0) return;
-
-            PlotView plot = InitPlotView();
-            PlotModel plotModel = InitPlotModel();
-            List<ScatterSeries> scatters = new List<ScatterSeries>();
-
-            foreach (PlotOrderElement plotOrderElement in PlotOrder)
-            {
-                ScatterSeries series = new ScatterSeries() { Tag = plotOrderElement.Name };
-                Plottable[] plottables;
-
-                switch (plotOrderElement.Name)
-                {
-                    case "Pass":
-                        series.MarkerFill = OxyColors.LawnGreen;
-                        series.MarkerSize = _PassPointSize;
-                        series.TrackerFormatString = "{Tag}";
-                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass).ToArray();
-                        break;
-                    case "Fail":
-                        series.MarkerFill = OxyColors.Firebrick;
-                        series.MarkerSize = _FailPointSize;
-                        series.TrackerFormatString = "{Tag}";
-                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
-                        break;
-                    default:
-                        CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
-                        series.MarkerFill = customFeature.OxyColor;
-                        series.MarkerSize = customFeature.Size;
-                        series.TrackerFormatString = "{Tag}";
-                        plottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();
-                        break;
-                }
-
-                foreach (Plottable p in plottables)
-                    series.Points.Add(new ScatterPoint(p.X, p.Y, tag: p.ToString()));
-                scatters.Add(series);
-            }
-
-            StackAndShowPlots(ref plot, ref plotModel, scatters);
-            Form form = InitLargeForm(Text);
-            form.Controls.Add(plot);
-            form.Show();
-            form.BringToFront();
-        }
-
-        private Form InitLargeForm(string text)
-        {
-            var xData = Plottables.Select(p => p.X);
-            var yData = Plottables.Select(p => p.Y);
-            double xRange = xData.Max() - xData.Min();
-            double yRange = yData.Max() - yData.Min();
-            double xScale = 1.0;
-            double yScale = 1.0;
-            if (xRange > yRange)
-                yScale = yRange / xRange;
-            else
-                xScale = xRange / yRange;
-
-            Rectangle bounds = Screen.FromControl(this).Bounds;
-            int size = (int)(Math.Min(bounds.Width, bounds.Height) * 0.95);
-            Form form = new Form()
-            {
-                Width = (int)(size * xScale),
-                Height = (int)(size * yScale),
-                FormBorderStyle = FormBorderStyle.SizableToolWindow,
-                StartPosition = FormStartPosition.CenterScreen,
-                Text = text,
-                Tag = (xScale/yScale).ToString()
-            };
-            form.Resize += Form_Resize;
-            return form;
-        }
-
-        private void Form_Resize(object sender, EventArgs e)
-        {
-            if (ModifierKeys.HasFlag(Keys.Control) || ModifierKeys.HasFlag(Keys.Alt) || ModifierKeys.HasFlag(Keys.Shift))
-            {
-                Form form = (Form)sender;
-                form.Size = new Size((int)(form.Height * double.Parse(form.Tag.ToString())), form.Height);
-            }
         }
 
         #endregion
