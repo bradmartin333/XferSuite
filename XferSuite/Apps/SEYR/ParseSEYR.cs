@@ -465,8 +465,8 @@ namespace XferSuite.Apps.SEYR
                                     {
                                         Region = regions[l],
                                         DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}\nCustom: {custom.Name}",
-                                        X = thisX + custom.Offset.X,
-                                        Y = thisY + custom.Offset.Y,
+                                        X = thisX - custom.Offset.X,
+                                        Y = thisY - custom.Offset.Y,
                                         Pass = custom.Type == Report.State.Pass,
                                         CustomTag = custom.Name,
                                     };
