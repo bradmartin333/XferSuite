@@ -44,35 +44,41 @@ namespace XferSuite.Apps.InlinePositions
             }
         }
 
+        private Metro.Position[] _raw; // Gets split into data and missing
+        private Metro.Position[] _data; // Gets split into pass and fail
+        private bool _PlotAll = true; // On by default
+        List<string> _prints = new List<string>();
+
         public Angleprinting(Metro.Position[] data)
         {
             InitializeComponent();
             _raw = data;
             Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_raw);
-            _data = _splitData.Item2;
+            _data = _splitData.Item2; // We don't want any data for missing devices
 
-            string[] indices = Metro.prints(_raw);
+            // HELP WANTED
+            // This could be a lot more efficent
+
+            string[] indices = Metro.prints(_raw); // Get all prints in RR RC R C format
             int printIdx = 1;
             int posIdx = 0;
             foreach (string index in indices)
             {
                 if (!_prints.Contains(index))
                 {
+                    // Add unique prints to the list box and increment the print index
                     _prints.Add(index);
                     PrintList.Items.Add(string.Format("{0}: {1}", printIdx, index));
                     printIdx += 1;
                 }
-                _raw[posIdx].PrintNum = printIdx;
+                _raw[posIdx].PrintNum = printIdx; // Assign an print index to each passing device
                 posIdx += 1;
             }
 
+            // END HELP WANTED
+
             MakePlot();
         }
-
-        private Metro.Position[] _raw; // Gets split into data and missing
-        private Metro.Position[] _data; // Gets split into pass and fail
-        private bool _PlotAll = true; // On by default
-        List<string> _prints = new List<string>();
 
         private void PrintList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -111,6 +117,7 @@ namespace XferSuite.Apps.InlinePositions
                 }
             }
 
+            // Obtain and plot data for selected list box indices
             Metro.Position[][] printData = new Metro.Position[_prints.Count()][];
             double[] printEntropy = new double[_prints.Count()];
             foreach (int idx in loopSet)
