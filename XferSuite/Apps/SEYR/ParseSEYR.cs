@@ -273,7 +273,14 @@ namespace XferSuite.Apps.SEYR
         {
             if (olvCustom.SelectedIndex == -1) return;
             CustomFeature customFeature = (CustomFeature)olvCustom.SelectedObject;
-            MessageBox.Show(customFeature.Name);
+            using (CreateCustom cc = new CreateCustom(Features, customFeature))
+            {
+                var result = cc.ShowDialog();
+                if (result == DialogResult.OK)
+                    CustomFeatures[CustomFeatures.IndexOf(CustomFeatures.Where(x => x.Name == customFeature.Name).First())] = cc.CustomFeature;
+                else
+                    return;
+            }
         }
 
         #endregion
@@ -633,7 +640,7 @@ namespace XferSuite.Apps.SEYR
                         break;
                     default:
                         CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
-                        series.MarkerFill = customFeature.Color;
+                        series.MarkerFill = customFeature.OxyColor;
                         series.MarkerSize = customFeature.Size;
                         series.TrackerFormatString = "{Tag}";
                         plottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();

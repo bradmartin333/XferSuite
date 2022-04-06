@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using XferHelper;
 
@@ -29,14 +30,28 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private OxyPlot.OxyColor _Color;
-        public OxyPlot.OxyColor Color {
+        private Color _Color;
+        public Color Color
+        {
             get => _Color;
             set
             {
                 if (value != _Color)
                 {
                     _Color = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private OxyPlot.OxyColor _OxyColor;
+        public OxyPlot.OxyColor OxyColor {
+            get => _OxyColor;
+            set
+            {
+                if (value != _OxyColor)
+                {
+                    _OxyColor = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -70,8 +85,8 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private System.Drawing.PointF _Offset;
-        public System.Drawing.PointF Offset
+        private PointF _Offset;
+        public PointF Offset
         {
             get => _Offset;
             set
@@ -115,11 +130,11 @@ namespace XferSuite.Apps.SEYR
         public CustomFeature(CreateCustom form, System.Collections.Generic.List<(string, Report.State)> filters)
         {
             _Name = form.txtName.Text;
-            System.Drawing.Color c = form.panelColor.BackColor;
-            _Color = OxyPlot.OxyColor.FromArgb(c.A, c.R, c.G, c.B);
+            _Color = form.panelColor.BackColor;
+            _OxyColor = OxyPlot.OxyColor.FromArgb(_Color.A, _Color.R, _Color.G, _Color.B);
             _Size = (int)form.numSize.Value;
             _Type = (Report.State)form.comboBoxType.SelectedIndex;
-            _Offset = new System.Drawing.PointF((float)form.numOffsetX.Value, (float)form.numOffsetY.Value);
+            _Offset = new PointF((float)form.numOffsetX.Value, (float)form.numOffsetY.Value);
             _Filters = filters;
         }
     }

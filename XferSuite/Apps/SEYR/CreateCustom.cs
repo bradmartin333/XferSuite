@@ -23,6 +23,21 @@ namespace XferSuite.Apps.SEYR
             txtName.Text = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(); // Random string
         }
 
+        public CreateCustom(Report.Feature[] features, CustomFeature feature)
+        {
+            InitializeComponent();
+            ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
+            txtName.Text = feature.Name;
+            panelColor.BackColor = Color.FromArgb(feature.Color.A, feature.Color.R, feature.Color.G, feature.Color.B);
+            numSize.Value = feature.Size;
+            comboBoxType.SelectedIndex = feature.Type == Report.State.Pass ? 0 : 1;
+            numOffsetX.Value = (decimal)feature.Offset.X;
+            numOffsetY.Value = (decimal)feature.Offset.Y;
+            foreach ((string, Report.State) filter in feature.Filters)
+                dataGridView.Rows.Add(new object[] { filter.Item1, filter.Item2 == Report.State.Pass ? "Pass" : "Fail" });
+            feature.Visible = true;
+        }
+
         private void BtnConfirm_Click(object sender, EventArgs e)
         {
             //if (ExistingCustomFeatures.Select(x => x.Name).Contains(txtName.Text))
