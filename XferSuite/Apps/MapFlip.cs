@@ -7,6 +7,10 @@ using System.Windows.Forms;
 
 namespace XferSuite.Apps
 {
+    /// <summary>
+    /// A silly, but sometimes handy app made long ago
+    /// (Hence the shoddy code and lack of comments)
+    /// </summary>
     public partial class MapFlip : Form
     {
         private string _Delimeter = "";
@@ -21,16 +25,16 @@ namespace XferSuite.Apps
             }
         }
 
-        Panel[] _Panels = new Panel[4];
-        Color[] _PnlColors = new Color[4];
-        Color[] _PnlColorsInit = new Color[4];
+        private readonly Panel[] _Panels = new Panel[4];
+        private readonly Color[] _PnlColors = new Color[4];
+        private readonly Color[] _PnlColorsInit = new Color[4];
         private string[][] _Input;
 
         public MapFlip()
         {
             InitializeComponent();
             _Panels = new Panel[] { pnlOutA, pnlOutB, pnlOutC, pnlOutD };
-            getPanelColors(init: true);
+            GetPanelColors(init: true);
             InitInput();
         }
 
@@ -43,10 +47,7 @@ namespace XferSuite.Apps
         {
             string clipText = Clipboard.GetText();
 
-            if (_Delimeter == "")
-            {
-                DetermineDelimeter(clipText);
-            }
+            if (_Delimeter == "") DetermineDelimeter(clipText);
 
             string[] clipLines = clipText.Split('\n');
 
@@ -54,39 +55,27 @@ namespace XferSuite.Apps
             List<string[]> arrBuilder = new List<string[]>();
             foreach (string line in clipLines)
             {
-                if (line.Trim() == "")
-                {
-                    continue;
-                }
+                if (line.Trim() == "") continue;
                 string[] values = line.Trim().Split(_Delimeter.ToCharArray());
                 arrBuilder.Add(values);
             }
 
-            if (arrBuilder.Count == 0)
-            {
-                validArr = false;
-            }
+            if (arrBuilder.Count == 0) validArr = false;
+
+            int checkLen = arrBuilder[0].Length;
+            for (int i = 1; i < arrBuilder.Count; i++)
+                if (arrBuilder[i].Length != checkLen) validArr = false;
 
             if (validArr)
-            {
-                int checkLen = arrBuilder[0].Length;
-                for (int i = 1; i < arrBuilder.Count; i++)
-                {
-                    if (arrBuilder[i].Length != checkLen)
-                    {
-                        validArr = false;
-                    }
-                }
                 lblClip.Text = string.Format("Clipboard contains a {0} x {1} matrix", arrBuilder.Count, checkLen);
-            }
             else
-            {
                 lblClip.Text = "Clipboard does not contain a valid m x n matrix";
-            }
 
             _Input = arrBuilder.ToArray();
         }
 
+        // HELP WANTED
+        // This function could be a lot smarter
         private void DetermineDelimeter(string clipText)
         {
             char[] delims = new char[] { ' ', ',', '\t', '|' };
@@ -95,17 +84,12 @@ namespace XferSuite.Apps
             {
                 char[] arr = clipText.ToCharArray();
                 foreach (char c in arr)
-                {
-                    if (c == delims[i])
-                    {
-                        count[i]++;
-                    }
-                }
+                    if (c == delims[i]) count[i]++;
             }
             _Delimeter = delims[count.ToList().IndexOf(count.Max())].ToString();
         }
 
-        private void horizFlip()
+        private void HorizFlip()
         {
             UpdateColors(new int[] { 1, 0, 3, 2 });
 
@@ -115,22 +99,17 @@ namespace XferSuite.Apps
                 for (int j = _Input[0].Length - 1; j >= 0; j--)
                 {
                     output += _Input[i][j];
-                    if (j != 0)
-                    {
-                        output += _Delimeter;
-                    }
+                    if (j != 0) output += _Delimeter;
                 }
                 if (i != _Input.Length - 1)
-                {
                     output += '\n';
-                }
             }
             Clipboard.SetText(output);
 
             InitInput();
         }
 
-        private void vertFlip()
+        private void VertFlip()
         {
             UpdateColors(new int[] { 2, 3, 0, 1 });
 
@@ -140,22 +119,16 @@ namespace XferSuite.Apps
                 for (int j = 0; j < _Input[0].Length; j++)
                 {
                     output += _Input[i][j];
-                    if (j != _Input[0].Length - 1)
-                    {
-                        output += _Delimeter;
-                    }
+                    if (j != _Input[0].Length - 1) output += _Delimeter;
                 }
-                if (i != 0)
-                {
-                    output += '\n';
-                }
+                if (i != 0) output += '\n';
             }
             Clipboard.SetText(output);
 
             InitInput();
         }
 
-        private void rotate()
+        private void Rotate()
         {
             UpdateColors(new int[] { 1, 3, 0, 2 });
 
@@ -165,15 +138,9 @@ namespace XferSuite.Apps
                 for (int i = 0; i < _Input.Length; i++)
                 {
                     output += _Input[i][j];
-                    if (i != _Input.Length - 1)
-                    {
-                        output += _Delimeter;
-                    }
+                    if (i != _Input.Length - 1) output += _Delimeter;
                 }
-                if (j != 0)
-                {
-                    output += '\n';
-                }
+                if (j != 0) output += '\n';
             }
             Clipboard.SetText(output);
 
@@ -182,14 +149,14 @@ namespace XferSuite.Apps
 
         private void UpdateColors(int[] vals)
         {
-            getPanelColors();
+            GetPanelColors();
             _Panels[0].BackColor = _PnlColors[vals[0]];
             _Panels[1].BackColor = _PnlColors[vals[1]];
             _Panels[2].BackColor = _PnlColors[vals[2]];
             _Panels[3].BackColor = _PnlColors[vals[3]];
         }
 
-        private void btnClick(object sender, EventArgs e)
+        private void BtnClick(object sender, EventArgs e)
         {
             BackColor = Color.Firebrick;
             Refresh();
@@ -200,13 +167,13 @@ namespace XferSuite.Apps
                 switch (button.Tag)
                 {
                     case "0":
-                        horizFlip();
+                        HorizFlip();
                         break;
                     case "1":
-                        vertFlip();
+                        VertFlip();
                         break;
                     case "2":
-                        rotate();
+                        Rotate();
                         break;
                 }
             }
@@ -218,27 +185,21 @@ namespace XferSuite.Apps
             BackColor = Color.Silver;
         }
 
-        private void getPanelColors(bool init = false)
+        private void GetPanelColors(bool init = false)
         {
             for(int i = 0; i < 4; i++)
             {
                 if (init)
-                {
                     _PnlColorsInit[i] = _Panels[i].BackColor;
-                }
                 else
-                {
                     _PnlColors[i] = _Panels[i].BackColor;
-                }
             }
         }
 
-        private void btnReset_Click(object sender, EventArgs e)
+        private void BtnReset_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < _Panels.Length; i++)
-            {
                 _Panels[i].BackColor = _PnlColorsInit[i];
-            }
             _Delimeter = "";
             InitInput();
         }

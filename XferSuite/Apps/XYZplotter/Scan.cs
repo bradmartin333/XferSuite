@@ -5,6 +5,9 @@ using XferHelper;
 
 namespace XferSuite.Apps.XYZplotter
 {
+    /// <summary>
+    /// Storage and functions for parsed scan data from a HeightSensorLog
+    /// </summary>
     public class Scan
     {
         public int Index { get; set; }

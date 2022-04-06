@@ -5,6 +5,9 @@ using static XferSuite.Apps.XYZplotter.Configuration;
 
 namespace XferSuite.Apps.XYZplotter
 {
+    /// <summary>
+    /// Class to generate filtered and corrected data for individual plots
+    /// </summary>
     public class PlotData
     {
         public string Name { get; set; }

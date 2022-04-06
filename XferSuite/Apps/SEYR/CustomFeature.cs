@@ -2,6 +2,9 @@
 
 namespace XferSuite.Apps.SEYR
 {
+    /// <summary>
+    /// Object created via the CreateCustom form
+    /// </summary>
     public class CustomFeature
     {
         public string Name { get; set; }

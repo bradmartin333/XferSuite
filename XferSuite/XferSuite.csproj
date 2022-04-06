@@ -122,6 +122,13 @@
     <Compile Include="AdvancedTools\CalGenerator.Designer.cs">
       <DependentUpon>CalGenerator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\Camera\CameraLayout.cs" />
+    <Compile Include="Apps\Camera\CameraViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\Camera\CameraViewer.Designer.cs">
+      <DependentUpon>CameraViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\InlinePositions\Angleprinting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,23 +166,11 @@
     <Compile Include="Apps\SEYR\ParseSEYR.Designer.cs">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\CameraViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Apps\CameraViewer.Designer.cs">
-      <DependentUpon>CameraViewer.cs</DependentUpon>
-    </Compile>
     <Compile Include="AdvancedTools\PrintLogParser.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AdvancedTools\PrintLogParser.Designer.cs">
       <DependentUpon>PrintLogParser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\SEYR\Scatter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Apps\SEYR\Scatter.Designer.cs">
-      <DependentUpon>Scatter.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
@@ -229,6 +224,9 @@
     <EmbeddedResource Include="AdvancedTools\SelectTool.resx">
       <DependentUpon>SelectTool.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Apps\Camera\CameraViewer.resx">
+      <DependentUpon>CameraViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Apps\InlinePositions\Angleprinting.resx">
       <DependentUpon>Angleprinting.cs</DependentUpon>
     </EmbeddedResource>
@@ -249,9 +247,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\ParseSEYR.resx">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Apps\CameraViewer.resx">
-      <DependentUpon>CameraViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AdvancedTools\PrintLogParser.resx">
       <DependentUpon>PrintLogParser.cs</DependentUpon>

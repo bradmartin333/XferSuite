@@ -13,6 +13,10 @@ using XferHelper;
 
 namespace XferSuite.Apps.InlinePositions
 {
+    /// <summary>
+    /// Simple, Oxyplot driven graphs generated from
+    /// Inlinepositions data that is parsed by F#
+    /// </summary>
     public partial class MetroGraphs : Form
     {
         private float _TargetSigma = 1.5F;
@@ -600,6 +604,9 @@ namespace XferSuite.Apps.InlinePositions
             }
         }
 
+        /// <summary>
+        /// Hacky way of making a big report from all the plots
+        /// </summary>
         private Bitmap ComposeSummary()
         {
             Size size = new Size(0, 0);

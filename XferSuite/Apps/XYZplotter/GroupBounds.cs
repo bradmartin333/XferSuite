@@ -1,5 +1,9 @@
 ﻿namespace XferSuite.Apps.XYZplotter
 {
+    /// <summary>
+    /// Functions and parameters related to finding the
+    /// max and min values for all 4 available plots
+    /// </summary>
     public static class GroupBounds
     {
         public static double XMin { get; set; } = double.MaxValue;

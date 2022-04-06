@@ -12,6 +12,9 @@ using XferHelper;
 
 namespace XferSuite.Apps.InlinePositions
 {
+    // HELP WANTED
+    // Combine this class with Angleprinting and replace homemade vector plotting
+    // with Scottplot vector plotting
     public partial class Fingerprinting : Form
     {
         private float _VectorMagnitude = 200F;

@@ -121,14 +121,14 @@ namespace XferSuite.Apps.SEYR
         private Report.Entry[] Data { get; set; }
         private Report.Feature[] Features { get; set; }
         private Report.Feature SelectedFeature { get; set; }
-        private bool ObjectHasBeenDropped { get; set; }
+        private bool ObjectHasBeenDropped { get; set; } // For criteria selector - possibly unecessary
 
         private List<Plottable> Plottables = new List<Plottable>();
         private List<CustomFeature> CustomFeatures = new List<CustomFeature>();
         private List<string> PlotOrder = new List<string>();
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
-        private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>();
+        private readonly List<(PlotView, int, int)> ContextMenuTable = new List<(PlotView, int, int)>(); // Will be replaced when upgraded to Scottplot
         private readonly BackgroundWorker ParseWorker = new BackgroundWorker();
 
         public ParseSEYR(string path)
@@ -137,10 +137,12 @@ namespace XferSuite.Apps.SEYR
             Path = new FileInfo(path);
             Text = Path.Name.Replace(Path.Extension, string.Empty);
             Data = Report.data(Path.FullName);
+
             ParseWorker.WorkerReportsProgress = true;
             ParseWorker.DoWork += ParseWorker_DoWork;
             ParseWorker.ProgressChanged += ParseWorker_ProgressChanged;
             ParseWorker.RunWorkerCompleted += ParseWorker_RunWorkerCompleted;
+
             ResetFeaturesAndUI();
 
             SimpleDragSource bufferSource = (SimpleDragSource)olvBuffer.DragSource;
@@ -194,12 +196,8 @@ namespace XferSuite.Apps.SEYR
         {
             e.Handled = true;
             e.Effect = DragDropEffects.None;
-            if (e.TargetModel != null) 
-            {
-                // Only one branch
-                if (!((Report.Feature)e.TargetModel).IsChild)
-                    e.Effect = DragDropEffects.Link;
-            }
+            if (e.TargetModel != null && !((Report.Feature)e.TargetModel).IsChild)
+                e.Effect = DragDropEffects.Link; // Only one branch
             else
                 e.Effect = DragDropEffects.Copy;
         }
@@ -231,9 +229,7 @@ namespace XferSuite.Apps.SEYR
                     }
                 } 
                 else
-                {
                     ((ObjectListView)sender).AddObject(m);
-                }
                 olvBuffer.RemoveObject(m);
             }
             e.RefreshObjects();
@@ -314,7 +310,7 @@ namespace XferSuite.Apps.SEYR
             }
 
             // Reset
-            ParseWorker.ReportProgress(1, "(RR, RC, R, C)\tYield\n");
+            ParseWorker.ReportProgress(1, "(RR, RC, R, C)\tYield\n"); // Header
             Plottables = new List<Plottable>();
             double distX = 0.0;
             double distY = 0.0;
@@ -370,6 +366,8 @@ namespace XferSuite.Apps.SEYR
                     Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() > 0));
         }
 
+        // Much, much faster way of parsing large data sets as you do not have to obtain regions
+        // within regions and each entry is treated as a tile
         private void ParseSingle(double distX, double distY, Report.Entry[] filteredData, string[] regions)
         {
             for (int l = 0; l < regions.Length; l++)
@@ -491,6 +489,8 @@ namespace XferSuite.Apps.SEYR
         #endregion
 
         #region Custom UI Elements
+
+        // This region will dissapear after upgrading to Scottplot
         private (ContextMenu, int, int) InitContextMenu()
         {
             MenuItem savePlot = new MenuItem() { Text = "Save Plot" };
@@ -554,6 +554,8 @@ namespace XferSuite.Apps.SEYR
         #endregion
 
         #region Plotting Methods
+
+        // This region will move to it's own class/form during Scottplot upgrade
 
         private PlotView InitPlotView()
         {
@@ -796,7 +798,7 @@ namespace XferSuite.Apps.SEYR
 
         #endregion
 
-        #region Feature Manipulation Methods
+        #region Feature Specific Methods
 
         private bool CheckCriteria(Report.Entry[] thisCell, List<string> needOneParents)
         {
@@ -873,6 +875,7 @@ namespace XferSuite.Apps.SEYR
             }   
         }
 
+        // Functions from here to the end of the region could exist in their own class/form
         private string MakeFeatureDataHistogram(ref ScottPlot.FormsPlot control, Report.State state)
         {
             ScottPlot.Plottable.BarPlot bar;

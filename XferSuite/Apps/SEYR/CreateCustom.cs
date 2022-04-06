@@ -7,10 +7,13 @@ using XferHelper;
 
 namespace XferSuite.Apps.SEYR
 {
+    /// <summary>
+    /// Form for creating custom SEYR features from existing report data
+    /// </summary>
     public partial class CreateCustom : Form
     {
         public CustomFeature CustomFeature { get; set; }
-        private List<CustomFeature> ExistingCustomFeatures;
+        private readonly List<CustomFeature> ExistingCustomFeatures;
 
         public CreateCustom(Report.Feature[] features, List<CustomFeature> customFeatures)
         {
@@ -18,7 +21,7 @@ namespace XferSuite.Apps.SEYR
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
             comboBoxType.SelectedIndex = 0;
             panelColor.Click += PanelColor_Click;
-            txtName.Text = Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
+            txtName.Text = Guid.NewGuid().ToString().Substring(0, 5).ToUpper(); // Random string
             ExistingCustomFeatures = customFeatures;
         }
 

@@ -7,22 +7,22 @@ using System.Windows.Forms;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-namespace XferSuite.Apps
+namespace XferSuite.Apps.Camera
 {
     public partial class CameraViewer : Form
     {
         // Session Memory
-        private string MemoryPath = @"C:\XferPrint\Data\Log\Layouts\XferSuiteCamera.bin";
+        private readonly string MemoryPath = @"C:\XferPrint\Data\Log\Layouts\XferSuiteCamera.bin";
         private CameraLayout CameraLayout;
 
         // Video Feed
-        private FilterInfoCollection VideoDevices;
+        private readonly FilterInfoCollection VideoDevices;
         private VideoCaptureDevice VideoSource;
 
         // Controls
-        private Splitter Splitter = new Splitter() { Dock = DockStyle.Left, MinExtra = 100, MinSize = 75 };
-        private ListBox ListBox = new ListBox() { Dock = DockStyle.Left };
-        private PictureBox PictureBox = new PictureBox() { Dock = DockStyle.Fill, BackgroundImageLayout = ImageLayout.Zoom, SizeMode = PictureBoxSizeMode.Zoom };
+        private readonly Splitter Splitter = new Splitter() { Dock = DockStyle.Left, MinExtra = 100, MinSize = 75 };
+        private readonly ListBox ListBox = new ListBox() { Dock = DockStyle.Left };
+        private readonly PictureBox PictureBox = new PictureBox() { Dock = DockStyle.Fill, BackgroundImageLayout = ImageLayout.Zoom, SizeMode = PictureBoxSizeMode.Zoom };
 
         // UI Elements
         private Size LastSize = Size.Empty;
@@ -114,7 +114,7 @@ namespace XferSuite.Apps
             return bitmap.Size;
         }
 
-        private void btnToggleListView_Click(object sender, EventArgs e)
+        private void BtnToggleListView_Click(object sender, EventArgs e)
         {
             ListBox.Visible = btnToggleListView.Checked;
             if (btnToggleListView.Checked)
@@ -124,7 +124,7 @@ namespace XferSuite.Apps
             UpdateSessionMemory();
         }
 
-        private void btnToggleCrosshair_Click(object sender, EventArgs e)
+        private void BtnToggleCrosshair_Click(object sender, EventArgs e)
         {
             DrawCrosshair();
         }
@@ -145,7 +145,7 @@ namespace XferSuite.Apps
             UpdateSessionMemory();
         }
 
-        private void btnCrosshairColor_Click(object sender, EventArgs e)
+        private void BtnCrosshairColor_Click(object sender, EventArgs e)
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
@@ -154,13 +154,13 @@ namespace XferSuite.Apps
             }
         }
 
-        private void btnRotateImage_Click(object sender, EventArgs e)
+        private void BtnRotateImage_Click(object sender, EventArgs e)
         {
             Rotation++;
             UpdateSessionMemory();
         }
 
-        private void btnSaveFrame_Click(object sender, EventArgs e)
+        private void BtnSaveFrame_Click(object sender, EventArgs e)
         {
             if (VideoSource == null || !VideoSource.IsRunning) return;
             Bitmap bitmap = (Bitmap)PictureBox.BackgroundImage.Clone();
@@ -177,7 +177,7 @@ namespace XferSuite.Apps
 
         #region Session Memory
 
-        private void btnResetSessionMem_Click(object sender, EventArgs e)
+        private void BtnResetSessionMem_Click(object sender, EventArgs e)
         {
             File.Delete(MemoryPath);
             Close();
@@ -263,17 +263,5 @@ namespace XferSuite.Apps
         }
 
         #endregion
-    }
-
-    [Serializable]
-    public class CameraLayout
-    {
-        public string CamID { get; set; } = string.Empty;
-        public bool ShowListView { get; set; } = true;
-        public bool ShowCrosshair { get; set; } = false;
-        public Color CrosshairColor { get; set; } = Color.LawnGreen;
-        public int Rotation { get; set; } = 0;
-        public Size WindowSize { get; set; } = Size.Empty;
-        public Point WindowLocation { get; set; } = Point.Empty;
     }
 }

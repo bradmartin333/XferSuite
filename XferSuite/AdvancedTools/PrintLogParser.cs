@@ -114,9 +114,6 @@ namespace XferSuite.AdvancedTools
         public string Recipe { get; set; } = string.Empty;
         public int Cycles { get; set; }
         public Print() { }
-        public override string ToString()
-        {
-            return $"{(Stop - Start).TotalMinutes:f3}\t{Cycles}\n";
-        }
+        public override string ToString() => $"{(Stop - Start).TotalMinutes:f3}\t{Cycles}\n";
     }
 }

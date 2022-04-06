@@ -29,7 +29,7 @@ namespace XferSuite
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            foreach (Apps.CameraViewer cameraViewer in Application.OpenForms.OfType<Apps.CameraViewer>()) 
+            foreach (Apps.Camera.CameraViewer cameraViewer in Application.OpenForms.OfType<Apps.Camera.CameraViewer>()) 
                 cameraViewer.EndStream();
         }
 
@@ -82,7 +82,7 @@ namespace XferSuite
                         form = new Apps.SEYR.ParseSEYR(path);
                         break;
                     case 3:
-                        form = new Apps.CameraViewer();
+                        form = new Apps.Camera.CameraViewer();
                         break;
                     case 4:
                         form = new Apps.MapFlip();

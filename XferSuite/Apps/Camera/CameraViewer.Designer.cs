@@ -1,5 +1,5 @@
 ﻿
-namespace XferSuite.Apps
+namespace XferSuite.Apps.Camera
 {
     partial class CameraViewer
     {
@@ -68,7 +68,7 @@ namespace XferSuite.Apps
             this.btnToggleListView.Name = "btnToggleListView";
             this.btnToggleListView.Size = new System.Drawing.Size(29, 28);
             this.btnToggleListView.Text = "Toggle List View";
-            this.btnToggleListView.Click += new System.EventHandler(this.btnToggleListView_Click);
+            this.btnToggleListView.Click += new System.EventHandler(this.BtnToggleListView_Click);
             // 
             // btnToggleCrosshair
             // 
@@ -79,7 +79,7 @@ namespace XferSuite.Apps
             this.btnToggleCrosshair.Name = "btnToggleCrosshair";
             this.btnToggleCrosshair.Size = new System.Drawing.Size(29, 28);
             this.btnToggleCrosshair.Text = "Toggle Crosshair";
-            this.btnToggleCrosshair.Click += new System.EventHandler(this.btnToggleCrosshair_Click);
+            this.btnToggleCrosshair.Click += new System.EventHandler(this.BtnToggleCrosshair_Click);
             // 
             // btnCrosshairColor
             // 
@@ -89,7 +89,7 @@ namespace XferSuite.Apps
             this.btnCrosshairColor.Name = "btnCrosshairColor";
             this.btnCrosshairColor.Size = new System.Drawing.Size(29, 28);
             this.btnCrosshairColor.Text = "Crosshair Color";
-            this.btnCrosshairColor.Click += new System.EventHandler(this.btnCrosshairColor_Click);
+            this.btnCrosshairColor.Click += new System.EventHandler(this.BtnCrosshairColor_Click);
             // 
             // btnRotateImage
             // 
@@ -99,7 +99,7 @@ namespace XferSuite.Apps
             this.btnRotateImage.Name = "btnRotateImage";
             this.btnRotateImage.Size = new System.Drawing.Size(29, 28);
             this.btnRotateImage.Text = "Rotate Image";
-            this.btnRotateImage.Click += new System.EventHandler(this.btnRotateImage_Click);
+            this.btnRotateImage.Click += new System.EventHandler(this.BtnRotateImage_Click);
             // 
             // btnSaveFrame
             // 
@@ -109,7 +109,7 @@ namespace XferSuite.Apps
             this.btnSaveFrame.Name = "btnSaveFrame";
             this.btnSaveFrame.Size = new System.Drawing.Size(29, 28);
             this.btnSaveFrame.Text = "Save Frame";
-            this.btnSaveFrame.Click += new System.EventHandler(this.btnSaveFrame_Click);
+            this.btnSaveFrame.Click += new System.EventHandler(this.BtnSaveFrame_Click);
             // 
             // btnResetSessionMem
             // 
@@ -119,7 +119,7 @@ namespace XferSuite.Apps
             this.btnResetSessionMem.Name = "btnResetSessionMem";
             this.btnResetSessionMem.Size = new System.Drawing.Size(29, 28);
             this.btnResetSessionMem.Text = "Reset Session Memory";
-            this.btnResetSessionMem.Click += new System.EventHandler(this.btnResetSessionMem_Click);
+            this.btnResetSessionMem.Click += new System.EventHandler(this.BtnResetSessionMem_Click);
             // 
             // CameraViewer
             // 

@@ -1,5 +1,8 @@
 ﻿namespace XferSuite.Apps.XYZplotter
 {
+    /// <summary>
+    /// Handy place to store user selected configurations of plots
+    /// </summary>
     public static class Configuration
     {
         public static bool RemoveAngle { get; set; } = true;
