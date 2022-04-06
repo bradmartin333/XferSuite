@@ -612,13 +612,25 @@ namespace XferSuite.Apps.SEYR
             foreach (string plotName in PlotOrder)
             {
                 if (plotName == "Pass")
-                    model.Series.Add(passSeries);
+                    if (passSeries.Points.Count > 0)
+                        model.Series.Add(passSeries);
+                    else
+                        System.Diagnostics.Debug.WriteLine($"Skipped plotting pass");
                 else if (plotName == "Fail")
-                    model.Series.Add(failSeries);
+                    if (failSeries.Points.Count > 0)
+                        model.Series.Add(failSeries); 
+                    else
+                        System.Diagnostics.Debug.WriteLine($"Skipped plotting fail");
                 else
-                    model.Series.Add(customScatters[
+                {
+                    ScatterSeries series = customScatters[
                         CustomFeatures.Where(x => x.Checked).ToList().
-                        IndexOf(CustomFeatures.Where(x => x.Name == plotName).First())]);
+                        IndexOf(CustomFeatures.Where(x => x.Name == plotName).First())];
+                    if (series != null && series.Points.Count > 0)
+                        model.Series.Add(series);
+                    else
+                        System.Diagnostics.Debug.WriteLine($"Skipped plotting Custom: {plotName}");
+                }     
             }
             view.Model = model;
         }
