@@ -73,6 +73,16 @@ namespace XferSuite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap iconmonstr_arrow_48_64 {
+            get {
+                object obj = ResourceManager.GetObject("iconmonstr-arrow-48-64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap iconmonstr_cursor_16_32 {
             get {
                 object obj = ResourceManager.GetObject("iconmonstr-cursor-16-32", resourceCulture);

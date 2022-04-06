@@ -16,7 +16,12 @@ namespace XferSuite.Apps.SEYR
         private void ListBox1_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-                btnMove.PerformClick();
+            {
+                if (ModifierKeys.HasFlag(Keys.Shift))
+                    btnMoveAll.PerformClick();
+                else
+                    btnMove.PerformClick();
+            }   
         }
 
         private void BtnMove_Click(object sender, System.EventArgs e)
@@ -28,8 +33,17 @@ namespace XferSuite.Apps.SEYR
                 listBox2.Items.Add(listBox1.SelectedItem);
                 listBox1.Items.RemoveAt(listBox1.SelectedIndex);
             }
-            if (listBox1.Items.Count == 0)
-                btnMove.BackgroundImage = Properties.Resources.bigCheck;
+        }
+
+        private void btnMoveAll_Click(object sender, System.EventArgs e)
+        {
+            listBox1.Items.AddRange(listBox1.Items);
+            listBox2.Items.Clear();
+        }
+
+        private void btnDone_Click(object sender, System.EventArgs e)
+        {
+            Confirm();
         }
 
         private void Confirm()
