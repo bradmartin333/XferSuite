@@ -12,44 +12,39 @@ namespace XferSuite.Apps.SEYR
     /// </summary>
     public partial class CreateCustom : Form
     {
-        public CustomFeature CustomFeature { get; set; }
-        private List<CustomFeature> ExistingCustomFeatures;
+        public CustomFeature CustomFeature { get; set; } = new CustomFeature();
+        private readonly List<CustomFeature> ExistingCustomFeatures;
 
-        public CreateCustom(Report.Feature[] features, List<CustomFeature> customFeatures)
+        public CreateCustom(Report.Feature[] features, List<CustomFeature> customFeatures, CustomFeature feature = null)
         {
             InitializeComponent();
-            ExistingCustomFeatures = customFeatures;
-            ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
-            comboBoxType.SelectedIndex = 0;
             panelColor.Click += PanelColor_Click;
-            txtName.Text = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(); // Random string
-        }
-
-        public CreateCustom(Report.Feature[] features, List<CustomFeature> customFeatures, CustomFeature feature)
-        {
-            InitializeComponent();
+            if (feature != null)
+            {
+                CustomFeature = feature;
+                Text = Text.Replace("Create", "Edit");
+            }
             ExistingCustomFeatures = customFeatures;
-            Text = Text.Replace("Create", "Edit");
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
-            txtName.Text = feature.Name;
-            panelColor.BackColor = Color.FromArgb(feature.Color.A, feature.Color.R, feature.Color.G, feature.Color.B);
-            numSize.Value = feature.Size;
-            comboBoxType.SelectedIndex = feature.Type == Report.State.Pass ? 0 : 1;
-            numOffsetX.Value = (decimal)feature.Offset.X;
-            numOffsetY.Value = (decimal)feature.Offset.Y;
-            foreach ((string, Report.State) filter in feature.Filters)
+            txtName.Text = CustomFeature.Name;
+            panelColor.BackColor = Color.FromArgb(CustomFeature.Color.A, CustomFeature.Color.R, CustomFeature.Color.G, CustomFeature.Color.B);
+            numSize.Value = CustomFeature.Size;
+            comboBoxType.SelectedIndex = CustomFeature.Type == Report.State.Pass ? 0 : 1;
+            numOffsetX.Value = (decimal)CustomFeature.Offset.X;
+            numOffsetY.Value = (decimal)CustomFeature.Offset.Y;
+            foreach ((string, Report.State) filter in CustomFeature.Filters)
                 dataGridView.Rows.Add(new object[] { filter.Item1, filter.Item2 == Report.State.Pass ? "Pass" : "Fail" });
-            feature.Visible = true;
+            CustomFeature.Visible = true;
         }
 
         private void BtnConfirm_Click(object sender, EventArgs e)
         {
-            if (ExistingCustomFeatures.Select(x => x.Name).Contains(txtName.Text))
+            if (ExistingCustomFeatures.Select(x => x.Name).Contains(txtName.Text) && !Text.Contains("Edit"))
             {
                 MessageBox.Show("Custom feature name already taken.", "Create Custom SEYR Feature");
                 return;
             }
-            CustomFeature = new CustomFeature(this, ParseDataGrid());
+            CustomFeature.Update(this, ParseDataGrid());
             DialogResult = DialogResult.OK;
             Close();
         }

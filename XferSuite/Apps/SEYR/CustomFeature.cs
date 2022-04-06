@@ -127,18 +127,16 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        public CustomFeature(CreateCustom form, System.Collections.Generic.List<(string, Report.State)> filters)
-        {
-            _Name = form.txtName.Text;
-            _Color = form.panelColor.BackColor;
+        public CustomFeature() 
+        { 
+            _Name = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(); // Random string
+            _Color = Color.Blue;
             _OxyColor = OxyPlot.OxyColor.FromArgb(_Color.A, _Color.R, _Color.G, _Color.B);
-            _Size = (int)form.numSize.Value;
-            _Type = (Report.State)form.comboBoxType.SelectedIndex;
-            _Offset = new PointF((float)form.numOffsetX.Value, (float)form.numOffsetY.Value);
-            _Filters = filters;
+            _Size = 1;
+            _Type = Report.State.Pass;
+            _Offset = PointF.Empty;
+            _Filters = new System.Collections.Generic.List<(string, Report.State)>();
         }
-
-        public CustomFeature() { }
 
         public CustomFeature Clone()
         {
@@ -153,6 +151,17 @@ namespace XferSuite.Apps.SEYR
                 Filters = _Filters,
                 Visible = _Visible
             };
+        }
+
+        public void Update(CreateCustom form, System.Collections.Generic.List<(string, Report.State)> filters)
+        {
+            _Name = form.txtName.Text;
+            _Color = form.panelColor.BackColor;
+            _OxyColor = OxyPlot.OxyColor.FromArgb(_Color.A, _Color.R, _Color.G, _Color.B);
+            _Size = (int)form.numSize.Value;
+            _Type = (Report.State)form.comboBoxType.SelectedIndex;
+            _Offset = new PointF((float)form.numOffsetX.Value, (float)form.numOffsetY.Value);
+            _Filters = filters;
         }
     }
 }
