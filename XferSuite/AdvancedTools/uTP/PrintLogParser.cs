@@ -5,14 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace XferSuite.AdvancedTools
+namespace XferSuite.AdvancedTools.uTP
 {
     /// <summary>
     /// Calculates duration of print sessions from a uTP log
     /// </summary>
     public partial class PrintLogParser : Form
     {
-        readonly List<Print> Prints = new List<Print>();
+        readonly List<PrintInfo> Prints = new List<PrintInfo>();
 
         public PrintLogParser()
         {
@@ -63,7 +63,7 @@ namespace XferSuite.AdvancedTools
                         string[] data = line.Split(',');
                         if (data.Length == 2)
                         {
-                            if (line.Contains("STARTED")) Prints.Add(new Print() { Start = DateTime.Parse(data[0]) });
+                            if (line.Contains("STARTED")) Prints.Add(new PrintInfo() { Start = DateTime.Parse(data[0]) });
                             else
                             {
                                 Prints.Last().Stop = DateTime.Parse(data[0]);
@@ -98,22 +98,11 @@ namespace XferSuite.AdvancedTools
         private void ComboBoxDate_SelectedIndexChanged(object sender, EventArgs e)
         {
             RichTextBox.Text = "Minutes\tCycles\n";
-            foreach (Print print in Prints.Where(x => x.Recipe == ComboBoxRecipe.Text &&
+            foreach (PrintInfo print in Prints.Where(x => x.Recipe == ComboBoxRecipe.Text &&
                 x.Start.ToShortDateString() == ComboBoxDate.Text))
             {
                 RichTextBox.Text += print.ToString();
             }
         }
-    }
-
-    public partial class Print
-    {
-        public DateTime Start { get; set; }
-        public DateTime Stop { get; set; }
-        public bool Finished { get; set; }
-        public string Recipe { get; set; } = string.Empty;
-        public int Cycles { get; set; }
-        public Print() { }
-        public override string ToString() => $"{(Stop - Start).TotalMinutes:f3}\t{Cycles}\n";
     }
 }

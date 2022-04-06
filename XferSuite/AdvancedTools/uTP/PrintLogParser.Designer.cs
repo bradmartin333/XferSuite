@@ -1,4 +1,4 @@
-﻿namespace XferSuite.AdvancedTools
+﻿namespace XferSuite.AdvancedTools.uTP
 {
     partial class PrintLogParser
     {

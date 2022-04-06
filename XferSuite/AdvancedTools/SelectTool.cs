@@ -42,10 +42,10 @@ namespace XferSuite.AdvancedTools
                         Close();
                         break;
                     case AdvancedForm.uTPlogParser:
-                        if (Application.OpenForms.OfType<PrintLogParser>().Any())
-                            Application.OpenForms.OfType<PrintLogParser>().First().BringToFront();
+                        if (Application.OpenForms.OfType<uTP.PrintLogParser>().Any())
+                            Application.OpenForms.OfType<uTP.PrintLogParser>().First().BringToFront();
                         else
-                            _ = new PrintLogParser();
+                            _ = new uTP.PrintLogParser();
                         Close();
                         break;
                     // Create a form in the AdvancedTools folder and add a case above this comment
