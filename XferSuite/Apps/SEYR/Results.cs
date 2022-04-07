@@ -190,6 +190,7 @@ namespace XferSuite.Apps.SEYR
 
         private void FormsPlot_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Enter) return;
             CustomRightClickEvent(sender, e);
             LabelTracker.Text = "";
         }
