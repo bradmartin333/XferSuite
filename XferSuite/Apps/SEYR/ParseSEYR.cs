@@ -481,9 +481,9 @@ namespace XferSuite.Apps.SEYR
 
                                 Plottables.Add(customPlottable);
 
-                                if (customPlottable.Pass)
+                                if (custom.Type == Report.State.Pass)
                                     passNum++;
-                                else
+                                else if (custom.Type == Report.State.Fail)
                                     failNum++;
                             }
 

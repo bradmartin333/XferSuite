@@ -99,6 +99,8 @@ namespace XferSuite.Apps.SEYR
 
         private void AddScatterPlots()
         {
+            List<Plottable> nullPlottables = new List<Plottable>();
+
             foreach (PlotOrderElement plotOrderElement in PlotOrder)
             {
                 Plottable[] plottables;
@@ -107,20 +109,28 @@ namespace XferSuite.Apps.SEYR
                 {
                     case "Pass":
                         thisSize = PassPointSize;
-                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass).ToArray();
+                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass && 
+                            !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
                         if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
                         break;
                     case "Fail":
                         thisSize = FailPointSize;
-                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
+                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass && 
+                            !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
                         if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
                         break;
                     default:
                         CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
                         thisSize = customFeature.Size;
-                        plottables =
-                            Plottables.Where(x => x.CustomTag == customFeature.Name)
-                            .Select(x => { x.Color = customFeature.Color; return x; }).ToArray();
+                        plottables = Plottables.Where(x => x.CustomTag == customFeature.Name).
+                            Select(x => { x.Color = customFeature.Color; return x; }).ToArray();
+                        if (customFeature.Type == XferHelper.Report.State.Null)
+                        {
+                            nullPlottables.AddRange(plottables);
+                            continue;
+                        }
+                        else
+                            plottables = plottables.Where(x => !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
                         break;
                 }
                 if (plottables.Count() > 0)
