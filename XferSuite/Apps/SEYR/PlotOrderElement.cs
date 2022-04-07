@@ -9,8 +9,8 @@ namespace XferSuite.Apps.SEYR
         public static List<PlotOrderElement> GenerateDefaults()
         {
             return new List<PlotOrderElement>() {
-                new PlotOrderElement() { Name = "Fail" },
-                new PlotOrderElement() { Name = "Pass" }, };
+                new PlotOrderElement() { Name = "Pass" },
+                new PlotOrderElement() { Name = "Fail" }, };
         }
     }
 }
