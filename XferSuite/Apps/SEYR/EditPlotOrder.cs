@@ -10,6 +10,7 @@ namespace XferSuite.Apps.SEYR
         public EditPlotOrder(List<PlotOrderElement> plotOrder)
         {
             InitializeComponent();
+            plotOrder.Reverse();
             PlotOrder = plotOrder;
             SimpleDropSink sink = (SimpleDropSink)olv.DropSink;
             sink.AcceptExternal = false;
@@ -44,7 +45,7 @@ namespace XferSuite.Apps.SEYR
         {
             int count = PlotOrder.Count;
             PlotOrder.Clear();
-            for (int i = 0; i < count; i++)
+            for (int i = count - 1; i >= 0; i--)
                 PlotOrder.Add((PlotOrderElement)olv.GetModelObject(i));
         }
 

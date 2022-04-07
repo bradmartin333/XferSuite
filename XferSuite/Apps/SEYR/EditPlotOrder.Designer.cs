@@ -80,7 +80,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(168, 20);
             this.label2.TabIndex = 5;
-            this.label2.Text = "First Plotted (Bottom Layer)";
+            this.label2.Text = "Last Plotted (Top Layer)";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
@@ -91,7 +91,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(168, 20);
             this.label3.TabIndex = 6;
-            this.label3.Text = "Last Plotted (Top Layer)";
+            this.label3.Text = "First Plotted (Bottom Layer)";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // olv
