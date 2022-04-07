@@ -6,6 +6,7 @@ using ScottPlot;
 using System;
 using ScottPlot.Plottable;
 using System.Drawing;
+using System.Text;
 
 namespace XferSuite.Apps.SEYR
 {
@@ -49,135 +50,6 @@ namespace XferSuite.Apps.SEYR
                 e.Cancel = true;
                 Hide();
             }
-        }
-
-        private void CustomRightClickEvent(object sender, EventArgs e)
-        {
-            ContextMenuStrip customMenu = new ContextMenuStrip();
-            customMenu.Items.Add(new ToolStripMenuItem("Copy Plot", null, new EventHandler(CopyImage)));
-            customMenu.Items.Add(new ToolStripMenuItem("Save Plot", null, new EventHandler(SaveImage)));
-            customMenu.Items.Add(new ToolStripMenuItem("Reset Axes", null, new EventHandler(ResetAxes)));
-            customMenu.Items.Add(new ToolStripMenuItem("Select Plot Background Color", null, new EventHandler(SelectPlotColor)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Grid", null, new EventHandler(ToggleGrid)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Tracker String", null, new EventHandler(ToggleTrackerString)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Quality", null, new EventHandler(ToggleQuality)));
-            customMenu.Show(System.Windows.Forms.Cursor.Position);
-        }
-
-        private void CopyImage(object sender, EventArgs e)
-        {
-            Clipboard.SetImage(formsPlot.Plot.Render());
-            LabelStatus.Text = "Plot copied to clipboard";
-        }
-
-        private void SaveImage(object sender, EventArgs e)
-        {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-            {
-                saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.Title = "Save Plot";
-                saveFileDialog.DefaultExt = ".png";
-                saveFileDialog.Filter = "png file (*.png)|*.png";
-                saveFileDialog.FileName = Text.Replace(".txt", "Summary");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    formsPlot.Plot.Render().Save(saveFileDialog.FileName);
-                    LabelStatus.Text = "Plot saved";
-                }
-            }
-        }
-
-        private void ResetAxes(object sender, EventArgs e)
-        {
-            formsPlot.Plot.AxisAuto();
-            formsPlot.Refresh(lowQuality: UseLowQuality);
-            LabelStatus.Text = "Plot axes autoscaled";
-        }
-
-        private void SelectPlotColor(object sender, EventArgs e)
-        {
-            ColorDialog MyDialog = new ColorDialog
-            {
-                AllowFullOpen = true,
-                ShowHelp = true,
-            };
-            if (MyDialog.ShowDialog() == DialogResult.OK)
-            {
-                formsPlot.Plot.Style(dataBackground: MyDialog.Color);
-                formsPlot.Refresh(lowQuality: UseLowQuality);
-            }
-            LabelStatus.Text = "Plot color changed";
-        }
-
-        private void ToggleGrid(object sender, EventArgs e)
-        {
-            ShowGrid = !ShowGrid;
-            formsPlot.Plot.Grid(ShowGrid);
-            formsPlot.Refresh(lowQuality: UseLowQuality);
-            LabelStatus.Text = "Grid visibility changed";
-        }
-
-        private void ToggleTrackerString(object sender, EventArgs e)
-        {
-            ShowTrackerString = !ShowTrackerString;
-            UpdatePlot("Tracker string visibility changed");
-        }
-
-        private void ToggleQuality(object sender, EventArgs e)
-        {
-            UseLowQuality = !UseLowQuality;
-            formsPlot.Refresh(lowQuality: UseLowQuality);
-            LabelStatus.Text = "Plot quality changed";
-        }
-
-        private void FormsPlot_MouseUp(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                if (e.Button != MouseButtons.Left || !ShowTrackerString || HighlightedPoint == null || Plottables.Count == 0) return;
-
-                // Determine point nearest the cursor
-                (double mouseCoordX, double mouseCoordY) = formsPlot.GetMouseCoordinates();
-                double xyRatio = formsPlot.Plot.XAxis.Dims.PxPerUnit / formsPlot.Plot.YAxis.Dims.PxPerUnit;
-
-                List<(double, double, int)> coords = new List<(double, double, int)>();
-                List<double> distances = new List<double>();
-                for (int i = 0; i < Scatters.Count; i++)
-                {
-                    (double pointX, double pointY, int pointIndex) = Scatters[i].GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
-                    coords.Add((pointX, pointY, pointIndex));
-                    distances.Add(Math.Sqrt(Math.Pow(mouseCoordX - pointX, 2) + Math.Pow(mouseCoordY - pointY, 2)));
-                }
-
-                int closestIdx = distances.IndexOf(distances.Min());
-
-                // Place the highlight over the point of interest
-                HighlightedPoint.X = coords[closestIdx].Item1;
-                HighlightedPoint.Y = coords[closestIdx].Item2;
-                HighlightedPoint.IsVisible = true;
-
-                // Render if the highlighted point chnaged
-                if (LastHighlightedIndex != (closestIdx, coords[closestIdx].Item3))
-                    LastHighlightedIndex = (closestIdx, coords[closestIdx].Item3);
-
-                // Update the GUI to describe the highlighted point
-                Plottable[] plottables = Plottables.Where(
-                    p => p.X * (FlipX ? -1 : 1) == coords[closestIdx].Item1 &&
-                    p.Y * (FlipY ? 1 : -1) == coords[closestIdx].Item2).ToArray();
-                
-                if (plottables.Count() != 0)
-                {
-                    formsPlot.Plot.Title(plottables[0].ToString(), size: 10);
-                    formsPlot.Refresh(lowQuality: UseLowQuality);
-                }
-            }
-            catch (Exception) { }
-        }
-
-        private void RTB_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(RTB.Text);
-            LabelStatus.Text = "Results text copied to clipboard";
         }
 
         public void UpdateData(string reason, ParseSEYR parseSEYR)
@@ -243,6 +115,159 @@ namespace XferSuite.Apps.SEYR
             LabelStatus.Text = reason;
         }
 
+        #region Context Menu
+
+        private void CustomRightClickEvent(object sender, EventArgs e)
+        {
+            ContextMenuStrip customMenu = new ContextMenuStrip();
+            customMenu.Items.Add(new ToolStripMenuItem("Copy Plot", null, new EventHandler(CopyImage)));
+            customMenu.Items.Add(new ToolStripMenuItem("Save Plot", null, new EventHandler(SaveImage)));
+            customMenu.Items.Add(new ToolStripMenuItem("Copy Data", null, new EventHandler(CopyData)));
+            customMenu.Items.Add(new ToolStripMenuItem("Reset Axes", null, new EventHandler(ResetAxes)));
+            customMenu.Items.Add(new ToolStripMenuItem("Select Plot Background Color", null, new EventHandler(SelectPlotColor)));
+            customMenu.Items.Add(new ToolStripMenuItem("Toggle Grid", null, new EventHandler(ToggleGrid)));
+            customMenu.Items.Add(new ToolStripMenuItem("Toggle Tracker String", null, new EventHandler(ToggleTrackerString)));
+            customMenu.Items.Add(new ToolStripMenuItem("Toggle Quality", null, new EventHandler(ToggleQuality)));
+            customMenu.Show(System.Windows.Forms.Cursor.Position);
+        }
+
+        private void CopyImage(object sender, EventArgs e)
+        {
+            Clipboard.SetImage(formsPlot.Plot.Render());
+            LabelStatus.Text = "Plot copied to clipboard";
+        }
+
+        private void SaveImage(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.Title = "Save Plot";
+                saveFileDialog.DefaultExt = ".png";
+                saveFileDialog.Filter = "png file (*.png)|*.png";
+                saveFileDialog.FileName = Text.Replace(".txt", "Summary");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    formsPlot.Plot.Render().Save(saveFileDialog.FileName);
+                    LabelStatus.Text = "Plot saved";
+                }
+            }
+        }
+
+        private void CopyData(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("X\tY\tRR\tRC\tR\tC\tState\tCustomTag\n");
+            foreach (Plottable p in Plottables)
+            {
+                string regionCSV = p.Region.Substring(1, p.Region.Length - 2).Replace(", ", "\t");
+                sb.Append($"{Math.Round(p.X, 3)}\t{Math.Round(p.Y, 3)}\t{regionCSV}\t{(p.Pass ? "Pass" : "Fail")}\t{p.CustomTag}\n");
+            }
+            Clipboard.SetText(sb.ToString());
+            LabelStatus.Text = "Data copied to clipboard";
+        }
+
+        private void ResetAxes(object sender, EventArgs e)
+        {
+            formsPlot.Plot.AxisAuto();
+            formsPlot.Refresh(lowQuality: UseLowQuality);
+            LabelStatus.Text = "Plot axes autoscaled";
+        }
+
+        private void SelectPlotColor(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog
+            {
+                AllowFullOpen = true,
+                ShowHelp = true,
+            };
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+            {
+                formsPlot.Plot.Style(dataBackground: MyDialog.Color);
+                formsPlot.Refresh(lowQuality: UseLowQuality);
+            }
+            LabelStatus.Text = "Plot color changed";
+        }
+
+        private void ToggleGrid(object sender, EventArgs e)
+        {
+            ShowGrid = !ShowGrid;
+            formsPlot.Plot.Grid(ShowGrid);
+            formsPlot.Refresh(lowQuality: UseLowQuality);
+            LabelStatus.Text = "Grid visibility changed";
+        }
+
+        private void ToggleTrackerString(object sender, EventArgs e)
+        {
+            ShowTrackerString = !ShowTrackerString;
+            UpdatePlot("Tracker string visibility changed");
+        }
+
+        private void ToggleQuality(object sender, EventArgs e)
+        {
+            UseLowQuality = !UseLowQuality;
+            formsPlot.Refresh(lowQuality: UseLowQuality);
+            LabelStatus.Text = "Plot quality changed";
+        }
+
+        #endregion
+
+        #region Mouse Handlers
+
+        private void FormsPlot_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (e.Button != MouseButtons.Left || !ShowTrackerString || HighlightedPoint == null || Plottables.Count == 0) return;
+
+                // Determine point nearest the cursor
+                (double mouseCoordX, double mouseCoordY) = formsPlot.GetMouseCoordinates();
+                double xyRatio = formsPlot.Plot.XAxis.Dims.PxPerUnit / formsPlot.Plot.YAxis.Dims.PxPerUnit;
+
+                List<(double, double, int)> coords = new List<(double, double, int)>();
+                List<double> distances = new List<double>();
+                for (int i = 0; i < Scatters.Count; i++)
+                {
+                    (double pointX, double pointY, int pointIndex) = Scatters[i].GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
+                    coords.Add((pointX, pointY, pointIndex));
+                    distances.Add(Math.Sqrt(Math.Pow(mouseCoordX - pointX, 2) + Math.Pow(mouseCoordY - pointY, 2)));
+                }
+
+                int closestIdx = distances.IndexOf(distances.Min());
+
+                // Place the highlight over the point of interest
+                HighlightedPoint.X = coords[closestIdx].Item1;
+                HighlightedPoint.Y = coords[closestIdx].Item2;
+                HighlightedPoint.IsVisible = true;
+
+                // Render if the highlighted point chnaged
+                if (LastHighlightedIndex != (closestIdx, coords[closestIdx].Item3))
+                    LastHighlightedIndex = (closestIdx, coords[closestIdx].Item3);
+
+                // Update the GUI to describe the highlighted point
+                Plottable[] plottables = Plottables.Where(
+                    p => p.X * (FlipX ? -1 : 1) == coords[closestIdx].Item1 &&
+                    p.Y * (FlipY ? 1 : -1) == coords[closestIdx].Item2).ToArray();
+                
+                if (plottables.Count() != 0)
+                {
+                    formsPlot.Plot.Title(plottables[0].ToString(), size: 10);
+                    formsPlot.Refresh(lowQuality: UseLowQuality);
+                }
+            }
+            catch (Exception) { }
+        }
+
+        private void RTB_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(RTB.Text);
+            LabelStatus.Text = "Results text copied to clipboard";
+        }
+
+        #endregion
+
+        #region Form Sizing
+
         private void UpdateForm()
         {
             var xData = Plottables.Select(p => p.X);
@@ -271,5 +296,7 @@ namespace XferSuite.Apps.SEYR
                 Size = new Size(desiredPlotSize.Width + 22, desiredPlotSize.Height + 235);
             }
         }
+
+        #endregion
     }
 }
