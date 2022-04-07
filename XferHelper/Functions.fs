@@ -726,6 +726,5 @@ module Report =
 
     let removeBuffers (data: Entry [], names: string []) =
         let nameList = names |> Array.toList
-
         data
         |> Array.filter (fun x -> not (List.contains x.Name nameList))

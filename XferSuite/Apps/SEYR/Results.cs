@@ -16,13 +16,21 @@ namespace XferSuite.Apps.SEYR
         private readonly List<ScatterPlot> Scatters = new List<ScatterPlot>();
         private MarkerPlot HighlightedPoint;
         private (int, int) LastHighlightedIndex = (-1, -1);
+
         private bool ShowGrid = true;
         private bool ShowTrackerString = false;
         private bool UseLowQuality = true;
+        private bool ShowRegionBorders = true;
+        private bool ShowPercentages = false;
+
         private bool FlipX;
         private bool FlipY;
         private int PassPointSize;
         private int FailPointSize;
+        private int RegionTextSize;
+        private int PercentageTextSize;
+
+        private string[] Regions;
         private List<Plottable> Plottables;
         private List<PlotOrderElement> PlotOrder;
         private List<CustomFeature> CustomFeatures;
@@ -58,6 +66,9 @@ namespace XferSuite.Apps.SEYR
             FlipY = parseSEYR.FlipYAxis;
             PassPointSize = parseSEYR.PassPointSize;
             FailPointSize = parseSEYR.FailPointSize;
+            RegionTextSize = parseSEYR.RegionTextSize;
+            PercentageTextSize = parseSEYR.PercentageTextSize;
+            Regions = parseSEYR.Regions;
             Plottables = parseSEYR.Plottables;
             PlotOrder = parseSEYR.PlotOrder;
             CustomFeatures = parseSEYR.CustomFeatures;
@@ -66,53 +77,102 @@ namespace XferSuite.Apps.SEYR
 
         private void UpdatePlot(string reason)
         {
-            if (Plottables.Count == 0) return;
-            UpdateForm();
-            Scatters.Clear();
-            formsPlot.Plot.Clear();
-            foreach (PlotOrderElement plotOrderElement in PlotOrder)
+            using (new Utility.HourGlass(UsePlexiglass: false))
             {
-                Plottable[] plottables;
-                float thisSize;
-                switch (plotOrderElement.Name)
+                if (Plottables.Count == 0) return;
+
+                UpdateForm();
+                Scatters.Clear();
+                formsPlot.Plot.Clear();
+                formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
+                formsPlot.Plot.YAxis.TickLabelNotation(invertSign: FlipY);
+
+                foreach (PlotOrderElement plotOrderElement in PlotOrder)
                 {
-                    case "Pass":
-                        thisSize = PassPointSize;
-                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass).ToArray();
-                        break;
-                    case "Fail":
-                        thisSize = FailPointSize;
-                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
-                        break;
-                    default:
-                        CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
-                        thisSize = customFeature.Size;
-                        plottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();
-                        break;
+                    Plottable[] plottables;
+                    float thisSize;
+                    switch (plotOrderElement.Name)
+                    {
+                        case "Pass":
+                            thisSize = PassPointSize;
+                            plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass).ToArray();
+                            break;
+                        case "Fail":
+                            thisSize = FailPointSize;
+                            plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
+                            break;
+                        default:
+                            CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
+                            thisSize = customFeature.Size;
+                            plottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();
+                            break;
+                    }
+                    Scatters.Add(formsPlot.Plot.AddScatter(
+                        plottables.Select(x => x.X * (FlipX ? -1 : 1)).ToArray(),
+                        plottables.Select(x => x.Y * (FlipY ? 1 : -1)).ToArray(),
+                        plottables[0].Color,
+                        markerSize: thisSize,
+                        lineStyle: LineStyle.None));
                 }
-                Scatters.Add(formsPlot.Plot.AddScatter(
-                    plottables.Select(x => x.X * (FlipX ? -1 : 1)).ToArray(),
-                    plottables.Select(x => x.Y * (FlipY ? 1 : -1)).ToArray(),
-                    plottables[0].Color,
-                    markerSize: thisSize,
-                    lineStyle: LineStyle.None));
-            }
-            formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
-            formsPlot.Plot.YAxis.TickLabelNotation(invertSign: FlipY);
 
-            if (ShowTrackerString) // Add a red circle we can move around later as a highlighted point indicator
-            {
-                HighlightedPoint = formsPlot.Plot.AddPoint(0, 0);
-                HighlightedPoint.Color = Color.Red;
-                HighlightedPoint.MarkerSize = 10;
-                HighlightedPoint.MarkerShape = MarkerShape.openCircle;
-                HighlightedPoint.IsVisible = false;
-            }
-            else
-                formsPlot.Plot.Title("");
+                if (ShowRegionBorders || ShowPercentages)
+                {
+                    foreach (string region in Regions)
+                    {
+                        Plottable[] regionPlottables = Plottables.Where(p => p.Region == region).ToArray();
+                        double[] xs = regionPlottables.Select(p => p.X).ToArray();
+                        double[] ys = regionPlottables.Select(p => p.Y).ToArray();
+                        double minX = xs.Min() * (FlipX ? -1 : 1);
+                        double minY = ys.Min() * (FlipY ? 1 : -1);
+                        double maxX = xs.Max() * (FlipX ? -1 : 1);
+                        double maxY = ys.Max() * (FlipY ? 1 : -1);
+                        double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
+                        double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
 
-            formsPlot.Refresh(lowQuality: UseLowQuality);
-            LabelStatus.Text = reason;
+                        if (ShowRegionBorders)
+                        {
+                            formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.Black, 3);
+                            var marker = formsPlot.Plot.AddMarker((minX + maxX) / 2, FlipY ? minY : maxY, MarkerShape.none);
+                            marker.Text = region;
+                            marker.TextFont.Color = Color.Black;
+                            marker.TextFont.Alignment = Alignment.UpperCenter;
+                            marker.TextFont.Size = RegionTextSize;
+                            marker.TextFont.Bold = true;
+                        }
+
+                        if (ShowPercentages)
+                        {
+                            var marker = formsPlot.Plot.AddMarker((minX + maxX) / 2, (minY + maxY) / 2, MarkerShape.none);
+                            marker.Text = GetRegionPercent(region);
+                            marker.TextFont.Color = Color.Black;
+                            marker.TextFont.Alignment = Alignment.UpperCenter;
+                            marker.TextFont.Size = PercentageTextSize;
+                            marker.TextFont.Bold = true;
+                        }
+                    }
+                }
+
+                if (ShowTrackerString) // Add a red circle we can move around later as a highlighted point indicator
+                {
+                    HighlightedPoint = formsPlot.Plot.AddPoint(0, 0);
+                    HighlightedPoint.Color = Color.Red;
+                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerShape = MarkerShape.openCircle;
+                    HighlightedPoint.IsVisible = false;
+                }
+                else
+                    formsPlot.Plot.Title("");
+
+                formsPlot.Refresh(lowQuality: UseLowQuality);
+                LabelStatus.Text = reason;
+            }
+        }
+
+        private string GetRegionPercent(string region)
+        {
+            string[] lines = RTB.Text.Split('\n');
+            string dataLine = lines.Where(x => x.Contains(region)).First();
+            return dataLine.Split('\t')[1];
         }
 
         #region Context Menu Strip
@@ -130,6 +190,8 @@ namespace XferSuite.Apps.SEYR
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Grid", null, new EventHandler(ToggleGrid)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Tracker String", null, new EventHandler(ToggleTrackerString)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Quality", null, new EventHandler(ToggleQuality)));
+            customMenu.Items.Add(new ToolStripMenuItem("Toggle Region Borders", null, new EventHandler(ToggleRegionBorders)));
+            customMenu.Items.Add(new ToolStripMenuItem("Toggle Percentages", null, new EventHandler(TogglePercentages)));
             customMenu.Show(System.Windows.Forms.Cursor.Position);
         }
 
@@ -210,6 +272,18 @@ namespace XferSuite.Apps.SEYR
             UseLowQuality = !UseLowQuality;
             formsPlot.Refresh(lowQuality: UseLowQuality);
             LabelStatus.Text = "Plot quality changed";
+        }
+
+        private void ToggleRegionBorders(object sender, EventArgs e)
+        {
+            ShowRegionBorders = !ShowRegionBorders;
+            UpdatePlot("Region borders changed");
+        }
+
+        private void TogglePercentages(object sender, EventArgs e)
+        {
+            ShowPercentages = !ShowPercentages;
+            UpdatePlot("Percentage visibility changed");
         }
 
         #endregion

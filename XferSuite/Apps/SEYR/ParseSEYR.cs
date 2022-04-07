@@ -8,7 +8,6 @@ using System.Drawing;
 using System.ComponentModel;
 using Microsoft.FSharp.Collections;
 using System.IO;
-using System.Text;
 
 namespace XferSuite.Apps.SEYR
 {
@@ -37,6 +36,30 @@ namespace XferSuite.Apps.SEYR
             {
                 _FailPointSize = value;
                 Results.UpdateData("Fail point size changed", this);
+            }
+        }
+
+        private int _RegionTextSize = 12;
+        [Category("User Parameters")]
+        public int RegionTextSize
+        {
+            get => _RegionTextSize;
+            set
+            {
+                _RegionTextSize = value;
+                Results.UpdateData("Region text size changed", this);
+            }
+        }
+
+        private int _PercentageTextSize = 12;
+        [Category("User Parameters")]
+        public int PercentageTextSize
+        {
+            get => _PercentageTextSize;
+            set
+            {
+                _PercentageTextSize = value;
+                Results.UpdateData("Percentage text size changed", this);
             }
         }
 
@@ -84,6 +107,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        public string[] Regions;
         public List<Plottable> Plottables = new List<Plottable>();
         public List<PlotOrderElement> PlotOrder = PlotOrderElement.GenerateDefaults();
         public readonly List<CustomFeature> CustomFeatures = new List<CustomFeature>();
@@ -309,14 +333,14 @@ namespace XferSuite.Apps.SEYR
 
             string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
             var filteredData = CustomFeatures.Where(x => x.Visible).Count() > 0 ? Data : Report.removeBuffers(Data, bufferStrings);
-            string[] regions = Report.getRegions(filteredData);
+            Regions = Report.getRegions(filteredData);
 
             if (Features.Where(x => x.Bucket == Report.Bucket.Required).Count() == 1 &&
                 Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() == 0 &&
                 CustomFeatures.Where(x => x.Visible).Count() == 0)
-                ParseSingle(distX, distY, filteredData, regions);
+                ParseSingle(distX, distY, filteredData);
             else
-                ParseMulti(distX, distY, filteredData, regions,
+                ParseMulti(distX, distY, filteredData,
                     !(Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0 ||
                     Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() > 0));
         }
@@ -340,13 +364,13 @@ namespace XferSuite.Apps.SEYR
 
         // Much, much faster way of parsing large data sets as you do not have to obtain regions
         // within regions and each entry is treated as a tile
-        private void ParseSingle(double distX, double distY, Report.Entry[] filteredData, string[] regions)
+        private void ParseSingle(double distX, double distY, Report.Entry[] filteredData)
         {
-            for (int l = 0; l < regions.Length; l++)
+            for (int l = 0; l < Regions.Length; l++)
             {
                 double passNum = 0;
                 double failNum = 0;
-                Report.Entry[] regionData = Report.getRegion(filteredData, regions[l]);
+                Report.Entry[] regionData = Report.getRegion(filteredData, Regions[l]);
 
                 foreach (Report.Entry entry in regionData)
                 {
@@ -356,7 +380,7 @@ namespace XferSuite.Apps.SEYR
 
                     Plottables.Add(new Plottable
                     {
-                        Region = regions[l],
+                        Region = Regions[l],
                         DetailString = $"     Copy ({entry.XCopy}, {entry.YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}",
                         X = thisX,
                         Y = thisY,
@@ -371,21 +395,21 @@ namespace XferSuite.Apps.SEYR
                         failNum++;
                 }
 
-                ParseWorker.ReportProgress((int)((l + 1) / (double)regions.Length * 100), $"{regions[l]}\t{passNum / (passNum + failNum):P}\n");
+                ParseWorker.ReportProgress((int)((l + 1) / (double)Regions.Length * 100), $"{Regions[l]}\t{passNum / (passNum + failNum):P}\n");
             };
         }
 
-        private void ParseMulti(double distX, double distY, Report.Entry[] filteredData, string[] regions, bool onlyCustom)
+        private void ParseMulti(double distX, double distY, Report.Entry[] filteredData, bool onlyCustom)
         {
             int numX = Report.getNumX(filteredData);
             int numY = Report.getNumY(filteredData);
             List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
 
-            for (int l = 0; l < regions.Length; l++)
+            for (int l = 0; l < Regions.Length; l++)
             {
                 double passNum = 0;
                 double failNum = 0;
-                Report.Entry[] regionData = Report.getRegion(filteredData, regions[l]);
+                Report.Entry[] regionData = Report.getRegion(filteredData, Regions[l]);
                 int numRegionPics = Report.getNumImages(regionData);
 
                 for (int k = 1; k < numRegionPics + 1; k++)
@@ -420,7 +444,7 @@ namespace XferSuite.Apps.SEYR
                                 {
                                     Plottable customPlottable = new Plottable
                                     {
-                                        Region = regions[l],
+                                        Region = Regions[l],
                                         DetailString = $"     Copy ({thisCell[0].XCopy}, {thisCell[0].YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}     Custom: {custom.Name}",
                                         X = thisX - custom.Offset.X,
                                         Y = thisY - custom.Offset.Y,
@@ -442,7 +466,7 @@ namespace XferSuite.Apps.SEYR
                             {
                                 Plottables.Add(new Plottable
                                 {
-                                    Region = regions[l],
+                                    Region = Regions[l],
                                     DetailString = $"     Copy ({thisCell[0].XCopy}, {thisCell[0].YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}",
                                     X = thisX,
                                     Y = thisY,
@@ -460,7 +484,7 @@ namespace XferSuite.Apps.SEYR
                     }
                 }
 
-                ParseWorker.ReportProgress((int)((l + 1) / (double)regions.Length * 100), $"{regions[l]}\t{passNum / (passNum + failNum):P}\n");
+                ParseWorker.ReportProgress((int)((l + 1) / (double)Regions.Length * 100), $"{Regions[l]}\t{passNum / (passNum + failNum):P}\n");
             };
         }
 
