@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static XferSuite.Apps.SEYR.ParseSEYR;
 using ScottPlot;
 using System;
 using ScottPlot.Plottable;
@@ -10,6 +9,8 @@ using System.Text;
 
 namespace XferSuite.Apps.SEYR
 {
+    using static ParseSEYR;
+
     public partial class Results : Form
     {
         private PointF FormScaling;
