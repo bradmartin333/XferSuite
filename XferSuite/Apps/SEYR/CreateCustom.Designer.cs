@@ -377,7 +377,7 @@
             this.numSize.TabIndex = 18;
             this.numSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numSize.Value = new decimal(new int[] {
-            1,
+            4,
             0,
             0,
             0});

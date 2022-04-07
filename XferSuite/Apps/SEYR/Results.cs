@@ -17,10 +17,11 @@ namespace XferSuite.Apps.SEYR
         private readonly List<ScatterPlot> Scatters = new List<ScatterPlot>();
         private MarkerPlot HighlightedPoint;
 
-        private bool ShowGrid = true;
+        private bool ShowGrid = false;
         private bool ShowTrackerString = false;
         private bool UseLowQuality = true;
-        private bool ShowRegionBorders = true;
+        private bool ShowRegionBorders = false;
+        private bool ShowRegionStrings = true;
         private bool ShowPercentages = false;
 
         private bool FlipX;
@@ -48,6 +49,8 @@ namespace XferSuite.Apps.SEYR
             formsPlot.Plot.Frameless();
             formsPlot.RightClicked -= formsPlot.DefaultRightClickEvent;
             formsPlot.RightClicked += FormsPlot_RightClicked;
+            formsPlot.Plot.Grid(ShowGrid);
+            formsPlot.Configuration.AllowDroppedFramesWhileDragging = true;
             RTB.Click += RTB_Click;
         }
 
@@ -121,7 +124,7 @@ namespace XferSuite.Apps.SEYR
                             lineStyle: LineStyle.None));  
                 }
 
-                if (ShowRegionBorders || ShowPercentages)
+                if (ShowRegionBorders || ShowRegionStrings || ShowPercentages)
                 {
                     foreach (string region in Regions)
                     {
@@ -135,9 +138,10 @@ namespace XferSuite.Apps.SEYR
                         double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
                         double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
 
-                        if (ShowRegionBorders)
-                        {
-                            formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(50, Color.Black), 3);
+                        if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(50, Color.Black), 3);
+
+                        if (ShowRegionStrings)
+                        { 
                             Text txt = formsPlot.Plot.AddText(
                                 region,
                                 (minX + maxX) / 2,
@@ -218,6 +222,7 @@ namespace XferSuite.Apps.SEYR
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Tracker String", null, new EventHandler(ToggleTrackerString)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Quality", null, new EventHandler(ToggleQuality)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Region Borders", null, new EventHandler(ToggleRegionBorders)));
+            customMenu.Items.Add(new ToolStripMenuItem("Toggle Region Strings", null, new EventHandler(ToggleRegionStrings)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Percentages", null, new EventHandler(TogglePercentages)));
             customMenu.Show(System.Windows.Forms.Cursor.Position);
         }
@@ -318,7 +323,13 @@ namespace XferSuite.Apps.SEYR
         private void ToggleRegionBorders(object sender, EventArgs e)
         {
             ShowRegionBorders = !ShowRegionBorders;
-            UpdatePlot("Region borders changed");
+            UpdatePlot("Region borders visibility changed");
+        }
+
+        private void ToggleRegionStrings(object sender, EventArgs e)
+        {
+            ShowRegionStrings = !ShowRegionStrings;
+            UpdatePlot("Region strings visibility changed");
         }
 
         private void TogglePercentages(object sender, EventArgs e)

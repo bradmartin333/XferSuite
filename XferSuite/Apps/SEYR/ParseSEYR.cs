@@ -15,7 +15,7 @@ namespace XferSuite.Apps.SEYR
     {
         #region User Parameters
 
-        private int _PassPointSize = 1;
+        private int _PassPointSize = 4;
         [Category("User Parameters")]
         public int PassPointSize
         {
@@ -27,7 +27,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _FailPointSize = 1;
+        private int _FailPointSize = 4;
         [Category("User Parameters")]
         public int FailPointSize
         {
