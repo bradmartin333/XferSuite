@@ -111,7 +111,9 @@ namespace XferSuite.Apps.SEYR
                         default:
                             CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
                             thisSize = customFeature.Size;
-                            plottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();
+                            plottables = 
+                                Plottables.Where(x => x.CustomTag == customFeature.Name)
+                                .Select(x => { x.Color = customFeature.Color; return x; }).ToArray();
                             break;
                     }
                     if (plottables.Count() > 0)

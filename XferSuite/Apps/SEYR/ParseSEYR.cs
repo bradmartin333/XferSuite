@@ -283,6 +283,10 @@ namespace XferSuite.Apps.SEYR
                 if (result == DialogResult.OK)
                 {
                     CustomFeatures[olvCustom.SelectedIndex] = cc.CustomFeature;
+                    olvCustom.SelectedItem.BackColor = cc.CustomFeature.Color;
+                    olvCustom.SelectedItem.ForeColor = cc.CustomFeature.ContrastColor;
+                    olvCustom.DeselectAll();
+                    olvCustom.Refresh();
                     Results.UpdateData("Custom feature updated", this);
                 }
                 else if (result == DialogResult.Ignore)
