@@ -47,6 +47,7 @@ namespace XferSuite.Apps.SEYR
             formsPlot.MouseUp += FormsPlot_MouseUp;
             formsPlot.Plot.Frameless();
             formsPlot.RightClicked -= formsPlot.DefaultRightClickEvent;
+            formsPlot.RightClicked += FormsPlot_RightClicked;
             RTB.Click += RTB_Click;
         }
 
@@ -191,6 +192,12 @@ namespace XferSuite.Apps.SEYR
         private void FormsPlot_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter) return;
+            CustomMenu(sender, e);
+            LabelTracker.Text = "";
+        }
+
+        private void FormsPlot_RightClicked(object sender, EventArgs e)
+        {
             CustomMenu(sender, e);
             LabelTracker.Text = "";
         }
