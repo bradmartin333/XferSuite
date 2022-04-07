@@ -119,7 +119,6 @@
             // 
             this.olvColumn1.AspectName = "Name";
             this.olvColumn1.FillsFreeSpace = true;
-            this.olvColumn1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // EditPlotOrder
             // 

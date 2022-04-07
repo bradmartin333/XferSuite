@@ -29,6 +29,7 @@ namespace XferSuite.Apps.SEYR
         private int FailPointSize;
         private int RegionTextSize;
         private int PercentageTextSize;
+        private int DataReduction;
 
         private string[] Regions;
         private List<Plottable> Plottables;
@@ -67,6 +68,7 @@ namespace XferSuite.Apps.SEYR
             FailPointSize = parseSEYR.FailPointSize;
             RegionTextSize = parseSEYR.RegionTextSize;
             PercentageTextSize = parseSEYR.PercentageTextSize;
+            DataReduction = parseSEYR.DataReduction;
             Regions = parseSEYR.Regions;
             Plottables = parseSEYR.Plottables;
             PlotOrder = parseSEYR.PlotOrder;
@@ -95,10 +97,12 @@ namespace XferSuite.Apps.SEYR
                         case "Pass":
                             thisSize = PassPointSize;
                             plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass).ToArray();
+                            if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
                             break;
                         case "Fail":
                             thisSize = FailPointSize;
                             plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
+                            if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
                             break;
                         default:
                             CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
@@ -111,6 +115,7 @@ namespace XferSuite.Apps.SEYR
                         plottables.Select(x => x.Y * (FlipY ? 1 : -1)).ToArray(),
                         plottables[0].Color,
                         markerSize: thisSize,
+                        markerShape: MarkerShape.filledSquare,
                         lineStyle: LineStyle.None));
                 }
 

@@ -15,7 +15,7 @@ namespace XferSuite.Apps.SEYR
     {
         #region User Parameters
 
-        private int _PassPointSize = 5;
+        private int _PassPointSize = 1;
         [Category("User Parameters")]
         public int PassPointSize
         {
@@ -27,7 +27,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _FailPointSize = 5;
+        private int _FailPointSize = 1;
         [Category("User Parameters")]
         public int FailPointSize
         {
@@ -84,6 +84,26 @@ namespace XferSuite.Apps.SEYR
             {
                 _FlipYAxis = value;
                 Results.UpdateData("Y axis orientation changed", this);
+            }
+        }
+
+        private int _DataReduction = 0;
+        [Category("User Parameters")]
+        [Description("Percentagle of Pass and Fail data to omit for the sake of PC speed")]
+        public int DataReduction
+        {
+            get => _DataReduction;
+            set
+            {
+                if (value >= 0 && value <= 100)
+                {
+                    _DataReduction = value;
+                    Results.UpdateData("Data reduction value changed", this);
+                }
+                else if (value < 0)
+                    _DataReduction = 0;
+                else if (value > 100)
+                    _DataReduction = 100;
             }
         }
 
