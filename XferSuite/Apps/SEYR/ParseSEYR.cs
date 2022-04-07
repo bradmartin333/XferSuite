@@ -281,7 +281,10 @@ namespace XferSuite.Apps.SEYR
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
+                {
                     CustomFeatures[olvCustom.SelectedIndex] = cc.CustomFeature;
+                    Results.UpdateData("Custom feature updated", this);
+                }
                 else
                     return;
             }
@@ -395,7 +398,7 @@ namespace XferSuite.Apps.SEYR
                 foreach (Report.Entry entry in regionData)
                 {
                     bool pass = CheckCriteria(new Report.Entry[] {entry}, new List<string>());
-                    double thisX = entry.X + entry.XCopy * distX;
+                    double thisX = entry.X + entry.XCopy * distX * (_FlipXAxis ? -1 : 1);
                     double thisY = entry.Y + entry.YCopy * distY;
 
                     Plottables.Add(new Plottable
@@ -443,7 +446,7 @@ namespace XferSuite.Apps.SEYR
                             var thisCell = Report.getCell(thisImg, i, j);
                             if (thisCell.Length == 0) continue;
                             bool pass = CheckCriteria(thisCell, needOneParents);
-                            double thisX = thisCell[0].X + i * distX;
+                            double thisX = thisCell[0].X + i * distX * (_FlipXAxis ? -1 : 1);
                             double thisY = thisCell[0].Y + j * distY;
 
                             foreach (CustomFeature custom in CustomFeatures.Where(x => x.Visible))

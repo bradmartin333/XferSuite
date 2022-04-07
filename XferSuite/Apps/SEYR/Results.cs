@@ -110,13 +110,14 @@ namespace XferSuite.Apps.SEYR
                             plottables = Plottables.Where(x => x.CustomTag == customFeature.Name).ToArray();
                             break;
                     }
-                    Scatters.Add(formsPlot.Plot.AddScatter(
-                        plottables.Select(x => x.X * (FlipX ? -1 : 1)).ToArray(),
-                        plottables.Select(x => x.Y * (FlipY ? 1 : -1)).ToArray(),
-                        plottables[0].Color,
-                        markerSize: thisSize,
-                        markerShape: MarkerShape.filledSquare,
-                        lineStyle: LineStyle.None));
+                    if (plottables.Count() > 0)
+                        Scatters.Add(formsPlot.Plot.AddScatter(
+                            plottables.Select(x => x.X * (FlipX ? -1 : 1)).ToArray(),
+                            plottables.Select(x => x.Y * (FlipY ? -1 : 1)).ToArray(),
+                            plottables[0].Color,
+                            markerSize: thisSize,
+                            markerShape: MarkerShape.filledSquare,
+                            lineStyle: LineStyle.None));  
                 }
 
                 if (ShowRegionBorders || ShowPercentages)
@@ -127,9 +128,9 @@ namespace XferSuite.Apps.SEYR
                         double[] xs = regionPlottables.Select(p => p.X).ToArray();
                         double[] ys = regionPlottables.Select(p => p.Y).ToArray();
                         double minX = xs.Min() * (FlipX ? -1 : 1);
-                        double minY = ys.Min() * (FlipY ? 1 : -1);
+                        double minY = ys.Min() * (FlipY ? -1 : 1);
                         double maxX = xs.Max() * (FlipX ? -1 : 1);
-                        double maxY = ys.Max() * (FlipY ? 1 : -1);
+                        double maxY = ys.Max() * (FlipY ? -1 : 1);
                         double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
                         double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
 
@@ -139,7 +140,7 @@ namespace XferSuite.Apps.SEYR
                             Text txt = formsPlot.Plot.AddText(
                                 region,
                                 (minX + maxX) / 2,
-                                FlipY ? minY : maxY,
+                                FlipY ? maxY : minY,
                                 RegionTextSize,
                                 color: Color.Black);
                             txt.BackgroundColor = Color.White;
@@ -342,7 +343,7 @@ namespace XferSuite.Apps.SEYR
                 // Update the GUI to describe the highlighted point
                 Plottable[] plottables = Plottables.Where(
                     p => p.X * (FlipX ? -1 : 1) == coords[closestIdx].Item1 &&
-                    p.Y * (FlipY ? 1 : -1) == coords[closestIdx].Item2).ToArray();
+                    p.Y * (FlipY ? -1 : 1) == coords[closestIdx].Item2).ToArray();
 
                 if (plottables.Count() != 0)
                 {
