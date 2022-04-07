@@ -85,104 +85,110 @@ namespace XferSuite.Apps.SEYR
             using (new Utility.HourGlass(UsePlexiglass: false))
             {
                 if (Plottables.Count == 0) return;
-
                 UpdateForm();
                 Scatters.Clear();
                 formsPlot.Plot.Clear();
                 formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
                 formsPlot.Plot.YAxis.TickLabelNotation(invertSign: FlipY);
-
-                foreach (PlotOrderElement plotOrderElement in PlotOrder)
-                {
-                    Plottable[] plottables;
-                    float thisSize;
-                    switch (plotOrderElement.Name)
-                    {
-                        case "Pass":
-                            thisSize = PassPointSize;
-                            plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass).ToArray();
-                            if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
-                            break;
-                        case "Fail":
-                            thisSize = FailPointSize;
-                            plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
-                            if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
-                            break;
-                        default:
-                            CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
-                            thisSize = customFeature.Size;
-                            plottables = 
-                                Plottables.Where(x => x.CustomTag == customFeature.Name)
-                                .Select(x => { x.Color = customFeature.Color; return x; }).ToArray();
-                            break;
-                    }
-                    if (plottables.Count() > 0)
-                        Scatters.Add(formsPlot.Plot.AddScatter(
-                            plottables.Select(x => x.X * (FlipX ? -1 : 1)).ToArray(),
-                            plottables.Select(x => x.Y * (FlipY ? -1 : 1)).ToArray(),
-                            plottables[0].Color,
-                            markerSize: thisSize,
-                            markerShape: MarkerShape.filledSquare,
-                            lineStyle: LineStyle.None));  
-                }
-
-                if (ShowRegionBorders || ShowRegionStrings || ShowPercentages)
-                {
-                    foreach (string region in Regions)
-                    {
-                        Plottable[] regionPlottables = Plottables.Where(p => p.Region == region).ToArray();
-                        double[] xs = regionPlottables.Select(p => p.X).ToArray();
-                        double[] ys = regionPlottables.Select(p => p.Y).ToArray();
-                        double minX = xs.Min() * (FlipX ? -1 : 1);
-                        double minY = ys.Min() * (FlipY ? -1 : 1);
-                        double maxX = xs.Max() * (FlipX ? -1 : 1);
-                        double maxY = ys.Max() * (FlipY ? -1 : 1);
-                        double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
-                        double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
-
-                        if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(50, Color.Black), 3);
-
-                        if (ShowRegionStrings)
-                        { 
-                            Text txt = formsPlot.Plot.AddText(
-                                region,
-                                (minX + maxX) / 2,
-                                FlipY ? maxY : minY,
-                                RegionTextSize,
-                                color: Color.Black);
-                            txt.BackgroundColor = Color.White;
-                            txt.BackgroundFill = true;
-                            txt.FontBold = true;
-                            txt.Alignment = Alignment.UpperCenter;
-                        }
-
-                        if (ShowPercentages)
-                        {
-                            Text txt = formsPlot.Plot.AddText(
-                                GetRegionPercent(region), 
-                                (minX + maxX) / 2, 
-                                (minY + maxY) / 2, 
-                                PercentageTextSize, 
-                                color: Color.Black);
-                            txt.BackgroundColor = Color.White;
-                            txt.BackgroundFill = true;
-                            txt.FontBold = true;
-                            txt.Alignment = Alignment.UpperCenter;
-                        }
-                    }
-                }
-
-                if (ShowTrackerString) // Add a red circle we can move around later as a highlighted point indicator
-                {
-                    HighlightedPoint = formsPlot.Plot.AddPoint(0, 0);
-                    HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
-                    HighlightedPoint.MarkerShape = MarkerShape.openCircle;
-                    HighlightedPoint.IsVisible = false;
-                }
-
+                AddScatterPlots();
+                AddOverlays();
                 formsPlot.Refresh(lowQuality: UseLowQuality);
                 LabelStatus.Text = reason;
+            }
+        }
+
+        private void AddScatterPlots()
+        {
+            foreach (PlotOrderElement plotOrderElement in PlotOrder)
+            {
+                Plottable[] plottables;
+                float thisSize;
+                switch (plotOrderElement.Name)
+                {
+                    case "Pass":
+                        thisSize = PassPointSize;
+                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass).ToArray();
+                        if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
+                        break;
+                    case "Fail":
+                        thisSize = FailPointSize;
+                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass).ToArray();
+                        if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
+                        break;
+                    default:
+                        CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
+                        thisSize = customFeature.Size;
+                        plottables =
+                            Plottables.Where(x => x.CustomTag == customFeature.Name)
+                            .Select(x => { x.Color = customFeature.Color; return x; }).ToArray();
+                        break;
+                }
+                if (plottables.Count() > 0)
+                    Scatters.Add(formsPlot.Plot.AddScatter(
+                        plottables.Select(x => x.X * (FlipX ? -1 : 1)).ToArray(),
+                        plottables.Select(x => x.Y * (FlipY ? -1 : 1)).ToArray(),
+                        plottables[0].Color,
+                        markerSize: thisSize,
+                        markerShape: MarkerShape.filledSquare,
+                        lineStyle: LineStyle.None));
+            }
+        }
+
+        private void AddOverlays()
+        {
+            if (ShowRegionBorders || ShowRegionStrings || ShowPercentages)
+            {
+                foreach (string region in Regions)
+                {
+                    Plottable[] regionPlottables = Plottables.Where(p => p.Region == region).ToArray();
+                    double[] xs = regionPlottables.Select(p => p.X).ToArray();
+                    double[] ys = regionPlottables.Select(p => p.Y).ToArray();
+                    double minX = xs.Min() * (FlipX ? -1 : 1);
+                    double minY = ys.Min() * (FlipY ? -1 : 1);
+                    double maxX = xs.Max() * (FlipX ? -1 : 1);
+                    double maxY = ys.Max() * (FlipY ? -1 : 1);
+                    double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
+                    double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
+
+                    if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(50, Color.Black), 3);
+
+                    if (ShowRegionStrings)
+                    {
+                        Text txt = formsPlot.Plot.AddText(
+                            region,
+                            (minX + maxX) / 2,
+                            FlipY ? maxY : minY,
+                            RegionTextSize,
+                            color: Color.Black);
+                        txt.BackgroundColor = Color.White;
+                        txt.BackgroundFill = true;
+                        txt.FontBold = true;
+                        txt.Alignment = Alignment.UpperCenter;
+                    }
+
+                    if (ShowPercentages)
+                    {
+                        Text txt = formsPlot.Plot.AddText(
+                            GetRegionPercent(region),
+                            (minX + maxX) / 2,
+                            (minY + maxY) / 2,
+                            PercentageTextSize,
+                            color: Color.Black);
+                        txt.BackgroundColor = Color.White;
+                        txt.BackgroundFill = true;
+                        txt.FontBold = true;
+                        txt.Alignment = Alignment.UpperCenter;
+                    }
+                }
+            }
+
+            if (ShowTrackerString) // Add a red circle we can move around later as a highlighted point indicator
+            {
+                HighlightedPoint = formsPlot.Plot.AddPoint(0, 0);
+                HighlightedPoint.Color = Color.Red;
+                HighlightedPoint.MarkerSize = 10;
+                HighlightedPoint.MarkerShape = MarkerShape.openCircle;
+                HighlightedPoint.IsVisible = false;
             }
         }
 
