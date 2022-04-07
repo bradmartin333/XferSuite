@@ -136,7 +136,7 @@ namespace XferSuite.Apps.SEYR
 
                         if (ShowRegionBorders)
                         {
-                            formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.Black, 3);
+                            formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(50, Color.Black), 3);
                             Text txt = formsPlot.Plot.AddText(
                                 region,
                                 (minX + maxX) / 2,
