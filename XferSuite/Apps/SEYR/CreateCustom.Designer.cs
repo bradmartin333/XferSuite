@@ -161,7 +161,7 @@
             this.btnHide.Text = "Hide";
             this.btnHide.UseVisualStyleBackColor = false;
             this.btnHide.Visible = false;
-            this.btnHide.Click += new System.EventHandler(this.btnHide_Click);
+            this.btnHide.Click += new System.EventHandler(this.BtnHide_Click);
             // 
             // label2
             // 
@@ -208,6 +208,7 @@
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(94, 21);
             this.comboBoxType.TabIndex = 6;
+            this.comboBoxType.SelectedIndexChanged += new System.EventHandler(this.ComboBoxType_SelectedIndexChanged);
             // 
             // numOffsetX
             // 
@@ -359,6 +360,7 @@
             // panelColor
             // 
             this.panelColor.BackColor = System.Drawing.Color.Blue;
+            this.panelColor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panelColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelColor.Location = new System.Drawing.Point(331, 29);
             this.panelColor.Name = "panelColor";
@@ -395,7 +397,7 @@
             this.deleteRowToolStripMenuItem.Name = "deleteRowToolStripMenuItem";
             this.deleteRowToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.deleteRowToolStripMenuItem.Text = "Delete Row";
-            this.deleteRowToolStripMenuItem.Click += new System.EventHandler(this.deleteRowToolStripMenuItem_Click);
+            this.deleteRowToolStripMenuItem.Click += new System.EventHandler(this.DeleteRowToolStripMenuItem_Click);
             // 
             // CreateCustom
             // 

@@ -13,7 +13,7 @@ namespace XferSuite.Apps.SEYR
     public partial class CreateCustom : Form
     {
         public CustomFeature CustomFeature { get; set; } = new CustomFeature();
-        private Report.Feature[] Features;
+        private readonly Report.Feature[] Features;
         private readonly List<CustomFeature> ExistingCustomFeatures;
         private int RowIndex;
 
@@ -34,7 +34,7 @@ namespace XferSuite.Apps.SEYR
             txtName.Text = CustomFeature.Name;
             panelColor.BackColor = Color.FromArgb(CustomFeature.Color.A, CustomFeature.Color.R, CustomFeature.Color.G, CustomFeature.Color.B);
             numSize.Value = CustomFeature.Size;
-            comboBoxType.SelectedIndex = CustomFeature.Type == Report.State.Pass ? 0 : 1;
+            comboBoxType.SelectedIndex = (int)CustomFeature.Type;
             numOffsetX.Value = (decimal)CustomFeature.Offset.X;
             numOffsetY.Value = (decimal)CustomFeature.Offset.Y;
             foreach ((string, Report.State) filter in CustomFeature.Filters)
@@ -60,7 +60,7 @@ namespace XferSuite.Apps.SEYR
             Close();
         }
 
-        private void btnHide_Click(object sender, EventArgs e)
+        private void BtnHide_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Ignore;
             Close();
@@ -83,6 +83,22 @@ namespace XferSuite.Apps.SEYR
                 panelColor.BackColor = MyDialog.Color;
         }
 
+        private void ComboBoxType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxType.SelectedIndex == 2)
+            {
+                panelColor.BackColor = Color.White;
+                panelColor.BackgroundImage = Properties.Resources.invisible;
+                panelColor.Enabled = false;
+            }
+            else
+            {
+                panelColor.BackColor = Color.Blue;
+                panelColor.BackgroundImage = null;
+                panelColor.Enabled = true;
+            }
+        }
+
         private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -95,7 +111,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void deleteRowToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DeleteRowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!dataGridView.Rows[RowIndex].IsNewRow) dataGridView.Rows.RemoveAt(RowIndex);
         }
