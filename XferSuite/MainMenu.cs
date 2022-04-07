@@ -10,8 +10,7 @@ namespace XferSuite
     {
         public static int MajorVersion = 0;
         public static int MinorVerson = 10999;
-
-        private static readonly Settings _Settings = new Settings();
+        public static readonly Settings Settings = new Settings();
 
         public MainMenu()
         {
@@ -93,19 +92,19 @@ namespace XferSuite
             }
             form.Activated += Form_Activated;
             form.Show();
-            _Settings.PropertyGrid.SelectedObject = form;
+            Settings.PropertyGrid.SelectedObject = form;
         }
 
         public static void Form_Activated(object sender, EventArgs e)
         {
-            if (!_Settings.IsDisposed) // Prevents error on app close
-                _Settings.PropertyGrid.SelectedObject = sender;
+            if (!Settings.IsDisposed) // Prevents error on app close
+                Settings.PropertyGrid.SelectedObject = sender;
         }
 
         private void BtnSettings_Click(object sender, EventArgs e)
         {
-            _Settings.Show();
-            _Settings.BringToFront();
+            Settings.Show();
+            Settings.BringToFront();
         }
 
         public static string OpenFile(string title, string filter)
@@ -168,7 +167,7 @@ namespace XferSuite
 
         private void MainMenu_Load(object sender, EventArgs e)
         {
-            _Settings.CheckForUpdates();
+            Settings.CheckForUpdates();
         }
     }
 }

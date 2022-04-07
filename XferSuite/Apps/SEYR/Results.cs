@@ -40,13 +40,12 @@ namespace XferSuite.Apps.SEYR
             InitializeComponent();
             Text = title;
             Resize += Results_Resize;
-
             formsPlot.Configuration.DoubleClickBenchmark = false;
             formsPlot.Plot.Style(figureBackground: Color.White);
             formsPlot.KeyUp += FormsPlot_KeyUp;
             formsPlot.MouseUp += FormsPlot_MouseUp;
             formsPlot.Plot.Frameless();
-
+            formsPlot.RightClicked -= formsPlot.DefaultRightClickEvent;
             RTB.Click += RTB_Click;
         }
 
@@ -198,6 +197,7 @@ namespace XferSuite.Apps.SEYR
             customMenu.Items.Add(new ToolStripSeparator());
             customMenu.Items.Add(new ToolStripMenuItem("Reset Axes", null, new EventHandler(ResetAxes)));
             customMenu.Items.Add(new ToolStripMenuItem("Select Plot Background Color", null, new EventHandler(SelectPlotColor)));
+            customMenu.Items.Add(new ToolStripMenuItem("Open Settings", null, new EventHandler(OpenSettings)));
             customMenu.Items.Add(new ToolStripSeparator());
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Grid", null, new EventHandler(ToggleGrid)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Tracker String", null, new EventHandler(ToggleTrackerString)));
@@ -263,6 +263,12 @@ namespace XferSuite.Apps.SEYR
                 formsPlot.Refresh(lowQuality: UseLowQuality);
             }
             LabelStatus.Text = "Plot color changed";
+        }
+
+        private void OpenSettings(object sender, EventArgs e)
+        {
+            MainMenu.Settings.Show();
+            MainMenu.Settings.BringToFront();
         }
 
         private void ToggleGrid(object sender, EventArgs e)
