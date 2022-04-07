@@ -15,7 +15,6 @@ namespace XferSuite.Apps.SEYR
         private PointF FormScaling;
         private readonly List<ScatterPlot> Scatters = new List<ScatterPlot>();
         private MarkerPlot HighlightedPoint;
-        private (int, int) LastHighlightedIndex = (-1, -1);
 
         private bool ShowGrid = true;
         private bool ShowTrackerString = false;
@@ -43,8 +42,7 @@ namespace XferSuite.Apps.SEYR
 
             formsPlot.Configuration.DoubleClickBenchmark = false;
             formsPlot.Plot.Style(figureBackground: Color.White);
-            formsPlot.RightClicked -= formsPlot.DefaultRightClickEvent;
-            formsPlot.RightClicked += CustomRightClickEvent;
+            formsPlot.KeyUp += FormsPlot_KeyUp;
             formsPlot.MouseUp += FormsPlot_MouseUp;
             formsPlot.Plot.Frameless();
 
@@ -132,22 +130,28 @@ namespace XferSuite.Apps.SEYR
                         if (ShowRegionBorders)
                         {
                             formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.Black, 3);
-                            var marker = formsPlot.Plot.AddMarker((minX + maxX) / 2, FlipY ? minY : maxY, MarkerShape.none);
-                            marker.Text = region;
-                            marker.TextFont.Color = Color.Black;
-                            marker.TextFont.Alignment = Alignment.UpperCenter;
-                            marker.TextFont.Size = RegionTextSize;
-                            marker.TextFont.Bold = true;
+                            Text txt = formsPlot.Plot.AddText(
+                                region,
+                                (minX + maxX) / 2,
+                                FlipY ? minY : maxY,
+                                RegionTextSize,
+                                color: Color.Black);
+                            txt.BackgroundColor = Color.White;
+                            txt.BackgroundFill = true;
+                            txt.FontBold = true;
                         }
 
                         if (ShowPercentages)
                         {
-                            var marker = formsPlot.Plot.AddMarker((minX + maxX) / 2, (minY + maxY) / 2, MarkerShape.none);
-                            marker.Text = GetRegionPercent(region);
-                            marker.TextFont.Color = Color.Black;
-                            marker.TextFont.Alignment = Alignment.UpperCenter;
-                            marker.TextFont.Size = PercentageTextSize;
-                            marker.TextFont.Bold = true;
+                            Text txt = formsPlot.Plot.AddText(
+                                GetRegionPercent(region), 
+                                (minX + maxX) / 2, 
+                                (minY + maxY) / 2, 
+                                PercentageTextSize, 
+                                color: Color.Black);
+                            txt.BackgroundColor = Color.White;
+                            txt.BackgroundFill = true;
+                            txt.FontBold = true;
                         }
                     }
                 }
@@ -160,8 +164,6 @@ namespace XferSuite.Apps.SEYR
                     HighlightedPoint.MarkerShape = MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
                 }
-                else
-                    formsPlot.Plot.Title("");
 
                 formsPlot.Refresh(lowQuality: UseLowQuality);
                 LabelStatus.Text = reason;
@@ -176,6 +178,12 @@ namespace XferSuite.Apps.SEYR
         }
 
         #region Context Menu Strip
+
+        private void FormsPlot_KeyUp(object sender, KeyEventArgs e)
+        {
+            CustomRightClickEvent(sender, e);
+            LabelTracker.Text = "";
+        }
 
         private void CustomRightClickEvent(object sender, EventArgs e)
         {
@@ -316,18 +324,14 @@ namespace XferSuite.Apps.SEYR
                 HighlightedPoint.Y = coords[closestIdx].Item2;
                 HighlightedPoint.IsVisible = true;
 
-                // Render if the highlighted point chnaged
-                if (LastHighlightedIndex != (closestIdx, coords[closestIdx].Item3))
-                    LastHighlightedIndex = (closestIdx, coords[closestIdx].Item3);
-
                 // Update the GUI to describe the highlighted point
                 Plottable[] plottables = Plottables.Where(
                     p => p.X * (FlipX ? -1 : 1) == coords[closestIdx].Item1 &&
                     p.Y * (FlipY ? 1 : -1) == coords[closestIdx].Item2).ToArray();
-                
+
                 if (plottables.Count() != 0)
                 {
-                    formsPlot.Plot.Title(plottables[0].ToString(), size: 10);
+                    LabelTracker.Text = plottables[0].ToString();
                     formsPlot.Refresh(lowQuality: UseLowQuality);
                 }
             }
