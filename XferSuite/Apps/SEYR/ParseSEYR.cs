@@ -451,29 +451,28 @@ namespace XferSuite.Apps.SEYR
 
                             foreach (CustomFeature custom in CustomFeatures)
                             {
-                                Report.Entry[] matches = Report.findMatched(
-                                    thisCell, custom.Filters.Select(x => x.Item1).ToArray(), custom.Filters.Select(x => x.Item2).ToArray());
+                                bool notMatched = false;
+                                foreach ((string, Report.State) filter in custom.Filters)
+                                    if (thisCell.Where(x => x.Name == filter.Item1).First().State != filter.Item2) notMatched = true;
+                                if (notMatched) continue;
 
-                                foreach (Report.Entry match in matches)
+                                Plottable customPlottable = new Plottable
                                 {
-                                    Plottable customPlottable = new Plottable
-                                    {
-                                        Region = Regions[l],
-                                        DetailString = $"     Copy ({thisCell[0].XCopy}, {thisCell[0].YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}     Custom: {custom.Name}",
-                                        X = thisX - custom.Offset.X,
-                                        Y = thisY - custom.Offset.Y,
-                                        Pass = custom.Type == Report.State.Pass,
-                                        CustomTag = custom.Name,
-                                        Color = custom.Color,
-                                    };
+                                    Region = Regions[l],
+                                    DetailString = $"     Copy ({thisCell[0].XCopy}, {thisCell[0].YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}     Custom: {custom.Name}",
+                                    X = thisX - custom.Offset.X,
+                                    Y = thisY - custom.Offset.Y,
+                                    Pass = custom.Type == Report.State.Pass,
+                                    CustomTag = custom.Name,
+                                    Color = custom.Color,
+                                };
 
-                                    Plottables.Add(customPlottable);
+                                Plottables.Add(customPlottable);
 
-                                    if (customPlottable.Pass)
-                                        passNum++;
-                                    else
-                                        failNum++;
-                                }
+                                if (customPlottable.Pass)
+                                    passNum++;
+                                else
+                                    failNum++;
                             }
 
                             if (!onlyCustom)

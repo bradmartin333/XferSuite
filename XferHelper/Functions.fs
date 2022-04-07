@@ -728,13 +728,3 @@ module Report =
         let nameList = names |> Array.toList
         data
         |> Array.filter (fun x -> not (List.contains x.Name nameList))
-
-    let findIndex arr elem = 
-        if arr |> Array.contains elem then arr |> Array.findIndex ((=) elem)
-        else -1
-
-    let findMatched (data: Entry []) (names: string[]) (states: State[]) =
-        data
-        |> Array.filter(fun x -> 
-            let i = findIndex names x.Name
-            i <> -1 && names.[i] = x.Name && states.[i] = x.State)
