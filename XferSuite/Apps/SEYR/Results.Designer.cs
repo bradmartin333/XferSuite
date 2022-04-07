@@ -47,12 +47,12 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(608, 737);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(608, 634);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // formsPlot
@@ -60,15 +60,15 @@
             this.formsPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.formsPlot.Location = new System.Drawing.Point(3, 3);
             this.formsPlot.Name = "formsPlot";
-            this.formsPlot.Size = new System.Drawing.Size(602, 481);
+            this.formsPlot.Size = new System.Drawing.Size(602, 438);
             this.formsPlot.TabIndex = 0;
             // 
             // RTB
             // 
             this.RTB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RTB.Location = new System.Drawing.Point(3, 500);
+            this.RTB.Location = new System.Drawing.Point(3, 457);
             this.RTB.Name = "RTB";
-            this.RTB.Size = new System.Drawing.Size(602, 203);
+            this.RTB.Size = new System.Drawing.Size(602, 144);
             this.RTB.TabIndex = 1;
             this.RTB.Text = "";
             // 
@@ -77,9 +77,9 @@
             this.LabelStatus.AutoSize = true;
             this.LabelStatus.BackColor = System.Drawing.Color.Silver;
             this.LabelStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LabelStatus.Location = new System.Drawing.Point(3, 716);
+            this.LabelStatus.Location = new System.Drawing.Point(3, 614);
             this.LabelStatus.Name = "LabelStatus";
-            this.LabelStatus.Size = new System.Drawing.Size(602, 21);
+            this.LabelStatus.Size = new System.Drawing.Size(602, 20);
             this.LabelStatus.TabIndex = 2;
             this.LabelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -87,7 +87,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(608, 737);
+            this.ClientSize = new System.Drawing.Size(608, 634);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Results";

@@ -11,6 +11,7 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class Results : Form
     {
+        private PointF FormScaling;
         private readonly List<ScatterPlot> Scatters = new List<ScatterPlot>();
         private MarkerPlot HighlightedPoint;
         private (int, int) LastHighlightedIndex = (-1, -1);
@@ -29,11 +30,16 @@ namespace XferSuite.Apps.SEYR
         {
             InitializeComponent();
             Text = title;
+            Resize += Results_Resize;
+
             formsPlot.Configuration.DoubleClickBenchmark = false;
             formsPlot.Plot.Style(figureBackground: Color.White);
             formsPlot.RightClicked -= formsPlot.DefaultRightClickEvent;
             formsPlot.RightClicked += CustomRightClickEvent;
             formsPlot.MouseUp += FormsPlot_MouseUp;
+            formsPlot.Plot.Frameless();
+
+            RTB.Click += RTB_Click;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -168,6 +174,12 @@ namespace XferSuite.Apps.SEYR
             catch (Exception) { }
         }
 
+        private void RTB_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(RTB.Text);
+            LabelStatus.Text = "Results text copied to clipboard";
+        }
+
         public void UpdateData(string reason, ParseSEYR parseSEYR)
         {
             FlipX = parseSEYR.FlipXAxis;
@@ -183,6 +195,7 @@ namespace XferSuite.Apps.SEYR
         private void UpdatePlot(string reason)
         {
             if (Plottables.Count == 0) return;
+            UpdateForm();
             Scatters.Clear();
             formsPlot.Plot.Clear();
             foreach (PlotOrderElement plotOrderElement in PlotOrder)
@@ -228,6 +241,35 @@ namespace XferSuite.Apps.SEYR
 
             formsPlot.Refresh(lowQuality: UseLowQuality);
             LabelStatus.Text = reason;
+        }
+
+        private void UpdateForm()
+        {
+            var xData = Plottables.Select(p => p.X);
+            var yData = Plottables.Select(p => p.Y);
+            float xRange = (float)(xData.Max() - xData.Min());
+            float yRange = (float)(yData.Max() - yData.Min());
+            float xScale = 1.0f;
+            float yScale = 1.0f;
+            if (xRange > yRange)
+                yScale = yRange / xRange;
+            else
+                xScale = xRange / yRange;
+
+            Rectangle plotBounds = formsPlot.Bounds;
+            Size desiredPlotSize = new Size((int)(plotBounds.Width * xScale), (int)(plotBounds.Width * yScale));
+            Size = new Size(desiredPlotSize.Width + 22, desiredPlotSize.Height + 235);
+            FormScaling = new PointF(xScale, yScale);
+        }
+
+        private void Results_Resize(object sender, EventArgs e)
+        {
+            if (ModifierKeys.HasFlag(Keys.Control) || ModifierKeys.HasFlag(Keys.Alt) || ModifierKeys.HasFlag(Keys.Shift))
+            {
+                Rectangle plotBounds = formsPlot.Bounds;
+                Size desiredPlotSize = new Size((int)(plotBounds.Width * FormScaling.X), (int)(plotBounds.Width * FormScaling.Y));
+                Size = new Size(desiredPlotSize.Width + 22, desiredPlotSize.Height + 235);
+            }
         }
     }
 }

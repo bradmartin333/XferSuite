@@ -261,6 +261,7 @@ namespace XferSuite.Apps.SEYR
                 olv.Enabled = false;
             flowLayoutPanelCriteria.Enabled = false;
             toolStripProgressBar.Value = 0;
+            Results.RTB.Clear();
             ParseWorker.RunWorkerAsync();
         }
 
