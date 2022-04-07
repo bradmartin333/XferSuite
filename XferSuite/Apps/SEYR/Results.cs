@@ -191,15 +191,16 @@ namespace XferSuite.Apps.SEYR
         private void FormsPlot_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter) return;
-            CustomRightClickEvent(sender, e);
+            CustomMenu(sender, e);
             LabelTracker.Text = "";
         }
 
-        private void CustomRightClickEvent(object sender, EventArgs e)
+        private void CustomMenu(object sender, EventArgs e)
         {
             ContextMenuStrip customMenu = new ContextMenuStrip();
             customMenu.Items.Add(new ToolStripMenuItem("Copy Plot", null, new EventHandler(CopyImage)));
             customMenu.Items.Add(new ToolStripMenuItem("Save Plot", null, new EventHandler(SaveImage)));
+            customMenu.Items.Add(new ToolStripMenuItem("Popout Plot", null, new EventHandler(PopoutPlot)));
             customMenu.Items.Add(new ToolStripMenuItem("Copy Data", null, new EventHandler(CopyData)));
             customMenu.Items.Add(new ToolStripSeparator());
             customMenu.Items.Add(new ToolStripMenuItem("Reset Axes", null, new EventHandler(ResetAxes)));
@@ -248,6 +249,14 @@ namespace XferSuite.Apps.SEYR
             }
             Clipboard.SetText(sb.ToString());
             LabelStatus.Text = "Data copied to clipboard";
+        }
+
+        private void PopoutPlot(object sender, EventArgs e)
+        {
+            new FormsPlotViewer(
+                formsPlot.Plot, (int)formsPlot.Plot.Width, (int)formsPlot.Plot.Height, 
+                $"{Text} {Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}").Show();
+            LabelStatus.Text = "Plot popped out";
         }
 
         private void ResetAxes(object sender, EventArgs e)

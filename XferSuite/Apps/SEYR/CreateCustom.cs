@@ -14,11 +14,13 @@ namespace XferSuite.Apps.SEYR
     {
         public CustomFeature CustomFeature { get; set; } = new CustomFeature();
         private readonly List<CustomFeature> ExistingCustomFeatures;
+        private int RowIndex;
 
         public CreateCustom(Report.Feature[] features, List<CustomFeature> customFeatures, CustomFeature feature = null)
         {
             InitializeComponent();
             panelColor.Click += PanelColor_Click;
+            dataGridView.CellMouseUp += DataGridView_CellMouseUp;
             if (feature != null)
             {
                 CustomFeature = feature;
@@ -70,6 +72,23 @@ namespace XferSuite.Apps.SEYR
             };
             if (MyDialog.ShowDialog() == DialogResult.OK)
                 panelColor.BackColor = MyDialog.Color;
+        }
+
+        private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                dataGridView.Rows[e.RowIndex].Selected = true;
+                RowIndex = e.RowIndex;
+                dataGridView.CurrentCell = dataGridView.Rows[e.RowIndex].Cells[1];
+                contextMenuStrip.Show(dataGridView, e.Location);
+                contextMenuStrip.Show(Cursor.Position);
+            }
+        }
+
+        private void deleteRowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!dataGridView.Rows[RowIndex].IsNewRow) dataGridView.Rows.RemoveAt(RowIndex);
         }
 
         #region File Management
