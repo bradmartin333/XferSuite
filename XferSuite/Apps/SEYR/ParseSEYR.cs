@@ -285,6 +285,14 @@ namespace XferSuite.Apps.SEYR
                     CustomFeatures[olvCustom.SelectedIndex] = cc.CustomFeature;
                     Results.UpdateData("Custom feature updated", this);
                 }
+                else if (result == DialogResult.Ignore)
+                {
+                    CustomFeatures.RemoveAt(olvCustom.SelectedIndex);
+                    PlotOrder.Remove(PlotOrder.Where(x => x.Name == feature.Name).First());
+                    olvCustom.RemoveObject(feature);
+                    olvCustom.Refresh();
+                    Results.UpdateData("Custom feature hidden", this);
+                }
                 else
                     return;
             }

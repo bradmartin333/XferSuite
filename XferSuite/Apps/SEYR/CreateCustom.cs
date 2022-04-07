@@ -25,6 +25,7 @@ namespace XferSuite.Apps.SEYR
             {
                 CustomFeature = feature;
                 Text = Text.Replace("Create", "Edit");
+                btnHide.Visible = true;
             }
             ExistingCustomFeatures = customFeatures;
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
@@ -54,6 +55,12 @@ namespace XferSuite.Apps.SEYR
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void btnHide_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Ignore;
             Close();
         }
 
