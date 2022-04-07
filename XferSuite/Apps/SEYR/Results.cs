@@ -146,7 +146,7 @@ namespace XferSuite.Apps.SEYR
                             txt.BackgroundColor = Color.White;
                             txt.BackgroundFill = true;
                             txt.FontBold = true;
-                            txt.Alignment = Alignment.LowerCenter;
+                            txt.Alignment = Alignment.UpperCenter;
                         }
 
                         if (ShowPercentages)
@@ -160,7 +160,7 @@ namespace XferSuite.Apps.SEYR
                             txt.BackgroundColor = Color.White;
                             txt.BackgroundFill = true;
                             txt.FontBold = true;
-                            txt.Alignment = Alignment.LowerCenter;
+                            txt.Alignment = Alignment.UpperCenter;
                         }
                     }
                 }
