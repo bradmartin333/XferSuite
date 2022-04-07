@@ -115,7 +115,7 @@ namespace XferSuite.Apps.SEYR
             LabelStatus.Text = reason;
         }
 
-        #region Context Menu
+        #region Context Menu Strip
 
         private void CustomRightClickEvent(object sender, EventArgs e)
         {
@@ -123,8 +123,10 @@ namespace XferSuite.Apps.SEYR
             customMenu.Items.Add(new ToolStripMenuItem("Copy Plot", null, new EventHandler(CopyImage)));
             customMenu.Items.Add(new ToolStripMenuItem("Save Plot", null, new EventHandler(SaveImage)));
             customMenu.Items.Add(new ToolStripMenuItem("Copy Data", null, new EventHandler(CopyData)));
+            customMenu.Items.Add(new ToolStripSeparator());
             customMenu.Items.Add(new ToolStripMenuItem("Reset Axes", null, new EventHandler(ResetAxes)));
             customMenu.Items.Add(new ToolStripMenuItem("Select Plot Background Color", null, new EventHandler(SelectPlotColor)));
+            customMenu.Items.Add(new ToolStripSeparator());
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Grid", null, new EventHandler(ToggleGrid)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Tracker String", null, new EventHandler(ToggleTrackerString)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Quality", null, new EventHandler(ToggleQuality)));
