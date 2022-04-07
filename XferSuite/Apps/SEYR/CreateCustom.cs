@@ -13,6 +13,7 @@ namespace XferSuite.Apps.SEYR
     public partial class CreateCustom : Form
     {
         public CustomFeature CustomFeature { get; set; } = new CustomFeature();
+        private Report.Feature[] Features;
         private readonly List<CustomFeature> ExistingCustomFeatures;
         private int RowIndex;
 
@@ -27,8 +28,9 @@ namespace XferSuite.Apps.SEYR
                 Text = Text.Replace("Create", "Edit");
                 btnHide.Visible = true;
             }
+            Features = features;
             ExistingCustomFeatures = customFeatures;
-            ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = features.Select(x => x.Name).Distinct().ToList();
+            ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = Features.Select(x => x.Name).Distinct().ToList();
             txtName.Text = CustomFeature.Name;
             panelColor.BackColor = Color.FromArgb(CustomFeature.Color.A, CustomFeature.Color.R, CustomFeature.Color.G, CustomFeature.Color.B);
             numSize.Value = CustomFeature.Size;
@@ -166,7 +168,17 @@ namespace XferSuite.Apps.SEYR
                         numOffsetY.Value = decimal.Parse(cols[5]);
                     }
                     else
-                        dataGridView.Rows.Add(cols);
+                    {
+                        if (Features.Select(x => x.Name).Contains(cols[0]))
+                            dataGridView.Rows.Add(cols);
+                        else
+                        {
+                            MessageBox.Show("Loaded feature does not match current SEYR report", "Create Custom SEYR Feature");
+                            DialogResult = DialogResult.Cancel;
+                            Close();
+                            return;
+                        }
+                    }   
                 }
             }
             catch (Exception ex)
