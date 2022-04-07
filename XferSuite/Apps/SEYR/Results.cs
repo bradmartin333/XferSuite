@@ -16,6 +16,7 @@ namespace XferSuite.Apps.SEYR
         private (int, int) LastHighlightedIndex = (-1, -1);
         private bool ShowGrid = true;
         private bool ShowTrackerString = false;
+        private bool UseLowQuality = true;
         private bool FlipX;
         private bool FlipY;
         private int PassPointSize;
@@ -32,7 +33,7 @@ namespace XferSuite.Apps.SEYR
             formsPlot.Plot.Style(figureBackground: Color.White);
             formsPlot.RightClicked -= formsPlot.DefaultRightClickEvent;
             formsPlot.RightClicked += CustomRightClickEvent;
-            formsPlot.MouseMove += FormsPlot_MouseMove;
+            formsPlot.MouseUp += FormsPlot_MouseUp;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -53,6 +54,7 @@ namespace XferSuite.Apps.SEYR
             customMenu.Items.Add(new ToolStripMenuItem("Select Plot Background Color", null, new EventHandler(SelectPlotColor)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Grid", null, new EventHandler(ToggleGrid)));
             customMenu.Items.Add(new ToolStripMenuItem("Toggle Tracker String", null, new EventHandler(ToggleTrackerString)));
+            customMenu.Items.Add(new ToolStripMenuItem("Toggle Quality", null, new EventHandler(ToggleQuality)));
             customMenu.Show(System.Windows.Forms.Cursor.Position);
         }
 
@@ -82,7 +84,7 @@ namespace XferSuite.Apps.SEYR
         private void ResetAxes(object sender, EventArgs e)
         {
             formsPlot.Plot.AxisAuto();
-            formsPlot.Refresh();
+            formsPlot.Refresh(lowQuality: UseLowQuality);
             LabelStatus.Text = "Plot axes autoscaled";
         }
 
@@ -96,7 +98,7 @@ namespace XferSuite.Apps.SEYR
             if (MyDialog.ShowDialog() == DialogResult.OK)
             {
                 formsPlot.Plot.Style(dataBackground: MyDialog.Color);
-                formsPlot.Refresh();
+                formsPlot.Refresh(lowQuality: UseLowQuality);
             }
             LabelStatus.Text = "Plot color changed";
         }
@@ -105,7 +107,7 @@ namespace XferSuite.Apps.SEYR
         {
             ShowGrid = !ShowGrid;
             formsPlot.Plot.Grid(ShowGrid);
-            formsPlot.Refresh();
+            formsPlot.Refresh(lowQuality: UseLowQuality);
             LabelStatus.Text = "Grid visibility changed";
         }
 
@@ -115,11 +117,18 @@ namespace XferSuite.Apps.SEYR
             UpdatePlot("Tracker string visibility changed");
         }
 
-        private void FormsPlot_MouseMove(object sender, MouseEventArgs e)
+        private void ToggleQuality(object sender, EventArgs e)
+        {
+            UseLowQuality = !UseLowQuality;
+            formsPlot.Refresh(lowQuality: UseLowQuality);
+            LabelStatus.Text = "Plot quality changed";
+        }
+
+        private void FormsPlot_MouseUp(object sender, MouseEventArgs e)
         {
             try
             {
-                if (!ShowTrackerString || HighlightedPoint == null || Plottables.Count == 0) return;
+                if (e.Button != MouseButtons.Left || !ShowTrackerString || HighlightedPoint == null || Plottables.Count == 0) return;
 
                 // Determine point nearest the cursor
                 (double mouseCoordX, double mouseCoordY) = formsPlot.GetMouseCoordinates();
@@ -153,7 +162,7 @@ namespace XferSuite.Apps.SEYR
                 if (plottables.Count() != 0)
                 {
                     formsPlot.Plot.Title(plottables[0].ToString(), size: 10);
-                    formsPlot.Refresh();
+                    formsPlot.Refresh(lowQuality: UseLowQuality);
                 }
             }
             catch (Exception) { }
@@ -217,7 +226,7 @@ namespace XferSuite.Apps.SEYR
             else
                 formsPlot.Plot.Title("");
 
-            formsPlot.Refresh();
+            formsPlot.Refresh(lowQuality: UseLowQuality);
             LabelStatus.Text = reason;
         }
     }

@@ -356,7 +356,7 @@ namespace XferSuite.Apps.SEYR
                     Plottables.Add(new Plottable
                     {
                         Region = regions[l],
-                        DetailString = $"\nCopy ({entry.XCopy}, {entry.YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}",
+                        DetailString = $"     Copy ({entry.XCopy}, {entry.YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}",
                         X = thisX,
                         Y = thisY,
                         Pass = pass,
@@ -420,7 +420,7 @@ namespace XferSuite.Apps.SEYR
                                     Plottable customPlottable = new Plottable
                                     {
                                         Region = regions[l],
-                                        DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}\nCustom: {custom.Name}",
+                                        DetailString = $"     Copy ({thisCell[0].XCopy}, {thisCell[0].YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}     Custom: {custom.Name}",
                                         X = thisX - custom.Offset.X,
                                         Y = thisY - custom.Offset.Y,
                                         Pass = custom.Type == Report.State.Pass,
@@ -442,7 +442,7 @@ namespace XferSuite.Apps.SEYR
                                 Plottables.Add(new Plottable
                                 {
                                     Region = regions[l],
-                                    DetailString = $"\nCopy ({thisCell[0].XCopy}, {thisCell[0].YCopy})\nLocation ({thisX}, {thisY})\n{(pass ? "Pass" : "Fail")}",
+                                    DetailString = $"     Copy ({thisCell[0].XCopy}, {thisCell[0].YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}",
                                     X = thisX,
                                     Y = thisY,
                                     Pass = pass,
