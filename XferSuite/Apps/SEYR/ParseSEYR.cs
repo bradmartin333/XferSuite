@@ -16,6 +16,30 @@ namespace XferSuite.Apps.SEYR
     {
         #region User Parameters
 
+        private int _PassPointSize = 5;
+        [Category("User Parameters")]
+        public int PassPointSize
+        {
+            get => _PassPointSize;
+            set
+            {
+                _PassPointSize = value;
+                Results.UpdateData("Pass point size changed", this);
+            }
+        }
+
+        private int _FailPointSize = 5;
+        [Category("User Parameters")]
+        public int FailPointSize
+        {
+            get => _FailPointSize;
+            set
+            {
+                _FailPointSize = value;
+                Results.UpdateData("Fail point size changed", this);
+            }
+        }
+
         private bool _FlipXAxis = true;
         [Category("User Parameters")]
         public bool FlipXAxis
@@ -24,6 +48,7 @@ namespace XferSuite.Apps.SEYR
             set
             {
                 _FlipXAxis = value;
+                Results.UpdateData("X axis orientation changed", this);
             }
         }
 
@@ -35,6 +60,7 @@ namespace XferSuite.Apps.SEYR
             set
             {
                 _FlipYAxis = value;
+                Results.UpdateData("Y axis orientation changed", this);
             }
         }
 
@@ -245,7 +271,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Results.UpdateData(this);
+            Results.UpdateData("Newly parsed data", this);
             Results.Show();
             Results.BringToFront();
             toolStripProgressBar.Value = 0;
@@ -329,8 +355,8 @@ namespace XferSuite.Apps.SEYR
                 foreach (Report.Entry entry in regionData)
                 {
                     bool pass = CheckCriteria(new Report.Entry[] {entry}, new List<string>());
-                    double thisX = entry.X + entry.XCopy * distX * (_FlipXAxis ? -1 : 1);
-                    double thisY = entry.Y + entry.YCopy * distY * (_FlipYAxis ? 1 : -1);
+                    double thisX = entry.X + entry.XCopy * distX;
+                    double thisY = entry.Y + entry.YCopy * distY;
 
                     Plottables.Add(new Plottable
                     {
@@ -377,8 +403,8 @@ namespace XferSuite.Apps.SEYR
                             var thisCell = Report.getCell(thisImg, i, j);
                             if (thisCell.Length == 0) continue;
                             bool pass = CheckCriteria(thisCell, needOneParents);
-                            double thisX = thisCell[0].X + i * distX * (_FlipXAxis ? -1 : 1);
-                            double thisY = thisCell[0].Y + j * distY * (_FlipYAxis ? 1 : -1);
+                            double thisX = thisCell[0].X + i * distX;
+                            double thisY = thisCell[0].Y + j * distY;
 
                             foreach (CustomFeature custom in CustomFeatures.Where(x => x.Visible))
                             {
@@ -515,7 +541,7 @@ namespace XferSuite.Apps.SEYR
                 if (result == DialogResult.OK)
                 {
                     PlotOrder = edit.PlotOrder;
-                    Results.UpdatePlot("Plot order updated");
+                    Results.UpdateData("Plot order updated", this);
                 } 
                 else
                     return;

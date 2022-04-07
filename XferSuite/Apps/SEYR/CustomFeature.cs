@@ -44,19 +44,6 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private OxyPlot.OxyColor _OxyColor;
-        public OxyPlot.OxyColor OxyColor {
-            get => _OxyColor;
-            set
-            {
-                if (value != _OxyColor)
-                {
-                    _OxyColor = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
         private int _Size;
         public int Size
         {
@@ -136,7 +123,6 @@ namespace XferSuite.Apps.SEYR
         { 
             _Name = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(); // Random string
             _Color = Color.Blue;
-            _OxyColor = OxyPlot.OxyColor.FromArgb(_Color.A, _Color.R, _Color.G, _Color.B);
             _Size = 1;
             _Type = Report.State.Pass;
             _Offset = PointF.Empty;
@@ -149,7 +135,6 @@ namespace XferSuite.Apps.SEYR
             {
                 Name = _Name,
                 Color = _Color,
-                OxyColor = _OxyColor,
                 Size = _Size,
                 Type = _Type,
                 Offset = _Offset,
@@ -162,7 +147,6 @@ namespace XferSuite.Apps.SEYR
         {
             _Name = form.txtName.Text;
             _Color = form.panelColor.BackColor;
-            _OxyColor = OxyPlot.OxyColor.FromArgb(_Color.A, _Color.R, _Color.G, _Color.B);
             _Size = (int)form.numSize.Value;
             _Type = (Report.State)form.comboBoxType.SelectedIndex;
             _Offset = new PointF((float)form.numOffsetX.Value, (float)form.numOffsetY.Value);

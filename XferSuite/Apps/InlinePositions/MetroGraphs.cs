@@ -587,19 +587,17 @@ namespace XferSuite.Apps.InlinePositions
 
         private void btnSaveSummary_Click(object sender, EventArgs e)
         {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
-                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.Title = "Export Summary";
+                saveFileDialog.DefaultExt = ".png";
+                saveFileDialog.Filter = "png file (*.png)|*.png";
+                saveFileDialog.FileName = Text.Replace(".txt", "Summary");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    saveFileDialog.RestoreDirectory = true;
-                    saveFileDialog.Title = "Export Summary";
-                    saveFileDialog.DefaultExt = ".png";
-                    saveFileDialog.Filter = "png file (*.png)|*.png";
-                    saveFileDialog.FileName = Text.Replace(".txt", "Summary");
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        Bitmap output = ComposeSummary();
-                        output.Save(saveFileDialog.FileName);
-                    }
+                    Bitmap output = ComposeSummary();
+                    output.Save(saveFileDialog.FileName);
                 }
             }
         }
