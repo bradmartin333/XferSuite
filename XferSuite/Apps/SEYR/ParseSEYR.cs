@@ -449,21 +449,12 @@ namespace XferSuite.Apps.SEYR
                             double thisX = thisCell[0].X + i * distX * (_FlipXAxis ? -1 : 1);
                             double thisY = thisCell[0].Y + j * distY;
 
-                            foreach (CustomFeature custom in CustomFeatures.Where(x => x.Visible))
+                            foreach (CustomFeature custom in CustomFeatures)
                             {
-                                bool matchesFilter = false;      
-                                foreach ((string, Report.State) filter in custom.Filters)
-                                {
-                                    Report.Entry[] matchingEntry = thisCell.Where(x => x.Name == filter.Item1).ToArray();
-                                    if (matchingEntry.Count() == 0)
-                                    {
-                                        System.Diagnostics.Debug.WriteLine("Something went wrong");
-                                        continue;
-                                    }
-                                    matchesFilter = matchingEntry[0].State == filter.Item2;
-                                }
-                                    
-                                if (matchesFilter)
+                                Report.Entry[] matches = Report.findMatched(
+                                    thisCell, custom.Filters.Select(x => x.Item1).ToArray(), custom.Filters.Select(x => x.Item2).ToArray());
+
+                                foreach (Report.Entry match in matches)
                                 {
                                     Plottable customPlottable = new Plottable
                                     {

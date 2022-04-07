@@ -691,12 +691,12 @@ module Report =
         |> Seq.toArray
         |> Array.map toCriteria
 
-    let getData (data: Entry [], name: string) =
+    let getData (data: Entry []) (name: string) =
         data
         |> Array.filter (fun x -> x.Name = name)
         |> Array.map (fun x -> x.Score)
 
-    let rescoreFeature (data: Entry [], name: string, min: float, max: float) =
+    let rescoreFeature (data: Entry []) (name: string) (min: float) (max: float) =
         for d in data do
             if d.Name = name then
                 if d.Score >= min && d.Score <= max then
@@ -704,7 +704,7 @@ module Report =
                 else
                     d.State <- State.Fail
 
-    let getImage (data: Entry [], num: int) =
+    let getImage (data: Entry []) (num: int) =
         data
         |> Array.filter (fun x -> x.ImageNumber = num)
 
@@ -716,15 +716,25 @@ module Report =
         |> Seq.distinct
         |> Seq.toArray
 
-    let getRegion (data: Entry [], region: string) =
+    let getRegion (data: Entry []) (region: string) =
         data
         |> Array.filter (fun x -> (x.RR, x.RC, x.R, x.C).ToString() = region)
 
-    let getCell (data: Entry [], row: int, col: int) =
+    let getCell (data: Entry []) (row: int) (col: int) =
         data
         |> Array.filter (fun x -> x.XCopy = row && x.YCopy = col)
 
-    let removeBuffers (data: Entry [], names: string []) =
+    let removeBuffers (data: Entry []) (names: string []) =
         let nameList = names |> Array.toList
         data
         |> Array.filter (fun x -> not (List.contains x.Name nameList))
+
+    let findIndex arr elem = 
+        if arr |> Array.contains elem then arr |> Array.findIndex ((=) elem)
+        else -1
+
+    let findMatched (data: Entry []) (names: string[]) (states: State[]) =
+        data
+        |> Array.filter(fun x -> 
+            let i = findIndex names x.Name
+            i <> -1 && names.[i] = x.Name && states.[i] = x.State)
