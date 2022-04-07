@@ -30,9 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditPlotOrder));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnDone = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.BtnDone = new System.Windows.Forms.Button();
             this.olv = new BrightIdeasSoftware.ObjectListView();
             this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tableLayoutPanel1.SuspendLayout();
@@ -59,6 +59,19 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(174, 361);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
+            // BtnDone
+            // 
+            this.BtnDone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.BtnDone.BackColor = System.Drawing.Color.LightGreen;
+            this.BtnDone.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnDone.Location = new System.Drawing.Point(47, 333);
+            this.BtnDone.Name = "BtnDone";
+            this.BtnDone.Size = new System.Drawing.Size(80, 25);
+            this.BtnDone.TabIndex = 0;
+            this.BtnDone.Text = "Done";
+            this.BtnDone.UseVisualStyleBackColor = false;
+            this.BtnDone.Click += new System.EventHandler(this.BtnDone_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -80,19 +93,6 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Last Plotted (Top Layer)";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // BtnDone
-            // 
-            this.BtnDone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.BtnDone.BackColor = System.Drawing.Color.LightGreen;
-            this.BtnDone.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnDone.Location = new System.Drawing.Point(47, 333);
-            this.BtnDone.Name = "BtnDone";
-            this.BtnDone.Size = new System.Drawing.Size(80, 25);
-            this.BtnDone.TabIndex = 0;
-            this.BtnDone.Text = "Done";
-            this.BtnDone.UseVisualStyleBackColor = false;
-            this.BtnDone.Click += new System.EventHandler(this.BtnDone_Click);
             // 
             // olv
             // 
@@ -118,6 +118,8 @@
             // olvColumn1
             // 
             this.olvColumn1.AspectName = "Name";
+            this.olvColumn1.FillsFreeSpace = true;
+            this.olvColumn1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // EditPlotOrder
             // 

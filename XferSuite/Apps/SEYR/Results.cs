@@ -61,6 +61,7 @@ namespace XferSuite.Apps.SEYR
 
         public void UpdateData(string reason, ParseSEYR parseSEYR)
         {
+            if (parseSEYR.Plottables.Count == 0) return;
             FlipX = parseSEYR.FlipXAxis;
             FlipY = parseSEYR.FlipYAxis;
             PassPointSize = parseSEYR.PassPointSize;
@@ -140,6 +141,7 @@ namespace XferSuite.Apps.SEYR
                             txt.BackgroundColor = Color.White;
                             txt.BackgroundFill = true;
                             txt.FontBold = true;
+                            txt.Alignment = Alignment.LowerCenter;
                         }
 
                         if (ShowPercentages)
@@ -153,6 +155,7 @@ namespace XferSuite.Apps.SEYR
                             txt.BackgroundColor = Color.White;
                             txt.BackgroundFill = true;
                             txt.FontBold = true;
+                            txt.Alignment = Alignment.LowerCenter;
                         }
                     }
                 }
