@@ -461,7 +461,7 @@ namespace XferSuite.Apps.SEYR
                             double thisX = thisCell[0].X + i * distX * (_FlipXAxis ? -1 : 1);
                             double thisY = thisCell[0].Y + j * distY;
 
-                            foreach (CustomFeature custom in CustomFeatures)
+                            foreach (CustomFeature custom in CustomFeatures.Where(x => x.Visible))
                             {
                                 bool notMatched = false;
                                 foreach ((string, Report.State) filter in custom.Filters)

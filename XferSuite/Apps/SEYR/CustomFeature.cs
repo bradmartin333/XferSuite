@@ -123,24 +123,10 @@ namespace XferSuite.Apps.SEYR
         { 
             _Name = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(); // Random string
             _Color = Color.Blue;
-            _Size = 1;
+            _Size = 4;
             _Type = Report.State.Pass;
             _Offset = PointF.Empty;
             _Filters = new System.Collections.Generic.List<(string, Report.State)>();
-        }
-
-        public CustomFeature Clone()
-        {
-            return new CustomFeature()
-            {
-                Name = _Name,
-                Color = _Color,
-                Size = _Size,
-                Type = _Type,
-                Offset = _Offset,
-                Filters = _Filters,
-                Visible = _Visible
-            };
         }
 
         public void Update(CreateCustom form, System.Collections.Generic.List<(string, Report.State)> filters)
