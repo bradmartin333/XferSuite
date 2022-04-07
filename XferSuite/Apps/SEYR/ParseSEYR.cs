@@ -266,28 +266,6 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            Parse();
-        }
-
-        private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Results.UpdateData("Newly parsed data", this);
-            Results.Show();
-            Results.BringToFront();
-            toolStripProgressBar.Value = 0;
-            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
-                olv.Enabled = true;
-            flowLayoutPanelCriteria.Enabled = true;
-        }
-
-        private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            Results.RTB.Text += e.UserState;
-            toolStripProgressBar.Value = e.ProgressPercentage;
-        }
-
-        private void Parse()
-        {
             // Reset
             ParseWorker.ReportProgress(1, "(RR, RC, R, C)\tYield\n"); // Header
             Plottables = new List<Plottable>();
@@ -337,9 +315,26 @@ namespace XferSuite.Apps.SEYR
                 CustomFeatures.Where(x => x.Visible).Count() == 0)
                 ParseSingle(distX, distY, filteredData, regions);
             else
-                ParseMulti(distX, distY, filteredData, regions, 
+                ParseMulti(distX, distY, filteredData, regions,
                     !(Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0 ||
                     Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() > 0));
+        }
+
+        private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Results.UpdateData("Newly parsed data", this);
+            Results.Show();
+            Results.BringToFront();
+            toolStripProgressBar.Value = 0;
+            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
+                olv.Enabled = true;
+            flowLayoutPanelCriteria.Enabled = true;
+        }
+
+        private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            Results.RTB.Text += e.UserState;
+            toolStripProgressBar.Value = e.ProgressPercentage;
         }
 
         // Much, much faster way of parsing large data sets as you do not have to obtain regions

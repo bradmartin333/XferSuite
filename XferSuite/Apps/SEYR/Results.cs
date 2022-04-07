@@ -147,7 +147,7 @@ namespace XferSuite.Apps.SEYR
             formsPlot.Plot.XAxis.TickLabelNotation(invertSign: FlipX);
             formsPlot.Plot.YAxis.TickLabelNotation(invertSign: FlipY);
             formsPlot.Refresh();
-            LabelStatus.Text = $"Replot: {reason}";
+            LabelStatus.Text = reason;
         }
     }
 }
