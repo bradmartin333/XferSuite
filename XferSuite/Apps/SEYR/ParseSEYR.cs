@@ -1,13 +1,13 @@
-﻿using System.Windows.Forms;
-using XferHelper;
-using BrightIdeasSoftware;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Drawing;
-using System.ComponentModel;
+﻿using BrightIdeasSoftware;
 using Microsoft.FSharp.Collections;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using XferHelper;
 
 namespace XferSuite.Apps.SEYR
 {
@@ -15,7 +15,7 @@ namespace XferSuite.Apps.SEYR
     {
         #region User Parameters
 
-        private int _PassPointSize = 4;
+        private int _PassPointSize = 1;
         [Category("User Parameters")]
         public int PassPointSize
         {
@@ -27,7 +27,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _FailPointSize = 4;
+        private int _FailPointSize = 1;
         [Category("User Parameters")]
         public int FailPointSize
         {
@@ -118,7 +118,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _RegionBorderOpacity = 100;
+        private int _RegionBorderOpacity = 255;
         [Category("User Parameters")]
         public int RegionBorderOpacity
         {
@@ -135,7 +135,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _RegionLabelOpacity = 100;
+        private int _RegionLabelOpacity = 255;
         [Category("User Parameters")]
         public int RegionLabelOpacity
         {
@@ -338,26 +338,24 @@ namespace XferSuite.Apps.SEYR
         {
             if (olvCustom.SelectedIndex == -1) return;
             CustomFeature feature = (CustomFeature)olvCustom.SelectedObject;
+            string originalName = feature.Name;
             using (CreateCustom cc = new CreateCustom(Features, CustomFeatures, feature))
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
                 {
+                    var plotOrderIdx = PlotOrder.Select(x => x.Name).ToList().IndexOf(originalName);
+                    PlotOrder[plotOrderIdx].Name = cc.CustomFeature.Name;
                     CustomFeatures[olvCustom.SelectedIndex] = cc.CustomFeature;
-                    olvCustom.SelectedItem.BackColor = cc.CustomFeature.Color;
-                    olvCustom.SelectedItem.ForeColor = cc.CustomFeature.ContrastColor;
-                    olvCustom.SelectedItem.Decoration = 
-                        cc.CustomFeature.Type == Report.State.Null ? new ImageDecoration(Properties.Resources.invisible_small, 255) : null;
+                    olvCustom.UpdateObject(olvCustom.SelectedObject);
                     olvCustom.DeselectAll();
-                    olvCustom.Refresh();
                     Results.UpdateData("Custom feature updated", this);
                 }
                 else if (result == DialogResult.Ignore)
                 {
-                    CustomFeatures.RemoveAt(olvCustom.SelectedIndex);
                     PlotOrder.Remove(PlotOrder.Where(x => x.Name == feature.Name).First());
+                    CustomFeatures.RemoveAt(olvCustom.SelectedIndex);
                     olvCustom.RemoveObject(feature);
-                    olvCustom.Refresh();
                     Results.UpdateData("Custom feature hidden", this);
                 }
                 else
