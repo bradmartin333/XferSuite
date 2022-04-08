@@ -12,6 +12,8 @@ using XferHelper;
 
 namespace XferSuite.Apps.InlinePositions
 {
+    // HELP WANTED
+    // Combine this class with Fingerprinting
     public partial class Angleprinting : Form
     {
         private float _PointMagnitude = 200F;
@@ -74,8 +76,6 @@ namespace XferSuite.Apps.InlinePositions
                 _Raw[posIdx].PrintNum = printIdx; // Assign an print index to each passing device
                 posIdx += 1;
             }
-
-            // END HELP WANTED
 
             MakePlot();
         }

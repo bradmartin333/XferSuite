@@ -12,9 +12,6 @@ using XferHelper;
 
 namespace XferSuite.Apps.InlinePositions
 {
-    // HELP WANTED
-    // Combine this class with Angleprinting and replace homemade vector plotting
-    // with Scottplot vector plotting
     public partial class Fingerprinting : Form
     {
         private float _VectorMagnitude = 200F;
@@ -138,7 +135,10 @@ namespace XferSuite.Apps.InlinePositions
             Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
-            PlotModel vectorPlot = new PlotModel() { TitleFontSize = 15 };
+           // HELP WANTED
+           // Replace homemade vector plotting
+           // with Scottplot vector plotting
+           PlotModel vectorPlot = new PlotModel() { TitleFontSize = 15 };
 
             // Hacky, but fast way of selecting all by default
             List<int> loopSet = new List<int>();
