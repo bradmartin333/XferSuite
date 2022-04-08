@@ -173,6 +173,8 @@ namespace XferSuite.Apps.SEYR
                 double passNum = regionPlottables.Where(x => x.Pass).Count();
                 double failNum = regionPlottables.Where(x => !x.Pass).Count();
                 RTB.Text += $"{region}\t{passNum / (passNum + failNum):P}\n";
+
+                if (regionPlottables.Count() == 0) return;
                 double[] xs = regionPlottables.Select(p => p.X).ToArray();
                 double[] ys = regionPlottables.Select(p => p.Y).ToArray();
                 double minX = (xs.Min() * (FlipX ? -1 : 1)) + RegionBorderPadding;
