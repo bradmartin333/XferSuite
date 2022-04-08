@@ -32,7 +32,7 @@ namespace XferSuite.Apps.SEYR
             ExistingCustomFeatures = customFeatures;
             ((DataGridViewComboBoxColumn)dataGridView.Columns[0]).DataSource = Features.Select(x => x.Name).Distinct().ToList();
             txtName.Text = CustomFeature.Name;
-            panelColor.BackColor = Color.FromArgb(CustomFeature.Color.A, CustomFeature.Color.R, CustomFeature.Color.G, CustomFeature.Color.B);
+            panelColor.BackColor = CustomFeature.Color;
             numSize.Value = CustomFeature.Size;
             comboBoxType.SelectedIndex = (int)CustomFeature.Type;
             numOffsetX.Value = (decimal)CustomFeature.Offset.X;
@@ -93,7 +93,7 @@ namespace XferSuite.Apps.SEYR
             }
             else
             {
-                panelColor.BackColor = Color.Blue;
+                panelColor.BackColor = CustomFeature.Color;
                 panelColor.BackgroundImage = null;
                 panelColor.Enabled = true;
             }

@@ -15,7 +15,7 @@ namespace XferSuite.Apps.SEYR
     {
         #region User Parameters
 
-        private int _PassPointSize = 4;
+        private int _PassPointSize = 1;
         [Category("User Parameters")]
         public int PassPointSize
         {
@@ -27,7 +27,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _FailPointSize = 4;
+        private int _FailPointSize = 1;
         [Category("User Parameters")]
         public int FailPointSize
         {
@@ -118,7 +118,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _RegionBorderOpacity = 100;
+        private int _RegionBorderOpacity = 255;
         [Category("User Parameters")]
         public int RegionBorderOpacity
         {
@@ -135,7 +135,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _RegionLabelOpacity = 100;
+        private int _RegionLabelOpacity = 255;
         [Category("User Parameters")]
         public int RegionLabelOpacity
         {

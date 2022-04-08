@@ -123,7 +123,7 @@ namespace XferSuite.Apps.SEYR
         { 
             _Name = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(); // Random string
             _Color = Color.Blue;
-            _Size = 4;
+            _Size = 1;
             _Type = Report.State.Pass;
             _Offset = PointF.Empty;
             _Filters = new System.Collections.Generic.List<(string, Report.State)>();
