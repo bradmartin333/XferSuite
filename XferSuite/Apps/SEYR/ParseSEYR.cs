@@ -256,8 +256,9 @@ namespace XferSuite.Apps.SEYR
 
         private void ModelDropped(object sender, ModelDropEventArgs e)
         {
-            foreach (Report.Feature m in e.SourceModels)
+            for (int i = 0; i < e.SourceModels.Count; i++)
             {
+                Report.Feature m = (Report.Feature)e.SourceModels[i];
                 m.Bucket = Report.toBucket(int.Parse(e.ListView.Tag.ToString()));
                 if ((ObjectListView)sender == olvNeedOne)
                 {
@@ -274,12 +275,27 @@ namespace XferSuite.Apps.SEYR
                     }
                     else
                     {
-                        m.IsParent = true;
-                        m.FamilyName = m.Name;
-                        ((ObjectListView)sender).AddObject(m);
-                        olvNeedOne.ExpandAll();
+                        if (i > 0)
+                        {
+                            m.Bucket = Report.Bucket.NeedOne;
+                            m.IsChild = true;
+                            Report.Feature parent = (Report.Feature)e.SourceModels[0];
+                            m.FamilyName = parent.Name;
+
+                            // Converting between F# and C# lists
+                            List<Report.Feature> children = parent.Children.ToList();
+                            children.Add(m);
+                            parent.Children = ListModule.OfSeq(children);
+                        }
+                        else
+                        {
+                            m.IsParent = true;
+                            m.FamilyName = m.Name;
+                            ((ObjectListView)sender).AddObject(m);
+                            olvNeedOne.ExpandAll();
+                        }
                     }
-                } 
+                }
                 else
                     ((ObjectListView)sender).AddObject(m);
                 olvBuffer.RemoveObject(m);
