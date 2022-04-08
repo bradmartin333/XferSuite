@@ -196,8 +196,8 @@ namespace XferSuite.Apps.SEYR
                         color: Color.Black);
                     txt.BackgroundColor = Color.FromArgb(RegionLabelOpacity, Color.White);
                     txt.BackgroundFill = true;
-                    txt.FontBold = true;
                     txt.Alignment = Alignment.UpperCenter;
+                    txt.FontName = "segoe";
                 }
 
                 if (ShowPercentages)
@@ -210,8 +210,8 @@ namespace XferSuite.Apps.SEYR
                         color: Color.Black);
                     txt.BackgroundColor = Color.White;
                     txt.BackgroundFill = true;
-                    txt.FontBold = true;
                     txt.Alignment = Alignment.UpperCenter;
+                    txt.FontName = "segoe";
                 }
             }
 
