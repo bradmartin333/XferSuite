@@ -167,52 +167,49 @@ namespace XferSuite.Apps.SEYR
         private void AddOverlays()
         {
             RTB.Text = "(RR, RC, R, C)\tYield\n"; // Header
-            if (ShowRegionBorders || ShowRegionStrings || ShowPercentages)
+            foreach (string region in Regions)
             {
-                foreach (string region in Regions)
+                Plottable[] regionPlottables = UsedPlottables.Where(p => p.Region == region).ToArray();
+                double passNum = regionPlottables.Where(x => x.Pass).Count();
+                double failNum = regionPlottables.Where(x => !x.Pass).Count();
+                RTB.Text += $"{region}\t{passNum / (passNum + failNum):P}\n";
+                double[] xs = regionPlottables.Select(p => p.X).ToArray();
+                double[] ys = regionPlottables.Select(p => p.Y).ToArray();
+                double minX = (xs.Min() * (FlipX ? -1 : 1)) + RegionBorderPadding;
+                double minY = (ys.Min() * (FlipY ? -1 : 1)) + RegionBorderPadding;
+                double maxX = (xs.Max() * (FlipX ? -1 : 1)) - RegionBorderPadding;
+                double maxY = (ys.Max() * (FlipY ? -1 : 1)) - RegionBorderPadding;
+                double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
+                double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
+
+                if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(RegionBorderOpcaity, Color.Black), 3);
+
+                if (ShowRegionStrings)
                 {
-                    Plottable[] regionPlottables = UsedPlottables.Where(p => p.Region == region).ToArray();
-                    double passNum = regionPlottables.Where(x => x.Pass).Count();
-                    double failNum = regionPlottables.Where(x => !x.Pass).Count();
-                    RTB.Text += $"{region}\t{passNum / (passNum + failNum):P}\n";
-                    double[] xs = regionPlottables.Select(p => p.X).ToArray();
-                    double[] ys = regionPlottables.Select(p => p.Y).ToArray();
-                    double minX = (xs.Min() * (FlipX ? -1 : 1)) + RegionBorderPadding;
-                    double minY = (ys.Min() * (FlipY ? -1 : 1)) + RegionBorderPadding;
-                    double maxX = (xs.Max() * (FlipX ? -1 : 1)) - RegionBorderPadding;
-                    double maxY = (ys.Max() * (FlipY ? -1 : 1)) - RegionBorderPadding;
-                    double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
-                    double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
+                    Text txt = formsPlot.Plot.AddText(
+                        region,
+                        (minX + maxX) / 2,
+                        FlipY ? maxY : minY,
+                        RegionTextSize,
+                        color: Color.Black);
+                    txt.BackgroundColor = Color.FromArgb(RegionLabelOpacity, Color.White);
+                    txt.BackgroundFill = true;
+                    txt.FontBold = true;
+                    txt.Alignment = Alignment.UpperCenter;
+                }
 
-                    if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(RegionBorderOpcaity, Color.Black), 3);
-
-                    if (ShowRegionStrings)
-                    {
-                        Text txt = formsPlot.Plot.AddText(
-                            region,
-                            (minX + maxX) / 2,
-                            FlipY ? maxY : minY,
-                            RegionTextSize,
-                            color: Color.Black);
-                        txt.BackgroundColor = Color.FromArgb(RegionLabelOpacity, Color.White);
-                        txt.BackgroundFill = true;
-                        txt.FontBold = true;
-                        txt.Alignment = Alignment.UpperCenter;
-                    }
-
-                    if (ShowPercentages)
-                    {
-                        Text txt = formsPlot.Plot.AddText(
-                            GetRegionPercent(region),
-                            (minX + maxX) / 2,
-                            (minY + maxY) / 2,
-                            PercentageTextSize,
-                            color: Color.Black);
-                        txt.BackgroundColor = Color.White;
-                        txt.BackgroundFill = true;
-                        txt.FontBold = true;
-                        txt.Alignment = Alignment.UpperCenter;
-                    }
+                if (ShowPercentages)
+                {
+                    Text txt = formsPlot.Plot.AddText(
+                        GetRegionPercent(region),
+                        (minX + maxX) / 2,
+                        (minY + maxY) / 2,
+                        PercentageTextSize,
+                        color: Color.Black);
+                    txt.BackgroundColor = Color.White;
+                    txt.BackgroundFill = true;
+                    txt.FontBold = true;
+                    txt.Alignment = Alignment.UpperCenter;
                 }
             }
 
