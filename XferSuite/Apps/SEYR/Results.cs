@@ -75,7 +75,7 @@ namespace XferSuite.Apps.SEYR
 
         public void UpdateData(string reason, ParseSEYR parseSEYR)
         {
-            if (Plottables == null || parseSEYR.Plottables.Count == 0) return;
+            if (parseSEYR.Plottables.Count == 0) return;
             FlipX = parseSEYR.FlipXAxis;
             FlipY = parseSEYR.FlipYAxis;
             PassPointSize = parseSEYR.PassPointSize;
@@ -113,47 +113,49 @@ namespace XferSuite.Apps.SEYR
         private void AddScatterPlots()
         {
             List<Plottable> nullPlottables = new List<Plottable>();
-
             foreach (PlotOrderElement plotOrderElement in PlotOrder)
             {
-                Plottable[] plottables;
-                float thisSize;
-                switch (plotOrderElement.Name)
-                {
-                    case "Pass":
-                        thisSize = PassPointSize;
-                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass && 
-                            !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
-                        if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
-                        break;
-                    case "Fail":
-                        thisSize = FailPointSize;
-                        plottables = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass && 
-                            !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
-                        if (DataReduction > 0) plottables = plottables.Where((x, i) => i % DataReduction == 0).ToArray();
-                        break;
-                    default:
-                        CustomFeature customFeature = CustomFeatures.Where(x => x.Name == plotOrderElement.Name).First();
-                        thisSize = customFeature.Size;
-                        plottables = Plottables.Where(x => x.CustomTag == customFeature.Name).
-                            Select(x => { x.Color = customFeature.Color; return x; }).ToArray();
-                        if (customFeature.Type == XferHelper.Report.State.Null)
-                        {
-                            nullPlottables.AddRange(plottables);
-                            continue;
-                        }
-                        else
-                            plottables = plottables.Where(x => !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
-                        break;
-                }
+                int size = -1;
+                Plottable[] plottables = new Plottable[] { };  
+                SetPlottables(ref size, ref plottables, plotOrderElement, nullPlottables);
+                if (size == -1) continue;
                 if (plottables.Count() > 0)
                     Scatters.Add(formsPlot.Plot.AddScatter(
                         plottables.Select(x => x.X * (FlipX ? -1 : 1)).ToArray(),
                         plottables.Select(x => x.Y * (FlipY ? -1 : 1)).ToArray(),
                         plottables[0].Color,
-                        markerSize: thisSize,
+                        markerSize: size,
                         markerShape: MarkerShape.filledSquare,
                         lineStyle: LineStyle.None));
+            }
+        }
+
+        private void SetPlottables(ref int size, ref Plottable[] ps, PlotOrderElement element, List<Plottable> nullPlottables)
+        {
+            switch (element.Name)
+            {
+                case "Pass":
+                    ps = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && x.Pass &&
+                        !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
+                    if (DataReduction > 0) ps = ps.Where((x, i) => i % DataReduction == 0).ToArray();
+                    size = PassPointSize;
+                    break;
+                case "Fail":
+                    ps = Plottables.Where(x => string.IsNullOrEmpty(x.CustomTag) && !x.Pass &&
+                        !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
+                    if (DataReduction > 0) ps = ps.Where((x, i) => i % DataReduction == 0).ToArray();
+                    size = FailPointSize;
+                    break;
+                default:
+                    CustomFeature customFeature = CustomFeatures.Where(x => x.Name == element.Name).First();
+                    ps = Plottables.Where(x => x.CustomTag == customFeature.Name).
+                        Select(x => { x.Color = customFeature.Color; return x; }).ToArray();
+                    if (customFeature.Type == XferHelper.Report.State.Null)
+                        nullPlottables.AddRange(ps);
+                    else
+                        ps = ps.Where(x => !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
+                    size = customFeature.Size;
+                    break;
             }
         }
 
