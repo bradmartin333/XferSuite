@@ -13,6 +13,8 @@ namespace XferSuite.Apps.SEYR
 
     public partial class Results : Form
     {
+        #region Globals and Setup
+
         private PointF FormScaling;
         private readonly List<ScatterPlot> Scatters = new List<ScatterPlot>();
         private MarkerPlot HighlightedPoint;
@@ -44,6 +46,7 @@ namespace XferSuite.Apps.SEYR
             Resize += Results_Resize;
             formsPlot.Configuration.DoubleClickBenchmark = false;
             formsPlot.Plot.Style(figureBackground: Color.White);
+            formsPlot.MouseWheel += FormsPlot_MouseWheel;
             formsPlot.KeyUp += FormsPlot_KeyUp;
             formsPlot.MouseUp += FormsPlot_MouseUp;
             formsPlot.Plot.Frameless();
@@ -62,6 +65,10 @@ namespace XferSuite.Apps.SEYR
                 Hide();
             }
         }
+
+        #endregion
+
+        #region Data Handling and Plotting
 
         public void UpdateData(string reason, ParseSEYR parseSEYR)
         {
@@ -208,6 +215,8 @@ namespace XferSuite.Apps.SEYR
             string dataLine = lines.Where(x => x.Contains(region)).First();
             return dataLine.Split('\t')[1];
         }
+
+        #endregion
 
         #region Context Menu Strip
 
@@ -359,6 +368,36 @@ namespace XferSuite.Apps.SEYR
         #endregion
 
         #region Mouse Handlers
+
+        private void FormsPlot_MouseWheel(object sender, MouseEventArgs e)
+        {
+            FormsPlot control = (FormsPlot)sender;
+            switch (GetControlAxis(control, e.Location))
+            {
+                case 0:
+                    control.Plot.XAxis.LockLimits(true);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
+                case 1:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(true);
+                    break;
+                default:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
+            }
+        }
+
+        private int GetControlAxis(FormsPlot control, Point location)
+        {
+            if (location.X < 60) // At XAxis
+                return 0;
+            else if (location.Y > control.Height - 60) // At YAxis
+                return 1;
+            else
+                return -1;
+        }
 
         private void FormsPlot_MouseUp(object sender, MouseEventArgs e)
         {
