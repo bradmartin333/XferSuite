@@ -237,7 +237,6 @@ namespace XferSuite.Apps.SEYR
             olvRequire.Objects = null;
             olvNeedOne.Objects = null;
             ObjectHasBeenDropped = false;
-            toolStripButtonAddCustom.Enabled = Features.Length > 1;
         }
 
         #endregion

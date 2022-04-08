@@ -167,11 +167,15 @@ namespace XferSuite.Apps.SEYR
         private void AddOverlays()
         {
             RTB.Text = "(RR, RC, R, C)\tYield\n"; // Header
+            double totalPass = 0;
+            double totalFail = 0;
             foreach (string region in Regions)
             {
                 Plottable[] regionPlottables = UsedPlottables.Where(p => p.Region == region).ToArray();
                 double passNum = regionPlottables.Where(x => x.Pass).Count();
                 double failNum = regionPlottables.Where(x => !x.Pass).Count();
+                totalPass += passNum;
+                totalFail += failNum;
                 RTB.Text += $"{region}\t{passNum / (passNum + failNum):P}\n";
 
                 if (regionPlottables.Count() == 0) continue;
@@ -214,6 +218,7 @@ namespace XferSuite.Apps.SEYR
                     txt.FontName = "segoe";
                 }
             }
+            if (totalPass > 0) RTB.Text += $"Total\t{totalPass / (totalPass + totalFail):P}\n";
 
             if (ShowTrackerString) // Add a red circle we can move around later as a highlighted point indicator
             {

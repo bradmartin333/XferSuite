@@ -338,7 +338,6 @@ namespace XferSuite.Apps.SEYR
             // toolStripButtonAddCustom
             // 
             this.toolStripButtonAddCustom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAddCustom.Enabled = false;
             this.toolStripButtonAddCustom.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddCustom.Image")));
             this.toolStripButtonAddCustom.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAddCustom.Name = "toolStripButtonAddCustom";
