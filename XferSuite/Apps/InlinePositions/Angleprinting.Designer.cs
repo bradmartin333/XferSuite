@@ -91,7 +91,7 @@ namespace XferSuite.Apps.InlinePositions
             this.btnSavePlot.TabIndex = 2;
             this.btnSavePlot.Text = "Save Plot";
             this.btnSavePlot.UseVisualStyleBackColor = true;
-            this.btnSavePlot.Click += new System.EventHandler(this.btnSavePlot_Click);
+            this.btnSavePlot.Click += new System.EventHandler(this.BtnSavePlot_Click);
             // 
             // Angleprinting
             // 

@@ -75,7 +75,7 @@ namespace XferSuite.Apps.SEYR
 
         public void UpdateData(string reason, ParseSEYR parseSEYR)
         {
-            if (parseSEYR.Plottables.Count == 0) return;
+            if (Plottables == null || parseSEYR.Plottables.Count == 0) return;
             FlipX = parseSEYR.FlipXAxis;
             FlipY = parseSEYR.FlipYAxis;
             PassPointSize = parseSEYR.PassPointSize;
@@ -97,7 +97,7 @@ namespace XferSuite.Apps.SEYR
         {
             using (new Utility.HourGlass(UsePlexiglass: false))
             {
-                if (Plottables.Count == 0) return;
+                if (Plottables == null || Plottables.Count == 0) return;
                 UpdateForm();
                 Scatters.Clear();
                 formsPlot.Plot.Clear();
@@ -409,7 +409,7 @@ namespace XferSuite.Apps.SEYR
         {
             try
             {
-                if (e.Button != MouseButtons.Left || !ShowTrackerString || HighlightedPoint == null || Plottables.Count == 0) return;
+                if (e.Button != MouseButtons.Left || !ShowTrackerString || HighlightedPoint == null || Plottables == null || Plottables.Count == 0) return;
 
                 // Determine point nearest the cursor
                 (double mouseCoordX, double mouseCoordY) = formsPlot.GetMouseCoordinates();

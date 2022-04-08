@@ -44,34 +44,34 @@ namespace XferSuite.Apps.InlinePositions
             }
         }
 
-        private Metro.Position[] _raw; // Gets split into data and missing
-        private Metro.Position[] _data; // Gets split into pass and fail
+        private readonly Metro.Position[] _Raw; // Gets split into data and missing
+        private readonly Metro.Position[] _Data; // Gets split into pass and fail
         private bool _PlotAll = true; // On by default
-        List<string> _prints = new List<string>();
+        readonly List<string> _Prints = new List<string>();
 
         public Angleprinting(Metro.Position[] data)
         {
             InitializeComponent();
-            _raw = data;
-            Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_raw);
-            _data = _splitData.Item2; // We don't want any data for missing devices
+            _Raw = data;
+            Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_Raw);
+            _Data = _splitData.Item2; // We don't want any data for missing devices
 
             // HELP WANTED
             // This could be a lot more efficent
 
-            string[] indices = Metro.prints(_raw); // Get all prints in RR RC R C format
+            string[] indices = Metro.prints(_Raw); // Get all prints in RR RC R C format
             int printIdx = 1;
             int posIdx = 0;
             foreach (string index in indices)
             {
-                if (!_prints.Contains(index))
+                if (!_Prints.Contains(index))
                 {
                     // Add unique prints to the list box and increment the print index
-                    _prints.Add(index);
+                    _Prints.Add(index);
                     PrintList.Items.Add(string.Format("{0}: {1}", printIdx, index));
                     printIdx += 1;
                 }
-                _raw[posIdx].PrintNum = printIdx; // Assign an print index to each passing device
+                _Raw[posIdx].PrintNum = printIdx; // Assign an print index to each passing device
                 posIdx += 1;
             }
 
@@ -94,8 +94,8 @@ namespace XferSuite.Apps.InlinePositions
 
         private void MakePlot()
         {
-            Metro.rescore(_data, Threshold);
-            Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
+            Metro.rescore(_Data, Threshold);
+            Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_Data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
             PlotModel anglePlot = new PlotModel() { TitleFontSize = 15 };
@@ -103,35 +103,19 @@ namespace XferSuite.Apps.InlinePositions
             // Hacky, but fast way of selecting all by default
             List<int> loopSet = new List<int>();
             if (_PlotAll)
-            {
                 for (int idx = 0; idx < PrintList.Items.Count; idx++)
-                {
                     loopSet.Add(idx);
-                }
-            }
             else
-            {
                 foreach (int idx in PrintList.SelectedIndices)
-                {
                     loopSet.Add(idx);
-                }
-            }
 
             // Obtain and plot data for selected list box indices
-            Metro.Position[][] printData = new Metro.Position[_prints.Count()][];
-            double[] printEntropy = new double[_prints.Count()];
+            Metro.Position[][] printData = new Metro.Position[_Prints.Count()][];
             foreach (int idx in loopSet)
-            {
-                printData[idx] = Metro.getPrint(_prints[idx], plotData);
-                printEntropy[idx] = Metro.nextMagnitudeEntropy(printData[idx]) / 1e10;
-            }
+                printData[idx] = Metro.getPrint(_Prints[idx], plotData);
             foreach (int idx in loopSet)
-            {
                 for (int i = 0; i < printData[idx].Length; i++)
-                {
                     anglePlot.Series.Add(PlotAngle(printData[idx][i], idx));
-                }
-            }
 
             LinearAxis myXaxis = new LinearAxis()
             {
@@ -173,7 +157,7 @@ namespace XferSuite.Apps.InlinePositions
             return post;
         }
 
-        private void btnSavePlot_Click(object sender, EventArgs e)
+        private void BtnSavePlot_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
