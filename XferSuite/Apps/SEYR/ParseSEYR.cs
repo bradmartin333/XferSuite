@@ -265,12 +265,23 @@ namespace XferSuite.Apps.SEYR
                     {
                         m.IsChild = true;
                         Report.Feature targ = (Report.Feature)e.TargetModel;
-                        m.FamilyName = targ.Name;
-
-                        // Converting between F# and C# lists
-                        List<Report.Feature> children = targ.Children.ToList();
-                        children.Add(m);
-                        targ.Children = ListModule.OfSeq(children);
+                        if (targ.IsChild)
+                        {
+                            Report.Feature parent = Features.Where(x => x.Name == targ.FamilyName).First();
+                            m.FamilyName = parent.Name;
+                            // Converting between F# and C# lists
+                            List<Report.Feature> children = parent.Children.ToList();
+                            children.Add(m);
+                            parent.Children = ListModule.OfSeq(children);
+                        }
+                        else
+                        {
+                            m.FamilyName = targ.Name;
+                            // Converting between F# and C# lists
+                            List<Report.Feature> children = targ.Children.ToList();
+                            children.Add(m);
+                            targ.Children = ListModule.OfSeq(children);
+                        }
                     }
                     else
                     {
@@ -280,7 +291,6 @@ namespace XferSuite.Apps.SEYR
                             m.IsChild = true;
                             Report.Feature parent = (Report.Feature)e.SourceModels[0];
                             m.FamilyName = parent.Name;
-
                             // Converting between F# and C# lists
                             List<Report.Feature> children = parent.Children.ToList();
                             children.Add(m);
