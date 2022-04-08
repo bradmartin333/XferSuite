@@ -96,14 +96,59 @@ namespace XferSuite.Apps.SEYR
             set
             {
                 if (value >= 0 && value <= 100)
-                {
                     _DataReduction = value;
-                    Results.UpdateData("Data reduction value changed", this);
-                }
                 else if (value < 0)
                     _DataReduction = 0;
                 else if (value > 100)
                     _DataReduction = 100;
+                Results.UpdateData("Data reduction value changed", this);
+            }
+        }
+
+        private double _RegionBorderPadding = 0.1;
+        [Category("User Parameters")]
+        [Description("Adds space (in mm) between data and plotted region border")]
+        public double RegionBorderPadding
+        {
+            get => _RegionBorderPadding;
+            set
+            {
+                _RegionBorderPadding = value < 0 ? 0 : value;
+                Results.UpdateData("Region border padding changed", this);
+            }
+        }
+
+        private int _RegionBorderTransparency = 100;
+        [Category("User Parameters")]
+        public int RegionBorderTransparency
+        {
+            get => _RegionBorderTransparency;
+            set
+            {
+                if (value >= 0 && value <= 255)
+                    _RegionBorderTransparency = value;
+                else if (value < 0)
+                    _RegionBorderTransparency = 0;
+                else if (value > 255)
+                    _RegionBorderTransparency = 255;
+                Results.UpdateData("Region border transparency changed", this);
+            }
+        }
+
+        private int _RegionLabelTransparency = 100;
+        [Category("User Parameters")]
+        public int RegionLabelTransparency
+        {
+            get => _RegionLabelTransparency;
+            set
+            {
+                if (value >= 0 && value <= 255)
+                    _RegionLabelTransparency = value;
+                else if (value < 0)
+                    _RegionLabelTransparency = 0;
+                else if (value > 255)
+                    _RegionLabelTransparency = 255;
+                Results.UpdateData("Region label transparency changed", this);
             }
         }
 

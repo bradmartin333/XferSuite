@@ -33,6 +33,9 @@ namespace XferSuite.Apps.SEYR
         private int RegionTextSize;
         private int PercentageTextSize;
         private int DataReduction;
+        private double RegionBorderPadding;
+        private int RegionBorderTransparency;
+        private int RegionLabelTransparency;
 
         private string[] Regions;
         private List<Plottable> Plottables;
@@ -80,6 +83,9 @@ namespace XferSuite.Apps.SEYR
             RegionTextSize = parseSEYR.RegionTextSize;
             PercentageTextSize = parseSEYR.PercentageTextSize;
             DataReduction = parseSEYR.DataReduction;
+            RegionBorderPadding = parseSEYR.RegionBorderPadding;
+            RegionBorderTransparency = parseSEYR.RegionBorderTransparency;
+            RegionLabelTransparency = parseSEYR.RegionLabelTransparency;
             Regions = parseSEYR.Regions;
             Plottables = parseSEYR.Plottables;
             PlotOrder = parseSEYR.PlotOrder;
@@ -160,14 +166,14 @@ namespace XferSuite.Apps.SEYR
                     Plottable[] regionPlottables = Plottables.Where(p => p.Region == region).ToArray();
                     double[] xs = regionPlottables.Select(p => p.X).ToArray();
                     double[] ys = regionPlottables.Select(p => p.Y).ToArray();
-                    double minX = xs.Min() * (FlipX ? -1 : 1);
-                    double minY = ys.Min() * (FlipY ? -1 : 1);
-                    double maxX = xs.Max() * (FlipX ? -1 : 1);
-                    double maxY = ys.Max() * (FlipY ? -1 : 1);
+                    double minX = xs.Min() * (FlipX ? -1 : 1) + RegionBorderPadding;
+                    double minY = ys.Min() * (FlipY ? -1 : 1) + RegionBorderPadding;
+                    double maxX = xs.Max() * (FlipX ? -1 : 1) - RegionBorderPadding;
+                    double maxY = ys.Max() * (FlipY ? -1 : 1) - RegionBorderPadding;
                     double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
                     double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
 
-                    if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(50, Color.Black), 3);
+                    if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(RegionBorderTransparency, Color.Black), 3);
 
                     if (ShowRegionStrings)
                     {
@@ -177,7 +183,7 @@ namespace XferSuite.Apps.SEYR
                             FlipY ? maxY : minY,
                             RegionTextSize,
                             color: Color.Black);
-                        txt.BackgroundColor = Color.White;
+                        txt.BackgroundColor = Color.FromArgb(RegionLabelTransparency, Color.White);
                         txt.BackgroundFill = true;
                         txt.FontBold = true;
                         txt.Alignment = Alignment.UpperCenter;
