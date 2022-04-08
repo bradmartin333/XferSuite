@@ -245,12 +245,24 @@ namespace XferSuite.Apps.SEYR
 
         private void ModelCanDrop(object sender, ModelDropEventArgs e)
         {
-            e.Handled = true;
             e.Effect = DragDropEffects.None;
-            if (e.TargetModel != null && !((Report.Feature)e.TargetModel).IsChild)
-                e.Effect = DragDropEffects.Link; // Only one branch
+            if (e.TargetModel != null)
+            {
+                if (((Report.Feature)e.TargetModel).IsChild)
+                {
+                    e.Handled = false;
+                }
+                else
+                {
+                    e.Handled = true;
+                    e.Effect = DragDropEffects.Link; // Only one branch
+                }
+            }
             else
+            {
+                e.Handled = true;
                 e.Effect = DragDropEffects.Copy;
+            }
         }
 
         private void ModelDropped(object sender, ModelDropEventArgs e)
