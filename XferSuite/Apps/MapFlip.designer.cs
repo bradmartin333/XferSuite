@@ -1,5 +1,5 @@
 ﻿
-namespace XferSuite
+namespace XferSuite.Apps
 {
     partial class MapFlip
     {
@@ -230,7 +230,7 @@ namespace XferSuite
             this.btnReset.TabIndex = 15;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = false;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            this.btnReset.Click += new System.EventHandler(this.BtnReset_Click);
             // 
             // lblClip
             // 
@@ -257,7 +257,7 @@ namespace XferSuite
             this.btnHorizFlip.TabIndex = 11;
             this.btnHorizFlip.Tag = "0";
             this.btnHorizFlip.UseVisualStyleBackColor = false;
-            this.btnHorizFlip.Click += new System.EventHandler(this.btnClick);
+            this.btnHorizFlip.Click += new System.EventHandler(this.BtnClick);
             // 
             // btnVertFlip
             // 
@@ -272,7 +272,7 @@ namespace XferSuite
             this.btnVertFlip.TabIndex = 12;
             this.btnVertFlip.Tag = "1";
             this.btnVertFlip.UseVisualStyleBackColor = false;
-            this.btnVertFlip.Click += new System.EventHandler(this.btnClick);
+            this.btnVertFlip.Click += new System.EventHandler(this.BtnClick);
             // 
             // btnRotate
             // 
@@ -287,7 +287,7 @@ namespace XferSuite
             this.btnRotate.TabIndex = 13;
             this.btnRotate.Tag = "2";
             this.btnRotate.UseVisualStyleBackColor = false;
-            this.btnRotate.Click += new System.EventHandler(this.btnClick);
+            this.btnRotate.Click += new System.EventHandler(this.BtnClick);
             // 
             // MapFlip
             // 

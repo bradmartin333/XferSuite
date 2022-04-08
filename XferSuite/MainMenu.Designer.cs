@@ -207,12 +207,12 @@ namespace XferSuite
 
         #endregion
         private System.Windows.Forms.Button btnInlinepositions;
-        private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnMapFlip;
         private System.Windows.Forms.Button btnParseSEYR;
         private System.Windows.Forms.Button btnXYZplotter;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.Button btnCameraViewer;
+        public System.Windows.Forms.Button btnSettings;
     }
 }
 

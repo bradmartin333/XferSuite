@@ -11,7 +11,7 @@ using XferHelper;
 using XferSuite.Apps.XYZplotter;
 using static XferSuite.Apps.XYZplotter.Configuration;
 
-namespace XferSuite
+namespace XferSuite.Apps.XYZplotter
 {
     public partial class Plotter : Form
     {

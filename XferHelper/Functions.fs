@@ -14,9 +14,9 @@ module Stats =
 
     let threeSig (data: float []) = Math.Round(stdDev (data) * 3.0, 3)
 
+    /// <returns>Probability density at x = i for the distribution data</returns>
     let normVal (data: float []) (i: float) : float =
         let norm = Normal.WithMeanStdDev(mean (data), stdDev (data))
-
         norm.Density(i)
 
     let summary (data: float []) = Statistics.FiveNumberSummary(data)
@@ -159,18 +159,19 @@ module Metro =
         data
         |> Array.partition (fun x -> x.Yld = " PASS " && x.Aln = " FAIL ")
 
+    /// <returns>Array of print RR RC R C strings</returns>
     let prints (data: Position []) =
         data
         |> Array.map (fun x -> x.RR, x.RC, x.R, x.C)
         |> Array.map (fun x -> string x)
-
+    
+    /// <returns>Position array from specified RR RC R C string</returns>
     let getPrint (index: string) (data: Position []) =
         let info = index.[1 .. index.Length - 2].Split(',')
         let RR = int info.[0]
         let RC = int info.[1]
         let R = int info.[2]
         let C = int info.[3]
-
         data
         |> Array.filter (fun x -> x.RR = RR && x.RC = RC && x.R = R && x.C = C)
 
@@ -194,6 +195,7 @@ module Metro =
         |> Statistics.StandardDeviation
         |> fun x -> x * 3.0
 
+    /// <summary>Update PASS or FAIL state of position array based on new threshold</summary>
     let rescore (data: Position []) (threshold: float) =
         for x in data do
             if (Math.Abs(x.XE) > threshold / 1e3
@@ -206,6 +208,7 @@ module Metro =
         data
         |> Array.map (fun x -> (x.XE ** 2. + x.YE ** 2.) ** 0.5)
 
+    ///<returns>Contrived entropy value from position array</returns>
     let nextMagnitudeEntropy (data: Position []) =
         data
         |> normErrorRange
@@ -366,6 +369,11 @@ module Zed =
     let linearFit (xData: double []) (yData: double []) =
         MathNet.Numerics.Fit.Line(xData, yData)
 
+    // Everything below here pertains to creating a best fit plane
+    // from a point cloud
+    // This work is largely based on Emil Ernerfeldt's blog post here:
+    // http://www.ilikebigbits.com/2017_09_25_plane_from_points_2.html
+
     type Vec2 = { X: float; Y: float }
 
     let toVec2 (x: float) (y: float) = { X = x; Y = y }
@@ -480,82 +488,58 @@ module Zed =
 
     let weightedDir (c: Covariance) =
         let mutable out = zeroVec3
-
         let detX = detX c
-
         let axis_dir: Vec3 =
             { X = detX
               Y = c.XZ * c.YZ - c.XY * c.ZZ
               Z = c.XY * c.YZ - c.XZ * c.YY }
-
         let mutable weight = detX ** 2.
-
         if dotVec3 out axis_dir < 0.0 then
             weight <- -weight
-
         out <- addVec3 out (multiplyVec3 axis_dir (nVec3 weight))
-
         let detY = detY c
-
         let axis_dir: Vec3 =
             { X = c.XZ * c.YZ - c.XY * c.ZZ
               Y = detY
               Z = c.XY * c.XZ - c.YZ * c.XX }
-
         let mutable weight = detY ** 2.
-
         if dotVec3 out axis_dir < 0.0 then
             weight <- -weight
-
         out <- addVec3 out (multiplyVec3 axis_dir (nVec3 weight))
-
         let detZ = detZ c
-
         let axis_dir: Vec3 =
             { X = c.XY * c.YZ - c.XZ * c.YY
               Y = c.XY * c.XZ - c.YZ * c.XX
               Z = detZ }
-
         let mutable weight = detX ** 2.
-
         if dotVec3 out axis_dir < 0. then
             weight <- -weight
-
         out <- addVec3 out (multiplyVec3 axis_dir (nVec3 weight))
-
         out
 
     let getPlaneVec (vecs: Vec3[]) =
         let n = float vecs.Length
-
         if n < 3. then
             let p: Plane =
                 { Centroid = zeroVec3
                   Normal = normalizeVec3 (weightedDir defaultCovariance) }
-
             p
         else
             let mutable sum = zeroVec3
-
             for v in vecs do
                 sum <- addVec3 sum v
-
             let centroid = multiplyVec3 sum (nVec3 (1. / n))
-
             let mutable covar = defaultCovariance
-
             for v in vecs do
                 let r = subtractVec3 v centroid
                 covar <- addCovariance covar r
-
             covar <- averageCovariance covar n
-
             let p: Plane =
                 { Centroid = centroid
                   Normal = normalizeVec3 (weightedDir covar) }
-
             p
 
+    ///<returns>Best fit plane for 3D point cloud position array</returns>
     let getPlane (data: Position []) =
         getPlaneVec (data |> Array.map (fun x -> posToVec3 x))
 
@@ -630,11 +614,11 @@ module Report =
 
     let toBucket (num: int) = enum<Bucket> num
 
-    type Criteria =
+    type Feature =
         { Name: string
           mutable Bucket: Bucket
           mutable Requirements: State []
-          mutable Children: List<Criteria>
+          mutable Children: List<Feature>
           mutable FamilyName: string
           mutable IsChild: bool
           mutable IsParent: bool }
@@ -707,12 +691,12 @@ module Report =
         |> Seq.toArray
         |> Array.map toCriteria
 
-    let getData (data: Entry [], name: string) =
+    let getData (data: Entry []) (name: string) =
         data
         |> Array.filter (fun x -> x.Name = name)
         |> Array.map (fun x -> x.Score)
 
-    let rescoreFeature (data: Entry [], name: string, min: float, max: float) =
+    let rescoreFeature (data: Entry []) (name: string) (min: float) (max: float) =
         for d in data do
             if d.Name = name then
                 if d.Score >= min && d.Score <= max then
@@ -720,7 +704,7 @@ module Report =
                 else
                     d.State <- State.Fail
 
-    let getImage (data: Entry [], num: int) =
+    let getImage (data: Entry []) (num: int) =
         data
         |> Array.filter (fun x -> x.ImageNumber = num)
 
@@ -732,16 +716,15 @@ module Report =
         |> Seq.distinct
         |> Seq.toArray
 
-    let getRegion (data: Entry [], region: string) =
+    let getRegion (data: Entry []) (region: string) =
         data
         |> Array.filter (fun x -> (x.RR, x.RC, x.R, x.C).ToString() = region)
 
-    let getCell (data: Entry [], row: int, col: int) =
+    let getCell (data: Entry []) (row: int) (col: int) =
         data
         |> Array.filter (fun x -> x.XCopy = row && x.YCopy = col)
 
-    let removeBuffers (data: Entry [], names: string []) =
+    let removeBuffers (data: Entry []) (names: string []) =
         let nameList = names |> Array.toList
-
         data
         |> Array.filter (fun x -> not (List.contains x.Name nameList))

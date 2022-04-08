@@ -1,4 +1,4 @@
-﻿namespace XferSuite
+﻿namespace XferSuite.Apps.XYZplotter
 {
     partial class Plotter
     {
@@ -67,6 +67,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel12 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabelRangeY = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButtonViewStandard = new System.Windows.Forms.ToolStripButton();
             this.toolStripZ = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.comboZ = new System.Windows.Forms.ToolStripComboBox();
@@ -78,7 +79,6 @@
             this.buttonExportSelected = new System.Windows.Forms.Button();
             this.checkBoxEraseData = new System.Windows.Forms.CheckBox();
             this.btnRevert = new System.Windows.Forms.Button();
-            this.toolStripButtonViewStandard = new System.Windows.Forms.ToolStripButton();
             this.tlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv)).BeginInit();
             this.toolStripX.SuspendLayout();
@@ -234,6 +234,7 @@
             this.olv.DataSource = null;
             this.olv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olv.FullRowSelect = true;
+            this.olv.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.olv.HideSelection = false;
             this.olv.Location = new System.Drawing.Point(3, 32);
             this.olv.Name = "olv";
@@ -478,6 +479,17 @@
             this.toolStripLabelRangeY.Text = "N/A";
             this.toolStripLabelRangeY.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // toolStripButtonViewStandard
+            // 
+            this.toolStripButtonViewStandard.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripButtonViewStandard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonViewStandard.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonViewStandard.Image")));
+            this.toolStripButtonViewStandard.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonViewStandard.Name = "toolStripButtonViewStandard";
+            this.toolStripButtonViewStandard.Size = new System.Drawing.Size(86, 22);
+            this.toolStripButtonViewStandard.Text = "View Standard";
+            this.toolStripButtonViewStandard.Click += new System.EventHandler(this.toolStripButtonViewStandard_Click);
+            // 
             // toolStripZ
             // 
             this.tlp.SetColumnSpan(this.toolStripZ, 2);
@@ -602,17 +614,6 @@
             this.btnRevert.TabIndex = 18;
             this.btnRevert.UseVisualStyleBackColor = true;
             this.btnRevert.Click += new System.EventHandler(this.BtnRevert_Click);
-            // 
-            // toolStripButtonViewStandard
-            // 
-            this.toolStripButtonViewStandard.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButtonViewStandard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonViewStandard.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonViewStandard.Image")));
-            this.toolStripButtonViewStandard.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonViewStandard.Name = "toolStripButtonViewStandard";
-            this.toolStripButtonViewStandard.Size = new System.Drawing.Size(86, 22);
-            this.toolStripButtonViewStandard.Text = "View Standard";
-            this.toolStripButtonViewStandard.Click += new System.EventHandler(this.toolStripButtonViewStandard_Click);
             // 
             // Plotter
             // 

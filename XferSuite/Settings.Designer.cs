@@ -34,10 +34,10 @@ namespace XferSuite
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.PropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnAdvancedTools = new System.Windows.Forms.Button();
             this.BtnViewDocs = new System.Windows.Forms.Button();
             this.BtnLegal = new System.Windows.Forms.Button();
             this.BtnCheckForUpdates = new System.Windows.Forms.Button();
-            this.BtnAdvancedTools = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,9 +48,10 @@ namespace XferSuite
             this.PropertyGrid.Location = new System.Drawing.Point(2, 31);
             this.PropertyGrid.Margin = new System.Windows.Forms.Padding(2);
             this.PropertyGrid.Name = "PropertyGrid";
-            this.PropertyGrid.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
+            this.PropertyGrid.PropertySort = System.Windows.Forms.PropertySort.NoSort;
             this.PropertyGrid.Size = new System.Drawing.Size(358, 365);
             this.PropertyGrid.TabIndex = 0;
+            this.PropertyGrid.ToolbarVisible = false;
             // 
             // tableLayoutPanel
             // 
@@ -73,6 +74,19 @@ namespace XferSuite
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(362, 456);
             this.tableLayoutPanel.TabIndex = 1;
+            // 
+            // BtnAdvancedTools
+            // 
+            this.BtnAdvancedTools.BackColor = System.Drawing.Color.White;
+            this.BtnAdvancedTools.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnAdvancedTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnAdvancedTools.Location = new System.Drawing.Point(184, 401);
+            this.BtnAdvancedTools.Name = "BtnAdvancedTools";
+            this.BtnAdvancedTools.Size = new System.Drawing.Size(175, 23);
+            this.BtnAdvancedTools.TabIndex = 4;
+            this.BtnAdvancedTools.Text = "Advanced Tools";
+            this.BtnAdvancedTools.UseVisualStyleBackColor = false;
+            this.BtnAdvancedTools.Click += new System.EventHandler(this.BtnAdvancedTools_Click);
             // 
             // BtnViewDocs
             // 
@@ -114,19 +128,6 @@ namespace XferSuite
             this.BtnCheckForUpdates.Text = "Check For Updates";
             this.BtnCheckForUpdates.UseVisualStyleBackColor = false;
             this.BtnCheckForUpdates.Click += new System.EventHandler(this.btnCheckForUpdates_Click);
-            // 
-            // BtnAdvancedTools
-            // 
-            this.BtnAdvancedTools.BackColor = System.Drawing.Color.White;
-            this.BtnAdvancedTools.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnAdvancedTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnAdvancedTools.Location = new System.Drawing.Point(184, 401);
-            this.BtnAdvancedTools.Name = "BtnAdvancedTools";
-            this.BtnAdvancedTools.Size = new System.Drawing.Size(175, 23);
-            this.BtnAdvancedTools.TabIndex = 4;
-            this.BtnAdvancedTools.Text = "Advanced Tools";
-            this.BtnAdvancedTools.UseVisualStyleBackColor = false;
-            this.BtnAdvancedTools.Click += new System.EventHandler(this.BtnAdvancedTools_Click);
             // 
             // Settings
             // 

@@ -8,10 +8,9 @@ namespace XferSuite
 {
     public partial class MainMenu : Form
     {
-        public static int MajorVersion = 3;
-        public static int MinorVerson = 10;
-
-        private static readonly Settings _Settings = new Settings();
+        public static int MajorVersion = 0; //3
+        public static int MinorVerson = 11;
+        public static readonly Settings Settings = new Settings();
 
         public MainMenu()
         {
@@ -29,7 +28,8 @@ namespace XferSuite
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            foreach (CameraViewer cameraViewer in Application.OpenForms.OfType<CameraViewer>()) cameraViewer.EndStream();
+            foreach (Apps.Camera.CameraViewer cameraViewer in Application.OpenForms.OfType<Apps.Camera.CameraViewer>()) 
+                cameraViewer.EndStream();
         }
 
         private void Btn_Click(object sender, EventArgs e)
@@ -64,27 +64,27 @@ namespace XferSuite
         private void CreateForm(int idx, string path)
         {
             Form form = new Form();
-            using (new HourGlass())
+            using (new Utility.HourGlass())
             {
                 switch (idx)
                 {
                     case 0:
                         if (!VerifyPath(path, idx)) return;
-                        form = new MetroGraphs(path) { Text = new FileInfo(path).Name };
+                        form = new Apps.InlinePositions.MetroGraphs(path) { Text = new FileInfo(path).Name };
                         break;
                     case 1:
                         if (!VerifyPath(path, idx)) return;
-                        form = new Plotter(path);
+                        form = new Apps.XYZplotter.Plotter(path);
                         break;
                     case 2:
                         if (!VerifyPath(path, idx)) return;
-                        form = new ParseSEYR(path);
+                        form = new Apps.SEYR.ParseSEYR(path);
                         break;
                     case 3:
-                        form = new CameraViewer();
+                        form = new Apps.Camera.CameraViewer();
                         break;
                     case 4:
-                        form = new MapFlip();
+                        form = new Apps.MapFlip();
                         break;
                     default:
                         return;
@@ -92,22 +92,22 @@ namespace XferSuite
             }
             form.Activated += Form_Activated;
             form.Show();
-            _Settings.PropertyGrid.SelectedObject = form;
+            Settings.PropertyGrid.SelectedObject = form;
         }
 
         public static void Form_Activated(object sender, EventArgs e)
         {
-            if (!_Settings.IsDisposed) // Prevents error on app close
-                _Settings.PropertyGrid.SelectedObject = sender;
+            if (!Settings.IsDisposed) // Prevents error on app close
+                Settings.PropertyGrid.SelectedObject = sender;
         }
 
         private void BtnSettings_Click(object sender, EventArgs e)
         {
-            _Settings.Show();
-            _Settings.BringToFront();
+            Settings.Show();
+            Settings.BringToFront();
         }
 
-        private string OpenFile(string title, string filter)
+        public static string OpenFile(string title, string filter)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -116,6 +116,19 @@ namespace XferSuite
                 openFileDialog.Filter = filter;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                     return openFileDialog.FileName;
+            }
+            return null;
+        }
+
+        public static string SaveFile(string title, string filter)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.Title = title;
+                saveFileDialog.Filter = filter;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    return saveFileDialog.FileName;
             }
             return null;
         }
@@ -154,7 +167,7 @@ namespace XferSuite
 
         private void MainMenu_Load(object sender, EventArgs e)
         {
-            _Settings.CheckForUpdates();
+            Settings.CheckForUpdates();
         }
     }
 }

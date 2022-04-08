@@ -64,7 +64,7 @@ namespace XferSuite
                     BtnCheckForUpdates.Text = $"Click here to update to {mostRecentVersion}";
                     BtnCheckForUpdates.BackColor = Color.PaleTurquoise;
                     MainMenu mainMenu = Application.OpenForms.OfType<MainMenu>().First();
-                    if (!UpdateFound) mainMenu.Text += $"   {mostRecentVersion} Available";
+                    if (!UpdateFound) mainMenu.btnSettings.BackgroundImage = Properties.Resources.UpdateAvailable;
                     UpdateFound = true;
                 }
                 else
@@ -116,10 +116,10 @@ namespace XferSuite
 
         private void BtnAdvancedTools_Click(object sender, EventArgs e)
         {
-            if (Application.OpenForms.OfType<AdvancedTools>().Any())
-                Application.OpenForms.OfType<AdvancedTools>().First().BringToFront();
+            if (Application.OpenForms.OfType<AdvancedTools.SelectTool > ().Any())
+                Application.OpenForms.OfType<AdvancedTools.SelectTool>().First().BringToFront();
             else
-                _ = new AdvancedTools();
+                _ = new AdvancedTools.SelectTool();
             Close();
         }
     }
