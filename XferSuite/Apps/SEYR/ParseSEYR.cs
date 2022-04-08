@@ -118,37 +118,37 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _RegionBorderTransparency = 100;
+        private int _RegionBorderOpacity = 100;
         [Category("User Parameters")]
-        public int RegionBorderTransparency
+        public int RegionBorderOpacity
         {
-            get => _RegionBorderTransparency;
+            get => _RegionBorderOpacity;
             set
             {
                 if (value >= 0 && value <= 255)
-                    _RegionBorderTransparency = value;
+                    _RegionBorderOpacity = value;
                 else if (value < 0)
-                    _RegionBorderTransparency = 0;
+                    _RegionBorderOpacity = 0;
                 else if (value > 255)
-                    _RegionBorderTransparency = 255;
-                Results.UpdateData("Region border transparency changed", this);
+                    _RegionBorderOpacity = 255;
+                Results.UpdateData("Region border opacity changed", this);
             }
         }
 
-        private int _RegionLabelTransparency = 100;
+        private int _RegionLabelOpacity = 100;
         [Category("User Parameters")]
-        public int RegionLabelTransparency
+        public int RegionLabelOpacity
         {
-            get => _RegionLabelTransparency;
+            get => _RegionLabelOpacity;
             set
             {
                 if (value >= 0 && value <= 255)
-                    _RegionLabelTransparency = value;
+                    _RegionLabelOpacity = value;
                 else if (value < 0)
-                    _RegionLabelTransparency = 0;
+                    _RegionLabelOpacity = 0;
                 else if (value > 255)
-                    _RegionLabelTransparency = 255;
-                Results.UpdateData("Region label transparency changed", this);
+                    _RegionLabelOpacity = 255;
+                Results.UpdateData("Region label opacity changed", this);
             }
         }
 

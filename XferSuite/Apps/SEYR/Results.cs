@@ -34,8 +34,8 @@ namespace XferSuite.Apps.SEYR
         private int PercentageTextSize;
         private int DataReduction;
         private double RegionBorderPadding;
-        private int RegionBorderTransparency;
-        private int RegionLabelTransparency;
+        private int RegionBorderOpcaity;
+        private int RegionLabelOpacity;
 
         private string[] Regions;
         private List<Plottable> Plottables;
@@ -84,8 +84,8 @@ namespace XferSuite.Apps.SEYR
             PercentageTextSize = parseSEYR.PercentageTextSize;
             DataReduction = parseSEYR.DataReduction;
             RegionBorderPadding = parseSEYR.RegionBorderPadding;
-            RegionBorderTransparency = parseSEYR.RegionBorderTransparency;
-            RegionLabelTransparency = parseSEYR.RegionLabelTransparency;
+            RegionBorderOpcaity = parseSEYR.RegionBorderOpacity;
+            RegionLabelOpacity = parseSEYR.RegionLabelOpacity;
             Regions = parseSEYR.Regions;
             Plottables = parseSEYR.Plottables;
             PlotOrder = parseSEYR.PlotOrder;
@@ -175,7 +175,7 @@ namespace XferSuite.Apps.SEYR
                     double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
                     double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
 
-                    if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(RegionBorderTransparency, Color.Black), 3);
+                    if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(RegionBorderOpcaity, Color.Black), 3);
 
                     if (ShowRegionStrings)
                     {
@@ -185,7 +185,7 @@ namespace XferSuite.Apps.SEYR
                             FlipY ? maxY : minY,
                             RegionTextSize,
                             color: Color.Black);
-                        txt.BackgroundColor = Color.FromArgb(RegionLabelTransparency, Color.White);
+                        txt.BackgroundColor = Color.FromArgb(RegionLabelOpacity, Color.White);
                         txt.BackgroundFill = true;
                         txt.FontBold = true;
                         txt.Alignment = Alignment.UpperCenter;
