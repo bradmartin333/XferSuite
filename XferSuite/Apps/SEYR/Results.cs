@@ -39,6 +39,7 @@ namespace XferSuite.Apps.SEYR
 
         private string[] Regions;
         private List<Plottable> Plottables;
+        private readonly List<Plottable> UsedPlottables = new List<Plottable>();
         private List<PlotOrderElement> PlotOrder;
         private List<CustomFeature> CustomFeatures;
 
@@ -112,12 +113,14 @@ namespace XferSuite.Apps.SEYR
 
         private void AddScatterPlots()
         {
+            UsedPlottables.Clear();
             List<Plottable> nullPlottables = new List<Plottable>();
             foreach (PlotOrderElement plotOrderElement in PlotOrder)
             {
                 int size = -1;
                 Plottable[] plottables = new Plottable[] { };  
                 SetPlottables(ref size, ref plottables, plotOrderElement, nullPlottables);
+                UsedPlottables.AddRange(plottables);
                 if (size == -1) continue;
                 if (plottables.Count() > 0)
                     Scatters.Add(formsPlot.Plot.AddScatter(
@@ -153,19 +156,25 @@ namespace XferSuite.Apps.SEYR
                     if (customFeature.Type == XferHelper.Report.State.Null)
                         nullPlottables.AddRange(ps);
                     else
+                    {
                         ps = ps.Where(x => !nullPlottables.Select(y => (y.X, y.Y)).Contains((x.X, x.Y))).ToArray();
-                    size = customFeature.Size;
+                        size = customFeature.Size;
+                    }
                     break;
             }
         }
 
         private void AddOverlays()
         {
+            RTB.Text = "(RR, RC, R, C)\tYield\n"; // Header
             if (ShowRegionBorders || ShowRegionStrings || ShowPercentages)
             {
                 foreach (string region in Regions)
                 {
-                    Plottable[] regionPlottables = Plottables.Where(p => p.Region == region).ToArray();
+                    Plottable[] regionPlottables = UsedPlottables.Where(p => p.Region == region).ToArray();
+                    double passNum = regionPlottables.Where(x => x.Pass).Count();
+                    double failNum = regionPlottables.Where(x => !x.Pass).Count();
+                    RTB.Text += $"{region}\t{passNum / (passNum + failNum):P}\n";
                     double[] xs = regionPlottables.Select(p => p.X).ToArray();
                     double[] ys = regionPlottables.Select(p => p.Y).ToArray();
                     double minX = (xs.Min() * (FlipX ? -1 : 1)) + RegionBorderPadding;

@@ -377,21 +377,9 @@ namespace XferSuite.Apps.SEYR
 
         #region Parse Methods
 
-        private void RunParseWorker()
-        {
-            if (ParseWorker.IsBusy) return;
-            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
-                olv.Enabled = false;
-            flowLayoutPanelCriteria.Enabled = false;
-            toolStripProgressBar.Value = 0;
-            Results.RTB.Clear();
-            ParseWorker.RunWorkerAsync();
-        }
-
         private void ParseWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             // Reset
-            ParseWorker.ReportProgress(1, "(RR, RC, R, C)\tYield\n"); // Header
             Plottables = new List<Plottable>();
             double distX = 0.0;
             double distY = 0.0;
@@ -457,7 +445,6 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            Results.RTB.Text += e.UserState;
             toolStripProgressBar.Value = e.ProgressPercentage;
         }
 
@@ -467,8 +454,6 @@ namespace XferSuite.Apps.SEYR
         {
             for (int l = 0; l < Regions.Length; l++)
             {
-                double passNum = 0;
-                double failNum = 0;
                 Report.Entry[] regionData = Report.getRegion(filteredData, Regions[l]);
 
                 foreach (Report.Entry entry in regionData)
@@ -487,14 +472,9 @@ namespace XferSuite.Apps.SEYR
                         CustomTag = string.Empty,
                         Color = pass ? Color.LawnGreen : Color.Firebrick,
                     });
-
-                    if (pass)
-                        passNum++;
-                    else
-                        failNum++;
                 }
 
-                ParseWorker.ReportProgress((int)((l + 1) / (double)Regions.Length * 100), $"{Regions[l]}\t{passNum / (passNum + failNum):P}\n");
+                ParseWorker.ReportProgress((int)((l + 1) / (double)Regions.Length * 100));
             };
         }
 
@@ -506,8 +486,6 @@ namespace XferSuite.Apps.SEYR
 
             for (int l = 0; l < Regions.Length; l++)
             {
-                double passNum = 0;
-                double failNum = 0;
                 Report.Entry[] regionData = Report.getRegion(filteredData, Regions[l]);
                 int numRegionPics = Report.getNumImages(regionData);
 
@@ -544,15 +522,9 @@ namespace XferSuite.Apps.SEYR
                                 };
 
                                 Plottables.Add(customPlottable);
-
-                                if (custom.Type == Report.State.Pass)
-                                    passNum++;
-                                else if (custom.Type == Report.State.Fail)
-                                    failNum++;
                             }
 
                             if (!onlyCustom)
-                            {
                                 Plottables.Add(new Plottable
                                 {
                                     Region = Regions[l],
@@ -563,17 +535,11 @@ namespace XferSuite.Apps.SEYR
                                     CustomTag = string.Empty,
                                     Color = pass ? Color.LawnGreen : Color.Firebrick,
                                 });
-
-                                if (pass)
-                                    passNum++;
-                                else
-                                    failNum++;
-                            }
                         }
                     }
                 }
 
-                ParseWorker.ReportProgress((int)((l + 1) / (double)Regions.Length * 100), $"{Regions[l]}\t{passNum / (passNum + failNum):P}\n");
+                ParseWorker.ReportProgress((int)((l + 1) / (double)Regions.Length * 100));
             };
         }
 
@@ -589,7 +555,12 @@ namespace XferSuite.Apps.SEYR
 
         private void ToolStripButtonParse_Click(object sender, EventArgs e)
         {
-            RunParseWorker();  
+            if (ParseWorker.IsBusy) return;
+            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
+                olv.Enabled = false;
+            flowLayoutPanelCriteria.Enabled = false;
+            toolStripProgressBar.Value = 0;
+            ParseWorker.RunWorkerAsync();
         }
 
         private void ToolStripButtonSmartSort_Click(object sender, EventArgs e)
