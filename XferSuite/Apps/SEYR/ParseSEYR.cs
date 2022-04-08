@@ -285,6 +285,8 @@ namespace XferSuite.Apps.SEYR
                     CustomFeatures[olvCustom.SelectedIndex] = cc.CustomFeature;
                     olvCustom.SelectedItem.BackColor = cc.CustomFeature.Color;
                     olvCustom.SelectedItem.ForeColor = cc.CustomFeature.ContrastColor;
+                    olvCustom.SelectedItem.Decoration = 
+                        cc.CustomFeature.Type == Report.State.Null ? new ImageDecoration(Properties.Resources.invisible_small, 255) : null;
                     olvCustom.DeselectAll();
                     olvCustom.Refresh();
                     Results.UpdateData("Custom feature updated", this);
@@ -307,6 +309,7 @@ namespace XferSuite.Apps.SEYR
             CustomFeature customFeature = (CustomFeature)e.Model;
             e.Item.BackColor = customFeature.Color;
             e.Item.ForeColor = customFeature.ContrastColor;
+            e.Item.Decoration = customFeature.Type == Report.State.Null ? new ImageDecoration(Properties.Resources.invisible_small, 255) : null;
         }
 
         #endregion

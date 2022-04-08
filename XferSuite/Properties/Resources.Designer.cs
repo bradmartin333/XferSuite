@@ -121,6 +121,16 @@ namespace XferSuite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap invisible_small {
+            get {
+                object obj = ResourceManager.GetObject("invisible_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Icons from iconmonstr.com
         ///License: https://iconmonstr.com/license/
         ///
