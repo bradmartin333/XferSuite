@@ -166,10 +166,10 @@ namespace XferSuite.Apps.SEYR
                     Plottable[] regionPlottables = Plottables.Where(p => p.Region == region).ToArray();
                     double[] xs = regionPlottables.Select(p => p.X).ToArray();
                     double[] ys = regionPlottables.Select(p => p.Y).ToArray();
-                    double minX = xs.Min() * (FlipX ? -1 : 1) + RegionBorderPadding;
-                    double minY = ys.Min() * (FlipY ? -1 : 1) + RegionBorderPadding;
-                    double maxX = xs.Max() * (FlipX ? -1 : 1) - RegionBorderPadding;
-                    double maxY = ys.Max() * (FlipY ? -1 : 1) - RegionBorderPadding;
+                    double minX = (xs.Min() * (FlipX ? -1 : 1)) + RegionBorderPadding;
+                    double minY = (ys.Min() * (FlipY ? -1 : 1)) + RegionBorderPadding;
+                    double maxX = (xs.Max() * (FlipX ? -1 : 1)) - RegionBorderPadding;
+                    double maxY = (ys.Max() * (FlipY ? -1 : 1)) - RegionBorderPadding;
                     double[] regionXs = new double[] { minX, minX, maxX, maxX, minX };
                     double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
 
