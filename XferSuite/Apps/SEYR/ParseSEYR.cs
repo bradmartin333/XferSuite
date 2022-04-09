@@ -452,6 +452,12 @@ namespace XferSuite.Apps.SEYR
             e.Item.Decoration = customFeature.Type == Report.State.Null ? new ImageDecoration(Properties.Resources.invisible_small, 255) : null;
         }
 
+        private void ToggleOLVs(bool toggle)
+        {
+            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
+                olv.Enabled = toggle;
+        }
+
         #endregion
 
         #region Parse Methods
@@ -509,19 +515,25 @@ namespace XferSuite.Apps.SEYR
         private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Results.UpdateData("Newly parsed data", this);
-            Results.Show();
-            Results.BringToFront();
             toolStripLabelPercent.Text = "";
-            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
-                olv.Enabled = true;
+            ToggleOLVs(true);
             flowLayoutPanelCriteria.Enabled = true;
         }
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (e.ProgressPercentage == -2) toolStripLabelPercent.Text = "Initializing Data";
-            else if (e.ProgressPercentage == -1) toolStripLabelPercent.Text = "Plotting Data";
-            else toolStripLabelPercent.Text = $"Parsing Region {e.ProgressPercentage + 1}/{Regions.Length}";
+            switch (e.ProgressPercentage)
+            {
+                case -2:
+                    toolStripLabelPercent.Text = "Initializing Data";
+                    break;
+                case -1:
+                    toolStripLabelPercent.Text = "Plotting Data";
+                    break;
+                default:
+                    toolStripLabelPercent.Text = $"Parsing Region {e.ProgressPercentage + 1}/{Regions.Length}";
+                    break;
+            }
         }
 
         private void Parse()
@@ -529,20 +541,14 @@ namespace XferSuite.Apps.SEYR
             List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
             int regionIdx = 0;
 
-            var regionGroups = FilteredData.GroupBy(x => (x.RR, x.RC, x.R, x.C).ToString());
-            foreach (IGrouping<string, Report.Entry> regionGroup in regionGroups)
+            foreach (IGrouping<string, Report.Entry> regionGroup in FilteredData.GroupBy(x => (x.RR, x.RC, x.R, x.C).ToString()))
             {
                 ParseWorker.ReportProgress(regionIdx);
-
                 Report.Entry[] region = regionGroup.ToArray();
-
-                var imageGroups = region.GroupBy(x => x.ImageNumber);
-                foreach (IGrouping<int, Report.Entry> imageGroup in imageGroups)
+                foreach (IGrouping<int, Report.Entry> imageGroup in region.GroupBy(x => x.ImageNumber))
                 {
                     Report.Entry[] image = imageGroup.ToArray();
-
-                    var cellGroups = image.GroupBy(x => (x.XCopy, x.YCopy).ToString());
-                    foreach (IGrouping<string, Report.Entry> cellGroup in cellGroups)
+                    foreach (IGrouping<string, Report.Entry> cellGroup in image.GroupBy(x => (x.XCopy, x.YCopy).ToString()))
                     {
                         Report.Entry[] cell = cellGroup.ToArray();
                         if (cell == null || cell.Length == 0) continue;
@@ -557,11 +563,7 @@ namespace XferSuite.Apps.SEYR
                         {
                             foreach (CustomFeature custom in CustomFeatures.Where(x => x.Checked))
                             {
-                                bool notMatched = false;
-                                foreach ((string, Report.State) filter in custom.Filters)
-                                    if (cell.Where(x => x.Name == filter.Item1).First().State != filter.Item2) notMatched = true;
-                                if (notMatched) continue;
-
+                                if (!CheckCustomCriteria(custom, cell)) continue;
                                 plottable = new Plottable
                                 {
                                     Region = Regions[regionIdx],
@@ -598,6 +600,37 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private bool CheckCustomCriteria(CustomFeature custom, Report.Entry[] cell)
+        {
+            int product = 1;
+            switch (custom.Logic)
+            {
+                case CustomFeature.LogicType.AND:
+                    foreach ((string, Report.State) filter in custom.Filters)
+                        product *= Convert.ToInt32(cell.Where(x => x.Name == filter.Item1).First().State == filter.Item2);
+                    break;
+                case CustomFeature.LogicType.OR:
+                    foreach ((string, Report.State) filter in custom.Filters)
+                        product += Convert.ToInt32(cell.Where(x => x.Name == filter.Item1).First().State == filter.Item2);
+                    break;
+                case CustomFeature.LogicType.XOR:
+                    foreach ((string, Report.State) filter in custom.Filters)
+                        product -= Convert.ToInt32(cell.Where(x => x.Name == filter.Item1).First().State == filter.Item2);
+                    break;
+            }
+            switch (custom.Logic)
+            {
+                case CustomFeature.LogicType.AND:
+                    return product == 1;
+                case CustomFeature.LogicType.OR:
+                    return product > 1;
+                case CustomFeature.LogicType.XOR:
+                    return product == 0;
+                default:
+                    return false;
+            }
+        }
+
 
         #endregion
 
@@ -612,8 +645,7 @@ namespace XferSuite.Apps.SEYR
         private void ToolStripButtonParse_Click(object sender, EventArgs e)
         {
             if (ParseWorker.IsBusy) return;
-            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
-                olv.Enabled = false;
+            ToggleOLVs(false);
             flowLayoutPanelCriteria.Enabled = false;
             toolStripLabelPercent.Text = "";
             ParseWorker.RunWorkerAsync();
@@ -671,12 +703,19 @@ namespace XferSuite.Apps.SEYR
             if (pathBuffers == null)
                 return;
             else
+            {
+                string mismatches = string.Empty;
                 foreach (string path in pathBuffers)
                 {
                     CustomFeature feature = new CustomFeature(path);
-                    if (!CustomFeatures.Select(x => x.Name).Contains(feature.Name))
+                    if (!CustomFeatures.Select(x => x.Name).Contains(feature.Name) && feature.ValidateFilters(Features.Select(x => x.Name).ToArray()))
                         AddFeatureToProject(feature);
+                    else
+                        mismatches += $"{new FileInfo(path).Name}\n";
                 }
+                if (!string.IsNullOrEmpty(mismatches))
+                    MessageBox.Show($"The following files did not match the currently loaded SEYR report:\n\n{mismatches}", "Load Custom SEYR Features");
+            }  
         }
 
         private void AddFeatureToProject(CustomFeature feature)

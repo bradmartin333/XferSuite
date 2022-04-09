@@ -117,6 +117,8 @@ namespace XferSuite.Apps.SEYR
                 AddScatterPlots();
                 AddOverlays();
                 formsPlot.Refresh(lowQuality: UseLowQuality);
+                Show();
+                BringToFront();
                 LabelStatus.Text = reason;
             }
         }

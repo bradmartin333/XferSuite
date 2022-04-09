@@ -34,6 +34,7 @@ namespace XferSuite.Apps.SEYR
             txtName.Text = CustomFeature.Name;
             panelColor.BackColor = CustomFeature.Color;
             numSize.Value = CustomFeature.Size;
+            SetLogic();
             comboBoxType.SelectedIndex = (int)CustomFeature.Type;
             numOffsetX.Value = (decimal)CustomFeature.Offset.X;
             numOffsetY.Value = (decimal)CustomFeature.Offset.Y;
@@ -134,6 +135,35 @@ namespace XferSuite.Apps.SEYR
             return filters;
         }
 
+        private void SetLogic()
+        {
+            switch (CustomFeature.Logic)
+            {
+                case CustomFeature.LogicType.AND:
+                    radioAND.Checked = true;
+                    break;
+                case CustomFeature.LogicType.OR:
+                    radioOR.Checked = true;
+                    break;
+                case CustomFeature.LogicType.XOR:
+                    radioXOR.Checked = true;
+                    break;
+                default:
+                    radioAND.Checked = true;
+                    break;
+            }
+        }
+
+        public CustomFeature.LogicType GetLogic()
+        {
+            if (radioAND.Checked)
+                return CustomFeature.LogicType.AND;
+            else if (radioOR.Checked)
+                return CustomFeature.LogicType.OR;
+            else
+                return CustomFeature.LogicType.XOR;
+        }
+
         private string GetDataGridAsString()
         {
             List<(string, Report.State)> filters = ParseDataGrid();
@@ -145,7 +175,7 @@ namespace XferSuite.Apps.SEYR
 
         private string GetParameters()
         {
-            return $"{txtName.Text}\t{panelColor.BackColor.ToArgb()}\t{numSize.Value}\t{comboBoxType.Text}\t{numOffsetX.Value}\t{numOffsetY.Value}\n";
+            return $"{txtName.Text}\t{panelColor.BackColor.ToArgb()}\t{numSize.Value}\t{GetLogic()}\t{comboBoxType.Text}\t{numOffsetX.Value}\t{numOffsetY.Value}\n";
         }
 
         private void BtnSaveAs_Click(object sender, EventArgs e)
