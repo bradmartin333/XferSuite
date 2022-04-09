@@ -678,14 +678,31 @@ namespace XferSuite.Apps.SEYR
             {
                 var result = cc.ShowDialog();
                 if (result == DialogResult.OK)
-                {
-                    olvCustom.AddObject(cc.CustomFeature);
-                    CustomFeatures.Add(cc.CustomFeature);
-                    PlotOrder.Add(new PlotOrderElement() { Name = cc.CustomFeature.Name });
-                }
+                    AddFeatureToProject(cc.CustomFeature);
                 else
                     return;
             }
+        }
+
+        private void toolStripButtonImportCustom_Click(object sender, EventArgs e)
+        {
+            string[] pathBuffers = MainMenu.OpenFiles("Open Custom SEYR Features", "Text File (*.txt) | *.txt");
+            if (pathBuffers == null)
+                return;
+            else
+                foreach (string path in pathBuffers)
+                {
+                    CustomFeature feature = new CustomFeature(path);
+                    if (!CustomFeatures.Select(x => x.Name).Contains(feature.Name))
+                        AddFeatureToProject(feature);
+                }
+        }
+
+        private void AddFeatureToProject(CustomFeature feature)
+        {
+            olvCustom.AddObject(feature);
+            CustomFeatures.Add(feature);
+            PlotOrder.Add(new PlotOrderElement() { Name = feature.Name });
         }
 
         private void ToolStripButtonEditPlotOrder_Click(object sender, EventArgs e)

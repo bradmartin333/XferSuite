@@ -126,6 +126,20 @@ namespace XferSuite
             return null;
         }
 
+        public static string[] OpenFiles(string title, string filter)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Title = title;
+                openFileDialog.Filter = filter;
+                openFileDialog.Multiselect = true;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    return openFileDialog.FileNames;
+            }
+            return null;
+        }
+
         public static string SaveFile(string title, string filter)
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())

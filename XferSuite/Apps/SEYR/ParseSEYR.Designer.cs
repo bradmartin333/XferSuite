@@ -54,6 +54,7 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonImportCustom = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEditPlotOrder = new System.Windows.Forms.ToolStripButton();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tableLayoutPanel.SuspendLayout();
@@ -362,6 +363,7 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonParse,
             this.toolStripButtonSmartSort,
             this.toolStripButtonAddCustom,
+            this.toolStripButtonImportCustom,
             this.toolStripButtonReset,
             this.toolStripButtonEditPlotOrder,
             this.toolStripProgressBar});
@@ -380,6 +382,16 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonSmartSort.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonSmartSort.Text = "Smart Sort";
             this.toolStripButtonSmartSort.Click += new System.EventHandler(this.ToolStripButtonSmartSort_Click);
+            // 
+            // toolStripButtonImportCustom
+            // 
+            this.toolStripButtonImportCustom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonImportCustom.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImportCustom.Image")));
+            this.toolStripButtonImportCustom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImportCustom.Name = "toolStripButtonImportCustom";
+            this.toolStripButtonImportCustom.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonImportCustom.Text = "Import Custom Features";
+            this.toolStripButtonImportCustom.Click += new System.EventHandler(this.toolStripButtonImportCustom_Click);
             // 
             // toolStripButtonEditPlotOrder
             // 
@@ -450,5 +462,6 @@ namespace XferSuite.Apps.SEYR
         private System.Windows.Forms.ToolStripButton toolStripButtonEditPlotOrder;
         private BrightIdeasSoftware.FastDataListView olvCustom;
         private BrightIdeasSoftware.OLVColumn olvColumnName;
+        private System.Windows.Forms.ToolStripButton toolStripButtonImportCustom;
     }
 }
