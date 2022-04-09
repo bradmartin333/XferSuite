@@ -497,12 +497,11 @@ namespace XferSuite.Apps.SEYR
                 }
             }
 
-            string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
-            FilteredData = CustomFeatures.Where(x => x.Visible).Count() > 0 ? Data : Report.removeBuffers(Data, bufferStrings);
-            Regions = Report.getRegions(FilteredData);
             RequiredOn = Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0;
             NeedOneOn = Features.Where(x => x.IsChild).Count() > 0;
             CustomOn = CustomFeatures.Where(x => x.Visible).Count() > 0;
+            FilteredData = CustomOn ? Data : Report.removeBuffers(Data, Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray());
+            Regions = Report.getRegions(FilteredData);
             if (RequiredOn || NeedOneOn || CustomOn) Parse();
             ParseWorker.ReportProgress(-1);
         }
