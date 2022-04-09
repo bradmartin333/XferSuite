@@ -56,7 +56,7 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportCustom = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEditPlotOrder = new System.Windows.Forms.ToolStripButton();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripLabelPercent = new System.Windows.Forms.ToolStripLabel();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -366,7 +366,7 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonImportCustom,
             this.toolStripButtonReset,
             this.toolStripButtonEditPlotOrder,
-            this.toolStripProgressBar});
+            this.toolStripLabelPercent});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(574, 27);
@@ -391,7 +391,7 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonImportCustom.Name = "toolStripButtonImportCustom";
             this.toolStripButtonImportCustom.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonImportCustom.Text = "Import Custom Features";
-            this.toolStripButtonImportCustom.Click += new System.EventHandler(this.toolStripButtonImportCustom_Click);
+            this.toolStripButtonImportCustom.Click += new System.EventHandler(this.ToolStripButtonImportCustom_Click);
             // 
             // toolStripButtonEditPlotOrder
             // 
@@ -403,11 +403,11 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonEditPlotOrder.Text = "Edit Plot Order";
             this.toolStripButtonEditPlotOrder.Click += new System.EventHandler(this.ToolStripButtonEditPlotOrder_Click);
             // 
-            // toolStripProgressBar
+            // toolStripLabelPercent
             // 
-            this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(400, 24);
+            this.toolStripLabelPercent.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripLabelPercent.Name = "toolStripLabelPercent";
+            this.toolStripLabelPercent.Size = new System.Drawing.Size(0, 24);
             // 
             // ParseSEYR
             // 
@@ -442,7 +442,6 @@ namespace XferSuite.Apps.SEYR
         private System.Windows.Forms.ToolStripButton toolStripButtonAddCustom;
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private BrightIdeasSoftware.TreeListView olvNeedOne;
         private BrightIdeasSoftware.OLVColumn olvColumn3;
         private BrightIdeasSoftware.ObjectListView olvRequire;
@@ -463,5 +462,6 @@ namespace XferSuite.Apps.SEYR
         private BrightIdeasSoftware.FastDataListView olvCustom;
         private BrightIdeasSoftware.OLVColumn olvColumnName;
         private System.Windows.Forms.ToolStripButton toolStripButtonImportCustom;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelPercent;
     }
 }

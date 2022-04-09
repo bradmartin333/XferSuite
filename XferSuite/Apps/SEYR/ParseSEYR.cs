@@ -253,6 +253,10 @@ namespace XferSuite.Apps.SEYR
         private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
         private readonly BackgroundWorker ParseWorker = new BackgroundWorker();
 
+        private bool RequiredOn, NeedOneOn, CustomOn;
+        private double DistX, DistY;
+        private Report.Entry[] FilteredData;
+
         public ParseSEYR(string path)
         {
             InitializeComponent();
@@ -454,16 +458,16 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            // Reset
+            ParseWorker.ReportProgress(-2);
             Plottables = new List<Plottable>();
-            double distX = 0.0;
-            double distY = 0.0;
+            DistX = 0.0;
+            DistY = 0.0;
 
             if (Path.FullName.Contains("_CP_"))
             {
                 string[] slice = Path.FullName.Replace(".txt", "").Split('_');
-                distX = double.Parse(slice[slice.Length - 2]);
-                distY = double.Parse(slice[slice.Length - 1]);
+                DistX = double.Parse(slice[slice.Length - 2]);
+                DistY = double.Parse(slice[slice.Length - 1]);
             }
             else
             {
@@ -475,7 +479,7 @@ namespace XferSuite.Apps.SEYR
                 {
                     var result = input.ShowDialog();
                     if (result == DialogResult.OK)
-                        distX = (double)((NumericUpDown)input.Control).Value;
+                        DistX = (double)((NumericUpDown)input.Control).Value;
                     else
                         return;
                 }
@@ -487,24 +491,20 @@ namespace XferSuite.Apps.SEYR
                 {
                     var result = input.ShowDialog();
                     if (result == DialogResult.OK)
-                        distY = (double)((NumericUpDown)input.Control).Value;
+                        DistY = (double)((NumericUpDown)input.Control).Value;
                     else
                         return;
                 }
             }
 
             string[] bufferStrings = Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray();
-            var filteredData = CustomFeatures.Where(x => x.Visible).Count() > 0 ? Data : Report.removeBuffers(Data, bufferStrings);
-            Regions = Report.getRegions(filteredData);
-
-            if (Features.Where(x => x.Bucket == Report.Bucket.Required).Count() == 1 &&
-                Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() == 0 &&
-                CustomFeatures.Where(x => x.Visible).Count() == 0)
-                ParseSingle(distX, distY, filteredData);
-            else
-                ParseMulti(distX, distY, filteredData,
-                    !(Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0 ||
-                    Features.Where(x => x.Bucket == Report.Bucket.NeedOne).Count() > 0));
+            FilteredData = CustomFeatures.Where(x => x.Visible).Count() > 0 ? Data : Report.removeBuffers(Data, bufferStrings);
+            Regions = Report.getRegions(FilteredData);
+            RequiredOn = Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0;
+            NeedOneOn = Features.Where(x => x.IsChild).Count() > 0;
+            CustomOn = CustomFeatures.Where(x => x.Visible).Count() > 0;
+            if (RequiredOn || NeedOneOn || CustomOn) Parse();
+            ParseWorker.ReportProgress(-1);
         }
 
         private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -512,7 +512,7 @@ namespace XferSuite.Apps.SEYR
             Results.UpdateData("Newly parsed data", this);
             Results.Show();
             Results.BringToFront();
-            toolStripProgressBar.Value = 0;
+            toolStripLabelPercent.Text = "";
             foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
                 olv.Enabled = true;
             flowLayoutPanelCriteria.Enabled = true;
@@ -520,103 +520,85 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            toolStripProgressBar.Value = e.ProgressPercentage;
+            if (e.ProgressPercentage == -2) toolStripLabelPercent.Text = "Initializing Data";
+            else if (e.ProgressPercentage == -1) toolStripLabelPercent.Text = "Plotting Data";
+            else toolStripLabelPercent.Text = $"Parsing Region {e.ProgressPercentage + 1}/{Regions.Length}";
         }
 
-        // Much, much faster way of parsing large data sets as you do not have to obtain regions
-        // within regions and each entry is treated as a tile
-        private void ParseSingle(double distX, double distY, Report.Entry[] filteredData)
+        private void Parse()
         {
-            for (int l = 0; l < Regions.Length; l++)
-            {
-                Report.Entry[] regionData = Report.getRegion(filteredData, Regions[l]);
-
-                foreach (Report.Entry entry in regionData)
-                {
-                    bool pass = CheckCriteria(new Report.Entry[] {entry}, new List<string>());
-                    double thisX = entry.X + entry.XCopy * distX * (_FlipXAxis ? -1 : 1);
-                    double thisY = entry.Y + entry.YCopy * distY;
-
-                    Plottables.Add(new Plottable
-                    {
-                        Region = Regions[l],
-                        DetailString = $"     Copy ({entry.XCopy}, {entry.YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}",
-                        X = thisX,
-                        Y = thisY,
-                        Pass = pass,
-                        CustomTag = string.Empty,
-                        Color = pass ? Color.LawnGreen : Color.Firebrick,
-                    });
-                }
-
-                ParseWorker.ReportProgress((int)((l + 1) / (double)Regions.Length * 100));
-            };
-        }
-
-        private void ParseMulti(double distX, double distY, Report.Entry[] filteredData, bool onlyCustom)
-        {
-            int numX = Report.getNumX(filteredData);
-            int numY = Report.getNumY(filteredData);
             List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
+            int regionIdx = 0;
 
-            for (int l = 0; l < Regions.Length; l++)
+            var regionGroups = FilteredData.GroupBy(x => (x.RR, x.RC, x.R, x.C).ToString());
+            foreach (IGrouping<string, Report.Entry> regionGroup in regionGroups)
             {
-                Report.Entry[] regionData = Report.getRegion(filteredData, Regions[l]);
-                int numRegionPics = Report.getNumImages(regionData);
+                ParseWorker.ReportProgress(regionIdx);
 
-                for (int k = 1; k < numRegionPics + 1; k++)
+                Report.Entry[] region = regionGroup.ToArray();
+
+                var imageGroups = region.GroupBy(x => x.ImageNumber);
+                foreach (IGrouping<int, Report.Entry> imageGroup in imageGroups)
                 {
-                    var thisImg = Report.getImage(regionData, k + l * numRegionPics);
+                    Report.Entry[] image = imageGroup.ToArray();
 
-                    for (int i = 0; i < numX; i++)
+                    var cellGroups = image.GroupBy(x => (x.XCopy, x.YCopy).ToString());
+                    foreach (IGrouping<string, Report.Entry> cellGroup in cellGroups)
                     {
-                        for (int j = 0; j < numY; j++)
-                        {
-                            var thisCell = Report.getCell(thisImg, i, j);
-                            if (thisCell.Length == 0) continue;
-                            bool pass = CheckCriteria(thisCell, needOneParents);
-                            double thisX = thisCell[0].X + i * distX * (_FlipXAxis ? -1 : 1);
-                            double thisY = thisCell[0].Y + j * distY;
+                        Report.Entry[] cell = cellGroup.ToArray();
+                        if (cell == null || cell.Length == 0) continue;
 
+                        Plottable plottable = new Plottable();
+                        bool pass;
+                        double thisX = cell[0].X + cell[0].XCopy * DistX * (_FlipXAxis ? -1 : 1);
+                        double thisY = cell[0].Y + cell[0].YCopy * DistY;
+                        string detailString = $"     Copy ({cell[0].XCopy}, {cell[0].YCopy})     Location ({thisX}, {thisY})";
+
+                        if (CustomOn)
+                        {
                             foreach (CustomFeature custom in CustomFeatures.Where(x => x.Visible))
                             {
                                 bool notMatched = false;
                                 foreach ((string, Report.State) filter in custom.Filters)
-                                    if (thisCell.Where(x => x.Name == filter.Item1).First().State != filter.Item2) notMatched = true;
+                                    if (cell.Where(x => x.Name == filter.Item1).First().State != filter.Item2) notMatched = true;
                                 if (notMatched) continue;
 
-                                Plottable customPlottable = new Plottable
+                                plottable = new Plottable
                                 {
-                                    Region = Regions[l],
-                                    DetailString = $"     Copy ({thisCell[0].XCopy}, {thisCell[0].YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}     Custom: {custom.Name}",
+                                    Region = Regions[regionIdx],
+                                    DetailString = detailString + $"     {custom.Type}     Custom: {custom.Name}",
                                     X = thisX - custom.Offset.X,
                                     Y = thisY - custom.Offset.Y,
                                     Pass = custom.Type == Report.State.Pass,
                                     CustomTag = custom.Name,
                                     Color = custom.Color,
                                 };
-
-                                Plottables.Add(customPlottable);
                             }
-
-                            if (!onlyCustom)
-                                Plottables.Add(new Plottable
-                                {
-                                    Region = Regions[l],
-                                    DetailString = $"     Copy ({thisCell[0].XCopy}, {thisCell[0].YCopy})     Location ({thisX}, {thisY})     {(pass ? "Pass" : "Fail")}",
-                                    X = thisX,
-                                    Y = thisY,
-                                    Pass = pass,
-                                    CustomTag = string.Empty,
-                                    Color = pass ? Color.LawnGreen : Color.Firebrick,
-                                });
                         }
+                        
+                        if (RequiredOn || NeedOneOn)
+                        {
+                            pass = CheckCriteria(cell, needOneParents);
+                            plottable = new Plottable
+                            {
+                                Region = Regions[regionIdx],
+                                DetailString = detailString + $"     {(pass ? "Pass" : "Fail")}",
+                                X = thisX,
+                                Y = thisY,
+                                Pass = pass,
+                                CustomTag = string.Empty,
+                                Color = pass ? Color.LawnGreen : Color.Firebrick,
+                            };
+                        }
+
+                        Plottables.Add(plottable);
                     }
                 }
 
-                ParseWorker.ReportProgress((int)((l + 1) / (double)Regions.Length * 100));
-            };
+                regionIdx++;
+            }
         }
+
 
         #endregion
 
@@ -634,7 +616,7 @@ namespace XferSuite.Apps.SEYR
             foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
                 olv.Enabled = false;
             flowLayoutPanelCriteria.Enabled = false;
-            toolStripProgressBar.Value = 0;
+            toolStripLabelPercent.Text = "";
             ParseWorker.RunWorkerAsync();
         }
 
@@ -684,7 +666,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void toolStripButtonImportCustom_Click(object sender, EventArgs e)
+        private void ToolStripButtonImportCustom_Click(object sender, EventArgs e)
         {
             string[] pathBuffers = MainMenu.OpenFiles("Open Custom SEYR Features", "Text File (*.txt) | *.txt");
             if (pathBuffers == null)
