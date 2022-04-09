@@ -39,30 +39,6 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _RegionTextSize = 12;
-        [Category("User Parameters")]
-        public int RegionTextSize
-        {
-            get => _RegionTextSize;
-            set
-            {
-                _RegionTextSize = value;
-                Results.UpdateData("Region text size changed", this);
-            }
-        }
-
-        private int _PercentageTextSize = 12;
-        [Category("User Parameters")]
-        public int PercentageTextSize
-        {
-            get => _PercentageTextSize;
-            set
-            {
-                _PercentageTextSize = value;
-                Results.UpdateData("Percentage text size changed", this);
-            }
-        }
-
         private bool _FlipXAxis = true;
         [Category("User Parameters")]
         public bool FlipXAxis
@@ -89,7 +65,7 @@ namespace XferSuite.Apps.SEYR
 
         private int _DataReduction = 0;
         [Category("User Parameters")]
-        [Description("Percentagle of Pass and Fail data to omit for the sake of PC speed")]
+        [Description("Percentage of Pass and Fail data to omit for the sake of PC speed")]
         public int DataReduction
         {
             get => _DataReduction;
@@ -102,6 +78,71 @@ namespace XferSuite.Apps.SEYR
                 else if (value > 100)
                     _DataReduction = 100;
                 Results.UpdateData("Data reduction value changed", this);
+            }
+        }
+
+        private int _RegionTextSize = 12;
+        [Category("User Parameters")]
+        public int RegionTextSize
+        {
+            get => _RegionTextSize;
+            set
+            {
+                _RegionTextSize = value;
+                Results.UpdateData("Region text size changed", this);
+            }
+        }
+
+        private int _RegionTextOffsetX = 0;
+        [Category("User Parameters")]
+        public int RegionTextOffsetX
+        {
+            get => _RegionTextOffsetX;
+            set
+            {
+                _RegionTextOffsetX = value;
+                Results.UpdateData("Region text offset changed", this);
+            }
+        }
+
+        private int _RegionTextOffsetY = 0;
+        [Category("User Parameters")]
+        public int RegionTextOffsetY
+        {
+            get => _RegionTextOffsetY;
+            set
+            {
+                _RegionTextOffsetY = value;
+                Results.UpdateData("Region text offset changed", this);
+            }
+        }
+
+        private float _RegionTextRotation = 0f;
+        [Category("User Parameters")]
+        public float RegionTextRotation
+        {
+            get => _RegionTextRotation;
+            set
+            {
+                _RegionTextRotation = value;
+                Results.UpdateData("Region text rotated", this);
+            }
+        }
+
+        private int _RegionLabelOpacity = 255;
+        [Category("User Parameters")]
+        public int RegionLabelOpacity
+        {
+            get => _RegionLabelOpacity;
+            set
+            {
+                if (value >= 0 && value <= 255)
+                    _RegionLabelOpacity = value;
+                else if (value < 0)
+                    _RegionLabelOpacity = 0;
+                else if (value > 255)
+                    _RegionLabelOpacity = 255;
+                Results.UpdateData("Region label opacity changed", this);
             }
         }
 
@@ -135,20 +176,45 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _RegionLabelOpacity = 255;
+        private int _PercentageTextSize = 12;
         [Category("User Parameters")]
-        public int RegionLabelOpacity
+        public int PercentageTextSize
         {
-            get => _RegionLabelOpacity;
+            get => _PercentageTextSize;
+            set
+            {
+                _PercentageTextSize = value;
+                Results.UpdateData("Percentage text size changed", this);
+            }
+        }
+
+        private int _PercentLabelOpacity = 255;
+        [Category("User Parameters")]
+        public int PercentLabelOpacity
+        {
+            get => _PercentLabelOpacity;
             set
             {
                 if (value >= 0 && value <= 255)
-                    _RegionLabelOpacity = value;
+                    _PercentLabelOpacity = value;
                 else if (value < 0)
-                    _RegionLabelOpacity = 0;
+                    _PercentLabelOpacity = 0;
                 else if (value > 255)
-                    _RegionLabelOpacity = 255;
-                Results.UpdateData("Region label opacity changed", this);
+                    _PercentLabelOpacity = 255;
+                Results.UpdateData("Percent label opacity changed", this);
+            }
+        }
+
+        private bool _PercentLocation = true;
+        [Category("User Parameters")]
+        [Description("True: Center of region, False: In region text location")]
+        public bool PercentLocation
+        {
+            get => _PercentLocation;
+            set
+            {
+                _PercentLocation = value;
+                Results.UpdateData("Percent location changed", this);
             }
         }
 

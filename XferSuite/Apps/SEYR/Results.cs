@@ -30,12 +30,17 @@ namespace XferSuite.Apps.SEYR
         private bool FlipY;
         private int PassPointSize;
         private int FailPointSize;
+        private float RegionTextRotation;
+        private int RegionTextOffsetX;
+        private int RegionTextOffsetY;
         private int RegionTextSize;
         private int PercentageTextSize;
         private int DataReduction;
         private double RegionBorderPadding;
         private int RegionBorderOpcaity;
         private int RegionLabelOpacity;
+        private int PercentLabelOpacity;
+        private bool PercentLocation;
 
         private string[] Regions;
         private List<Plottable> Plottables;
@@ -81,12 +86,17 @@ namespace XferSuite.Apps.SEYR
             FlipY = parseSEYR.FlipYAxis;
             PassPointSize = parseSEYR.PassPointSize;
             FailPointSize = parseSEYR.FailPointSize;
+            RegionTextRotation = parseSEYR.RegionTextRotation;
+            RegionTextOffsetX = parseSEYR.RegionTextOffsetX;
+            RegionTextOffsetY = parseSEYR.RegionTextOffsetY;
             RegionTextSize = parseSEYR.RegionTextSize;
             PercentageTextSize = parseSEYR.PercentageTextSize;
             DataReduction = parseSEYR.DataReduction;
             RegionBorderPadding = parseSEYR.RegionBorderPadding;
             RegionBorderOpcaity = parseSEYR.RegionBorderOpacity;
             RegionLabelOpacity = parseSEYR.RegionLabelOpacity;
+            PercentLabelOpacity = parseSEYR.PercentLabelOpacity;
+            PercentLocation = parseSEYR.PercentLocation;
             Regions = parseSEYR.Regions;
             Plottables = parseSEYR.Plottables;
             PlotOrder = parseSEYR.PlotOrder;
@@ -190,21 +200,22 @@ namespace XferSuite.Apps.SEYR
 
                 if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(RegionBorderOpcaity, Color.Black), 3);
 
-                if (ShowRegionStrings)
+                if (ShowRegionStrings || (ShowPercentages && !PercentLocation))
                 {
                     Text txt = formsPlot.Plot.AddText(
-                        region,
-                        (minX + maxX) / 2,
-                        FlipY ? maxY : minY,
+                        (ShowRegionStrings ? region : "") + ((ShowPercentages && !PercentLocation) ? $" {GetRegionPercent(region)}" : ""),
+                        ((minX + maxX) / 2) + RegionTextOffsetX,
+                        (FlipY ? maxY : minY) + RegionTextOffsetY,
                         RegionTextSize,
                         color: Color.Black);
                     txt.BackgroundColor = Color.FromArgb(RegionLabelOpacity, Color.White);
                     txt.BackgroundFill = true;
                     txt.Alignment = Alignment.UpperCenter;
                     txt.FontName = "segoe";
+                    txt.Rotation = RegionTextRotation;
                 }
 
-                if (ShowPercentages)
+                if (ShowPercentages && PercentLocation)
                 {
                     Text txt = formsPlot.Plot.AddText(
                         GetRegionPercent(region),
@@ -212,7 +223,7 @@ namespace XferSuite.Apps.SEYR
                         (minY + maxY) / 2,
                         PercentageTextSize,
                         color: Color.Black);
-                    txt.BackgroundColor = Color.White;
+                    txt.BackgroundColor = Color.FromArgb(PercentLabelOpacity, Color.White);
                     txt.BackgroundFill = true;
                     txt.Alignment = Alignment.UpperCenter;
                     txt.FontName = "segoe";
