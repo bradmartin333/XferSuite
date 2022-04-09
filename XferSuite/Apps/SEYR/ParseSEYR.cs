@@ -522,9 +522,18 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (e.ProgressPercentage == -2) toolStripLabelPercent.Text = "Initializing Data";
-            else if (e.ProgressPercentage == -1) toolStripLabelPercent.Text = "Plotting Data";
-            else toolStripLabelPercent.Text = $"Parsing Region {e.ProgressPercentage + 1}/{Regions.Length}";
+            switch (e.ProgressPercentage)
+            {
+                case -2:
+                    toolStripLabelPercent.Text = "Initializing Data";
+                    break;
+                case -1:
+                    toolStripLabelPercent.Text = "Plotting Data";
+                    break;
+                default:
+                    toolStripLabelPercent.Text = $"Parsing Region {e.ProgressPercentage + 1}/{Regions.Length}";
+                    break;
+            }
         }
 
         private void Parse()
