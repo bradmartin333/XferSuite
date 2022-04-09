@@ -343,7 +343,7 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonAddCustom.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAddCustom.Name = "toolStripButtonAddCustom";
             this.toolStripButtonAddCustom.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonAddCustom.Text = "Add Custom";
+            this.toolStripButtonAddCustom.Text = "Add Custom Feature";
             this.toolStripButtonAddCustom.Click += new System.EventHandler(this.ToolStripButtonAddCustom_Click);
             // 
             // toolStripButtonReset
@@ -353,7 +353,7 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonReset.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonReset.Name = "toolStripButtonReset";
             this.toolStripButtonReset.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonReset.Text = "Reset Columns";
+            this.toolStripButtonReset.Text = "Reset Buckets";
             this.toolStripButtonReset.Click += new System.EventHandler(this.ToolStripButtonReset_Click);
             // 
             // toolStrip
