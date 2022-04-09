@@ -116,7 +116,6 @@ namespace XferSuite.Apps.SEYR
                 formsPlot.Plot.YAxis.TickLabelNotation(invertSign: FlipY);
                 AddScatterPlots();
                 AddOverlays();
-                if (ShowTrackerString) AddHighlightedPoint();
                 formsPlot.Refresh(lowQuality: UseLowQuality);
                 LabelStatus.Text = reason;
             }
@@ -200,40 +199,43 @@ namespace XferSuite.Apps.SEYR
                 double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
 
                 if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(RegionBorderOpcaity, Color.Black), 3);
-
-                if (ShowRegionStrings || (ShowPercentages && !PercentLocation))
-                {
-                    Text txt = formsPlot.Plot.AddText(
-                        (ShowRegionStrings ? region : "") + ((ShowPercentages && !PercentLocation) ? $" {GetRegionPercent(region)}" : ""),
-                        ((minX + maxX) / 2) + RegionTextOffsetX,
-                        (FlipY ? maxY : minY) + RegionTextOffsetY,
-                        RegionTextSize,
-                        color: Color.Black);
-                    txt.BackgroundColor = Color.FromArgb(RegionLabelOpacity, Color.White);
-                    txt.BackgroundFill = true;
-                    txt.Alignment = Alignment.UpperCenter;
-                    txt.FontName = "segoe";
-                    txt.Rotation = RegionTextRotation;
-                }
-
-                if (ShowPercentages && PercentLocation)
-                {
-                    Text txt = formsPlot.Plot.AddText(
-                        GetRegionPercent(region),
-                        (minX + maxX) / 2,
-                        (minY + maxY) / 2,
-                        PercentageTextSize,
-                        color: Color.Black);
-                    txt.BackgroundColor = Color.FromArgb(PercentLabelOpacity, Color.White);
-                    txt.BackgroundFill = true;
-                    txt.Alignment = Alignment.UpperCenter;
-                    txt.FontName = "segoe";
-                }
+                if (ShowRegionStrings || (ShowPercentages && !PercentLocation)) AddRegionText(region, minX, minY, maxX, maxY);
+                if (ShowPercentages && PercentLocation) AddPercentText(region, minX, minY, maxX, maxY);
+                if (ShowTrackerString) AddHighlightedPoint();
             }
             if (totalPass > 0) RTB.Text += $"Total\t{totalPass / (totalPass + totalFail):P}\n";
         }
 
-        public void AddHighlightedPoint()
+        private void AddRegionText(string region, double minX, double minY, double maxX, double maxY)
+        {
+            Text txt = formsPlot.Plot.AddText(
+                (ShowRegionStrings ? region : "") + ((ShowPercentages && !PercentLocation) ? $" {GetRegionPercent(region)}" : ""),
+                ((minX + maxX) / 2) + RegionTextOffsetX,
+                (FlipY ? maxY : minY) + RegionTextOffsetY,
+                RegionTextSize,
+                color: Color.Black);
+            txt.BackgroundColor = Color.FromArgb(RegionLabelOpacity, Color.White);
+            txt.BackgroundFill = true;
+            txt.Alignment = Alignment.UpperCenter;
+            txt.FontName = "segoe";
+            txt.Rotation = RegionTextRotation;
+        }
+
+        private void AddPercentText(string region, double minX, double minY, double maxX, double maxY)
+        {
+            Text txt = formsPlot.Plot.AddText(
+                GetRegionPercent(region),
+                (minX + maxX) / 2,
+                (minY + maxY) / 2,
+                PercentageTextSize,
+                color: Color.Black);
+            txt.BackgroundColor = Color.FromArgb(PercentLabelOpacity, Color.White);
+            txt.BackgroundFill = true;
+            txt.Alignment = Alignment.UpperCenter;
+            txt.FontName = "segoe";
+        }
+
+        private void AddHighlightedPoint()
         {
             // Add a red circle we can move around later as a highlighted point indicator
             HighlightedPoint = formsPlot.Plot.AddPoint(0, 0);
