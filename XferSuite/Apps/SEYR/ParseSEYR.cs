@@ -515,8 +515,6 @@ namespace XferSuite.Apps.SEYR
         private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Results.UpdateData("Newly parsed data", this);
-            Results.Show();
-            Results.BringToFront();
             toolStripLabelPercent.Text = "";
             ToggleOLVs(true);
             flowLayoutPanelCriteria.Enabled = true;
