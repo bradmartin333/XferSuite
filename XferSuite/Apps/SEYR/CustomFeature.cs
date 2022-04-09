@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
@@ -53,6 +54,20 @@ namespace XferSuite.Apps.SEYR
                 if (value != _Size)
                 {
                     _Size = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private LogicType _Logic = LogicType.AND;
+        public LogicType Logic
+        {
+            get => _Logic;
+            set
+            {
+                if (value != _Logic)
+                {
+                    _Logic = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -119,11 +134,19 @@ namespace XferSuite.Apps.SEYR
             get => (((0.299 * _Color.R) + (0.587 * _Color.G) + (0.114 * _Color.B)) / 255) > 0.5 ? Color.Black : Color.White;
         }
 
+        public enum LogicType
+        {
+            AND,
+            OR,
+            XOR,
+        }
+
         public CustomFeature() 
         { 
             _Name = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(); // Random string
             _Color = Color.Blue;
             _Size = 1;
+            _Logic = LogicType.AND;
             _Type = Report.State.Pass;
             _Offset = PointF.Empty;
             _Filters = new System.Collections.Generic.List<(string, Report.State)>();
@@ -140,8 +163,9 @@ namespace XferSuite.Apps.SEYR
                     _Name = cols[0];
                     _Color = Color.FromArgb(int.Parse(cols[1]));
                     _Size = int.Parse(cols[2]);
-                    _Type = (Report.State)Enum.Parse(typeof(Report.State), cols[3]);
-                    _Offset = new PointF(float.Parse(cols[4]), float.Parse(cols[5]));
+                    _Logic = (LogicType)Enum.Parse(typeof(LogicType), cols[3]);
+                    _Type = (Report.State)Enum.Parse(typeof(Report.State), cols[4]);
+                    _Offset = new PointF(float.Parse(cols[5]), float.Parse(cols[6]));
                 }
                 else
                     Filters.Add((cols[0], (Report.State)Enum.Parse(typeof(Report.State), cols[1])));
@@ -153,9 +177,17 @@ namespace XferSuite.Apps.SEYR
             _Name = form.txtName.Text;
             _Color = form.panelColor.BackColor;
             _Size = (int)form.numSize.Value;
+            _Logic = form.GetLogic();
             _Type = (Report.State)form.comboBoxType.SelectedIndex;
             _Offset = new PointF((float)form.numOffsetX.Value, (float)form.numOffsetY.Value);
             _Filters = filters;
+        }
+
+        public bool ValidateFilters(string[] names)
+        {
+            foreach (string name in _Filters.Select(x => x.Item1))
+                if (!names.Contains(name)) return false;
+            return true;
         }
     }
 }

@@ -529,20 +529,14 @@ namespace XferSuite.Apps.SEYR
             List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
             int regionIdx = 0;
 
-            var regionGroups = FilteredData.GroupBy(x => (x.RR, x.RC, x.R, x.C).ToString());
-            foreach (IGrouping<string, Report.Entry> regionGroup in regionGroups)
+            foreach (IGrouping<string, Report.Entry> regionGroup in FilteredData.GroupBy(x => (x.RR, x.RC, x.R, x.C).ToString()))
             {
                 ParseWorker.ReportProgress(regionIdx);
-
                 Report.Entry[] region = regionGroup.ToArray();
-
-                var imageGroups = region.GroupBy(x => x.ImageNumber);
-                foreach (IGrouping<int, Report.Entry> imageGroup in imageGroups)
+                foreach (IGrouping<int, Report.Entry> imageGroup in region.GroupBy(x => x.ImageNumber))
                 {
                     Report.Entry[] image = imageGroup.ToArray();
-
-                    var cellGroups = image.GroupBy(x => (x.XCopy, x.YCopy).ToString());
-                    foreach (IGrouping<string, Report.Entry> cellGroup in cellGroups)
+                    foreach (IGrouping<string, Report.Entry> cellGroup in image.GroupBy(x => (x.XCopy, x.YCopy).ToString()))
                     {
                         Report.Entry[] cell = cellGroup.ToArray();
                         if (cell == null || cell.Length == 0) continue;
@@ -671,12 +665,19 @@ namespace XferSuite.Apps.SEYR
             if (pathBuffers == null)
                 return;
             else
+            {
+                string mismatches = string.Empty;
                 foreach (string path in pathBuffers)
                 {
                     CustomFeature feature = new CustomFeature(path);
-                    if (!CustomFeatures.Select(x => x.Name).Contains(feature.Name))
+                    if (!CustomFeatures.Select(x => x.Name).Contains(feature.Name) && feature.ValidateFilters(Features.Select(x => x.Name).ToArray()))
                         AddFeatureToProject(feature);
+                    else
+                        mismatches += $"{new FileInfo(path).Name}\n";
                 }
+                if (!string.IsNullOrEmpty(mismatches))
+                    MessageBox.Show($"The following files did not match the currently loaded SEYR report:\n\n{mismatches}", "Load Custom SEYR Features");
+            }  
         }
 
         private void AddFeatureToProject(CustomFeature feature)
