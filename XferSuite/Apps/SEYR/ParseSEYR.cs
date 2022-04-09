@@ -452,6 +452,12 @@ namespace XferSuite.Apps.SEYR
             e.Item.Decoration = customFeature.Type == Report.State.Null ? new ImageDecoration(Properties.Resources.invisible_small, 255) : null;
         }
 
+        private void ToggleOLVs(bool toggle)
+        {
+            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
+                olv.Enabled = toggle;
+        }
+
         #endregion
 
         #region Parse Methods
@@ -512,8 +518,7 @@ namespace XferSuite.Apps.SEYR
             Results.Show();
             Results.BringToFront();
             toolStripLabelPercent.Text = "";
-            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
-                olv.Enabled = true;
+            ToggleOLVs(true);
             flowLayoutPanelCriteria.Enabled = true;
         }
 
@@ -633,8 +638,7 @@ namespace XferSuite.Apps.SEYR
         private void ToolStripButtonParse_Click(object sender, EventArgs e)
         {
             if (ParseWorker.IsBusy) return;
-            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
-                olv.Enabled = false;
+            ToggleOLVs(false);
             flowLayoutPanelCriteria.Enabled = false;
             toolStripLabelPercent.Text = "";
             ParseWorker.RunWorkerAsync();
