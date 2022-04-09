@@ -277,13 +277,18 @@ namespace XferSuite.Apps.SEYR
             customMenu.Items.Add(new ToolStripMenuItem("Select Plot Background Color", null, new EventHandler(SelectPlotColor)));
             customMenu.Items.Add(new ToolStripMenuItem("Open Settings", null, new EventHandler(OpenSettings)));
             customMenu.Items.Add(new ToolStripSeparator());
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Grid", null, new EventHandler(ToggleGrid)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Tracker String", null, new EventHandler(ToggleTrackerString)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Quality", null, new EventHandler(ToggleQuality)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Region Borders", null, new EventHandler(ToggleRegionBorders)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Region Strings", null, new EventHandler(ToggleRegionStrings)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Percentages", null, new EventHandler(TogglePercentages)));
+            customMenu.Items.Add(new ToolStripMenuItem("Grid", GetToggleImage(ShowGrid), new EventHandler(ToggleGrid)));
+            customMenu.Items.Add(new ToolStripMenuItem("Tracker String", GetToggleImage(ShowTrackerString), new EventHandler(ToggleTrackerString)));
+            customMenu.Items.Add(new ToolStripMenuItem("High Quality", GetToggleImage(!UseLowQuality), new EventHandler(ToggleQuality)));
+            customMenu.Items.Add(new ToolStripMenuItem("Region Borders", GetToggleImage(ShowRegionBorders), new EventHandler(ToggleRegionBorders)));
+            customMenu.Items.Add(new ToolStripMenuItem("Region Strings", GetToggleImage(ShowRegionStrings), new EventHandler(ToggleRegionStrings)));
+            customMenu.Items.Add(new ToolStripMenuItem("Percentages", GetToggleImage(ShowPercentages), new EventHandler(TogglePercentages)));
             customMenu.Show(System.Windows.Forms.Cursor.Position);
+        }
+
+        private Bitmap GetToggleImage(bool toggle)
+        {
+            return toggle ? Properties.Resources.toggleOn : Properties.Resources.toggleOff;
         }
 
         private void CopyImage(object sender, EventArgs e)

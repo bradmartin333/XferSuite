@@ -317,6 +317,8 @@
     <None Include="Resources\iconmonstr-check-mark-1-64.png" />
     <None Include="Resources\iconmonstr-arrow-48-64.png" />
     <None Include="Resources\iconmonstr-eye-10-16.png" />
+    <None Include="Resources\toggleOn.png" />
+    <None Include="Resources\toggleOff.png" />
     <Content Include="XferSuite.ico" />
   </ItemGroup>
   <ItemGroup>
