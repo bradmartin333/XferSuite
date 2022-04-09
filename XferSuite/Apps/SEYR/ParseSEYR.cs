@@ -551,11 +551,7 @@ namespace XferSuite.Apps.SEYR
                         {
                             foreach (CustomFeature custom in CustomFeatures.Where(x => x.Checked))
                             {
-                                bool notMatched = false;
-                                foreach ((string, Report.State) filter in custom.Filters)
-                                    if (cell.Where(x => x.Name == filter.Item1).First().State != filter.Item2) notMatched = true;
-                                if (notMatched) continue;
-
+                                if (!CheckCustomCriteria(custom, cell)) continue;
                                 plottable = new Plottable
                                 {
                                     Region = Regions[regionIdx],
@@ -589,6 +585,37 @@ namespace XferSuite.Apps.SEYR
                 }
 
                 regionIdx++;
+            }
+        }
+
+        private bool CheckCustomCriteria(CustomFeature custom, Report.Entry[] cell)
+        {
+            int product = 1;
+            switch (custom.Logic)
+            {
+                case CustomFeature.LogicType.AND:
+                    foreach ((string, Report.State) filter in custom.Filters)
+                        product *= Convert.ToInt32(cell.Where(x => x.Name == filter.Item1).First().State == filter.Item2);
+                    break;
+                case CustomFeature.LogicType.OR:
+                    foreach ((string, Report.State) filter in custom.Filters)
+                        product += Convert.ToInt32(cell.Where(x => x.Name == filter.Item1).First().State == filter.Item2);
+                    break;
+                case CustomFeature.LogicType.XOR:
+                    foreach ((string, Report.State) filter in custom.Filters)
+                        product -= Convert.ToInt32(cell.Where(x => x.Name == filter.Item1).First().State == filter.Item2);
+                    break;
+            }
+            switch (custom.Logic)
+            {
+                case CustomFeature.LogicType.AND:
+                    return product == 1;
+                case CustomFeature.LogicType.OR:
+                    return product > 1;
+                case CustomFeature.LogicType.XOR:
+                    return product == 0;
+                default:
+                    return false;
             }
         }
 
