@@ -116,6 +116,7 @@ namespace XferSuite.Apps.SEYR
                 formsPlot.Plot.YAxis.TickLabelNotation(invertSign: FlipY);
                 AddScatterPlots();
                 AddOverlays();
+                if (ShowTrackerString) AddHighlightedPoint();
                 formsPlot.Refresh(lowQuality: UseLowQuality);
                 LabelStatus.Text = reason;
             }
@@ -230,15 +231,16 @@ namespace XferSuite.Apps.SEYR
                 }
             }
             if (totalPass > 0) RTB.Text += $"Total\t{totalPass / (totalPass + totalFail):P}\n";
+        }
 
-            if (ShowTrackerString) // Add a red circle we can move around later as a highlighted point indicator
-            {
-                HighlightedPoint = formsPlot.Plot.AddPoint(0, 0);
-                HighlightedPoint.Color = Color.Red;
-                HighlightedPoint.MarkerSize = 10;
-                HighlightedPoint.MarkerShape = MarkerShape.openCircle;
-                HighlightedPoint.IsVisible = false;
-            }
+        public void AddHighlightedPoint()
+        {
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
         }
 
         private string GetRegionPercent(string region)
