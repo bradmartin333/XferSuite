@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace XferSuite.Apps
+namespace XferSuite.AdvancedTools
 {
     /// <summary>
     /// A silly, but sometimes handy app made long ago
@@ -45,33 +45,40 @@ namespace XferSuite.Apps
 
         private void InitInput()
         {
-            string clipText = Clipboard.GetText();
-
-            if (_Delimeter == "") DetermineDelimeter(clipText);
-
-            string[] clipLines = clipText.Split('\n');
-
-            bool validArr = true;
-            List<string[]> arrBuilder = new List<string[]>();
-            foreach (string line in clipLines)
+            try
             {
-                if (line.Trim() == "") continue;
-                string[] values = line.Trim().Split(_Delimeter.ToCharArray());
-                arrBuilder.Add(values);
+                string clipText = Clipboard.GetText();
+
+                if (_Delimeter == "") DetermineDelimeter(clipText);
+
+                string[] clipLines = clipText.Split('\n');
+
+                bool validArr = true;
+                List<string[]> arrBuilder = new List<string[]>();
+                foreach (string line in clipLines)
+                {
+                    if (line.Trim() == "") continue;
+                    string[] values = line.Trim().Split(_Delimeter.ToCharArray());
+                    arrBuilder.Add(values);
+                }
+
+                if (arrBuilder.Count == 0) validArr = false;
+
+                int checkLen = arrBuilder[0].Length;
+                for (int i = 1; i < arrBuilder.Count; i++)
+                    if (arrBuilder[i].Length != checkLen) validArr = false;
+
+                if (validArr)
+                    lblClip.Text = string.Format("Clipboard contains a {0} x {1} matrix", arrBuilder.Count, checkLen);
+                else
+                    lblClip.Text = "Clipboard does not contain a valid m x n matrix";
+
+                _Input = arrBuilder.ToArray();
             }
-
-            if (arrBuilder.Count == 0) validArr = false;
-
-            int checkLen = arrBuilder[0].Length;
-            for (int i = 1; i < arrBuilder.Count; i++)
-                if (arrBuilder[i].Length != checkLen) validArr = false;
-
-            if (validArr)
-                lblClip.Text = string.Format("Clipboard contains a {0} x {1} matrix", arrBuilder.Count, checkLen);
-            else
-                lblClip.Text = "Clipboard does not contain a valid m x n matrix";
-
-            _Input = arrBuilder.ToArray();
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error initializing input:\n{ex.Message}", "Map Flip");
+            }
         }
 
         // HELP WANTED

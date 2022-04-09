@@ -86,7 +86,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        public System.Collections.Generic.List<(string, Report.State)> _Filters;
+        private System.Collections.Generic.List<(string, Report.State)> _Filters = new System.Collections.Generic.List<(string, Report.State)>();
         public System.Collections.Generic.List<(string, Report.State)> Filters
         {
             get => _Filters;
@@ -100,15 +100,15 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private bool _Visible = true;
-        public bool Visible
+        private bool _Checked = true;
+        public bool Checked
         {
-            get => _Visible;
+            get => _Checked;
             set
             {
-                if (value != _Visible)
+                if (value != _Checked)
                 {
-                    _Visible = value;
+                    _Checked = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -127,6 +127,25 @@ namespace XferSuite.Apps.SEYR
             _Type = Report.State.Pass;
             _Offset = PointF.Empty;
             _Filters = new System.Collections.Generic.List<(string, Report.State)>();
+        }
+
+        public CustomFeature(string path)
+        {
+            string[] lines = System.IO.File.ReadAllLines(path);
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] cols = lines[i].Split('\t');
+                if (i == 0)
+                {
+                    _Name = cols[0];
+                    _Color = Color.FromArgb(int.Parse(cols[1]));
+                    _Size = int.Parse(cols[2]);
+                    _Type = (Report.State)Enum.Parse(typeof(Report.State), cols[3]);
+                    _Offset = new PointF(float.Parse(cols[4]), float.Parse(cols[5]));
+                }
+                else
+                    Filters.Add((cols[0], (Report.State)Enum.Parse(typeof(Report.State), cols[1])));
+            }
         }
 
         public void Update(CreateCustom form, System.Collections.Generic.List<(string, Report.State)> filters)

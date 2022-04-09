@@ -23,7 +23,6 @@ namespace XferSuite.AdvancedTools
             ComboYAxis.SelectedIndex = 1;
             ComboZAxis.SelectedIndex = 3;
             ComboZCAxis.SelectedIndex = 5;
-            Show();
         }
 
         #region UI Handlers

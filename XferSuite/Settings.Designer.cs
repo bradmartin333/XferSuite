@@ -34,10 +34,9 @@ namespace XferSuite
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.PropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.BtnAdvancedTools = new System.Windows.Forms.Button();
-            this.BtnViewDocs = new System.Windows.Forms.Button();
-            this.BtnLegal = new System.Windows.Forms.Button();
             this.BtnCheckForUpdates = new System.Windows.Forms.Button();
+            this.BtnLegal = new System.Windows.Forms.Button();
+            this.BtnViewDocs = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,7 +48,7 @@ namespace XferSuite
             this.PropertyGrid.Margin = new System.Windows.Forms.Padding(2);
             this.PropertyGrid.Name = "PropertyGrid";
             this.PropertyGrid.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            this.PropertyGrid.Size = new System.Drawing.Size(358, 365);
+            this.PropertyGrid.Size = new System.Drawing.Size(358, 394);
             this.PropertyGrid.TabIndex = 0;
             this.PropertyGrid.ToolbarVisible = false;
             // 
@@ -58,62 +57,20 @@ namespace XferSuite
             this.tableLayoutPanel.ColumnCount = 2;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.Controls.Add(this.BtnAdvancedTools, 1, 2);
             this.tableLayoutPanel.Controls.Add(this.BtnViewDocs, 0, 2);
-            this.tableLayoutPanel.Controls.Add(this.BtnLegal, 0, 3);
+            this.tableLayoutPanel.Controls.Add(this.BtnLegal, 1, 2);
             this.tableLayoutPanel.Controls.Add(this.PropertyGrid, 0, 1);
             this.tableLayoutPanel.Controls.Add(this.BtnCheckForUpdates, 0, 0);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 4;
+            this.tableLayoutPanel.RowCount = 3;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(362, 456);
             this.tableLayoutPanel.TabIndex = 1;
-            // 
-            // BtnAdvancedTools
-            // 
-            this.BtnAdvancedTools.BackColor = System.Drawing.Color.White;
-            this.BtnAdvancedTools.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnAdvancedTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnAdvancedTools.Location = new System.Drawing.Point(184, 401);
-            this.BtnAdvancedTools.Name = "BtnAdvancedTools";
-            this.BtnAdvancedTools.Size = new System.Drawing.Size(175, 23);
-            this.BtnAdvancedTools.TabIndex = 4;
-            this.BtnAdvancedTools.Text = "Advanced Tools";
-            this.BtnAdvancedTools.UseVisualStyleBackColor = false;
-            this.BtnAdvancedTools.Click += new System.EventHandler(this.BtnAdvancedTools_Click);
-            // 
-            // BtnViewDocs
-            // 
-            this.BtnViewDocs.BackColor = System.Drawing.Color.White;
-            this.BtnViewDocs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnViewDocs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnViewDocs.Location = new System.Drawing.Point(3, 401);
-            this.BtnViewDocs.Name = "BtnViewDocs";
-            this.BtnViewDocs.Size = new System.Drawing.Size(175, 23);
-            this.BtnViewDocs.TabIndex = 3;
-            this.BtnViewDocs.Text = "Documentation";
-            this.BtnViewDocs.UseVisualStyleBackColor = false;
-            this.BtnViewDocs.Click += new System.EventHandler(this.btnViewDocs_Click);
-            // 
-            // BtnLegal
-            // 
-            this.BtnLegal.BackColor = System.Drawing.Color.White;
-            this.tableLayoutPanel.SetColumnSpan(this.BtnLegal, 2);
-            this.BtnLegal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnLegal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnLegal.Location = new System.Drawing.Point(3, 430);
-            this.BtnLegal.Name = "BtnLegal";
-            this.BtnLegal.Size = new System.Drawing.Size(356, 23);
-            this.BtnLegal.TabIndex = 2;
-            this.BtnLegal.Text = "View License";
-            this.BtnLegal.UseVisualStyleBackColor = false;
-            this.BtnLegal.Click += new System.EventHandler(this.btnViewLicense_Click);
             // 
             // BtnCheckForUpdates
             // 
@@ -127,7 +84,33 @@ namespace XferSuite
             this.BtnCheckForUpdates.TabIndex = 1;
             this.BtnCheckForUpdates.Text = "Check For Updates";
             this.BtnCheckForUpdates.UseVisualStyleBackColor = false;
-            this.BtnCheckForUpdates.Click += new System.EventHandler(this.btnCheckForUpdates_Click);
+            this.BtnCheckForUpdates.Click += new System.EventHandler(this.BtnCheckForUpdates_Click);
+            // 
+            // BtnLegal
+            // 
+            this.BtnLegal.BackColor = System.Drawing.Color.White;
+            this.BtnLegal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnLegal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnLegal.Location = new System.Drawing.Point(184, 430);
+            this.BtnLegal.Name = "BtnLegal";
+            this.BtnLegal.Size = new System.Drawing.Size(175, 23);
+            this.BtnLegal.TabIndex = 2;
+            this.BtnLegal.Text = "View License";
+            this.BtnLegal.UseVisualStyleBackColor = false;
+            this.BtnLegal.Click += new System.EventHandler(this.BtnViewLicense_Click);
+            // 
+            // BtnViewDocs
+            // 
+            this.BtnViewDocs.BackColor = System.Drawing.Color.White;
+            this.BtnViewDocs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnViewDocs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnViewDocs.Location = new System.Drawing.Point(3, 430);
+            this.BtnViewDocs.Name = "BtnViewDocs";
+            this.BtnViewDocs.Size = new System.Drawing.Size(175, 23);
+            this.BtnViewDocs.TabIndex = 3;
+            this.BtnViewDocs.Text = "Documentation";
+            this.BtnViewDocs.UseVisualStyleBackColor = false;
+            this.BtnViewDocs.Click += new System.EventHandler(this.BtnViewDocs_Click);
             // 
             // Settings
             // 
@@ -149,8 +132,7 @@ namespace XferSuite
         public PropertyGrid PropertyGrid;
         private TableLayoutPanel tableLayoutPanel;
         private Button BtnCheckForUpdates;
-        private Button BtnLegal;
         private Button BtnViewDocs;
-        private Button BtnAdvancedTools;
+        private Button BtnLegal;
     }
 }

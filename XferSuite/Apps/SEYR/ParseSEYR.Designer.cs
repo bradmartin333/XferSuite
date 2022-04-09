@@ -54,8 +54,9 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonImportCustom = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEditPlotOrder = new System.Windows.Forms.ToolStripButton();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripLabelPercent = new System.Windows.Forms.ToolStripLabel();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -294,7 +295,7 @@ namespace XferSuite.Apps.SEYR
             this.olvCustom.AllColumns.Add(this.olvColumnName);
             this.olvCustom.CellEditUseWholeCell = false;
             this.olvCustom.CheckBoxes = true;
-            this.olvCustom.CheckedAspectName = "Visible";
+            this.olvCustom.CheckedAspectName = "Checked";
             this.olvCustom.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnName});
             this.olvCustom.Cursor = System.Windows.Forms.Cursors.Default;
@@ -338,12 +339,11 @@ namespace XferSuite.Apps.SEYR
             // toolStripButtonAddCustom
             // 
             this.toolStripButtonAddCustom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAddCustom.Enabled = false;
             this.toolStripButtonAddCustom.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddCustom.Image")));
             this.toolStripButtonAddCustom.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAddCustom.Name = "toolStripButtonAddCustom";
             this.toolStripButtonAddCustom.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonAddCustom.Text = "Add Custom";
+            this.toolStripButtonAddCustom.Text = "Add Custom Feature";
             this.toolStripButtonAddCustom.Click += new System.EventHandler(this.ToolStripButtonAddCustom_Click);
             // 
             // toolStripButtonReset
@@ -353,7 +353,7 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonReset.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonReset.Name = "toolStripButtonReset";
             this.toolStripButtonReset.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonReset.Text = "Reset Columns";
+            this.toolStripButtonReset.Text = "Reset Buckets";
             this.toolStripButtonReset.Click += new System.EventHandler(this.ToolStripButtonReset_Click);
             // 
             // toolStrip
@@ -363,9 +363,10 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonParse,
             this.toolStripButtonSmartSort,
             this.toolStripButtonAddCustom,
+            this.toolStripButtonImportCustom,
             this.toolStripButtonReset,
             this.toolStripButtonEditPlotOrder,
-            this.toolStripProgressBar});
+            this.toolStripLabelPercent});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(574, 27);
@@ -382,6 +383,16 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonSmartSort.Text = "Smart Sort";
             this.toolStripButtonSmartSort.Click += new System.EventHandler(this.ToolStripButtonSmartSort_Click);
             // 
+            // toolStripButtonImportCustom
+            // 
+            this.toolStripButtonImportCustom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonImportCustom.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImportCustom.Image")));
+            this.toolStripButtonImportCustom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImportCustom.Name = "toolStripButtonImportCustom";
+            this.toolStripButtonImportCustom.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonImportCustom.Text = "Import Custom Features";
+            this.toolStripButtonImportCustom.Click += new System.EventHandler(this.ToolStripButtonImportCustom_Click);
+            // 
             // toolStripButtonEditPlotOrder
             // 
             this.toolStripButtonEditPlotOrder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -392,11 +403,11 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonEditPlotOrder.Text = "Edit Plot Order";
             this.toolStripButtonEditPlotOrder.Click += new System.EventHandler(this.ToolStripButtonEditPlotOrder_Click);
             // 
-            // toolStripProgressBar
+            // toolStripLabelPercent
             // 
-            this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(400, 24);
+            this.toolStripLabelPercent.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripLabelPercent.Name = "toolStripLabelPercent";
+            this.toolStripLabelPercent.Size = new System.Drawing.Size(0, 24);
             // 
             // ParseSEYR
             // 
@@ -431,7 +442,6 @@ namespace XferSuite.Apps.SEYR
         private System.Windows.Forms.ToolStripButton toolStripButtonAddCustom;
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private BrightIdeasSoftware.TreeListView olvNeedOne;
         private BrightIdeasSoftware.OLVColumn olvColumn3;
         private BrightIdeasSoftware.ObjectListView olvRequire;
@@ -451,5 +461,7 @@ namespace XferSuite.Apps.SEYR
         private System.Windows.Forms.ToolStripButton toolStripButtonEditPlotOrder;
         private BrightIdeasSoftware.FastDataListView olvCustom;
         private BrightIdeasSoftware.OLVColumn olvColumnName;
+        private System.Windows.Forms.ToolStripButton toolStripButtonImportCustom;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelPercent;
     }
 }

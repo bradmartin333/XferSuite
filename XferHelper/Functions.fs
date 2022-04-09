@@ -662,27 +662,6 @@ module Report =
 
     let data (path: string) = reader path
 
-    let getNumImages (data: Entry []) =
-        data
-        |> Array.map (fun x -> x.ImageNumber)
-        |> Array.toSeq
-        |> Seq.distinct
-        |> Seq.length
-
-    let getNumX (data: Entry []) =
-        data
-        |> Array.map (fun x -> x.XCopy)
-        |> Array.toSeq
-        |> Seq.distinct
-        |> Seq.length
-
-    let getNumY (data: Entry []) =
-        data
-        |> Array.map (fun x -> x.YCopy)
-        |> Array.toSeq
-        |> Seq.distinct
-        |> Seq.length
-
     let getFeatures (data: Entry []) =
         data
         |> Array.map (fun x -> x.Name)
@@ -704,9 +683,10 @@ module Report =
                 else
                     d.State <- State.Fail
 
-    let getImage (data: Entry []) (num: int) =
+    let removeBuffers (data: Entry []) (names: string []) =
+        let nameList = names |> Array.toList
         data
-        |> Array.filter (fun x -> x.ImageNumber = num)
+        |> Array.filter (fun x -> not (List.contains x.Name nameList))
 
     let getRegions (data: Entry []) =
         data
@@ -715,16 +695,3 @@ module Report =
         |> Array.toSeq
         |> Seq.distinct
         |> Seq.toArray
-
-    let getRegion (data: Entry []) (region: string) =
-        data
-        |> Array.filter (fun x -> (x.RR, x.RC, x.R, x.C).ToString() = region)
-
-    let getCell (data: Entry []) (row: int) (col: int) =
-        data
-        |> Array.filter (fun x -> x.XCopy = row && x.YCopy = col)
-
-    let removeBuffers (data: Entry []) (names: string []) =
-        let nameList = names |> Array.toList
-        data
-        |> Array.filter (fun x -> not (List.contains x.Name nameList))

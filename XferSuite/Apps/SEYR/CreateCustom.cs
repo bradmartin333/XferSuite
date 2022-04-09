@@ -26,7 +26,7 @@ namespace XferSuite.Apps.SEYR
             {
                 CustomFeature = feature;
                 Text = Text.Replace("Create", "Edit");
-                btnHide.Visible = true;
+                btnHide.Enabled = true;
             }
             Features = features;
             ExistingCustomFeatures = customFeatures;
@@ -39,7 +39,7 @@ namespace XferSuite.Apps.SEYR
             numOffsetY.Value = (decimal)CustomFeature.Offset.Y;
             foreach ((string, Report.State) filter in CustomFeature.Filters)
                 dataGridView.Rows.Add(new object[] { filter.Item1, filter.Item2 == Report.State.Pass ? "Pass" : "Fail" });
-            CustomFeature.Visible = true;
+            CustomFeature.Checked = true;
         }
 
         private void BtnConfirm_Click(object sender, EventArgs e)
@@ -155,52 +155,6 @@ namespace XferSuite.Apps.SEYR
                 return;
             else
                 System.IO.File.WriteAllText(pathBuffer, GetParameters() + GetDataGridAsString());
-        }
-
-        private void BtnLoad_Click(object sender, EventArgs e)
-        {
-            string pathBuffer = MainMenu.OpenFile("Open Custom SEYR Feature", "Text File (*.txt) | *.txt");
-            if (pathBuffer == null)
-                return;
-            else
-                LoadAll(System.IO.File.ReadAllLines(pathBuffer));
-        }
-
-        private void LoadAll(string[] lines)
-        {
-            try
-            {
-                dataGridView.Rows.Clear();
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    string[] cols = lines[i].Split('\t');
-                    if (i == 0)
-                    {
-                        txtName.Text = cols[0];
-                        panelColor.BackColor = Color.FromArgb(int.Parse(cols[1]));
-                        numSize.Value = decimal.Parse(cols[2]);
-                        comboBoxType.Text = cols[3];
-                        numOffsetX.Value = decimal.Parse(cols[4]);
-                        numOffsetY.Value = decimal.Parse(cols[5]);
-                    }
-                    else
-                    {
-                        if (Features.Select(x => x.Name).Contains(cols[0]))
-                            dataGridView.Rows.Add(cols);
-                        else
-                        {
-                            MessageBox.Show("Loaded feature does not match current SEYR report", "Create Custom SEYR Feature");
-                            DialogResult = DialogResult.Cancel;
-                            Close();
-                            return;
-                        }
-                    }   
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Corrupt save:\n\n{ex}", "Create Custom SEYR Feature");
-            }
         }
 
         #endregion

@@ -34,7 +34,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnSaveAs = new System.Windows.Forms.Button();
-            this.btnLoad = new System.Windows.Forms.Button();
             this.btnHide = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -119,11 +118,10 @@
             this.flowLayoutPanel2.AutoSize = true;
             this.tableLayoutPanel.SetColumnSpan(this.flowLayoutPanel2, 2);
             this.flowLayoutPanel2.Controls.Add(this.btnSaveAs);
-            this.flowLayoutPanel2.Controls.Add(this.btnLoad);
             this.flowLayoutPanel2.Controls.Add(this.btnHide);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(256, 206);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(264, 206);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(168, 31);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(152, 31);
             this.flowLayoutPanel2.TabIndex = 12;
             // 
             // btnSaveAs
@@ -132,35 +130,23 @@
             this.btnSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveAs.Location = new System.Drawing.Point(3, 3);
             this.btnSaveAs.Name = "btnSaveAs";
-            this.btnSaveAs.Size = new System.Drawing.Size(50, 25);
+            this.btnSaveAs.Size = new System.Drawing.Size(70, 25);
             this.btnSaveAs.TabIndex = 2;
             this.btnSaveAs.Text = "Save";
             this.btnSaveAs.UseVisualStyleBackColor = false;
             this.btnSaveAs.Click += new System.EventHandler(this.BtnSaveAs_Click);
             // 
-            // btnLoad
-            // 
-            this.btnLoad.BackColor = System.Drawing.Color.White;
-            this.btnLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLoad.Location = new System.Drawing.Point(59, 3);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(50, 25);
-            this.btnLoad.TabIndex = 0;
-            this.btnLoad.Text = "Load";
-            this.btnLoad.UseVisualStyleBackColor = false;
-            this.btnLoad.Click += new System.EventHandler(this.BtnLoad_Click);
-            // 
             // btnHide
             // 
             this.btnHide.BackColor = System.Drawing.Color.White;
+            this.btnHide.Enabled = false;
             this.btnHide.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHide.Location = new System.Drawing.Point(115, 3);
+            this.btnHide.Location = new System.Drawing.Point(79, 3);
             this.btnHide.Name = "btnHide";
-            this.btnHide.Size = new System.Drawing.Size(50, 25);
+            this.btnHide.Size = new System.Drawing.Size(70, 25);
             this.btnHide.TabIndex = 3;
             this.btnHide.Text = "Hide";
             this.btnHide.UseVisualStyleBackColor = false;
-            this.btnHide.Visible = false;
             this.btnHide.Click += new System.EventHandler(this.BtnHide_Click);
             // 
             // label2
@@ -435,7 +421,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.Button btnSaveAs;
-        private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.DataGridViewComboBoxColumn Feature;
         private System.Windows.Forms.DataGridViewComboBoxColumn Criteria;
         private System.Windows.Forms.Label label6;

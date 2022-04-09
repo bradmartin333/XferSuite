@@ -36,7 +36,7 @@ namespace XferSuite
             this.btnParseSEYR = new System.Windows.Forms.Button();
             this.btnCameraViewer = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
-            this.btnMapFlip = new System.Windows.Forms.Button();
+            this.btnAdvancedTools = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,7 +52,7 @@ namespace XferSuite
             this.tableLayoutPanel.Controls.Add(this.btnParseSEYR, 2, 0);
             this.tableLayoutPanel.Controls.Add(this.btnCameraViewer, 0, 1);
             this.tableLayoutPanel.Controls.Add(this.btnSettings, 2, 1);
-            this.tableLayoutPanel.Controls.Add(this.btnMapFlip, 1, 1);
+            this.tableLayoutPanel.Controls.Add(this.btnAdvancedTools, 1, 1);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2);
@@ -80,7 +80,6 @@ namespace XferSuite
             this.btnXYZplotter.Size = new System.Drawing.Size(92, 65);
             this.btnXYZplotter.TabIndex = 4;
             this.btnXYZplotter.Tag = "1";
-            this.btnXYZplotter.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnXYZplotter.UseVisualStyleBackColor = true;
             this.btnXYZplotter.Click += new System.EventHandler(this.Btn_Click);
             // 
@@ -100,7 +99,6 @@ namespace XferSuite
             this.btnInlinepositions.Size = new System.Drawing.Size(92, 65);
             this.btnInlinepositions.TabIndex = 2;
             this.btnInlinepositions.Tag = "0";
-            this.btnInlinepositions.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnInlinepositions.UseVisualStyleBackColor = true;
             this.btnInlinepositions.Click += new System.EventHandler(this.Btn_Click);
             // 
@@ -120,7 +118,6 @@ namespace XferSuite
             this.btnParseSEYR.Size = new System.Drawing.Size(94, 65);
             this.btnParseSEYR.TabIndex = 7;
             this.btnParseSEYR.Tag = "2";
-            this.btnParseSEYR.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnParseSEYR.UseVisualStyleBackColor = true;
             this.btnParseSEYR.Click += new System.EventHandler(this.Btn_Click);
             // 
@@ -140,7 +137,6 @@ namespace XferSuite
             this.btnCameraViewer.Size = new System.Drawing.Size(92, 65);
             this.btnCameraViewer.TabIndex = 11;
             this.btnCameraViewer.Tag = "3";
-            this.btnCameraViewer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCameraViewer.UseVisualStyleBackColor = true;
             this.btnCameraViewer.Click += new System.EventHandler(this.Btn_Click);
             // 
@@ -159,29 +155,27 @@ namespace XferSuite
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(94, 65);
             this.btnSettings.TabIndex = 11;
-            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSettings.UseVisualStyleBackColor = true;
             this.btnSettings.Click += new System.EventHandler(this.BtnSettings_Click);
             // 
-            // btnMapFlip
+            // btnAdvancedTools
             // 
-            this.btnMapFlip.AccessibleName = "Map Flip";
-            this.btnMapFlip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMapFlip.BackgroundImage")));
-            this.btnMapFlip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnMapFlip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnMapFlip.FlatAppearance.BorderSize = 0;
-            this.btnMapFlip.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
-            this.btnMapFlip.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnMapFlip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMapFlip.Location = new System.Drawing.Point(122, 95);
-            this.btnMapFlip.Margin = new System.Windows.Forms.Padding(10);
-            this.btnMapFlip.Name = "btnMapFlip";
-            this.btnMapFlip.Size = new System.Drawing.Size(92, 65);
-            this.btnMapFlip.TabIndex = 10;
-            this.btnMapFlip.Tag = "4";
-            this.btnMapFlip.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnMapFlip.UseVisualStyleBackColor = true;
-            this.btnMapFlip.Click += new System.EventHandler(this.Btn_Click);
+            this.btnAdvancedTools.AccessibleName = "Advanced Tools";
+            this.btnAdvancedTools.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAdvancedTools.BackgroundImage")));
+            this.btnAdvancedTools.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnAdvancedTools.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnAdvancedTools.FlatAppearance.BorderSize = 0;
+            this.btnAdvancedTools.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LawnGreen;
+            this.btnAdvancedTools.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnAdvancedTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAdvancedTools.Location = new System.Drawing.Point(122, 95);
+            this.btnAdvancedTools.Margin = new System.Windows.Forms.Padding(10);
+            this.btnAdvancedTools.Name = "btnAdvancedTools";
+            this.btnAdvancedTools.Size = new System.Drawing.Size(92, 65);
+            this.btnAdvancedTools.TabIndex = 10;
+            this.btnAdvancedTools.Tag = "4";
+            this.btnAdvancedTools.UseVisualStyleBackColor = true;
+            this.btnAdvancedTools.Click += new System.EventHandler(this.Btn_Click);
             // 
             // MainMenu
             // 
@@ -207,7 +201,7 @@ namespace XferSuite
 
         #endregion
         private System.Windows.Forms.Button btnInlinepositions;
-        private System.Windows.Forms.Button btnMapFlip;
+        private System.Windows.Forms.Button btnAdvancedTools;
         private System.Windows.Forms.Button btnParseSEYR;
         private System.Windows.Forms.Button btnXYZplotter;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanel;

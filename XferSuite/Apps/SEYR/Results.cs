@@ -30,12 +30,17 @@ namespace XferSuite.Apps.SEYR
         private bool FlipY;
         private int PassPointSize;
         private int FailPointSize;
+        private float RegionTextRotation;
+        private int RegionTextOffsetX;
+        private int RegionTextOffsetY;
         private int RegionTextSize;
         private int PercentageTextSize;
         private int DataReduction;
         private double RegionBorderPadding;
         private int RegionBorderOpcaity;
         private int RegionLabelOpacity;
+        private int PercentLabelOpacity;
+        private bool PercentLocation;
 
         private string[] Regions;
         private List<Plottable> Plottables;
@@ -81,12 +86,17 @@ namespace XferSuite.Apps.SEYR
             FlipY = parseSEYR.FlipYAxis;
             PassPointSize = parseSEYR.PassPointSize;
             FailPointSize = parseSEYR.FailPointSize;
+            RegionTextRotation = parseSEYR.RegionTextRotation;
+            RegionTextOffsetX = parseSEYR.RegionTextOffsetX;
+            RegionTextOffsetY = parseSEYR.RegionTextOffsetY;
             RegionTextSize = parseSEYR.RegionTextSize;
             PercentageTextSize = parseSEYR.PercentageTextSize;
             DataReduction = parseSEYR.DataReduction;
             RegionBorderPadding = parseSEYR.RegionBorderPadding;
             RegionBorderOpcaity = parseSEYR.RegionBorderOpacity;
             RegionLabelOpacity = parseSEYR.RegionLabelOpacity;
+            PercentLabelOpacity = parseSEYR.PercentLabelOpacity;
+            PercentLocation = parseSEYR.PercentLocation;
             Regions = parseSEYR.Regions;
             Plottables = parseSEYR.Plottables;
             PlotOrder = parseSEYR.PlotOrder;
@@ -167,11 +177,15 @@ namespace XferSuite.Apps.SEYR
         private void AddOverlays()
         {
             RTB.Text = "(RR, RC, R, C)\tYield\n"; // Header
+            double totalPass = 0;
+            double totalFail = 0;
             foreach (string region in Regions)
             {
                 Plottable[] regionPlottables = UsedPlottables.Where(p => p.Region == region).ToArray();
                 double passNum = regionPlottables.Where(x => x.Pass).Count();
                 double failNum = regionPlottables.Where(x => !x.Pass).Count();
+                totalPass += passNum;
+                totalFail += failNum;
                 RTB.Text += $"{region}\t{passNum / (passNum + failNum):P}\n";
 
                 if (regionPlottables.Count() == 0) continue;
@@ -185,44 +199,50 @@ namespace XferSuite.Apps.SEYR
                 double[] regionYs = new double[] { minY, maxY, maxY, minY, minY };
 
                 if (ShowRegionBorders) formsPlot.Plot.AddScatterLines(regionXs, regionYs, Color.FromArgb(RegionBorderOpcaity, Color.Black), 3);
-
-                if (ShowRegionStrings)
-                {
-                    Text txt = formsPlot.Plot.AddText(
-                        region,
-                        (minX + maxX) / 2,
-                        FlipY ? maxY : minY,
-                        RegionTextSize,
-                        color: Color.Black);
-                    txt.BackgroundColor = Color.FromArgb(RegionLabelOpacity, Color.White);
-                    txt.BackgroundFill = true;
-                    txt.Alignment = Alignment.UpperCenter;
-                    txt.FontName = "segoe";
-                }
-
-                if (ShowPercentages)
-                {
-                    Text txt = formsPlot.Plot.AddText(
-                        GetRegionPercent(region),
-                        (minX + maxX) / 2,
-                        (minY + maxY) / 2,
-                        PercentageTextSize,
-                        color: Color.Black);
-                    txt.BackgroundColor = Color.White;
-                    txt.BackgroundFill = true;
-                    txt.Alignment = Alignment.UpperCenter;
-                    txt.FontName = "segoe";
-                }
+                if (ShowRegionStrings || (ShowPercentages && !PercentLocation)) AddRegionText(region, minX, minY, maxX, maxY);
+                if (ShowPercentages && PercentLocation) AddPercentText(region, minX, minY, maxX, maxY);
+                if (ShowTrackerString) AddHighlightedPoint();
             }
+            if (totalPass > 0) RTB.Text += $"Total\t{totalPass / (totalPass + totalFail):P}\n";
+        }
 
-            if (ShowTrackerString) // Add a red circle we can move around later as a highlighted point indicator
-            {
-                HighlightedPoint = formsPlot.Plot.AddPoint(0, 0);
-                HighlightedPoint.Color = Color.Red;
-                HighlightedPoint.MarkerSize = 10;
-                HighlightedPoint.MarkerShape = MarkerShape.openCircle;
-                HighlightedPoint.IsVisible = false;
-            }
+        private void AddRegionText(string region, double minX, double minY, double maxX, double maxY)
+        {
+            Text txt = formsPlot.Plot.AddText(
+                (ShowRegionStrings ? region : "") + ((ShowPercentages && !PercentLocation) ? $" {GetRegionPercent(region)}" : ""),
+                ((minX + maxX) / 2) + RegionTextOffsetX,
+                (FlipY ? maxY : minY) + RegionTextOffsetY,
+                RegionTextSize,
+                color: Color.Black);
+            txt.BackgroundColor = Color.FromArgb(RegionLabelOpacity, Color.White);
+            txt.BackgroundFill = true;
+            txt.Alignment = Alignment.UpperCenter;
+            txt.FontName = "segoe";
+            txt.Rotation = RegionTextRotation;
+        }
+
+        private void AddPercentText(string region, double minX, double minY, double maxX, double maxY)
+        {
+            Text txt = formsPlot.Plot.AddText(
+                GetRegionPercent(region),
+                (minX + maxX) / 2,
+                (minY + maxY) / 2,
+                PercentageTextSize,
+                color: Color.Black);
+            txt.BackgroundColor = Color.FromArgb(PercentLabelOpacity, Color.White);
+            txt.BackgroundFill = true;
+            txt.Alignment = Alignment.UpperCenter;
+            txt.FontName = "segoe";
+        }
+
+        private void AddHighlightedPoint()
+        {
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
         }
 
         private string GetRegionPercent(string region)
@@ -261,13 +281,18 @@ namespace XferSuite.Apps.SEYR
             customMenu.Items.Add(new ToolStripMenuItem("Select Plot Background Color", null, new EventHandler(SelectPlotColor)));
             customMenu.Items.Add(new ToolStripMenuItem("Open Settings", null, new EventHandler(OpenSettings)));
             customMenu.Items.Add(new ToolStripSeparator());
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Grid", null, new EventHandler(ToggleGrid)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Tracker String", null, new EventHandler(ToggleTrackerString)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Quality", null, new EventHandler(ToggleQuality)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Region Borders", null, new EventHandler(ToggleRegionBorders)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Region Strings", null, new EventHandler(ToggleRegionStrings)));
-            customMenu.Items.Add(new ToolStripMenuItem("Toggle Percentages", null, new EventHandler(TogglePercentages)));
+            customMenu.Items.Add(new ToolStripMenuItem("Grid", GetToggleImage(ShowGrid), new EventHandler(ToggleGrid)));
+            customMenu.Items.Add(new ToolStripMenuItem("Tracker String", GetToggleImage(ShowTrackerString), new EventHandler(ToggleTrackerString)));
+            customMenu.Items.Add(new ToolStripMenuItem("High Quality", GetToggleImage(!UseLowQuality), new EventHandler(ToggleQuality)));
+            customMenu.Items.Add(new ToolStripMenuItem("Region Borders", GetToggleImage(ShowRegionBorders), new EventHandler(ToggleRegionBorders)));
+            customMenu.Items.Add(new ToolStripMenuItem("Region Strings", GetToggleImage(ShowRegionStrings), new EventHandler(ToggleRegionStrings)));
+            customMenu.Items.Add(new ToolStripMenuItem("Percentages", GetToggleImage(ShowPercentages), new EventHandler(TogglePercentages)));
             customMenu.Show(System.Windows.Forms.Cursor.Position);
+        }
+
+        private Bitmap GetToggleImage(bool toggle)
+        {
+            return toggle ? Properties.Resources.toggleOn : Properties.Resources.toggleOff;
         }
 
         private void CopyImage(object sender, EventArgs e)

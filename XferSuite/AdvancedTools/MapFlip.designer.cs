@@ -1,5 +1,5 @@
 ﻿
-namespace XferSuite.Apps
+namespace XferSuite.AdvancedTools
 {
     partial class MapFlip
     {
@@ -42,11 +42,11 @@ namespace XferSuite.Apps
             this.pnlOutD = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnReset = new System.Windows.Forms.Button();
-            this.lblClip = new System.Windows.Forms.Label();
             this.btnHorizFlip = new System.Windows.Forms.Button();
             this.btnVertFlip = new System.Windows.Forms.Button();
             this.btnRotate = new System.Windows.Forms.Button();
+            this.btnReset = new System.Windows.Forms.Button();
+            this.lblClip = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -217,33 +217,6 @@ namespace XferSuite.Apps
             this.label2.Text = "Out";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // btnReset
-            // 
-            this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReset.AutoSize = true;
-            this.btnReset.BackColor = System.Drawing.SystemColors.Control;
-            this.tableLayoutPanel2.SetColumnSpan(this.btnReset, 3);
-            this.btnReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReset.Location = new System.Drawing.Point(104, 28);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(77, 25);
-            this.btnReset.TabIndex = 15;
-            this.btnReset.Text = "Reset";
-            this.btnReset.UseVisualStyleBackColor = false;
-            this.btnReset.Click += new System.EventHandler(this.BtnReset_Click);
-            // 
-            // lblClip
-            // 
-            this.lblClip.AutoSize = true;
-            this.tableLayoutPanel2.SetColumnSpan(this.lblClip, 7);
-            this.lblClip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblClip.Location = new System.Drawing.Point(6, 3);
-            this.lblClip.Name = "lblClip";
-            this.lblClip.Size = new System.Drawing.Size(273, 17);
-            this.lblClip.TabIndex = 16;
-            this.lblClip.Text = "Clipboard contains an m x n matrix";
-            this.lblClip.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // btnHorizFlip
             // 
             this.btnHorizFlip.BackColor = System.Drawing.SystemColors.Control;
@@ -288,6 +261,33 @@ namespace XferSuite.Apps
             this.btnRotate.Tag = "2";
             this.btnRotate.UseVisualStyleBackColor = false;
             this.btnRotate.Click += new System.EventHandler(this.BtnClick);
+            // 
+            // btnReset
+            // 
+            this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnReset.AutoSize = true;
+            this.btnReset.BackColor = System.Drawing.SystemColors.Control;
+            this.tableLayoutPanel2.SetColumnSpan(this.btnReset, 3);
+            this.btnReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReset.Location = new System.Drawing.Point(104, 28);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(77, 25);
+            this.btnReset.TabIndex = 15;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = false;
+            this.btnReset.Click += new System.EventHandler(this.BtnReset_Click);
+            // 
+            // lblClip
+            // 
+            this.lblClip.AutoSize = true;
+            this.tableLayoutPanel2.SetColumnSpan(this.lblClip, 7);
+            this.lblClip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblClip.Location = new System.Drawing.Point(6, 3);
+            this.lblClip.Name = "lblClip";
+            this.lblClip.Size = new System.Drawing.Size(273, 17);
+            this.lblClip.TabIndex = 16;
+            this.lblClip.Text = "Clipboard contains an m x n matrix";
+            this.lblClip.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MapFlip
             // 
