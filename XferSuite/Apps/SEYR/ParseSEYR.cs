@@ -499,7 +499,7 @@ namespace XferSuite.Apps.SEYR
 
             RequiredOn = Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0;
             NeedOneOn = Features.Where(x => x.IsChild).Count() > 0;
-            CustomOn = CustomFeatures.Where(x => x.Visible).Count() > 0;
+            CustomOn = CustomFeatures.Where(x => x.Checked).Count() > 0;
             FilteredData = CustomOn ? Data : Report.removeBuffers(Data, Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray());
             Regions = Report.getRegions(FilteredData);
             if (RequiredOn || NeedOneOn || CustomOn) Parse();
@@ -555,7 +555,7 @@ namespace XferSuite.Apps.SEYR
 
                         if (CustomOn)
                         {
-                            foreach (CustomFeature custom in CustomFeatures.Where(x => x.Visible))
+                            foreach (CustomFeature custom in CustomFeatures.Where(x => x.Checked))
                             {
                                 bool notMatched = false;
                                 foreach ((string, Report.State) filter in custom.Filters)

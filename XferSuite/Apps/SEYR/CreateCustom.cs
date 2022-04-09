@@ -39,7 +39,7 @@ namespace XferSuite.Apps.SEYR
             numOffsetY.Value = (decimal)CustomFeature.Offset.Y;
             foreach ((string, Report.State) filter in CustomFeature.Filters)
                 dataGridView.Rows.Add(new object[] { filter.Item1, filter.Item2 == Report.State.Pass ? "Pass" : "Fail" });
-            CustomFeature.Visible = true;
+            CustomFeature.Checked = true;
         }
 
         private void BtnConfirm_Click(object sender, EventArgs e)

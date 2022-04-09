@@ -100,15 +100,15 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private bool _Visible = true;
-        public bool Visible
+        private bool _Checked = true;
+        public bool Checked
         {
-            get => _Visible;
+            get => _Checked;
             set
             {
-                if (value != _Visible)
+                if (value != _Checked)
                 {
-                    _Visible = value;
+                    _Checked = value;
                     NotifyPropertyChanged();
                 }
             }

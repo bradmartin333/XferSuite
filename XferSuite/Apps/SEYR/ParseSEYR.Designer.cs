@@ -295,7 +295,7 @@ namespace XferSuite.Apps.SEYR
             this.olvCustom.AllColumns.Add(this.olvColumnName);
             this.olvCustom.CellEditUseWholeCell = false;
             this.olvCustom.CheckBoxes = true;
-            this.olvCustom.CheckedAspectName = "Visible";
+            this.olvCustom.CheckedAspectName = "Checked";
             this.olvCustom.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnName});
             this.olvCustom.Cursor = System.Windows.Forms.Cursors.Default;
