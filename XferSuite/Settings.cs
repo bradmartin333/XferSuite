@@ -91,12 +91,12 @@ namespace XferSuite
             System.Diagnostics.Process.Start(tempPath);
         }
 
-        private void btnCheckForUpdates_Click(object sender, EventArgs e)
+        private void BtnCheckForUpdates_Click(object sender, EventArgs e)
         {
             CheckForUpdates();
         }
 
-        private void btnViewLicense_Click(object sender, EventArgs e)
+        private void BtnViewLicense_Click(object sender, EventArgs e)
         {
             Form form = new Form()
             {
@@ -109,18 +109,9 @@ namespace XferSuite
             form.Show();
         }
 
-        private void btnViewDocs_Click(object sender, EventArgs e)
+        private void BtnViewDocs_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(@"https://github.com/bradmartin333/XferSuite/wiki");
-        }
-
-        private void BtnAdvancedTools_Click(object sender, EventArgs e)
-        {
-            if (Application.OpenForms.OfType<AdvancedTools.SelectTool > ().Any())
-                Application.OpenForms.OfType<AdvancedTools.SelectTool>().First().BringToFront();
-            else
-                _ = new AdvancedTools.SelectTool();
-            Close();
         }
     }
 }

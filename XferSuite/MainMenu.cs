@@ -28,7 +28,7 @@ namespace XferSuite
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            foreach (Apps.Camera.CameraViewer cameraViewer in Application.OpenForms.OfType<Apps.Camera.CameraViewer>()) 
+            foreach (Apps.Camera.CameraViewer cameraViewer in Application.OpenForms.OfType<Apps.Camera.CameraViewer>())
                 cameraViewer.EndStream();
         }
 
@@ -64,31 +64,37 @@ namespace XferSuite
         private void CreateForm(int idx, string path)
         {
             Form form = new Form();
-            using (new Utility.HourGlass())
+            switch (idx)
             {
-                switch (idx)
-                {
-                    case 0:
+                case 0:
+                    using (new Utility.HourGlass())
+                    {
                         if (!VerifyPath(path, idx)) return;
                         form = new Apps.InlinePositions.MetroGraphs(path) { Text = new FileInfo(path).Name };
-                        break;
-                    case 1:
+                    }
+                    break;
+                case 1:
+                    using (new Utility.HourGlass())
+                    {
                         if (!VerifyPath(path, idx)) return;
                         form = new Apps.XYZplotter.Plotter(path);
-                        break;
-                    case 2:
+                    }
+                    break;
+                case 2:
+                    using (new Utility.HourGlass())
+                    {
                         if (!VerifyPath(path, idx)) return;
                         form = new Apps.SEYR.ParseSEYR(path);
-                        break;
-                    case 3:
-                        form = new Apps.Camera.CameraViewer();
-                        break;
-                    case 4:
-                        form = new Apps.MapFlip();
-                        break;
-                    default:
-                        return;
-                }
+                    }
+                    break;
+                case 3:
+                    form = new Apps.Camera.CameraViewer();
+                    break;
+                case 4:
+                    form = new AdvancedTools.SelectTool();
+                    break;
+                default:
+                    return;
             }
             form.Activated += Form_Activated;
             form.Show();

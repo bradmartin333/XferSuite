@@ -17,7 +17,6 @@ namespace XferSuite.AdvancedTools.uTP
         public PrintLogParser()
         {
             InitializeComponent();
-            Show();
         }
 
         private void BtnOpenFile_Click(object sender, EventArgs e)

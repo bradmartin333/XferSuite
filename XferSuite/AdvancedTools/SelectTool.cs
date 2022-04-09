@@ -15,9 +15,11 @@ namespace XferSuite.AdvancedTools
         enum AdvancedForm
         {
             [Description("10Zone Cal Generator")]
-            TenZoneCal,
+            tenZoneCal,
             [Description("uTP Log Parser")]
             uTPlogParser,
+            [Description("Map Flip")]
+            mapFlip,
         }
 
         public SelectTool()
@@ -32,33 +34,50 @@ namespace XferSuite.AdvancedTools
             try
             {
                 AdvancedForm form = (AdvancedForm)ListBox.SelectedIndices[0];
+                Form tool = new Form();
                 switch (form)
                 {
-                    case AdvancedForm.TenZoneCal:
+                    case AdvancedForm.tenZoneCal:
                         if (Application.OpenForms.OfType<CalGenerator>().Any())
                             Application.OpenForms.OfType<CalGenerator>().First().BringToFront();
                         else
-                            _ = new CalGenerator();
+                            tool = new CalGenerator();
                         Close();
                         break;
                     case AdvancedForm.uTPlogParser:
                         if (Application.OpenForms.OfType<uTP.PrintLogParser>().Any())
                             Application.OpenForms.OfType<uTP.PrintLogParser>().First().BringToFront();
                         else
-                            _ = new uTP.PrintLogParser();
+                            tool = new uTP.PrintLogParser();
+                        Close();
+                        break;
+                    case AdvancedForm.mapFlip:
+                        if (Application.OpenForms.OfType<MapFlip>().Any())
+                            Application.OpenForms.OfType<MapFlip>().First().BringToFront();
+                        else
+                            tool = new MapFlip();
                         Close();
                         break;
                     // Create a form in the AdvancedTools folder and add a case above this comment
                     // for the newly added enum field and copy the above examples to launch the new form
                     default:
                         MessageBox.Show("Invalid Selection", "XferSuite Advanced Tools");
-                        break;
+                        return;
                 }
+                tool.Activated += Tool_Activated;
+                tool.Show();
+                MainMenu.Settings.PropertyGrid.SelectedObject = form;
             }
             catch (Exception)
             {
                 MessageBox.Show("Invalid Selection", "XferSuite Advanced Tools");
             }
+        }
+
+        private void Tool_Activated(object sender, EventArgs e)
+        {
+            if (!MainMenu.Settings.IsDisposed) // Prevents error on app close
+                MainMenu.Settings.PropertyGrid.SelectedObject = sender;
         }
 
         /// <summary>

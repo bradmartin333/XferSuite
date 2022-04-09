@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace XferSuite.Apps
+namespace XferSuite.AdvancedTools
 {
     /// <summary>
     /// A silly, but sometimes handy app made long ago
