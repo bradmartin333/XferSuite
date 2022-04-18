@@ -89,18 +89,12 @@ namespace XferSuite
                         {
                             using (ZipArchive archive = ZipFile.OpenRead(path))
                             {
-                                foreach (ZipArchiveEntry entry in archive.Entries)
-                                {
-                                    if (entry.Name == "SEYRreport.txt")
-                                    {
-                                        string destinationPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
-                                        entry.ExtractToFile(destinationPath, true);
-                                        if (!VerifyPath(destinationPath, idx)) return;
-                                        form = new Apps.SEYR.ParseSEYR(destinationPath);
-                                        found = true;
-                                        break;
-                                    }
-                                }
+                                ZipArchiveEntry report = archive.Entries.Where(x => x.Name == "SEYRreport.txt").First();
+                                string destinationPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
+                                report.ExtractToFile(destinationPath, true);
+                                if (!VerifyPath(destinationPath, idx)) return;
+                                form = new Apps.SEYR.ParseSEYR(destinationPath, path);
+                                found = true;
                             }
                             if (!found) MessageBox.Show("SEYR Report not found in SEYRUP file", "XferSuite");
                         }
@@ -108,7 +102,6 @@ namespace XferSuite
                         {
                             if (!VerifyPath(path, idx)) return;
                             form = new Apps.SEYR.ParseSEYR(path);
-                            break;
                         }
                     }
                     break;

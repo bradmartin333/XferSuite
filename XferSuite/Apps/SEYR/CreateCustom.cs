@@ -13,11 +13,11 @@ namespace XferSuite.Apps.SEYR
     public partial class CreateCustom : Form
     {
         public CustomFeature CustomFeature { get; set; } = new CustomFeature();
-        private readonly Report.Feature[] Features;
+        private readonly Feature[] Features;
         private readonly List<CustomFeature> ExistingCustomFeatures;
         private int RowIndex;
 
-        public CreateCustom(Report.Feature[] features, List<CustomFeature> customFeatures, CustomFeature feature = null)
+        public CreateCustom(Feature[] features, List<CustomFeature> customFeatures, CustomFeature feature = null)
         {
             InitializeComponent();
             panelColor.Click += PanelColor_Click;

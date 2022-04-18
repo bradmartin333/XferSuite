@@ -615,24 +615,6 @@ module Report =
 
     let toBucket (num: int) = enum<Bucket> num
 
-    type Feature =
-        { Name: string
-          mutable Bucket: Bucket
-          mutable Requirements: State []
-          mutable Children: List<Feature>
-          mutable FamilyName: string
-          mutable IsChild: bool
-          mutable IsParent: bool }
-
-    let toFeature (name: string) =
-        { Name = name
-          Bucket = Bucket.Buffer
-          Requirements = [| State.Pass |]
-          Children = []
-          FamilyName = ""
-          IsChild = false
-          IsParent = false }
-
     let verify (path: string) =
         let data = File.ReadAllLines path
 
@@ -656,14 +638,6 @@ module Report =
         |> Array.map toEntry
 
     let data (path: string) = reader path
-
-    let getFeatures (data: Entry []) =
-        data
-        |> Array.map (fun x -> x.Name)
-        |> Array.toSeq
-        |> Seq.distinct
-        |> Seq.toArray
-        |> Array.map toFeature
 
     let getData (data: Entry []) (name: string) =
         data

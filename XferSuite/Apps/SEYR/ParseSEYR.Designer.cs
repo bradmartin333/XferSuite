@@ -49,13 +49,13 @@ namespace XferSuite.Apps.SEYR
             this.olvCustom = new BrightIdeasSoftware.FastDataListView();
             this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStripButtonParse = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonAddCustom = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonReset = new System.Windows.Forms.ToolStripButton();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSmartSort = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportCustom = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEditPlotOrder = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabelPercent = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButtonAddCustom = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvNeedOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvRequire)).BeginInit();
@@ -321,16 +321,6 @@ namespace XferSuite.Apps.SEYR
             this.toolStripButtonParse.Text = "Parse";
             this.toolStripButtonParse.Click += new System.EventHandler(this.ToolStripButtonParse_Click);
             // 
-            // toolStripButtonAddCustom
-            // 
-            this.toolStripButtonAddCustom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAddCustom.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddCustom.Image")));
-            this.toolStripButtonAddCustom.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonAddCustom.Name = "toolStripButtonAddCustom";
-            this.toolStripButtonAddCustom.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonAddCustom.Text = "Add Custom Feature";
-            this.toolStripButtonAddCustom.Click += new System.EventHandler(this.ToolStripButtonAddCustom_Click);
-            // 
             // toolStripButtonReset
             // 
             this.toolStripButtonReset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -394,6 +384,16 @@ namespace XferSuite.Apps.SEYR
             this.toolStripLabelPercent.Name = "toolStripLabelPercent";
             this.toolStripLabelPercent.Size = new System.Drawing.Size(0, 24);
             // 
+            // toolStripButtonAddCustom
+            // 
+            this.toolStripButtonAddCustom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAddCustom.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddCustom.Image")));
+            this.toolStripButtonAddCustom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAddCustom.Name = "toolStripButtonAddCustom";
+            this.toolStripButtonAddCustom.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonAddCustom.Text = "Add Custom Feature";
+            this.toolStripButtonAddCustom.Click += new System.EventHandler(this.ToolStripButtonAddCustom_Click);
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -424,7 +424,6 @@ namespace XferSuite.Apps.SEYR
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.ToolStripButton toolStripButtonParse;
-        private System.Windows.Forms.ToolStripButton toolStripButtonAddCustom;
         private System.Windows.Forms.ToolStripButton toolStripButtonReset;
         private System.Windows.Forms.ToolStrip toolStrip;
         private BrightIdeasSoftware.TreeListView olvNeedOne;
@@ -447,5 +446,6 @@ namespace XferSuite.Apps.SEYR
         private BrightIdeasSoftware.OLVColumn olvColumnName;
         private System.Windows.Forms.ToolStripButton toolStripButtonImportCustom;
         private System.Windows.Forms.ToolStripLabel toolStripLabelPercent;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAddCustom;
     }
 }

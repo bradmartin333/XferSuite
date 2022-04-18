@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml;
 using XferHelper;
 
 namespace XferSuite.Apps.SEYR
@@ -245,8 +247,8 @@ namespace XferSuite.Apps.SEYR
 
         private readonly FileInfo Path;
         private readonly Report.Entry[] Data;
-        private Report.Feature[] Features;
-        private Report.Feature SelectedFeature;
+        private Feature[] Features;
+        private Feature SelectedFeature;
         private bool ObjectHasBeenDropped; // For criteria selector - possibly unecessary
         private readonly Results Results;
         private ScottPlot.Plottable.Annotation ViewDataAnnotation;
@@ -254,10 +256,11 @@ namespace XferSuite.Apps.SEYR
         private readonly BackgroundWorker ParseWorker = new BackgroundWorker();
 
         private bool RequiredOn, NeedOneOn, CustomOn;
-        private double DistX, DistY;
+        private double DistX = -1;
+        private double DistY = -1;
         private Report.Entry[] FilteredData;
 
-        public ParseSEYR(string path)
+        public ParseSEYR(string path, string seyrup = null)
         {
             InitializeComponent();
             Path = new FileInfo(path);
@@ -269,6 +272,8 @@ namespace XferSuite.Apps.SEYR
             ParseWorker.DoWork += ParseWorker_DoWork;
             ParseWorker.ProgressChanged += ParseWorker_ProgressChanged;
             ParseWorker.RunWorkerCompleted += ParseWorker_RunWorkerCompleted;
+
+            if (!string.IsNullOrEmpty(seyrup)) LoadProjectInfo(seyrup);
 
             ResetFeaturesAndUI();
 
@@ -289,8 +294,8 @@ namespace XferSuite.Apps.SEYR
             olvRequire.ModelDropped += ModelDropped;
             olvNeedOne.ModelCanDrop += ModelCanDrop;
             olvNeedOne.ModelDropped += ModelDropped;
-            olvNeedOne.CanExpandGetter = delegate (object x) { return ((Report.Feature)x).IsParent; };
-            olvNeedOne.ChildrenGetter = delegate (object x) { return ((Report.Feature)x).Children; };
+            olvNeedOne.CanExpandGetter = delegate (object x) { return ((Feature)x).IsParent; };
+            olvNeedOne.ChildrenGetter = delegate (object x) { return ((Feature)x).Children; };
 
             olvCustom.DoubleClick += OlvCustom_DoubleClick;
             olvCustom.FormatRow += OlvCustom_FormatRow;
@@ -298,9 +303,33 @@ namespace XferSuite.Apps.SEYR
             Show();
         }
 
+        private void LoadProjectInfo(string path)
+        {
+            string destinationPath = $@"{System.IO.Path.GetTempPath()}\project.seyr";
+
+            using (ZipArchive archive = ZipFile.OpenRead(path))
+            {
+                ZipArchiveEntry report = archive.Entries.Where(x => x.Name == "project.seyr").First();
+                report.ExtractToFile(destinationPath, true);
+            }
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(destinationPath);
+            double pxPerMM = double.Parse(doc.SelectSingleNode("/Project/PixelsPerMicron").InnerText) * 1e3;
+            DistX = double.Parse(doc.SelectSingleNode("/Project/PitchX").InnerText) / pxPerMM;
+            DistY = double.Parse(doc.SelectSingleNode("/Project/PitchY").InnerText) / pxPerMM;
+
+            XmlNodeList features = doc.SelectNodes("/Project/Features/Feature");
+            XmlNodeList locations = doc.SelectNodes("/Project/Features/Feature/Rectangle/Location");
+            for (int i = 0; i < features.Count; i++)
+                Feature.ProjectInfo.Add((
+                    features[i]["Name"].InnerText,
+                    new PointF((float)(double.Parse(locations[i]["X"].InnerText) / pxPerMM), (float)(double.Parse(locations[i]["Y"].InnerText) / pxPerMM))));
+        }
+
         private void ResetFeaturesAndUI()
         {
-            Features = Report.getFeatures(Data);
+            Features = Feature.GetFeatures(Data);
             SelectedFeature = null;
             lblSelectedFeature.Text = @"N\A";
             olvBuffer.SetObjects(Features);
@@ -318,7 +347,7 @@ namespace XferSuite.Apps.SEYR
             e.Effect = DragDropEffects.None;
             if (e.TargetModel != null)
             {
-                if (((Report.Feature)e.TargetModel).IsChild)
+                if (((Feature)e.TargetModel).IsChild)
                 {
                     e.Handled = false;
                 }
@@ -339,20 +368,16 @@ namespace XferSuite.Apps.SEYR
         {
             for (int i = 0; i < e.SourceModels.Count; i++)
             {
-                Report.Feature m = (Report.Feature)e.SourceModels[i];
+                Feature m = (Feature)e.SourceModels[i];
                 m.Bucket = Report.toBucket(int.Parse(e.ListView.Tag.ToString()));
                 if ((ObjectListView)sender == olvNeedOne)
                 {
                     if (e.DropTargetLocation == DropTargetLocation.Item)
                     {
                         m.IsChild = true;
-                        Report.Feature targ = (Report.Feature)e.TargetModel;
+                        Feature targ = (Feature)e.TargetModel;
                         m.FamilyName = targ.Name;
-
-                        // Converting between F# and C# lists
-                        List<Report.Feature> children = targ.Children.ToList();
-                        children.Add(m);
-                        targ.Children = ListModule.OfSeq(children);
+                        targ.Children.Add(m);
                     }
                     else
                     {
@@ -360,13 +385,9 @@ namespace XferSuite.Apps.SEYR
                         {
                             m.Bucket = Report.Bucket.NeedOne;
                             m.IsChild = true;
-                            Report.Feature parent = (Report.Feature)e.SourceModels[0];
+                            Feature parent = (Feature)e.SourceModels[0];
                             m.FamilyName = parent.Name;
-
-                            // Converting between F# and C# lists
-                            List<Report.Feature> children = parent.Children.ToList();
-                            children.Add(m);
-                            parent.Children = ListModule.OfSeq(children);
+                            parent.Children.Add(m);
                         }
                         else
                         {
@@ -411,7 +432,7 @@ namespace XferSuite.Apps.SEYR
             List<Report.State> requirements = new List<Report.State>();
             foreach (CheckBox cbx in flowLayoutPanelCriteria.Controls.OfType<CheckBox>())
                 if (cbx.Checked) requirements.Add(Report.toState(int.Parse(cbx.Tag.ToString())));
-            foreach (Report.Feature feature in Features)
+            foreach (Feature feature in Features)
                 feature.Requirements = requirements.ToArray();
         }
 
@@ -476,43 +497,46 @@ namespace XferSuite.Apps.SEYR
 
         private void InitialzeData()
         {
-            DistX = 0.0;
-            DistY = 0.0;
-
-            if (Path.FullName.Contains("_CP_"))
+            if (DistX == -1 || DistY == -1)
             {
-                string[] slice = Path.FullName.Replace(".txt", "").Split('_');
-                DistX = double.Parse(slice[slice.Length - 2]);
-                DistY = double.Parse(slice[slice.Length - 1]);
-            }
-            else
-            {
-                using (Utility.PromptForInput input = new Utility.PromptForInput(
-                    prompt: "Enter X grid pitch in millimeters",
-                    textEntry: false,
-                    max: 100,
-                    title: $"SEYR Parser Grid Setup"))
-                {
-                    var result = input.ShowDialog();
-                    if (result == DialogResult.OK)
-                        DistX = (double)((NumericUpDown)input.Control).Value;
-                    else
-                        return;
-                }
-                using (Utility.PromptForInput input = new Utility.PromptForInput(
-                    prompt: "Enter Y grid pitch in millimeters",
-                    textEntry: false,
-                    max: 100,
-                    title: $"SEYR Parser Grid Setup"))
-                {
-                    var result = input.ShowDialog();
-                    if (result == DialogResult.OK)
-                        DistY = (double)((NumericUpDown)input.Control).Value;
-                    else
-                        return;
-                }
-            }
+                DistX = 0.0;
+                DistY = 0.0;
 
+                if (Path.FullName.Contains("_CP_"))
+                {
+                    string[] slice = Path.FullName.Replace(".txt", "").Split('_');
+                    DistX = double.Parse(slice[slice.Length - 2]);
+                    DistY = double.Parse(slice[slice.Length - 1]);
+                }
+                else
+                {
+                    using (Utility.PromptForInput input = new Utility.PromptForInput(
+                        prompt: "Enter X grid pitch in millimeters",
+                        textEntry: false,
+                        max: 100,
+                        title: $"SEYR Parser Grid Setup"))
+                    {
+                        var result = input.ShowDialog();
+                        if (result == DialogResult.OK)
+                            DistX = (double)((NumericUpDown)input.Control).Value;
+                        else
+                            return;
+                    }
+                    using (Utility.PromptForInput input = new Utility.PromptForInput(
+                        prompt: "Enter Y grid pitch in millimeters",
+                        textEntry: false,
+                        max: 100,
+                        title: $"SEYR Parser Grid Setup"))
+                    {
+                        var result = input.ShowDialog();
+                        if (result == DialogResult.OK)
+                            DistY = (double)((NumericUpDown)input.Control).Value;
+                        else
+                            return;
+                    }
+                }
+            }
+            
             Regions = Report.getRegions(FilteredData);
         }
 
@@ -556,51 +580,20 @@ namespace XferSuite.Apps.SEYR
                     {
                         Report.Entry[] cell = cellGroup.ToArray();
                         if (cell == null || cell.Length == 0) continue;
-
-                        Plottable plottable = new Plottable();
-                        bool pass;
                         double thisX = cell[0].X + cell[0].TileCol * DistX * (_FlipXAxis ? -1 : 1);
                         double thisY = cell[0].Y + cell[0].TileRow * DistY;
-                        string detailString = $"     Copy ({cell[0].TileCol}, {cell[0].TileRow})     Location ({thisX}, {thisY})";
-
-                        foreach (CustomFeature custom in CustomFeatures.Where(x => x.Checked))
+                        string detailString = $"     Cell ({cell[0].TileCol}, {cell[0].TileRow})     Location ({thisX}, {thisY})";
+                        foreach (Feature feature in Features)
                         {
-                            if (!CheckCustomCriteria(custom, cell)) continue;
-                            plottable = new Plottable
+                            Plottables.Add(new Plottable()
                             {
                                 Region = Regions[regionIdx],
-                                DetailString = detailString + $"     {custom.Type}     Custom: {custom.Name}",
-                                X = thisX - custom.Offset.X,
-                                Y = thisY - custom.Offset.Y,
-                                Pass = custom.Type == Report.State.Pass,
-                                CustomTag = custom.Name,
-                                Color = custom.Color,
-                            };
-                        }
-                        
-                        if (RequiredOn || NeedOneOn)
-                        {
-                            pass = CheckCriteria(cell, needOneParents);
-                            plottable = new Plottable
-                            {
-                                Region = Regions[regionIdx],
-                                DetailString = detailString + $"     {(pass ? "Pass" : "Fail")}",
-                                X = thisX,
-                                Y = thisY,
-                                Pass = pass,
-                                CustomTag = string.Empty,
-                                Color = pass ? Color.LawnGreen : Color.Firebrick,
-                            };
-                        }
-
-                        try
-                        {
-                            Plottables.Add(plottable);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Try closing and reopening XferSuite:\n\n{ex}", "Parse SEYR");
-                            return;
+                                DetailString = detailString + $"     {feature.Name}",
+                                X = thisX + feature.Location.X * (_FlipXAxis ? -1 : 1),
+                                Y = thisY + feature.Location.Y,
+                                Pass = cell.Where(x => x.Name == feature.Name).First().State == Report.State.Pass,
+                                Color = Color.Green,
+                            });
                         }
                     }
                 }
@@ -664,18 +657,16 @@ namespace XferSuite.Apps.SEYR
         {
             if (ParseWorker.IsBusy) return;
             
-            Report.Feature[] originalFeatures = Features; // Maintain requirements
+            Feature[] originalFeatures = Features; // Maintain requirements
             ResetFeaturesAndUI();
 
             // Alphabetical order looks better in the NeedOne bucket
-            var sortList = Features.ToList();
-            sortList.Sort();
-            Features = sortList.ToArray();
+            Features.Select(x => x.Name).ToList().Sort();
 
             flowLayoutPanelCriteria.Enabled = false;
             olvBuffer.Objects = null;
 
-            Report.Feature[] criteria = Features.Where(x => !x.Name.Contains("pat")).ToArray();
+            Feature[] criteria = Features.Where(x => !x.Name.Contains("pat")).ToArray();
             if (criteria.Length == 1)
             {
                 criteria[0].Bucket = Report.Bucket.Required;
@@ -684,7 +675,7 @@ namespace XferSuite.Apps.SEYR
             }
             else
             {
-                foreach (Report.Feature feature in Features)
+                foreach (Feature feature in Features)
                 {
                     feature.Requirements = originalFeatures.First(x => x.Name == feature.Name).Requirements;
                     FindHome(feature);
@@ -760,7 +751,7 @@ namespace XferSuite.Apps.SEYR
             for (int i = 0; i < thisCell.Length; i++)
             {
                 Report.Entry item = thisCell[i];
-                Report.Feature criteria = Features.First(x => x.Name == item.Name);
+                Feature criteria = Features.First(x => x.Name == item.Name);
                 switch (criteria.Bucket)
                 {
                     case Report.Bucket.Buffer:
@@ -785,7 +776,7 @@ namespace XferSuite.Apps.SEYR
             return true;
         }
 
-        private void FindHome(Report.Feature feature)
+        private void FindHome(Feature feature)
         {
             char[] digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
             if (feature.Name.Any(char.IsDigit))
@@ -795,16 +786,12 @@ namespace XferSuite.Apps.SEYR
                 bool foundParent = false;
                 foreach (var item in olvNeedOne.Objects)
                 {
-                    Report.Feature targ = (Report.Feature)item;
+                    Feature targ = (Feature)item;
                     if (targ.Name.Contains(rootName) && targ.IsParent)
                     {
                         feature.IsChild = true;
                         feature.FamilyName = targ.Name;
-
-                        // Converting between F# and C# lists
-                        List<Report.Feature> children = targ.Children.ToList();
-                        children.Add(feature);
-                        targ.Children = ListModule.OfSeq(children);
+                        targ.Children.Add(feature);
                         foundParent = true;
                     }
                 }

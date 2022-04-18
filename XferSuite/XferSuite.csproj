@@ -163,6 +163,7 @@
     <Compile Include="Apps\SEYR\EditPlotOrder.Designer.cs">
       <DependentUpon>EditPlotOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\SEYR\Feature.cs" />
     <Compile Include="Apps\SEYR\ParseSEYR.cs">
       <SubType>Form</SubType>
     </Compile>
