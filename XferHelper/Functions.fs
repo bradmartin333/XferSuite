@@ -624,7 +624,7 @@ module Report =
           mutable IsChild: bool
           mutable IsParent: bool }
 
-    let toCriteria (name: string) =
+    let toFeature (name: string) =
         { Name = name
           Bucket = Bucket.Buffer
           Requirements = [| State.Pass |]
@@ -663,7 +663,7 @@ module Report =
         |> Array.toSeq
         |> Seq.distinct
         |> Seq.toArray
-        |> Array.map toCriteria
+        |> Array.map toFeature
 
     let getData (data: Entry []) (name: string) =
         data
