@@ -552,60 +552,61 @@ module Report =
         | Pass = 0
         | Fail = 1
         | Null = 2
-        | Misaligned = 3
-        | Other = 4
+        | Other = 3
 
     let toState (num: int) = enum<State> num
 
     type Entry =
         { ImageNumber: int
-          XCopy: int
-          YCopy: int
-          Name: string
-          mutable State: State
+          X: float
+          Y: float
           RR: int
           RC: int
           R: int
           C: int
-          X: float
-          Y: float
-          Score: float }
+          SR: int
+          SC: int
+          TileRow: int
+          TileCol: int
+          Name: string
+          Score: float 
+          mutable State: State }
 
     let toEntry (data: string) =
         let columns = data.Split('\t')
         let ImageNumber = int columns.[0]
-        let XCopy = int columns.[1]
-        let YCopy = int columns.[2]
-        let Name = string columns.[3]
-
-        let mutable State =
-            match string columns.[4] with
-            | "Pass" -> State.Pass
-            | "Fail" -> State.Fail
-            | "Null" -> State.Null
-            | "Misaligned" -> State.Misaligned
-            | _ -> State.Other
-
-        let RR = int columns.[5]
-        let RC = int columns.[6]
-        let R = int columns.[7]
-        let C = int columns.[8]
-        let X = float columns.[9]
-        let Y = float columns.[10]
-        let Score = float columns.[11]
+        let X = float columns.[1]
+        let Y = float columns.[2]
+        let RR = int columns.[3]
+        let RC = int columns.[4]
+        let R = int columns.[5]
+        let C = int columns.[6]
+        let SR = int columns.[7]
+        let SC = int columns.[8]
+        let TileRow = int columns.[9]
+        let TileCol = int columns.[10]
+        let Name = string columns.[11]
+        let Score = float columns.[12]
+        let State = 
+            match Score with
+            | 0. -> State.Pass
+            | -10. -> State.Fail
+            | _ -> State.Null
 
         { ImageNumber = ImageNumber
-          XCopy = XCopy
-          YCopy = YCopy
-          Name = Name
-          State = State
+          X = X
+          Y = Y
           RR = RR
           RC = RC
           R = R
           C = C
-          X = X
-          Y = Y
-          Score = Score }
+          SR = SR
+          SC = SC
+          TileRow = TileRow
+          TileCol = TileCol
+          Name = Name
+          Score = Score 
+          State = State }
 
     type Bucket =
         | Buffer = 0
@@ -640,23 +641,17 @@ module Report =
         else
             let firstLineCols = data.[0].Split('\t')
 
-            if firstLineCols.Length < 12 then
+            if firstLineCols.Length < 13 then
                 3 // Not enough cols
+            else if firstLineCols.[firstLineCols.Length - 1] <> "Score" then
+                3
             else
-                let state =
-                    match firstLineCols.[4] with
-                    | "Pass" -> State.Pass
-                    | "Fail" -> State.Fail
-                    | "Null" -> State.Null
-                    | "Misaligned" -> State.Misaligned
-                    | _ -> State.Other
-
-                if state = State.Other then 3 else 1
+                1
 
     let reader (path: string) =
         let data = File.ReadAllLines path
 
-        data
+        data[1..]
         |> Array.filter (fun x -> x <> "")
         |> Array.map toEntry
 
@@ -680,7 +675,7 @@ module Report =
             if d.Name = name then
                 if d.Score >= min && d.Score <= max then
                     d.State <- State.Pass
-                else
+                else if d.Score > 0 then
                     d.State <- State.Fail
 
     let removeBuffers (data: Entry []) (names: string []) =

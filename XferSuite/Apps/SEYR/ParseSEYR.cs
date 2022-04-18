@@ -552,16 +552,16 @@ namespace XferSuite.Apps.SEYR
                 foreach (IGrouping<int, Report.Entry> imageGroup in region.GroupBy(x => x.ImageNumber))
                 {
                     Report.Entry[] image = imageGroup.ToArray();
-                    foreach (IGrouping<string, Report.Entry> cellGroup in image.GroupBy(x => (x.XCopy, x.YCopy).ToString()))
+                    foreach (IGrouping<string, Report.Entry> cellGroup in image.GroupBy(x => (x.TileCol, x.TileRow).ToString()))
                     {
                         Report.Entry[] cell = cellGroup.ToArray();
                         if (cell == null || cell.Length == 0) continue;
 
                         Plottable plottable = new Plottable();
                         bool pass;
-                        double thisX = cell[0].X + cell[0].XCopy * DistX * (_FlipXAxis ? -1 : 1);
-                        double thisY = cell[0].Y + cell[0].YCopy * DistY;
-                        string detailString = $"     Copy ({cell[0].XCopy}, {cell[0].YCopy})     Location ({thisX}, {thisY})";
+                        double thisX = cell[0].X + cell[0].TileCol * DistX * (_FlipXAxis ? -1 : 1);
+                        double thisY = cell[0].Y + cell[0].TileRow * DistY;
+                        string detailString = $"     Copy ({cell[0].TileCol}, {cell[0].TileRow})     Location ({thisX}, {thisY})";
 
                         foreach (CustomFeature custom in CustomFeatures.Where(x => x.Checked))
                         {
@@ -863,9 +863,6 @@ namespace XferSuite.Apps.SEYR
                     break;
                 case Report.State.Null:
                     bar.FillColor = Color.Blue;
-                    break;
-                case Report.State.Misaligned:
-                    bar.FillColor = Color.ForestGreen;
                     break;
                 default:
                     bar.FillColor = Color.Black;

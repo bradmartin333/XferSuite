@@ -44,7 +44,6 @@ namespace XferSuite.Apps.SEYR
             this.cbxPass = new System.Windows.Forms.CheckBox();
             this.cbxFail = new System.Windows.Forms.CheckBox();
             this.cbxNull = new System.Windows.Forms.CheckBox();
-            this.cbxMisaligned = new System.Windows.Forms.CheckBox();
             this.btnApplyToAll = new System.Windows.Forms.Button();
             this.btnViewData = new System.Windows.Forms.Button();
             this.olvCustom = new BrightIdeasSoftware.FastDataListView();
@@ -181,14 +180,13 @@ namespace XferSuite.Apps.SEYR
             this.flowLayoutPanelCriteria.Controls.Add(this.cbxPass);
             this.flowLayoutPanelCriteria.Controls.Add(this.cbxFail);
             this.flowLayoutPanelCriteria.Controls.Add(this.cbxNull);
-            this.flowLayoutPanelCriteria.Controls.Add(this.cbxMisaligned);
             this.flowLayoutPanelCriteria.Controls.Add(this.btnApplyToAll);
             this.flowLayoutPanelCriteria.Controls.Add(this.btnViewData);
             this.flowLayoutPanelCriteria.Enabled = false;
             this.flowLayoutPanelCriteria.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(3, 62);
+            this.flowLayoutPanelCriteria.Location = new System.Drawing.Point(3, 74);
             this.flowLayoutPanelCriteria.Name = "flowLayoutPanelCriteria";
-            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(108, 175);
+            this.flowLayoutPanelCriteria.Size = new System.Drawing.Size(108, 152);
             this.flowLayoutPanelCriteria.TabIndex = 4;
             // 
             // label1
@@ -255,23 +253,10 @@ namespace XferSuite.Apps.SEYR
             this.cbxNull.UseVisualStyleBackColor = true;
             this.cbxNull.CheckedChanged += new System.EventHandler(this.Cbx_CheckedChanged);
             // 
-            // cbxMisaligned
-            // 
-            this.cbxMisaligned.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxMisaligned.AutoSize = true;
-            this.cbxMisaligned.Location = new System.Drawing.Point(3, 97);
-            this.cbxMisaligned.Name = "cbxMisaligned";
-            this.cbxMisaligned.Size = new System.Drawing.Size(91, 17);
-            this.cbxMisaligned.TabIndex = 5;
-            this.cbxMisaligned.Tag = "3";
-            this.cbxMisaligned.Text = "Misaligned";
-            this.cbxMisaligned.UseVisualStyleBackColor = true;
-            this.cbxMisaligned.CheckedChanged += new System.EventHandler(this.Cbx_CheckedChanged);
-            // 
             // btnApplyToAll
             // 
             this.btnApplyToAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnApplyToAll.Location = new System.Drawing.Point(3, 120);
+            this.btnApplyToAll.Location = new System.Drawing.Point(3, 97);
             this.btnApplyToAll.Name = "btnApplyToAll";
             this.btnApplyToAll.Size = new System.Drawing.Size(91, 23);
             this.btnApplyToAll.TabIndex = 8;
@@ -282,7 +267,7 @@ namespace XferSuite.Apps.SEYR
             // btnViewData
             // 
             this.btnViewData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnViewData.Location = new System.Drawing.Point(3, 149);
+            this.btnViewData.Location = new System.Drawing.Point(3, 126);
             this.btnViewData.Name = "btnViewData";
             this.btnViewData.Size = new System.Drawing.Size(91, 23);
             this.btnViewData.TabIndex = 9;
@@ -454,7 +439,6 @@ namespace XferSuite.Apps.SEYR
         private System.Windows.Forms.CheckBox cbxPass;
         private System.Windows.Forms.CheckBox cbxFail;
         private System.Windows.Forms.CheckBox cbxNull;
-        private System.Windows.Forms.CheckBox cbxMisaligned;
         private System.Windows.Forms.Button btnApplyToAll;
         private System.Windows.Forms.Button btnViewData;
         private System.Windows.Forms.ToolStripButton toolStripButtonSmartSort;

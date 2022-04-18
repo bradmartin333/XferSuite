@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Windows.Forms;
 using XferHelper;
@@ -53,7 +54,7 @@ namespace XferSuite
                     path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
                     break;
                 case 2:
-                    path = OpenFile("Open a SEYR Report", "txt file (*.txt)|*.txt");
+                    path = OpenFile("Open a SEYRUP file", "SEYRUP file (*.seyrup)|*.seyrup|All files (*.*)|*.*");
                     break;
                 default:
                     break;
@@ -83,8 +84,32 @@ namespace XferSuite
                 case 2:
                     using (new Utility.HourGlass())
                     {
-                        if (!VerifyPath(path, idx)) return;
-                        form = new Apps.SEYR.ParseSEYR(path);
+                        bool found = false;
+                        if (path.Contains(".seyrup"))
+                        {
+                            using (ZipArchive archive = ZipFile.OpenRead(path))
+                            {
+                                foreach (ZipArchiveEntry entry in archive.Entries)
+                                {
+                                    if (entry.Name == "SEYRreport.txt")
+                                    {
+                                        string destinationPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
+                                        entry.ExtractToFile(destinationPath, true);
+                                        if (!VerifyPath(destinationPath, idx)) return;
+                                        form = new Apps.SEYR.ParseSEYR(destinationPath);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!found) MessageBox.Show("SEYR Report not found in SEYRUP file", "XferSuite");
+                        }
+                        else
+                        {
+                            if (!VerifyPath(path, idx)) return;
+                            form = new Apps.SEYR.ParseSEYR(path);
+                            break;
+                        }
                     }
                     break;
                 case 3:
