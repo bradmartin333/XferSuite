@@ -156,6 +156,7 @@
     <Compile Include="AdvancedTools\uTP\PrintLogParser.Designer.cs">
       <DependentUpon>PrintLogParser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\SEYR\DataEntry.cs" />
     <Compile Include="Apps\SEYR\Feature.cs" />
     <Compile Include="Apps\SEYR\ParseSEYR.cs">
       <SubType>Form</SubType>
