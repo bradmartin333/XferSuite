@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Windows.Forms;
 using XferHelper;
@@ -54,7 +53,7 @@ namespace XferSuite
                     path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
                     break;
                 case 2:
-                    path = OpenFile("Open a SEYRUP file", "SEYRUP file (*.seyrup)|*.seyrup|All files (*.*)|*.*");
+                    path = OpenFile("Open a SEYRUP file", "SEYRUP file (*.seyrup)|*.seyrup");
                     break;
                 default:
                     break;
@@ -84,25 +83,7 @@ namespace XferSuite
                 case 2:
                     using (new Utility.HourGlass())
                     {
-                        bool found = false;
-                        if (path.Contains(".seyrup"))
-                        {
-                            using (ZipArchive archive = ZipFile.OpenRead(path))
-                            {
-                                ZipArchiveEntry report = archive.Entries.Where(x => x.Name == "SEYRreport.txt").First();
-                                string destinationPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
-                                report.ExtractToFile(destinationPath, true);
-                                if (!VerifyPath(destinationPath, idx)) return;
-                                form = new Apps.SEYR.ParseSEYR(destinationPath, path);
-                                found = true;
-                            }
-                            if (!found) MessageBox.Show("SEYR Report not found in SEYRUP file", "XferSuite");
-                        }
-                        else
-                        {
-                            if (!VerifyPath(path, idx)) return;
-                            form = new Apps.SEYR.ParseSEYR(path);
-                        }
+                        form = new Apps.SEYR.ParseSEYR(path);
                     }
                     break;
                 case 3:
@@ -181,9 +162,6 @@ namespace XferSuite
                     break;
                 case 1:
                     result = Zed.verify(path);
-                    break;
-                case 2:
-                    result = Report.verify(path);
                     break;
                 default:
                     break;

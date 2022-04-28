@@ -150,18 +150,11 @@
     <Compile Include="AdvancedTools\MapFlip.designer.cs">
       <DependentUpon>MapFlip.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\SEYR\CreateCustom.cs">
+    <Compile Include="AdvancedTools\uTP\PrintLogParser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\SEYR\CreateCustom.Designer.cs">
-      <DependentUpon>CreateCustom.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\SEYR\CustomFeature.cs" />
-    <Compile Include="Apps\SEYR\EditPlotOrder.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Apps\SEYR\EditPlotOrder.Designer.cs">
-      <DependentUpon>EditPlotOrder.cs</DependentUpon>
+    <Compile Include="AdvancedTools\uTP\PrintLogParser.Designer.cs">
+      <DependentUpon>PrintLogParser.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\SEYR\Feature.cs" />
     <Compile Include="Apps\SEYR\ParseSEYR.cs">
@@ -170,19 +163,7 @@
     <Compile Include="Apps\SEYR\ParseSEYR.Designer.cs">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
     </Compile>
-    <Compile Include="AdvancedTools\uTP\PrintLogParser.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AdvancedTools\uTP\PrintLogParser.Designer.cs">
-      <DependentUpon>PrintLogParser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\SEYR\Results.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Apps\SEYR\Results.Designer.cs">
-      <DependentUpon>Results.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\SEYR\PlotOrderElement.cs" />
+    <Compile Include="Apps\SEYR\Project.cs" />
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
     <Compile Include="Apps\XYZplotter\PlotData.cs" />
@@ -250,20 +231,11 @@
     <EmbeddedResource Include="AdvancedTools\MapFlip.resx">
       <DependentUpon>MapFlip.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\SEYR\CreateCustom.resx">
-      <DependentUpon>CreateCustom.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Apps\SEYR\EditPlotOrder.resx">
-      <DependentUpon>EditPlotOrder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Apps\SEYR\ParseSEYR.resx">
-      <DependentUpon>ParseSEYR.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="AdvancedTools\uTP\PrintLogParser.resx">
       <DependentUpon>PrintLogParser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\SEYR\Results.resx">
-      <DependentUpon>Results.cs</DependentUpon>
+    <EmbeddedResource Include="Apps\SEYR\ParseSEYR.resx">
+      <DependentUpon>ParseSEYR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\XYZplotter\Plotter.resx">
       <DependentUpon>Plotter.cs</DependentUpon>
@@ -337,6 +309,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
