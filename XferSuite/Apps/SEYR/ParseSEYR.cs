@@ -1,5 +1,4 @@
-﻿using ScottPlot.Statistics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -28,7 +27,7 @@ namespace XferSuite.Apps.SEYR
             LoadProject();
             LoadData();
             RescoreAllData();
-            MakePopulationPlots();
+            ComboFeatures.Items.AddRange(Data.GroupBy(x => x.FeatureName).Select(x => x.Key).ToArray());
         }
 
         private void ExtractFile(string path, ZipArchive archive)
@@ -76,23 +75,24 @@ namespace XferSuite.Apps.SEYR
             System.Diagnostics.Debug.WriteLine($"{Data.Where(x => x.UpdatedState).Count()} Updated States");
         }
 
-        public void MakePopulationPlots()
+        private void BtnRescore_Click(object sender, EventArgs e)
         {
-            var groups = Data.GroupBy(x => x.FeatureName);
-            List<PopulationSeries> populations = new List<PopulationSeries>();
-            List<string> names = new List<string>();
-            foreach (var group in groups)
-            {
-                string name = group.Key;
-                populations.Add(new PopulationSeries(new Population[] { new Population(group.Select(x => (double)x.Score).ToArray()) }, name));
-                names.Add(name);
-            }
-            FormsPlot.Plot.Clear();
-            FormsPlot.Plot.AddPopulations(new PopulationMultiSeries(populations.ToArray()));
-            FormsPlot.Plot.XAxis.Grid(false);
-            FormsPlot.Plot.XTicks(names.ToArray());
-            FormsPlot.Plot.Legend();
-            FormsPlot.Refresh();
+
+        }
+
+        private void BtnPlot_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BtnEditCriteria_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BtnExportCycleFile_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
