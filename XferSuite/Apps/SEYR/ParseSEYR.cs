@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScottPlot.Statistics;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -26,6 +27,8 @@ namespace XferSuite.Apps.SEYR
             }
             LoadProject();
             LoadData();
+            RescoreAllData();
+            MakePopulationPlots();
         }
 
         private void ExtractFile(string path, ZipArchive archive)
@@ -56,6 +59,40 @@ namespace XferSuite.Apps.SEYR
             string[] lines = File.ReadAllLines(ReportPath);
             for (int i = 1; i < lines.Length; i++)
                 Data.Add(new DataEntry(lines[i]));
+        }
+
+        private void RescoreAllData()
+        {
+            foreach (DataEntry dataEntry in Data)
+            {
+                Feature feature = Project.Features.Where(x => x.Name == dataEntry.FeatureName).First();
+                bool newState = feature.GenerateState(dataEntry.Score);
+                if (dataEntry.State != newState)
+                {
+                    dataEntry.State = newState;
+                    dataEntry.UpdatedState = true;
+                }
+            }
+            System.Diagnostics.Debug.WriteLine($"{Data.Where(x => x.UpdatedState).Count()} Updated States");
+        }
+
+        public void MakePopulationPlots()
+        {
+            var groups = Data.GroupBy(x => x.FeatureName);
+            List<PopulationSeries> populations = new List<PopulationSeries>();
+            List<string> names = new List<string>();
+            foreach (var group in groups)
+            {
+                string name = group.Key;
+                populations.Add(new PopulationSeries(new Population[] { new Population(group.Select(x => (double)x.Score).ToArray()) }, name));
+                names.Add(name);
+            }
+            FormsPlot.Plot.Clear();
+            FormsPlot.Plot.AddPopulations(new PopulationMultiSeries(populations.ToArray()));
+            FormsPlot.Plot.XAxis.Grid(false);
+            FormsPlot.Plot.XTicks(names.ToArray());
+            FormsPlot.Plot.Legend();
+            FormsPlot.Refresh();
         }
     }
 }

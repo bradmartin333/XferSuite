@@ -21,7 +21,7 @@ namespace XferSuite.Apps.SEYR
         public int TC { get; set; }
         public string FeatureName { get; set; }
         public Feature Feature { get => ParseSEYR.Project.Features.Where(x => x.Name == FeatureName).First(); }
-        public double Score { get; set; }
+        public float Score { get; set; }
         public bool State { get; set; }
         public string ImageData { get; set; }
         public Bitmap Image
@@ -49,6 +49,7 @@ namespace XferSuite.Apps.SEYR
                     return null;
             }
         }
+        public bool UpdatedState { get; set; } = false;
 
         public DataEntry(string data)
         {
@@ -65,7 +66,7 @@ namespace XferSuite.Apps.SEYR
             TR = int.Parse(cols[9]);
             TC = int.Parse(cols[10]);
             FeatureName = cols[11];
-            Score = double.Parse(cols[12]);
+            Score = float.Parse(cols[12]);
             State = bool.Parse(cols[13]);
             ImageData = cols[14];
         }
