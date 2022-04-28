@@ -72,7 +72,7 @@ namespace XferSuite.Apps.SEYR
                     dataEntry.UpdatedState = true;
                 }
             }
-            System.Diagnostics.Debug.WriteLine($"{Data.Where(x => x.UpdatedState).Count()} Updated States");
+            System.Diagnostics.Debug.WriteLine($"{Data.Where(x => x.UpdatedState).Count()} updated states");
         }
 
         private void BtnRescore_Click(object sender, EventArgs e)
@@ -81,11 +81,6 @@ namespace XferSuite.Apps.SEYR
         }
 
         private void BtnPlot_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void BtnEditCriteria_Click(object sender, EventArgs e)
         {
 
         }
