@@ -58,6 +58,18 @@ namespace XferSuite.Apps.SEYR
             string[] lines = File.ReadAllLines(ReportPath);
             for (int i = 1; i < lines.Length; i++)
                 Data.Add(new DataEntry(lines[i]));
+
+            foreach (Feature feature in Project.Features)
+            {
+                if (feature.MinScore == double.MaxValue || feature.MaxScore == double.MinValue || feature.MinScore == feature.MaxScore)
+                {
+                    float[] data = Data.Where(x => x.FeatureName == feature.Name).Select(x => x.Score).Where(x => x > 0).ToArray();
+                    feature.MinScore = data.Min();
+                    feature.MaxScore = data.Max();
+                    System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
+                }
+                System.Diagnostics.Debug.WriteLine($"{feature.Name} Min = {feature.MinScore} Max = {feature.MaxScore}");
+            }
         }
 
         private void RescoreAllData()
@@ -77,7 +89,16 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnRescore_Click(object sender, EventArgs e)
         {
-
+            if (ComboFeatures.SelectedIndex == -1) return;
+            LabelLoading.Visible = true;
+            Application.DoEvents();
+            DataEntry[] data = Data.Where(x => x.FeatureName == ComboFeatures.Text).ToArray();
+            using (PassFailUtility pf = new PassFailUtility(data))
+            {
+                LabelLoading.Visible = false;
+                Application.DoEvents();
+                pf.ShowDialog();
+            }
         }
 
         private void BtnPlot_Click(object sender, EventArgs e)

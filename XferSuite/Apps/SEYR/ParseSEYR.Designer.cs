@@ -34,6 +34,7 @@
             this.BtnRescore = new System.Windows.Forms.Button();
             this.BtnPlot = new System.Windows.Forms.Button();
             this.BtnExportCycleFile = new System.Windows.Forms.Button();
+            this.LabelLoading = new System.Windows.Forms.Label();
             this.TLP.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,6 +48,7 @@
             this.TLP.Controls.Add(this.BtnRescore, 1, 0);
             this.TLP.Controls.Add(this.BtnPlot, 0, 2);
             this.TLP.Controls.Add(this.BtnExportCycleFile, 1, 2);
+            this.TLP.Controls.Add(this.LabelLoading, 0, 1);
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TLP.Location = new System.Drawing.Point(0, 0);
             this.TLP.Name = "TLP";
@@ -106,6 +108,20 @@
             this.BtnExportCycleFile.UseVisualStyleBackColor = false;
             this.BtnExportCycleFile.Click += new System.EventHandler(this.BtnExportCycleFile_Click);
             // 
+            // LabelLoading
+            // 
+            this.LabelLoading.AutoSize = true;
+            this.LabelLoading.BackColor = System.Drawing.Color.Gold;
+            this.TLP.SetColumnSpan(this.LabelLoading, 2);
+            this.LabelLoading.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LabelLoading.Location = new System.Drawing.Point(3, 29);
+            this.LabelLoading.Name = "LabelLoading";
+            this.LabelLoading.Size = new System.Drawing.Size(295, 20);
+            this.LabelLoading.TabIndex = 6;
+            this.LabelLoading.Text = "Loading...";
+            this.LabelLoading.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LabelLoading.Visible = false;
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -116,6 +132,7 @@
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
             this.TLP.ResumeLayout(false);
+            this.TLP.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -126,5 +143,6 @@
         private System.Windows.Forms.Button BtnRescore;
         private System.Windows.Forms.Button BtnPlot;
         private System.Windows.Forms.Button BtnExportCycleFile;
+        private System.Windows.Forms.Label LabelLoading;
     }
 }
