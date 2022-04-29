@@ -153,5 +153,11 @@ namespace XferSuite.Apps.SEYR
             LabelTotalCount.Text = $"{NullExclude + NullInclude + numPass + numFail}";
             return new double[] { numPass + NullInclude, numFail + NullExclude };
         }
+
+        private void BtnConfirm_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+            Close();
+        }
     }
 }

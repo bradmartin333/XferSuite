@@ -102,7 +102,20 @@ namespace XferSuite.Apps.SEYR
             {
                 LabelLoading.Visible = false;
                 Application.DoEvents();
-                pf.ShowDialog();
+                DialogResult result = pf.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    if (feature.PassThreshold != pf.PassThreshold)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} PassThreshold updated from {feature.PassThreshold} to {pf.PassThreshold}");
+                        feature.PassThreshold = pf.PassThreshold;
+                    }
+                    if (feature.Limit != pf.Limit)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} Limit updated from {feature.Limit} to {pf.Limit}");
+                        feature.Limit = pf.Limit;
+                    }
+                }
             }
         }
 

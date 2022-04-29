@@ -43,7 +43,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.BtnConfirm = new System.Windows.Forms.Button();
             this.PiePlot = new ScottPlot.FormsPlot();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +76,7 @@
             this.tableLayoutPanel.Controls.Add(this.label4, 1, 5);
             this.tableLayoutPanel.Controls.Add(this.label5, 1, 0);
             this.tableLayoutPanel.Controls.Add(this.label6, 2, 0);
-            this.tableLayoutPanel.Controls.Add(this.button1, 1, 7);
+            this.tableLayoutPanel.Controls.Add(this.BtnConfirm, 1, 7);
             this.tableLayoutPanel.Controls.Add(this.PiePlot, 1, 6);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
@@ -249,18 +249,19 @@
             this.label6.Text = "Count";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // button1
+            // BtnConfirm
             // 
-            this.button1.BackColor = System.Drawing.Color.LightGreen;
-            this.tableLayoutPanel.SetColumnSpan(this.button1, 2);
-            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(494, 437);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(162, 23);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "Confirm";
-            this.button1.UseVisualStyleBackColor = false;
+            this.BtnConfirm.BackColor = System.Drawing.Color.LightGreen;
+            this.tableLayoutPanel.SetColumnSpan(this.BtnConfirm, 2);
+            this.BtnConfirm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnConfirm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnConfirm.Location = new System.Drawing.Point(494, 437);
+            this.BtnConfirm.Name = "BtnConfirm";
+            this.BtnConfirm.Size = new System.Drawing.Size(162, 23);
+            this.BtnConfirm.TabIndex = 11;
+            this.BtnConfirm.Text = "Confirm";
+            this.BtnConfirm.UseVisualStyleBackColor = false;
+            this.BtnConfirm.Click += new System.EventHandler(this.BtnConfirm_Click);
             // 
             // PiePlot
             // 
@@ -302,7 +303,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button BtnConfirm;
         private ScottPlot.FormsPlot PiePlot;
         private System.Windows.Forms.Label LabelUnselectedCount;
         private System.Windows.Forms.Label label7;
