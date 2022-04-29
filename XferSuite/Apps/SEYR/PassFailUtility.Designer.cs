@@ -54,7 +54,7 @@
             this.HistPlot.Location = new System.Drawing.Point(3, 3);
             this.HistPlot.Name = "HistPlot";
             this.tableLayoutPanel.SetRowSpan(this.HistPlot, 8);
-            this.HistPlot.Size = new System.Drawing.Size(485, 457);
+            this.HistPlot.Size = new System.Drawing.Size(485, 455);
             this.HistPlot.TabIndex = 0;
             // 
             // tableLayoutPanel
@@ -91,7 +91,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(659, 463);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(659, 461);
             this.tableLayoutPanel.TabIndex = 1;
             // 
             // LabelUnselectedCount
@@ -255,7 +255,7 @@
             this.tableLayoutPanel.SetColumnSpan(this.BtnConfirm, 2);
             this.BtnConfirm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnConfirm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnConfirm.Location = new System.Drawing.Point(494, 437);
+            this.BtnConfirm.Location = new System.Drawing.Point(494, 435);
             this.BtnConfirm.Name = "BtnConfirm";
             this.BtnConfirm.Size = new System.Drawing.Size(162, 23);
             this.BtnConfirm.TabIndex = 11;
@@ -270,7 +270,7 @@
             this.PiePlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PiePlot.Location = new System.Drawing.Point(494, 107);
             this.PiePlot.Name = "PiePlot";
-            this.PiePlot.Size = new System.Drawing.Size(162, 324);
+            this.PiePlot.Size = new System.Drawing.Size(162, 322);
             this.PiePlot.TabIndex = 12;
             // 
             // PassFailUtility
@@ -278,11 +278,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(659, 463);
+            this.ClientSize = new System.Drawing.Size(659, 461);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(675, 500);
             this.Name = "PassFailUtility";
-            this.Text = "PassFailUtility";
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             this.ResumeLayout(false);

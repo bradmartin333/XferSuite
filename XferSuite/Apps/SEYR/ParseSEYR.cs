@@ -69,7 +69,7 @@ namespace XferSuite.Apps.SEYR
                     feature.MaxScore = (float)feature.HistData.Max();
                     System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
                 }
-                feature.PassThreshold = (feature.MaxScore - feature.MinScore) / 2;
+                feature.PassThreshold = (feature.MaxScore + feature.MinScore) / 2.0;
                 feature.Limit = feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max();
                 System.Diagnostics.Debug.WriteLine($"{feature.Name} Min = {feature.MinScore} Max = {feature.MaxScore}");
             }

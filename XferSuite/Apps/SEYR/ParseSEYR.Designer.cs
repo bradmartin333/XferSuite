@@ -41,30 +41,30 @@
             // TLP
             // 
             this.TLP.ColumnCount = 2;
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.00001F));
             this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.TLP.Controls.Add(this.ComboFeatures, 0, 0);
-            this.TLP.Controls.Add(this.BtnRescore, 1, 0);
-            this.TLP.Controls.Add(this.BtnPlot, 0, 2);
-            this.TLP.Controls.Add(this.BtnExportCycleFile, 1, 2);
-            this.TLP.Controls.Add(this.LabelLoading, 0, 1);
+            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.99999F));
+            this.TLP.Controls.Add(this.ComboFeatures, 0, 1);
+            this.TLP.Controls.Add(this.BtnRescore, 1, 1);
+            this.TLP.Controls.Add(this.BtnPlot, 0, 3);
+            this.TLP.Controls.Add(this.BtnExportCycleFile, 1, 3);
+            this.TLP.Controls.Add(this.LabelLoading, 0, 2);
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TLP.Location = new System.Drawing.Point(0, 0);
             this.TLP.Name = "TLP";
-            this.TLP.RowCount = 4;
+            this.TLP.RowCount = 5;
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.TLP.Size = new System.Drawing.Size(301, 426);
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.TLP.Size = new System.Drawing.Size(301, 96);
             this.TLP.TabIndex = 1;
             // 
             // ComboFeatures
             // 
             this.ComboFeatures.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ComboFeatures.FormattingEnabled = true;
-            this.ComboFeatures.Location = new System.Drawing.Point(3, 3);
+            this.ComboFeatures.Location = new System.Drawing.Point(3, 12);
             this.ComboFeatures.Name = "ComboFeatures";
             this.ComboFeatures.Size = new System.Drawing.Size(144, 21);
             this.ComboFeatures.TabIndex = 1;
@@ -74,7 +74,7 @@
             this.BtnRescore.BackColor = System.Drawing.Color.White;
             this.BtnRescore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnRescore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnRescore.Location = new System.Drawing.Point(153, 3);
+            this.BtnRescore.Location = new System.Drawing.Point(153, 12);
             this.BtnRescore.Name = "BtnRescore";
             this.BtnRescore.Size = new System.Drawing.Size(145, 23);
             this.BtnRescore.TabIndex = 2;
@@ -87,7 +87,7 @@
             this.BtnPlot.BackColor = System.Drawing.Color.White;
             this.BtnPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnPlot.Location = new System.Drawing.Point(3, 52);
+            this.BtnPlot.Location = new System.Drawing.Point(3, 61);
             this.BtnPlot.Name = "BtnPlot";
             this.BtnPlot.Size = new System.Drawing.Size(144, 23);
             this.BtnPlot.TabIndex = 3;
@@ -100,7 +100,7 @@
             this.BtnExportCycleFile.BackColor = System.Drawing.Color.White;
             this.BtnExportCycleFile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnExportCycleFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnExportCycleFile.Location = new System.Drawing.Point(153, 52);
+            this.BtnExportCycleFile.Location = new System.Drawing.Point(153, 61);
             this.BtnExportCycleFile.Name = "BtnExportCycleFile";
             this.BtnExportCycleFile.Size = new System.Drawing.Size(145, 23);
             this.BtnExportCycleFile.TabIndex = 5;
@@ -111,10 +111,10 @@
             // LabelLoading
             // 
             this.LabelLoading.AutoSize = true;
-            this.LabelLoading.BackColor = System.Drawing.Color.Gold;
+            this.LabelLoading.BackColor = System.Drawing.Color.Bisque;
             this.TLP.SetColumnSpan(this.LabelLoading, 2);
             this.LabelLoading.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LabelLoading.Location = new System.Drawing.Point(3, 29);
+            this.LabelLoading.Location = new System.Drawing.Point(3, 38);
             this.LabelLoading.Name = "LabelLoading";
             this.LabelLoading.Size = new System.Drawing.Size(295, 20);
             this.LabelLoading.TabIndex = 6;
@@ -126,7 +126,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(301, 426);
+            this.ClientSize = new System.Drawing.Size(301, 96);
             this.Controls.Add(this.TLP);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ParseSEYR";
