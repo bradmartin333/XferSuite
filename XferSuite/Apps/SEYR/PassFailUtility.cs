@@ -127,15 +127,13 @@ namespace XferSuite.Apps.SEYR
         {
             PiePlot.Plot.Clear();
             double[] values = GetValues();
-            Color color1 = Color.FromArgb(255, 0, 150, 200);
-            Color color2 = Color.FromArgb(100, 0, 150, 200);
             var pie = PiePlot.Plot.AddPie(values);
             pie.DonutSize = .6;
             pie.DonutLabel = (values[0] / values.Sum()).ToString("P");
-            pie.CenterFont.Color = color1;
+            pie.CenterFont.Color = Color.Black;
             pie.CenterFont.Size = 18;
             pie.OutlineSize = 2;
-            pie.SliceFillColors = new Color[] { color1, color2 };
+            pie.SliceFillColors = new Color[] { Color.LightGreen, Color.LightCoral };
             PiePlot.Configuration.DoubleClickBenchmark = false;
             PiePlot.Plot.XAxis.LockLimits();
             PiePlot.Plot.YAxis.LockLimits();
