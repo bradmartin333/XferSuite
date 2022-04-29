@@ -79,7 +79,7 @@ namespace XferSuite.Apps.SEYR
             string message = $"Score = {x}\n";
             for (int i = 0; i < BarPlot.Positions.Length; i++)
                 if (Math.Floor(BarPlot.Positions[i]) == x && BarPlot.Values[i] > 0)
-                    message += $"{BarPlot.Label} Count = {BarPlot.Values[i]}\n";
+                    message += $"Count = {BarPlot.Values[i]}\n";
             ViewDataAnnotation.Label = message;
             p.Refresh();
         }
@@ -119,16 +119,9 @@ namespace XferSuite.Apps.SEYR
             HSpan hSpan = (HSpan)sender;
             double minVal = Math.Min(hSpan.X1, hSpan.X2);
             double maxVal = Math.Max(hSpan.X1, hSpan.X2);
-            if (FlipScore)
-            {
-                Limit = minVal;
-                PassThreshold = maxVal;
-            }
-            else
-            {
-                PassThreshold = minVal;
-                Limit = maxVal;
-            }
+            Limit = FlipScore ? minVal : maxVal;
+            PassThreshold = FlipScore ? maxVal : minVal;
+            ViewDataAnnotation.Label = $"Limit = {Math.Round(Limit, 2)}\nPass Threshold = {Math.Round(PassThreshold, 2)}";
             MakePie();
         }
 
@@ -155,7 +148,9 @@ namespace XferSuite.Apps.SEYR
 
         private double[] GetValues()
         {
-            double numPass = HistData.Where(x => FlipScore ? x < PassThreshold : x > PassThreshold).Count();
+            double numPass = HistData.Where(
+                x => (FlipScore ? x < PassThreshold : x > PassThreshold) && 
+                (FlipScore ? x > Limit : x < Limit)).Count();
             double numFail = HistData.Length - numPass;
             LabelSelectedCount.Text = numPass.ToString();
             LabelUnselectedCount.Text = numFail.ToString();
