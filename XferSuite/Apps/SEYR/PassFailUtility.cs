@@ -9,29 +9,25 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class PassFailUtility : Form
     {
-        private readonly DataEntry[] Data;
-        private readonly double[] HistData;
-        private double PassThreshold;
-        private readonly bool FlipScore;
-        private double Limit;
+        public double PassThreshold;
+        public double Limit;
+        private readonly Feature Feature;
+        private double[] HistData { get => Feature.HistData; }
+        private bool FlipScore { get => Feature.FlipScore; }
         private readonly int NullExclude;
         private readonly int NullInclude;
         private BarPlot BarPlot;
         private Annotation ViewDataAnnotation;
 
-        public PassFailUtility(DataEntry[] data)
+        public PassFailUtility(Feature feature)
         {
             InitializeComponent();
-            Data = data;
-            Text = $"Editing {Data[0].FeatureName}";
-            HistData = Data.Select(x => (double)x.Score).Where(x => x > 0).ToArray();
-            PassThreshold = (Data[0].Feature.MaxScore - Data[0].Feature.MinScore) / 2;
-            FlipScore = Data[0].Feature.FlipScore;
-            Limit = FlipScore ? HistData.Min() : HistData.Max();
+            Feature = feature;
+            Text = $"Editing {feature.Name}";
+            PassThreshold = feature.PassThreshold;
+            Limit = feature.Limit;
 
-            float[] scores = Data.Select(x => x.Score).ToArray();
-            NullExclude = scores.Where(x => x == -10).Count();
-            NullInclude = scores.Where(x => x == 0).Count();
+            (NullExclude, NullInclude) = feature.GetNullData();
             LabelNullExcludeCount.Text = NullExclude.ToString();
             LabelNullIncludeCount.Text = NullInclude.ToString();
 

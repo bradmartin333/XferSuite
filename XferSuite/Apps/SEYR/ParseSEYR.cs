@@ -61,30 +61,35 @@ namespace XferSuite.Apps.SEYR
 
             foreach (Feature feature in Project.Features)
             {
-                if (feature.MinScore == double.MaxValue || feature.MaxScore == double.MinValue || feature.MinScore == feature.MaxScore)
+                feature.Data = Data.Where(x => x.FeatureName == feature.Name).ToArray();
+                feature.HistData = feature.Data.Select(x => (double)x.Score).Where(x => x > 0).ToArray();
+                if (feature.MinScore == float.MaxValue || feature.MaxScore == float.MinValue || feature.MinScore == feature.MaxScore)
                 {
-                    float[] data = Data.Where(x => x.FeatureName == feature.Name).Select(x => x.Score).Where(x => x > 0).ToArray();
-                    feature.MinScore = data.Min();
-                    feature.MaxScore = data.Max();
+                    feature.MinScore = (float)feature.HistData.Min();
+                    feature.MaxScore = (float)feature.HistData.Max();
                     System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
                 }
+                feature.PassThreshold = (feature.MaxScore - feature.MinScore) / 2;
+                feature.Limit = feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max();
                 System.Diagnostics.Debug.WriteLine($"{feature.Name} Min = {feature.MinScore} Max = {feature.MaxScore}");
             }
         }
 
         private void RescoreAllData()
         {
-            foreach (DataEntry dataEntry in Data)
+            foreach (Feature feature in Project.Features)
             {
-                Feature feature = Project.Features.Where(x => x.Name == dataEntry.FeatureName).First();
-                bool newState = feature.GenerateState(dataEntry.Score);
-                if (dataEntry.State != newState)
+                foreach (DataEntry entry in feature.Data)
                 {
-                    dataEntry.State = newState;
-                    dataEntry.UpdatedState = true;
+                    bool newState = feature.GenerateState(entry.Score);
+                    if (entry.State != newState)
+                    {
+                        entry.State = newState;
+                        entry.UpdatedState = true;
+                    }
                 }
+                System.Diagnostics.Debug.WriteLine($"{feature.Name} {Data.Where(x => x.UpdatedState).Count()} updated states");
             }
-            System.Diagnostics.Debug.WriteLine($"{Data.Where(x => x.UpdatedState).Count()} updated states");
         }
 
         private void BtnRescore_Click(object sender, EventArgs e)
@@ -92,8 +97,8 @@ namespace XferSuite.Apps.SEYR
             if (ComboFeatures.SelectedIndex == -1) return;
             LabelLoading.Visible = true;
             Application.DoEvents();
-            DataEntry[] data = Data.Where(x => x.FeatureName == ComboFeatures.Text).ToArray();
-            using (PassFailUtility pf = new PassFailUtility(data))
+            Feature feature = Project.Features.Where(x => x.Name == ComboFeatures.Text).First();
+            using (PassFailUtility pf = new PassFailUtility(feature))
             {
                 LabelLoading.Visible = false;
                 Application.DoEvents();

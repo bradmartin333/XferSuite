@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace XferSuite.Apps.SEYR
@@ -37,6 +38,11 @@ namespace XferSuite.Apps.SEYR
         [XmlElement("MaxScore")]
         public float MaxScore { get => _MaxScore; set => _MaxScore = value; }
 
+        internal double PassThreshold { get; set; }
+        internal double Limit { get; set; }
+        internal DataEntry[] Data { get; set; }
+        internal double[] HistData { get; set; }
+
         public Rectangle GetGeometry()
         {
             Point offset = new Point((int)(ParseSEYR.Project.ScaledPixelsPerMicron * Rectangle.X),
@@ -60,6 +66,12 @@ namespace XferSuite.Apps.SEYR
             double toHigh = FlipScore ? 0 : 128;
             double map = (double)((score - fromLow) * (toHigh - toLow) / (fromHigh - fromLow)) + toLow;
             return map - 64 > 0;
+        }
+
+        internal (int, int) GetNullData()
+        {
+            float[] scores = Data.Select(x => x.Score).ToArray();
+            return (scores.Where(x => x == -10).Count(), scores.Where(x => x == 0).Count());
         }
     }
 }
