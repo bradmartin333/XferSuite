@@ -3,6 +3,7 @@ using ScottPlot.Plottable;
 using System.Windows.Forms;
 using ScottPlot.Statistics;
 using System.Drawing;
+using System;
 
 namespace XferSuite.Apps.SEYR
 {
@@ -10,10 +11,13 @@ namespace XferSuite.Apps.SEYR
     {
         private readonly DataEntry[] Data;
         private readonly double[] HistData;
-        private readonly float PassThreshold;
+        private double PassThreshold;
         private readonly bool FlipScore;
+        private double Limit;
         private readonly int NullExclude;
         private readonly int NullInclude;
+        private BarPlot BarPlot;
+        private Annotation ViewDataAnnotation;
 
         public PassFailUtility(DataEntry[] data)
         {
@@ -23,6 +27,7 @@ namespace XferSuite.Apps.SEYR
             HistData = Data.Select(x => (double)x.Score).Where(x => x > 0).ToArray();
             PassThreshold = (Data[0].Feature.MaxScore - Data[0].Feature.MinScore) / 2;
             FlipScore = Data[0].Feature.FlipScore;
+            Limit = FlipScore ? HistData.Min() : HistData.Max();
 
             float[] scores = Data.Select(x => x.Score).ToArray();
             NullExclude = scores.Where(x => x == -10).Count();
@@ -34,19 +39,104 @@ namespace XferSuite.Apps.SEYR
             MakePie();
         }
 
+        #region Histogram
+
         private void MakeHistogram()
         {
+            HistPlot.Plot.Clear();
+
             if (HistData.Length < 2) return; // Insufficient data
             (double[] counts, double[] binEdges) = Common.Histogram(HistData, min: HistData.Min(), max: HistData.Max(), binSize: 1);
             double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
-            BarPlot bar = HistPlot.Plot.AddBar(values: counts, positions: leftEdges);
-            bar.BarWidth = 1;
-            bar.BorderColor = Color.Transparent;
+            BarPlot = HistPlot.Plot.AddBar(values: counts, positions: leftEdges);
+            BarPlot.BarWidth = 1;
+            BarPlot.BorderColor = Color.Transparent;
+
+            ViewDataAnnotation = HistPlot.Plot.AddAnnotation("Score = N/A", 10, 10);
+            ViewDataAnnotation.BackgroundColor = Color.FromArgb(200, Color.White);
+            ViewDataAnnotation.BorderColor = Color.Transparent;
+            ViewDataAnnotation.Font.Color = Color.Black;
+            ViewDataAnnotation.Shadow = false;
+            HistPlot.MouseWheel += Control_MouseWheel;
+            HistPlot.Configuration.DoubleClickBenchmark = false;
+            HistPlot.MouseUp += Control_MouseUp;
+
+            HSpan hSpan = HistPlot.Plot.AddHorizontalSpan(
+                FlipScore ? Limit : PassThreshold, 
+                FlipScore ? PassThreshold : Limit, 
+                Color.FromArgb(75, Color.SlateGray));
+            hSpan.DragEnabled = true;
+            hSpan.Dragged += HSpan_Dragged;
+
             HistPlot.Refresh();
         }
 
+        private void Control_MouseUp(object sender, MouseEventArgs e)
+        {
+            ScottPlot.FormsPlot p = (ScottPlot.FormsPlot)sender;
+            (double mX, _) = p.GetMouseCoordinates();
+            int x = (int)Math.Floor(mX);
+            string message = $"Score = {x}\n";
+            for (int i = 0; i < BarPlot.Positions.Length; i++)
+                if (Math.Floor(BarPlot.Positions[i]) == x && BarPlot.Values[i] > 0)
+                    message += $"{BarPlot.Label} Count = {BarPlot.Values[i]}\n";
+            ViewDataAnnotation.Label = message;
+            p.Refresh();
+        }
+
+        private void Control_MouseWheel(object sender, MouseEventArgs e)
+        {
+            ScottPlot.FormsPlot control = (ScottPlot.FormsPlot)sender;
+            switch (GetControlAxis(control, e.Location))
+            {
+                case 0:
+                    control.Plot.XAxis.LockLimits(true);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
+                case 1:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(true);
+                    break;
+                default:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
+            }
+        }
+
+        private int GetControlAxis(ScottPlot.FormsPlot control, Point location)
+        {
+            if (location.X < 60) // At XAxis
+                return 0;
+            else if (location.Y > control.Height - 60) // At YAxis
+                return 1;
+            else
+                return -1;
+        }
+
+        private void HSpan_Dragged(object sender, EventArgs e)
+        {
+            HSpan hSpan = (HSpan)sender;
+            double minVal = Math.Min(hSpan.X1, hSpan.X2);
+            double maxVal = Math.Max(hSpan.X1, hSpan.X2);
+            if (FlipScore)
+            {
+                Limit = minVal;
+                PassThreshold = maxVal;
+            }
+            else
+            {
+                PassThreshold = minVal;
+                Limit = maxVal;
+            }
+            MakePie();
+        }
+
+        #endregion
+
         private void MakePie()
         {
+            PiePlot.Plot.Clear();
             double[] values = GetValues();
             Color color1 = Color.FromArgb(255, 0, 150, 200);
             Color color2 = Color.FromArgb(100, 0, 150, 200);
