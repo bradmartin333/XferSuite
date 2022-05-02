@@ -11,6 +11,7 @@ namespace XferSuite.Apps.SEYR
             InitializeComponent();
             foreach (ScatterCriteria scatter in scatters)
             {
+                if (scatter.X.Count == 0) continue;
                 ScatterPlot plot = FormsPlot.Plot.AddScatter(
                     scatter.X.ToArray(), 
                     scatter.Y.ToArray(), 

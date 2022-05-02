@@ -16,7 +16,7 @@ namespace XferSuite.Apps.SEYR
         private static readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
         public static Project Project { get; set; } = null;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
-        private List<int> Criteria { get; set; } = null;
+        private List<int> Criteria { get; set; } = new List<int>();
         private ScatterCriteria[] Scatters { get; set; } = null;
 
         public ParseSEYR(string path)
@@ -124,63 +124,39 @@ namespace XferSuite.Apps.SEYR
 
         private void InitFeatureInfo()
         {
-            for (int i = 0; i < Project.Features.Count; i++)
-            {
-                Project.Features[i].ID = (i + 1) * (i + 1);
-                ComboFeatures.Items.Add(Project.Features[i].Name);
-            }
-
             List<int> criteriaVals = new List<int>();
             List<string> criteriaNames = new List<string>();
-            foreach (string[] features in Project.Criteria)
+            for (int i = 0; i < Project.Features.Count; i++)
             {
-                int id = 0;
-                string name = string.Empty;
-                foreach (string feature in features)
-                {
-                    id += Project.Features.Where(x => x.Name == feature).First().ID;
-                    name += feature + " ";
-                }
+                int id = (i + 1) * (i + 1);
+                string name = Project.Features[i].Name;
+                Project.Features[i].ID = id;
+                ComboFeatures.Items.Add(name);
                 criteriaVals.Add(id);
                 criteriaNames.Add(name);
             }
 
-            Criteria = criteriaVals.Distinct().ToList();
-            List<ScatterCriteria> scatterCriteria = new List<ScatterCriteria>();
-            foreach (string name in criteriaNames)
-                scatterCriteria.Add(new ScatterCriteria(name));
-            Scatters = scatterCriteria.ToArray();
-        }
+            //foreach (string[] features in Project.Criteria)
+            //{
+            //    int id = 0;
+            //    string name = string.Empty;
+            //    foreach (string feature in features)
+            //    {
+            //        id += Project.Features.Where(x => x.Name == feature).First().ID;
+            //        name += feature + " ";
+            //    }
+            //    criteriaVals.Add(id);
+            //    criteriaNames.Add(name);
+            //}
 
-        private void BtnPlot_Click(object sender, EventArgs e)
-        {
-            Scatters.ToList().ForEach(s => s.Reset());
-            var images = Data.GroupBy(x => x.ImageNumber);
-            foreach (IGrouping<int, DataEntry> image in images)
-            {
-                var tiles = image.ToArray().GroupBy(x => (x.TR, x.TC));
-                foreach (var tile in tiles)
-                {
-                    DataEntry[] entries = tile.ToArray();
-                    double x = -(entries[0].X + (entries[0].TC * Project.PitchX / Project.PixelsPerMicron / 1e3));
-                    double y = entries[0].Y + (entries[0].TR * Project.PitchY / Project.PixelsPerMicron / 1e3);
-                    
-                    List<int> criteriaInTile = new List<int>();
-                    foreach (DataEntry data in tile)
-                        if (data.State) criteriaInTile.Add(data.Feature.ID);
-                    
-                    foreach (var val in Combinations(criteriaInTile))
-                    {
-                        int criterion = Criteria.IndexOf(val.Sum());
-                        if (criterion == -1) continue;
-                        ScatterCriteria scatterCriteria = Scatters[criterion];
-                        scatterCriteria.X.Add(x);
-                        scatterCriteria.Y.Add(y);
-                    }
-                }
-            }
+            criteriaVals = criteriaVals.Distinct().ToList();
+            foreach (var valCombo in Combinations(criteriaVals))
+                if (valCombo.Length > 0) Criteria.Add(valCombo.Sum());
 
-            Results results = new Results(Scatters);
+            List<ScatterCriteria> scatters = new List<ScatterCriteria>();
+            foreach (var nameCombo in Combinations(criteriaNames))
+                if (nameCombo.Length > 0) scatters.Add(new ScatterCriteria(string.Join(", ", nameCombo)));
+            Scatters = scatters.ToArray();
         }
 
         public static IEnumerable<T[]> Combinations<T>(IEnumerable<T> source)
@@ -195,6 +171,36 @@ namespace XferSuite.Apps.SEYR
               .Select(index => data
                  .Where((v, i) => (index & (1 << i)) != 0)
                  .ToArray());
+        }
+
+        private void BtnPlot_Click(object sender, EventArgs e)
+        {
+            Scatters.ToList().ForEach(s => s.Reset());
+
+            var images = Data.GroupBy(x => x.ImageNumber);
+            foreach (IGrouping<int, DataEntry> image in images)
+            {
+                var tiles = image.ToArray().GroupBy(x => (x.TR, x.TC));
+                foreach (var tile in tiles)
+                {
+                    DataEntry[] entries = tile.ToArray();
+                    double x = -(entries[0].X + (entries[0].TC * Project.PitchX / Project.PixelsPerMicron / 1e3));
+                    double y = entries[0].Y + (entries[0].TR * Project.PitchY / Project.PixelsPerMicron / 1e3);
+
+                    int criterion = 0;
+                    foreach (DataEntry entry in entries)
+                        if (entry.State) criterion += entry.Feature.ID;
+                    
+                    int idx = Criteria.IndexOf(criterion);
+                    if (idx == -1) continue;
+                    ScatterCriteria scatterCriteria = Scatters[idx];
+                    scatterCriteria.X.Add(x);
+                    scatterCriteria.Y.Add(y);
+                    break;
+                }
+            }
+
+            Results results = new Results(Scatters);
         }
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)
