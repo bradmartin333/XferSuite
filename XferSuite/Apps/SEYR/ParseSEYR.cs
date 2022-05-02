@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -27,7 +28,7 @@ namespace XferSuite.Apps.SEYR
             LoadProject();
             LoadData();
             RescoreAllData();
-            ComboFeatures.Items.AddRange(Data.GroupBy(x => x.FeatureName).Select(x => x.Key).ToArray());
+            InitFeatureInfo();
         }
 
         private void ExtractFile(string path, ZipArchive archive)
@@ -119,9 +120,29 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private void InitFeatureInfo()
+        {
+            for (int i = 0; i < Project.Features.Count; i++)
+            {
+                Project.Features[i].ID = (i + 1) * (i + 1);
+                ComboFeatures.Items.Add(Project.Features[i].Name);
+            }
+        }
+
         private void BtnPlot_Click(object sender, EventArgs e)
         {
-
+            var images = Data.GroupBy(x => x.ImageNumber);
+            foreach (IGrouping<int, DataEntry> image in images)
+            {
+                var tiles = image.ToArray().GroupBy(x => (x.TR, x.TC));
+                foreach (var tile in tiles)
+                {
+                    int val = 0;
+                    foreach (DataEntry data in tile)
+                        if (data.State) val += data.Feature.ID;
+                    System.Diagnostics.Debug.WriteLine($"image {image.Key}, tile {tile.Key}, val {val}");
+                }
+            }
         }
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)

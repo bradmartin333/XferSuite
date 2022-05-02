@@ -38,6 +38,7 @@ namespace XferSuite.Apps.SEYR
         [XmlElement("MaxScore")]
         public float MaxScore { get => _MaxScore; set => _MaxScore = value; }
 
+        internal int ID { get; set; }
         internal double PassThreshold { get; set; }
         internal double Limit { get; set; }
         internal DataEntry[] Data { get; set; }
