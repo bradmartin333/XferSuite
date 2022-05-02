@@ -8,6 +8,7 @@ namespace XferSuite.Apps.SEYR
 {
     public class DataEntry
     {
+        public string Raw { get; set; }
         public int ImageNumber { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
@@ -53,6 +54,7 @@ namespace XferSuite.Apps.SEYR
 
         public DataEntry(string data)
         {
+            Raw = data;
             string[] cols = data.Split('\t');
             ImageNumber = int.Parse(cols[0]);
             X = double.Parse(cols[1]);

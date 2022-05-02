@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -12,9 +11,10 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class ParseSEYR : Form
     {
-        private static readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
-        private static readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
+        private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
+        private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
         public static Project Project { get; set; } = null;
+        private string DataHeader { get; set; } = string.Empty;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
         private List<(int, bool)> Criteria { get; set; } = new List<(int, bool)>();
         private ScatterCriteria[] Scatters { get; set; } = null;
@@ -59,6 +59,7 @@ namespace XferSuite.Apps.SEYR
         private void LoadData()
         {
             string[] lines = File.ReadAllLines(ReportPath);
+            DataHeader = lines[0];
             for (int i = 1; i < lines.Length; i++)
                 Data.Add(new DataEntry(lines[i]));
 
@@ -163,7 +164,7 @@ namespace XferSuite.Apps.SEYR
             Scatters = scatters.ToArray();
         }
 
-        public static IEnumerable<T[]> Combinations<T>(IEnumerable<T> source)
+        public IEnumerable<T[]> Combinations<T>(IEnumerable<T> source)
         {
             if (null == source)
                 throw new ArgumentNullException(nameof(source));
@@ -223,5 +224,48 @@ namespace XferSuite.Apps.SEYR
         {
 
         }
+
+        #region Save Session
+
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog svd = new SaveFileDialog();
+            svd.Filter = "SEYRUP file(*.seyrup)| *.seyrup";
+            svd.Title = "Save SEYRUP File";
+            if (svd.ShowDialog() == DialogResult.OK)
+            {
+                LabelLoading.Visible = true;
+                Application.DoEvents();
+                SaveProject();
+                SaveReport();
+                using (ZipArchive zip = ZipFile.Open(svd.FileName, ZipArchiveMode.Create))
+                {
+                    zip.CreateEntryFromFile(ReportPath, Path.GetFileName(ReportPath));
+                    zip.CreateEntryFromFile(ProjectPath, Path.GetFileName(ProjectPath));
+                }
+                LabelLoading.Visible = false;
+            }
+        }
+
+        private void SaveProject()
+        {
+            using (StreamWriter stream = new StreamWriter(ProjectPath))
+            {
+                XmlSerializer x = new XmlSerializer(typeof(Project));
+                x.Serialize(stream, Project);
+            }
+        }
+
+        private void SaveReport()
+        {
+            using (StreamWriter stream = new StreamWriter(ReportPath))
+            {
+                stream.WriteLine(DataHeader);
+                foreach (DataEntry entry in Data)
+                    stream.WriteLine(entry.Raw);
+            }
+        }
+
+        #endregion
     }
 }
