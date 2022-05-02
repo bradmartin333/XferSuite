@@ -16,6 +16,7 @@ namespace XferSuite.Apps.SEYR
         private static readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
         public static Project Project { get; set; } = null;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
+        private List<int> Criteria { get; set; } = new List<int>();
 
         public ParseSEYR(string path)
         {
@@ -127,22 +128,71 @@ namespace XferSuite.Apps.SEYR
                 Project.Features[i].ID = (i + 1) * (i + 1);
                 ComboFeatures.Items.Add(Project.Features[i].Name);
             }
+            foreach (Feature[] features in Project.Criteria)
+            {
+                int id = 0;
+                foreach (Feature feature in features)
+                    id += Project.Features.Where(x => x.Name == feature.Name).First().ID;
+                Criteria.Add(id);
+            }
         }
 
         private void BtnPlot_Click(object sender, EventArgs e)
         {
+            List<double> passX = new List<double>();
+            List<double> passY = new List<double>();
+            List<double> failX = new List<double>();
+            List<double> failY = new List<double>();
+
             var images = Data.GroupBy(x => x.ImageNumber);
             foreach (IGrouping<int, DataEntry> image in images)
             {
                 var tiles = image.ToArray().GroupBy(x => (x.TR, x.TC));
                 foreach (var tile in tiles)
                 {
-                    int val = 0;
+                    DataEntry[] entries = tile.ToArray();
+                    double x = -((entries[0].TC * Project.PitchX / Project.PixelsPerMicron / 1e3) + entries[0].X);
+                    double y = (entries[0].TR * Project.PitchY / Project.PixelsPerMicron / 1e3) + entries[0].Y;
+                    List<int> criteriaInTile = new List<int>();
                     foreach (DataEntry data in tile)
-                        if (data.State) val += data.Feature.ID;
-                    System.Diagnostics.Debug.WriteLine($"image {image.Key}, tile {tile.Key}, val {val}");
+                        if (data.State) criteriaInTile.Add(data.Feature.ID);
+                    bool pass = false;
+                    foreach (var val in Combinations(criteriaInTile))
+                    {
+                        if (Criteria.Contains(val.Sum()))
+                        {
+                            pass = true;
+                            break;
+                        }
+                    }
+                    if (pass)
+                    {
+                        passX.Add(x);
+                        passY.Add(y);
+                    }
+                    else
+                    {
+                        failX.Add(x);
+                        failY.Add(y);
+                    }
                 }
             }
+
+            Results results = new Results(passX.ToArray(), passY.ToArray(), failX.ToArray(), failY.ToArray());
+        }
+
+        public static IEnumerable<T[]> Combinations<T>(IEnumerable<T> source)
+        {
+            if (null == source)
+                throw new ArgumentNullException(nameof(source));
+
+            T[] data = source.ToArray();
+
+            return Enumerable
+              .Range(0, 1 << (data.Length))
+              .Select(index => data
+                 .Where((v, i) => (index & (1 << i)) != 0)
+                 .ToArray());
         }
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)

@@ -171,6 +171,12 @@
       <DependentUpon>PassFailUtility.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\SEYR\Project.cs" />
+    <Compile Include="Apps\SEYR\Results.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\SEYR\Results.Designer.cs">
+      <DependentUpon>Results.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
     <Compile Include="Apps\XYZplotter\PlotData.cs" />
@@ -246,6 +252,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\PassFailUtility.resx">
       <DependentUpon>PassFailUtility.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\SEYR\Results.resx">
+      <DependentUpon>Results.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\XYZplotter\Plotter.resx">
       <DependentUpon>Plotter.cs</DependentUpon>
