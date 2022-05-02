@@ -50,7 +50,6 @@ namespace XferSuite.Apps.SEYR
                     return null;
             }
         }
-        public bool UpdatedState { get; set; } = false;
 
         public DataEntry(string data)
         {
