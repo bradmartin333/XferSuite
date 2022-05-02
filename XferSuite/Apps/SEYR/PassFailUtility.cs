@@ -30,6 +30,8 @@ namespace XferSuite.Apps.SEYR
             (NullExclude, NullInclude) = feature.GetNullData();
             LabelNullExcludeCount.Text = NullExclude.ToString();
             LabelNullIncludeCount.Text = NullInclude.ToString();
+            BtnIgnoreFeature.Text = feature.Ignore ? "Include Feature" : "Ignore Feature";
+            BtnIgnoreFeature.BackColor = feature.Ignore ? Color.Gold : Color.LightCoral;
 
             MakeHistogram();
             MakePie();
@@ -155,6 +157,12 @@ namespace XferSuite.Apps.SEYR
         private void BtnConfirm_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        private void BtnIgnoreFeature_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Ignore;
             Close();
         }
     }

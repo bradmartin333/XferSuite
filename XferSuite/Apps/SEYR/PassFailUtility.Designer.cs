@@ -45,6 +45,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.BtnConfirm = new System.Windows.Forms.Button();
             this.PiePlot = new ScottPlot.FormsPlot();
+            this.BtnIgnoreFeature = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +54,7 @@
             this.HistPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.HistPlot.Location = new System.Drawing.Point(3, 3);
             this.HistPlot.Name = "HistPlot";
-            this.tableLayoutPanel.SetRowSpan(this.HistPlot, 8);
+            this.tableLayoutPanel.SetRowSpan(this.HistPlot, 9);
             this.HistPlot.Size = new System.Drawing.Size(485, 455);
             this.HistPlot.TabIndex = 0;
             // 
@@ -63,6 +64,7 @@
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel.Controls.Add(this.BtnIgnoreFeature, 1, 7);
             this.tableLayoutPanel.Controls.Add(this.LabelUnselectedCount, 2, 3);
             this.tableLayoutPanel.Controls.Add(this.label7, 0, 3);
             this.tableLayoutPanel.Controls.Add(this.HistPlot, 0, 0);
@@ -76,12 +78,12 @@
             this.tableLayoutPanel.Controls.Add(this.label4, 1, 5);
             this.tableLayoutPanel.Controls.Add(this.label5, 1, 0);
             this.tableLayoutPanel.Controls.Add(this.label6, 2, 0);
-            this.tableLayoutPanel.Controls.Add(this.BtnConfirm, 1, 7);
+            this.tableLayoutPanel.Controls.Add(this.BtnConfirm, 1, 8);
             this.tableLayoutPanel.Controls.Add(this.PiePlot, 1, 6);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 8;
+            this.tableLayoutPanel.RowCount = 9;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -90,7 +92,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.Size = new System.Drawing.Size(659, 461);
             this.tableLayoutPanel.TabIndex = 1;
             // 
@@ -270,8 +272,22 @@
             this.PiePlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PiePlot.Location = new System.Drawing.Point(494, 107);
             this.PiePlot.Name = "PiePlot";
-            this.PiePlot.Size = new System.Drawing.Size(162, 322);
+            this.PiePlot.Size = new System.Drawing.Size(162, 293);
             this.PiePlot.TabIndex = 12;
+            // 
+            // BtnIgnoreFeature
+            // 
+            this.BtnIgnoreFeature.BackColor = System.Drawing.Color.LightCoral;
+            this.tableLayoutPanel.SetColumnSpan(this.BtnIgnoreFeature, 2);
+            this.BtnIgnoreFeature.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnIgnoreFeature.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnIgnoreFeature.Location = new System.Drawing.Point(494, 406);
+            this.BtnIgnoreFeature.Name = "BtnIgnoreFeature";
+            this.BtnIgnoreFeature.Size = new System.Drawing.Size(162, 23);
+            this.BtnIgnoreFeature.TabIndex = 15;
+            this.BtnIgnoreFeature.Text = "Ignore Feature";
+            this.BtnIgnoreFeature.UseVisualStyleBackColor = false;
+            this.BtnIgnoreFeature.Click += new System.EventHandler(this.BtnIgnoreFeature_Click);
             // 
             // PassFailUtility
             // 
@@ -307,5 +323,6 @@
         private ScottPlot.FormsPlot PiePlot;
         private System.Windows.Forms.Label LabelUnselectedCount;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button BtnIgnoreFeature;
     }
 }

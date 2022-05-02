@@ -16,7 +16,7 @@ namespace XferSuite.Apps.SEYR
         private static readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
         public static Project Project { get; set; } = null;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
-        private List<int> Criteria { get; set; } = new List<int>();
+        private List<(int, bool)> Criteria { get; set; } = new List<(int, bool)>();
         private ScatterCriteria[] Scatters { get; set; } = null;
 
         public ParseSEYR(string path)
@@ -118,7 +118,10 @@ namespace XferSuite.Apps.SEYR
                         System.Diagnostics.Debug.WriteLine($"{feature.Name} Limit updated from {feature.Limit} to {pf.Limit}");
                         feature.Limit = pf.Limit;
                     }
+                    InitFeatureInfo();
                 }
+                else if (result == DialogResult.Ignore)
+                    feature.Ignore = !feature.Ignore;
             }
         }
 
@@ -126,33 +129,34 @@ namespace XferSuite.Apps.SEYR
         {
             List<int> criteriaVals = new List<int>();
             List<string> criteriaNames = new List<string>();
+            ComboFeatures.Items.Clear();
             for (int i = 0; i < Project.Features.Count; i++)
             {
                 int id = (i + 1) * (i + 1);
                 string name = Project.Features[i].Name;
                 Project.Features[i].ID = id;
                 ComboFeatures.Items.Add(name);
+                if (Project.Features[i].Ignore) continue;
                 criteriaVals.Add(id);
                 criteriaNames.Add(name);
             }
 
-            //foreach (string[] features in Project.Criteria)
-            //{
-            //    int id = 0;
-            //    string name = string.Empty;
-            //    foreach (string feature in features)
-            //    {
-            //        id += Project.Features.Where(x => x.Name == feature).First().ID;
-            //        name += feature + " ";
-            //    }
-            //    criteriaVals.Add(id);
-            //    criteriaNames.Add(name);
-            //}
+            List<int> passingVals = new List<int>();
+            foreach (string[] features in Project.Criteria)
+            {
+                int id = 0;
+                foreach (string feature in features)
+                    id += Project.Features.Where(x => x.Name == feature).First().ID;
+                passingVals.Add(id);
+            }
 
             criteriaVals = criteriaVals.Distinct().ToList();
             foreach (var valCombo in Combinations(criteriaVals))
-                if (valCombo.Length > 0) Criteria.Add(valCombo.Sum());
-
+            {
+                int sum = valCombo.Sum();
+                if (valCombo.Length > 0) Criteria.Add((sum, passingVals.Contains(sum)));
+            }
+                
             List<ScatterCriteria> scatters = new List<ScatterCriteria>();
             foreach (var nameCombo in Combinations(criteriaNames))
                 if (nameCombo.Length > 0) scatters.Add(new ScatterCriteria(string.Join(", ", nameCombo)));
@@ -189,13 +193,25 @@ namespace XferSuite.Apps.SEYR
 
                     int criterion = 0;
                     foreach (DataEntry entry in entries)
-                        if (entry.State) criterion += entry.Feature.ID;
-                    
-                    int idx = Criteria.IndexOf(criterion);
-                    if (idx == -1) continue;
+                    {
+                        Feature feature = entry.Feature;
+                        if (feature.Ignore) continue;
+                        if (entry.State) criterion += feature.ID;
+                    }
+
+                    bool pass = true;
+                    int idx = Criteria.IndexOf((criterion, pass));
+                    if (idx == -1)
+                    {
+                        pass = false;
+                        idx = Criteria.IndexOf((criterion, pass));
+                    }
+                    if (idx == -1)
+                        continue;
                     ScatterCriteria scatterCriteria = Scatters[idx];
                     scatterCriteria.X.Add(x);
                     scatterCriteria.Y.Add(y);
+                    scatterCriteria.Pass = pass;
                     break;
                 }
             }

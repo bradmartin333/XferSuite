@@ -8,6 +8,7 @@ namespace XferSuite.Apps.SEYR
         public List<double> X { get; set; } = new List<double>();
         public List<double> Y { get; set; } = new List<double>();
         public string Name { get; set; }
+        public bool Pass { get; set; } = false;
         public Color Color { get; set; } = Color.Transparent;
         public ScatterCriteria(string name)
         {
