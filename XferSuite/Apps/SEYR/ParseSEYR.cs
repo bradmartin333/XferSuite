@@ -16,7 +16,7 @@ namespace XferSuite.Apps.SEYR
         private static readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
         public static Project Project { get; set; } = null;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
-        private List<int> Criteria { get; set; } = new List<int>();
+        private int[] Criteria { get; set; } = null;
 
         public ParseSEYR(string path)
         {
@@ -128,13 +128,15 @@ namespace XferSuite.Apps.SEYR
                 Project.Features[i].ID = (i + 1) * (i + 1);
                 ComboFeatures.Items.Add(Project.Features[i].Name);
             }
+            List<int> criteriaList = new List<int>();
             foreach (Feature[] features in Project.Criteria)
             {
                 int id = 0;
                 foreach (Feature feature in features)
                     id += Project.Features.Where(x => x.Name == feature.Name).First().ID;
-                Criteria.Add(id);
+                criteriaList.Add(id);
             }
+            Criteria = criteriaList.Distinct().ToArray();
         }
 
         private void BtnPlot_Click(object sender, EventArgs e)
