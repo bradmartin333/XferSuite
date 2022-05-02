@@ -37,11 +37,12 @@ namespace XferSuite.Apps.SEYR
         private float _MaxScore = float.MinValue;
         [XmlElement("MaxScore")]
         public float MaxScore { get => _MaxScore; set => _MaxScore = value; }
-
+        [XmlElement("PassThreshold")]
+        public double PassThreshold { get; set; } = -10; // Added by XferSuite
+        [XmlElement("Limit")]
+        public double Limit { get; set; } = -10; // Added by XferSuite
         internal bool Ignore { get; set; } = false;
         internal int ID { get; set; }
-        internal double PassThreshold { get; set; }
-        internal double Limit { get; set; }
         internal DataEntry[] Data { get; set; }
         internal double[] HistData { get; set; }
 
@@ -62,12 +63,8 @@ namespace XferSuite.Apps.SEYR
 
         internal bool GenerateState(float score)
         {
-            double fromLow = _MinScore;
-            double fromHigh = _MaxScore;
-            double toLow = FlipScore ? 128 : 0;
-            double toHigh = FlipScore ? 0 : 128;
-            double map = (double)((score - fromLow) * (toHigh - toLow) / (fromHigh - fromLow)) + toLow;
-            return map - 64 > 0;
+            if (FlipScore) return score >= Limit && score <= PassThreshold;
+            else return score >= PassThreshold && score <= Limit;
         }
 
         internal (int, int) GetNullData()

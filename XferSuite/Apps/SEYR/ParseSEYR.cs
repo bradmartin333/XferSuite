@@ -33,6 +33,8 @@ namespace XferSuite.Apps.SEYR
             InitFeatureInfo();
         }
 
+        #region Load Data
+
         private void ExtractFile(string path, ZipArchive archive)
         {
             archive.Entries.Where(x => x.Name == path.Split('\\').Last()).First().ExtractToFile(path, true);
@@ -73,8 +75,8 @@ namespace XferSuite.Apps.SEYR
                     feature.MaxScore = (float)feature.HistData.Max();
                     System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
                 }
-                feature.PassThreshold = (feature.MaxScore + feature.MinScore) / 2.0;
-                feature.Limit = feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max();
+                feature.PassThreshold = feature.PassThreshold == -10 ? (feature.MaxScore + feature.MinScore) / 2.0 : feature.PassThreshold;
+                feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
                 System.Diagnostics.Debug.WriteLine($"{feature.Name} Min = {feature.MinScore} Max = {feature.MaxScore}");
             }
         }
@@ -95,6 +97,8 @@ namespace XferSuite.Apps.SEYR
                 System.Diagnostics.Debug.WriteLine($"{feature.Name} {Data.Where(x => x.UpdatedState).Count()} updated states");
             }
         }
+
+        #endregion
 
         private void BtnRescore_Click(object sender, EventArgs e)
         {
@@ -119,6 +123,7 @@ namespace XferSuite.Apps.SEYR
                         System.Diagnostics.Debug.WriteLine($"{feature.Name} Limit updated from {feature.Limit} to {pf.Limit}");
                         feature.Limit = pf.Limit;
                     }
+                    RescoreAllData();
                     InitFeatureInfo();
                 }
                 else if (result == DialogResult.Ignore)
@@ -238,7 +243,7 @@ namespace XferSuite.Apps.SEYR
                 Application.DoEvents();
                 SaveProject();
                 SaveReport();
-                using (ZipArchive zip = ZipFile.Open(svd.FileName, ZipArchiveMode.Create))
+                using (ZipArchive zip = ZipFile.Open(svd.FileName, ZipArchiveMode.Update))
                 {
                     zip.CreateEntryFromFile(ReportPath, Path.GetFileName(ReportPath));
                     zip.CreateEntryFromFile(ProjectPath, Path.GetFileName(ProjectPath));
