@@ -80,9 +80,13 @@ namespace XferSuite.Apps.SEYR
         private void MakePlot()
         {
             FormsPlot.Plot.Clear();
+            double someX = 0;
+            double someY = 0;
             foreach (ScatterCriteria scatter in Scatters)
             {
                 if (scatter.X.Count == 0) continue;
+                if (someX == 0) someX = scatter.X[0];
+                if (someY == 0) someY = scatter.Y[0];
                 ScatterPlot plot = FormsPlot.Plot.AddScatter(
                     scatter.X.ToArray(),
                     scatter.Y.ToArray(),
@@ -94,7 +98,7 @@ namespace XferSuite.Apps.SEYR
                 else if (ShowPassFail)
                     plot.Color = scatter.Pass ? Color.LawnGreen : Color.Firebrick;
             }
-            MarkerPlot = FormsPlot.Plot.AddMarker(0, 0, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
+            MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
             FormsPlot.Refresh();
         }
     }
