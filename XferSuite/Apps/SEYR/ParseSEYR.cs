@@ -74,9 +74,17 @@ namespace XferSuite.Apps.SEYR
                 feature.HistData = feature.Data.Select(x => (double)x.Score).Where(x => x > 0).ToArray();
                 if (feature.MinScore == float.MaxValue || feature.MaxScore == float.MinValue || feature.MinScore == feature.MaxScore)
                 {
-                    feature.MinScore = (float)feature.HistData.Min();
-                    feature.MaxScore = (float)feature.HistData.Max();
-                    System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
+                    if (feature.HistData.Length == 0)
+                    {
+                        feature.HistData = new double[] { 0 };
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} is empty");
+                    }
+                    else
+                    {
+                        feature.MinScore = (float)feature.HistData.Min();
+                        feature.MaxScore = (float)feature.HistData.Max();
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
+                    }
                 }
                 feature.PassThreshold = feature.PassThreshold == -10 ? (feature.MaxScore + feature.MinScore) / 2.0 : feature.PassThreshold;
                 feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
@@ -110,7 +118,7 @@ namespace XferSuite.Apps.SEYR
             LabelLoading.Visible = true;
             Application.DoEvents();
             Feature feature = Project.Features.Where(x => x.Name == ComboFeatures.Text).First();
-            using (PassFailUtility pf = new PassFailUtility(feature))
+            using (PassFailUtility pf = new PassFailUtility(Data, feature))
             {
                 LabelLoading.Visible = false;
                 Application.DoEvents();

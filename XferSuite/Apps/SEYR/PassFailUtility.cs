@@ -4,11 +4,13 @@ using System.Windows.Forms;
 using ScottPlot.Statistics;
 using System.Drawing;
 using System;
+using System.Collections.Generic;
 
 namespace XferSuite.Apps.SEYR
 {
     public partial class PassFailUtility : Form
     {
+        private List<DataEntry> Data;
         public double PassThreshold;
         public double Limit;
         private readonly Feature Feature;
@@ -19,9 +21,10 @@ namespace XferSuite.Apps.SEYR
         private BarPlot BarPlot;
         private Annotation ViewDataAnnotation;
 
-        public PassFailUtility(Feature feature)
+        public PassFailUtility(List<DataEntry> data, Feature feature)
         {
             InitializeComponent();
+            Data = data;
             Feature = feature;
             Text = $"Editing {feature.Name}";
             PassThreshold = feature.PassThreshold;
@@ -79,7 +82,31 @@ namespace XferSuite.Apps.SEYR
                 if (Math.Floor(BarPlot.Positions[i]) == x && BarPlot.Values[i] > 0)
                     message += $"Count = {BarPlot.Values[i]}\n";
             ViewDataAnnotation.Label = message;
+            ShowImages(x);
             p.Refresh();
+        }
+
+        private void ShowImages(int x)
+        {
+            Bitmap bitmap = null;
+            DataEntry[] entries = Data.Where(d => Math.Round(d.Score) == x).ToArray();
+            foreach (DataEntry entry in entries)
+            {
+                if (bitmap != null) break;
+                foreach (DataEntry match in Data.Where(d => d.X == entry.X && d.Y == entry.Y))
+                {
+                    if (match.Image != null)
+                    {
+                        bitmap = match.Image;
+                        break;
+                    }
+                }
+            }
+            if (bitmap != null)
+            {
+                HistPlot.Plot.AddImage(bitmap, 0, 0);
+                HistPlot.Refresh();
+            }
         }
 
         private void Control_MouseWheel(object sender, MouseEventArgs e)
