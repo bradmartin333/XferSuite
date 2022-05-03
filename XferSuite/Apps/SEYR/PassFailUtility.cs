@@ -20,6 +20,8 @@ namespace XferSuite.Apps.SEYR
         private readonly int NullInclude;
         private BarPlot BarPlot;
         private Annotation ViewDataAnnotation;
+        private bool HSpanChanging = false;
+        private bool LoadingImages = false;
 
         public PassFailUtility(List<DataEntry> data, Feature feature)
         {
@@ -38,6 +40,19 @@ namespace XferSuite.Apps.SEYR
 
             MakeHistogram();
             MakePie();
+
+            FormClosing += PassFailUtility_FormClosing;
+        }
+
+        private void PassFailUtility_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CloseImageScroller();
+        }
+
+        private void CloseImageScroller()
+        {
+            if (Application.OpenForms.OfType<ImageScroller>().Any())
+                Application.OpenForms.OfType<ImageScroller>().First().Close();
         }
 
         #region Histogram
@@ -82,31 +97,29 @@ namespace XferSuite.Apps.SEYR
                 if (Math.Floor(BarPlot.Positions[i]) == x && BarPlot.Values[i] > 0)
                     message += $"Count = {BarPlot.Values[i]}\n";
             ViewDataAnnotation.Label = message;
-            ShowImages(x);
+            if (!HSpanChanging) ShowImages(x);
+            else CloseImageScroller();
+            HSpanChanging = false;
             p.Refresh();
         }
-
         private void ShowImages(int x)
         {
-            Bitmap bitmap = null;
-            DataEntry[] entries = Data.Where(d => Math.Round(d.Score) == x).ToArray();
+            Cursor = Cursors.WaitCursor;
+            if (LoadingImages) return;
+            LoadingImages = true;
+            List<Bitmap> bitmaps = new List<Bitmap>();
+            DataEntry[] entries = Data.Where(d => Math.Round(d.Score) == x && d.FeatureName == Feature.Name).ToArray();
             foreach (DataEntry entry in entries)
-            {
-                if (bitmap != null) break;
                 foreach (DataEntry match in Data.Where(d => d.X == entry.X && d.Y == entry.Y))
-                {
                     if (match.Image != null)
-                    {
-                        bitmap = match.Image;
-                        break;
-                    }
-                }
-            }
-            if (bitmap != null)
+                        bitmaps.Add(match.Image);
+            if (bitmaps.Count > 0)
             {
-                HistPlot.Plot.AddImage(bitmap, 0, 0);
-                HistPlot.Refresh();
+                CloseImageScroller();
+                _ = new ImageScroller(bitmaps) { Text = $"Score = {x}" };
             }
+            Cursor = Cursors.Default;
+            LoadingImages = false;
         }
 
         private void Control_MouseWheel(object sender, MouseEventArgs e)
@@ -141,6 +154,7 @@ namespace XferSuite.Apps.SEYR
 
         private void HSpan_Dragged(object sender, EventArgs e)
         {
+            HSpanChanging = true;
             HSpan hSpan = (HSpan)sender;
             double minVal = Math.Min(hSpan.X1, hSpan.X2);
             double maxVal = Math.Max(hSpan.X1, hSpan.X2);

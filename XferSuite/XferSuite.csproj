@@ -158,6 +158,12 @@
     </Compile>
     <Compile Include="Apps\SEYR\DataEntry.cs" />
     <Compile Include="Apps\SEYR\Feature.cs" />
+    <Compile Include="Apps\SEYR\ImageScroller.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\SEYR\ImageScroller.Designer.cs">
+      <DependentUpon>ImageScroller.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\SEYR\ParseSEYR.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -247,6 +253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AdvancedTools\uTP\PrintLogParser.resx">
       <DependentUpon>PrintLogParser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\SEYR\ImageScroller.resx">
+      <DependentUpon>ImageScroller.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\ParseSEYR.resx">
       <DependentUpon>ParseSEYR.cs</DependentUpon>

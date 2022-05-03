@@ -64,6 +64,8 @@ namespace XferSuite.Apps.SEYR
 
         internal bool GenerateState(float score)
         {
+            if (score == -10) return false; // Null exclude
+            if (score == 0) return true; // Null include
             if (FlipScore) return score >= Limit && score <= PassThreshold;
             else return score >= PassThreshold && score <= Limit;
         }
