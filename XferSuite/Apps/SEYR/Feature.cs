@@ -41,7 +41,8 @@ namespace XferSuite.Apps.SEYR
         public double PassThreshold { get; set; } = -10; // Added by XferSuite
         [XmlElement("Limit")]
         public double Limit { get; set; } = -10; // Added by XferSuite
-        internal bool Ignore { get; set; } = false;
+        [XmlElement("Ignore")]
+        public bool Ignore { get; set; } = false; // Added by XferSuite
         internal int ID { get; set; }
         internal DataEntry[] Data { get; set; }
         internal double[] HistData { get; set; }

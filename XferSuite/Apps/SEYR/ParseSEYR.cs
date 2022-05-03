@@ -13,9 +13,7 @@ namespace XferSuite.Apps.SEYR
     {
         private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
-        private readonly string IgnoredFeaturesPath = $@"{Path.GetTempPath()}\ignoredFeatures.txt";
         public static Project Project { get; set; } = null;
-        private bool IgnoredFeaturesLoaded { get; set; } = false;
         private string DataHeader { get; set; } = string.Empty;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
         private List<(int, bool)> Criteria { get; set; } = new List<(int, bool)>();
@@ -28,7 +26,6 @@ namespace XferSuite.Apps.SEYR
             {
                 ExtractFile(ProjectPath, archive);
                 ExtractFile(ReportPath, archive);
-                IgnoredFeaturesLoaded = ExtractFile(IgnoredFeaturesPath, archive);
             }
             LoadProject();
             LoadData();
@@ -140,7 +137,6 @@ namespace XferSuite.Apps.SEYR
 
         private void InitFeatureInfo()
         {
-            string[] ignoredFeatures = IgnoredFeaturesLoaded ? File.ReadAllLines(IgnoredFeaturesPath) : new string[] { };
             List<int> criteriaVals = new List<int>();
             List<string> criteriaNames = new List<string>();
             ComboFeatures.Items.Clear();
@@ -150,7 +146,6 @@ namespace XferSuite.Apps.SEYR
                 int id = (i + 1) * (i + 1);
                 string name = feature.Name;
                 feature.ID = id;
-                feature.Ignore = ignoredFeatures.Contains(feature.Name);
                 ComboFeatures.Items.Add(name);
                 if (Project.Features[i].Ignore) continue;
                 criteriaVals.Add(id);
@@ -250,18 +245,18 @@ namespace XferSuite.Apps.SEYR
             if (svd.ShowDialog() == DialogResult.OK)
             {
                 if (File.Exists(svd.FileName)) File.Delete(svd.FileName);
+                LabelLoading.Text = "Saving...";
                 LabelLoading.Visible = true;
                 Application.DoEvents();
                 SaveProject();
                 SaveReport();
-                SaveIgnoredFeatures();
                 using (ZipArchive zip = ZipFile.Open(svd.FileName, ZipArchiveMode.Create))
                 {
                     zip.CreateEntryFromFile(ReportPath, Path.GetFileName(ReportPath));
                     zip.CreateEntryFromFile(ProjectPath, Path.GetFileName(ProjectPath));
-                    zip.CreateEntryFromFile(IgnoredFeaturesPath, Path.GetFileName(IgnoredFeaturesPath));
                 }
                 LabelLoading.Visible = false;
+                LabelLoading.Text = "Loading...";
             }
         }
 
@@ -281,16 +276,6 @@ namespace XferSuite.Apps.SEYR
                 stream.WriteLine(DataHeader);
                 foreach (DataEntry entry in Data)
                     stream.WriteLine(entry.Raw);
-            }
-        }
-
-
-        private void SaveIgnoredFeatures()
-        {
-            using (StreamWriter stream = new StreamWriter(IgnoredFeaturesPath))
-            {
-                foreach (Feature feature in Project.Features.Where(x => x.Ignore))
-                    stream.WriteLine(feature.Name);
             }
         }
 
