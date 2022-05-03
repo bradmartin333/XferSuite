@@ -5,6 +5,8 @@ namespace XferSuite.Apps.SEYR
 {
     public class ScatterCriteria
     {
+        public List<double> BaseX { get; set; } = new List<double>();
+        public List<double> BaseY { get; set; } = new List<double>();
         public List<double> X { get; set; } = new List<double>();
         public List<double> Y { get; set; } = new List<double>();
         public string Name { get; set; }

@@ -220,6 +220,8 @@ namespace XferSuite.Apps.SEYR
                     if (idx == -1)
                         continue;
                     ScatterCriteria scatterCriteria = Scatters[idx];
+                    scatterCriteria.BaseX.Add(entries[0].X);
+                    scatterCriteria.BaseY.Add(entries[0].Y);
                     scatterCriteria.X.Add(x);
                     scatterCriteria.Y.Add(y);
                     scatterCriteria.Pass = pass;
@@ -227,7 +229,7 @@ namespace XferSuite.Apps.SEYR
                 }
             }
 
-            Results results = new Results(Scatters);
+            Results results = new Results(Data, Scatters);
         }
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)

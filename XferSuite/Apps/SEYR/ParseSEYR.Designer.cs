@@ -30,12 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParseSEYR));
             this.TLP = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnSave = new System.Windows.Forms.Button();
             this.ComboFeatures = new System.Windows.Forms.ComboBox();
             this.BtnRescore = new System.Windows.Forms.Button();
             this.BtnPlot = new System.Windows.Forms.Button();
             this.BtnExportCycleFile = new System.Windows.Forms.Button();
             this.LabelLoading = new System.Windows.Forms.Label();
-            this.BtnSave = new System.Windows.Forms.Button();
             this.TLP.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,6 +62,20 @@
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TLP.Size = new System.Drawing.Size(298, 128);
             this.TLP.TabIndex = 1;
+            // 
+            // BtnSave
+            // 
+            this.BtnSave.BackColor = System.Drawing.Color.White;
+            this.TLP.SetColumnSpan(this.BtnSave, 2);
+            this.BtnSave.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnSave.Location = new System.Drawing.Point(3, 62);
+            this.BtnSave.Name = "BtnSave";
+            this.BtnSave.Size = new System.Drawing.Size(292, 23);
+            this.BtnSave.TabIndex = 7;
+            this.BtnSave.Text = "Make SEYRUP";
+            this.BtnSave.UseVisualStyleBackColor = false;
+            this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // ComboFeatures
             // 
@@ -124,20 +138,6 @@
             this.LabelLoading.Text = "Loading...";
             this.LabelLoading.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.LabelLoading.Visible = false;
-            // 
-            // BtnSave
-            // 
-            this.BtnSave.BackColor = System.Drawing.Color.White;
-            this.TLP.SetColumnSpan(this.BtnSave, 2);
-            this.BtnSave.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnSave.Location = new System.Drawing.Point(3, 62);
-            this.BtnSave.Name = "BtnSave";
-            this.BtnSave.Size = new System.Drawing.Size(292, 23);
-            this.BtnSave.TabIndex = 7;
-            this.BtnSave.Text = "Make SEYRUP";
-            this.BtnSave.UseVisualStyleBackColor = false;
-            this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // ParseSEYR
             // 
