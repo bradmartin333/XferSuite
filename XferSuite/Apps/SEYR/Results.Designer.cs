@@ -45,11 +45,10 @@
             // FormsPlot
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.FormsPlot, 5);
-            this.FormsPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FormsPlot.Location = new System.Drawing.Point(3, 3);
             this.FormsPlot.Name = "FormsPlot";
             this.tableLayoutPanel1.SetRowSpan(this.FormsPlot, 2);
-            this.FormsPlot.Size = new System.Drawing.Size(564, 492);
+            this.FormsPlot.Size = new System.Drawing.Size(559, 492);
             this.FormsPlot.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -72,25 +71,25 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(760, 533);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(759, 536);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // ComboPropertySelector
             // 
             this.ComboPropertySelector.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ComboPropertySelector.FormattingEnabled = true;
-            this.ComboPropertySelector.Location = new System.Drawing.Point(573, 3);
+            this.ComboPropertySelector.Location = new System.Drawing.Point(568, 3);
             this.ComboPropertySelector.Name = "ComboPropertySelector";
-            this.ComboPropertySelector.Size = new System.Drawing.Size(184, 21);
+            this.ComboPropertySelector.Size = new System.Drawing.Size(188, 21);
             this.ComboPropertySelector.TabIndex = 4;
             this.ComboPropertySelector.SelectedIndexChanged += new System.EventHandler(this.ComboPropertySelector_SelectedIndexChanged);
             // 
             // PropertyGrid
             // 
             this.PropertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PropertyGrid.Location = new System.Drawing.Point(573, 30);
+            this.PropertyGrid.Location = new System.Drawing.Point(568, 30);
             this.PropertyGrid.Name = "PropertyGrid";
-            this.PropertyGrid.Size = new System.Drawing.Size(184, 465);
+            this.PropertyGrid.Size = new System.Drawing.Size(188, 468);
             this.PropertyGrid.TabIndex = 5;
             this.PropertyGrid.ToolbarVisible = false;
             // 
@@ -103,7 +102,7 @@
             this.flowLayoutPanel1.Controls.Add(this.CbxTogglePassFail);
             this.flowLayoutPanel1.Controls.Add(this.BtnReset);
             this.flowLayoutPanel1.Controls.Add(this.BtnRefreshPlot);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(122, 501);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(121, 504);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(516, 29);
             this.flowLayoutPanel1.TabIndex = 7;
@@ -168,9 +167,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(760, 533);
+            this.ClientSize = new System.Drawing.Size(759, 536);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(775, 575);
             this.Name = "Results";
             this.Text = "Results";
             this.tableLayoutPanel1.ResumeLayout(false);

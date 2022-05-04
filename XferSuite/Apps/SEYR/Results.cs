@@ -99,6 +99,7 @@ namespace XferSuite.Apps.SEYR
             }
             MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
             SetupCombo();
+            SetSize();
             SetAxes();
             FormsPlot.Refresh();
         }
@@ -119,8 +120,19 @@ namespace XferSuite.Apps.SEYR
             ComboPropertySelector.Items.Add("Plot Control");
         }
 
+        private void SetSize()
+        {
+            double[] xData = Data.Select(x => x.X).ToArray();
+            double[] yData = Data.Select(x => x.Y).ToArray();
+            double xRange = xData.Max() - xData.Min();
+            double yRange = yData.Max() - yData.Min();
+            if (xRange < yRange) FormsPlot.Width = (int)(FormsPlot.Height * (xRange / yRange));
+            else FormsPlot.Height = (int)(FormsPlot.Width * (yRange / xRange));
+        }
+
         private void SetAxes()
         {
+            
             List<double> xPositions = new List<double>();
             List<string> xLabels = new List<string>();
             foreach (var region in Data.GroupBy(x => x.RC))
@@ -131,12 +143,13 @@ namespace XferSuite.Apps.SEYR
             }
             FormsPlot.Plot.XAxis.ManualTickPositions(xPositions.ToArray(), xLabels.ToArray());
 
+            
             List<double> yPositions = new List<double>();
             List<string> yLabels = new List<string>();
             foreach (var region in Data.GroupBy(x => x.RR))
             {
                 DataEntry[] regionData = region.ToArray();
-                yPositions.Add(regionData.Select(x => ParseSEYR.YSign * x.Y).Average());
+                yPositions.Add(regionData.Select(x => ParseSEYR.XSign * x.Y).Average());
                 yLabels.Add(region.Key.ToString());
             }
             FormsPlot.Plot.YAxis.ManualTickPositions(yPositions.ToArray(), yLabels.ToArray());
