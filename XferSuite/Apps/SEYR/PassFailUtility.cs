@@ -158,9 +158,9 @@ namespace XferSuite.Apps.SEYR
             HSpan hSpan = (HSpan)sender;
             double minVal = Math.Min(hSpan.X1, hSpan.X2);
             double maxVal = Math.Max(hSpan.X1, hSpan.X2);
-            Limit = FlipScore ? minVal : maxVal;
-            PassThreshold = FlipScore ? maxVal : minVal;
-            ViewDataAnnotation.Label = $"Limit = {Math.Round(Limit, 2)}\nPass Threshold = {Math.Round(PassThreshold, 2)}";
+            Limit = Math.Round(FlipScore ? minVal : maxVal);
+            PassThreshold = Math.Round(FlipScore ? maxVal : minVal);
+            ViewDataAnnotation.Label = $"Limit = {Limit}\nPass Threshold = {PassThreshold}";
             MakePie();
         }
 
@@ -188,7 +188,7 @@ namespace XferSuite.Apps.SEYR
             double numPass = HistData.Where(
                 x => (FlipScore ? x < PassThreshold : x > PassThreshold) && 
                 (FlipScore ? x > Limit : x < Limit)).Count();
-            double numFail = HistData.Length - numPass;
+            double numFail = HistData.Length - numPass - 1;
             LabelSelectedCount.Text = numPass.ToString();
             LabelUnselectedCount.Text = numFail.ToString();
             LabelTotalCount.Text = $"{NullExclude + NullInclude + numPass + numFail}";
