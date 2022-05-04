@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.IO.Compression;
@@ -11,6 +12,16 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class ParseSEYR : Form
     {
+        private static bool _FlipX = true;
+        [Category("User Parameters")]
+        public bool FlipX { get => _FlipX; set => _FlipX = value; }
+        public static int XSign { get => _FlipX ? -1 : 1; }
+
+        private static bool _FlipY = true;
+        [Category("User Parameters")]
+        public bool FlipY { get => _FlipY; set => _FlipY = value; }
+        public static int YSign { get => _FlipY ? -1 : 1; }
+
         private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
         public static Project Project { get; set; } = null;
@@ -207,8 +218,8 @@ namespace XferSuite.Apps.SEYR
                 foreach (var tile in tiles)
                 {
                     DataEntry[] entries = tile.ToArray();
-                    double x = -(entries[0].X + (entries[0].TC * Project.PitchX / Project.PixelsPerMicron / 1e3));
-                    double y = entries[0].Y + (entries[0].TR * Project.PitchY / Project.PixelsPerMicron / 1e3);
+                    double x = XSign * (entries[0].X + (entries[0].TC * Project.PitchX / Project.PixelsPerMicron / 1e3));
+                    double y = YSign * (entries[0].Y + (entries[0].TR * Project.PitchY / Project.PixelsPerMicron / 1e3));
 
                     int criterion = 0;
                     foreach (DataEntry entry in entries)

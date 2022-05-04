@@ -55,8 +55,8 @@ namespace XferSuite.Apps.SEYR
                     break;
                 }
 
-            MarkerPlot.X = -thisX;
-            MarkerPlot.Y = thisY;
+            MarkerPlot.X = ParseSEYR.XSign * thisX;
+            MarkerPlot.Y = ParseSEYR.YSign * thisY;
             MarkerPlot.Color = SelectedBitmap == null ? Color.Transparent : Color.Gold;
             FormsPlot.Refresh();
         }
@@ -89,7 +89,31 @@ namespace XferSuite.Apps.SEYR
                     plot.Color = scatter.Pass ? Color.LawnGreen : Color.Firebrick;
             }
             MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
+            SetAxes();
             FormsPlot.Refresh();
+        }
+
+        private void SetAxes()
+        {
+            List<double> xPositions = new List<double>();
+            List<string> xLabels = new List<string>();
+            foreach (var region in Data.GroupBy(x => x.RC))
+            {
+                DataEntry[] regionData = region.ToArray();
+                xPositions.Add(regionData.Select(x => ParseSEYR.XSign * x.X).Average());
+                xLabels.Add(region.Key.ToString());
+            }
+            FormsPlot.Plot.XAxis.ManualTickPositions(xPositions.ToArray(), xLabels.ToArray());
+
+            List<double> yPositions = new List<double>();
+            List<string> yLabels = new List<string>();
+            foreach (var region in Data.GroupBy(x => x.RR))
+            {
+                DataEntry[] regionData = region.ToArray();
+                yPositions.Add(regionData.Select(x => ParseSEYR.YSign * x.Y).Average());
+                yLabels.Add(region.Key.ToString());
+            }
+            FormsPlot.Plot.YAxis.ManualTickPositions(yPositions.ToArray(), yLabels.ToArray());
         }
 
         #region UI Elements
