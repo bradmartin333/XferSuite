@@ -21,15 +21,40 @@ namespace XferSuite.Apps.SEYR
             InitializeComponent();
             Data = data;
             Scatters = scatters;
-
-            FormsPlot.Plot.Palette = ScottPlot.Palette.ColorblindFriendly;
-            FormsPlot.Plot.Legend();
-            FormsPlot.MouseMove += FormsPlot_MouseMove;
-            FormsPlot.LeftClicked += FormsPlot_LeftClicked;
-
+            SetupPlot();
             MakePlot();
             Show();
         }
+        private void MakePlot()
+        {
+            ResetUI();
+            double someX = 0;
+            double someY = 0;
+            foreach (ScatterCriteria scatter in Scatters)
+            {
+                if (scatter.X.Count == 0) continue;
+                if (someX == 0) someX = scatter.X[0];
+                if (someY == 0) someY = scatter.Y[0];
+                ScatterPlot plot = FormsPlot.Plot.AddScatter(
+                    scatter.X.ToArray(),
+                    scatter.Y.ToArray(),
+                    markerShape: ScottPlot.MarkerShape.filledSquare,
+                    lineStyle: ScottPlot.LineStyle.None,
+                    label: scatter.Name);
+                if (scatter.Color != Color.Transparent)
+                    plot.Color = scatter.Color;
+                else if (ShowPassFail)
+                    plot.Color = scatter.Pass ? Color.LawnGreen : Color.Firebrick;
+                ScatterPlots.Add(plot);
+            }
+            MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
+            SetupCombo();
+            SetSize();
+            SetAxes();
+            FormsPlot.Refresh();
+        }
+
+        #region Mouse Handlers
 
         private void FormsPlot_MouseMove(object sender, MouseEventArgs e)
         {
@@ -60,7 +85,7 @@ namespace XferSuite.Apps.SEYR
                     SelectedBitmap = entry.Image;
                     break;
                 }
-            } 
+            }
 
             MarkerPlot.X = ParseSEYR.XSign * thisX;
             MarkerPlot.Y = ParseSEYR.YSign * thisY;
@@ -75,33 +100,48 @@ namespace XferSuite.Apps.SEYR
             FormsPlot.Refresh();
         }
 
-        private void MakePlot()
+        private void FormsPlot_MouseWheel(object sender, MouseEventArgs e)
         {
-            ResetUI();
-            double someX = 0;
-            double someY = 0;
-            foreach (ScatterCriteria scatter in Scatters)
+            ScottPlot.FormsPlot control = (ScottPlot.FormsPlot)sender;
+            switch (GetControlAxis(control, e.Location))
             {
-                if (scatter.X.Count == 0) continue;
-                if (someX == 0) someX = scatter.X[0];
-                if (someY == 0) someY = scatter.Y[0];
-                ScatterPlot plot = FormsPlot.Plot.AddScatter(
-                    scatter.X.ToArray(),
-                    scatter.Y.ToArray(),
-                    markerShape: ScottPlot.MarkerShape.filledSquare,
-                    lineStyle: ScottPlot.LineStyle.None,
-                    label: scatter.Name);
-                if (scatter.Color != Color.Transparent)
-                    plot.Color = scatter.Color;
-                else if (ShowPassFail)
-                    plot.Color = scatter.Pass ? Color.LawnGreen : Color.Firebrick;
-                ScatterPlots.Add(plot);
+                case 0:
+                    control.Plot.XAxis.LockLimits(true);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
+                case 1:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(true);
+                    break;
+                default:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
             }
-            MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
-            SetupCombo();
-            SetSize();
-            SetAxes();
-            FormsPlot.Refresh();
+        }
+
+        private int GetControlAxis(ScottPlot.FormsPlot control, Point location)
+        {
+            if (location.X < 60) // At XAxis
+                return 0;
+            else if (location.Y > control.Height - 60) // At YAxis
+                return 1;
+            else
+                return -1;
+        }
+
+        #endregion
+
+        #region UI Configuration
+
+        private void SetupPlot()
+        {
+            FormsPlot.Plot.Palette = ScottPlot.Palette.ColorblindFriendly;
+            FormsPlot.Plot.Legend();
+            FormsPlot.MouseMove += FormsPlot_MouseMove;
+            FormsPlot.LeftClicked += FormsPlot_LeftClicked;
+            FormsPlot.MouseWheel += FormsPlot_MouseWheel;
+            FormsPlot.Configuration.DoubleClickBenchmark = false;
         }
 
         private void ResetUI()
@@ -155,7 +195,9 @@ namespace XferSuite.Apps.SEYR
             FormsPlot.Plot.YAxis.ManualTickPositions(yPositions.ToArray(), yLabels.ToArray());
         }
 
-        #region UI Elements
+        #endregion
+
+        #region User Elements
 
         private void CbxToggleMarker_CheckedChanged(object sender, EventArgs e)
         {
