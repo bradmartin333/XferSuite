@@ -248,7 +248,7 @@ namespace XferSuite.Apps.SEYR
                 }
             }
 
-            Results results = new Results(Data, Scatters);
+            Results results = new Results(Data.Where(x => (x.X, x.Y) != (0, 0)).ToList(), Scatters);
         }
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)

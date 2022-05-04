@@ -54,84 +54,6 @@ namespace XferSuite.Apps.SEYR
             FormsPlot.Refresh();
         }
 
-        #region Mouse Handlers
-
-        private void FormsPlot_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (!CbxToggleMarker.Checked) return;
-            (double x, double y) = FormsPlot.GetMouseCoordinates();
-            double min = double.MaxValue;
-            double thisX = 0;
-            double thisY = 0;
-            foreach (ScatterCriteria scatter in Scatters)
-                for (int i = 0; i < scatter.X.Count; i++)
-                {
-                    double hyp = Math.Sqrt((scatter.X[i] - x) * (scatter.X[i] - x) + (scatter.Y[i] - y) * (scatter.Y[i] - y));
-                    if (hyp < min)
-                    {
-                        min = hyp;
-                        thisX = scatter.BaseX[i];
-                        thisY = scatter.BaseY[i];
-                    }
-                }
-
-            SelectedBitmap = null;
-            DataEntry[] entries = Data.Where(d => d.X == thisX && d.Y == thisY).ToArray();
-            foreach (DataEntry entry in entries)
-            {
-                FormsPlot.Plot.Title($"{entry}", false, size: 12);
-                if (entry.Image != null)
-                {
-                    SelectedBitmap = entry.Image;
-                    break;
-                }
-            }
-
-            MarkerPlot.X = ParseSEYR.XSign * thisX;
-            MarkerPlot.Y = ParseSEYR.YSign * thisY;
-            MarkerPlot.Color = SelectedBitmap == null ? Color.Transparent : Color.Gold;
-            FormsPlot.Refresh();
-        }
-
-        private void FormsPlot_LeftClicked(object sender, EventArgs e)
-        {
-            if (!CbxToggleMarker.Checked) return;
-            FormsPlot.Plot.AddImage(SelectedBitmap, MarkerPlot.X, MarkerPlot.Y);
-            FormsPlot.Refresh();
-        }
-
-        private void FormsPlot_MouseWheel(object sender, MouseEventArgs e)
-        {
-            ScottPlot.FormsPlot control = (ScottPlot.FormsPlot)sender;
-            switch (GetControlAxis(control, e.Location))
-            {
-                case 0:
-                    control.Plot.XAxis.LockLimits(true);
-                    control.Plot.YAxis.LockLimits(false);
-                    break;
-                case 1:
-                    control.Plot.XAxis.LockLimits(false);
-                    control.Plot.YAxis.LockLimits(true);
-                    break;
-                default:
-                    control.Plot.XAxis.LockLimits(false);
-                    control.Plot.YAxis.LockLimits(false);
-                    break;
-            }
-        }
-
-        private int GetControlAxis(ScottPlot.FormsPlot control, Point location)
-        {
-            if (location.X < 60) // At XAxis
-                return 0;
-            else if (location.Y > control.Height - 60) // At YAxis
-                return 1;
-            else
-                return -1;
-        }
-
-        #endregion
-
         #region UI Configuration
 
         private void SetupPlot()
@@ -229,6 +151,84 @@ namespace XferSuite.Apps.SEYR
         {
             FormsPlot.Plot.Title("");
             FormsPlot.Refresh();
+        }
+
+        #endregion
+
+        #region Mouse Handlers
+
+        private void FormsPlot_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!CbxToggleMarker.Checked) return;
+            (double x, double y) = FormsPlot.GetMouseCoordinates();
+            double min = double.MaxValue;
+            double thisX = 0;
+            double thisY = 0;
+            foreach (ScatterCriteria scatter in Scatters)
+                for (int i = 0; i < scatter.X.Count; i++)
+                {
+                    double hyp = Math.Sqrt((scatter.X[i] - x) * (scatter.X[i] - x) + (scatter.Y[i] - y) * (scatter.Y[i] - y));
+                    if (hyp < min)
+                    {
+                        min = hyp;
+                        thisX = scatter.BaseX[i];
+                        thisY = scatter.BaseY[i];
+                    }
+                }
+
+            SelectedBitmap = null;
+            DataEntry[] entries = Data.Where(d => d.X == thisX && d.Y == thisY).ToArray();
+            foreach (DataEntry entry in entries)
+            {
+                FormsPlot.Plot.Title($"{entry}", false, size: 12);
+                if (entry.Image != null)
+                {
+                    SelectedBitmap = entry.Image;
+                    break;
+                }
+            }
+
+            MarkerPlot.X = ParseSEYR.XSign * thisX;
+            MarkerPlot.Y = ParseSEYR.YSign * thisY;
+            MarkerPlot.Color = SelectedBitmap == null ? Color.Transparent : Color.Gold;
+            FormsPlot.Refresh();
+        }
+
+        private void FormsPlot_LeftClicked(object sender, EventArgs e)
+        {
+            if (!CbxToggleMarker.Checked) return;
+            FormsPlot.Plot.AddImage(SelectedBitmap, MarkerPlot.X, MarkerPlot.Y);
+            FormsPlot.Refresh();
+        }
+
+        private void FormsPlot_MouseWheel(object sender, MouseEventArgs e)
+        {
+            ScottPlot.FormsPlot control = (ScottPlot.FormsPlot)sender;
+            switch (GetControlAxis(control, e.Location))
+            {
+                case 0:
+                    control.Plot.XAxis.LockLimits(true);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
+                case 1:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(true);
+                    break;
+                default:
+                    control.Plot.XAxis.LockLimits(false);
+                    control.Plot.YAxis.LockLimits(false);
+                    break;
+            }
+        }
+
+        private int GetControlAxis(ScottPlot.FormsPlot control, Point location)
+        {
+            if (location.X < 60) // At XAxis
+                return 0;
+            else if (location.Y > control.Height - 60) // At YAxis
+                return 1;
+            else
+                return -1;
         }
 
         #endregion
