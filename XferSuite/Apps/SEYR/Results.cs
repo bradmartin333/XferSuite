@@ -10,17 +10,20 @@ namespace XferSuite.Apps.SEYR
     public partial class Results : Form
     {
         private readonly List<DataEntry> Data;
-        private readonly ScatterCriteria[] Scatters;
+        private readonly List<ScatterCriteria> Scatters;
+        private readonly List<RegionInfo> Regions;
         private readonly List<ScatterPlot> ScatterPlots = new List<ScatterPlot>();
+        private List<Text> Percentages = new List<Text>();
         private MarkerPlot MarkerPlot = null;
         private Bitmap SelectedBitmap = null;
         private bool ShowPassFail = false;
 
-        public Results(List<DataEntry> data, ScatterCriteria[] scatters)
+        public Results(List<DataEntry> data, List<ScatterCriteria> scatters, List<RegionInfo> regions)
         {
             InitializeComponent();
             Data = data;
             Scatters = scatters;
+            Regions = regions;
             SetupPlot();
             MakePlot();
             Show();
@@ -79,6 +82,7 @@ namespace XferSuite.Apps.SEYR
         private void SetupCombo()
         {
             ComboPropertySelector.Items.AddRange(ScatterPlots.Select(x => x.Label).ToArray());
+            ComboPropertySelector.Items.Add("Percentages");
             ComboPropertySelector.Items.Add("Plot Control");
         }
 
@@ -94,7 +98,6 @@ namespace XferSuite.Apps.SEYR
 
         private void SetAxes()
         {
-            
             List<double> xPositions = new List<double>();
             List<string> xLabels = new List<string>();
             foreach (var region in Data.GroupBy(x => x.RC))
@@ -115,6 +118,27 @@ namespace XferSuite.Apps.SEYR
                 yLabels.Add(region.Key.ToString());
             }
             FormsPlot.Plot.YAxis.ManualTickPositions(yPositions.ToArray(), yLabels.ToArray());
+
+            MakePercentages(xPositions, yPositions);
+        }
+
+        private void MakePercentages(List<double> xPositions, List<double> yPositions)
+        {
+            int idx = 0;
+            for (int i = 0; i < xPositions.Count; i++)
+            {
+                for (int j = 0; j < yPositions.Count; j++)
+                {
+                    RegionInfo region = Regions.Where(x => x.ID == (j + 1, i + 1)).First();
+                    Text text = FormsPlot.Plot.AddText(region.Percentage(), xPositions[i], yPositions[j],
+                        new ScottPlot.Drawing.Font() { 
+                            Name = "segoe", Size = 10, Color = Color.Black, Bold = false, Alignment = ScottPlot.Alignment.LowerCenter });
+                    text.BackgroundColor = Color.White;
+                    text.BackgroundFill = true;
+                    Percentages.Add(text);
+                    idx++;
+                }
+            }
         }
 
         #endregion
@@ -141,7 +165,9 @@ namespace XferSuite.Apps.SEYR
 
         private void ComboPropertySelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ComboPropertySelector.Text == "Plot Control")
+            if (ComboPropertySelector.Text == "Percentages")
+                PropertyGrid.SelectedObject = Percentages[0];
+            else if (ComboPropertySelector.Text == "Plot Control")
                 PropertyGrid.SelectedObject = FormsPlot;
             else
                 PropertyGrid.SelectedObject = ScatterPlots.Where(x => x.Label == ComboPropertySelector.Text).First();

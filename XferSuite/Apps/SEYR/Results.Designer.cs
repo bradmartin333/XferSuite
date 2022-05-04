@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Results));
             this.FormsPlot = new ScottPlot.FormsPlot();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ComboPropertySelector = new System.Windows.Forms.ComboBox();
             this.PropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -38,41 +38,41 @@
             this.CbxTogglePassFail = new System.Windows.Forms.CheckBox();
             this.BtnReset = new System.Windows.Forms.Button();
             this.BtnRefreshPlot = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // FormsPlot
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.FormsPlot, 5);
+            this.tableLayoutPanel.SetColumnSpan(this.FormsPlot, 5);
             this.FormsPlot.Location = new System.Drawing.Point(3, 3);
             this.FormsPlot.Name = "FormsPlot";
-            this.tableLayoutPanel1.SetRowSpan(this.FormsPlot, 2);
+            this.tableLayoutPanel.SetRowSpan(this.FormsPlot, 2);
             this.FormsPlot.Size = new System.Drawing.Size(559, 492);
             this.FormsPlot.TabIndex = 0;
             // 
-            // tableLayoutPanel1
+            // tableLayoutPanel
             // 
-            this.tableLayoutPanel1.ColumnCount = 6;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Controls.Add(this.FormsPlot, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.ComboPropertySelector, 5, 0);
-            this.tableLayoutPanel1.Controls.Add(this.PropertyGrid, 5, 1);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 2);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(759, 536);
-            this.tableLayoutPanel1.TabIndex = 1;
+            this.tableLayoutPanel.ColumnCount = 6;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel.Controls.Add(this.FormsPlot, 0, 0);
+            this.tableLayoutPanel.Controls.Add(this.ComboPropertySelector, 5, 0);
+            this.tableLayoutPanel.Controls.Add(this.PropertyGrid, 5, 1);
+            this.tableLayoutPanel.Controls.Add(this.flowLayoutPanel1, 0, 2);
+            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel.Name = "tableLayoutPanel";
+            this.tableLayoutPanel.RowCount = 3;
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel.Size = new System.Drawing.Size(759, 536);
+            this.tableLayoutPanel.TabIndex = 1;
             // 
             // ComboPropertySelector
             // 
@@ -97,7 +97,7 @@
             // 
             this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.flowLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.flowLayoutPanel1, 6);
+            this.tableLayoutPanel.SetColumnSpan(this.flowLayoutPanel1, 6);
             this.flowLayoutPanel1.Controls.Add(this.CbxToggleMarker);
             this.flowLayoutPanel1.Controls.Add(this.CbxTogglePassFail);
             this.flowLayoutPanel1.Controls.Add(this.BtnReset);
@@ -168,13 +168,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(759, 536);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(775, 575);
             this.Name = "Results";
             this.Text = "Results";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanel.ResumeLayout(false);
+            this.tableLayoutPanel.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -183,7 +183,7 @@
         #endregion
 
         private ScottPlot.FormsPlot FormsPlot;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.CheckBox CbxTogglePassFail;
         private System.Windows.Forms.Button BtnReset;
         private System.Windows.Forms.ComboBox ComboPropertySelector;

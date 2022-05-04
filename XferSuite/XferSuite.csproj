@@ -177,6 +177,7 @@
       <DependentUpon>PassFailUtility.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\SEYR\Project.cs" />
+    <Compile Include="Apps\SEYR\RegionInfo.cs" />
     <Compile Include="Apps\SEYR\Results.cs">
       <SubType>Form</SubType>
     </Compile>

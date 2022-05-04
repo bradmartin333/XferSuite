@@ -62,9 +62,14 @@ namespace XferSuite.Apps.SEYR
             HistPlot.Plot.Clear();
 
             if (HistData.Length < 2) return; // Insufficient data
-            (double[] counts, double[] binEdges) = Common.Histogram(HistData, min: HistData.Min(), max: HistData.Max(), binSize: 1);
-            double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
-            BarPlot = HistPlot.Plot.AddBar(values: counts, positions: leftEdges);
+            if (HistData.Min() == HistData.Max())
+                BarPlot = HistPlot.Plot.AddBar(values: new double[] { HistData.Length }, positions: new double[] { HistData[0] });
+            else
+            {
+                (double[] counts, double[] binEdges) = Common.Histogram(HistData, min: HistData.Min(), max: HistData.Max(), binSize: 1);
+                double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
+                BarPlot = HistPlot.Plot.AddBar(values: counts, positions: leftEdges);
+            }
             BarPlot.BarWidth = 1;
             BarPlot.BorderColor = Color.Transparent;
 

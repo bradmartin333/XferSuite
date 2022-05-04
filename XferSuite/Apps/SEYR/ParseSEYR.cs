@@ -28,7 +28,8 @@ namespace XferSuite.Apps.SEYR
         private string DataHeader { get; set; } = string.Empty;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
         private List<(int, bool)> Criteria { get; set; } = new List<(int, bool)>();
-        private ScatterCriteria[] Scatters { get; set; } = null;
+        private List<RegionInfo> Regions { get; set; } = new List<RegionInfo>();
+        private List<ScatterCriteria> Scatters { get; set; } = null;
 
         public ParseSEYR(string path)
         {
@@ -78,6 +79,11 @@ namespace XferSuite.Apps.SEYR
             DataHeader = lines[0];
             for (int i = 1; i < lines.Length; i++)
                 Data.Add(new DataEntry(lines[i]));
+            Data = Data.Where(x => x.RR > 0 && x.RC > 0).ToList();
+
+            (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
+            foreach ((int, int) region in regions)
+                Regions.Add(new RegionInfo(region));
 
             foreach (Feature feature in Project.Features)
             {
@@ -187,10 +193,9 @@ namespace XferSuite.Apps.SEYR
                 if (valCombo.Length > 0) Criteria.Add((sum, passingVals.Contains(sum)));
             }
                 
-            List<ScatterCriteria> scatters = new List<ScatterCriteria>();
+            Scatters = new List<ScatterCriteria>();
             foreach (var nameCombo in Combinations(criteriaNames))
-                if (nameCombo.Length > 0) scatters.Add(new ScatterCriteria(string.Join(", ", nameCombo)));
-            Scatters = scatters.ToArray();
+                if (nameCombo.Length > 0) Scatters.Add(new ScatterCriteria(string.Join(", ", nameCombo)));
         }
 
         public IEnumerable<T[]> Combinations<T>(IEnumerable<T> source)
@@ -209,7 +214,8 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnPlot_Click(object sender, EventArgs e)
         {
-            Scatters.ToList().ForEach(s => s.Reset());
+            Scatters.ForEach(s => s.Reset());
+            Regions.ForEach(r => r.Reset());
 
             var images = Data.GroupBy(x => x.ImageNumber);
             foreach (IGrouping<int, DataEntry> image in images)
@@ -220,6 +226,8 @@ namespace XferSuite.Apps.SEYR
                     DataEntry[] entries = tile.ToArray();
                     double x = XSign * (entries[0].X + (entries[0].TC * Project.PitchX / Project.PixelsPerMicron / 1e3));
                     double y = YSign * (entries[0].Y + (entries[0].TR * Project.PitchY / Project.PixelsPerMicron / 1e3));
+                    RegionInfo region = Regions.Where(r => r.ID == (entries[0].RR, entries[0].RC)).First();
+                    region.Total++;
 
                     int criterion = 0;
                     foreach (DataEntry entry in entries)
@@ -238,17 +246,19 @@ namespace XferSuite.Apps.SEYR
                     }
                     if (idx == -1)
                         continue;
+
                     ScatterCriteria scatterCriteria = Scatters[idx];
                     scatterCriteria.BaseX.Add(entries[0].X);
                     scatterCriteria.BaseY.Add(entries[0].Y);
                     scatterCriteria.X.Add(x);
                     scatterCriteria.Y.Add(y);
                     scatterCriteria.Pass = pass;
-                    break;
+
+                    if (pass) region.Pass++;
                 }
             }
 
-            Results results = new Results(Data.Where(x => (x.X, x.Y) != (0, 0)).ToList(), Scatters);
+            Results results = new Results(Data, Scatters, Regions);
         }
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)
@@ -260,9 +270,11 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            SaveFileDialog svd = new SaveFileDialog();
-            svd.Filter = "SEYRUP file(*.seyrup)| *.seyrup";
-            svd.Title = "Save SEYRUP File";
+            SaveFileDialog svd = new SaveFileDialog
+            {
+                Filter = "SEYRUP file(*.seyrup)| *.seyrup",
+                Title = "Save SEYRUP File"
+            };
             if (svd.ShowDialog() == DialogResult.OK)
             {
                 if (File.Exists(svd.FileName)) File.Delete(svd.FileName);
