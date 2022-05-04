@@ -10,7 +10,7 @@ namespace XferSuite.Apps.SEYR
     public partial class Results : Form
     {
         private bool ShowPassFail = false;
-        private List<DataEntry> Data;
+        private readonly List<DataEntry> Data;
         private readonly ScatterCriteria[] Scatters;
         private MarkerPlot MarkerPlot = null;
         private Bitmap SelectedBitmap = null;
@@ -35,7 +35,6 @@ namespace XferSuite.Apps.SEYR
             double thisX = 0;
             double thisY = 0;
             foreach (ScatterCriteria scatter in Scatters)
-            {
                 for (int i = 0; i < scatter.X.Count; i++)
                 {
                     double hyp = Math.Sqrt((scatter.X[i] - x) * (scatter.X[i] - x) + (scatter.Y[i] - y) * (scatter.Y[i] - y));
@@ -46,18 +45,15 @@ namespace XferSuite.Apps.SEYR
                         thisY = scatter.BaseY[i];
                     }
                 }
-            }
 
             SelectedBitmap = null;
             DataEntry[] entries = Data.Where(d => d.X == thisX && d.Y == thisY).ToArray();
             foreach (DataEntry entry in entries)
-            {
                 if (entry.Image != null)
                 {
                     SelectedBitmap = entry.Image;
                     break;
                 }
-            }
 
             MarkerPlot.X = -thisX;
             MarkerPlot.Y = thisY;
@@ -69,12 +65,6 @@ namespace XferSuite.Apps.SEYR
         {
             FormsPlot.Plot.AddImage(SelectedBitmap, MarkerPlot.X, MarkerPlot.Y);
             FormsPlot.Refresh();
-        }
-
-        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            ShowPassFail = checkBox1.Checked;
-            MakePlot();
         }
 
         private void MakePlot()
@@ -101,5 +91,20 @@ namespace XferSuite.Apps.SEYR
             MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
             FormsPlot.Refresh();
         }
+
+        #region UI Elements
+
+        private void CbxTogglePassFail_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowPassFail = CbxTogglePassFail.Checked;
+            MakePlot();
+        }
+
+        private void BtnResetPlot_Click(object sender, EventArgs e)
+        {
+            MakePlot();
+        }
+
+        #endregion
     }
 }
