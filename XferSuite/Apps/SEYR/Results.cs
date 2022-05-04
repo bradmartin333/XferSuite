@@ -9,27 +9,31 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class Results : Form
     {
-        private bool ShowPassFail = false;
         private readonly List<DataEntry> Data;
         private readonly ScatterCriteria[] Scatters;
+        private readonly List<ScatterPlot> ScatterPlots = new List<ScatterPlot>();
         private MarkerPlot MarkerPlot = null;
         private Bitmap SelectedBitmap = null;
+        private bool ShowPassFail = false;
 
         public Results(List<DataEntry> data, ScatterCriteria[] scatters)
         {
             InitializeComponent();
             Data = data;
             Scatters = scatters;
+
             FormsPlot.Plot.Palette = ScottPlot.Palette.ColorblindFriendly;
             FormsPlot.Plot.Legend();
             FormsPlot.MouseMove += FormsPlot_MouseMove;
             FormsPlot.LeftClicked += FormsPlot_LeftClicked;
+
             MakePlot();
             Show();
         }
 
         private void FormsPlot_MouseMove(object sender, MouseEventArgs e)
         {
+            if (!CbxToggleMarker.Checked) return;
             (double x, double y) = FormsPlot.GetMouseCoordinates();
             double min = double.MaxValue;
             double thisX = 0;
@@ -49,11 +53,14 @@ namespace XferSuite.Apps.SEYR
             SelectedBitmap = null;
             DataEntry[] entries = Data.Where(d => d.X == thisX && d.Y == thisY).ToArray();
             foreach (DataEntry entry in entries)
+            {
+                FormsPlot.Plot.Title($"{entry}", false, size: 12);
                 if (entry.Image != null)
                 {
                     SelectedBitmap = entry.Image;
                     break;
                 }
+            } 
 
             MarkerPlot.X = ParseSEYR.XSign * thisX;
             MarkerPlot.Y = ParseSEYR.YSign * thisY;
@@ -63,13 +70,14 @@ namespace XferSuite.Apps.SEYR
 
         private void FormsPlot_LeftClicked(object sender, EventArgs e)
         {
+            if (!CbxToggleMarker.Checked) return;
             FormsPlot.Plot.AddImage(SelectedBitmap, MarkerPlot.X, MarkerPlot.Y);
             FormsPlot.Refresh();
         }
 
         private void MakePlot()
         {
-            FormsPlot.Plot.Clear();
+            ResetUI();
             double someX = 0;
             double someY = 0;
             foreach (ScatterCriteria scatter in Scatters)
@@ -87,10 +95,28 @@ namespace XferSuite.Apps.SEYR
                     plot.Color = scatter.Color;
                 else if (ShowPassFail)
                     plot.Color = scatter.Pass ? Color.LawnGreen : Color.Firebrick;
+                ScatterPlots.Add(plot);
             }
             MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
+            SetupCombo();
             SetAxes();
             FormsPlot.Refresh();
+        }
+
+        private void ResetUI()
+        {
+            FormsPlot.Plot.Clear();
+            ScatterPlots.Clear();
+            FormsPlot.Plot.Title("");
+            ComboPropertySelector.Text = "";
+            ComboPropertySelector.Items.Clear();
+            PropertyGrid.SelectedObject = null;
+        }
+
+        private void SetupCombo()
+        {
+            ComboPropertySelector.Items.AddRange(ScatterPlots.Select(x => x.Label).ToArray());
+            ComboPropertySelector.Items.Add("Plot Control");
         }
 
         private void SetAxes()
@@ -118,15 +144,36 @@ namespace XferSuite.Apps.SEYR
 
         #region UI Elements
 
+        private void CbxToggleMarker_CheckedChanged(object sender, EventArgs e)
+        {
+            MarkerPlot.IsVisible = CbxToggleMarker.Checked;
+            FormsPlot.Plot.Title("");
+            FormsPlot.Refresh();
+        }
+
         private void CbxTogglePassFail_CheckedChanged(object sender, EventArgs e)
         {
             ShowPassFail = CbxTogglePassFail.Checked;
             MakePlot();
         }
 
-        private void BtnResetPlot_Click(object sender, EventArgs e)
+        private void BtnReset_Click(object sender, EventArgs e)
         {
             MakePlot();
+        }
+
+        private void ComboPropertySelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ComboPropertySelector.Text == "Plot Control")
+                PropertyGrid.SelectedObject = FormsPlot;
+            else
+                PropertyGrid.SelectedObject = ScatterPlots.Where(x => x.Label == ComboPropertySelector.Text).First();
+        }
+
+        private void BtnRefreshPlot_Click(object sender, EventArgs e)
+        {
+            FormsPlot.Plot.Title("");
+            FormsPlot.Refresh();
         }
 
         #endregion

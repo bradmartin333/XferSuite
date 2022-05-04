@@ -31,9 +31,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Results));
             this.FormsPlot = new ScottPlot.FormsPlot();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.ComboPropertySelector = new System.Windows.Forms.ComboBox();
+            this.PropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.CbxToggleMarker = new System.Windows.Forms.CheckBox();
             this.CbxTogglePassFail = new System.Windows.Forms.CheckBox();
-            this.BtnResetPlot = new System.Windows.Forms.Button();
+            this.BtnReset = new System.Windows.Forms.Button();
+            this.BtnRefreshPlot = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // FormsPlot
@@ -42,70 +48,134 @@
             this.FormsPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FormsPlot.Location = new System.Drawing.Point(3, 3);
             this.FormsPlot.Name = "FormsPlot";
-            this.FormsPlot.Size = new System.Drawing.Size(617, 498);
+            this.tableLayoutPanel1.SetRowSpan(this.FormsPlot, 2);
+            this.FormsPlot.Size = new System.Drawing.Size(564, 492);
             this.FormsPlot.TabIndex = 0;
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnCount = 6;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.Controls.Add(this.FormsPlot, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.CbxTogglePassFail, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.BtnResetPlot, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.ComboPropertySelector, 5, 0);
+            this.tableLayoutPanel1.Controls.Add(this.PropertyGrid, 5, 1);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(623, 533);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(760, 533);
             this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // ComboPropertySelector
+            // 
+            this.ComboPropertySelector.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ComboPropertySelector.FormattingEnabled = true;
+            this.ComboPropertySelector.Location = new System.Drawing.Point(573, 3);
+            this.ComboPropertySelector.Name = "ComboPropertySelector";
+            this.ComboPropertySelector.Size = new System.Drawing.Size(184, 21);
+            this.ComboPropertySelector.TabIndex = 4;
+            this.ComboPropertySelector.SelectedIndexChanged += new System.EventHandler(this.ComboPropertySelector_SelectedIndexChanged);
+            // 
+            // PropertyGrid
+            // 
+            this.PropertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PropertyGrid.Location = new System.Drawing.Point(573, 30);
+            this.PropertyGrid.Name = "PropertyGrid";
+            this.PropertyGrid.Size = new System.Drawing.Size(184, 465);
+            this.PropertyGrid.TabIndex = 5;
+            this.PropertyGrid.ToolbarVisible = false;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.flowLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.flowLayoutPanel1, 6);
+            this.flowLayoutPanel1.Controls.Add(this.CbxToggleMarker);
+            this.flowLayoutPanel1.Controls.Add(this.CbxTogglePassFail);
+            this.flowLayoutPanel1.Controls.Add(this.BtnReset);
+            this.flowLayoutPanel1.Controls.Add(this.BtnRefreshPlot);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(122, 501);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(516, 29);
+            this.flowLayoutPanel1.TabIndex = 7;
+            // 
+            // CbxToggleMarker
+            // 
+            this.CbxToggleMarker.Appearance = System.Windows.Forms.Appearance.Button;
+            this.CbxToggleMarker.BackColor = System.Drawing.Color.White;
+            this.CbxToggleMarker.Checked = true;
+            this.CbxToggleMarker.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CbxToggleMarker.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightBlue;
+            this.CbxToggleMarker.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CbxToggleMarker.Location = new System.Drawing.Point(3, 3);
+            this.CbxToggleMarker.Name = "CbxToggleMarker";
+            this.CbxToggleMarker.Size = new System.Drawing.Size(123, 23);
+            this.CbxToggleMarker.TabIndex = 5;
+            this.CbxToggleMarker.Text = "Toggle Marker";
+            this.CbxToggleMarker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.CbxToggleMarker.UseVisualStyleBackColor = false;
+            this.CbxToggleMarker.CheckedChanged += new System.EventHandler(this.CbxToggleMarker_CheckedChanged);
             // 
             // CbxTogglePassFail
             // 
             this.CbxTogglePassFail.Appearance = System.Windows.Forms.Appearance.Button;
-            this.CbxTogglePassFail.AutoSize = true;
             this.CbxTogglePassFail.BackColor = System.Drawing.Color.White;
-            this.CbxTogglePassFail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CbxTogglePassFail.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightBlue;
             this.CbxTogglePassFail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CbxTogglePassFail.Location = new System.Drawing.Point(3, 507);
+            this.CbxTogglePassFail.Location = new System.Drawing.Point(132, 3);
             this.CbxTogglePassFail.Name = "CbxTogglePassFail";
-            this.CbxTogglePassFail.Size = new System.Drawing.Size(118, 23);
+            this.CbxTogglePassFail.Size = new System.Drawing.Size(123, 23);
             this.CbxTogglePassFail.TabIndex = 1;
             this.CbxTogglePassFail.Text = "Toggle Pass/Fail";
             this.CbxTogglePassFail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.CbxTogglePassFail.UseVisualStyleBackColor = false;
             this.CbxTogglePassFail.CheckedChanged += new System.EventHandler(this.CbxTogglePassFail_CheckedChanged);
             // 
-            // BtnResetPlot
+            // BtnReset
             // 
-            this.BtnResetPlot.BackColor = System.Drawing.Color.White;
-            this.BtnResetPlot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnResetPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnResetPlot.Location = new System.Drawing.Point(127, 507);
-            this.BtnResetPlot.Name = "BtnResetPlot";
-            this.BtnResetPlot.Size = new System.Drawing.Size(118, 23);
-            this.BtnResetPlot.TabIndex = 2;
-            this.BtnResetPlot.Text = "Reset Plot";
-            this.BtnResetPlot.UseVisualStyleBackColor = false;
-            this.BtnResetPlot.Click += new System.EventHandler(this.BtnResetPlot_Click);
+            this.BtnReset.BackColor = System.Drawing.Color.White;
+            this.BtnReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnReset.Location = new System.Drawing.Point(261, 3);
+            this.BtnReset.Name = "BtnReset";
+            this.BtnReset.Size = new System.Drawing.Size(123, 23);
+            this.BtnReset.TabIndex = 3;
+            this.BtnReset.Text = "Reset";
+            this.BtnReset.UseVisualStyleBackColor = false;
+            this.BtnReset.Click += new System.EventHandler(this.BtnReset_Click);
+            // 
+            // BtnRefreshPlot
+            // 
+            this.BtnRefreshPlot.BackColor = System.Drawing.Color.White;
+            this.BtnRefreshPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnRefreshPlot.Location = new System.Drawing.Point(390, 3);
+            this.BtnRefreshPlot.Name = "BtnRefreshPlot";
+            this.BtnRefreshPlot.Size = new System.Drawing.Size(123, 23);
+            this.BtnRefreshPlot.TabIndex = 4;
+            this.BtnRefreshPlot.Text = "Refresh";
+            this.BtnRefreshPlot.UseVisualStyleBackColor = false;
+            this.BtnRefreshPlot.Click += new System.EventHandler(this.BtnRefreshPlot_Click);
             // 
             // Results
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(623, 533);
+            this.ClientSize = new System.Drawing.Size(760, 533);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Results";
             this.Text = "Results";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -115,6 +185,11 @@
         private ScottPlot.FormsPlot FormsPlot;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.CheckBox CbxTogglePassFail;
-        private System.Windows.Forms.Button BtnResetPlot;
+        private System.Windows.Forms.Button BtnReset;
+        private System.Windows.Forms.ComboBox ComboPropertySelector;
+        private System.Windows.Forms.PropertyGrid PropertyGrid;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button BtnRefreshPlot;
+        private System.Windows.Forms.CheckBox CbxToggleMarker;
     }
 }
