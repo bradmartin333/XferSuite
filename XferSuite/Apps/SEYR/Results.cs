@@ -109,6 +109,9 @@ namespace XferSuite.Apps.SEYR
             FormsPlot.Plot.XAxis.ManualTickPositions(xPositions.ToArray(), xLabels.ToArray());
 
             
+            // set tick distance to maintain aspect ratio
+            // update for resize
+
             List<double> yPositions = new List<double>();
             List<string> yLabels = new List<string>();
             foreach (var region in Data.GroupBy(x => x.RR))
@@ -204,16 +207,14 @@ namespace XferSuite.Apps.SEYR
 
             SelectedBitmap = null;
             DataEntry[] entries = Data.Where(d => d.X == thisX && d.Y == thisY).ToArray();
+            string title = entries[0].Location() + "\n";
             foreach (DataEntry entry in entries)
             {
-                FormsPlot.Plot.Title($"{entry}", false, size: 12);
-                if (entry.Image != null)
-                {
-                    SelectedBitmap = entry.Image;
-                    break;
-                }
+                title += entry.ToString() + " ";
+                if (entry.Image != null && SelectedBitmap == null) SelectedBitmap = entry.Image;
             }
 
+            FormsPlot.Plot.Title(title, false, size: 10);
             MarkerPlot.X = ParseSEYR.XSign * thisX;
             MarkerPlot.Y = ParseSEYR.YSign * thisY;
             MarkerPlot.Color = SelectedBitmap == null ? Color.Transparent : Color.Gold;

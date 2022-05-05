@@ -84,6 +84,8 @@ namespace XferSuite.Apps.SEYR
             return output.ToArray();
         }
 
-        public override string ToString() => $"#{ImageNumber}  ({X}, {Y})  ({RR}, {RC}, {R}, {C}, {SR}, {SC}, {TR}, {TC})";
+        public string Location() => $"#{ImageNumber} ({X}, {Y}) ({RR}, {RC}, {R}, {C}, {SR}, {SC}, {TR}, {TC})";
+
+        public override string ToString() => $"({FeatureName} {Score})";
     }
 }
