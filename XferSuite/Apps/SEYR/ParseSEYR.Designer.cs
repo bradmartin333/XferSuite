@@ -60,7 +60,7 @@
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TLP.Size = new System.Drawing.Size(298, 128);
+            this.TLP.Size = new System.Drawing.Size(299, 111);
             this.TLP.TabIndex = 1;
             // 
             // BtnSave
@@ -69,9 +69,9 @@
             this.TLP.SetColumnSpan(this.BtnSave, 2);
             this.BtnSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnSave.Location = new System.Drawing.Point(3, 62);
+            this.BtnSave.Location = new System.Drawing.Point(3, 54);
             this.BtnSave.Name = "BtnSave";
-            this.BtnSave.Size = new System.Drawing.Size(292, 23);
+            this.BtnSave.Size = new System.Drawing.Size(293, 23);
             this.BtnSave.TabIndex = 7;
             this.BtnSave.Text = "Make SEYRUP";
             this.BtnSave.UseVisualStyleBackColor = false;
@@ -81,7 +81,7 @@
             // 
             this.ComboFeatures.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ComboFeatures.FormattingEnabled = true;
-            this.ComboFeatures.Location = new System.Drawing.Point(3, 13);
+            this.ComboFeatures.Location = new System.Drawing.Point(3, 5);
             this.ComboFeatures.Name = "ComboFeatures";
             this.ComboFeatures.Size = new System.Drawing.Size(143, 21);
             this.ComboFeatures.TabIndex = 1;
@@ -91,9 +91,9 @@
             this.BtnRescore.BackColor = System.Drawing.Color.White;
             this.BtnRescore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnRescore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnRescore.Location = new System.Drawing.Point(152, 13);
+            this.BtnRescore.Location = new System.Drawing.Point(152, 5);
             this.BtnRescore.Name = "BtnRescore";
-            this.BtnRescore.Size = new System.Drawing.Size(143, 23);
+            this.BtnRescore.Size = new System.Drawing.Size(144, 23);
             this.BtnRescore.TabIndex = 2;
             this.BtnRescore.Text = "Open Rescore Utility";
             this.BtnRescore.UseVisualStyleBackColor = false;
@@ -104,7 +104,7 @@
             this.BtnPlot.BackColor = System.Drawing.Color.White;
             this.BtnPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnPlot.Location = new System.Drawing.Point(3, 91);
+            this.BtnPlot.Location = new System.Drawing.Point(3, 83);
             this.BtnPlot.Name = "BtnPlot";
             this.BtnPlot.Size = new System.Drawing.Size(143, 23);
             this.BtnPlot.TabIndex = 3;
@@ -117,9 +117,9 @@
             this.BtnExportCycleFile.BackColor = System.Drawing.Color.White;
             this.BtnExportCycleFile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnExportCycleFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnExportCycleFile.Location = new System.Drawing.Point(152, 91);
+            this.BtnExportCycleFile.Location = new System.Drawing.Point(152, 83);
             this.BtnExportCycleFile.Name = "BtnExportCycleFile";
-            this.BtnExportCycleFile.Size = new System.Drawing.Size(143, 23);
+            this.BtnExportCycleFile.Size = new System.Drawing.Size(144, 23);
             this.BtnExportCycleFile.TabIndex = 5;
             this.BtnExportCycleFile.Text = "Export Cycle File";
             this.BtnExportCycleFile.UseVisualStyleBackColor = false;
@@ -131,9 +131,9 @@
             this.LabelLoading.BackColor = System.Drawing.Color.Bisque;
             this.TLP.SetColumnSpan(this.LabelLoading, 2);
             this.LabelLoading.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LabelLoading.Location = new System.Drawing.Point(3, 39);
+            this.LabelLoading.Location = new System.Drawing.Point(3, 31);
             this.LabelLoading.Name = "LabelLoading";
-            this.LabelLoading.Size = new System.Drawing.Size(292, 20);
+            this.LabelLoading.Size = new System.Drawing.Size(293, 20);
             this.LabelLoading.TabIndex = 6;
             this.LabelLoading.Text = "Loading...";
             this.LabelLoading.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -143,9 +143,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(298, 128);
+            this.ClientSize = new System.Drawing.Size(299, 111);
             this.Controls.Add(this.TLP);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(315, 150);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
             this.TLP.ResumeLayout(false);

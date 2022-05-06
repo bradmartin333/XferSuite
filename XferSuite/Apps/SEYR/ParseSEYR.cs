@@ -263,7 +263,11 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)
         {
-
+            Form form = new Form() { Text = "Cycle File" };
+            RichTextBox rtb = new RichTextBox() { Dock = DockStyle.Fill };
+            form.Controls.Add(rtb);
+            rtb.Text = "Coming soon";
+            form.Show();
         }
 
         #region Save Session
