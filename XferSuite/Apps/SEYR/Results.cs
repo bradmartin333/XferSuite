@@ -13,7 +13,8 @@ namespace XferSuite.Apps.SEYR
         private readonly List<ScatterCriteria> Scatters;
         private readonly List<RegionInfo> Regions;
         private readonly List<ScatterPlot> ScatterPlots = new List<ScatterPlot>();
-        private List<Text> Percentages = new List<Text>();
+        private readonly List<Text> Percentages = new List<Text>();
+        private PointF LastPercentageLocation;
         private MarkerPlot MarkerPlot = null;
         private Bitmap SelectedBitmap = null;
         private bool ShowPassFail = false;
@@ -136,12 +137,18 @@ namespace XferSuite.Apps.SEYR
                     Text text = FormsPlot.Plot.AddText(region.Percentage(), xPositions[i], yPositions[j],
                         new ScottPlot.Drawing.Font() { 
                             Name = "segoe", Size = 10, Color = Color.Black, Bold = false, Alignment = ScottPlot.Alignment.LowerCenter });
-                    text.BackgroundColor = Color.White;
-                    text.BackgroundFill = true;
                     Percentages.Add(text);
+                    // Need to set background to be able to set border
+                    text.BackgroundFill = true;
+                    text.BackgroundColor = Color.Transparent;
+                    text.BorderSize = 13;
+                    text.BorderColor = Color.Transparent;
                     idx++;
                 }
             }
+            Percentages[0].Dragged += Percentage_Dragged;
+            Percentages[0].DragEnabled = true;
+            LastPercentageLocation = new PointF((float)Percentages[0].X, (float)Percentages[0].Y);
         }
 
         #endregion
@@ -178,8 +185,37 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnRefreshPlot_Click(object sender, EventArgs e)
         {
+            for (int i = 1; i < Percentages.Count; i++)
+            {
+                Percentages[i].IsVisible = Percentages[0].IsVisible;
+                Percentages[i].XAxisIndex = Percentages[0].XAxisIndex;
+                Percentages[i].YAxisIndex = Percentages[0].YAxisIndex;
+                Percentages[i].Color = Percentages[0].Color;
+                Percentages[i].FontName = Percentages[0].FontName;
+                Percentages[i].FontSize = Percentages[0].FontSize;
+                Percentages[i].FontBold  = Percentages[0].FontBold;
+                Percentages[i].Alignment = Percentages[0].Alignment;
+                Percentages[i].Rotation = Percentages[0].Rotation;
+                Percentages[i].BorderSize = Percentages[0].BorderSize;
+                Percentages[i].BorderColor = Percentages[0].BorderColor;
+                Percentages[i].PixelOffsetX = Percentages[0].PixelOffsetX;
+                Percentages[i].PixelOffsetY = Percentages[0].PixelOffsetY;
+            }
             FormsPlot.Plot.Title("");
             FormsPlot.Refresh();
+        }
+
+        private void Percentage_Dragged(object sender, EventArgs e)
+        {
+            PointF newLocation = new PointF((float)Percentages[0].X, (float)Percentages[0].Y);
+            PointF delta = new PointF(LastPercentageLocation.X - newLocation.X, LastPercentageLocation.Y - newLocation.Y);
+            LastPercentageLocation = newLocation;
+            for (int i = 1; i < Percentages.Count; i++)
+            {
+                Percentages[i].X -= delta.X;
+                Percentages[i].Y -= delta.Y;
+                Percentages[i].XAxisIndex = Percentages[0].XAxisIndex;
+            }
         }
 
         #endregion
