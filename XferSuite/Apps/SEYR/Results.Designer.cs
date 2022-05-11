@@ -111,8 +111,6 @@
             // 
             this.CbxToggleMarker.Appearance = System.Windows.Forms.Appearance.Button;
             this.CbxToggleMarker.BackColor = System.Drawing.Color.White;
-            this.CbxToggleMarker.Checked = true;
-            this.CbxToggleMarker.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CbxToggleMarker.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightBlue;
             this.CbxToggleMarker.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CbxToggleMarker.Location = new System.Drawing.Point(3, 3);

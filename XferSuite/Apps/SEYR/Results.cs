@@ -53,7 +53,6 @@ namespace XferSuite.Apps.SEYR
             }
             MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
             SetupCombo();
-            SetSize();
             SetAxes();
             FormsPlot.Refresh();
         }
@@ -87,16 +86,6 @@ namespace XferSuite.Apps.SEYR
             ComboPropertySelector.Items.Add("Plot Control");
         }
 
-        private void SetSize()
-        {
-            double[] xData = Data.Select(x => x.X).ToArray();
-            double[] yData = Data.Select(x => x.Y).ToArray();
-            double xRange = xData.Max() - xData.Min();
-            double yRange = yData.Max() - yData.Min();
-            if (xRange < yRange) FormsPlot.Width = (int)(FormsPlot.Height * (xRange / yRange));
-            else FormsPlot.Height = (int)(FormsPlot.Width * (yRange / xRange));
-        }
-
         private void SetAxes()
         {
             List<double> xPositions = new List<double>();
@@ -108,10 +97,6 @@ namespace XferSuite.Apps.SEYR
                 xLabels.Add(region.Key.ToString());
             }
             FormsPlot.Plot.XAxis.ManualTickPositions(xPositions.ToArray(), xLabels.ToArray());
-
-            
-            // set tick distance to maintain aspect ratio
-            // update for resize
 
             List<double> yPositions = new List<double>();
             List<string> yLabels = new List<string>();
@@ -133,7 +118,9 @@ namespace XferSuite.Apps.SEYR
             {
                 for (int j = 0; j < yPositions.Count; j++)
                 {
-                    RegionInfo region = Regions.Where(x => x.ID == (j, i)).First();
+                    RegionInfo[] regions = Regions.Where(x => x.ID == (j, i)).ToArray();
+                    if (regions.Length == 0) continue;
+                    RegionInfo region = regions.First();
                     Text text = FormsPlot.Plot.AddText(region.Percentage(), xPositions[i], yPositions[j],
                         new ScottPlot.Drawing.Font() { 
                             Name = "segoe", Size = 10, Color = Color.Black, Bold = false, Alignment = ScottPlot.Alignment.LowerCenter });
@@ -259,7 +246,7 @@ namespace XferSuite.Apps.SEYR
 
         private void FormsPlot_LeftClicked(object sender, EventArgs e)
         {
-            if (!CbxToggleMarker.Checked) return;
+            if (!CbxToggleMarker.Checked || SelectedBitmap == null) return;
             FormsPlot.Plot.AddImage(SelectedBitmap, MarkerPlot.X, MarkerPlot.Y);
             FormsPlot.Refresh();
         }
