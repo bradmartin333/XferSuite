@@ -133,7 +133,7 @@ namespace XferSuite.Apps.SEYR
             {
                 for (int j = 0; j < yPositions.Count; j++)
                 {
-                    RegionInfo region = Regions.Where(x => x.ID == (j + 1, i + 1)).First();
+                    RegionInfo region = Regions.Where(x => x.ID == (j, i)).First();
                     Text text = FormsPlot.Plot.AddText(region.Percentage(), xPositions[i], yPositions[j],
                         new ScottPlot.Drawing.Font() { 
                             Name = "segoe", Size = 10, Color = Color.Black, Bold = false, Alignment = ScottPlot.Alignment.LowerCenter });

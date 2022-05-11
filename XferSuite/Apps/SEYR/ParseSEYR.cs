@@ -79,7 +79,6 @@ namespace XferSuite.Apps.SEYR
             DataHeader = lines[0];
             for (int i = 1; i < lines.Length; i++)
                 Data.Add(new DataEntry(lines[i]));
-            Data = Data.Where(x => x.RR > 0 && x.RC > 0).ToList();
 
             (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
             foreach ((int, int) region in regions)
