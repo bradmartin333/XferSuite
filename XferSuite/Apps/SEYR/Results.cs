@@ -133,9 +133,13 @@ namespace XferSuite.Apps.SEYR
                     idx++;
                 }
             }
-            Percentages[0].Dragged += Percentage_Dragged;
-            Percentages[0].DragEnabled = true;
-            LastPercentageLocation = new PointF((float)Percentages[0].X, (float)Percentages[0].Y);
+
+            if (Percentages.Count > 0)
+            {
+                Percentages[0].Dragged += Percentage_Dragged;
+                Percentages[0].DragEnabled = true;
+                LastPercentageLocation = new PointF((float)Percentages[0].X, (float)Percentages[0].Y);
+            }
         }
 
         #endregion
