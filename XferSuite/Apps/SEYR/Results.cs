@@ -18,6 +18,7 @@ namespace XferSuite.Apps.SEYR
         private MarkerPlot MarkerPlot = null;
         private Bitmap SelectedBitmap = null;
         private bool ShowPassFail = false;
+        private int PointSize;
 
         public Results(List<DataEntry> data, List<ScatterCriteria> scatters, List<RegionInfo> regions, int pointSize)
         {
@@ -25,14 +26,15 @@ namespace XferSuite.Apps.SEYR
             Data = data;
             Scatters = scatters;
             Regions = regions;
+            PointSize = pointSize;
             SetupPlot();
-            MakePlot(pointSize);
+            MakePlot();
             Show();
             ScottPlot.FormsPlotLegendViewer formsPlotLegendViewer = new ScottPlot.FormsPlotLegendViewer(FormsPlot);
             formsPlotLegendViewer.Show();
         }
 
-        private void MakePlot(int pointSize = 0)
+        private void MakePlot()
         {
             Cursor = Cursors.WaitCursor;
             ResetUI();
@@ -46,6 +48,7 @@ namespace XferSuite.Apps.SEYR
                 ScatterPlot plot = FormsPlot.Plot.AddScatter(
                     scatter.X.ToArray(),
                     scatter.Y.ToArray(),
+                    markerSize: PointSize,
                     markerShape: ScottPlot.MarkerShape.filledSquare,
                     lineStyle: ScottPlot.LineStyle.None,
                     label: scatter.Name);
@@ -53,7 +56,6 @@ namespace XferSuite.Apps.SEYR
                     plot.Color = scatter.Color;
                 else if (ShowPassFail)
                     plot.Color = scatter.Pass ? Color.LawnGreen : Color.Firebrick;
-                if (pointSize != 0) plot.MarkerSize = pointSize;
                 ScatterPlots.Add(plot);
             }
             MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
