@@ -41,7 +41,7 @@
             this.PBX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PBX.Location = new System.Drawing.Point(0, 0);
             this.PBX.Name = "PBX";
-            this.PBX.Size = new System.Drawing.Size(283, 252);
+            this.PBX.Size = new System.Drawing.Size(350, 350);
             this.PBX.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PBX.TabIndex = 0;
             this.PBX.TabStop = false;
@@ -55,7 +55,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(283, 252);
+            this.ClientSize = new System.Drawing.Size(350, 350);
             this.Controls.Add(this.PBX);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ImageScroller";

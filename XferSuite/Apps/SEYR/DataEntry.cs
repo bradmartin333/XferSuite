@@ -87,5 +87,10 @@ namespace XferSuite.Apps.SEYR
         public string Location() => $"#{ImageNumber} ({X}, {Y}) ({RR}, {RC}, {R}, {C}, {SR}, {SC}, {TR}, {TC})";
 
         public override string ToString() => $"({FeatureName} {Score})";
+
+        public bool HasValidPosition()
+        {
+            return X != 0 && Y != 0 && RR != 0 && RC != 0 && R != 0 && C != 0;
+        }
     }
 }

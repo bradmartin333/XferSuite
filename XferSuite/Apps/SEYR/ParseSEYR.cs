@@ -88,7 +88,10 @@ namespace XferSuite.Apps.SEYR
             string[] lines = File.ReadAllLines(ReportPath);
             DataHeader = lines[0];
             for (int i = 1; i < lines.Length; i++)
-                Data.Add(new DataEntry(lines[i]));
+            {
+                DataEntry dataEntry = new DataEntry(lines[i]);
+                if (dataEntry.HasValidPosition()) Data.Add(dataEntry);
+            }
 
             (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
             

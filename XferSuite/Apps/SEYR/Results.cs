@@ -29,6 +29,7 @@ namespace XferSuite.Apps.SEYR
             MakePlot();
             Show();
         }
+
         private void MakePlot()
         {
             ResetUI();
@@ -42,6 +43,7 @@ namespace XferSuite.Apps.SEYR
                 ScatterPlot plot = FormsPlot.Plot.AddScatter(
                     scatter.X.ToArray(),
                     scatter.Y.ToArray(),
+                    markerSize: 1,
                     markerShape: ScottPlot.MarkerShape.filledSquare,
                     lineStyle: ScottPlot.LineStyle.None,
                     label: scatter.Name);
@@ -118,7 +120,7 @@ namespace XferSuite.Apps.SEYR
             {
                 for (int j = 0; j < yPositions.Count; j++)
                 {
-                    RegionInfo[] regions = Regions.Where(x => x.ID == (j, i)).ToArray();
+                    RegionInfo[] regions = Regions.Where(x => x.ID == (j + 1, i + 1)).ToArray();
                     if (regions.Length == 0) continue;
                     RegionInfo region = regions.First();
                     Text text = FormsPlot.Plot.AddText(region.Percentage(), xPositions[i], yPositions[j],
