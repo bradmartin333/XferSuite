@@ -22,6 +22,7 @@ namespace XferSuite.Apps.SEYR
         public bool FlipY { get => _FlipY; set => _FlipY = value; }
         public static int YSign { get => _FlipY ? -1 : 1; }
 
+        private readonly bool ForceClose;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
         public static Project Project { get; set; } = null;
@@ -40,9 +41,18 @@ namespace XferSuite.Apps.SEYR
                 ExtractFile(ReportPath, archive);
             }
             LoadProject();
-            LoadData();
+            if (!LoadData())
+            {
+                ForceClose = true;
+                return;
+            }
             RescoreAllData();
             InitFeatureInfo();
+        }
+
+        private void ParseSEYR_Load(object sender, EventArgs e)
+        {
+            if (ForceClose) Close();
         }
 
         #region Load Data
@@ -73,7 +83,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void LoadData()
+        private bool LoadData()
         {
             string[] lines = File.ReadAllLines(ReportPath);
             DataHeader = lines[0];
@@ -81,6 +91,13 @@ namespace XferSuite.Apps.SEYR
                 Data.Add(new DataEntry(lines[i]));
 
             (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
+            
+            if (regions.Length == 0 || (regions.Length == 1 && regions[0] == (0, 0)))
+            {
+                MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
+                return false;
+            }
+
             foreach ((int, int) region in regions)
                 Regions.Add(new RegionInfo(region));
 
@@ -106,6 +123,8 @@ namespace XferSuite.Apps.SEYR
                 feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
                 System.Diagnostics.Debug.WriteLine($"{feature.Name} Min = {feature.MinScore} Max = {feature.MaxScore}");
             }
+
+            return true;
         }
 
         private void RescoreAllData()

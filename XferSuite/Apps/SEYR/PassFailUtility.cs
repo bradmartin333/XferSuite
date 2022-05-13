@@ -38,6 +38,8 @@ namespace XferSuite.Apps.SEYR
             BtnIgnoreFeature.Text = feature.Ignore ? "Include Feature" : "Ignore Feature";
             BtnIgnoreFeature.BackColor = feature.Ignore ? Color.Gold : Color.LightCoral;
 
+            HistPlot.Plot.Grid(false);
+
             MakeHistogram();
             MakePie();
 
@@ -107,17 +109,17 @@ namespace XferSuite.Apps.SEYR
             HSpanChanging = false;
             p.Refresh();
         }
+
         private void ShowImages(int x)
         {
             Cursor = Cursors.WaitCursor;
             if (LoadingImages) return;
             LoadingImages = true;
             List<Bitmap> bitmaps = new List<Bitmap>();
-            DataEntry[] entries = Data.Where(d => Math.Round(d.Score) == x && d.FeatureName == Feature.Name).ToArray();
+            DataEntry[] entries = Data.Where(d => Math.Abs(d.Score - x) <= 2 && d.FeatureName == Feature.Name).ToArray();
             foreach (DataEntry entry in entries)
-                foreach (DataEntry match in Data.Where(d => d.X == entry.X && d.Y == entry.Y))
-                    if (match.Image != null)
-                        bitmaps.Add(match.Image);
+                if (entry.Image != null)
+                    bitmaps.Add(entry.Image);
             if (bitmaps.Count > 0)
             {
                 CloseImageScroller();

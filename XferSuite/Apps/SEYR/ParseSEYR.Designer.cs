@@ -149,6 +149,7 @@
             this.MinimumSize = new System.Drawing.Size(315, 150);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
+            this.Load += new System.EventHandler(this.ParseSEYR_Load);
             this.TLP.ResumeLayout(false);
             this.TLP.PerformLayout();
             this.ResumeLayout(false);
