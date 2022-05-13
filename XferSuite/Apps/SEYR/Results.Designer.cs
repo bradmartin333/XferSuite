@@ -31,13 +31,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Results));
             this.FormsPlot = new ScottPlot.FormsPlot();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.ComboPropertySelector = new System.Windows.Forms.ComboBox();
             this.PropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.CbxToggleMarker = new System.Windows.Forms.CheckBox();
             this.CbxTogglePassFail = new System.Windows.Forms.CheckBox();
             this.BtnReset = new System.Windows.Forms.Button();
             this.BtnRefreshPlot = new System.Windows.Forms.Button();
+            this.ComboPropertySelector = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -73,16 +73,6 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.Size = new System.Drawing.Size(759, 536);
             this.tableLayoutPanel.TabIndex = 1;
-            // 
-            // ComboPropertySelector
-            // 
-            this.ComboPropertySelector.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ComboPropertySelector.FormattingEnabled = true;
-            this.ComboPropertySelector.Location = new System.Drawing.Point(568, 3);
-            this.ComboPropertySelector.Name = "ComboPropertySelector";
-            this.ComboPropertySelector.Size = new System.Drawing.Size(188, 21);
-            this.ComboPropertySelector.TabIndex = 4;
-            this.ComboPropertySelector.SelectedIndexChanged += new System.EventHandler(this.ComboPropertySelector_SelectedIndexChanged);
             // 
             // PropertyGrid
             // 
@@ -161,6 +151,16 @@
             this.BtnRefreshPlot.UseVisualStyleBackColor = false;
             this.BtnRefreshPlot.Click += new System.EventHandler(this.BtnRefreshPlot_Click);
             // 
+            // ComboPropertySelector
+            // 
+            this.ComboPropertySelector.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ComboPropertySelector.FormattingEnabled = true;
+            this.ComboPropertySelector.Location = new System.Drawing.Point(568, 3);
+            this.ComboPropertySelector.Name = "ComboPropertySelector";
+            this.ComboPropertySelector.Size = new System.Drawing.Size(188, 21);
+            this.ComboPropertySelector.TabIndex = 4;
+            this.ComboPropertySelector.SelectedIndexChanged += new System.EventHandler(this.ComboPropertySelector_SelectedIndexChanged);
+            // 
             // Results
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -184,10 +184,10 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.CheckBox CbxTogglePassFail;
         private System.Windows.Forms.Button BtnReset;
-        private System.Windows.Forms.ComboBox ComboPropertySelector;
         private System.Windows.Forms.PropertyGrid PropertyGrid;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button BtnRefreshPlot;
         private System.Windows.Forms.CheckBox CbxToggleMarker;
+        private System.Windows.Forms.ComboBox ComboPropertySelector;
     }
 }

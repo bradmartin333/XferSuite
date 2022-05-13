@@ -19,19 +19,22 @@ namespace XferSuite.Apps.SEYR
         private Bitmap SelectedBitmap = null;
         private bool ShowPassFail = false;
 
-        public Results(List<DataEntry> data, List<ScatterCriteria> scatters, List<RegionInfo> regions)
+        public Results(List<DataEntry> data, List<ScatterCriteria> scatters, List<RegionInfo> regions, int pointSize)
         {
             InitializeComponent();
             Data = data;
             Scatters = scatters;
             Regions = regions;
             SetupPlot();
-            MakePlot();
+            MakePlot(pointSize);
             Show();
+            ScottPlot.FormsPlotLegendViewer formsPlotLegendViewer = new ScottPlot.FormsPlotLegendViewer(FormsPlot);
+            formsPlotLegendViewer.Show();
         }
 
-        private void MakePlot()
+        private void MakePlot(int pointSize = 0)
         {
+            Cursor = Cursors.WaitCursor;
             ResetUI();
             double someX = 0;
             double someY = 0;
@@ -43,7 +46,6 @@ namespace XferSuite.Apps.SEYR
                 ScatterPlot plot = FormsPlot.Plot.AddScatter(
                     scatter.X.ToArray(),
                     scatter.Y.ToArray(),
-                    markerSize: 1,
                     markerShape: ScottPlot.MarkerShape.filledSquare,
                     lineStyle: ScottPlot.LineStyle.None,
                     label: scatter.Name);
@@ -51,12 +53,14 @@ namespace XferSuite.Apps.SEYR
                     plot.Color = scatter.Color;
                 else if (ShowPassFail)
                     plot.Color = scatter.Pass ? Color.LawnGreen : Color.Firebrick;
+                if (pointSize != 0) plot.MarkerSize = pointSize;
                 ScatterPlots.Add(plot);
             }
             MarkerPlot = FormsPlot.Plot.AddMarker(someX, someY, ScottPlot.MarkerShape.filledSquare, color: Color.Transparent);
             SetupCombo();
             SetAxes();
             FormsPlot.Refresh();
+            Cursor = Cursors.Default;
         }
 
         #region UI Configuration
@@ -64,7 +68,7 @@ namespace XferSuite.Apps.SEYR
         private void SetupPlot()
         {
             FormsPlot.Plot.Palette = ScottPlot.Palette.ColorblindFriendly;
-            FormsPlot.Plot.Legend();
+            var legend = FormsPlot.Plot.Legend();
             FormsPlot.MouseMove += FormsPlot_MouseMove;
             FormsPlot.LeftClicked += FormsPlot_LeftClicked;
             FormsPlot.MouseWheel += FormsPlot_MouseWheel;

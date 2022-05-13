@@ -12,6 +12,10 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class ParseSEYR : Form
     {
+        private static int _PointSize = 3;
+        [Category("User Parameters")]
+        public int PointSize { get => _PointSize; set => _PointSize = value; }
+
         private static bool _FlipX = true;
         [Category("User Parameters")]
         public bool FlipX { get => _FlipX; set => _FlipX = value; }
@@ -279,7 +283,7 @@ namespace XferSuite.Apps.SEYR
                 }
             }
 
-            Results results = new Results(Data, Scatters, Regions);
+            Results results = new Results(Data, Scatters, Regions, _PointSize);
         }
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)
