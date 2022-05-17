@@ -238,7 +238,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        public string[] Regions;
+        public string[] Regions = null;
         public List<Plottable> Plottables = new List<Plottable>();
         public List<PlotOrderElement> PlotOrder = PlotOrderElement.GenerateDefaults();
         public readonly List<CustomFeature> CustomFeatures = new List<CustomFeature>();
@@ -466,6 +466,16 @@ namespace XferSuite.Apps.SEYR
         {
             ParseWorker.ReportProgress(-2);
             Plottables = new List<Plottable>();
+            RequiredOn = Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0;
+            NeedOneOn = Features.Where(x => x.IsChild).Count() > 0;
+            CustomOn = CustomFeatures.Where(x => x.Checked).Count() > 0;
+            FilteredData = CustomOn ? Data : Report.removeBuffers(Data, Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray());
+            if (Regions == null) InitialzeData();
+            if (RequiredOn || NeedOneOn || CustomOn) Parse();
+        }
+
+        private void InitialzeData()
+        {
             DistX = 0.0;
             DistY = 0.0;
 
@@ -503,13 +513,7 @@ namespace XferSuite.Apps.SEYR
                 }
             }
 
-            RequiredOn = Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0;
-            NeedOneOn = Features.Where(x => x.IsChild).Count() > 0;
-            CustomOn = CustomFeatures.Where(x => x.Checked).Count() > 0;
-            FilteredData = CustomOn ? Data : Report.removeBuffers(Data, Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray());
             Regions = Report.getRegions(FilteredData);
-            if (RequiredOn || NeedOneOn || CustomOn) Parse();
-            ParseWorker.ReportProgress(-1);
         }
 
         private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -518,6 +522,7 @@ namespace XferSuite.Apps.SEYR
             toolStripLabelPercent.Text = "";
             ToggleOLVs(true);
             flowLayoutPanelCriteria.Enabled = true;
+            Application.DoEvents();
         }
 
         private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -540,7 +545,6 @@ namespace XferSuite.Apps.SEYR
         {
             List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
             int regionIdx = 0;
-
             foreach (IGrouping<string, Report.Entry> regionGroup in FilteredData.GroupBy(x => (x.RR, x.RC, x.R, x.C).ToString()))
             {
                 ParseWorker.ReportProgress(regionIdx);
@@ -559,22 +563,19 @@ namespace XferSuite.Apps.SEYR
                         double thisY = cell[0].Y + cell[0].YCopy * DistY;
                         string detailString = $"     Copy ({cell[0].XCopy}, {cell[0].YCopy})     Location ({thisX}, {thisY})";
 
-                        if (CustomOn)
+                        foreach (CustomFeature custom in CustomFeatures.Where(x => x.Checked))
                         {
-                            foreach (CustomFeature custom in CustomFeatures.Where(x => x.Checked))
+                            if (!CheckCustomCriteria(custom, cell)) continue;
+                            plottable = new Plottable
                             {
-                                if (!CheckCustomCriteria(custom, cell)) continue;
-                                plottable = new Plottable
-                                {
-                                    Region = Regions[regionIdx],
-                                    DetailString = detailString + $"     {custom.Type}     Custom: {custom.Name}",
-                                    X = thisX - custom.Offset.X,
-                                    Y = thisY - custom.Offset.Y,
-                                    Pass = custom.Type == Report.State.Pass,
-                                    CustomTag = custom.Name,
-                                    Color = custom.Color,
-                                };
-                            }
+                                Region = Regions[regionIdx],
+                                DetailString = detailString + $"     {custom.Type}     Custom: {custom.Name}",
+                                X = thisX - custom.Offset.X,
+                                Y = thisY - custom.Offset.Y,
+                                Pass = custom.Type == Report.State.Pass,
+                                CustomTag = custom.Name,
+                                Color = custom.Color,
+                            };
                         }
                         
                         if (RequiredOn || NeedOneOn)
@@ -592,12 +593,20 @@ namespace XferSuite.Apps.SEYR
                             };
                         }
 
-                        Plottables.Add(plottable);
+                        try
+                        {
+                            Plottables.Add(plottable);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Try closing and reopening XferSuite:\n\n{ex}", "Parse SEYR");
+                            return;
+                        }
                     }
                 }
-
                 regionIdx++;
             }
+            ParseWorker.ReportProgress(-1);
         }
 
         private bool CheckCustomCriteria(CustomFeature custom, Report.Entry[] cell)
