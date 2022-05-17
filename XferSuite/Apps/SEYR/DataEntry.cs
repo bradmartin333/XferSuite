@@ -90,7 +90,7 @@ namespace XferSuite.Apps.SEYR
 
         public bool HasValidPosition()
         {
-            return X != 0 && Y != 0 && RR != 0 && RC != 0 && R != 0 && C != 0;
+            return X != 0 && Y != 0;
         }
     }
 }
