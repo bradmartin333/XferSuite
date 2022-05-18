@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -12,29 +12,15 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class ParseSEYR : Form
     {
-        private static int _PointSize = 3;
-        [Category("User Parameters")]
-        public int PointSize { get => _PointSize; set => _PointSize = value; }
-
-        private static bool _FlipX = true;
-        [Category("User Parameters")]
-        public bool FlipX { get => _FlipX; set => _FlipX = value; }
-        public static int XSign { get => _FlipX ? -1 : 1; }
-
-        private static bool _FlipY = true;
-        [Category("User Parameters")]
-        public bool FlipY { get => _FlipY; set => _FlipY = value; }
-        public static int YSign { get => _FlipY ? -1 : 1; }
-
         private readonly bool ForceClose;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
+
         public static Project Project { get; set; } = null;
         private string DataHeader { get; set; } = string.Empty;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
         private List<(int, bool)> Criteria { get; set; } = new List<(int, bool)>();
-        private List<RegionInfo> Regions { get; set; } = new List<RegionInfo>();
-        private List<ScatterCriteria> Scatters { get; set; } = null;
+        private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
 
         public ParseSEYR(string path)
         {
@@ -97,16 +83,11 @@ namespace XferSuite.Apps.SEYR
                 if (dataEntry.HasValidPosition()) Data.Add(dataEntry);
             }
 
-            (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
-            
-            if (regions.Length == 0 || (regions.Length == 1 && regions[0] == (0, 0)))
+            if (Data.Count == 0)
             {
                 MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
                 return false;
             }
-
-            foreach ((int, int) region in regions)
-                Regions.Add(new RegionInfo(region));
 
             foreach (Feature feature in Project.Features)
             {
@@ -217,10 +198,6 @@ namespace XferSuite.Apps.SEYR
                 int sum = valCombo.Sum();
                 if (valCombo.Length > 0) Criteria.Add((sum, passingVals.Contains(sum)));
             }
-                
-            Scatters = new List<ScatterCriteria>();
-            foreach (var nameCombo in Combinations(criteriaNames))
-                if (nameCombo.Length > 0) Scatters.Add(new ScatterCriteria(string.Join(", ", nameCombo)));
         }
 
         public IEnumerable<T[]> Combinations<T>(IEnumerable<T> source)
@@ -239,51 +216,57 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnPlot_Click(object sender, EventArgs e)
         {
-            Scatters.ForEach(s => s.Reset());
-            Regions.ForEach(r => r.Reset());
+            if (!MakeSheets()) return;
 
-            var images = Data.GroupBy(x => x.ImageNumber);
-            foreach (IGrouping<int, DataEntry> image in images)
+            foreach (DataSheet sheet in Sheets)
             {
-                var tiles = image.ToArray().GroupBy(x => (x.TR, x.TC));
-                foreach (var tile in tiles)
+                DataEntry[] region = Data.Where(x => (x.RR, x.RC) == sheet.ID).ToArray();
+                var images = region.GroupBy(x => x.ImageNumber);
+                foreach (IGrouping<int, DataEntry> image in images)
                 {
-                    DataEntry[] entries = tile.ToArray();
-                    double x = XSign * (entries[0].X + (entries[0].TC * Project.PitchX / Project.PixelsPerMicron / 1e3));
-                    double y = YSign * (entries[0].Y + (entries[0].TR * Project.PitchY / Project.PixelsPerMicron / 1e3));
-                    RegionInfo region = Regions.Where(r => r.ID == (entries[0].RR, entries[0].RC)).First();
-                    region.Total++;
-
-                    int criterion = 0;
-                    foreach (DataEntry entry in entries)
+                    var tiles = image.ToArray().GroupBy(x => (x.TR, x.TC));
+                    foreach (var tile in tiles)
                     {
-                        Feature feature = entry.Feature;
-                        if (feature.Ignore) continue;
-                        if (entry.State) criterion += feature.ID;
+                        DataEntry[] entries = tile.ToArray();
+
+                        int criterion = 0;
+                        foreach (DataEntry entry in entries)
+                        {
+                            Feature feature = entry.Feature;
+                            if (feature.Ignore) continue;
+                            if (entry.State) criterion += feature.ID;
+                        }
+
+                        int i = (entries[0].R - 1) * sheet.ImageGrid.Width + entries[0].TR - 1;
+                        int j = (entries[0].C - 1) * sheet.ImageGrid.Height + entries[0].TC - 1;
+
+                        sheet.Insert(i, j, criterion);
                     }
-
-                    bool pass = true;
-                    int idx = Criteria.IndexOf((criterion, pass));
-                    if (idx == -1)
-                    {
-                        pass = false;
-                        idx = Criteria.IndexOf((criterion, pass));
-                    }
-                    if (idx == -1)
-                        continue;
-
-                    ScatterCriteria scatterCriteria = Scatters[idx];
-                    scatterCriteria.BaseX.Add(entries[0].X);
-                    scatterCriteria.BaseY.Add(entries[0].Y);
-                    scatterCriteria.X.Add(x);
-                    scatterCriteria.Y.Add(y);
-                    scatterCriteria.Pass = pass;
-
-                    if (pass) region.Pass++;
                 }
             }
+        }
 
-            Results results = new Results(Data, Scatters, Regions, _PointSize);
+        private bool MakeSheets()
+        {
+            int maxR = Data.Select(x => x.R).Max();
+            int maxC = Data.Select(x => x.C).Max();
+            int maxTR = Data.Select(x => x.TR).Max();
+            int maxTC = Data.Select(x => x.TC).Max();
+            Size regionGrid = new Size(maxR, maxC);
+            Size imageGrid = new Size(maxTR, maxTC);
+
+            (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
+
+            if (regions.Length == 0 || (regions.Length == 1 && regions[0] == (0, 0)))
+            {
+                MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
+                return false;
+            }
+
+            foreach ((int, int) region in regions)
+                Sheets.Add(new DataSheet(region, regionGrid, imageGrid, Criteria));
+
+            return true;
         }
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)
