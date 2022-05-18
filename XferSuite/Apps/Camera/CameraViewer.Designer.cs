@@ -36,8 +36,8 @@ namespace XferSuite.Apps.Camera
             this.btnCrosshairColor = new System.Windows.Forms.ToolStripButton();
             this.btnRotateImage = new System.Windows.Forms.ToolStripButton();
             this.btnSaveFrame = new System.Windows.Forms.ToolStripButton();
-            this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.btnResetSessionMem = new System.Windows.Forms.ToolStripButton();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +53,7 @@ namespace XferSuite.Apps.Camera
             this.btnResetSessionMem});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(724, 31);
+            this.toolStrip.Size = new System.Drawing.Size(543, 27);
             this.toolStrip.TabIndex = 0;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -66,7 +66,7 @@ namespace XferSuite.Apps.Camera
             this.btnToggleListView.Image = global::XferSuite.Properties.Resources.visible;
             this.btnToggleListView.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnToggleListView.Name = "btnToggleListView";
-            this.btnToggleListView.Size = new System.Drawing.Size(29, 28);
+            this.btnToggleListView.Size = new System.Drawing.Size(24, 24);
             this.btnToggleListView.Text = "Toggle List View";
             this.btnToggleListView.Click += new System.EventHandler(this.BtnToggleListView_Click);
             // 
@@ -77,7 +77,7 @@ namespace XferSuite.Apps.Camera
             this.btnToggleCrosshair.Image = ((System.Drawing.Image)(resources.GetObject("btnToggleCrosshair.Image")));
             this.btnToggleCrosshair.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnToggleCrosshair.Name = "btnToggleCrosshair";
-            this.btnToggleCrosshair.Size = new System.Drawing.Size(29, 28);
+            this.btnToggleCrosshair.Size = new System.Drawing.Size(24, 24);
             this.btnToggleCrosshair.Text = "Toggle Crosshair";
             this.btnToggleCrosshair.Click += new System.EventHandler(this.BtnToggleCrosshair_Click);
             // 
@@ -87,7 +87,7 @@ namespace XferSuite.Apps.Camera
             this.btnCrosshairColor.Image = ((System.Drawing.Image)(resources.GetObject("btnCrosshairColor.Image")));
             this.btnCrosshairColor.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnCrosshairColor.Name = "btnCrosshairColor";
-            this.btnCrosshairColor.Size = new System.Drawing.Size(29, 28);
+            this.btnCrosshairColor.Size = new System.Drawing.Size(24, 24);
             this.btnCrosshairColor.Text = "Crosshair Color";
             this.btnCrosshairColor.Click += new System.EventHandler(this.BtnCrosshairColor_Click);
             // 
@@ -97,7 +97,7 @@ namespace XferSuite.Apps.Camera
             this.btnRotateImage.Image = ((System.Drawing.Image)(resources.GetObject("btnRotateImage.Image")));
             this.btnRotateImage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnRotateImage.Name = "btnRotateImage";
-            this.btnRotateImage.Size = new System.Drawing.Size(29, 28);
+            this.btnRotateImage.Size = new System.Drawing.Size(24, 24);
             this.btnRotateImage.Text = "Rotate Image";
             this.btnRotateImage.Click += new System.EventHandler(this.BtnRotateImage_Click);
             // 
@@ -107,7 +107,7 @@ namespace XferSuite.Apps.Camera
             this.btnSaveFrame.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveFrame.Image")));
             this.btnSaveFrame.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSaveFrame.Name = "btnSaveFrame";
-            this.btnSaveFrame.Size = new System.Drawing.Size(29, 28);
+            this.btnSaveFrame.Size = new System.Drawing.Size(24, 24);
             this.btnSaveFrame.Text = "Save Frame";
             this.btnSaveFrame.Click += new System.EventHandler(this.BtnSaveFrame_Click);
             // 
@@ -117,19 +117,17 @@ namespace XferSuite.Apps.Camera
             this.btnResetSessionMem.Image = ((System.Drawing.Image)(resources.GetObject("btnResetSessionMem.Image")));
             this.btnResetSessionMem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnResetSessionMem.Name = "btnResetSessionMem";
-            this.btnResetSessionMem.Size = new System.Drawing.Size(29, 28);
+            this.btnResetSessionMem.Size = new System.Drawing.Size(24, 24);
             this.btnResetSessionMem.Text = "Reset Session Memory";
             this.btnResetSessionMem.Click += new System.EventHandler(this.BtnResetSessionMem_Click);
             // 
             // CameraViewer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(724, 517);
+            this.ClientSize = new System.Drawing.Size(543, 420);
             this.Controls.Add(this.toolStrip);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "CameraViewer";
             this.Text = "Camera Viewer";
             this.toolStrip.ResumeLayout(false);
