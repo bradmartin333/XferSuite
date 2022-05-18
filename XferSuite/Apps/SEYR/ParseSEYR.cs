@@ -19,8 +19,9 @@ namespace XferSuite.Apps.SEYR
         public static Project Project { get; set; } = null;
         private string DataHeader { get; set; } = string.Empty;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
-        private List<(int, bool)> Criteria { get; set; } = new List<(int, bool)>();
+        private List<(int, bool, Color)> Criteria { get; set; } = new List<(int, bool, Color)>();
         private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
+        private ScottPlot.Drawing.Palette Pallete = ScottPlot.Palette.ColorblindFriendly;
 
         public ParseSEYR(string path)
         {
@@ -196,7 +197,7 @@ namespace XferSuite.Apps.SEYR
             foreach (var valCombo in Combinations(criteriaVals))
             {
                 int sum = valCombo.Sum();
-                if (valCombo.Length > 0) Criteria.Add((sum, passingVals.Contains(sum)));
+                if (valCombo.Length > 0) Criteria.Add((sum, passingVals.Contains(sum), Pallete.GetColor(sum)));
             }
         }
 
@@ -228,7 +229,6 @@ namespace XferSuite.Apps.SEYR
                     foreach (var tile in tiles)
                     {
                         DataEntry[] entries = tile.ToArray();
-
                         int criterion = 0;
                         foreach (DataEntry entry in entries)
                         {
@@ -236,13 +236,11 @@ namespace XferSuite.Apps.SEYR
                             if (feature.Ignore) continue;
                             if (entry.State) criterion += feature.ID;
                         }
-
-                        int i = (entries[0].R - 1) * sheet.ImageGrid.Width + entries[0].TR - 1;
-                        int j = (entries[0].C - 1) * sheet.ImageGrid.Height + entries[0].TC - 1;
-
-                        sheet.Insert(i, j, criterion);
+                        sheet.Insert(entries[0], criterion);
                     }
                 }
+                Bitmap bitmap = sheet.GetTestBitmap();
+                bitmap.Save($@"C:\Users\delta\Desktop\{sheet.ID}.png");
             }
         }
 
@@ -250,9 +248,12 @@ namespace XferSuite.Apps.SEYR
         {
             int maxR = Data.Select(x => x.R).Max();
             int maxC = Data.Select(x => x.C).Max();
+            int maxSR = Data.Select(x => x.SR).Max();
+            int maxSC = Data.Select(x => x.SC).Max();
             int maxTR = Data.Select(x => x.TR).Max();
             int maxTC = Data.Select(x => x.TC).Max();
             Size regionGrid = new Size(maxR, maxC);
+            Size stampGrid = new Size(maxSR, maxSC);
             Size imageGrid = new Size(maxTR, maxTC);
 
             (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
@@ -264,7 +265,7 @@ namespace XferSuite.Apps.SEYR
             }
 
             foreach ((int, int) region in regions)
-                Sheets.Add(new DataSheet(region, regionGrid, imageGrid, Criteria));
+                Sheets.Add(new DataSheet(region, regionGrid, stampGrid, imageGrid, Criteria));
 
             return true;
         }
