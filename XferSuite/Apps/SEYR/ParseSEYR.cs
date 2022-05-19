@@ -225,7 +225,10 @@ namespace XferSuite.Apps.SEYR
                 var images = region.GroupBy(x => x.ImageNumber);
                 foreach (IGrouping<int, DataEntry> image in images)
                 {
-                    var tiles = image.ToArray().GroupBy(x => (x.TR, x.TC));
+                    var imageData = image.ToArray();
+                    if (!imageData.Where(x => x.State == true).Any())
+                        System.Diagnostics.Debug.WriteLine($"{imageData[0].R}\t{imageData[0].C}");
+                    var tiles = imageData.GroupBy(x => (x.TR, x.TC));
                     foreach (var tile in tiles)
                     {
                         DataEntry[] entries = tile.ToArray();
