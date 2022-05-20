@@ -178,6 +178,12 @@
       <DependentUpon>PassFailUtility.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\SEYR\Project.cs" />
+    <Compile Include="Apps\SEYR\RegionBrowser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\SEYR\RegionBrowser.Designer.cs">
+      <DependentUpon>RegionBrowser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
     <Compile Include="Apps\XYZplotter\PlotData.cs" />
@@ -256,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\PassFailUtility.resx">
       <DependentUpon>PassFailUtility.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\SEYR\RegionBrowser.resx">
+      <DependentUpon>RegionBrowser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\XYZplotter\Plotter.resx">
       <DependentUpon>Plotter.cs</DependentUpon>

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace XferSuite.Apps.SEYR
 {
-    internal class DataSheet
+    public class DataSheet
     {      
         public (int, int) ID { get; set; }
         public Size StampGrid { get; set; }
@@ -41,6 +41,7 @@ namespace XferSuite.Apps.SEYR
                     var criterion = Criteria.Where(x => x.Item1 == Data[j, i]);
                     if (criterion.Any()) bitmap.SetPixel(i, j, criterion.First().Item3);
                 }
+            bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             return bitmap;
         }
     }
