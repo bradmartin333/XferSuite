@@ -30,7 +30,6 @@ namespace XferSuite.Apps.SEYR
             int i = ((e.R - 1) * StampGrid.Width * ImageGrid.Width) + ((e.SR - 1) * ImageGrid.Width) + e.TR - 1;
             int j = ((e.C - 1) * StampGrid.Height * ImageGrid.Height) + ((e.SC - 1) * ImageGrid.Height) + e.TC - 1;
             Data[i, j] = criterion;
-
         }
 
         // HELP WANTED
