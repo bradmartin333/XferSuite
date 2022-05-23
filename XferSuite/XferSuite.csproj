@@ -76,17 +76,19 @@
       <HintPath>..\packages\OxyPlot.WindowsForms.2.1.0\lib\net45\OxyPlot.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
-    <Reference Include="ScottPlot, Version=4.1.35.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScottPlot.4.1.35\lib\net461\ScottPlot.dll</HintPath>
+    <Reference Include="ScottPlot, Version=4.1.45.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScottPlot.4.1.45\lib\net461\ScottPlot.dll</HintPath>
     </Reference>
-    <Reference Include="ScottPlot.WinForms, Version=4.1.35.0, Culture=neutral, PublicKeyToken=5df1dfa5321e734b, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScottPlot.WinForms.4.1.35\lib\net472\ScottPlot.WinForms.dll</HintPath>
+    <Reference Include="ScottPlot.WinForms, Version=4.1.45.0, Culture=neutral, PublicKeyToken=5df1dfa5321e734b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScottPlot.WinForms.4.1.45\lib\net472\ScottPlot.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing.Common, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Drawing.Common.4.6.1\lib\net461\System.Drawing.Common.dll</HintPath>
     </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
@@ -110,6 +112,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedTools\DataFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedTools\DataFilter.Designer.cs">
+      <DependentUpon>DataFilter.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdvancedTools\SelectTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,18 +156,26 @@
     <Compile Include="AdvancedTools\MapFlip.designer.cs">
       <DependentUpon>MapFlip.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\SEYR\CreateCustom.cs">
+    <Compile Include="AdvancedTools\uTP\PrintLogParser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\SEYR\CreateCustom.Designer.cs">
-      <DependentUpon>CreateCustom.cs</DependentUpon>
+    <Compile Include="AdvancedTools\uTP\PrintLogParser.Designer.cs">
+      <DependentUpon>PrintLogParser.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\SEYR\CustomFeature.cs" />
-    <Compile Include="Apps\SEYR\EditPlotOrder.cs">
+    <Compile Include="Apps\SEYR\DataEntry.cs" />
+    <Compile Include="Apps\SEYR\DataSheet.cs" />
+    <Compile Include="Apps\SEYR\Feature.cs" />
+    <Compile Include="Apps\SEYR\ImageScroller.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\SEYR\EditPlotOrder.Designer.cs">
-      <DependentUpon>EditPlotOrder.cs</DependentUpon>
+    <Compile Include="Apps\SEYR\ImageScroller.Designer.cs">
+      <DependentUpon>ImageScroller.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\SEYR\LegendView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\SEYR\LegendView.Designer.cs">
+      <DependentUpon>LegendView.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\SEYR\ParseSEYR.cs">
       <SubType>Form</SubType>
@@ -167,19 +183,19 @@
     <Compile Include="Apps\SEYR\ParseSEYR.Designer.cs">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
     </Compile>
-    <Compile Include="AdvancedTools\uTP\PrintLogParser.cs">
+    <Compile Include="Apps\SEYR\PassFailUtility.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AdvancedTools\uTP\PrintLogParser.Designer.cs">
-      <DependentUpon>PrintLogParser.cs</DependentUpon>
+    <Compile Include="Apps\SEYR\PassFailUtility.Designer.cs">
+      <DependentUpon>PassFailUtility.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\SEYR\Results.cs">
+    <Compile Include="Apps\SEYR\Project.cs" />
+    <Compile Include="Apps\SEYR\RegionBrowser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Apps\SEYR\Results.Designer.cs">
-      <DependentUpon>Results.cs</DependentUpon>
+    <Compile Include="Apps\SEYR\RegionBrowser.Designer.cs">
+      <DependentUpon>RegionBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="Apps\SEYR\PlotOrderElement.cs" />
     <Compile Include="Apps\XYZplotter\Configuration.cs" />
     <Compile Include="Apps\XYZplotter\GroupBounds.cs" />
     <Compile Include="Apps\XYZplotter\PlotData.cs" />
@@ -229,6 +245,9 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AdvancedTools\DataFilter.resx">
+      <DependentUpon>DataFilter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AdvancedTools\SelectTool.resx">
       <DependentUpon>SelectTool.cs</DependentUpon>
     </EmbeddedResource>
@@ -247,20 +266,23 @@
     <EmbeddedResource Include="AdvancedTools\MapFlip.resx">
       <DependentUpon>MapFlip.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\SEYR\CreateCustom.resx">
-      <DependentUpon>CreateCustom.cs</DependentUpon>
+    <EmbeddedResource Include="AdvancedTools\uTP\PrintLogParser.resx">
+      <DependentUpon>PrintLogParser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\SEYR\EditPlotOrder.resx">
-      <DependentUpon>EditPlotOrder.cs</DependentUpon>
+    <EmbeddedResource Include="Apps\SEYR\ImageScroller.resx">
+      <DependentUpon>ImageScroller.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\SEYR\LegendView.resx">
+      <DependentUpon>LegendView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\ParseSEYR.resx">
       <DependentUpon>ParseSEYR.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AdvancedTools\uTP\PrintLogParser.resx">
-      <DependentUpon>PrintLogParser.cs</DependentUpon>
+    <EmbeddedResource Include="Apps\SEYR\PassFailUtility.resx">
+      <DependentUpon>PassFailUtility.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Apps\SEYR\Results.resx">
-      <DependentUpon>Results.cs</DependentUpon>
+    <EmbeddedResource Include="Apps\SEYR\RegionBrowser.resx">
+      <DependentUpon>RegionBrowser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\XYZplotter\Plotter.resx">
       <DependentUpon>Plotter.cs</DependentUpon>
@@ -334,6 +356,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

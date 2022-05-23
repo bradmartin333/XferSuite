@@ -8,8 +8,8 @@ namespace XferSuite
 {
     public partial class MainMenu : Form
     {
-        public static int MajorVersion = 3;
-        public static int MinorVerson = 12;
+        public static int MajorVersion = 0;
+        public static int MinorVerson = 13;
         public static readonly Settings Settings = new Settings();
 
         public MainMenu()
@@ -53,7 +53,7 @@ namespace XferSuite
                     path = OpenFile("Open a HeightSensorLog File", "txt file (*.txt)|*.txt");
                     break;
                 case 2:
-                    path = OpenFile("Open a SEYR Report", "txt file (*.txt)|*.txt");
+                    path = OpenFile("Open a SEYRUP file", "SEYRUP file (*.seyrup)|*.seyrup");
                     break;
                 default:
                     break;
@@ -83,7 +83,6 @@ namespace XferSuite
                 case 2:
                     using (new Utility.HourGlass())
                     {
-                        if (!VerifyPath(path, idx)) return;
                         form = new Apps.SEYR.ParseSEYR(path);
                     }
                     break;
@@ -163,9 +162,6 @@ namespace XferSuite
                     break;
                 case 1:
                     result = Zed.verify(path);
-                    break;
-                case 2:
-                    result = Report.verify(path);
                     break;
                 default:
                     break;

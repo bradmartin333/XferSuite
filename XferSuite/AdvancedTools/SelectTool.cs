@@ -14,12 +14,14 @@ namespace XferSuite.AdvancedTools
         // Add enum for form as well as a human readable decription
         enum AdvancedForm
         {
+            [Description("Data Filtering")]
+            dataFilter,
+            [Description("Map Flip")]
+            mapFlip,
             [Description("10Zone Cal Generator")]
             tenZoneCal,
             [Description("uTP Log Parser")]
             uTPlogParser,
-            [Description("Map Flip")]
-            mapFlip,
         }
 
         public SelectTool()
@@ -37,6 +39,20 @@ namespace XferSuite.AdvancedTools
                 Form tool = new Form();
                 switch (form)
                 {
+                    case AdvancedForm.dataFilter:
+                        if (Application.OpenForms.OfType<DataFilter>().Any())
+                            Application.OpenForms.OfType<DataFilter>().First().BringToFront();
+                        else
+                            tool = new DataFilter();
+                        Close();
+                        break;
+                    case AdvancedForm.mapFlip:
+                        if (Application.OpenForms.OfType<MapFlip>().Any())
+                            Application.OpenForms.OfType<MapFlip>().First().BringToFront();
+                        else
+                            tool = new MapFlip();
+                        Close();
+                        break;
                     case AdvancedForm.tenZoneCal:
                         if (Application.OpenForms.OfType<CalGenerator>().Any())
                             Application.OpenForms.OfType<CalGenerator>().First().BringToFront();
@@ -49,13 +65,6 @@ namespace XferSuite.AdvancedTools
                             Application.OpenForms.OfType<uTP.PrintLogParser>().First().BringToFront();
                         else
                             tool = new uTP.PrintLogParser();
-                        Close();
-                        break;
-                    case AdvancedForm.mapFlip:
-                        if (Application.OpenForms.OfType<MapFlip>().Any())
-                            Application.OpenForms.OfType<MapFlip>().First().BringToFront();
-                        else
-                            tool = new MapFlip();
                         Close();
                         break;
                     // Create a form in the AdvancedTools folder and add a case above this comment
