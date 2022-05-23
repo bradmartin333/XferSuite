@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using System.Text;
 
 namespace XferSuite.AdvancedTools
 {
@@ -14,7 +15,7 @@ namespace XferSuite.AdvancedTools
             public List<string> Args;
         }
 
-        enum Commands { COLS, COUNT, COUNTEX, DELETE, REPLACE }
+        enum Commands { COLS, COUNT, COUNTEX, DELETE, REPLACE, REPLACEEX }
         enum Delimeter { Tab, Space, Comma }
         private char Delim { 
             get
@@ -34,6 +35,7 @@ namespace XferSuite.AdvancedTools
         }
         private FileInfo FileInfo = null;
         private string Header = null;
+        private string LastEntry = string.Empty;
         private List<string[]> Data = new List<string[]>();
         private List<bool> NumberColumn = new List<bool>();
 
@@ -47,6 +49,12 @@ namespace XferSuite.AdvancedTools
         private void RTB_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter) ProcessRTB();
+            if (e.KeyCode == Keys.Up) PrintLastEntry();
+        }
+
+        private void PrintLastEntry()
+        {
+            RTB.Text = LastEntry;
         }
 
         private void ProcessRTB()
@@ -62,9 +70,10 @@ namespace XferSuite.AdvancedTools
                 RTB.Text = "";
                 return;
             }
-            
+
             string[] commands = Enum.GetNames(typeof(Commands));
-            string[] cols = RTB.Text.TrimEnd('\n').Split(' ');
+            string msg = RTB.Text.TrimEnd('\n');
+            string[] cols = msg.Split(' ');
             
             List<CommandProcessor> commandProcessors = new List<CommandProcessor>();
             foreach (string col in cols)
@@ -81,9 +90,15 @@ namespace XferSuite.AdvancedTools
                 else if (commandProcessors.Count > 0)
                     commandProcessors.Last().Args.Add(col);
             }
-            
-            RTB.Text = commandProcessors.Count == 0 ? "Invalid command" : string.Empty;
-            
+
+            if (commandProcessors.Count == 0)
+                RTB.Text = "Invalid command";
+            else
+            {
+                RTB.Text = string.Empty;
+                LastEntry = msg;
+            }    
+
             foreach (CommandProcessor cp in commandProcessors)
                 ExecuteCommand(cp);
         }
@@ -105,9 +120,77 @@ namespace XferSuite.AdvancedTools
                 case Commands.DELETE:
                     break;
                 case Commands.REPLACE:
+                case Commands.REPLACEEX:
+                    if ((cp.Args.Count == 4 && cp.Args[2] != "IN") || cp.Args.Count > 4)
+                        RTB.Text += "Invalid replace command\n";
+                    else
+                        PrintReplace(cp.Args.ToArray(), cp.Command == Commands.COUNTEX);
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void PrintReplace(string[] vals, bool exact)
+        {
+            try
+            {
+                int num = 0;
+                if (vals.Length == 2)
+                {
+                    foreach (string[] row in Data)
+                    {
+                        for (int i = 0; i < row.Length; i++)
+                        {
+                            if (exact)
+                            {
+                                if (row[i] == vals[0])
+                                {
+                                    row[i] = vals[1];
+                                    num++;
+                                }
+                            }
+                            else
+                            {
+                                if (row[i].Contains(vals[0]))
+                                {
+                                    row[i] = row[i].Replace(vals[0], vals[1]);
+                                    num++;
+                                }
+                            }
+                        }
+                    }
+                    RTB.Text += $"{(exact ? "Exact r" : "R")}eplaced {num} intances of {vals[0]}\n";
+                }
+                else
+                {
+                    int colNum = int.Parse(vals[3]);
+                    foreach (string[] row in Data)
+                    {
+                        if (row.Length - 1 < colNum) continue;
+                        if (exact)
+                        {
+                            if (row[colNum] == vals[0])
+                            {
+                                row[colNum] = vals[1];
+                                num++;
+                            }
+                        }
+                        else
+                        {
+                            if (row[colNum].Contains(vals[0]))
+                            {
+                                row[colNum] = row[colNum].Replace(vals[0], vals[1]);
+                                num++;
+                            }
+                        }
+                    }
+                    RTB.Text += $"{(exact ? "Exact r" : "R")}eplaced {num} intances of {vals[0]} in {vals[3]}\n";
+                }
+            }
+            catch (Exception ex)
+            {
+                RTB.Text += $"Invalid replace command {ex}\n";
             }
         }
 
@@ -133,7 +216,7 @@ namespace XferSuite.AdvancedTools
                 {
                     foreach (string[] row in Data)
                         num += row.Where(x => exact ? x == vals[0] : x.Contains(vals[0])).Count();
-                    RTB.Text += $"{(exact ? "Exact c" : "C")} of {vals[0]} = {num}\n";
+                    RTB.Text += $"{(exact ? "Exact c" : "C")}ount of {vals[0]} = {num}\n";
                 }
                 else
                 {
@@ -198,6 +281,26 @@ namespace XferSuite.AdvancedTools
                 if (!string.IsNullOrEmpty(lines[i])) Data.Add(lines[i].Split(Delim));
 
             LblData.Text = $"{Data.Count} Rows Loaded";
+        }
+
+        private string StringifyData()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(Header)) sb.AppendLine(Header);
+            foreach (string[] row in Data)
+                sb.AppendLine(string.Join(Delim.ToString(), row));
+            return sb.ToString();
+        }
+
+        private void BtnCopy_Click(object sender, EventArgs e)
+        {
+           
+            Clipboard.SetText(StringifyData());
+        }
+
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

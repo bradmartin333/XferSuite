@@ -211,6 +211,7 @@
             this.BtnCopy.TabIndex = 0;
             this.BtnCopy.Text = "Copy Data";
             this.BtnCopy.UseVisualStyleBackColor = false;
+            this.BtnCopy.Click += new System.EventHandler(this.BtnCopy_Click);
             // 
             // BtnSave
             // 
@@ -223,6 +224,7 @@
             this.BtnSave.TabIndex = 1;
             this.BtnSave.Text = "Save Data";
             this.BtnSave.UseVisualStyleBackColor = false;
+            this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // RTB
             // 
