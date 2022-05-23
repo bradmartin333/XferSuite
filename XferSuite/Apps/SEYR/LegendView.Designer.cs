@@ -32,16 +32,19 @@
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.CbxTogglePF = new System.Windows.Forms.CheckBox();
             this.PBX = new System.Windows.Forms.PictureBox();
+            this.BtnCopyImage = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PBX)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel
             // 
-            this.tableLayoutPanel.ColumnCount = 1;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel.ColumnCount = 2;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.Controls.Add(this.CbxTogglePF, 0, 1);
             this.tableLayoutPanel.Controls.Add(this.PBX, 0, 0);
+            this.tableLayoutPanel.Controls.Add(this.BtnCopyImage, 1, 1);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
@@ -61,7 +64,7 @@
             this.CbxTogglePF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CbxTogglePF.Location = new System.Drawing.Point(3, 138);
             this.CbxTogglePF.Name = "CbxTogglePF";
-            this.CbxTogglePF.Size = new System.Drawing.Size(283, 23);
+            this.CbxTogglePF.Size = new System.Drawing.Size(138, 23);
             this.CbxTogglePF.TabIndex = 0;
             this.CbxTogglePF.Text = "Toggle Pass Fail";
             this.CbxTogglePF.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -71,12 +74,26 @@
             // PBX
             // 
             this.PBX.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.tableLayoutPanel.SetColumnSpan(this.PBX, 2);
             this.PBX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PBX.Location = new System.Drawing.Point(3, 3);
             this.PBX.Name = "PBX";
             this.PBX.Size = new System.Drawing.Size(283, 129);
             this.PBX.TabIndex = 1;
             this.PBX.TabStop = false;
+            // 
+            // BtnCopyImage
+            // 
+            this.BtnCopyImage.BackColor = System.Drawing.Color.White;
+            this.BtnCopyImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnCopyImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnCopyImage.Location = new System.Drawing.Point(147, 138);
+            this.BtnCopyImage.Name = "BtnCopyImage";
+            this.BtnCopyImage.Size = new System.Drawing.Size(139, 23);
+            this.BtnCopyImage.TabIndex = 2;
+            this.BtnCopyImage.Text = "Copy Image";
+            this.BtnCopyImage.UseVisualStyleBackColor = false;
+            this.BtnCopyImage.Click += new System.EventHandler(this.BtnCopyImage_Click);
             // 
             // LegendView
             // 
@@ -100,5 +117,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.CheckBox CbxTogglePF;
         private System.Windows.Forms.PictureBox PBX;
+        private System.Windows.Forms.Button BtnCopyImage;
     }
 }

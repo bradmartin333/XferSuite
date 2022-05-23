@@ -219,6 +219,9 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnPlot_Click(object sender, EventArgs e)
         {
+            if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
+            if (Application.OpenForms.OfType<LegendView>().Any()) Application.OpenForms.OfType<LegendView>().First().Close();
+
             if (!MakeSheets()) return;
 
             foreach (DataSheet sheet in Sheets)

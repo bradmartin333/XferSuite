@@ -32,8 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegionBrowser));
             this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItemCopyImage = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemCopyCSV = new System.Windows.Forms.ToolStripMenuItem();
             this.CopyEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemCopyCSV = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,30 +43,30 @@
             this.ToolStripMenuItemCopyImage,
             this.ToolStripMenuItemCopyCSV});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(181, 70);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(139, 48);
             // 
             // ToolStripMenuItemCopyImage
             // 
             this.ToolStripMenuItemCopyImage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CopyEntireWindowToolStripMenuItem});
             this.ToolStripMenuItemCopyImage.Name = "ToolStripMenuItemCopyImage";
-            this.ToolStripMenuItemCopyImage.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemCopyImage.Size = new System.Drawing.Size(138, 22);
             this.ToolStripMenuItemCopyImage.Text = "Copy Image";
             this.ToolStripMenuItemCopyImage.Click += new System.EventHandler(this.ToolStripMenuItemCopyImage_Click);
-            // 
-            // ToolStripMenuItemCopyCSV
-            // 
-            this.ToolStripMenuItemCopyCSV.Name = "ToolStripMenuItemCopyCSV";
-            this.ToolStripMenuItemCopyCSV.Size = new System.Drawing.Size(180, 22);
-            this.ToolStripMenuItemCopyCSV.Text = "Copy CSV";
-            this.ToolStripMenuItemCopyCSV.Click += new System.EventHandler(this.ToolStripMenuCopyCSV_Click);
             // 
             // CopyEntireWindowToolStripMenuItem
             // 
             this.CopyEntireWindowToolStripMenuItem.Name = "CopyEntireWindowToolStripMenuItem";
-            this.CopyEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CopyEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.CopyEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.CopyEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.CopyEntireWindowToolStripMenuItem_Click);
+            // 
+            // ToolStripMenuItemCopyCSV
+            // 
+            this.ToolStripMenuItemCopyCSV.Name = "ToolStripMenuItemCopyCSV";
+            this.ToolStripMenuItemCopyCSV.Size = new System.Drawing.Size(138, 22);
+            this.ToolStripMenuItemCopyCSV.Text = "Copy CSV";
+            this.ToolStripMenuItemCopyCSV.Click += new System.EventHandler(this.ToolStripMenuCopyCSV_Click);
             // 
             // RegionBrowser
             // 
@@ -75,6 +75,7 @@
             this.ClientSize = new System.Drawing.Size(742, 654);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RegionBrowser";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Region Browser";
             this.ContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);

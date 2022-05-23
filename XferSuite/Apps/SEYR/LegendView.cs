@@ -22,5 +22,10 @@ namespace XferSuite.Apps.SEYR
         {
             RegionBrowser.TogglePF(CbxTogglePF.Checked);
         }
+
+        private void BtnCopyImage_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetImage(Legend);
+        }
     }
 }
