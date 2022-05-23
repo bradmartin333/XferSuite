@@ -2,4 +2,4 @@
 # **[Download Here](https://bradmartin333.github.io/utility/XferSuite)** ![GitHub release (latest by date)](https://img.shields.io/github/v/release/bradmartin333/xfersuite)
 # **[Read The Wiki](https://github.com/bradmartin333/XferSuite/wiki)**
 
-Note: With the upcoming v3.13 release, SEYR parsing with be restricted to SEYRUP files only.
+Since v3.13, SEYR parsing is restricted to SEYRUP files only.
