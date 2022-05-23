@@ -6,8 +6,8 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class LegendView : Form
     {
-        private Bitmap Legend;
-        private RegionBrowser RegionBrowser;
+        private readonly Bitmap Legend;
+        private readonly RegionBrowser RegionBrowser;
 
         public LegendView(Bitmap bitmap, RegionBrowser rb)
         {
@@ -26,6 +26,12 @@ namespace XferSuite.Apps.SEYR
         private void BtnCopyImage_Click(object sender, EventArgs e)
         {
             Clipboard.SetImage(Legend);
+        }
+
+        private void BtnCloseAll_Click(object sender, EventArgs e)
+        {
+            RegionBrowser.Close();
+            Close();
         }
     }
 }

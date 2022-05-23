@@ -202,6 +202,8 @@ namespace XferSuite.Apps.SEYR
 
             criteriaVals = criteriaVals.Distinct().ToList();
             var combos = Combinations(criteriaVals);
+
+            Criteria.Clear();
             foreach (var valCombo in combos)
             {
                 int sum = valCombo.Sum();

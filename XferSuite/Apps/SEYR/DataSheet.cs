@@ -103,8 +103,9 @@ namespace XferSuite.Apps.SEYR
                    $"{(d.C - 1) * StampGrid.Height * ImageGrid.Height + (d.SC - 1) * StampGrid.Height + d.TC}";
         }
 
-        public DataEntry GetLocation(object ID, Point l)
+        public DataEntry GetLocation(object ID, Point p_in)
         {
+            Point l = new Point(p_in.X, DataSize.Width - p_in.Y);
             (int, int) region = ((int, int))ID;
 
             int C = l.X / (StampGrid.Height * ImageGrid.Height);

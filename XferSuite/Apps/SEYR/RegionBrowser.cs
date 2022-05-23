@@ -18,11 +18,17 @@ namespace XferSuite.Apps.SEYR
         public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, string legendStr)
         {
             InitializeComponent();
+            FormClosing += RegionBrowser_FormClosing;
             Data = data;
             Sheets = sheets;
             LegendStr = legendStr;
             SetupTLP();
             Show();
+        }
+
+        private void RegionBrowser_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Data.Where(x => x.Form != null).ToList().ForEach(x => x.Form.Close());
         }
 
         private void SetupTLP(bool showPF = false)
@@ -128,6 +134,7 @@ namespace XferSuite.Apps.SEYR
                     ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
                     DataEntry data = GetActiveSheet().GetLocation(ContextMenuStrip.Tag, ZoomMousePos(e.Location));
                     DataEntry[] matches = Data.Where(x => x.ImageMatch(data)).Where(x => x.Image != null).ToArray();
+                    Text = data.Location();
                     if (matches.Any()) matches[0].ShowImage();
                     break;
                 case MouseButtons.Right:

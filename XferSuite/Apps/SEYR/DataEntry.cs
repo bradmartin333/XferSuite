@@ -25,6 +25,7 @@ namespace XferSuite.Apps.SEYR
         public Feature Feature { get => ParseSEYR.Project.Features.Where(x => x.Name == FeatureName).First(); }
         public float Score { get; set; }
         public bool State { get; set; }
+        public Form Form { get; set; } = null;
         public string ImageData { get; set; }
         public Bitmap Image
         {
@@ -85,7 +86,7 @@ namespace XferSuite.Apps.SEYR
             return output.ToArray();
         }
 
-        public string Location() => $"#{ImageNumber} ({X}, {Y}) ({RR}, {RC}, {R}, {C}, {SR}, {SC}, {TR}, {TC})";
+        public string Location() => $"RR {RR}, RC {RC}, R {R}, C {C}, SR {SR}, SC {SC}, TR {TR}, TC {TC}";
 
         public override string ToString() => $"({FeatureName} {Score})";
 
@@ -101,14 +102,15 @@ namespace XferSuite.Apps.SEYR
 
         public void ShowImage()
         {
-            Form form = new Form()
+            if (Form != null) Form.Close();
+            Form = new Form()
             {
                 FormBorderStyle = FormBorderStyle.SizableToolWindow,
                 Text = Location(),
                 BackgroundImageLayout = ImageLayout.Zoom,
                 BackgroundImage = Image,
             };
-            form.Show();
+            Form.Show();
         }
     }
 }
