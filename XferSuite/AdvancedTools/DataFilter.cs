@@ -15,7 +15,7 @@ namespace XferSuite.AdvancedTools
             public List<string> Args;
         }
 
-        enum Commands { COLS, COUNT, COUNTEX, DELETE, REPLACE, REPLACEEX }
+        enum Commands { COLS, COUNT, COUNTEX, DELETE, DELETEEX, REPLACE, REPLACEEX }
         enum Delimeter { Tab, Space, Comma }
         private char Delim { 
             get
@@ -118,6 +118,11 @@ namespace XferSuite.AdvancedTools
                         PrintCount(cp.Args.ToArray(), cp.Command == Commands.COUNTEX);
                     break;
                 case Commands.DELETE:
+                case Commands.DELETEEX:
+                    if (cp.Args.Count > 3 || (cp.Args.Count == 3 && cp.Args[1] != "IN") || cp.Args.Count == 2)
+                        RTB.Text += "Invalid delete command\n";
+                    else
+                        PrintDelete(cp.Args.ToArray(), cp.Command == Commands.DELETEEX);
                     break;
                 case Commands.REPLACE:
                 case Commands.REPLACEEX:
@@ -128,6 +133,39 @@ namespace XferSuite.AdvancedTools
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void PrintDelete(string[] vals, bool exact)
+        {
+            try
+            {
+                List<string[]> newData = new List<string[]>();
+                if (vals.Length == 1)
+                {
+                    foreach (string[] row in Data)
+                        if (!row.Where(x => exact ? x == vals[0] : x.Contains(vals[0])).Any()) newData.Add(row);
+                }
+                else
+                {
+                    int colNum = int.Parse(vals[2]);
+                    foreach (string[] row in Data)
+                    {
+                        bool match = false;
+                        if (row.Length - 1 < colNum) continue;
+                        if (exact)
+                            match = row[colNum] == vals[0];
+                        else
+                            match = row[colNum].Contains(vals[0]);
+                        if (!match) newData.Add(row);
+                    }
+                }
+                RTB.Text += $"{(exact ? "Exact d" : "D")}eleted {Data.Count - newData.Count} rows\n";
+                Data = newData;
+            }
+            catch (Exception ex)
+            {
+                RTB.Text += $"Invalid delete command {ex}\n";
             }
         }
 
