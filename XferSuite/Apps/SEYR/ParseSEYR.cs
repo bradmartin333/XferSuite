@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -12,6 +13,11 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class ParseSEYR : Form
     {
+        public enum Delimeter { Tab, Comma, Space }
+        private Delimeter _CycleFileDelimeter = Delimeter.Tab;
+        [Category("User Parameters")]
+        public Delimeter CycleFileDelimeter { get => _CycleFileDelimeter; set => _CycleFileDelimeter = value; }
+
         private readonly bool ForceClose;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
@@ -249,6 +255,7 @@ namespace XferSuite.Apps.SEYR
 
             RegionBrowser rb = new RegionBrowser(Data, Sheets, MakeLegendStr());
             LegendView lv = new LegendView(MakeLegend(), rb);
+            BtnExportCycleFile.Enabled = true;
         }
 
         private bool MakeSheets()
@@ -348,10 +355,34 @@ namespace XferSuite.Apps.SEYR
         private void BtnExportCycleFile_Click(object sender, EventArgs e)
         {
             Form form = new Form() { Text = "Cycle File" };
-            RichTextBox rtb = new RichTextBox() { Dock = DockStyle.Fill };
+            RichTextBox rtb = new RichTextBox() { 
+                Dock = DockStyle.Fill,
+                Text = MakeCycleFileHeader(),
+            };
             form.Controls.Add(rtb);
-            rtb.Text = "Coming soon";
+            int idx = 0;
+            foreach (DataSheet sheet in Sheets)
+                rtb.Text += sheet.CreateCycleFile(ref idx, _CycleFileDelimeter);
             form.Show();
+        }
+
+        private string MakeCycleFileHeader()
+        {
+            string output = "UniqueID, Pick.WaferID, Pick.RegionRow, Pick.RegionColumn, Pick.Row, Pick.Column, Pick.Index, Place.WaferID, Place.RegionRow, Place.RegionColumn, Place.Row, Place.Column\n";
+            switch (_CycleFileDelimeter)
+            {
+                case Delimeter.Tab:
+                    output = output.Replace(", ", "\t");
+                    break;
+                case Delimeter.Comma:
+                    break;
+                case Delimeter.Space:
+                    output = output.Replace(", ", " ");
+                    break;
+                default:
+                    break;
+            }
+            return output;
         }
 
         #region Save Session

@@ -77,6 +77,47 @@ namespace XferSuite.Apps.SEYR
             return sb.ToString();
         }
 
+        public string CreateCycleFile(ref int idx, ParseSEYR.Delimeter delimeter)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < DataSize.Width; i++)
+            {
+                for (int j = 0; j < DataSize.Height; j++)
+                {
+                    var criterion = Criteria.Where(x => x.Item1.Sum() == Data[i, j]);
+                    bool pass = false;
+                    if (criterion.Any()) pass = criterion.First().Item2;
+                    if (!pass)
+                    {
+                        idx++;
+                        sb.AppendLine(CreateCycleFileEntry(delimeter, idx, GetLocation(ID, new Point(i, j))));
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
+        private string CreateCycleFileEntry(ParseSEYR.Delimeter delimeter, int idx, DataEntry d)
+        {
+            string output = $"{idx}, AB1234, 1, 1, 1, 1, {idx}, YZ9876, {d.RR}, {d.RC}, " +
+                            $"{(d.R - 1) * StampGrid.Width * ImageGrid.Width + (d.SR - 1) * StampGrid.Width + d.TR}, " +
+                            $"{(d.C - 1) * StampGrid.Height * ImageGrid.Height + (d.SC - 1) * StampGrid.Height + d.TC}";
+            switch (delimeter)
+            {
+                case ParseSEYR.Delimeter.Tab:
+                    output = output.Replace(", ", "\t");
+                    break;
+                case ParseSEYR.Delimeter.Comma:
+                    break;
+                case ParseSEYR.Delimeter.Space:
+                    output = output.Replace(", ", " ");
+                    break;
+                default:
+                    break;
+            }
+            return output;
+        }
+
         public DataEntry GetLocation(object ID, Point l)
         {
             (int, int) region = ((int, int))ID;

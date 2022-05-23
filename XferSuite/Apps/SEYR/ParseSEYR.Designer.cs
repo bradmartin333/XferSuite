@@ -116,6 +116,7 @@
             // 
             this.BtnExportCycleFile.BackColor = System.Drawing.Color.White;
             this.BtnExportCycleFile.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnExportCycleFile.Enabled = false;
             this.BtnExportCycleFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnExportCycleFile.Location = new System.Drawing.Point(152, 83);
             this.BtnExportCycleFile.Name = "BtnExportCycleFile";
