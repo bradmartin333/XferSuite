@@ -31,12 +31,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataFilter));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Flow1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.LblFile = new System.Windows.Forms.Label();
             this.BtnSelectFile = new System.Windows.Forms.Button();
+            this.LblFile = new System.Windows.Forms.Label();
             this.Flow2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.CbxHeaderRow = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.ComboDelimeter = new System.Windows.Forms.ComboBox();
-            this.CbxHeaderRow = new System.Windows.Forms.CheckBox();
             this.Flow3 = new System.Windows.Forms.FlowLayoutPanel();
             this.BtnLoadData = new System.Windows.Forms.Button();
             this.LblData = new System.Windows.Forms.Label();
@@ -83,17 +83,6 @@
             this.Flow1.Size = new System.Drawing.Size(172, 29);
             this.Flow1.TabIndex = 0;
             // 
-            // LblFile
-            // 
-            this.LblFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.LblFile.AutoSize = true;
-            this.LblFile.Location = new System.Drawing.Point(84, 8);
-            this.LblFile.Name = "LblFile";
-            this.LblFile.Size = new System.Drawing.Size(85, 13);
-            this.LblFile.TabIndex = 0;
-            this.LblFile.Text = "No File Selected";
-            this.LblFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // BtnSelectFile
             // 
             this.BtnSelectFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -105,6 +94,18 @@
             this.BtnSelectFile.TabIndex = 1;
             this.BtnSelectFile.Text = "Select File";
             this.BtnSelectFile.UseVisualStyleBackColor = false;
+            this.BtnSelectFile.Click += new System.EventHandler(this.BtnSelectFile_Click);
+            // 
+            // LblFile
+            // 
+            this.LblFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.LblFile.AutoSize = true;
+            this.LblFile.Location = new System.Drawing.Point(84, 8);
+            this.LblFile.Name = "LblFile";
+            this.LblFile.Size = new System.Drawing.Size(85, 13);
+            this.LblFile.TabIndex = 0;
+            this.LblFile.Text = "No File Selected";
+            this.LblFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Flow2
             // 
@@ -113,11 +114,24 @@
             this.Flow2.Controls.Add(this.CbxHeaderRow);
             this.Flow2.Controls.Add(this.label2);
             this.Flow2.Controls.Add(this.ComboDelimeter);
-            this.Flow2.Enabled = false;
             this.Flow2.Location = new System.Drawing.Point(98, 38);
             this.Flow2.Name = "Flow2";
             this.Flow2.Size = new System.Drawing.Size(325, 27);
             this.Flow2.TabIndex = 1;
+            // 
+            // CbxHeaderRow
+            // 
+            this.CbxHeaderRow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.CbxHeaderRow.AutoSize = true;
+            this.CbxHeaderRow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CbxHeaderRow.Location = new System.Drawing.Point(3, 5);
+            this.CbxHeaderRow.Name = "CbxHeaderRow";
+            this.CbxHeaderRow.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
+            this.CbxHeaderRow.Size = new System.Drawing.Size(135, 17);
+            this.CbxHeaderRow.TabIndex = 2;
+            this.CbxHeaderRow.Text = "Has Header Row";
+            this.CbxHeaderRow.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.CbxHeaderRow.UseVisualStyleBackColor = false;
             // 
             // label2
             // 
@@ -138,27 +152,12 @@
             this.ComboDelimeter.Size = new System.Drawing.Size(121, 21);
             this.ComboDelimeter.TabIndex = 1;
             // 
-            // CbxHeaderRow
-            // 
-            this.CbxHeaderRow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.CbxHeaderRow.AutoSize = true;
-            this.CbxHeaderRow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CbxHeaderRow.Location = new System.Drawing.Point(3, 5);
-            this.CbxHeaderRow.Name = "CbxHeaderRow";
-            this.CbxHeaderRow.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
-            this.CbxHeaderRow.Size = new System.Drawing.Size(135, 17);
-            this.CbxHeaderRow.TabIndex = 2;
-            this.CbxHeaderRow.Text = "Has Header Row";
-            this.CbxHeaderRow.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.CbxHeaderRow.UseVisualStyleBackColor = false;
-            // 
             // Flow3
             // 
             this.Flow3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.Flow3.AutoSize = true;
             this.Flow3.Controls.Add(this.BtnLoadData);
             this.Flow3.Controls.Add(this.LblData);
-            this.Flow3.Enabled = false;
             this.Flow3.Location = new System.Drawing.Point(174, 71);
             this.Flow3.Name = "Flow3";
             this.Flow3.Size = new System.Drawing.Size(173, 29);
@@ -175,6 +174,7 @@
             this.BtnLoadData.TabIndex = 0;
             this.BtnLoadData.Text = "Load Data";
             this.BtnLoadData.UseVisualStyleBackColor = false;
+            this.BtnLoadData.Click += new System.EventHandler(this.BtnLoadData_Click);
             // 
             // LblData
             // 
@@ -193,7 +193,6 @@
             this.Flow4.AutoSize = true;
             this.Flow4.Controls.Add(this.BtnCopy);
             this.Flow4.Controls.Add(this.BtnSave);
-            this.Flow4.Enabled = false;
             this.Flow4.Location = new System.Drawing.Point(179, 213);
             this.Flow4.Name = "Flow4";
             this.Flow4.Size = new System.Drawing.Size(162, 29);
@@ -226,7 +225,6 @@
             // RTB
             // 
             this.RTB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RTB.Enabled = false;
             this.RTB.Location = new System.Drawing.Point(3, 106);
             this.RTB.Name = "RTB";
             this.RTB.Size = new System.Drawing.Size(515, 101);
