@@ -112,6 +112,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedTools\DataFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedTools\DataFilter.Designer.cs">
+      <DependentUpon>DataFilter.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdvancedTools\SelectTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -239,6 +245,9 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AdvancedTools\DataFilter.resx">
+      <DependentUpon>DataFilter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AdvancedTools\SelectTool.resx">
       <DependentUpon>SelectTool.cs</DependentUpon>
     </EmbeddedResource>
