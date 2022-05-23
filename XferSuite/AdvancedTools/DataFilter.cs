@@ -126,7 +126,7 @@ namespace XferSuite.AdvancedTools
                     break;
                 case Commands.REPLACE:
                 case Commands.REPLACEEX:
-                    if ((cp.Args.Count == 4 && cp.Args[2] != "IN") || cp.Args.Count > 4)
+                    if (cp.Args.Count < 2 || (cp.Args.Count == 4 && cp.Args[2] != "IN") || cp.Args.Count > 4)
                         RTB.Text += "Invalid replace command\n";
                     else
                         PrintReplace(cp.Args.ToArray(), cp.Command == Commands.COUNTEX);
@@ -224,6 +224,9 @@ namespace XferSuite.AdvancedTools
         {
             try
             {
+                string rep = string.Empty;
+                if (vals[1] != "NULL") rep = vals[1];
+
                 int num = 0;
                 if (vals.Length == 2)
                 {
@@ -235,7 +238,7 @@ namespace XferSuite.AdvancedTools
                             {
                                 if (row[i] == vals[0])
                                 {
-                                    row[i] = vals[1];
+                                    row[i] = rep;
                                     num++;
                                 }
                             }
@@ -243,7 +246,7 @@ namespace XferSuite.AdvancedTools
                             {
                                 if (row[i].Contains(vals[0]))
                                 {
-                                    row[i] = row[i].Replace(vals[0], vals[1]);
+                                    row[i] = row[i].Replace(vals[0], rep);
                                     num++;
                                 }
                             }
@@ -261,7 +264,7 @@ namespace XferSuite.AdvancedTools
                         {
                             if (row[colNum] == vals[0])
                             {
-                                row[colNum] = vals[1];
+                                row[colNum] = rep;
                                 num++;
                             }
                         }
@@ -269,7 +272,7 @@ namespace XferSuite.AdvancedTools
                         {
                             if (row[colNum].Contains(vals[0]))
                             {
-                                row[colNum] = row[colNum].Replace(vals[0], vals[1]);
+                                row[colNum] = row[colNum].Replace(vals[0], rep);
                                 num++;
                             }
                         }
@@ -310,6 +313,7 @@ namespace XferSuite.AdvancedTools
         {
             if (FileInfo == null || !FileInfo.Exists) return;
 
+            Header = null;
             Data = new List<string[]>();
             NumberColumn = new List<bool>();
 
