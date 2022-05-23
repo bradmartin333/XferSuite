@@ -52,13 +52,11 @@ namespace XferSuite.Apps.SEYR
                         TLP.RowStyles.Add(new RowStyle(SizeType.Percent, hgt));
                         TLP.Controls.Add(TLPLabel((j + 1).ToString()), 1, TLP.RowCount - 2 - (j * 2) - 1);
                     }
-                    PictureBox pictureBox = new PictureBox()
-                    {
-                        Dock = DockStyle.Fill,
-                        BackgroundImageLayout = ImageLayout.Zoom,
-                    };
+                    
                     DataSheet[] sheets = Sheets.Where(s => s.ID == (ArraySize.Width - j, i + 1)).ToArray();
-                    var bmpInfo = sheets.First().GetBitmap(showPF);
+                    DataSheet sheet = sheets.First();
+                    var bmpInfo = sheet.GetBitmap(showPF);
+                    PictureBox pictureBox = TLPPictureBox(sheet.ID);
                     if (sheets.Any()) pictureBox.BackgroundImage = bmpInfo.Item1;
                     if (showPF) TLP.Controls.Add(TLPLabel(bmpInfo.Item2), i + 2, j * 2);
                     TLP.Controls.Add(pictureBox, i + 2, j * 2 + 1);
@@ -91,10 +89,74 @@ namespace XferSuite.Apps.SEYR
             };
         }
 
+        private PictureBox TLPPictureBox((int, int) ID)
+        {
+            PictureBox pictureBox = new PictureBox()
+            {
+                Dock = DockStyle.Fill,
+                BackgroundImageLayout = ImageLayout.Zoom,
+                Tag = ID,
+            };
+            pictureBox.MouseUp += PictureBox_MouseUp;
+            return pictureBox;
+        }
+
+        private void PictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    break;
+                case MouseButtons.None:
+                    break;
+                case MouseButtons.Right:
+                    ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
+                    ContextMenuStrip.Show(((PictureBox)sender).PointToScreen(e.Location));
+                    break;
+                case MouseButtons.Middle:
+                    break;
+                case MouseButtons.XButton1:
+                    break;
+                case MouseButtons.XButton2:
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public void TogglePF(bool showPF)
         {
             Controls.Remove(TLP);
             SetupTLP(showPF);
         }
+
+        #region Context Menu
+
+        private void ToolStripMenuItemSave_Click(object sender, System.EventArgs e)
+        {
+            MessageBox.Show(ContextMenuStrip.Tag.ToString());
+        }
+
+        private void ToolStripMenuItemFlipHoriz_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void ToolStripMenuItemFlipVert_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void ToolStripMenuItemRotate_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void ToolStripMenuItemExportExcel_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        #endregion
     }
 }
