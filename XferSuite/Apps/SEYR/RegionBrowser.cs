@@ -35,15 +35,22 @@ namespace XferSuite.Apps.SEYR
 
             TLP.ColumnStyles.Clear();
             TLP.RowStyles.Clear();
-            TLP.ColumnCount = ArraySize.Height;
-            TLP.RowCount = ArraySize.Width;
+            TLP.ColumnCount = ArraySize.Height + 2;
+            TLP.RowCount = ArraySize.Width + 2;
+
+            TLP.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            TLP.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
             for (int i = 0; i < ArraySize.Height; i++)
             {
                 TLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, wid));
                 for (int j = 0; j < ArraySize.Width; j++)
                 {
-                    if (i == 0) TLP.RowStyles.Add(new RowStyle(SizeType.Percent, hgt));
+                    if (i == 0)
+                    {
+                        TLP.RowStyles.Add(new RowStyle(SizeType.Percent, hgt));
+                        TLP.Controls.Add(TLPLabel((j + 1).ToString()), 1, ArraySize.Width - j - 1);
+                    }
                     PictureBox pictureBox = new PictureBox()
                     {
                         Dock = DockStyle.Fill,
@@ -51,9 +58,34 @@ namespace XferSuite.Apps.SEYR
                     };
                     DataSheet[] sheets = Sheets.Where(s => s.ID == (ArraySize.Width - j, i + 1)).ToArray();
                     if (sheets.Any()) pictureBox.BackgroundImage = sheets.First().GetTestBitmap();
-                    TLP.Controls.Add(pictureBox, i, j);
+                    TLP.Controls.Add(pictureBox, i + 2, j);
                 }
             }
+
+            TLP.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            TLP.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+            for (int i = 1; i < ArraySize.Height + 1; i++)
+                TLP.Controls.Add(TLPLabel(i.ToString()), i + 1, ArraySize.Width + 1);
+
+            Label RRlabel = TLPLabel("RR");
+            TLP.Controls.Add(RRlabel, 0, 0);
+            TLP.SetRowSpan(RRlabel, ArraySize.Width);
+
+            Label RClabel = TLPLabel("RC");
+            TLP.Controls.Add(RClabel, 2, ArraySize.Width + 2);
+            TLP.SetColumnSpan(RClabel, ArraySize.Height);
+        }
+
+        private Label TLPLabel(string txt)
+        {
+            return new Label()
+            {
+                Text = txt,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+                AutoSize = true,
+            };
         }
     }
 }
