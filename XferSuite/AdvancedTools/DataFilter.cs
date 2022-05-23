@@ -14,7 +14,7 @@ namespace XferSuite.AdvancedTools
             public List<string> Args;
         }
 
-        enum Commands { COLS, COUNT, DELETE, REPLACE }
+        enum Commands { COLS, COUNT, COUNTEX, DELETE, REPLACE }
         enum Delimeter { Tab, Space, Comma }
         private char Delim { 
             get
@@ -56,6 +56,12 @@ namespace XferSuite.AdvancedTools
                 RTB.Text = "No data loaded";
                 return;
             }              
+
+            if (RTB.Text.Contains("Invalid"))
+            {
+                RTB.Text = "";
+                return;
+            }
             
             string[] commands = Enum.GetNames(typeof(Commands));
             string[] cols = RTB.Text.TrimEnd('\n').Split(' ');
@@ -90,6 +96,11 @@ namespace XferSuite.AdvancedTools
                     PrintCols();
                     break;
                 case Commands.COUNT:
+                case Commands.COUNTEX:
+                    if (cp.Args.Count > 3 || (cp.Args.Count == 3 && cp.Args[1] != "IN") || cp.Args.Count == 2)
+                        RTB.Text += "Invalid count command\n";
+                    else
+                        PrintCount(cp.Args.ToArray(), cp.Command == Commands.COUNTEX);
                     break;
                 case Commands.DELETE:
                     break;
@@ -104,9 +115,44 @@ namespace XferSuite.AdvancedTools
         {
             if (!string.IsNullOrEmpty(Header))
                 RTB.Text = Header + "\n";
-            RTB.Text += "NUMCOL: ";
+            RTB.Text += "ColIdx: ";
+            for (int i = 0; i < NumberColumn.Count; i++)
+                RTB.Text += $"{i}{Delim}";
+            RTB.Text += "\nNumCol: ";
             foreach (bool item in NumberColumn)
                 RTB.Text += $"{item}{Delim}";
+            RTB.Text += "\n";
+        }
+
+        private void PrintCount(string[] vals, bool exact)
+        {
+            try
+            {
+                int num = 0;
+                if (vals.Length == 1)
+                {
+                    foreach (string[] row in Data)
+                        num += row.Where(x => exact ? x == vals[0] : x.Contains(vals[0])).Count();
+                    RTB.Text += $"{(exact ? "Exact c" : "C")} of {vals[0]} = {num}\n";
+                }
+                else
+                {
+                    int colNum = int.Parse(vals[2]);
+                    foreach (string[] row in Data)
+                    {
+                        if (row.Length - 1 < colNum) continue;
+                        if (exact)
+                            num += row[colNum] == vals[0] ? 1 : 0;
+                        else
+                            num += row[colNum].Contains(vals[0]) ? 1 : 0;
+                    }
+                    RTB.Text += $"{(exact ? "Exact c" : "C")}ount of {vals[0]} in {vals[2]} = {num}\n";
+                }
+            }
+            catch (Exception ex)
+            {
+                RTB.Text += $"Invalid count command {ex}\n";
+            }
         }
 
         private void BtnSelectFile_Click(object sender, EventArgs e)
@@ -149,7 +195,7 @@ namespace XferSuite.AdvancedTools
                 NumberColumn.Add(float.TryParse(col, out _));
 
             for (int i = idx; i < lines.Length; i++)
-                Data.Add(lines[i].Split(Delim));
+                if (!string.IsNullOrEmpty(lines[i])) Data.Add(lines[i].Split(Delim));
 
             LblData.Text = $"{Data.Count} Rows Loaded";
         }

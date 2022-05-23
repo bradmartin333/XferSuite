@@ -69,7 +69,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(521, 245);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(521, 230);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // Flow1
@@ -123,6 +123,8 @@
             // 
             this.CbxHeaderRow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.CbxHeaderRow.AutoSize = true;
+            this.CbxHeaderRow.Checked = true;
+            this.CbxHeaderRow.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CbxHeaderRow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CbxHeaderRow.Location = new System.Drawing.Point(3, 5);
             this.CbxHeaderRow.Name = "CbxHeaderRow";
@@ -193,7 +195,7 @@
             this.Flow4.AutoSize = true;
             this.Flow4.Controls.Add(this.BtnCopy);
             this.Flow4.Controls.Add(this.BtnSave);
-            this.Flow4.Location = new System.Drawing.Point(179, 213);
+            this.Flow4.Location = new System.Drawing.Point(179, 198);
             this.Flow4.Name = "Flow4";
             this.Flow4.Size = new System.Drawing.Size(162, 29);
             this.Flow4.TabIndex = 4;
@@ -227,7 +229,7 @@
             this.RTB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RTB.Location = new System.Drawing.Point(3, 106);
             this.RTB.Name = "RTB";
-            this.RTB.Size = new System.Drawing.Size(515, 101);
+            this.RTB.Size = new System.Drawing.Size(515, 86);
             this.RTB.TabIndex = 5;
             this.RTB.Text = "";
             // 
@@ -235,7 +237,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(521, 245);
+            this.ClientSize = new System.Drawing.Size(521, 230);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DataFilter";
