@@ -128,11 +128,7 @@ namespace XferSuite.Apps.SEYR
                     ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
                     DataEntry data = GetActiveSheet().GetLocation(ContextMenuStrip.Tag, ZoomMousePos(e.Location));
                     DataEntry[] matches = Data.Where(x => x.ImageMatch(data)).Where(x => x.Image != null).ToArray();
-                    if (matches.Any())
-                    {
-                        DataEntry match = matches[0];
-                        if (match.Image != null) match.ShowImage();
-                    }
+                    if (matches.Any()) matches[0].ShowImage();
                     break;
                 case MouseButtons.Right:
                     ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
