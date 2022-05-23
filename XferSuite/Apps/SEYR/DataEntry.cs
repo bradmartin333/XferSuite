@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace XferSuite.Apps.SEYR
 {
@@ -91,6 +92,23 @@ namespace XferSuite.Apps.SEYR
         public bool HasValidPosition()
         {
             return X != 0 && Y != 0 && RR != 0 && RC != 0 && R != 0 && C != 0 && TR != 0 && TC != 0;
+        }
+
+        public bool ImageMatch(DataEntry d)
+        {
+            return d.RR == RR && d.RC == RC && d.R == R && d.C == C && d.SR == SR && d.SC == SC && d.TR == TR && d.TC == TC;
+        }
+
+        public void ShowImage()
+        {
+            Form form = new Form()
+            {
+                FormBorderStyle = FormBorderStyle.SizableToolWindow,
+                Text = Location(),
+                BackgroundImageLayout = ImageLayout.Zoom,
+                BackgroundImage = Image,
+            };
+            form.Show();
         }
     }
 }

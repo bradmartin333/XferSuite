@@ -8,15 +8,17 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class RegionBrowser : Form
     {
+        private readonly List<DataEntry> Data;
         private readonly List<DataSheet> Sheets;
         private readonly string LegendStr;
         private Size ArraySize;
         private TableLayoutPanel TLP;
         private List<PictureBox> PictureBoxes;
 
-        public RegionBrowser(List<DataSheet> sheets, string legendStr)
+        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, string legendStr)
         {
             InitializeComponent();
+            Data = data;
             Sheets = sheets;
             LegendStr = legendStr;
             SetupTLP();
@@ -110,36 +112,36 @@ namespace XferSuite.Apps.SEYR
             return pictureBox;
         }
 
-        private void PictureBox_MouseUp(object sender, MouseEventArgs e)
-        {
-            switch (e.Button)
-            {
-                case MouseButtons.Left:
-                    break;
-                case MouseButtons.None:
-                    break;
-                case MouseButtons.Right:
-                    ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
-                    ContextMenuStrip.Show(((PictureBox)sender).PointToScreen(e.Location));
-                    break;
-                case MouseButtons.Middle:
-                    break;
-                case MouseButtons.XButton1:
-                    break;
-                case MouseButtons.XButton2:
-                    break;
-                default:
-                    break;
-            }
-        }
-
         public void TogglePF(bool showPF)
         {
             Controls.Remove(TLP);
             SetupTLP(showPF);
         }
 
-        #region Context Menu
+        #region PictureBox Methods
+
+        private void PictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
+                    DataEntry data = GetActiveSheet().GetLocation(ContextMenuStrip.Tag, ZoomMousePos(e.Location));
+                    DataEntry[] matches = Data.Where(x => x.ImageMatch(data)).Where(x => x.Image != null).ToArray();
+                    if (matches.Any())
+                    {
+                        DataEntry match = matches[0];
+                        if (match.Image != null) match.ShowImage();
+                    }
+                    break;
+                case MouseButtons.Right:
+                    ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
+                    ContextMenuStrip.Show(((PictureBox)sender).PointToScreen(e.Location));
+                    break;
+                default:
+                    break;
+            }
+        }
 
         private void CopyEntireWindowToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -178,6 +180,48 @@ namespace XferSuite.Apps.SEYR
         private DataSheet GetActiveSheet()
         {
             return Sheets.Where(x => x.ID == ((int, int))ContextMenuStrip.Tag).First();
+        }
+
+        /// <summary>
+        /// Method for adjusting mouse pos to pictureBox set to Zoom
+        /// </summary>
+        /// <param name="click">
+        /// Mouse coordinates
+        /// </param>
+        /// <returns>
+        /// Pixel coordinates at that point
+        /// </returns>
+        private Point ZoomMousePos(Point click)
+        {
+            Size pbxSize = GetActivePictureBox().Size;
+            Bitmap image = GetActiveBitmap();
+            Size imgSize = image.Size;
+            float imageAspect = imgSize.Width / (float)imgSize.Height;
+            float controlAspect = pbxSize.Width / (float)pbxSize.Height;
+            PointF pos = new PointF(click.X, click.Y);
+            if (imageAspect > controlAspect)
+            {
+                float ratioWidth = imgSize.Width / (float)pbxSize.Width;
+                pos.X *= ratioWidth;
+                float scale = pbxSize.Width / (float)imgSize.Width;
+                float displayHeight = scale * imgSize.Height;
+                float diffHeight = pbxSize.Height - displayHeight;
+                diffHeight /= 2;
+                pos.Y -= diffHeight;
+                pos.Y /= scale;
+            }
+            else
+            {
+                float ratioHeight = imgSize.Height / (float)pbxSize.Height;
+                pos.Y *= ratioHeight;
+                float scale = pbxSize.Height / (float)imgSize.Height;
+                float displayWidth = scale * imgSize.Width;
+                float diffWidth = pbxSize.Width - displayWidth;
+                diffWidth /= 2;
+                pos.X -= diffWidth;
+                pos.X /= scale;
+            }
+            return new Point((int)pos.X, (int)pos.Y);
         }
 
         #endregion

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace XferSuite.Apps.SEYR
 {
@@ -75,6 +75,21 @@ namespace XferSuite.Apps.SEYR
                 sb.AppendLine();
             }
             return sb.ToString();
+        }
+
+        public DataEntry GetLocation(object ID, Point l)
+        {
+            (int, int) region = ((int, int))ID;
+
+            int C = l.X / (StampGrid.Height * ImageGrid.Height);
+            int SC = (l.X - (C * StampGrid.Height * ImageGrid.Height)) / ImageGrid.Height;
+            int TC = l.X - (C * StampGrid.Height * ImageGrid.Height) - (SC * ImageGrid.Height);
+
+            int R = l.Y / (StampGrid.Width * ImageGrid.Width);
+            int SR = (l.Y - (R * StampGrid.Width * ImageGrid.Width)) / ImageGrid.Width;
+            int TR = l.Y - (R * StampGrid.Width * ImageGrid.Width) - (SR * ImageGrid.Width);
+
+            return new DataEntry($"0\t0\t0\t{region.Item1}\t{region.Item2}\t{R + 1}\t{C + 1}\t{SR + 1}\t{SC + 1}\t{TR + 1}\t{TC + 1}\t\t0\tFalse\t");
         }
     }
 }

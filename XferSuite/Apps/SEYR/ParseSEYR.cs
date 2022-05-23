@@ -247,7 +247,7 @@ namespace XferSuite.Apps.SEYR
                 }
             }
 
-            RegionBrowser rb = new RegionBrowser(Sheets, MakeLegendStr());
+            RegionBrowser rb = new RegionBrowser(Data, Sheets, MakeLegendStr());
             LegendView lv = new LegendView(MakeLegend(), rb);
         }
 
@@ -401,33 +401,5 @@ namespace XferSuite.Apps.SEYR
         }
 
         #endregion
-
-        //private void UpdateStageLabels()
-        //{
-        //    if (Data.Count == 0) return;
-
-        //    int x = (int)NumPixelX.Value;
-        //    int C = x / (StampGrid.Height * ImageGrid.Height);
-        //    int SC = (x - (C * StampGrid.Height * ImageGrid.Height)) / ImageGrid.Height;
-        //    int TC = x - (C * StampGrid.Height * ImageGrid.Height) - (SC * ImageGrid.Height);
-
-        //    int y = (int)NumPixelY.Value;
-        //    int R = y / (StampGrid.Width * ImageGrid.Width);
-        //    int SR = (y - (R * StampGrid.Width * ImageGrid.Width)) / ImageGrid.Width;
-        //    int TR = y - (R * StampGrid.Width * ImageGrid.Width) - (SR * ImageGrid.Width);
-
-        //    DataEntry[] dataEntries = Data.Where(d => d.R == R + 1 && d.C == C + 1 && d.SR == SR + 1 && d.SC == SC + 1 && d.TR == TR + 1 && d.TC == TC + 1).ToArray();
-        //    if (dataEntries.Any())
-        //    {
-        //        DataEntry data = dataEntries[0]; 
-        //        LblStageX.Text = data.X.ToString();
-        //        LblStageY.Text = data.Y.ToString();
-        //    }
-        //    else
-        //    {
-        //        LblStageX.Text = "N/A";
-        //        LblStageY.Text = "N/A";
-        //    }
-        //}
     }
 }
