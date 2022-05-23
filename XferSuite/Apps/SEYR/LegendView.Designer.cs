@@ -40,7 +40,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LegendView";
-            this.Text = "Legend View";
+            this.Text = "Legend";
             this.ResumeLayout(false);
 
         }

@@ -195,7 +195,8 @@ namespace XferSuite.Apps.SEYR
             }
 
             criteriaVals = criteriaVals.Distinct().ToList();
-            foreach (var valCombo in Combinations(criteriaVals))
+            var combos = Combinations(criteriaVals);
+            foreach (var valCombo in combos)
             {
                 int sum = valCombo.Sum();
                 if (valCombo.Length > 0) Criteria.Add((valCombo, passingVals.Contains(sum), Pallete.GetColor(Criteria.Count)));
@@ -277,12 +278,13 @@ namespace XferSuite.Apps.SEYR
 
         private Bitmap MakeLegend()
         {
+            var criteria = GetUsedCriteria();
             Font font = new Font("Segoe", 16);
             SizeF strSize = SizeF.Empty;
             Bitmap bmp = new Bitmap(1, 1);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                foreach (var criterion in Criteria)
+                foreach (var criterion in criteria)
                 {
                     string critStr = GetCriterionString(criterion);
                     SizeF critSize = g.MeasureString(critStr, font);
@@ -290,25 +292,44 @@ namespace XferSuite.Apps.SEYR
                 }
             }
             strSize = new SizeF(strSize.Width, strSize.Height * 0.9f);
-            bmp = new Bitmap((int)(strSize.Height * (Criteria.Count + 2)), (int)strSize.Width);
+            bmp = new Bitmap((int)strSize.Width, (int)(strSize.Height * criteria.Count));
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                for (int i = 0; i < Criteria.Count; i++)
+                for (int i = 0; i < criteria.Count; i++)
                 {
-                    Color c = Criteria[i].Item3;
+                    Color c = criteria[i].Item3;
                     g.FillRectangle(new SolidBrush(c), 0, i * strSize.Height, strSize.Width, strSize.Height);
                     SolidBrush contrastBrush = new SolidBrush((((0.299 * c.R) + (0.587 * c.G) + (0.114 * c.B)) / 255) > 0.5 ? Color.Black : Color.White);
-                    g.DrawString(GetCriterionString(Criteria[i]), font, contrastBrush, new PointF(0, i * strSize.Height));
+                    g.DrawString(GetCriterionString(criteria[i]), font, contrastBrush, new PointF(0, i * strSize.Height));
                 }
             }
             return bmp;
+        }
+
+        private List<(int[], bool, Color)> GetUsedCriteria()
+        {
+            List<(int[], bool, Color)> criteria = new List<(int[], bool, Color)>();
+            foreach (var criterion in Criteria)
+            {
+                bool valid = true;
+                foreach (int val in criterion.Item1)
+                {
+                    if (Project.Features[(int)(Math.Sqrt(val) - 1)].Ignore)
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (valid) criteria.Add(criterion);
+            }
+            return criteria;
         }
 
         private string GetCriterionString((int[], bool, Color) criterion)
         {
             string output = string.Empty;
             foreach (int val in criterion.Item1)
-                output += Project.Features[(int)Math.Sqrt(val / 2)].Name + "-";
+                output += Project.Features[(int)(Math.Sqrt(val) - 1)].Name + "-";
             return output.Substring(0, output.Length - 1);
         }
 
