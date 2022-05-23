@@ -72,7 +72,7 @@ namespace XferSuite.AdvancedTools
             }
 
             string[] commands = Enum.GetNames(typeof(Commands));
-            string msg = RTB.Text.TrimEnd('\n');
+            string msg = RTB.Text.Replace("\n", "");
             string[] cols = msg.Split(' ');
             
             List<CommandProcessor> commandProcessors = new List<CommandProcessor>();
@@ -285,6 +285,8 @@ namespace XferSuite.AdvancedTools
 
         #endregion
 
+        #region Input and Output
+
         private void BtnSelectFile_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -295,7 +297,7 @@ namespace XferSuite.AdvancedTools
                 {
                     FileInfo = new FileInfo(openFileDialog.FileName);
                     InitFile();
-                }    
+                }
             }
         }
 
@@ -354,5 +356,7 @@ namespace XferSuite.AdvancedTools
                     File.WriteAllText(saveFileDialog.FileName, StringifyData());
             }
         }
+
+        #endregion
     }
 }
