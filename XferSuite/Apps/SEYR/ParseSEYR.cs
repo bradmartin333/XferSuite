@@ -244,7 +244,7 @@ namespace XferSuite.Apps.SEYR
                 }
             }
 
-            RegionBrowser rb = new RegionBrowser(Sheets);
+            RegionBrowser rb = new RegionBrowser(Sheets, MakeLegendStr());
             LegendView lv = new LegendView(MakeLegend(), rb);
         }
 
@@ -274,6 +274,15 @@ namespace XferSuite.Apps.SEYR
                 Sheets.Add(new DataSheet(region, RegionGrid, StampGrid, ImageGrid, Criteria));
 
             return true;
+        }
+
+        private string MakeLegendStr()
+        {
+            var criteria = GetUsedCriteria();
+            string output = string.Empty;
+            foreach (var criterion in criteria)
+                output += $"{criterion.Item1.Sum()}\t{GetCriterionString(criterion)}\n";
+            return output;
         }
 
         private Bitmap MakeLegend()

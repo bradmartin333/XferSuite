@@ -9,14 +9,16 @@ namespace XferSuite.Apps.SEYR
     public partial class RegionBrowser : Form
     {
         private readonly List<DataSheet> Sheets;
+        private readonly string LegendStr;
         private Size ArraySize;
         private TableLayoutPanel TLP;
         private List<PictureBox> PictureBoxes;
 
-        public RegionBrowser(List<DataSheet> sheets)
+        public RegionBrowser(List<DataSheet> sheets, string legendStr)
         {
             InitializeComponent();
             Sheets = sheets;
+            LegendStr = legendStr;
             SetupTLP();
             Show();
         }
@@ -57,13 +59,16 @@ namespace XferSuite.Apps.SEYR
                     }
                     
                     DataSheet[] sheets = Sheets.Where(s => s.ID == (ArraySize.Width - j, i + 1)).ToArray();
-                    DataSheet sheet = sheets.First();
-                    var bmpInfo = sheet.GetBitmap(showPF);
-                    PictureBox pictureBox = TLPPictureBox(sheet.ID);
-                    PictureBoxes.Add(pictureBox);
-                    if (sheets.Any()) pictureBox.BackgroundImage = bmpInfo.Item1;
-                    if (showPF) TLP.Controls.Add(TLPLabel(bmpInfo.Item2), i + 2, j * 2);
-                    TLP.Controls.Add(pictureBox, i + 2, j * 2 + 1);
+                    if (sheets.Any())
+                    {
+                        DataSheet sheet = sheets.First();
+                        var bmpInfo = sheet.GetBitmap(showPF);
+                        PictureBox pictureBox = TLPPictureBox(sheet.ID);
+                        PictureBoxes.Add(pictureBox);
+                        pictureBox.BackgroundImage = bmpInfo.Item1;
+                        if (showPF) TLP.Controls.Add(TLPLabel(bmpInfo.Item2), i + 2, j * 2);
+                        TLP.Controls.Add(pictureBox, i + 2, j * 2 + 1);
+                    }  
                 }
             }
 
@@ -149,71 +154,15 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void FlipHorizApplyAllToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            foreach (PictureBox pictureBox in PictureBoxes)
-            {
-                Bitmap bmp = (Bitmap)pictureBox.BackgroundImage;
-                bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                pictureBox.BackgroundImage = bmp;
-                pictureBox.Refresh();
-            }
-        }
-
-        private void FlipVertApplyAllToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            foreach (PictureBox pictureBox in PictureBoxes)
-            {
-                Bitmap bmp = (Bitmap)pictureBox.BackgroundImage;
-                bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                pictureBox.BackgroundImage = bmp;
-                pictureBox.Refresh();
-            }
-        }
-
-        private void RotateApplyAllToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            foreach (PictureBox pictureBox in PictureBoxes)
-            {
-                Bitmap bmp = (Bitmap)pictureBox.BackgroundImage;
-                bmp.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                pictureBox.BackgroundImage = bmp;
-                pictureBox.Refresh();
-            }
-        }
-
         private void ToolStripMenuItemCopyImage_Click(object sender, System.EventArgs e)
         {
             Clipboard.SetImage(GetActiveBitmap());
         }
 
-        private void ToolStripMenuItemFlipHoriz_Click(object sender, System.EventArgs e)
+        private void ToolStripMenuCopyCSV_Click(object sender, System.EventArgs e)
         {
-            Bitmap bmp = GetActiveBitmap();
-            bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
-            GetActivePictureBox().BackgroundImage = bmp;
-            GetActivePictureBox().Refresh();
-        }
-
-        private void ToolStripMenuItemFlipVert_Click(object sender, System.EventArgs e)
-        {
-            Bitmap bmp = GetActiveBitmap();
-            bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-            GetActivePictureBox().BackgroundImage = bmp;
-            GetActivePictureBox().Refresh();
-        }
-
-        private void ToolStripMenuItemRotate_Click(object sender, System.EventArgs e)
-        {
-            Bitmap bmp = GetActiveBitmap();
-            bmp.RotateFlip(RotateFlipType.Rotate90FlipNone);
-            GetActivePictureBox().BackgroundImage = bmp;
-            GetActivePictureBox().Refresh();
-        }
-
-        private void ToolStripMenuItemExportExcel_Click(object sender, System.EventArgs e)
-        {
-
+            string data = GetActiveSheet().GetCSV();
+            Clipboard.SetText(data + LegendStr);
         }
 
         private Bitmap GetActiveBitmap()
@@ -224,6 +173,11 @@ namespace XferSuite.Apps.SEYR
         private PictureBox GetActivePictureBox()
         {
             return PictureBoxes.Where(x => x.Tag == ContextMenuStrip.Tag).First();
+        }
+
+        private DataSheet GetActiveSheet()
+        {
+            return Sheets.Where(x => x.ID == ((int, int))ContextMenuStrip.Tag).First();
         }
 
         #endregion

@@ -32,13 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegionBrowser));
             this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItemCopyImage = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemFlipHoriz = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemFlipVert = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemRotate = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemExportExcel = new System.Windows.Forms.ToolStripMenuItem();
-            this.FlipHorizApplyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.FlipVertApplyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RotateApplyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemCopyCSV = new System.Windows.Forms.ToolStripMenuItem();
             this.CopyEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -47,12 +41,9 @@
             // 
             this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItemCopyImage,
-            this.ToolStripMenuItemFlipHoriz,
-            this.ToolStripMenuItemFlipVert,
-            this.ToolStripMenuItemRotate,
-            this.ToolStripMenuItemExportExcel});
+            this.ToolStripMenuItemCopyCSV});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(181, 136);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(181, 70);
             // 
             // ToolStripMenuItemCopyImage
             // 
@@ -63,60 +54,12 @@
             this.ToolStripMenuItemCopyImage.Text = "Copy Image";
             this.ToolStripMenuItemCopyImage.Click += new System.EventHandler(this.ToolStripMenuItemCopyImage_Click);
             // 
-            // ToolStripMenuItemFlipHoriz
+            // ToolStripMenuItemCopyCSV
             // 
-            this.ToolStripMenuItemFlipHoriz.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FlipHorizApplyAllToolStripMenuItem});
-            this.ToolStripMenuItemFlipHoriz.Name = "ToolStripMenuItemFlipHoriz";
-            this.ToolStripMenuItemFlipHoriz.Size = new System.Drawing.Size(180, 22);
-            this.ToolStripMenuItemFlipHoriz.Text = "Flip Horizontally";
-            this.ToolStripMenuItemFlipHoriz.Click += new System.EventHandler(this.ToolStripMenuItemFlipHoriz_Click);
-            // 
-            // ToolStripMenuItemFlipVert
-            // 
-            this.ToolStripMenuItemFlipVert.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FlipVertApplyAllToolStripMenuItem});
-            this.ToolStripMenuItemFlipVert.Name = "ToolStripMenuItemFlipVert";
-            this.ToolStripMenuItemFlipVert.Size = new System.Drawing.Size(180, 22);
-            this.ToolStripMenuItemFlipVert.Text = "Flip Vertically";
-            this.ToolStripMenuItemFlipVert.Click += new System.EventHandler(this.ToolStripMenuItemFlipVert_Click);
-            // 
-            // ToolStripMenuItemRotate
-            // 
-            this.ToolStripMenuItemRotate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.RotateApplyAllToolStripMenuItem});
-            this.ToolStripMenuItemRotate.Name = "ToolStripMenuItemRotate";
-            this.ToolStripMenuItemRotate.Size = new System.Drawing.Size(180, 22);
-            this.ToolStripMenuItemRotate.Text = "Rotate 90 degrees";
-            this.ToolStripMenuItemRotate.Click += new System.EventHandler(this.ToolStripMenuItemRotate_Click);
-            // 
-            // ToolStripMenuItemExportExcel
-            // 
-            this.ToolStripMenuItemExportExcel.Name = "ToolStripMenuItemExportExcel";
-            this.ToolStripMenuItemExportExcel.Size = new System.Drawing.Size(180, 22);
-            this.ToolStripMenuItemExportExcel.Text = "Export to Excel";
-            this.ToolStripMenuItemExportExcel.Click += new System.EventHandler(this.ToolStripMenuItemExportExcel_Click);
-            // 
-            // FlipHorizApplyAllToolStripMenuItem
-            // 
-            this.FlipHorizApplyAllToolStripMenuItem.Name = "FlipHorizApplyAllToolStripMenuItem";
-            this.FlipHorizApplyAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.FlipHorizApplyAllToolStripMenuItem.Text = "Apply All";
-            this.FlipHorizApplyAllToolStripMenuItem.Click += new System.EventHandler(this.FlipHorizApplyAllToolStripMenuItem_Click);
-            // 
-            // FlipVertApplyAllToolStripMenuItem
-            // 
-            this.FlipVertApplyAllToolStripMenuItem.Name = "FlipVertApplyAllToolStripMenuItem";
-            this.FlipVertApplyAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.FlipVertApplyAllToolStripMenuItem.Text = "Apply All";
-            this.FlipVertApplyAllToolStripMenuItem.Click += new System.EventHandler(this.FlipVertApplyAllToolStripMenuItem_Click);
-            // 
-            // RotateApplyAllToolStripMenuItem
-            // 
-            this.RotateApplyAllToolStripMenuItem.Name = "RotateApplyAllToolStripMenuItem";
-            this.RotateApplyAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.RotateApplyAllToolStripMenuItem.Text = "Apply All";
-            this.RotateApplyAllToolStripMenuItem.Click += new System.EventHandler(this.RotateApplyAllToolStripMenuItem_Click);
+            this.ToolStripMenuItemCopyCSV.Name = "ToolStripMenuItemCopyCSV";
+            this.ToolStripMenuItemCopyCSV.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemCopyCSV.Text = "Copy CSV";
+            this.ToolStripMenuItemCopyCSV.Click += new System.EventHandler(this.ToolStripMenuCopyCSV_Click);
             // 
             // CopyEntireWindowToolStripMenuItem
             // 
@@ -142,13 +85,7 @@
 
         private System.Windows.Forms.ContextMenuStrip ContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCopyImage;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemFlipHoriz;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemFlipVert;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemRotate;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemExportExcel;
-        private System.Windows.Forms.ToolStripMenuItem FlipHorizApplyAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem FlipVertApplyAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem RotateApplyAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCopyCSV;
         private System.Windows.Forms.ToolStripMenuItem CopyEntireWindowToolStripMenuItem;
     }
 }

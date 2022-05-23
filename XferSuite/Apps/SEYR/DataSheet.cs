@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 
 namespace XferSuite.Apps.SEYR
 {
@@ -56,6 +58,23 @@ namespace XferSuite.Apps.SEYR
             bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             string percentage = (pass / total).ToString("P");
             return (bitmap, percentage);
+        }
+
+        public string GetCSV()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = DataSize.Width - 1; i > 0; i--)
+            {
+                for (int j = 0; j < DataSize.Height; j++)
+                {
+                    var criterion = Criteria.Where(x => x.Item1.Sum() == Data[i, j]);
+                    string data = "0";
+                    if (criterion.Any()) data = criterion.First().Item1.Sum().ToString();
+                    sb.Append($"{data}\t");
+                }
+                sb.AppendLine();
+            }
+            return sb.ToString();
         }
     }
 }
