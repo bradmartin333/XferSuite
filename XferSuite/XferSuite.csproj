@@ -165,6 +165,12 @@
     <Compile Include="Apps\SEYR\ImageScroller.Designer.cs">
       <DependentUpon>ImageScroller.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\SEYR\LegendView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\SEYR\LegendView.Designer.cs">
+      <DependentUpon>LegendView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\SEYR\ParseSEYR.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\ImageScroller.resx">
       <DependentUpon>ImageScroller.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\SEYR\LegendView.resx">
+      <DependentUpon>LegendView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\ParseSEYR.resx">
       <DependentUpon>ParseSEYR.cs</DependentUpon>

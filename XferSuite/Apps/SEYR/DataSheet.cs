@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -12,9 +11,9 @@ namespace XferSuite.Apps.SEYR
         public Size ImageGrid { get; set; }
         private Size DataSize { get; set; }
         private int[,] Data { get; set; }
-        private List<(int, bool, Color)> Criteria { get; set; }
+        private List<(int[], bool, Color)> Criteria { get; set; }
 
-        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, List<(int, bool, Color)> criteria)
+        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, List<(int[], bool, Color)> criteria)
         {
             ID = region;
             StampGrid = stampGrid;
@@ -38,7 +37,7 @@ namespace XferSuite.Apps.SEYR
             for (int i = 0; i < bitmap.Width; i++)
                 for (int j = 0; j < bitmap.Height; j++)
                 {
-                    var criterion = Criteria.Where(x => x.Item1 == Data[j, i]);
+                    var criterion = Criteria.Where(x => x.Item1.Sum() == Data[j, i]);
                     if (criterion.Any()) bitmap.SetPixel(i, j, criterion.First().Item3);
                 }
             bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);

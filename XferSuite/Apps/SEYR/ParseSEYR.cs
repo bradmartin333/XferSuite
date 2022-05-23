@@ -19,9 +19,9 @@ namespace XferSuite.Apps.SEYR
         public static Project Project { get; set; } = null;
         private string DataHeader { get; set; } = string.Empty;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
-        private List<(int, bool, Color)> Criteria { get; set; } = new List<(int, bool, Color)>();
+        private List<(int[], bool, Color)> Criteria { get; set; } = new List<(int[], bool, Color)>();
         private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
-        private readonly ScottPlot.Drawing.Palette Pallete = ScottPlot.Palette.ColorblindFriendly;
+        private readonly ScottPlot.Drawing.Palette Pallete = ScottPlot.Palette.Category20;
         private Size RegionGrid, StampGrid, ImageGrid;       
 
         public ParseSEYR(string path)
@@ -198,7 +198,7 @@ namespace XferSuite.Apps.SEYR
             foreach (var valCombo in Combinations(criteriaVals))
             {
                 int sum = valCombo.Sum();
-                if (valCombo.Length > 0) Criteria.Add((sum, passingVals.Contains(sum), Pallete.GetColor(sum)));
+                if (valCombo.Length > 0) Criteria.Add((valCombo, passingVals.Contains(sum), Pallete.GetColor(Criteria.Count)));
             }
         }
 
@@ -243,7 +243,8 @@ namespace XferSuite.Apps.SEYR
                 }
             }
 
-            _ = new RegionBrowser(Sheets);
+            RegionBrowser rb = new RegionBrowser(Sheets);
+            LegendView lv = new LegendView(MakeLegend(), rb);
         }
 
         private bool MakeSheets()
@@ -272,6 +273,43 @@ namespace XferSuite.Apps.SEYR
                 Sheets.Add(new DataSheet(region, RegionGrid, StampGrid, ImageGrid, Criteria));
 
             return true;
+        }
+
+        private Bitmap MakeLegend()
+        {
+            Font font = new Font("Segoe", 16);
+            SizeF strSize = SizeF.Empty;
+            Bitmap bmp = new Bitmap(1, 1);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                foreach (var criterion in Criteria)
+                {
+                    string critStr = GetCriterionString(criterion);
+                    SizeF critSize = g.MeasureString(critStr, font);
+                    if (critSize.Width > strSize.Width) strSize = critSize;
+                }
+            }
+            strSize = new SizeF(strSize.Width, strSize.Height * 0.9f);
+            bmp = new Bitmap((int)(strSize.Height * (Criteria.Count + 2)), (int)strSize.Width);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                for (int i = 0; i < Criteria.Count; i++)
+                {
+                    Color c = Criteria[i].Item3;
+                    g.FillRectangle(new SolidBrush(c), 0, i * strSize.Height, strSize.Width, strSize.Height);
+                    SolidBrush contrastBrush = new SolidBrush((((0.299 * c.R) + (0.587 * c.G) + (0.114 * c.B)) / 255) > 0.5 ? Color.Black : Color.White);
+                    g.DrawString(GetCriterionString(Criteria[i]), font, contrastBrush, new PointF(0, i * strSize.Height));
+                }
+            }
+            return bmp;
+        }
+
+        private string GetCriterionString((int[], bool, Color) criterion)
+        {
+            string output = string.Empty;
+            foreach (int val in criterion.Item1)
+                output += Project.Features[(int)Math.Sqrt(val / 2)].Name + "-";
+            return output.Substring(0, output.Length - 1);
         }
 
         private void BtnExportCycleFile_Click(object sender, EventArgs e)

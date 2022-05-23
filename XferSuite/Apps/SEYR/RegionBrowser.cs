@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace XferSuite.Apps.SEYR
 {
     public partial class RegionBrowser : Form
     {
-        private List<DataSheet> Sheets;
+        private readonly List<DataSheet> Sheets;
         private Size ArraySize;
 
         public RegionBrowser(List<DataSheet> sheets)
         {
             InitializeComponent();
             Sheets = sheets;
-            ResizeTLP();
+            SetupTLP();
             Show();
         }
 
-        private void ResizeTLP()
+        private void SetupTLP()
         {
             var IDs = Sheets.Select(s => s.ID).ToList();
             var RRs = IDs.Select(id => id.Item1);
