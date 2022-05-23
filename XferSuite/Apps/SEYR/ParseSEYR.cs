@@ -1,976 +1,442 @@
-﻿using BrightIdeasSoftware;
-using Microsoft.FSharp.Collections;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Windows.Forms;
-using XferHelper;
+using System.Xml.Serialization;
 
 namespace XferSuite.Apps.SEYR
 {
     public partial class ParseSEYR : Form
     {
-        #region User Parameters
-
-        private int _PassPointSize = 1;
+        public enum Delimeter { Tab, Comma, Space }
+        private Delimeter _CycleFileDelimeter = Delimeter.Tab;
         [Category("User Parameters")]
-        public int PassPointSize
-        {
-            get => _PassPointSize;
-            set
-            {
-                _PassPointSize = value;
-                Results.UpdateData("Pass point size changed", this);
-            }
-        }
+        public Delimeter CycleFileDelimeter { get => _CycleFileDelimeter; set => _CycleFileDelimeter = value; }
 
-        private int _FailPointSize = 1;
-        [Category("User Parameters")]
-        public int FailPointSize
-        {
-            get => _FailPointSize;
-            set
-            {
-                _FailPointSize = value;
-                Results.UpdateData("Fail point size changed", this);
-            }
-        }
+        private readonly bool ForceClose;
+        private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
+        private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
 
-        private bool _FlipXAxis = true;
-        [Category("User Parameters")]
-        public bool FlipXAxis
-        {
-            get => _FlipXAxis;
-            set
-            {
-                _FlipXAxis = value;
-                Results.UpdateData("X axis orientation changed", this);
-            }
-        }
-
-        private bool _FlipYAxis = true;
-        [Category("User Parameters")]
-        public bool FlipYAxis
-        {
-            get => _FlipYAxis;
-            set
-            {
-                _FlipYAxis = value;
-                Results.UpdateData("Y axis orientation changed", this);
-            }
-        }
-
-        private int _DataReduction = 0;
-        [Category("User Parameters")]
-        [Description("Percentage of Pass and Fail data to omit for the sake of PC speed")]
-        public int DataReduction
-        {
-            get => _DataReduction;
-            set
-            {
-                if (value >= 0 && value <= 100)
-                    _DataReduction = value;
-                else if (value < 0)
-                    _DataReduction = 0;
-                else if (value > 100)
-                    _DataReduction = 100;
-                Results.UpdateData("Data reduction value changed", this);
-            }
-        }
-
-        private int _RegionTextSize = 12;
-        [Category("User Parameters")]
-        public int RegionTextSize
-        {
-            get => _RegionTextSize;
-            set
-            {
-                _RegionTextSize = value;
-                Results.UpdateData("Region text size changed", this);
-            }
-        }
-
-        private int _RegionTextOffsetX = 0;
-        [Category("User Parameters")]
-        public int RegionTextOffsetX
-        {
-            get => _RegionTextOffsetX;
-            set
-            {
-                _RegionTextOffsetX = value;
-                Results.UpdateData("Region text offset changed", this);
-            }
-        }
-
-        private int _RegionTextOffsetY = 0;
-        [Category("User Parameters")]
-        public int RegionTextOffsetY
-        {
-            get => _RegionTextOffsetY;
-            set
-            {
-                _RegionTextOffsetY = value;
-                Results.UpdateData("Region text offset changed", this);
-            }
-        }
-
-        private float _RegionTextRotation = 0f;
-        [Category("User Parameters")]
-        public float RegionTextRotation
-        {
-            get => _RegionTextRotation;
-            set
-            {
-                _RegionTextRotation = value;
-                Results.UpdateData("Region text rotated", this);
-            }
-        }
-
-        private int _RegionLabelOpacity = 255;
-        [Category("User Parameters")]
-        public int RegionLabelOpacity
-        {
-            get => _RegionLabelOpacity;
-            set
-            {
-                if (value >= 0 && value <= 255)
-                    _RegionLabelOpacity = value;
-                else if (value < 0)
-                    _RegionLabelOpacity = 0;
-                else if (value > 255)
-                    _RegionLabelOpacity = 255;
-                Results.UpdateData("Region label opacity changed", this);
-            }
-        }
-
-        private double _RegionBorderPadding = 0.1;
-        [Category("User Parameters")]
-        [Description("Adds space (in mm) between data and plotted region border")]
-        public double RegionBorderPadding
-        {
-            get => _RegionBorderPadding;
-            set
-            {
-                _RegionBorderPadding = value < 0 ? 0 : value;
-                Results.UpdateData("Region border padding changed", this);
-            }
-        }
-
-        private int _RegionBorderOpacity = 255;
-        [Category("User Parameters")]
-        public int RegionBorderOpacity
-        {
-            get => _RegionBorderOpacity;
-            set
-            {
-                if (value >= 0 && value <= 255)
-                    _RegionBorderOpacity = value;
-                else if (value < 0)
-                    _RegionBorderOpacity = 0;
-                else if (value > 255)
-                    _RegionBorderOpacity = 255;
-                Results.UpdateData("Region border opacity changed", this);
-            }
-        }
-
-        private int _PercentageTextSize = 12;
-        [Category("User Parameters")]
-        public int PercentageTextSize
-        {
-            get => _PercentageTextSize;
-            set
-            {
-                _PercentageTextSize = value;
-                Results.UpdateData("Percentage text size changed", this);
-            }
-        }
-
-        private int _PercentLabelOpacity = 255;
-        [Category("User Parameters")]
-        public int PercentLabelOpacity
-        {
-            get => _PercentLabelOpacity;
-            set
-            {
-                if (value >= 0 && value <= 255)
-                    _PercentLabelOpacity = value;
-                else if (value < 0)
-                    _PercentLabelOpacity = 0;
-                else if (value > 255)
-                    _PercentLabelOpacity = 255;
-                Results.UpdateData("Percent label opacity changed", this);
-            }
-        }
-
-        private bool _PercentLocation = true;
-        [Category("User Parameters")]
-        [Description("True: Center of region, False: In region text location")]
-        public bool PercentLocation
-        {
-            get => _PercentLocation;
-            set
-            {
-                _PercentLocation = value;
-                Results.UpdateData("Percent location changed", this);
-            }
-        }
-
-        #endregion
-
-        #region Globals and Setup
-
-        public struct Plottable
-        {
-            public string Region;
-            public string DetailString;
-            public double X;
-            public double Y;
-            public bool Pass;
-            public string CustomTag;
-            public Color Color;
-
-            public override string ToString()
-            {
-                return $"Region {Region}{DetailString}";
-            }
-        }
-
-        public string[] Regions = null;
-        public List<Plottable> Plottables = new List<Plottable>();
-        public List<PlotOrderElement> PlotOrder = PlotOrderElement.GenerateDefaults();
-        public readonly List<CustomFeature> CustomFeatures = new List<CustomFeature>();
-
-        private readonly FileInfo Path;
-        private readonly Report.Entry[] Data;
-        private Report.Feature[] Features;
-        private Report.Feature SelectedFeature;
-        private bool ObjectHasBeenDropped; // For criteria selector - possibly unecessary
-        private readonly Results Results;
-        private ScottPlot.Plottable.Annotation ViewDataAnnotation;
-        private readonly List<ScottPlot.Plottable.BarPlot> ViewDataPlots = new List<ScottPlot.Plottable.BarPlot>();
-        private readonly BackgroundWorker ParseWorker = new BackgroundWorker();
-
-        private bool RequiredOn, NeedOneOn, CustomOn;
-        private double DistX, DistY;
-        private Report.Entry[] FilteredData;
+        public static Project Project { get; set; } = null;
+        private string DataHeader { get; set; } = string.Empty;
+        private List<DataEntry> Data { get; set; } = new List<DataEntry>();
+        private List<(int[], bool, Color)> Criteria { get; set; } = new List<(int[], bool, Color)>();
+        private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
+        private readonly ScottPlot.Drawing.Palette Pallete = ScottPlot.Palette.Category20;
+        private Size RegionGrid, StampGrid, ImageGrid;       
 
         public ParseSEYR(string path)
         {
             InitializeComponent();
-            Path = new FileInfo(path);
-            Text = Path.Name.Replace(Path.Extension, string.Empty);
-            Results = new Results(Text);
-            Data = Report.data(Path.FullName);
-
-            ParseWorker.WorkerReportsProgress = true;
-            ParseWorker.DoWork += ParseWorker_DoWork;
-            ParseWorker.ProgressChanged += ParseWorker_ProgressChanged;
-            ParseWorker.RunWorkerCompleted += ParseWorker_RunWorkerCompleted;
-
-            ResetFeaturesAndUI();
-
-            SimpleDragSource bufferSource = (SimpleDragSource)olvBuffer.DragSource;
-            bufferSource.RefreshAfterDrop = true;
-            SimpleDropSink requireSink = (SimpleDropSink)olvRequire.DropSink;
-            requireSink.AcceptExternal = true;
-            requireSink.CanDropOnBackground = true;
-            SimpleDropSink needOneSink = (SimpleDropSink)olvNeedOne.DropSink;
-            needOneSink.AcceptExternal = true;
-            needOneSink.CanDropOnBackground = true;
-
-            olvBuffer.ItemSelectionChanged += ItemSelectionChanged;
-            olvRequire.ItemSelectionChanged += ItemSelectionChanged;
-            olvNeedOne.ItemSelectionChanged += ItemSelectionChanged;
-
-            olvRequire.ModelCanDrop += (s, e) => { e.Effect = DragDropEffects.Copy; };
-            olvRequire.ModelDropped += ModelDropped;
-            olvNeedOne.ModelCanDrop += ModelCanDrop;
-            olvNeedOne.ModelDropped += ModelDropped;
-            olvNeedOne.CanExpandGetter = delegate (object x) { return ((Report.Feature)x).IsParent; };
-            olvNeedOne.ChildrenGetter = delegate (object x) { return ((Report.Feature)x).Children; };
-
-            olvCustom.DoubleClick += OlvCustom_DoubleClick;
-            olvCustom.FormatRow += OlvCustom_FormatRow;
-
-            Show();
-        }
-
-        private void ResetFeaturesAndUI()
-        {
-            Features = Report.getFeatures(Data);
-            SelectedFeature = null;
-            lblSelectedFeature.Text = @"N\A";
-            olvBuffer.SetObjects(Features);
-            olvRequire.Objects = null;
-            olvNeedOne.Objects = null;
-            ObjectHasBeenDropped = false;
-        }
-
-        #endregion
-
-        #region OLV Logic
-
-        private void ModelCanDrop(object sender, ModelDropEventArgs e)
-        {
-            e.Effect = DragDropEffects.None;
-            if (e.TargetModel != null)
+            using (ZipArchive archive = ZipFile.OpenRead(path))
             {
-                if (((Report.Feature)e.TargetModel).IsChild)
-                {
-                    e.Handled = false;
-                }
-                else
-                {
-                    e.Handled = true;
-                    e.Effect = DragDropEffects.Link; // Only one branch
-                }
+                ExtractFile(ProjectPath, archive);
+                ExtractFile(ReportPath, archive);
             }
-            else
+            LoadProject();
+            if (!LoadData())
             {
-                e.Handled = true;
-                e.Effect = DragDropEffects.Copy;
-            }
-        }
-
-        private void ModelDropped(object sender, ModelDropEventArgs e)
-        {
-            for (int i = 0; i < e.SourceModels.Count; i++)
-            {
-                Report.Feature m = (Report.Feature)e.SourceModels[i];
-                m.Bucket = Report.toBucket(int.Parse(e.ListView.Tag.ToString()));
-                if ((ObjectListView)sender == olvNeedOne)
-                {
-                    if (e.DropTargetLocation == DropTargetLocation.Item)
-                    {
-                        m.IsChild = true;
-                        Report.Feature targ = (Report.Feature)e.TargetModel;
-                        m.FamilyName = targ.Name;
-
-                        // Converting between F# and C# lists
-                        List<Report.Feature> children = targ.Children.ToList();
-                        children.Add(m);
-                        targ.Children = ListModule.OfSeq(children);
-                    }
-                    else
-                    {
-                        if (i > 0)
-                        {
-                            m.Bucket = Report.Bucket.NeedOne;
-                            m.IsChild = true;
-                            Report.Feature parent = (Report.Feature)e.SourceModels[0];
-                            m.FamilyName = parent.Name;
-
-                            // Converting between F# and C# lists
-                            List<Report.Feature> children = parent.Children.ToList();
-                            children.Add(m);
-                            parent.Children = ListModule.OfSeq(children);
-                        }
-                        else
-                        {
-                            m.IsParent = true;
-                            m.FamilyName = m.Name;
-                            ((ObjectListView)sender).AddObject(m);
-                            olvNeedOne.ExpandAll();
-                        }
-                    }
-                }
-                else
-                    ((ObjectListView)sender).AddObject(m);
-                olvBuffer.RemoveObject(m);
-            }
-            e.RefreshObjects();
-            flowLayoutPanelCriteria.Enabled = false;
-            ObjectHasBeenDropped = true;
-        }
-
-        private void ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            flowLayoutPanelCriteria.Enabled = !ObjectHasBeenDropped;
-            SelectedFeature = Features.First(x => x.Name == e.Item.Text);
-            lblSelectedFeature.Text = SelectedFeature.Name;
-            foreach (CheckBox cbx in flowLayoutPanelCriteria.Controls.OfType<CheckBox>())
-            {
-                Report.State state = Report.toState(int.Parse(cbx.Tag.ToString()));
-                cbx.Checked = SelectedFeature.Requirements.Contains(state);
-            }
-        }
-
-        private void Cbx_CheckedChanged(object sender, EventArgs e)
-        {
-            List<Report.State> requirements = new List<Report.State>();
-            foreach (CheckBox cbx in flowLayoutPanelCriteria.Controls.OfType<CheckBox>())
-                if (cbx.Checked) requirements.Add(Report.toState(int.Parse(cbx.Tag.ToString())));
-            Features.First(x => x.Name == SelectedFeature.Name).Requirements = requirements.ToArray();
-        }
-
-        private void BtnApplyToAll_Click(object sender, EventArgs e)
-        {
-            List<Report.State> requirements = new List<Report.State>();
-            foreach (CheckBox cbx in flowLayoutPanelCriteria.Controls.OfType<CheckBox>())
-                if (cbx.Checked) requirements.Add(Report.toState(int.Parse(cbx.Tag.ToString())));
-            foreach (Report.Feature feature in Features)
-                feature.Requirements = requirements.ToArray();
-        }
-
-        private void OlvCustom_DoubleClick(object sender, EventArgs e)
-        {
-            if (olvCustom.SelectedIndex == -1) return;
-            CustomFeature feature = (CustomFeature)olvCustom.SelectedObject;
-            string originalName = feature.Name;
-            using (CreateCustom cc = new CreateCustom(Features, CustomFeatures, feature))
-            {
-                var result = cc.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    var plotOrderIdx = PlotOrder.Select(x => x.Name).ToList().IndexOf(originalName);
-                    PlotOrder[plotOrderIdx].Name = cc.CustomFeature.Name;
-                    CustomFeatures[olvCustom.SelectedIndex] = cc.CustomFeature;
-                    olvCustom.UpdateObject(olvCustom.SelectedObject);
-                    olvCustom.DeselectAll();
-                    Results.UpdateData("Custom feature updated", this);
-                }
-                else if (result == DialogResult.Ignore)
-                {
-                    PlotOrder.Remove(PlotOrder.Where(x => x.Name == feature.Name).First());
-                    CustomFeatures.RemoveAt(olvCustom.SelectedIndex);
-                    olvCustom.RemoveObject(feature);
-                    Results.UpdateData("Custom feature hidden", this);
-                }
-                else
-                    return;
-            }
-        }
-
-        private void OlvCustom_FormatRow(object sender, FormatRowEventArgs e)
-        {
-            CustomFeature customFeature = (CustomFeature)e.Model;
-            e.Item.BackColor = customFeature.Color;
-            e.Item.ForeColor = customFeature.ContrastColor;
-            e.Item.Decoration = customFeature.Type == Report.State.Null ? new ImageDecoration(Properties.Resources.invisible_small, 255) : null;
-        }
-
-        private void ToggleOLVs(bool toggle)
-        {
-            foreach (ObjectListView olv in tableLayoutPanel.Controls.OfType<ObjectListView>())
-                olv.Enabled = toggle;
-        }
-
-        #endregion
-
-        #region Parse Methods
-
-        private void ParseWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            ParseWorker.ReportProgress(-2);
-            Plottables = new List<Plottable>();
-            RequiredOn = Features.Where(x => x.Bucket == Report.Bucket.Required).Count() > 0;
-            NeedOneOn = Features.Where(x => x.IsChild).Count() > 0;
-            CustomOn = CustomFeatures.Where(x => x.Checked).Count() > 0;
-            FilteredData = CustomOn ? Data : Report.removeBuffers(Data, Features.Where(x => x.Bucket == Report.Bucket.Buffer).Select(x => x.Name).ToArray());
-            if (Regions == null) InitialzeData();
-            if (RequiredOn || NeedOneOn || CustomOn) Parse();
-        }
-
-        private void InitialzeData()
-        {
-            DistX = 0.0;
-            DistY = 0.0;
-
-            if (Path.FullName.Contains("_CP_"))
-            {
-                string[] slice = Path.FullName.Replace(".txt", "").Split('_');
-                DistX = double.Parse(slice[slice.Length - 2]);
-                DistY = double.Parse(slice[slice.Length - 1]);
-            }
-            else
-            {
-                using (Utility.PromptForInput input = new Utility.PromptForInput(
-                    prompt: "Enter X grid pitch in millimeters",
-                    textEntry: false,
-                    max: 100,
-                    title: $"SEYR Parser Grid Setup"))
-                {
-                    var result = input.ShowDialog();
-                    if (result == DialogResult.OK)
-                        DistX = (double)((NumericUpDown)input.Control).Value;
-                    else
-                        return;
-                }
-                using (Utility.PromptForInput input = new Utility.PromptForInput(
-                    prompt: "Enter Y grid pitch in millimeters",
-                    textEntry: false,
-                    max: 100,
-                    title: $"SEYR Parser Grid Setup"))
-                {
-                    var result = input.ShowDialog();
-                    if (result == DialogResult.OK)
-                        DistY = (double)((NumericUpDown)input.Control).Value;
-                    else
-                        return;
-                }
-            }
-
-            Regions = Report.getRegions(FilteredData);
-        }
-
-        private void ParseWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Results.UpdateData("Newly parsed data", this);
-            toolStripLabelPercent.Text = "";
-            ToggleOLVs(true);
-            flowLayoutPanelCriteria.Enabled = true;
-            Application.DoEvents();
-        }
-
-        private void ParseWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            switch (e.ProgressPercentage)
-            {
-                case -2:
-                    toolStripLabelPercent.Text = "Initializing Data";
-                    break;
-                case -1:
-                    toolStripLabelPercent.Text = "Plotting Data";
-                    break;
-                default:
-                    toolStripLabelPercent.Text = $"Parsing Region {e.ProgressPercentage + 1}/{Regions.Length}";
-                    break;
-            }
-        }
-
-        private void Parse()
-        {
-            List<string> needOneParents = Features.Where(x => x.IsParent).Select(x => x.Name).ToList();
-            int regionIdx = 0;
-            foreach (IGrouping<string, Report.Entry> regionGroup in FilteredData.GroupBy(x => (x.RR, x.RC, x.R, x.C).ToString()))
-            {
-                ParseWorker.ReportProgress(regionIdx);
-                Report.Entry[] region = regionGroup.ToArray();
-                foreach (IGrouping<int, Report.Entry> imageGroup in region.GroupBy(x => x.ImageNumber))
-                {
-                    Report.Entry[] image = imageGroup.ToArray();
-                    foreach (IGrouping<string, Report.Entry> cellGroup in image.GroupBy(x => (x.XCopy, x.YCopy).ToString()))
-                    {
-                        Report.Entry[] cell = cellGroup.ToArray();
-                        if (cell == null || cell.Length == 0) continue;
-
-                        Plottable plottable = new Plottable();
-                        bool pass;
-                        double thisX = cell[0].X + cell[0].XCopy * DistX * (_FlipXAxis ? -1 : 1);
-                        double thisY = cell[0].Y + cell[0].YCopy * DistY;
-                        string detailString = $"     Copy ({cell[0].XCopy}, {cell[0].YCopy})     Location ({thisX}, {thisY})";
-
-                        foreach (CustomFeature custom in CustomFeatures.Where(x => x.Checked))
-                        {
-                            if (!CheckCustomCriteria(custom, cell)) continue;
-                            plottable = new Plottable
-                            {
-                                Region = Regions[regionIdx],
-                                DetailString = detailString + $"     {custom.Type}     Custom: {custom.Name}",
-                                X = thisX - custom.Offset.X,
-                                Y = thisY - custom.Offset.Y,
-                                Pass = custom.Type == Report.State.Pass,
-                                CustomTag = custom.Name,
-                                Color = custom.Color,
-                            };
-                        }
-                        
-                        if (RequiredOn || NeedOneOn)
-                        {
-                            pass = CheckCriteria(cell, needOneParents);
-                            plottable = new Plottable
-                            {
-                                Region = Regions[regionIdx],
-                                DetailString = detailString + $"     {(pass ? "Pass" : "Fail")}",
-                                X = thisX,
-                                Y = thisY,
-                                Pass = pass,
-                                CustomTag = string.Empty,
-                                Color = pass ? Color.LawnGreen : Color.Firebrick,
-                            };
-                        }
-
-                        try
-                        {
-                            Plottables.Add(plottable);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Try closing and reopening XferSuite:\n\n{ex}", "Parse SEYR");
-                            return;
-                        }
-                    }
-                }
-                regionIdx++;
-            }
-            ParseWorker.ReportProgress(-1);
-        }
-
-        private bool CheckCustomCriteria(CustomFeature custom, Report.Entry[] cell)
-        {
-            int product = 1;
-            switch (custom.Logic)
-            {
-                case CustomFeature.LogicType.AND:
-                    foreach ((string, Report.State) filter in custom.Filters)
-                        product *= Convert.ToInt32(cell.Where(x => x.Name == filter.Item1).First().State == filter.Item2);
-                    break;
-                case CustomFeature.LogicType.OR:
-                    foreach ((string, Report.State) filter in custom.Filters)
-                        product += Convert.ToInt32(cell.Where(x => x.Name == filter.Item1).First().State == filter.Item2);
-                    break;
-                case CustomFeature.LogicType.XOR:
-                    foreach ((string, Report.State) filter in custom.Filters)
-                        product -= Convert.ToInt32(cell.Where(x => x.Name == filter.Item1).First().State == filter.Item2);
-                    break;
-            }
-            switch (custom.Logic)
-            {
-                case CustomFeature.LogicType.AND:
-                    return product == 1;
-                case CustomFeature.LogicType.OR:
-                    return product > 1;
-                case CustomFeature.LogicType.XOR:
-                    return product == 0;
-                default:
-                    return false;
-            }
-        }
-
-
-        #endregion
-
-        #region Tool Strip Methods
-
-        private void ToolStripButtonReset_Click(object sender, EventArgs e)
-        {
-            if (ParseWorker.IsBusy) return;
-            ResetFeaturesAndUI();
-        }
-
-        private void ToolStripButtonParse_Click(object sender, EventArgs e)
-        {
-            if (ParseWorker.IsBusy) return;
-            ToggleOLVs(false);
-            flowLayoutPanelCriteria.Enabled = false;
-            toolStripLabelPercent.Text = "";
-            ParseWorker.RunWorkerAsync();
-        }
-
-        private void ToolStripButtonSmartSort_Click(object sender, EventArgs e)
-        {
-            if (ParseWorker.IsBusy) return;
-            
-            Report.Feature[] originalFeatures = Features; // Maintain requirements
-            ResetFeaturesAndUI();
-
-            // Alphabetical order looks better in the NeedOne bucket
-            var sortList = Features.ToList();
-            sortList.Sort();
-            Features = sortList.ToArray();
-
-            flowLayoutPanelCriteria.Enabled = false;
-            olvBuffer.Objects = null;
-
-            Report.Feature[] criteria = Features.Where(x => !x.Name.Contains("pat")).ToArray();
-            if (criteria.Length == 1)
-            {
-                criteria[0].Bucket = Report.Bucket.Required;
-                olvRequire.AddObject(criteria[0]);
-                olvBuffer.AddObjects(Features.Where(x => x.Name.Contains("pat")).ToArray());
-            }
-            else
-            {
-                foreach (Report.Feature feature in Features)
-                {
-                    feature.Requirements = originalFeatures.First(x => x.Name == feature.Name).Requirements;
-                    FindHome(feature);
-                }
-            }
-
-            olvNeedOne.RebuildAll(true);
-        }
-
-        private void ToolStripButtonAddCustom_Click(object sender, EventArgs e)
-        {
-            using (CreateCustom cc = new CreateCustom(Features, CustomFeatures))
-            {
-                var result = cc.ShowDialog();
-                if (result == DialogResult.OK)
-                    AddFeatureToProject(cc.CustomFeature);
-                else
-                    return;
-            }
-        }
-
-        private void ToolStripButtonImportCustom_Click(object sender, EventArgs e)
-        {
-            string[] pathBuffers = MainMenu.OpenFiles("Open Custom SEYR Features", "Text File (*.txt) | *.txt");
-            if (pathBuffers == null)
+                ForceClose = true;
                 return;
-            else
+            }
+            RescoreAllData();
+            InitFeatureInfo();
+        }
+
+        private void ParseSEYR_Load(object sender, EventArgs e)
+        {
+            if (ForceClose) Close();
+        }
+
+        #region Load Data
+
+        private bool ExtractFile(string path, ZipArchive archive)
+        {
+            var matches = archive.Entries.Where(x => x.Name == path.Split('\\').Last());
+            if (matches.Any()) matches.First().ExtractToFile(path, true);
+            else return false;
+            return true;
+        }
+
+        private void LoadProject()
+        {
+            using (StreamReader stream = new StreamReader(ProjectPath))
             {
-                string mismatches = string.Empty;
-                foreach (string path in pathBuffers)
+                XmlSerializer x = new XmlSerializer(typeof(Project));
+                try
                 {
-                    CustomFeature feature = new CustomFeature(path);
-                    if (!CustomFeatures.Select(x => x.Name).Contains(feature.Name) && feature.ValidateFilters(Features.Select(x => x.Name).ToArray()))
-                        AddFeatureToProject(feature);
-                    else
-                        mismatches += $"{new FileInfo(path).Name}\n";
+                    Project = (Project)x.Deserialize(stream);
                 }
-                if (!string.IsNullOrEmpty(mismatches))
-                    MessageBox.Show($"The following files did not match the currently loaded SEYR report:\n\n{mismatches}", "Load Custom SEYR Features");
-            }  
-        }
-
-        private void AddFeatureToProject(CustomFeature feature)
-        {
-            olvCustom.AddObject(feature);
-            CustomFeatures.Add(feature);
-            PlotOrder.Add(new PlotOrderElement() { Name = feature.Name });
-        }
-
-        private void ToolStripButtonEditPlotOrder_Click(object sender, EventArgs e)
-        {
-            using (EditPlotOrder edit = new EditPlotOrder(PlotOrder))
-            {
-                var result = edit.ShowDialog();
-                if (result == DialogResult.OK)
+                catch (Exception ex)
                 {
-                    PlotOrder = edit.PlotOrder;
-                    Results.UpdateData("Plot order updated", this);
-                } 
-                else
+                    MessageBox.Show($"Corrupt SEYR Project. Loading default project.\n\n{ex}", "SEYR");
+                    Project = new Project();
                     return;
+                }
             }
         }
 
-        #endregion
-
-        #region Feature Specific Methods
-
-        private bool CheckCriteria(Report.Entry[] thisCell, List<string> needOneParents)
+        private bool LoadData()
         {
-            List<bool>[] needOneLists = new List<bool>[needOneParents.Count];
-
-            for (int i = 0; i < thisCell.Length; i++)
+            string[] lines = File.ReadAllLines(ReportPath);
+            DataHeader = lines[0];
+            for (int i = 1; i < lines.Length; i++)
             {
-                Report.Entry item = thisCell[i];
-                Report.Feature criteria = Features.First(x => x.Name == item.Name);
-                switch (criteria.Bucket)
-                {
-                    case Report.Bucket.Buffer:
-                        break;
-                    case Report.Bucket.Required:
-                        if (!criteria.Requirements.Contains(item.State)) return false;
-                        break;
-                    case Report.Bucket.NeedOne:
-                        int listIdx = needOneParents.IndexOf(criteria.FamilyName);
-                        if (needOneLists[listIdx] == null) needOneLists[listIdx] = new List<bool>(); // Init list
-                        needOneLists[listIdx].Add(
-                            criteria.Requirements.Contains(item.State));
-                        break;
-                    default:
-                        break;
-                }
+                DataEntry dataEntry = new DataEntry(lines[i]);
+                if (dataEntry.HasValidPosition()) Data.Add(dataEntry);
             }
 
-            foreach (List<bool> needOneList in needOneLists)
-                if (needOneList.Count != 0 && !needOneList.Contains(true)) return false;
+            if (Data.Count == 0)
+            {
+                MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
+                return false;
+            }
+
+            foreach (Feature feature in Project.Features)
+            {
+                feature.Data = Data.Where(x => x.FeatureName == feature.Name).ToArray();
+                feature.HistData = feature.Data.Select(x => (double)x.Score).Where(x => x > 0).ToArray();
+                if (feature.MinScore == float.MaxValue || feature.MaxScore == float.MinValue || feature.MinScore == feature.MaxScore)
+                {
+                    if (feature.HistData.Length == 0)
+                    {
+                        feature.HistData = new double[] { 0 };
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} is empty");
+                    }
+                    else
+                    {
+                        feature.MinScore = (float)feature.HistData.Min();
+                        feature.MaxScore = (float)feature.HistData.Max();
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
+                    }
+                }
+                feature.PassThreshold = feature.PassThreshold == -10 ? (feature.MaxScore + feature.MinScore) / 2.0 : feature.PassThreshold;
+                feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
+                System.Diagnostics.Debug.WriteLine($"{feature.Name} Min = {feature.MinScore} Max = {feature.MaxScore}");
+            }
 
             return true;
         }
 
-        private void FindHome(Report.Feature feature)
+        private void RescoreAllData()
         {
-            char[] digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-            if (feature.Name.Any(char.IsDigit))
+            foreach (Feature feature in Project.Features)
             {
-                feature.Bucket = Report.Bucket.NeedOne;
-                string rootName = feature.Name.TrimEnd(digits);
-                bool foundParent = false;
-                foreach (var item in olvNeedOne.Objects)
+                int updated = 0;
+                foreach (DataEntry entry in feature.Data)
                 {
-                    Report.Feature targ = (Report.Feature)item;
-                    if (targ.Name.Contains(rootName) && targ.IsParent)
+                    bool newState = feature.GenerateState(entry.Score);
+                    if (entry.State != newState)
                     {
-                        feature.IsChild = true;
-                        feature.FamilyName = targ.Name;
-
-                        // Converting between F# and C# lists
-                        List<Report.Feature> children = targ.Children.ToList();
-                        children.Add(feature);
-                        targ.Children = ListModule.OfSeq(children);
-                        foundParent = true;
+                        updated++;
+                        entry.State = newState;
                     }
                 }
-                if (!foundParent)
+                System.Diagnostics.Debug.WriteLine($"{feature.Name} {updated} updated states");
+            }
+        }
+
+        #endregion
+
+        private void BtnRescore_Click(object sender, EventArgs e)
+        {
+            if (ComboFeatures.SelectedIndex == -1) return;
+            LabelLoading.Visible = true;
+            Application.DoEvents();
+            Feature feature = Project.Features.Where(x => x.Name == ComboFeatures.Text).First();
+            using (PassFailUtility pf = new PassFailUtility(Data, feature))
+            {
+                LabelLoading.Visible = false;
+                Application.DoEvents();
+                DialogResult result = pf.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    feature.IsParent = true;
-                    feature.FamilyName = feature.Name;
-                    olvNeedOne.AddObject(feature);
-                    olvNeedOne.ExpandAll();
+                    if (feature.PassThreshold != pf.PassThreshold)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} PassThreshold updated from {feature.PassThreshold} to {pf.PassThreshold}");
+                        feature.PassThreshold = pf.PassThreshold;
+                    }
+                    if (feature.Limit != pf.Limit)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} Limit updated from {feature.Limit} to {pf.Limit}");
+                        feature.Limit = pf.Limit;
+                    }
+                    RescoreAllData();
+                    InitFeatureInfo();
+                }
+                else if (result == DialogResult.Ignore)
+                    feature.Ignore = !feature.Ignore;
+            }
+        }
+
+        private void InitFeatureInfo()
+        {
+            List<int> criteriaVals = new List<int>();
+            List<string> criteriaNames = new List<string>();
+            ComboFeatures.Items.Clear();
+            for (int i = 0; i < Project.Features.Count; i++)
+            {
+                Feature feature = Project.Features[i];
+                int id = (i + 1) * (i + 1);
+                string name = feature.Name;
+                feature.ID = id;
+                ComboFeatures.Items.Add(name);
+                if (Project.Features[i].Ignore) continue;
+                criteriaVals.Add(id);
+                criteriaNames.Add(name);
+            }
+
+            List<int> passingVals = new List<int>();
+            foreach (string[] features in Project.Criteria)
+            {
+                int id = 0;
+                foreach (string feature in features)
+                    id += Project.Features.Where(x => x.Name == feature).First().ID;
+                passingVals.Add(id);
+            }
+
+            criteriaVals = criteriaVals.Distinct().ToList();
+            var combos = Combinations(criteriaVals);
+            foreach (var valCombo in combos)
+            {
+                int sum = valCombo.Sum();
+                if (valCombo.Length > 0) Criteria.Add((valCombo, passingVals.Contains(sum), Pallete.GetColor(Criteria.Count)));
+            }
+        }
+
+        public IEnumerable<T[]> Combinations<T>(IEnumerable<T> source)
+        {
+            if (null == source)
+                throw new ArgumentNullException(nameof(source));
+
+            T[] data = source.ToArray();
+
+            return Enumerable
+              .Range(0, 1 << (data.Length))
+              .Select(index => data
+                 .Where((v, i) => (index & (1 << i)) != 0)
+                 .ToArray());
+        }
+
+        private void BtnPlot_Click(object sender, EventArgs e)
+        {
+            if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
+            if (Application.OpenForms.OfType<LegendView>().Any()) Application.OpenForms.OfType<LegendView>().First().Close();
+
+            if (!MakeSheets()) return;
+
+            foreach (DataSheet sheet in Sheets)
+            {
+                DataEntry[] region = Data.Where(x => (x.RR, x.RC) == sheet.ID).ToArray();
+                var images = region.GroupBy(x => x.ImageNumber);
+                foreach (IGrouping<int, DataEntry> image in images)
+                {
+                    var imageData = image.ToArray();
+                    var tiles = imageData.GroupBy(x => (x.TR, x.TC));
+                    foreach (var tile in tiles)
+                    {
+                        DataEntry[] entries = tile.ToArray();
+                        int criterion = 0;
+                        foreach (DataEntry entry in entries)
+                        {
+                            Feature feature = entry.Feature;
+                            if (feature.Ignore) continue;
+                            if (entry.State) criterion += feature.ID;
+                        }
+                        sheet.Insert(entries[0], criterion);
+                    }
                 }
             }
-            else if (!feature.Name.ToLower().Contains("pat"))
-            {
-                feature.Bucket = Report.Bucket.Required;
-                olvRequire.AddObject(feature);
-            }
-            else
-            {
-                feature.Bucket = Report.Bucket.Buffer;
-                olvBuffer.AddObject(feature);
-            }   
+
+            RegionBrowser rb = new RegionBrowser(Data, Sheets, MakeLegendStr());
+            LegendView lv = new LegendView(MakeLegend(), rb);
+            BtnMakeCycleFile.Enabled = true;
         }
 
-        // Functions from here to the end of the region could exist in their own class/form
-        private string MakeFeatureDataHistogram(ref ScottPlot.FormsPlot control, Report.State state)
+        private bool MakeSheets()
         {
-            ScottPlot.Plottable.BarPlot bar;
-            double[] data = Report.getData(Data.Where(x => x.State == state).ToArray(), SelectedFeature.Name);
-            if (data.Count() == 0)
-                return state.ToString();
-            else if (data.Max() == 0)
-                bar = control.Plot.AddBar(values: new double[] { data.Count() }, positions: new double[] { 0 });
-            else if (data.Count() == 1)
-                bar = control.Plot.AddBar(values: new double[] {1}, positions: new double[] {data[0]});
-            else
-            {
-                (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(data, min: data.Min(), max: data.Max(), binSize: 1);
-                double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
-                bar = control.Plot.AddBar(values: counts, positions: leftEdges);
-            }
-            bar.BarWidth = 1;
-            bar.BorderColor = Color.Transparent;
-            bar.Label = state.ToString();
+            Sheets.Clear();
 
-            switch (state)
+            int maxR = Data.Select(x => x.R).Max();
+            int maxC = Data.Select(x => x.C).Max();
+            int maxSR = Data.Select(x => x.SR).Max();
+            int maxSC = Data.Select(x => x.SC).Max();
+            int maxTR = Data.Select(x => x.TR).Max();
+            int maxTC = Data.Select(x => x.TC).Max();
+            RegionGrid = new Size(maxR, maxC);
+            StampGrid = new Size(maxSR, maxSC);
+            ImageGrid = new Size(maxTR, maxTC);
+
+            (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
+
+            if (regions.Length == 0 || (regions.Length == 1 && regions[0] == (0, 0)))
             {
-                case Report.State.Pass:
-                    bar.FillColor = Color.LawnGreen;
-                    ScottPlot.Plottable.HSpan hSpan =
-                        control.Plot.AddHorizontalSpan(data.Min(), data.Max(), Color.FromArgb(75, Color.SlateGray));
-                    hSpan.DragEnabled = true;
-                    hSpan.Dragged += HSpan_Dragged;
-                    break;
-                case Report.State.Fail:
-                    bar.FillColor = Color.Firebrick;
-                    break;
-                case Report.State.Null:
-                    bar.FillColor = Color.Blue;
-                    break;
-                case Report.State.Misaligned:
-                    bar.FillColor = Color.ForestGreen;
-                    break;
-                default:
-                    bar.FillColor = Color.Black;
-                    break;
+                MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
+                return false;
             }
 
-            ViewDataPlots.Add(bar);
-            return string.Empty;
+            foreach ((int, int) region in regions)
+                Sheets.Add(new DataSheet(region, RegionGrid, StampGrid, ImageGrid, Criteria));
+
+            return true;
         }
 
-        private void HSpan_Dragged(object sender, EventArgs e)
+        private string MakeLegendStr()
         {
-            ScottPlot.Plottable.HSpan hSpan = (ScottPlot.Plottable.HSpan)sender;
-            Report.rescoreFeature(Data, SelectedFeature.Name, hSpan.X1, hSpan.X2);
+            var criteria = GetUsedCriteria();
+            string output = string.Empty;
+            foreach (var criterion in criteria)
+                output += $"{criterion.Item1.Sum()}\t{GetCriterionString(criterion)}\n";
+            return output;
         }
 
-        private void BtnViewData_Click(object sender, EventArgs e)
+        private Bitmap MakeLegend()
         {
-            ScottPlot.FormsPlot control = new ScottPlot.FormsPlot() { Dock = DockStyle.Fill };
-            ViewDataPlots.Clear();
-            List<string> skippedPlots = new List<string>();
-            foreach (Report.State state in Enum.GetValues(typeof(Report.State)))
+            var criteria = GetUsedCriteria();
+            Font font = new Font("Segoe", 16);
+            SizeF strSize = SizeF.Empty;
+            Bitmap bmp = new Bitmap(1, 1);
+            using (Graphics g = Graphics.FromImage(bmp))
             {
-                if (state == Report.State.Other) continue;
-                string plotName = MakeFeatureDataHistogram(ref control, state);
-                if (plotName != string.Empty) skippedPlots.Add(plotName);
+                foreach (var criterion in criteria)
+                {
+                    string critStr = GetCriterionString(criterion);
+                    SizeF critSize = g.MeasureString(critStr, font);
+                    if (critSize.Width > strSize.Width) strSize = critSize;
+                }
             }
-            if (skippedPlots.Count > 0)
+            strSize = new SizeF(strSize.Width, strSize.Height * 0.9f);
+            bmp = new Bitmap((int)strSize.Width, (int)(strSize.Height * criteria.Count));
+            using (Graphics g = Graphics.FromImage(bmp))
             {
-                string message = "Plots without data: ";
-                foreach (string item in skippedPlots)
-                    message += $"{item}, ";
-                ScottPlot.Plottable.Annotation annotation =
-                    control.Plot.AddAnnotation(message.Substring(0, message.Length - 2), -10, 10);
-                annotation.BackgroundColor = Color.FromArgb(200, Color.White);
-                annotation.BorderColor = Color.Transparent;
-                annotation.Font.Color = Color.Black;
-                annotation.Shadow = false;
+                for (int i = 0; i < criteria.Count; i++)
+                {
+                    Color c = criteria[i].Item3;
+                    g.FillRectangle(new SolidBrush(c), 0, i * strSize.Height, strSize.Width, strSize.Height);
+                    SolidBrush contrastBrush = new SolidBrush((((0.299 * c.R) + (0.587 * c.G) + (0.114 * c.B)) / 255) > 0.5 ? Color.Black : Color.White);
+                    g.DrawString(GetCriterionString(criteria[i]), font, contrastBrush, new PointF(0, i * strSize.Height));
+                }
             }
+            return bmp;
+        }
 
-            ViewDataAnnotation = control.Plot.AddAnnotation("Score = N/A", 10, 10);
-            ViewDataAnnotation.BackgroundColor = Color.FromArgb(200, Color.White);
-            ViewDataAnnotation.BorderColor = Color.Transparent;
-            ViewDataAnnotation.Font.Color = Color.Black;
-            ViewDataAnnotation.Shadow = false;
-
-            control.Plot.Title(SelectedFeature.Name);
-            control.Plot.XAxis.Label("Score");
-            control.Plot.YAxis.Label("Count");
-            control.Plot.Grid(false);
-            control.MouseWheel += Control_MouseWheel;
-            control.Configuration.DoubleClickBenchmark = false;
-            control.MouseUp += Control_MouseUp;
-            control.Refresh();
-            Form form = new Form()
+        private List<(int[], bool, Color)> GetUsedCriteria()
+        {
+            List<(int[], bool, Color)> criteria = new List<(int[], bool, Color)>();
+            foreach (var criterion in Criteria)
             {
-                Size = new Size(600, 400),
-                FormBorderStyle = FormBorderStyle.SizableToolWindow
+                bool valid = true;
+                foreach (int val in criterion.Item1)
+                {
+                    if (Project.Features[(int)(Math.Sqrt(val) - 1)].Ignore)
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (valid) criteria.Add(criterion);
+            }
+            return criteria;
+        }
+
+        private string GetCriterionString((int[], bool, Color) criterion)
+        {
+            string output = string.Empty;
+            foreach (int val in criterion.Item1)
+                output += Project.Features[(int)(Math.Sqrt(val) - 1)].Name + "-";
+            return output.Substring(0, output.Length - 1);
+        }
+
+        private void BtnMakeCycleFile_Click(object sender, EventArgs e)
+        {
+            Form form = new Form() { Text = "Cycle File" };
+            RichTextBox rtb = new RichTextBox() { 
+                Dock = DockStyle.Fill,
+                Text = MakeCycleFileHeader(),
             };
-            form.Controls.Add(control);
+            form.Controls.Add(rtb);
+            int idx = 0;
+            foreach (DataSheet sheet in Sheets)
+            {
+                string lines = sheet.CreateCycleFile(ref idx);
+                ApplyDelimeter(ref lines);
+                rtb.Text += lines;
+            }
             form.Show();
         }
 
-        private void Control_MouseUp(object sender, MouseEventArgs e)
+        private string MakeCycleFileHeader()
         {
-            ScottPlot.FormsPlot p = (ScottPlot.FormsPlot)sender;
-            (double mX, _) = p.GetMouseCoordinates();
-            int x = (int)Math.Floor(mX);
-            string message = $"Score = {x}\n";
-            foreach (ScottPlot.Plottable.BarPlot barPlot in ViewDataPlots)
-                for (int i = 0; i < barPlot.Positions.Length; i++)
-                    if (Math.Floor(barPlot.Positions[i]) == x && barPlot.Values[i] > 0)
-                        message += $"{barPlot.Label} Count = {barPlot.Values[i]}\n";
-            ViewDataAnnotation.Label = message;
-            p.Refresh();
+            string output = "UniqueID, Pick.WaferID, Pick.RegionRow, Pick.RegionColumn, Pick.Row, Pick.Column, Pick.Index, Place.WaferID, Place.RegionRow, Place.RegionColumn, Place.Row, Place.Column\n";
+            ApplyDelimeter(ref output);
+            return output;
         }
 
-        private void Control_MouseWheel(object sender, MouseEventArgs e)
+        private void ApplyDelimeter(ref string txt)
         {
-            ScottPlot.FormsPlot control = (ScottPlot.FormsPlot)sender;
-            switch(GetControlAxis(control, e.Location))
+            switch (_CycleFileDelimeter)
             {
-                case 0:
-                    control.Plot.XAxis.LockLimits(true);
-                    control.Plot.YAxis.LockLimits(false);
+                case Delimeter.Tab:
+                    txt = txt.Replace(", ", "\t");
                     break;
-                case 1:
-                    control.Plot.XAxis.LockLimits(false);
-                    control.Plot.YAxis.LockLimits(true);
+                case Delimeter.Space:
+                    txt = txt.Replace(", ", " ");
                     break;
+                case Delimeter.Comma:
                 default:
-                    control.Plot.XAxis.LockLimits(false);
-                    control.Plot.YAxis.LockLimits(false);
                     break;
             }
         }
 
-        private int GetControlAxis(ScottPlot.FormsPlot control, Point location)
+        #region Save Session
+
+        private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (location.X < 60) // At XAxis
-                return 0;
-            else if (location.Y > control.Height - 60) // At YAxis
-                return 1;
-            else
-                return -1;
+            SaveFileDialog svd = new SaveFileDialog
+            {
+                Filter = "SEYRUP file(*.seyrup)| *.seyrup",
+                Title = "Save SEYRUP File"
+            };
+            if (svd.ShowDialog() == DialogResult.OK)
+            {
+                if (File.Exists(svd.FileName)) File.Delete(svd.FileName);
+                LabelLoading.Text = "Saving...";
+                LabelLoading.Visible = true;
+                Application.DoEvents();
+                SaveProject();
+                SaveReport();
+                using (ZipArchive zip = ZipFile.Open(svd.FileName, ZipArchiveMode.Create))
+                {
+                    zip.CreateEntryFromFile(ReportPath, Path.GetFileName(ReportPath));
+                    zip.CreateEntryFromFile(ProjectPath, Path.GetFileName(ProjectPath));
+                }
+                LabelLoading.Visible = false;
+                LabelLoading.Text = "Loading...";
+            }
+        }
+
+        private void SaveProject()
+        {
+            using (StreamWriter stream = new StreamWriter(ProjectPath))
+            {
+                XmlSerializer x = new XmlSerializer(typeof(Project));
+                x.Serialize(stream, Project);
+            }
+        }
+
+        private void SaveReport()
+        {
+            using (StreamWriter stream = new StreamWriter(ReportPath))
+            {
+                stream.WriteLine(DataHeader);
+                foreach (DataEntry entry in Data)
+                    stream.WriteLine(entry.Raw);
+            }
         }
 
         #endregion

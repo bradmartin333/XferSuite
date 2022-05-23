@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using XferHelper;
-using XferSuite.Apps.XYZplotter;
 using static XferSuite.Apps.XYZplotter.Configuration;
 
 namespace XferSuite.Apps.XYZplotter
