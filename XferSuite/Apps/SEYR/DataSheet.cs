@@ -31,17 +31,29 @@ namespace XferSuite.Apps.SEYR
 
         }
 
-        public Bitmap GetTestBitmap()
+        public (Bitmap, string) GetBitmap(bool showPF)
         {
             Bitmap bitmap = new Bitmap(DataSize.Height - 1, DataSize.Width - 1);
+            double pass = 0;
+            double total = 0;
             for (int i = 0; i < bitmap.Width; i++)
                 for (int j = 0; j < bitmap.Height; j++)
                 {
+                    total++;
                     var criterion = Criteria.Where(x => x.Item1.Sum() == Data[j, i]);
-                    if (criterion.Any()) bitmap.SetPixel(i, j, criterion.First().Item3);
+                    if (criterion.Any())
+                    {
+                        Color c = criterion.First().Item3;
+                        if (showPF) c = criterion.First().Item2 ? Color.Green : Color.Firebrick;
+                        if (c == Color.Green) pass++;
+                        bitmap.SetPixel(i, j, c);
+                    } 
+                    else if (showPF)
+                        bitmap.SetPixel(i, j, Color.Firebrick);
                 }
             bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
-            return bitmap;
+            string percentage = (pass / total).ToString("P");
+            return (bitmap, percentage);
         }
     }
 }

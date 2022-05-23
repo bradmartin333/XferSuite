@@ -20,8 +20,13 @@ namespace XferSuite.Apps.SEYR
             InitializeComponent();
             Legend = bitmap;
             RegionBrowser = rb;
-            BackgroundImage = Legend;
+            PBX.BackgroundImage = Legend;
             Show();
+        }
+
+        private void CbxTogglePF_CheckedChanged(object sender, EventArgs e)
+        {
+            RegionBrowser.TogglePF(CbxTogglePF.Checked);
         }
     }
 }
