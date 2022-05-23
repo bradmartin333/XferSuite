@@ -362,27 +362,35 @@ namespace XferSuite.Apps.SEYR
             form.Controls.Add(rtb);
             int idx = 0;
             foreach (DataSheet sheet in Sheets)
-                rtb.Text += sheet.CreateCycleFile(ref idx, _CycleFileDelimeter);
+            {
+                string lines = sheet.CreateCycleFile(ref idx);
+                ApplyDelimeter(ref lines);
+                rtb.Text += lines;
+            }
             form.Show();
         }
 
         private string MakeCycleFileHeader()
         {
             string output = "UniqueID, Pick.WaferID, Pick.RegionRow, Pick.RegionColumn, Pick.Row, Pick.Column, Pick.Index, Place.WaferID, Place.RegionRow, Place.RegionColumn, Place.Row, Place.Column\n";
+            ApplyDelimeter(ref output);
+            return output;
+        }
+
+        private void ApplyDelimeter(ref string txt)
+        {
             switch (_CycleFileDelimeter)
             {
                 case Delimeter.Tab:
-                    output = output.Replace(", ", "\t");
-                    break;
-                case Delimeter.Comma:
+                    txt = txt.Replace(", ", "\t");
                     break;
                 case Delimeter.Space:
-                    output = output.Replace(", ", " ");
+                    txt = txt.Replace(", ", " ");
                     break;
+                case Delimeter.Comma:
                 default:
                     break;
             }
-            return output;
         }
 
         #region Save Session
