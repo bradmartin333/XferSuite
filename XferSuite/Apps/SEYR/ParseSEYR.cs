@@ -255,7 +255,7 @@ namespace XferSuite.Apps.SEYR
 
             RegionBrowser rb = new RegionBrowser(Data, Sheets, MakeLegendStr());
             LegendView lv = new LegendView(MakeLegend(), rb);
-            BtnExportCycleFile.Enabled = true;
+            BtnMakeCycleFile.Enabled = true;
         }
 
         private bool MakeSheets()
@@ -352,7 +352,7 @@ namespace XferSuite.Apps.SEYR
             return output.Substring(0, output.Length - 1);
         }
 
-        private void BtnExportCycleFile_Click(object sender, EventArgs e)
+        private void BtnMakeCycleFile_Click(object sender, EventArgs e)
         {
             Form form = new Form() { Text = "Cycle File" };
             RichTextBox rtb = new RichTextBox() { 

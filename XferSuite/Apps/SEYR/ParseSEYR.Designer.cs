@@ -34,7 +34,7 @@
             this.ComboFeatures = new System.Windows.Forms.ComboBox();
             this.BtnRescore = new System.Windows.Forms.Button();
             this.BtnPlot = new System.Windows.Forms.Button();
-            this.BtnExportCycleFile = new System.Windows.Forms.Button();
+            this.BtnMakeCycleFile = new System.Windows.Forms.Button();
             this.LabelLoading = new System.Windows.Forms.Label();
             this.TLP.SuspendLayout();
             this.SuspendLayout();
@@ -48,7 +48,7 @@
             this.TLP.Controls.Add(this.ComboFeatures, 0, 1);
             this.TLP.Controls.Add(this.BtnRescore, 1, 1);
             this.TLP.Controls.Add(this.BtnPlot, 0, 4);
-            this.TLP.Controls.Add(this.BtnExportCycleFile, 1, 4);
+            this.TLP.Controls.Add(this.BtnMakeCycleFile, 1, 4);
             this.TLP.Controls.Add(this.LabelLoading, 0, 2);
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TLP.Location = new System.Drawing.Point(0, 0);
@@ -112,19 +112,19 @@
             this.BtnPlot.UseVisualStyleBackColor = false;
             this.BtnPlot.Click += new System.EventHandler(this.BtnPlot_Click);
             // 
-            // BtnExportCycleFile
+            // BtnMakeCycleFile
             // 
-            this.BtnExportCycleFile.BackColor = System.Drawing.Color.White;
-            this.BtnExportCycleFile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnExportCycleFile.Enabled = false;
-            this.BtnExportCycleFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnExportCycleFile.Location = new System.Drawing.Point(152, 83);
-            this.BtnExportCycleFile.Name = "BtnExportCycleFile";
-            this.BtnExportCycleFile.Size = new System.Drawing.Size(144, 23);
-            this.BtnExportCycleFile.TabIndex = 5;
-            this.BtnExportCycleFile.Text = "Export Cycle File";
-            this.BtnExportCycleFile.UseVisualStyleBackColor = false;
-            this.BtnExportCycleFile.Click += new System.EventHandler(this.BtnExportCycleFile_Click);
+            this.BtnMakeCycleFile.BackColor = System.Drawing.Color.White;
+            this.BtnMakeCycleFile.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnMakeCycleFile.Enabled = false;
+            this.BtnMakeCycleFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnMakeCycleFile.Location = new System.Drawing.Point(152, 83);
+            this.BtnMakeCycleFile.Name = "BtnMakeCycleFile";
+            this.BtnMakeCycleFile.Size = new System.Drawing.Size(144, 23);
+            this.BtnMakeCycleFile.TabIndex = 5;
+            this.BtnMakeCycleFile.Text = "Make Cycle File";
+            this.BtnMakeCycleFile.UseVisualStyleBackColor = false;
+            this.BtnMakeCycleFile.Click += new System.EventHandler(this.BtnMakeCycleFile_Click);
             // 
             // LabelLoading
             // 
@@ -162,7 +162,7 @@
         private System.Windows.Forms.ComboBox ComboFeatures;
         private System.Windows.Forms.Button BtnRescore;
         private System.Windows.Forms.Button BtnPlot;
-        private System.Windows.Forms.Button BtnExportCycleFile;
+        private System.Windows.Forms.Button BtnMakeCycleFile;
         private System.Windows.Forms.Label LabelLoading;
         private System.Windows.Forms.Button BtnSave;
     }
