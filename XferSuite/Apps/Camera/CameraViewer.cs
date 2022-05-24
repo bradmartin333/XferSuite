@@ -248,7 +248,7 @@ namespace XferSuite.Apps.Camera
             foreach (FilterInfo device in VideoDevices)
                 if (device.MonikerString == CameraLayout.CamID) StartStream(CameraLayout.CamID);
             System.Threading.Thread.SpinWait(1000);
-            if (!VideoSource.IsRunning) return;
+            if (VideoSource == null || !VideoSource.IsRunning) return;
 
             // Restore Position
             StartPosition = FormStartPosition.Manual;
