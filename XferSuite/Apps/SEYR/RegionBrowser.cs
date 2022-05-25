@@ -159,7 +159,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void ToolStripMenuItemCopyImage_Click(object sender, System.EventArgs e)
+        private void CopySelectedRegionToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             Clipboard.SetImage(GetActiveBitmap());
         }
