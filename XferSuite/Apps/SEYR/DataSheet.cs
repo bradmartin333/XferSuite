@@ -32,8 +32,6 @@ namespace XferSuite.Apps.SEYR
             Data[i, j] = criterion;
         }
 
-        // HELP WANTED
-        // Create bitmap using BitmapData, not SetPixel
         public (Bitmap, string) GetBitmap(bool showPF)
         {
             Bitmap bitmap = new Bitmap(DataSize.Height - 1, DataSize.Width - 1);
