@@ -20,10 +20,11 @@ namespace XferSuite.AdvancedTools
             COUNT, COUNTEX, 
             DELETE, DELETEEX, 
             REPLACE, REPLACEEX, 
-            IF, IFEX, XIF, XIFEX,
+            IF, IFEX,
+            NOT, NOTEX,
             EVAL, OPER
         }
-        enum Delimeter { Tab, Space, Comma }
+        enum Delimeter { Tab, Space, Comma, Semicolon }
         enum Evaluators { GR, LS, GREQ, LSEQ, EQ, NEQ }
         enum Operators { ADD, SUB, MUL, DIV, MOD, POW, RND }
         private char Delim { 
@@ -37,6 +38,8 @@ namespace XferSuite.AdvancedTools
                         return ' ';
                     case Delimeter.Comma:
                         return ',';
+                    case Delimeter.Semicolon:
+                        return ';';
                     default:
                         return ' ';
                 }
@@ -149,8 +152,8 @@ namespace XferSuite.AdvancedTools
                     break;
                 case Commands.IF:
                 case Commands.IFEX:
-                case Commands.XIF:
-                case Commands.XIFEX:
+                case Commands.NOT:
+                case Commands.NOTEX:
                     if (cp.Args.Count > 3 || (cp.Args.Count == 3 && cp.Args[1] != "IN") || cp.Args.Count == 2 || cp.Args.Count == 0)
                         RTB.Text += "Invalid if command\n";
                     else
@@ -243,7 +246,7 @@ namespace XferSuite.AdvancedTools
 
         private void PrintDelete(string[] vals, bool exact)
         {
-            List<(int, string[])> data = DataSubset.Count == 0 ? Data : DataSubset;
+            List<(int, string[])> data = DataSubset.Count == 0 ? new List<(int, string[])>(Data) : DataSubset;
             try
             {
                 List<(int, string[])> newData = new List<(int, string[])>();
@@ -299,7 +302,7 @@ namespace XferSuite.AdvancedTools
 
         private void PrintReplace(string[] vals, bool exact)
         {
-            List<(int, string[])> data = DataSubset.Count == 0 ? Data : DataSubset;
+            List<(int, string[])> data = DataSubset.Count == 0 ? new List<(int, string[])>(Data) : DataSubset;
             try
             {
                 string rep = string.Empty;
@@ -388,19 +391,19 @@ namespace XferSuite.AdvancedTools
                         switch (command)
                         {
                             case Commands.IF:
-                            case Commands.XIF:
+                            case Commands.NOT:
                                 if (row.Item2.Where(x => x.Contains(vals[0])).Count() > 0 && command == Commands.IF)
                                     thisSubset.Add(row);
-                                else if (row.Item2.Where(x => x.Contains(vals[0])).Count() == 0 && command == Commands.XIF)
+                                else if (row.Item2.Where(x => x.Contains(vals[0])).Count() == 0 && command == Commands.NOT)
                                     thisSubset.Add(row);
                                 else
                                     thisRemainder.Add(row);
                                 break;
                             case Commands.IFEX:
-                            case Commands.XIFEX:
+                            case Commands.NOTEX:
                                 if (row.Item2.Where(x => x == vals[0]).Count() > 0 && command == Commands.IFEX)
                                     thisSubset.Add(row);
-                                else if (row.Item2.Where(x => x == vals[0]).Count() == 0 && command == Commands.XIFEX)
+                                else if (row.Item2.Where(x => x == vals[0]).Count() == 0 && command == Commands.NOTEX)
                                     thisSubset.Add(row);
                                 else
                                     thisRemainder.Add(row);
@@ -418,19 +421,19 @@ namespace XferSuite.AdvancedTools
                         switch (command)
                         {
                             case Commands.IF:
-                            case Commands.XIF:
+                            case Commands.NOT:
                                 if (row.Item2[colNum].Contains(vals[0]) && command == Commands.IF)
                                     thisSubset.Add(row);
-                                else if (!row.Item2[colNum].Contains(vals[0]) && command == Commands.XIF)
+                                else if (!row.Item2[colNum].Contains(vals[0]) && command == Commands.NOT)
                                     thisSubset.Add(row);
                                 else
                                     thisRemainder.Add(row);
                                 break;
                             case Commands.IFEX:
-                            case Commands.XIFEX:
+                            case Commands.NOTEX:
                                 if (row.Item2[colNum] == vals[0] && command == Commands.IFEX)
                                     thisSubset.Add(row);
-                                else if (row.Item2[colNum] != vals[0] && command == Commands.XIFEX)
+                                else if (row.Item2[colNum] != vals[0] && command == Commands.NOTEX)
                                     thisSubset.Add(row);
                                 else
                                     thisRemainder.Add(row);
