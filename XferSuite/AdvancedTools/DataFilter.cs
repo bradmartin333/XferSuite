@@ -21,10 +21,11 @@ namespace XferSuite.AdvancedTools
             DELETE, DELETEEX, 
             REPLACE, REPLACEEX, 
             IF, IFEX, XIF, XIFEX,
-            EVAL
+            EVAL, OPER
         }
         enum Delimeter { Tab, Space, Comma }
         enum Evaluators { GR, LS, GREQ, LSEQ, EQ, NEQ }
+        enum Operators { ADD, SUB, MUL, DIV, MOD, POW, RND }
         private char Delim { 
             get
             {
@@ -156,19 +157,34 @@ namespace XferSuite.AdvancedTools
                         EvaluateIf(cp.Args.ToArray(), cp.Command);
                     break;
                 case Commands.EVAL:
-                    int colNum;
-                    Evaluators evaluator;
-                    float crit;
-                    if (!int.TryParse(cp.Args[0], out colNum))
+                    int EcolNum;
+                    Evaluators Eenum;
+                    float Ecrit;
+                    if (!int.TryParse(cp.Args[0], out EcolNum))
                         RTB.Text += "Invalid eval command (Bad column number)\n";
-                    else if (!Enum.TryParse(cp.Args[1], out evaluator))
+                    else if (!Enum.TryParse(cp.Args[1], out Eenum))
                         RTB.Text += $"Invalid eval command (Valid keys are {string.Join(", ", Enum.GetNames(typeof(Evaluators)))})\n";
-                    else if (!float.TryParse(cp.Args[2], out crit))
+                    else if (!float.TryParse(cp.Args[2], out Ecrit))
                         RTB.Text += "Invalid eval command (Bad criteria)\n";
-                    else if (!NumberColumn[colNum])
+                    else if (!NumberColumn[EcolNum])
                         RTB.Text += "Selected eval column is not a number column\n";
                     else
-                        EvaluateEval(colNum, evaluator, crit);
+                        EvaluateEval(EcolNum, Eenum, Ecrit);
+                    break;
+                case Commands.OPER:
+                    int OcolNum;
+                    Operators Oenum;
+                    float Ocrit;
+                    if (!int.TryParse(cp.Args[0], out OcolNum))
+                        RTB.Text += "Invalid oper command (Bad column number)\n";
+                    else if (!Enum.TryParse(cp.Args[1], out Oenum))
+                        RTB.Text += $"Invalid oper command (Valid keys are {string.Join(", ", Enum.GetNames(typeof(Operators)))})\n";
+                    else if (!float.TryParse(cp.Args[2], out Ocrit))
+                        RTB.Text += "Invalid oper command (Bad criteria)\n";
+                    else if (!NumberColumn[OcolNum])
+                        RTB.Text += "Selected oper column is not a number column\n";
+                    else
+                        EvaluateOper(OcolNum, Oenum, Ocrit);
                     break;
                 default:
                     break;
@@ -424,17 +440,17 @@ namespace XferSuite.AdvancedTools
                         }
                     }
                 }
+
+                DataRemainder.AddRange(thisRemainder);
+                DataSubset = thisSubset;
             }
             catch (Exception ex)
             {
                 RTB.Text += $"Invalid if command {ex}\n";
             }
-            
-            DataRemainder.AddRange(thisRemainder);
-            DataSubset = thisSubset;
         }
 
-        private void EvaluateEval(int colNum, Evaluators evaluator, float crit)
+        private void EvaluateEval(int colNum, Evaluators c, float crit)
         {
             List<(int, string[])> data = DataSubset.Count == 0 ? Data : DataSubset;
             List<(int, string[])> thisRemainder = new List<(int, string[])>();
@@ -445,7 +461,7 @@ namespace XferSuite.AdvancedTools
                 foreach ((int, string[]) row in data)
                 {
                     if (!float.TryParse(row.Item2[colNum], out float val)) thisRemainder.Add(row);
-                    switch (evaluator)
+                    switch (c)
                     {
                         case Evaluators.GR:
                             if (val > crit)
@@ -488,14 +504,63 @@ namespace XferSuite.AdvancedTools
                             break;
                     }
                 }
+
+                DataRemainder.AddRange(thisRemainder);
+                DataSubset = thisSubset;
             }
             catch (Exception ex)
             {
                 RTB.Text += $"Invalid eval command {ex}\n";
             }
+        }
 
-            DataRemainder.AddRange(thisRemainder);
-            DataSubset = thisSubset;
+        private void EvaluateOper(int colNum, Operators c, float crit)
+        {
+            List<(int, string[])> data = DataSubset.Count == 0 ? Data : DataSubset;
+            try
+            {
+                foreach ((int, string[]) row in data)
+                {
+                    if (!float.TryParse(row.Item2[colNum], out float val)) continue;
+                    switch (c)
+                    {
+                        case Operators.ADD:
+                            row.Item2[colNum] = (val + crit).ToString();
+                            break;
+                        case Operators.SUB:
+                            row.Item2[colNum] = (val - crit).ToString();
+                            break;
+                        case Operators.MUL:
+                            row.Item2[colNum] = (val * crit).ToString();
+                            break;
+                        case Operators.DIV:
+                            row.Item2[colNum] = (val / crit).ToString();
+                            break;
+                        case Operators.MOD:
+                            row.Item2[colNum] = (val % crit).ToString();
+                            break;
+                        case Operators.POW:
+                            row.Item2[colNum] = (Math.Pow(val, crit)).ToString();
+                            break;
+                        case Operators.RND:
+                            row.Item2[colNum] = (Math.Round(val, (int)crit)).ToString();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                Data.Clear();
+                Data.AddRange(DataRemainder);
+                Data.AddRange(data);
+                DataRemainder.Clear();
+                DataSubset.Clear();
+                RTB.Text += $"Oper command complete\n";
+            }
+            catch (Exception ex)
+            {
+                RTB.Text += $"Invalid oper command {ex}\n";
+            }
         }
 
         #endregion
