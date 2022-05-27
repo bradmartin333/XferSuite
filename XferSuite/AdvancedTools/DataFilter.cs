@@ -75,7 +75,7 @@ namespace XferSuite.AdvancedTools
             }
 
             string[] commands = Enum.GetNames(typeof(Commands));
-            string msg = RTB.Text.Split('\n')[0];
+            string msg = RTB.Text.Replace("\n", "");
             string[] cols = msg.Split(' ');
             
             List<CommandProcessor> commandProcessors = new List<CommandProcessor>();
@@ -142,7 +142,7 @@ namespace XferSuite.AdvancedTools
                 case Commands.IFEX:
                 case Commands.XIF:
                 case Commands.XIFEX:
-                    if (cp.Args.Count > 3 || (cp.Args.Count == 3 && cp.Args[1] != "IN") || cp.Args.Count == 2)
+                    if (cp.Args.Count > 3 || (cp.Args.Count == 3 && cp.Args[1] != "IN") || cp.Args.Count == 2 || cp.Args.Count == 0)
                         RTB.Text += "Invalid if command\n";
                     else
                         EvaluateIf(cp.Args.ToArray(), cp.Command);
