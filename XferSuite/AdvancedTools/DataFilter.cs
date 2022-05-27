@@ -15,8 +15,16 @@ namespace XferSuite.AdvancedTools
             public List<string> Args;
         }
 
-        enum Commands { COLS, COUNT, COUNTEX, DELETE, DELETEEX, REPLACE, REPLACEEX, IF, IFEX, XIF, XIFEX }
+        enum Commands { 
+            COLS, 
+            COUNT, COUNTEX, 
+            DELETE, DELETEEX, 
+            REPLACE, REPLACEEX, 
+            IF, IFEX, XIF, XIFEX,
+            EVAL
+        }
         enum Delimeter { Tab, Space, Comma }
+        enum Evaluators { GR, LS, GREQ, LSEQ, EQ, NEQ }
         private char Delim { 
             get
             {
@@ -146,6 +154,21 @@ namespace XferSuite.AdvancedTools
                         RTB.Text += "Invalid if command\n";
                     else
                         EvaluateIf(cp.Args.ToArray(), cp.Command);
+                    break;
+                case Commands.EVAL:
+                    int colNum;
+                    Evaluators evaluator;
+                    float crit;
+                    if (!int.TryParse(cp.Args[0], out colNum))
+                        RTB.Text += "Invalid eval command (Bad column number)\n";
+                    else if (!Enum.TryParse(cp.Args[1], out evaluator))
+                        RTB.Text += $"Invalid eval command (Valid keys are {string.Join(", ", Enum.GetNames(typeof(Evaluators)))})\n";
+                    else if (!float.TryParse(cp.Args[2], out crit))
+                        RTB.Text += "Invalid eval command (Bad criteria)\n";
+                    else if (!NumberColumn[colNum])
+                        RTB.Text += "Selected eval column is not a number column\n";
+                    else
+                        EvaluateEval(colNum, evaluator, crit);
                     break;
                 default:
                     break;
@@ -339,69 +362,141 @@ namespace XferSuite.AdvancedTools
             List<(int, string[])> data = DataSubset.Count == 0 ? Data : DataSubset;
             List<(int, string[])> thisRemainder = new List<(int, string[])>();
             List<(int, string[])> thisSubset = new List<(int, string[])>();
-            if (vals.Length == 1)
+
+            try
             {
-                foreach ((int, string[]) row in data)
+                if (vals.Length == 1)
                 {
-                    switch (command)
+                    foreach ((int, string[]) row in data)
                     {
-                        case Commands.IF:
-                        case Commands.XIF:
-                            if (row.Item2.Where(x => x.Contains(vals[0])).Count() > 0 && command == Commands.IF)
-                                thisSubset.Add(row);
-                            else if (row.Item2.Where(x => x.Contains(vals[0])).Count() == 0 && command == Commands.XIF)
-                                thisSubset.Add(row);
-                            else
-                                thisRemainder.Add(row);
-                            break;
-                        case Commands.IFEX:
-                        case Commands.XIFEX:
-                            if (row.Item2.Where(x => x == vals[0]).Count() > 0 && command == Commands.IFEX)
-                                thisSubset.Add(row);
-                            else if (row.Item2.Where(x => x == vals[0]).Count() == 0 && command == Commands.XIFEX)
-                                thisSubset.Add(row);
-                            else
-                                thisRemainder.Add(row);
-                            break;
-                        default:
-                            break;
+                        switch (command)
+                        {
+                            case Commands.IF:
+                            case Commands.XIF:
+                                if (row.Item2.Where(x => x.Contains(vals[0])).Count() > 0 && command == Commands.IF)
+                                    thisSubset.Add(row);
+                                else if (row.Item2.Where(x => x.Contains(vals[0])).Count() == 0 && command == Commands.XIF)
+                                    thisSubset.Add(row);
+                                else
+                                    thisRemainder.Add(row);
+                                break;
+                            case Commands.IFEX:
+                            case Commands.XIFEX:
+                                if (row.Item2.Where(x => x == vals[0]).Count() > 0 && command == Commands.IFEX)
+                                    thisSubset.Add(row);
+                                else if (row.Item2.Where(x => x == vals[0]).Count() == 0 && command == Commands.XIFEX)
+                                    thisSubset.Add(row);
+                                else
+                                    thisRemainder.Add(row);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    int colNum = int.Parse(vals[2]);
+                    foreach ((int, string[]) row in data)
+                    {
+                        switch (command)
+                        {
+                            case Commands.IF:
+                            case Commands.XIF:
+                                if (row.Item2[colNum].Contains(vals[0]) && command == Commands.IF)
+                                    thisSubset.Add(row);
+                                else if (!row.Item2[colNum].Contains(vals[0]) && command == Commands.XIF)
+                                    thisSubset.Add(row);
+                                else
+                                    thisRemainder.Add(row);
+                                break;
+                            case Commands.IFEX:
+                            case Commands.XIFEX:
+                                if (row.Item2[colNum] == vals[0] && command == Commands.IFEX)
+                                    thisSubset.Add(row);
+                                else if (row.Item2[colNum] != vals[0] && command == Commands.XIFEX)
+                                    thisSubset.Add(row);
+                                else
+                                    thisRemainder.Add(row);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                int colNum = int.Parse(vals[2]);
-                foreach ((int, string[]) row in data)
-                {
-                    switch (command)
-                    {
-                        case Commands.IF:
-                        case Commands.XIF:
-                            if (row.Item2[colNum].Contains(vals[0]) && command == Commands.IF)
-                                thisSubset.Add(row);
-                            else if (!row.Item2[colNum].Contains(vals[0]) && command == Commands.XIF)
-                                thisSubset.Add(row);
-                            else
-                                thisRemainder.Add(row);
-                            break;
-                        case Commands.IFEX:
-                        case Commands.XIFEX:
-                            if (row.Item2[colNum] == vals[0] && command == Commands.IFEX)
-                                thisSubset.Add(row);
-                            else if (row.Item2[colNum] != vals[0] && command == Commands.XIFEX)
-                                thisSubset.Add(row);
-                            else
-                                thisRemainder.Add(row);
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                RTB.Text += $"Invalid if command {ex}\n";
             }
+            
             DataRemainder.AddRange(thisRemainder);
             DataSubset = thisSubset;
         }
 
+        private void EvaluateEval(int colNum, Evaluators evaluator, float crit)
+        {
+            List<(int, string[])> data = DataSubset.Count == 0 ? Data : DataSubset;
+            List<(int, string[])> thisRemainder = new List<(int, string[])>();
+            List<(int, string[])> thisSubset = new List<(int, string[])>();
+
+            try
+            {
+                foreach ((int, string[]) row in data)
+                {
+                    if (!float.TryParse(row.Item2[colNum], out float val)) thisRemainder.Add(row);
+                    switch (evaluator)
+                    {
+                        case Evaluators.GR:
+                            if (val > crit)
+                                thisSubset.Add(row);
+                            else
+                                thisRemainder.Add(row);
+                            break;
+                        case Evaluators.LS:
+                            if (val < crit)
+                                thisSubset.Add(row);
+                            else
+                                thisRemainder.Add(row);
+                            break;
+                        case Evaluators.GREQ:
+                            if (val >= crit)
+                                thisSubset.Add(row);
+                            else
+                                thisRemainder.Add(row);
+                            break;
+                        case Evaluators.LSEQ:
+                            if (val <= crit)
+                                thisSubset.Add(row);
+                            else
+                                thisRemainder.Add(row);
+                            break;
+                        case Evaluators.EQ:
+                            if (val == crit)
+                                thisSubset.Add(row);
+                            else
+                                thisRemainder.Add(row);
+                            break;
+                        case Evaluators.NEQ:
+                            if (val != crit)
+                                thisSubset.Add(row);
+                            else
+                                thisRemainder.Add(row);
+                            break;
+                        default:
+                            thisRemainder.Add(row);
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RTB.Text += $"Invalid eval command {ex}\n";
+            }
+
+            DataRemainder.AddRange(thisRemainder);
+            DataSubset = thisSubset;
+        }
 
         #endregion
 
