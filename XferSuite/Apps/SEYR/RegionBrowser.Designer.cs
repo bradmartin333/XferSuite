@@ -34,6 +34,7 @@
             this.ToolStripMenuItemCopyImage = new System.Windows.Forms.ToolStripMenuItem();
             this.CopyEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCopyCSV = new System.Windows.Forms.ToolStripMenuItem();
+            this.CopySelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,30 +44,37 @@
             this.ToolStripMenuItemCopyImage,
             this.ToolStripMenuItemCopyCSV});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(139, 48);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(181, 70);
             // 
             // ToolStripMenuItemCopyImage
             // 
             this.ToolStripMenuItemCopyImage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CopyEntireWindowToolStripMenuItem});
+            this.CopyEntireWindowToolStripMenuItem,
+            this.CopySelectedRegionToolStripMenuItem});
             this.ToolStripMenuItemCopyImage.Name = "ToolStripMenuItemCopyImage";
-            this.ToolStripMenuItemCopyImage.Size = new System.Drawing.Size(138, 22);
+            this.ToolStripMenuItemCopyImage.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemCopyImage.Text = "Copy Image";
-            this.ToolStripMenuItemCopyImage.Click += new System.EventHandler(this.ToolStripMenuItemCopyImage_Click);
             // 
             // CopyEntireWindowToolStripMenuItem
             // 
             this.CopyEntireWindowToolStripMenuItem.Name = "CopyEntireWindowToolStripMenuItem";
-            this.CopyEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.CopyEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.CopyEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.CopyEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.CopyEntireWindowToolStripMenuItem_Click);
             // 
             // ToolStripMenuItemCopyCSV
             // 
             this.ToolStripMenuItemCopyCSV.Name = "ToolStripMenuItemCopyCSV";
-            this.ToolStripMenuItemCopyCSV.Size = new System.Drawing.Size(138, 22);
+            this.ToolStripMenuItemCopyCSV.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemCopyCSV.Text = "Copy CSV";
             this.ToolStripMenuItemCopyCSV.Click += new System.EventHandler(this.ToolStripMenuCopyCSV_Click);
+            // 
+            // CopySelectedRegionToolStripMenuItem
+            // 
+            this.CopySelectedRegionToolStripMenuItem.Name = "CopySelectedRegionToolStripMenuItem";
+            this.CopySelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CopySelectedRegionToolStripMenuItem.Text = "Selected Region";
+            this.CopySelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.CopySelectedRegionToolStripMenuItem_Click);
             // 
             // RegionBrowser
             // 
@@ -88,5 +96,6 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCopyImage;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCopyCSV;
         private System.Windows.Forms.ToolStripMenuItem CopyEntireWindowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CopySelectedRegionToolStripMenuItem;
     }
 }
