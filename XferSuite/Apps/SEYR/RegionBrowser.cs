@@ -132,7 +132,7 @@ namespace XferSuite.Apps.SEYR
             {
                 case MouseButtons.Left:
                     ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
-                    DataEntry data = GetActiveSheet().GetLocation(ContextMenuStrip.Tag, ZoomMousePos(e.Location));
+                    DataEntry data = GetActiveSheet().GetLocation(ZoomMousePos(e.Location));
                     DataEntry[] matches = Data.Where(x => x.ImageMatch(data)).Where(x => x.Image != null).ToArray();
                     Text = data.Location();
                     if (matches.Any()) matches[0].ShowImage();
@@ -167,7 +167,7 @@ namespace XferSuite.Apps.SEYR
         private void ToolStripMenuCopyCSV_Click(object sender, System.EventArgs e)
         {
             string data = GetActiveSheet().GetCSV();
-            Clipboard.SetText(data + LegendStr);
+            Clipboard.SetText(data + '\n' + LegendStr);
         }
 
         private Bitmap GetActiveBitmap()
