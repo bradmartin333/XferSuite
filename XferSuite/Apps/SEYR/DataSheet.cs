@@ -89,13 +89,13 @@ namespace XferSuite.Apps.SEYR
             {
                 for (int j = 0; j < DataSize.Height; j++)
                 {
-                    var criterion = Criteria.Where(x => x.Item1.Sum() == Data[i, j].Item1);
+                    var criterion = Criteria.Where(x => x.Item1.Sum() == Data[j, i].Item1);
                     bool pass = false;
                     if (criterion.Any()) pass = criterion.First().Item2;
                     if (!pass)
                     {
                         idx++;
-                        sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(j, i), true)));
+                        sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true)));
                     }
                 }
             }
