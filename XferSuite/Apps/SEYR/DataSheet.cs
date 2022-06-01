@@ -15,9 +15,9 @@ namespace XferSuite.Apps.SEYR
         private List<(int[], bool, Color)> Criteria { get; set; }
         private Bitmap Render;
         private readonly bool FlipX = false;
-        private readonly bool FlipY = true;
+        private readonly bool FlipY = false;
 
-        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, List<(int[], bool, Color)> criteria)
+        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, List<(int[], bool, Color)> criteria, bool flipX, bool flipY)
         {
             ID = region;
             StampGrid = stampGrid;
@@ -25,6 +25,8 @@ namespace XferSuite.Apps.SEYR
             DataSize = new Size(regionGrid.Width * stampGrid.Width * imageGrid.Width, regionGrid.Height * stampGrid.Height * imageGrid.Height);
             Data = new (int, DataEntry)[DataSize.Width, DataSize.Height];
             Criteria = criteria;
+            FlipX = flipX;
+            FlipY = flipY;
         }
 
         public void Insert(DataEntry e, int criterion)
@@ -93,7 +95,7 @@ namespace XferSuite.Apps.SEYR
                     if (!pass)
                     {
                         idx++;
-                        sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j))));
+                        sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(j, i), true)));
                     }
                 }
             }
@@ -107,12 +109,12 @@ namespace XferSuite.Apps.SEYR
                    $"{(d.C - 1) * StampGrid.Height * ImageGrid.Height + (d.SC - 1) * StampGrid.Height + d.TC}";
         }
 
-        public DataEntry GetLocation(Point p_in)
+        public DataEntry GetLocation(Point p_in, bool cycle = false)
         {
             int bmpX = p_in.X;
             int bmpY = p_in.Y;
-            if (FlipX) bmpX = Render.Width - bmpX - 1;
-            if (FlipY) bmpY = Render.Height - bmpY - 1;
+            if (!cycle && FlipX) bmpX = Render.Width - bmpX - 1;
+            if (!cycle && FlipY) bmpY = Render.Height - bmpY - 1;
             return Data[bmpY, bmpX].Item2;
         }
     }

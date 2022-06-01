@@ -18,6 +18,14 @@ namespace XferSuite.Apps.SEYR
         [Category("User Parameters")]
         public Delimeter CycleFileDelimeter { get => _CycleFileDelimeter; set => _CycleFileDelimeter = value; }
 
+        private bool _FlipX = false;
+        [Category("User Parameters")]
+        public bool FlipX { get => _FlipX; set => _FlipX = value; }
+
+        private bool _FlipY = false;
+        [Category("User Parameters")]
+        public bool FlipY { get => _FlipY; set => _FlipY = value; }
+
         private readonly bool ForceClose;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
@@ -292,7 +300,7 @@ namespace XferSuite.Apps.SEYR
             }
 
             foreach ((int, int) region in regions)
-                Sheets.Add(new DataSheet(region, RegionGrid, StampGrid, ImageGrid, Criteria));
+                Sheets.Add(new DataSheet(region, RegionGrid, StampGrid, ImageGrid, Criteria, _FlipX, _FlipY));
 
             return true;
         }
