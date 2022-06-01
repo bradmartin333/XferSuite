@@ -128,6 +128,7 @@ namespace XferSuite.Apps.Camera
             this.ClientSize = new System.Drawing.Size(543, 420);
             this.Controls.Add(this.toolStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimizeBox = false;
             this.Name = "CameraViewer";
             this.Text = "Camera Viewer";
             this.toolStrip.ResumeLayout(false);
