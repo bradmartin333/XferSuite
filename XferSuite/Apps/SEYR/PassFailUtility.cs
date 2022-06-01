@@ -116,16 +116,21 @@ namespace XferSuite.Apps.SEYR
             if (LoadingImages) return;
             LoadingImages = true;
             List<Bitmap> bitmaps = new List<Bitmap>();
+            List<string> info = new List<string>();
             DataEntry[] entries = Data.Where(d => Math.Abs(d.Score - x) <= 2 && d.FeatureName == Feature.Name).ToArray();
             foreach (DataEntry entry in entries)
             {
                 if (bitmaps.Count > 25) break;
-                if (entry.Image != null) bitmaps.Add(entry.Image);
+                if (entry.Image != null)
+                {
+                    bitmaps.Add(entry.Image);
+                    info.Add(entry.Location());
+                }
             }   
             if (bitmaps.Count > 0)
             {
                 CloseImageScroller();
-                _ = new ImageScroller(bitmaps) { Text = $"First 25 images with score = {x}±2" };
+                _ = new ImageScroller(bitmaps, info) { Text = $"First 25 images with score = {x}±2" };
             }
             Cursor = Cursors.Default;
             LoadingImages = false;

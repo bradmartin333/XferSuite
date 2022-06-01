@@ -177,6 +177,7 @@ namespace XferSuite.Apps.SEYR
                 else if (result == DialogResult.Ignore)
                     feature.Ignore = !feature.Ignore;
             }
+            ComboFeatures.Text = feature.Name;
         }
 
         private void InitFeatureInfo()
