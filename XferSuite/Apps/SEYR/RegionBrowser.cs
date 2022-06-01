@@ -79,7 +79,7 @@ namespace XferSuite.Apps.SEYR
                         PictureBoxes.Add(pictureBox);
                         pictureBox.BackgroundImage = bmpInfo.Item1;
                         if (showPF) TLP.Controls.Add(TLPLabel(bmpInfo.Item2), i + 2, j * 2);
-                        TLP.Controls.Add(pictureBox, i + 2, j * 2 + 1);
+                        TLP.Controls.Add(pictureBox, i + 2, (j * 2) + 1);
                     }  
                 }
             }
