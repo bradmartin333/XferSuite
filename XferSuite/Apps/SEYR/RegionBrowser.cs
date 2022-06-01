@@ -40,12 +40,12 @@ namespace XferSuite.Apps.SEYR
             PictureBoxes = new List<PictureBox>();
 
             var IDs = Sheets.Select(s => s.ID).ToList();
-            var RRs = IDs.Select(id => id.Item1);
-            var RCs = IDs.Select(id => id.Item2);
+            var RRs = IDs.Select(id => id.Item1).Distinct();
+            var RCs = IDs.Select(id => id.Item2).Distinct();
             ArraySize = new Size(RRs.Max(), RCs.Max());
 
-            int hgt = 100 / RRs.Count();
-            int wid = 100 / RCs.Count();
+            int hgt = (int)Math.Floor(100 / (double)RRs.Count());
+            int wid = (int)Math.Floor(100 / (double)RCs.Count());
 
             TLP.ColumnStyles.Clear();
             TLP.RowStyles.Clear();
