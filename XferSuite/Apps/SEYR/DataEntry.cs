@@ -99,18 +99,5 @@ namespace XferSuite.Apps.SEYR
         {
             return d.RR == RR && d.RC == RC && d.R == R && d.C == C && d.SR == SR && d.SC == SC && d.TR == TR && d.TC == TC;
         }
-
-        public void ShowImage()
-        {
-            if (Form != null) Form.Close();
-            Form = new Form()
-            {
-                FormBorderStyle = FormBorderStyle.SizableToolWindow,
-                Text = Location(),
-                BackgroundImageLayout = ImageLayout.Zoom,
-                BackgroundImage = Image,
-            };
-            Form.Show();
-        }
     }
 }

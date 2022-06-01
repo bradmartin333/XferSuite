@@ -15,6 +15,7 @@ namespace XferSuite.Apps.SEYR
         private Size ArraySize;
         private TableLayoutPanel TLP;
         private List<PictureBox> PictureBoxes;
+        private Inspection Inspection;
 
         public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, string legendStr)
         {
@@ -23,6 +24,7 @@ namespace XferSuite.Apps.SEYR
             Data = data;
             Sheets = sheets;
             LegendStr = legendStr;
+            Inspection = new Inspection(this);
             SetupTLP();
             Show();
         }
@@ -30,6 +32,7 @@ namespace XferSuite.Apps.SEYR
         private void RegionBrowser_FormClosing(object sender, FormClosingEventArgs e)
         {
             Data.Where(x => x.Form != null).ToList().ForEach(x => x.Form.Close());
+            Inspection.Close();
         }
 
         private void SetupTLP(bool showPF = false)
@@ -136,11 +139,13 @@ namespace XferSuite.Apps.SEYR
                 case MouseButtons.Left:
                     ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
                     Point location = StretchMousePos(e.Location);
-                    HighightPoint(location, GetActivePictureBox());
-                    DataEntry data = GetActiveSheet().GetLocation(location);
+                    PictureBox thisPBX = GetActivePictureBox();
+                    DataSheet thisSheet = GetActiveSheet();
+                    HighightPoint(location, thisPBX);
+                    DataEntry data = thisSheet.GetLocation(location);
                     DataEntry[] matches = Data.Where(x => x.ImageMatch(data)).Where(x => x.Image != null).ToArray();
                     Text = data.Location();
-                    if (matches.Any()) matches[0].ShowImage();
+                    if (matches.Any()) Inspection.Set(matches[0]);
                     break;
                 case MouseButtons.Right:
                     ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
