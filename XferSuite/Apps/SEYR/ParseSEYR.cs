@@ -101,12 +101,17 @@ namespace XferSuite.Apps.SEYR
             {
                 feature.Data = Data.Where(x => x.FeatureName == feature.Name).ToArray();
                 feature.HistData = feature.Data.Select(x => (double)x.Score).Where(x => x > 0).ToArray();
-                if (feature.MinScore == float.MaxValue || feature.MaxScore == float.MinValue || feature.MinScore == feature.MaxScore)
+                if (feature.HistData.Length == 0)
+                {
+                    feature.HistData = new double[] { 0 };
+                    System.Diagnostics.Debug.WriteLine($"{feature.Name} is empty");
+                }
+                else if (feature.MinScore == float.MaxValue || feature.MaxScore == float.MinValue || feature.MinScore == feature.MaxScore)
                 {
                     if (feature.HistData.Length == 0)
                     {
                         feature.HistData = new double[] { 0 };
-                        System.Diagnostics.Debug.WriteLine($"{feature.Name} is empty");
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} has no valid data");
                     }
                     else
                     {
@@ -196,7 +201,10 @@ namespace XferSuite.Apps.SEYR
             {
                 int id = 0;
                 foreach (string feature in features)
-                    id += Project.Features.Where(x => x.Name == feature).First().ID;
+                {
+                    var ids = Project.Features.Where(x => x.Name == feature);
+                    if (ids.Any()) id += ids.First().ID;
+                }
                 passingVals.Add(id);
             }
 

@@ -34,6 +34,7 @@ namespace XferSuite.Apps.SEYR
 
         public (Bitmap, string) GetBitmap(bool showPF)
         {
+            if (DataSize.Height <= 1 || DataSize.Width <= 1) return (new Bitmap(1,1), 0.ToString("P"));
             Bitmap bitmap = new Bitmap(DataSize.Height - 1, DataSize.Width - 1);
             double pass = 0;
             double total = 0;
