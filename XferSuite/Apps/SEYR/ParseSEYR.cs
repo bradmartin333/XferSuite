@@ -22,7 +22,7 @@ namespace XferSuite.Apps.SEYR
         [Category("User Parameters")]
         public bool FlipX { get => _FlipX; set => _FlipX = value; }
 
-        private bool _FlipY = false;
+        private bool _FlipY = true;
         [Category("User Parameters")]
         public bool FlipY { get => _FlipY; set => _FlipY = value; }
 
