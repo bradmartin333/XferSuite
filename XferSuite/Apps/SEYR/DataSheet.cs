@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -11,7 +10,7 @@ namespace XferSuite.Apps.SEYR
         public (int, int) ID { get; set; }
         public Size StampGrid { get; set; }
         public Size ImageGrid { get; set; }
-        private Size DataSize { get; set; }
+        public Size DataSize { get; set; }
         private (int, DataEntry)[,] Data { get; set; }
         private List<(int[], bool, Color)> Criteria { get; set; }
         private Bitmap Render;

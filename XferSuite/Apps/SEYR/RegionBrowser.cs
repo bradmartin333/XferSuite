@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -111,8 +112,10 @@ namespace XferSuite.Apps.SEYR
             PictureBox pictureBox = new PictureBox()
             {
                 Dock = DockStyle.Fill,
-                BackgroundImageLayout = ImageLayout.Zoom,
+                BackgroundImageLayout = ImageLayout.Stretch,
+                SizeMode = PictureBoxSizeMode.StretchImage,
                 Tag = ID,
+                Cursor = Cursors.Cross,
             };
             pictureBox.MouseUp += PictureBox_MouseUp;
             return pictureBox;
@@ -132,7 +135,9 @@ namespace XferSuite.Apps.SEYR
             {
                 case MouseButtons.Left:
                     ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
-                    DataEntry data = GetActiveSheet().GetLocation(ZoomMousePos(e.Location));
+                    Point location = StretchMousePos(e.Location);
+                    HighightPoint(location, GetActivePictureBox());
+                    DataEntry data = GetActiveSheet().GetLocation(location);
                     DataEntry[] matches = Data.Where(x => x.ImageMatch(data)).Where(x => x.Image != null).ToArray();
                     Text = data.Location();
                     if (matches.Any()) matches[0].ShowImage();
@@ -170,6 +175,13 @@ namespace XferSuite.Apps.SEYR
             Clipboard.SetText(data + '\n' + LegendStr);
         }
 
+        private void HighightPoint(Point location, PictureBox pictureBox)
+        {
+            Bitmap bmp = new Bitmap(pictureBox.BackgroundImage.Width, pictureBox.BackgroundImage.Height);
+            bmp.SetPixel(location.X, location.Y, Color.HotPink);
+            pictureBox.Image = bmp;
+        }
+
         private Bitmap GetActiveBitmap()
         {
             return (Bitmap)GetActivePictureBox().BackgroundImage;
@@ -177,6 +189,8 @@ namespace XferSuite.Apps.SEYR
 
         private PictureBox GetActivePictureBox()
         {
+            foreach (PictureBox pictureBox in PictureBoxes)
+                pictureBox.Image = null;
             return PictureBoxes.Where(x => x.Tag == ContextMenuStrip.Tag).First();
         }
 
@@ -185,46 +199,14 @@ namespace XferSuite.Apps.SEYR
             return Sheets.Where(x => x.ID == ((int, int))ContextMenuStrip.Tag).First();
         }
 
-        /// <summary>
-        /// Method for adjusting mouse pos to pictureBox set to Zoom
-        /// </summary>
-        /// <param name="click">
-        /// Mouse coordinates
-        /// </param>
-        /// <returns>
-        /// Pixel coordinates at that point
-        /// </returns>
-        private Point ZoomMousePos(Point click)
+        private Point StretchMousePos(Point p)
         {
-            Size pbxSize = GetActivePictureBox().Size;
-            Bitmap image = GetActiveBitmap();
-            Size imgSize = image.Size;
-            float imageAspect = imgSize.Width / (float)imgSize.Height;
-            float controlAspect = pbxSize.Width / (float)pbxSize.Height;
-            PointF pos = new PointF(click.X, click.Y);
-            if (imageAspect > controlAspect)
-            {
-                float ratioWidth = imgSize.Width / (float)pbxSize.Width;
-                pos.X *= ratioWidth;
-                float scale = pbxSize.Width / (float)imgSize.Width;
-                float displayHeight = scale * imgSize.Height;
-                float diffHeight = pbxSize.Height - displayHeight;
-                diffHeight /= 2;
-                pos.Y -= diffHeight;
-                pos.Y /= scale;
-            }
-            else
-            {
-                float ratioHeight = imgSize.Height / (float)pbxSize.Height;
-                pos.Y *= ratioHeight;
-                float scale = pbxSize.Height / (float)imgSize.Height;
-                float displayWidth = scale * imgSize.Width;
-                float diffWidth = pbxSize.Width - displayWidth;
-                diffWidth /= 2;
-                pos.X -= diffWidth;
-                pos.X /= scale;
-            }
-            return new Point((int)pos.X, (int)pos.Y);
+            PictureBox pictureBox = GetActivePictureBox();
+            Size pbx = pictureBox.Size;
+            Size img = pictureBox.BackgroundImage.Size;
+            return new Point(
+                (int)Math.Floor(img.Width * p.X / (double)pbx.Width),
+                (int)Math.Floor(img.Height * p.Y / (double)pbx.Height));
         }
 
         #endregion
