@@ -1,6 +1,7 @@
 ﻿using ScottPlot;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -145,6 +146,13 @@ namespace XferSuite.AdvancedTools
             }
             if (d == 0) return new double?[,] { { 1, 2, 3 }, { 4, 5, 6 } };
             return output;
+        }
+
+        private void BtnCopyWindow_Click(object sender, EventArgs e)
+        {
+            Bitmap b = new Bitmap(Width, Height);
+            DrawToBitmap(b, new Rectangle(0, 0, Width, Height));
+            Clipboard.SetImage(b);
         }
     }
 }

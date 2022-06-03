@@ -30,22 +30,23 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StampSEYR));
             this.TLP = new System.Windows.Forms.TableLayoutPanel();
-            this.BtnOpenFile = new System.Windows.Forms.Button();
             this.PlotPostCount = new ScottPlot.FormsPlot();
             this.PlotPostDebris = new ScottPlot.FormsPlot();
             this.PlotMesaDebris = new ScottPlot.FormsPlot();
             this.LblPostCount = new System.Windows.Forms.Label();
             this.LblPostDebris = new System.Windows.Forms.Label();
             this.LblMesaDebris = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.NumPostsX = new System.Windows.Forms.NumericUpDown();
-            this.NumPostsY = new System.Windows.Forms.NumericUpDown();
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.BtnOpenFile = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.NumPostsX = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.NumPostsY = new System.Windows.Forms.NumericUpDown();
+            this.BtnCopyWindow = new System.Windows.Forms.Button();
             this.TLP.SuspendLayout();
+            this.flowLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumPostsX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumPostsY)).BeginInit();
-            this.flowLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // TLP
@@ -72,18 +73,6 @@
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLP.Size = new System.Drawing.Size(884, 361);
             this.TLP.TabIndex = 0;
-            // 
-            // BtnOpenFile
-            // 
-            this.BtnOpenFile.BackColor = System.Drawing.Color.White;
-            this.BtnOpenFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnOpenFile.Location = new System.Drawing.Point(3, 3);
-            this.BtnOpenFile.Name = "BtnOpenFile";
-            this.BtnOpenFile.Size = new System.Drawing.Size(75, 23);
-            this.BtnOpenFile.TabIndex = 1;
-            this.BtnOpenFile.Text = "Open File";
-            this.BtnOpenFile.UseVisualStyleBackColor = false;
-            this.BtnOpenFile.Click += new System.EventHandler(this.BtnOpenFile_Click);
             // 
             // PlotPostCount
             // 
@@ -139,46 +128,6 @@
             this.LblMesaDebris.Text = "Mesa Debris";
             this.LblMesaDebris.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(84, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 13);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "# Posts X";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(269, 8);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 13);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "# Posts Y";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // NumPostsX
-            // 
-            this.NumPostsX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.NumPostsX.Location = new System.Drawing.Point(143, 4);
-            this.NumPostsX.Name = "NumPostsX";
-            this.NumPostsX.Size = new System.Drawing.Size(120, 20);
-            this.NumPostsX.TabIndex = 14;
-            this.NumPostsX.ValueChanged += new System.EventHandler(this.NumPostsX_ValueChanged);
-            // 
-            // NumPostsY
-            // 
-            this.NumPostsY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.NumPostsY.Location = new System.Drawing.Point(328, 4);
-            this.NumPostsY.Name = "NumPostsY";
-            this.NumPostsY.Size = new System.Drawing.Size(120, 20);
-            this.NumPostsY.TabIndex = 15;
-            this.NumPostsY.ValueChanged += new System.EventHandler(this.NumPostsY_ValueChanged);
-            // 
             // flowLayoutPanel
             // 
             this.flowLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
@@ -189,10 +138,75 @@
             this.flowLayoutPanel.Controls.Add(this.NumPostsX);
             this.flowLayoutPanel.Controls.Add(this.label5);
             this.flowLayoutPanel.Controls.Add(this.NumPostsY);
-            this.flowLayoutPanel.Location = new System.Drawing.Point(216, 3);
+            this.flowLayoutPanel.Controls.Add(this.BtnCopyWindow);
+            this.flowLayoutPanel.Location = new System.Drawing.Point(151, 3);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
-            this.flowLayoutPanel.Size = new System.Drawing.Size(451, 29);
+            this.flowLayoutPanel.Size = new System.Drawing.Size(582, 29);
             this.flowLayoutPanel.TabIndex = 16;
+            // 
+            // BtnOpenFile
+            // 
+            this.BtnOpenFile.BackColor = System.Drawing.Color.White;
+            this.BtnOpenFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnOpenFile.Location = new System.Drawing.Point(3, 3);
+            this.BtnOpenFile.Name = "BtnOpenFile";
+            this.BtnOpenFile.Size = new System.Drawing.Size(100, 23);
+            this.BtnOpenFile.TabIndex = 1;
+            this.BtnOpenFile.Text = "Open File";
+            this.BtnOpenFile.UseVisualStyleBackColor = false;
+            this.BtnOpenFile.Click += new System.EventHandler(this.BtnOpenFile_Click);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(109, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "# Posts X";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // NumPostsX
+            // 
+            this.NumPostsX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.NumPostsX.Location = new System.Drawing.Point(168, 4);
+            this.NumPostsX.Name = "NumPostsX";
+            this.NumPostsX.Size = new System.Drawing.Size(120, 20);
+            this.NumPostsX.TabIndex = 14;
+            this.NumPostsX.ValueChanged += new System.EventHandler(this.NumPostsX_ValueChanged);
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(294, 8);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(53, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "# Posts Y";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // NumPostsY
+            // 
+            this.NumPostsY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.NumPostsY.Location = new System.Drawing.Point(353, 4);
+            this.NumPostsY.Name = "NumPostsY";
+            this.NumPostsY.Size = new System.Drawing.Size(120, 20);
+            this.NumPostsY.TabIndex = 15;
+            this.NumPostsY.ValueChanged += new System.EventHandler(this.NumPostsY_ValueChanged);
+            // 
+            // BtnCopyWindow
+            // 
+            this.BtnCopyWindow.BackColor = System.Drawing.Color.White;
+            this.BtnCopyWindow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnCopyWindow.Location = new System.Drawing.Point(479, 3);
+            this.BtnCopyWindow.Name = "BtnCopyWindow";
+            this.BtnCopyWindow.Size = new System.Drawing.Size(100, 23);
+            this.BtnCopyWindow.TabIndex = 16;
+            this.BtnCopyWindow.Text = "Copy Window";
+            this.BtnCopyWindow.UseVisualStyleBackColor = false;
+            this.BtnCopyWindow.Click += new System.EventHandler(this.BtnCopyWindow_Click);
             // 
             // StampSEYR
             // 
@@ -206,10 +220,10 @@
             this.Text = "Stamp SEYR Parser";
             this.TLP.ResumeLayout(false);
             this.TLP.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumPostsX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumPostsY)).EndInit();
             this.flowLayoutPanel.ResumeLayout(false);
             this.flowLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumPostsX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumPostsY)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -229,5 +243,6 @@
         private System.Windows.Forms.NumericUpDown NumPostsX;
         private System.Windows.Forms.NumericUpDown NumPostsY;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
+        private System.Windows.Forms.Button BtnCopyWindow;
     }
 }
