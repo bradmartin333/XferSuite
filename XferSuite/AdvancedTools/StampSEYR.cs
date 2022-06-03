@@ -25,10 +25,7 @@ namespace XferSuite.AdvancedTools
         {
             InitializeComponent();
             foreach (FormsPlot p in TLP.Controls.OfType<FormsPlot>())
-            {
-                p.Plot.Frameless(true);
                 p.Plot.Grid(false);
-            }
         }
 
         private void BtnOpenFile_Click(object sender, EventArgs e)
