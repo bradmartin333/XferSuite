@@ -579,14 +579,9 @@ namespace XferSuite.AdvancedTools
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     FileInfo = new FileInfo(openFileDialog.FileName);
-                    InitFile();
+                    LblFile.Text = FileInfo.Name;
                 }
             }
-        }
-
-        private void InitFile()
-        {
-            LblFile.Text = FileInfo.Name;
         }
 
         private void BtnLoadData_Click(object sender, EventArgs e)

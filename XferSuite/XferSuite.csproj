@@ -130,6 +130,12 @@
     <Compile Include="AdvancedTools\CalGenerator.Designer.cs">
       <DependentUpon>CalGenerator.cs</DependentUpon>
     </Compile>
+    <Compile Include="AdvancedTools\StampSEYR.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedTools\StampSEYR.Designer.cs">
+      <DependentUpon>StampSEYR.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdvancedTools\uTP\PrintInfo.cs" />
     <Compile Include="Apps\Camera\CameraLayout.cs" />
     <Compile Include="Apps\Camera\CameraViewer.cs">
@@ -256,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AdvancedTools\SelectTool.resx">
       <DependentUpon>SelectTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdvancedTools\StampSEYR.resx">
+      <DependentUpon>StampSEYR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\Camera\CameraViewer.resx">
       <DependentUpon>CameraViewer.cs</DependentUpon>
