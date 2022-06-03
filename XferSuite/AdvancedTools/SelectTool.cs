@@ -16,6 +16,8 @@ namespace XferSuite.AdvancedTools
         {
             [Description("Data Filtering")]
             dataFilter,
+            [Description("Stamp SEYR Parser")]
+            stampSEYR,
             [Description("Map Flip")]
             mapFlip,
             [Description("10Zone Cal Generator")]
@@ -44,6 +46,13 @@ namespace XferSuite.AdvancedTools
                             Application.OpenForms.OfType<DataFilter>().First().BringToFront();
                         else
                             tool = new DataFilter();
+                        Close();
+                        break;
+                    case AdvancedForm.stampSEYR:
+                        if (Application.OpenForms.OfType<StampSEYR>().Any())
+                            Application.OpenForms.OfType<StampSEYR>().First().BringToFront();
+                        else
+                            tool = new StampSEYR();
                         Close();
                         break;
                     case AdvancedForm.mapFlip:
