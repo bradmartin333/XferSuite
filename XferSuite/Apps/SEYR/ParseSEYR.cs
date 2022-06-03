@@ -204,28 +204,6 @@ namespace XferSuite.Apps.SEYR
                 criteriaVals.Add(id);
                 criteriaNames.Add(name);
             }
-
-            List<int> passingVals = new List<int>();
-            foreach (string[] features in Project.Criteria)
-            {
-                int id = 0;
-                foreach (string feature in features)
-                {
-                    var ids = Project.Features.Where(x => x.Name == feature);
-                    if (ids.Any()) id += ids.First().ID;
-                }
-                passingVals.Add(id);
-            }
-
-            criteriaVals = criteriaVals.Distinct().ToList();
-            var combos = Combinations(criteriaVals);
-
-            Criteria.Clear();
-            foreach (var valCombo in combos)
-            {
-                int sum = valCombo.Sum();
-                if (valCombo.Length > 0) Criteria.Add((valCombo, passingVals.Contains(sum), Pallete.GetColor(Criteria.Count)));
-            }
         }
 
         public IEnumerable<T[]> Combinations<T>(IEnumerable<T> source)
