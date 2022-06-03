@@ -295,6 +295,7 @@ namespace XferSuite.Apps.SEYR
         private Bitmap MakeLegend()
         {
             var criteria = GetUsedCriteria();
+            if (criteria.Count == 0) return null;
             Font font = new Font("Segoe", 16);
             SizeF strSize = SizeF.Empty;
             Bitmap bmp = new Bitmap(1, 1);
