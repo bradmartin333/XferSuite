@@ -201,9 +201,9 @@ namespace XferSuite.Apps.SEYR
         private double[] GetValues()
         {
             double numPass = HistData.Where(
-                x => (FlipScore ? x < PassThreshold : x > PassThreshold) && 
-                (FlipScore ? x > Limit : x < Limit)).Count();
-            double numFail = HistData.Length - numPass - 1;
+                x => (FlipScore ? x <= PassThreshold : x >= PassThreshold) && 
+                (FlipScore ? x >= Limit : x <= Limit)).Count();
+            double numFail = HistData.Length - numPass;
             LabelSelectedCount.Text = numPass.ToString();
             LabelUnselectedCount.Text = numFail.ToString();
             LabelTotalCount.Text = $"{NullExclude + NullInclude + numPass + numFail}";
