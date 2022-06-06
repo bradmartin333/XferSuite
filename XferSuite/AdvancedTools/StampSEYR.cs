@@ -28,7 +28,11 @@ namespace XferSuite.AdvancedTools
         {
             InitializeComponent();
             foreach (FormsPlot p in TLP.Controls.OfType<FormsPlot>())
+            {
                 p.Plot.Grid(false);
+                p.Configuration.DoubleClickBenchmark = false;
+                p.Configuration.EnablePlotObjectEditor = true;
+            }            
         }
 
         private void BtnOpenFile_Click(object sender, EventArgs e)

@@ -92,6 +92,7 @@ namespace XferSuite.Apps.XYZplotter
                 p.MouseMove += P_MouseMove;
                 p.MouseUp += P_MouseUp;
                 p.Configuration.DoubleClickBenchmark = false;
+                p.Configuration.EnablePlotObjectEditor = true;
             }
 
             ComboBoxes = new ToolStripComboBox[] { comboX, comboY, comboZ };
