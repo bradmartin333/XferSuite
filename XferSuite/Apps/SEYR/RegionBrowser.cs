@@ -15,7 +15,7 @@ namespace XferSuite.Apps.SEYR
         private Size ArraySize;
         private TableLayoutPanel TLP;
         private List<PictureBox> PictureBoxes;
-        private Inspection Inspection;
+        private readonly Inspection Inspection;
 
         public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria)
         {
@@ -162,7 +162,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void CopyEntireWindowToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void CopyEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Rectangle bounds = Bounds;
             using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
@@ -175,12 +175,12 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void CopySelectedRegionToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void CopySelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetImage(GetActiveBitmap());
         }
 
-        private void ToolStripMenuCopyCSV_Click(object sender, System.EventArgs e)
+        private void ToolStripMenuCopyCSV_Click(object sender, EventArgs e)
         {
             string data = GetActiveSheet().GetCSV(Criteria);
             Clipboard.SetText(data + '\n' + string.Join("\n", Criteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray()));

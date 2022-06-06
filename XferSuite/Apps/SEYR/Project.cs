@@ -48,27 +48,5 @@ namespace XferSuite.Apps.SEYR
         public List<Point> PatternLocations { get; set; } = new List<Point>();
         [XmlArray("Features")]
         public List<Feature> Features { get; set; } = new List<Feature>();
-
-        public double GetNumTotalFeatures()
-        {
-            return Rows * Columns * Features.Count;
-        }
-
-        public Rectangle GetGeometry()
-        {
-            return new Rectangle(
-                (int)(ScaledPixelsPerMicron * OriginX),
-                (int)(ScaledPixelsPerMicron * OriginY),
-                (int)(ScaledPixelsPerMicron * SizeX),
-                (int)(ScaledPixelsPerMicron * SizeY));
-        }
-
-        public Rectangle GetIndexedGeometry(int i, int j, Point offset)
-        {
-            Rectangle rectangle = GetGeometry();
-            int thisX = rectangle.X + (int)(i * ScaledPixelsPerMicron * PitchX) - offset.X;
-            int thisY = rectangle.Y + (int)(j * ScaledPixelsPerMicron * PitchY) - offset.Y;
-            return new Rectangle(thisX, thisY, rectangle.Width, rectangle.Height);
-        }
     }
 }
