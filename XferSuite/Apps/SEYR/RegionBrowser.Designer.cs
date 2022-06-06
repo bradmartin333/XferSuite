@@ -33,8 +33,9 @@
             this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItemCopyImage = new System.Windows.Forms.ToolStripMenuItem();
             this.CopyEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemCopyCSV = new System.Windows.Forms.ToolStripMenuItem();
             this.CopySelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemCopyCSV = new System.Windows.Forms.ToolStripMenuItem();
+            this.RenderSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -42,9 +43,10 @@
             // 
             this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItemCopyImage,
-            this.ToolStripMenuItemCopyCSV});
+            this.ToolStripMenuItemCopyCSV,
+            this.RenderSelectedRegionToolStripMenuItem});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(181, 70);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(290, 92);
             // 
             // ToolStripMenuItemCopyImage
             // 
@@ -52,7 +54,7 @@
             this.CopyEntireWindowToolStripMenuItem,
             this.CopySelectedRegionToolStripMenuItem});
             this.ToolStripMenuItemCopyImage.Name = "ToolStripMenuItemCopyImage";
-            this.ToolStripMenuItemCopyImage.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemCopyImage.Size = new System.Drawing.Size(289, 22);
             this.ToolStripMenuItemCopyImage.Text = "Copy Image";
             // 
             // CopyEntireWindowToolStripMenuItem
@@ -62,19 +64,26 @@
             this.CopyEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.CopyEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.CopyEntireWindowToolStripMenuItem_Click);
             // 
-            // ToolStripMenuItemCopyCSV
-            // 
-            this.ToolStripMenuItemCopyCSV.Name = "ToolStripMenuItemCopyCSV";
-            this.ToolStripMenuItemCopyCSV.Size = new System.Drawing.Size(180, 22);
-            this.ToolStripMenuItemCopyCSV.Text = "Copy CSV";
-            this.ToolStripMenuItemCopyCSV.Click += new System.EventHandler(this.ToolStripMenuCopyCSV_Click);
-            // 
             // CopySelectedRegionToolStripMenuItem
             // 
             this.CopySelectedRegionToolStripMenuItem.Name = "CopySelectedRegionToolStripMenuItem";
             this.CopySelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.CopySelectedRegionToolStripMenuItem.Text = "Selected Region";
             this.CopySelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.CopySelectedRegionToolStripMenuItem_Click);
+            // 
+            // ToolStripMenuItemCopyCSV
+            // 
+            this.ToolStripMenuItemCopyCSV.Name = "ToolStripMenuItemCopyCSV";
+            this.ToolStripMenuItemCopyCSV.Size = new System.Drawing.Size(289, 22);
+            this.ToolStripMenuItemCopyCSV.Text = "Copy CSV";
+            this.ToolStripMenuItemCopyCSV.Click += new System.EventHandler(this.ToolStripMenuCopyCSV_Click);
+            // 
+            // RenderSelectedRegionToolStripMenuItem
+            // 
+            this.RenderSelectedRegionToolStripMenuItem.Name = "RenderSelectedRegionToolStripMenuItem";
+            this.RenderSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(289, 22);
+            this.RenderSelectedRegionToolStripMenuItem.Text = "Render Selected Region (Breaks Clicking)";
+            this.RenderSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.RenderSelectedRegionToolStripMenuItem_Click);
             // 
             // RegionBrowser
             // 
@@ -97,5 +106,6 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCopyCSV;
         private System.Windows.Forms.ToolStripMenuItem CopyEntireWindowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CopySelectedRegionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RenderSelectedRegionToolStripMenuItem;
     }
 }

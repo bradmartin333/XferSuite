@@ -217,6 +217,9 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnPlot_Click(object sender, EventArgs e)
         {
+            LabelLoading.Visible = true;
+            Application.DoEvents();
+
             if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
             if (Application.OpenForms.OfType<LegendView>().Any()) Application.OpenForms.OfType<LegendView>().First().Close();
 
@@ -244,6 +247,8 @@ namespace XferSuite.Apps.SEYR
             RegionBrowser rb = new RegionBrowser(Data, Sheets, criteria);
             LegendView lv = new LegendView(MakeLegend(criteria), rb);
             BtnMakeCycleFile.Enabled = true;
+
+            LabelLoading.Visible = false;
         }
 
         private bool MakeSheets()
@@ -297,6 +302,9 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnMakeCycleFile_Click(object sender, EventArgs e)
         {
+            LabelLoading.Visible = true;
+            Application.DoEvents();
+
             Form form = new Form() { Text = "Cycle File" };
             RichTextBox rtb = new RichTextBox() { 
                 Dock = DockStyle.Fill,
@@ -311,6 +319,8 @@ namespace XferSuite.Apps.SEYR
                 rtb.Text += lines;
             }
             form.Show();
+
+            LabelLoading.Visible = false;
         }
 
         private string MakeCycleFileHeader()

@@ -180,6 +180,18 @@ namespace XferSuite.Apps.SEYR
             Clipboard.SetImage(GetActiveBitmap());
         }
 
+        private void RenderSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pictureBox = GetActivePictureBox();
+            Bitmap newimg = new Bitmap(pictureBox.Width, pictureBox.Height);
+            using (Graphics g = Graphics.FromImage(newimg))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.DrawImage(pictureBox.BackgroundImage, new Rectangle(Point.Empty, newimg.Size));
+            }
+            pictureBox.BackgroundImage = newimg;
+        }
+
         private void ToolStripMenuCopyCSV_Click(object sender, EventArgs e)
         {
             string data = GetActiveSheet().GetCSV(Criteria);
