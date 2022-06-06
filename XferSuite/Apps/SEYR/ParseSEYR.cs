@@ -26,6 +26,27 @@ namespace XferSuite.Apps.SEYR
         [Category("User Parameters")]
         public bool FlipY { get => _FlipY; set => _FlipY = value; }
 
+        public enum Palletes { Category20, ColorblindFriendly, Microcharts}
+        [Category("User Parameters")]
+        public Palletes Palette {
+            get => (Palletes)Enum.Parse(typeof(Palletes), Criteria.Palette.Name);
+            set
+            {
+                switch (value)
+                {
+                    case Palletes.Category20:
+                        Criteria.Palette = ScottPlot.Drawing.Palette.Category20;
+                        break;
+                    case Palletes.ColorblindFriendly:
+                        Criteria.Palette = ScottPlot.Drawing.Palette.ColorblindFriendly;
+                        break;
+                    case Palletes.Microcharts:
+                        Criteria.Palette = ScottPlot.Drawing.Palette.Microcharts;
+                        break;
+                }
+            }
+        }
+
         private readonly bool ForceClose;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";

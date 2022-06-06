@@ -147,7 +147,7 @@ namespace XferSuite.Apps.SEYR
                     {
                         DataEntry[] matches = match.Where(x => x.Image != null).ToArray();
                         if (matches.Any())
-                            Inspection.Set(matches, criterion.Pass);
+                            Inspection.Set(matches, criterion);
                         else
                             Inspection.Hide();
                         Text = match[0].Location();
@@ -188,9 +188,16 @@ namespace XferSuite.Apps.SEYR
 
         private void HighightPoint(Point location, PictureBox pictureBox)
         {
-            Bitmap bmp = new Bitmap(pictureBox.BackgroundImage.Width, pictureBox.BackgroundImage.Height);
-            bmp.SetPixel(location.X, location.Y, Color.HotPink);
-            pictureBox.Image = bmp;
+            try
+            {
+                Bitmap bmp = new Bitmap(pictureBox.BackgroundImage.Width, pictureBox.BackgroundImage.Height);
+                bmp.SetPixel(location.X, location.Y, Color.HotPink);
+                pictureBox.Image = bmp;
+            }
+            catch (Exception)
+            {
+                pictureBox.Image = null;
+            }
         }
 
         private Bitmap GetActiveBitmap()

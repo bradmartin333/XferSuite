@@ -32,13 +32,14 @@ namespace XferSuite.Apps.SEYR
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
         }
 
-        public void Set(DataEntry[] d, bool pass)
+        public void Set(DataEntry[] d, Criteria criteria)
         {
             Loading = true;
             IDX = 0;
             Data = d;
-            CBX.Checked = pass;
+            CBX.Checked = criteria.Pass;
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
+            PBX.BackColor = criteria.Color;
             CycleImages();
             Show();
             Loading = false;

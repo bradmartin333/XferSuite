@@ -107,11 +107,18 @@ namespace XferSuite.Apps.SEYR
 
         public (DataEntry[], Criteria) GetLocation(Point p_in, bool cycle = false)
         {
-            int bmpX = p_in.X;
-            int bmpY = p_in.Y;
-            if (!cycle && FlipX) bmpX = Render.Width - bmpX - 1;
-            if (!cycle && FlipY) bmpY = Render.Height - bmpY - 1;
-            return Data[bmpY, bmpX];
+            try
+            {
+                int bmpX = p_in.X;
+                int bmpY = p_in.Y;
+                if (!cycle && FlipX) bmpX = Render.Width - bmpX - 1;
+                if (!cycle && FlipY) bmpY = Render.Height - bmpY - 1;
+                return Data[bmpY, bmpX];
+            }
+            catch (System.Exception)
+            {
+                return (null, null);
+            }
         }
     }
 }
