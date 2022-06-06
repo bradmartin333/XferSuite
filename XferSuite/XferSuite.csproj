@@ -168,6 +168,7 @@
     <Compile Include="AdvancedTools\uTP\PrintLogParser.Designer.cs">
       <DependentUpon>PrintLogParser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Apps\SEYR\Criteria.cs" />
     <Compile Include="Apps\SEYR\DataEntry.cs" />
     <Compile Include="Apps\SEYR\DataSheet.cs" />
     <Compile Include="Apps\SEYR\Feature.cs" />

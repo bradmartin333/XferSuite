@@ -6,7 +6,8 @@ namespace XferSuite.Apps.SEYR
     public partial class Inspection : Form
     {
         private bool Loading = false;
-        private DataEntry _DataEntry;
+        private DataEntry[] Data;
+        private int IDX = 0;
 
         public Inspection()
         {
@@ -26,21 +27,35 @@ namespace XferSuite.Apps.SEYR
         private void CBX_CheckedChanged(object sender, EventArgs e)
         {
             if (Loading) return;
-            _DataEntry.State = CBX.Checked;
+            foreach (DataEntry entry in Data)
+                entry.State = CBX.Checked;
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
         }
 
-        public void Set(DataEntry d, bool pass)
+        public void Set(DataEntry[] d, bool pass)
         {
             Loading = true;
-            PBX.BackgroundImage = d.Image;
-            Text = $"{d} {d.X}, {d.Y}";
-            LblInfo.Text = d.Location();
+            IDX = 0;
+            Data = d;
             CBX.Checked = pass;
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
-            _DataEntry = d;
+            CycleImages();
             Show();
             Loading = false;
+        }
+
+        private void CycleImages()
+        {
+            PBX.BackgroundImage = Data[IDX].Image;
+            Text = $"{Data[IDX]} {Data[IDX].X}, {Data[IDX].Y}";
+            LblInfo.Text = Data[IDX].Location();
+        }
+
+        private void PBX_Click(object sender, EventArgs e)
+        {
+            IDX++;
+            if (IDX > Data.Length - 1) IDX = 0;
+            CycleImages();
         }
     }
 }

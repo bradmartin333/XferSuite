@@ -9,6 +9,7 @@ namespace XferSuite.Apps.SEYR
 {
     public class DataEntry
     {
+        public static string Header;
         public string Raw { get; set; }
         public int ImageNumber { get; set; }
         public double X { get; set; }

@@ -65,6 +65,7 @@
             this.PBX.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PBX.TabIndex = 0;
             this.PBX.TabStop = false;
+            this.PBX.Click += new System.EventHandler(this.PBX_Click);
             // 
             // LblInfo
             // 

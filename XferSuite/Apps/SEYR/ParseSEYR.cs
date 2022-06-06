@@ -31,11 +31,8 @@ namespace XferSuite.Apps.SEYR
         private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
 
         public static Project Project { get; set; } = null;
-        private string DataHeader { get; set; } = string.Empty;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
         private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
-        private readonly ScottPlot.Drawing.Palette Pallete = ScottPlot.Palette.Category20;
-        private Size RegionGrid, StampGrid, ImageGrid;       
 
         public ParseSEYR(string path)
         {
@@ -93,7 +90,7 @@ namespace XferSuite.Apps.SEYR
         {
             Data.Clear();
             string[] lines = File.ReadAllLines(ReportPath);
-            DataHeader = lines[0];
+            DataEntry.Header = lines[0];
             for (int i = 1; i < lines.Length; i++)
             {
                 DataEntry dataEntry = new DataEntry(lines[i], swap);
@@ -131,7 +128,6 @@ namespace XferSuite.Apps.SEYR
                 }
                 feature.PassThreshold = feature.PassThreshold == -10 ? (feature.MaxScore + feature.MinScore) / 2.0 : feature.PassThreshold;
                 feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
-                System.Diagnostics.Debug.WriteLine($"{feature.Name} Min = {feature.MinScore} Max = {feature.MaxScore}");
             }
 
             return true;
@@ -158,18 +154,10 @@ namespace XferSuite.Apps.SEYR
         {
             foreach (Feature feature in Project.Features)
             {
-                int updated = 0;
                 foreach (DataEntry entry in feature.Data)
-                {
-                    bool newState = feature.GenerateState(entry.Score);
-                    if (entry.State != newState)
-                    {
-                        updated++;
-                        entry.State = newState;
-                    }
-                }
+                    entry.State = feature.GenerateState(entry.Score);
                 if (string.IsNullOrEmpty(feature.CriteriaString))
-                    feature.CriteriaString = feature.Name;
+                    feature.CriteriaString = System.Text.RegularExpressions.Regex.Replace(feature.Name, @"\d", "");
             }
         }
 
@@ -188,16 +176,8 @@ namespace XferSuite.Apps.SEYR
                 DialogResult result = pf.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    if (feature.PassThreshold != pf.PassThreshold)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"{feature.Name} PassThreshold updated from {feature.PassThreshold} to {pf.PassThreshold}");
-                        feature.PassThreshold = pf.PassThreshold;
-                    }
-                    if (feature.Limit != pf.Limit)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"{feature.Name} Limit updated from {feature.Limit} to {pf.Limit}");
-                        feature.Limit = pf.Limit;
-                    }
+                    feature.PassThreshold = pf.PassThreshold;
+                    feature.Limit = pf.Limit;
                     RescoreAllData();
                     InitFeatureInfo();
                 }
@@ -211,25 +191,7 @@ namespace XferSuite.Apps.SEYR
         {
             ComboFeatures.Items.Clear();
             for (int i = 0; i < Project.Features.Count; i++)
-            {
-                Feature feature = Project.Features[i];
-                ComboFeatures.Items.Add(feature.Name);
-                if (Project.Features[i].Ignore) continue;
-            }
-        }
-
-        public IEnumerable<T[]> Combinations<T>(IEnumerable<T> source)
-        {
-            if (null == source)
-                throw new ArgumentNullException(nameof(source));
-
-            T[] data = source.ToArray();
-
-            return Enumerable
-              .Range(0, 1 << (data.Length))
-              .Select(index => data
-                 .Where((v, i) => (index & (1 << i)) != 0)
-                 .ToArray());
+                ComboFeatures.Items.Add(Project.Features[i].Name);
         }
 
         private void BtnPlot_Click(object sender, EventArgs e)
@@ -239,8 +201,7 @@ namespace XferSuite.Apps.SEYR
 
             if (!MakeSheets()) return;
 
-            List<(int, Color, string, bool)> matchedCriteria = new List<(int, Color, string, bool)>();
-
+            List<Criteria> criteria = new List<Criteria>();
             foreach (DataSheet sheet in Sheets)
             {
                 DataEntry[] region = Data.Where(x => (x.RR, x.RC) == sheet.ID).ToArray();
@@ -252,97 +213,62 @@ namespace XferSuite.Apps.SEYR
                     foreach (var tile in tiles)
                     {
                         DataEntry[] entries = tile.ToArray();
-                        (int, Color, string, bool) match = FindMatchingCriteria(entries, matchedCriteria.Count);
-                        if (!string.IsNullOrEmpty(match.Item3) && !matchedCriteria.Select(x => x.Item1).ToList().Contains(match.Item1))
-                            matchedCriteria.Add(match);
-                        sheet.Insert(entries[0], match.Item1, match.Item2, match.Item4);
+                        Criteria criterion = new Criteria(entries);
+                        criterion.TryAppend(ref criteria);
+                        sheet.Insert(entries, criterion);
                     }
                 }
             }
 
-            RegionBrowser rb = new RegionBrowser(Data, Sheets, matchedCriteria);
-            LegendView lv = new LegendView(MakeLegend(matchedCriteria), rb);
+            RegionBrowser rb = new RegionBrowser(Data, Sheets, criteria);
+            LegendView lv = new LegendView(MakeLegend(criteria), rb);
             BtnMakeCycleFile.Enabled = true;
-        }
-
-        private (int ID, Color c, string str, bool pass) FindMatchingCriteria(DataEntry[] entries, int colorIdx)
-        {
-            int passingID = 0;
-            string passingNames = string.Empty;
-            bool pass = true;
-
-            var redundantGroups = entries.GroupBy(x => x.Feature.RedundancyGroup);
-            foreach (var group in redundantGroups)
-            {
-                var needOneGroups = group.ToArray().GroupBy(x => x.Feature.NeedOneGroup).ToArray();
-                for (int i = 0; i < needOneGroups.Length; i++)
-                {
-                    DataEntry[] needOneEntries = needOneGroups[i].ToArray();
-                    if (needOneEntries.Where(x => x.State).Any())
-                    {
-                        passingID += (i + 1) * (i + 1);
-                        passingNames += $"{needOneGroups[i].Key} ";
-                    }
-                    else
-                        pass = false;
-                }
-            }
-
-            return (passingID, Pallete.GetColor(colorIdx), passingNames, pass);
         }
 
         private bool MakeSheets()
         {
             Sheets.Clear();
-
-            int maxR = Data.Select(x => x.R).Max();
-            int maxC = Data.Select(x => x.C).Max();
-            int maxSR = Data.Select(x => x.SR).Max();
-            int maxSC = Data.Select(x => x.SC).Max();
-            int maxTR = Data.Select(x => x.TR).Max();
-            int maxTC = Data.Select(x => x.TC).Max();
-            RegionGrid = new Size(maxR, maxC);
-            StampGrid = new Size(maxSR, maxSC);
-            ImageGrid = new Size(maxTR, maxTC);
-
             (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
-
             if (regions.Length == 0 || (regions.Length == 1 && regions[0] == (0, 0)))
             {
                 MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
                 return false;
             }
-
             foreach ((int, int) region in regions)
-                Sheets.Add(new DataSheet(region, RegionGrid, StampGrid, ImageGrid, _FlipX, _FlipY));
+                Sheets.Add(new DataSheet(
+                    region, 
+                    new Size(Data.Select(x => x.R).Max(), Data.Select(x => x.C).Max()), 
+                    new Size(Data.Select(x => x.SR).Max(), Data.Select(x => x.SC).Max()), 
+                    new Size(Data.Select(x => x.TR).Max(), Data.Select(x => x.TC).Max()), 
+                    _FlipX, _FlipY));
 
             return true;
         }
 
-        private Bitmap MakeLegend(List<(int, Color, string, bool)> matches)
+        private Bitmap MakeLegend(List<Criteria> criteria)
         {
-            if (matches.Count == 0) return null;
+            if (criteria.Count == 0) return null;
             Font font = new Font("Segoe", 16);
             SizeF strSize = SizeF.Empty;
             Bitmap bmp = new Bitmap(1, 1);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                foreach (var criterion in matches)
+                foreach (var criterion in criteria)
                 {
-                    SizeF critSize = g.MeasureString(criterion.Item3, font);
+                    SizeF critSize = g.MeasureString(criterion.LegendEntry, font);
                     if (critSize.Width > strSize.Width) strSize = critSize;
                 }
             }
             strSize = new SizeF(strSize.Width, strSize.Height * 0.9f);
-            bmp = new Bitmap((int)strSize.Width, (int)(strSize.Height * matches.Count));
+            bmp = new Bitmap((int)strSize.Width, (int)(strSize.Height * criteria.Count));
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                for (int i = 0; i < matches.Count; i++)
+                for (int i = 0; i < criteria.Count; i++)
                 {
-                    Color c = matches[i].Item2;
+                    Color c = criteria[i].Color;
                     g.FillRectangle(new SolidBrush(c), 0, i * strSize.Height, strSize.Width, strSize.Height);
                     SolidBrush contrastBrush = new SolidBrush((((0.299 * c.R) + (0.587 * c.G) + (0.114 * c.B)) / 255) > 0.5 ? Color.Black : Color.White);
-                    g.DrawString(matches[i].Item3, font, contrastBrush, new PointF(0, i * strSize.Height));
+                    g.DrawString(criteria[i].LegendEntry, font, contrastBrush, new PointF(0, i * strSize.Height));
                 }
             }
             return bmp;
@@ -429,7 +355,7 @@ namespace XferSuite.Apps.SEYR
         {
             using (StreamWriter stream = new StreamWriter(ReportPath))
             {
-                stream.WriteLine(DataHeader);
+                stream.WriteLine(DataEntry.Header);
                 foreach (DataEntry entry in Data)
                     stream.WriteLine(entry.Raw);
             }

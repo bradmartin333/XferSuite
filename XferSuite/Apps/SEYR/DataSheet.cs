@@ -11,7 +11,7 @@ namespace XferSuite.Apps.SEYR
         public Size StampGrid { get; set; }
         public Size ImageGrid { get; set; }
         public Size DataSize { get; set; }
-        private (int, DataEntry, Color, bool)[,] Data { get; set; }
+        private (DataEntry[], Criteria)[,] Data { get; set; }
         private Bitmap Render;
         private readonly bool FlipX = false;
         private readonly bool FlipY = false;
@@ -22,16 +22,16 @@ namespace XferSuite.Apps.SEYR
             StampGrid = stampGrid;
             ImageGrid = imageGrid;
             DataSize = new Size(regionGrid.Width * stampGrid.Width * imageGrid.Width, regionGrid.Height * stampGrid.Height * imageGrid.Height);
-            Data = new (int, DataEntry, Color, bool)[DataSize.Width, DataSize.Height];
+            Data = new (DataEntry[], Criteria)[DataSize.Width, DataSize.Height];
             FlipX = flipX;
             FlipY = flipY;
         }
 
-        public void Insert(DataEntry e, int criterion, Color c, bool pass)
+        public void Insert(DataEntry[] e, Criteria c)
         {
-            int i = ((e.R - 1) * StampGrid.Width * ImageGrid.Width) + ((e.SR - 1) * ImageGrid.Width) + e.TR - 1;
-            int j = ((e.C - 1) * StampGrid.Height * ImageGrid.Height) + ((e.SC - 1) * ImageGrid.Height) + e.TC - 1;
-            Data[i, j] = (criterion, e, c, pass);
+            int i = ((e[0].R - 1) * StampGrid.Width * ImageGrid.Width) + ((e[0].SR - 1) * ImageGrid.Width) + e[0].TR - 1;
+            int j = ((e[0].C - 1) * StampGrid.Height * ImageGrid.Height) + ((e[0].SC - 1) * ImageGrid.Height) + e[0].TC - 1;
+            Data[i, j] = (e, c);
         }
 
         public (Bitmap, string) GetBitmap(bool showPF)
@@ -45,10 +45,10 @@ namespace XferSuite.Apps.SEYR
                 {
                     if (Data[j, i].Item2 == null) continue;
                     total++;
-                    Color c = Data[j, i].Item3;
+                    Color c = Data[j, i].Item2.Color;
                     if (showPF) 
                     {
-                        c = Data[j, i].Item4 ? Color.Green : Color.Firebrick;
+                        c = Data[j, i].Item2.Pass ? Color.Green : Color.Firebrick;
                         if (c == Color.Green) 
                             pass++;
                         bitmap.SetPixel(i, j, c);
@@ -63,17 +63,17 @@ namespace XferSuite.Apps.SEYR
             return (bitmap, percentage);
         }
 
-        public string GetCSV(List<(int, Color, string, bool)> criteria)
+        public string GetCSV(List<Criteria> criteria)
         {
             StringBuilder sb = new StringBuilder();
             for (int j = 0; j < Render.Height; j++)
             {
                 for (int i = 0; i < Render.Width; i++)
                 {
-                    var criterion = criteria.Where(x => x.Item2 == Render.GetPixel(i, j));
+                    var criterion = criteria.Where(x => x.Color == Render.GetPixel(i, j));
                     if (criterion.Any())
-                        sb.Append($"{criterion.First().Item1}\t");
-                    else
+                        sb.Append($"{criterion.First().ID}\t");
+                    else if (Data[i,j].Item1 != null)
                         sb.Append($"0\t");
                 }
                 sb.AppendLine();
@@ -88,10 +88,10 @@ namespace XferSuite.Apps.SEYR
             {
                 for (int j = 0; j < DataSize.Height; j++)
                 {
-                    if (!Data[j, i].Item4)
+                    if (Data[j, i].Item1 != null && !Data[j, i].Item2.Pass)
                     {
                         idx++;
-                        sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true).Item2));
+                        sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true).Item1[0]));
                     }
                 }
             }
@@ -105,7 +105,7 @@ namespace XferSuite.Apps.SEYR
                    $"{(d.C - 1) * StampGrid.Height * ImageGrid.Height + (d.SC - 1) * StampGrid.Height + d.TC}";
         }
 
-        public (int, DataEntry, Color, bool) GetLocation(Point p_in, bool cycle = false)
+        public (DataEntry[], Criteria) GetLocation(Point p_in, bool cycle = false)
         {
             int bmpX = p_in.X;
             int bmpY = p_in.Y;

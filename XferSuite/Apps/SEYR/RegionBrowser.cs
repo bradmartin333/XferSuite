@@ -11,13 +11,13 @@ namespace XferSuite.Apps.SEYR
     {
         private readonly List<DataEntry> Data;
         private readonly List<DataSheet> Sheets;
-        private readonly List<(int, Color, string, bool)> Criteria;
+        private readonly List<Criteria> Criteria;
         private Size ArraySize;
         private TableLayoutPanel TLP;
         private List<PictureBox> PictureBoxes;
         private Inspection Inspection;
 
-        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<(int, Color, string, bool)> criteria)
+        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
@@ -142,12 +142,15 @@ namespace XferSuite.Apps.SEYR
                     PictureBox thisPBX = GetActivePictureBox();
                     DataSheet thisSheet = GetActiveSheet();
                     HighightPoint(location, thisPBX);
-                    (int, DataEntry, Color, bool) match = thisSheet.GetLocation(location);
-                    if (match.Item2 != null)
+                    (DataEntry[] match, Criteria criterion) = thisSheet.GetLocation(location);
+                    if (match != null)
                     {
-                        DataEntry[] matches = Data.Where(x => x.ImageMatch(match.Item2)).Where(x => x.Image != null).ToArray();
-                        Text = match.Item2.Location();
-                        if (matches.Any()) Inspection.Set(matches[0], match.Item4);
+                        DataEntry[] matches = match.Where(x => x.Image != null).ToArray();
+                        if (matches.Any())
+                            Inspection.Set(matches, criterion.Pass);
+                        else
+                            Inspection.Hide();
+                        Text = match[0].Location();
                     }
                     break;
                 case MouseButtons.Right:
@@ -180,7 +183,7 @@ namespace XferSuite.Apps.SEYR
         private void ToolStripMenuCopyCSV_Click(object sender, System.EventArgs e)
         {
             string data = GetActiveSheet().GetCSV(Criteria);
-            Clipboard.SetText(data + '\n' + string.Join("\n", Criteria.Select(x => x.Item3).ToArray()));
+            Clipboard.SetText(data + '\n' + string.Join("\n", Criteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray()));
         }
 
         private void HighightPoint(Point location, PictureBox pictureBox)
