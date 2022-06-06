@@ -12,13 +12,15 @@ namespace XferSuite.AdvancedTools
     {
         struct Entry
         {
+            public double X;
+            public double Y;
             public int PostCount;
             public int PostDebris;
             public int MesaDebris;
         }
 
         private FileInfo FileInfo = null;
-        private readonly List<Entry> Data = new List<Entry>();
+        private List<Entry> Data = new List<Entry>();
         private int MaxPostCount = 1;
         private int[] Counts = new int[3];
 
@@ -61,6 +63,8 @@ namespace XferSuite.AdvancedTools
                 int md = int.Parse(cols[cols.Length - 1]);
                 Data.Add(new Entry()
                 {
+                    X = double.Parse(cols[1]),
+                    Y = double.Parse(cols[2]),
                     PostCount = pc,
                     PostDebris = pd,
                     MesaDebris = md,
@@ -70,6 +74,7 @@ namespace XferSuite.AdvancedTools
                 Counts[1] += pd;
                 Counts[2] += md;
             }
+            Data = Data.OrderBy(x => x.X).OrderBy(x => x.Y).ToList();
             PlotAll();
         }
 
