@@ -11,19 +11,19 @@ namespace XferSuite.Apps.SEYR
     {
         private readonly List<DataEntry> Data;
         private readonly List<DataSheet> Sheets;
-        private readonly string LegendStr;
+        private readonly List<(int, Color, string, bool)> Criteria;
         private Size ArraySize;
         private TableLayoutPanel TLP;
         private List<PictureBox> PictureBoxes;
         private Inspection Inspection;
 
-        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, string legendStr)
+        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<(int, Color, string, bool)> criteria)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
             Data = data;
             Sheets = sheets;
-            LegendStr = legendStr;
+            Criteria = criteria;
             Inspection = new Inspection(this);
             SetupTLP();
             Show();
@@ -176,8 +176,8 @@ namespace XferSuite.Apps.SEYR
 
         private void ToolStripMenuCopyCSV_Click(object sender, System.EventArgs e)
         {
-            string data = GetActiveSheet().GetCSV();
-            Clipboard.SetText(data + '\n' + LegendStr);
+            string data = GetActiveSheet().GetCSV(Criteria);
+            Clipboard.SetText(data + '\n' + string.Join("\n", Criteria.Select(x => x.Item3).ToArray()));
         }
 
         private void HighightPoint(Point location, PictureBox pictureBox)

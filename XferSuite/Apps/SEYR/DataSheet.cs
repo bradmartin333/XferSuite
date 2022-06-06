@@ -11,29 +11,27 @@ namespace XferSuite.Apps.SEYR
         public Size StampGrid { get; set; }
         public Size ImageGrid { get; set; }
         public Size DataSize { get; set; }
-        private (int, DataEntry)[,] Data { get; set; }
-        private List<(int[], bool, Color)> Criteria { get; set; }
+        private (int, DataEntry, Color, bool)[,] Data { get; set; }
         private Bitmap Render;
         private readonly bool FlipX = false;
         private readonly bool FlipY = false;
 
-        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, List<(int[], bool, Color)> criteria, bool flipX, bool flipY)
+        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, bool flipX, bool flipY)
         {
             ID = region;
             StampGrid = stampGrid;
             ImageGrid = imageGrid;
             DataSize = new Size(regionGrid.Width * stampGrid.Width * imageGrid.Width, regionGrid.Height * stampGrid.Height * imageGrid.Height);
-            Data = new (int, DataEntry)[DataSize.Width, DataSize.Height];
-            Criteria = criteria;
+            Data = new (int, DataEntry, Color, bool)[DataSize.Width, DataSize.Height];
             FlipX = flipX;
             FlipY = flipY;
         }
 
-        public void Insert(DataEntry e, int criterion)
+        public void Insert(DataEntry e, int criterion, Color c, bool pass)
         {
             int i = ((e.R - 1) * StampGrid.Width * ImageGrid.Width) + ((e.SR - 1) * ImageGrid.Width) + e.TR - 1;
             int j = ((e.C - 1) * StampGrid.Height * ImageGrid.Height) + ((e.SC - 1) * ImageGrid.Height) + e.TC - 1;
-            Data[i, j] = (criterion, e);
+            Data[i, j] = (criterion, e, c, pass);
         }
 
         public (Bitmap, string) GetBitmap(bool showPF)
@@ -46,16 +44,16 @@ namespace XferSuite.Apps.SEYR
                 for (int j = 0; j < bitmap.Height; j++)
                 {
                     total++;
-                    var criterion = Criteria.Where(x => x.Item1.Sum() == Data[j, i].Item1);
-                    if (criterion.Any())
+                    Color c = Data[j, i].Item3;
+                    if (showPF) 
                     {
-                        Color c = criterion.First().Item3;
-                        if (showPF) c = criterion.First().Item2 ? Color.Green : Color.Firebrick;
-                        if (c == Color.Green) pass++;
+                        c = Data[j, i].Item4 ? Color.Green : Color.Firebrick;
+                        if (c == Color.Green) 
+                            pass++;
                         bitmap.SetPixel(i, j, c);
                     } 
-                    else if (showPF)
-                        bitmap.SetPixel(i, j, Color.Firebrick);
+                    else
+                        bitmap.SetPixel(i, j, c);
                 }
             if (FlipX) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipX);
             if (FlipY) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
@@ -64,16 +62,16 @@ namespace XferSuite.Apps.SEYR
             return (bitmap, percentage);
         }
 
-        public string GetCSV()
+        public string GetCSV(List<(int, Color, string, bool)> criteria)
         {
             StringBuilder sb = new StringBuilder();
             for (int j = 0; j < Render.Height; j++)
             {
                 for (int i = 0; i < Render.Width; i++)
                 {
-                    var criteria = Criteria.Where(x => x.Item3 == Render.GetPixel(i, j));
-                    if (criteria.Any())
-                        sb.Append($"{criteria.First().Item1.Sum()}\t");
+                    var criterion = criteria.Where(x => x.Item2 == Render.GetPixel(i, j));
+                    if (criterion.Any())
+                        sb.Append($"{criterion.First().Item1}\t");
                     else
                         sb.Append($"0\t");
                 }
@@ -89,10 +87,7 @@ namespace XferSuite.Apps.SEYR
             {
                 for (int j = 0; j < DataSize.Height; j++)
                 {
-                    var criterion = Criteria.Where(x => x.Item1.Sum() == Data[j, i].Item1);
-                    bool pass = false;
-                    if (criterion.Any()) pass = criterion.First().Item2;
-                    if (!pass)
+                    if (!Data[j, i].Item4)
                     {
                         idx++;
                         sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true)));

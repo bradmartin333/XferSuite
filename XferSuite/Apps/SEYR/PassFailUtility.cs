@@ -10,7 +10,7 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class PassFailUtility : Form
     {
-        private List<DataEntry> Data;
+        private readonly List<DataEntry> Data;
         public double PassThreshold;
         public double Limit;
         private readonly Feature Feature;
@@ -31,6 +31,7 @@ namespace XferSuite.Apps.SEYR
             Text = $"Editing {feature.Name}";
             PassThreshold = feature.PassThreshold;
             Limit = feature.Limit;
+            TxtCriteriaString.Text = feature.CriteriaString;
 
             (NullExclude, NullInclude) = feature.GetNullData();
             LabelNullExcludeCount.Text = NullExclude.ToString();
@@ -211,12 +212,14 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnConfirm_Click(object sender, EventArgs e)
         {
+            Feature.CriteriaString = TxtCriteriaString.Text;
             DialogResult = DialogResult.OK;
             Close();
         }
 
         private void BtnIgnoreFeature_Click(object sender, EventArgs e)
         {
+            Feature.CriteriaString = TxtCriteriaString.Text;
             DialogResult = DialogResult.Ignore;
             Close();
         }

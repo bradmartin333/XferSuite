@@ -33,7 +33,6 @@ namespace XferSuite.Apps.SEYR
         public static Project Project { get; set; } = null;
         private string DataHeader { get; set; } = string.Empty;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
-        private List<(int[], bool, Color)> Criteria { get; set; } = new List<(int[], bool, Color)>();
         private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
         private readonly ScottPlot.Drawing.Palette Pallete = ScottPlot.Palette.Category20;
         private Size RegionGrid, StampGrid, ImageGrid;       
@@ -52,6 +51,7 @@ namespace XferSuite.Apps.SEYR
                 ForceClose = true;
                 return;
             }
+            ValidateRegions();
             RescoreAllData();
             InitFeatureInfo();
         }
@@ -89,13 +89,14 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private bool LoadData()
+        private bool LoadData(bool swap = false)
         {
+            Data.Clear();
             string[] lines = File.ReadAllLines(ReportPath);
             DataHeader = lines[0];
             for (int i = 1; i < lines.Length; i++)
             {
-                DataEntry dataEntry = new DataEntry(lines[i]);
+                DataEntry dataEntry = new DataEntry(lines[i], swap);
                 if (dataEntry.HasValidPosition()) Data.Add(dataEntry);
             }
 
@@ -136,6 +137,23 @@ namespace XferSuite.Apps.SEYR
             return true;
         }
 
+        private void ValidateRegions()
+        {
+            int maxRR = Data.Select(x => x.RR).Max();
+            int maxR = Data.Select(x => x.R).Max();
+            if (maxR == 1 && maxRR > 1)
+            {
+                DialogResult result = MessageBox.Show(
+                    "The RR/RC indices outrank the R/C indices, which will cause rendering issues. Would you like to swap RR with R and RC with C?",
+                    "Parse SEYR", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    LoadProject();
+                    LoadData(true);
+                }
+            }
+        }
+
         private void RescoreAllData()
         {
             foreach (Feature feature in Project.Features)
@@ -150,7 +168,8 @@ namespace XferSuite.Apps.SEYR
                         entry.State = newState;
                     }
                 }
-                System.Diagnostics.Debug.WriteLine($"{feature.Name} {updated} updated states");
+                if (string.IsNullOrEmpty(feature.CriteriaString))
+                    feature.CriteriaString = feature.Name;
             }
         }
 
@@ -190,19 +209,12 @@ namespace XferSuite.Apps.SEYR
 
         private void InitFeatureInfo()
         {
-            List<int> criteriaVals = new List<int>();
-            List<string> criteriaNames = new List<string>();
             ComboFeatures.Items.Clear();
             for (int i = 0; i < Project.Features.Count; i++)
             {
                 Feature feature = Project.Features[i];
-                int id = (i + 1) * (i + 1);
-                string name = feature.Name;
-                feature.ID = id;
-                ComboFeatures.Items.Add(name);
+                ComboFeatures.Items.Add(feature.Name);
                 if (Project.Features[i].Ignore) continue;
-                criteriaVals.Add(id);
-                criteriaNames.Add(name);
             }
         }
 
@@ -227,6 +239,8 @@ namespace XferSuite.Apps.SEYR
 
             if (!MakeSheets()) return;
 
+            List<(int, Color, string, bool)> matchedCriteria = new List<(int, Color, string, bool)>();
+
             foreach (DataSheet sheet in Sheets)
             {
                 DataEntry[] region = Data.Where(x => (x.RR, x.RC) == sheet.ID).ToArray();
@@ -238,21 +252,43 @@ namespace XferSuite.Apps.SEYR
                     foreach (var tile in tiles)
                     {
                         DataEntry[] entries = tile.ToArray();
-                        int criterion = 0;
-                        foreach (DataEntry entry in entries)
-                        {
-                            Feature feature = entry.Feature;
-                            if (feature.Ignore) continue;
-                            if (entry.State) criterion += feature.ID;
-                        }
-                        sheet.Insert(entries[0], criterion);
+                        (int, Color, string, bool) match = FindMatchingCriteria(entries, matchedCriteria.Count);
+                        if (!matchedCriteria.Select(x => x.Item1).ToList().Contains(match.Item1))
+                            matchedCriteria.Add(match);
+                        sheet.Insert(entries[0], match.Item1, match.Item2, match.Item4);
                     }
                 }
             }
 
-            RegionBrowser rb = new RegionBrowser(Data, Sheets, MakeLegendStr());
-            LegendView lv = new LegendView(MakeLegend(), rb);
+            RegionBrowser rb = new RegionBrowser(Data, Sheets, matchedCriteria);
+            LegendView lv = new LegendView(MakeLegend(matchedCriteria), rb);
             BtnMakeCycleFile.Enabled = true;
+        }
+
+        private (int ID, Color c, string str, bool pass) FindMatchingCriteria(DataEntry[] entries, int colorIdx)
+        {
+            int passingID = 0;
+            string passingNames = string.Empty;
+            bool pass = true;
+
+            var redundantGroups = entries.GroupBy(x => x.Feature.RedundancyGroup);
+            foreach (var group in redundantGroups)
+            {
+                var needOneGroups = group.ToArray().GroupBy(x => x.Feature.NeedOneGroup).ToArray();
+                for (int i = 0; i < needOneGroups.Length; i++)
+                {
+                    DataEntry[] needOneEntries = needOneGroups[i].ToArray();
+                    if (needOneEntries.Where(x => x.State).Any())
+                    {
+                        passingID += (i + 1) * (i + 1);
+                        passingNames += $"{needOneGroups[i].Key}\t";
+                    }
+                    else
+                        pass = false;
+                }
+            }
+
+            return (passingID, Pallete.GetColor(colorIdx), passingNames, pass);
         }
 
         private bool MakeSheets()
@@ -278,76 +314,38 @@ namespace XferSuite.Apps.SEYR
             }
 
             foreach ((int, int) region in regions)
-                Sheets.Add(new DataSheet(region, RegionGrid, StampGrid, ImageGrid, Criteria, _FlipX, _FlipY));
+                Sheets.Add(new DataSheet(region, RegionGrid, StampGrid, ImageGrid, _FlipX, _FlipY));
 
             return true;
         }
 
-        private string MakeLegendStr()
+        private Bitmap MakeLegend(List<(int, Color, string, bool)> matches)
         {
-            var criteria = GetUsedCriteria();
-            string output = string.Empty;
-            foreach (var criterion in criteria)
-                output += $"{criterion.Item1.Sum()}\t{GetCriterionString(criterion)}\n";
-            return output;
-        }
-
-        private Bitmap MakeLegend()
-        {
-            var criteria = GetUsedCriteria();
-            if (criteria.Count == 0) return null;
+            if (matches.Count == 0) return null;
             Font font = new Font("Segoe", 16);
             SizeF strSize = SizeF.Empty;
             Bitmap bmp = new Bitmap(1, 1);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                foreach (var criterion in criteria)
+                foreach (var criterion in matches)
                 {
-                    string critStr = GetCriterionString(criterion);
-                    SizeF critSize = g.MeasureString(critStr, font);
+                    SizeF critSize = g.MeasureString(criterion.Item3, font);
                     if (critSize.Width > strSize.Width) strSize = critSize;
                 }
             }
             strSize = new SizeF(strSize.Width, strSize.Height * 0.9f);
-            bmp = new Bitmap((int)strSize.Width, (int)(strSize.Height * criteria.Count));
+            bmp = new Bitmap((int)strSize.Width, (int)(strSize.Height * matches.Count));
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                for (int i = 0; i < criteria.Count; i++)
+                for (int i = 0; i < matches.Count; i++)
                 {
-                    Color c = criteria[i].Item3;
+                    Color c = matches[i].Item2;
                     g.FillRectangle(new SolidBrush(c), 0, i * strSize.Height, strSize.Width, strSize.Height);
                     SolidBrush contrastBrush = new SolidBrush((((0.299 * c.R) + (0.587 * c.G) + (0.114 * c.B)) / 255) > 0.5 ? Color.Black : Color.White);
-                    g.DrawString(GetCriterionString(criteria[i]), font, contrastBrush, new PointF(0, i * strSize.Height));
+                    g.DrawString(matches[i].Item3, font, contrastBrush, new PointF(0, i * strSize.Height));
                 }
             }
             return bmp;
-        }
-
-        private List<(int[], bool, Color)> GetUsedCriteria()
-        {
-            List<(int[], bool, Color)> criteria = new List<(int[], bool, Color)>();
-            foreach (var criterion in Criteria)
-            {
-                bool valid = true;
-                foreach (int val in criterion.Item1)
-                {
-                    if (Project.Features[(int)(Math.Sqrt(val) - 1)].Ignore)
-                    {
-                        valid = false;
-                        break;
-                    }
-                }
-                if (valid) criteria.Add(criterion);
-            }
-            return criteria;
-        }
-
-        private string GetCriterionString((int[], bool, Color) criterion)
-        {
-            string output = string.Empty;
-            foreach (int val in criterion.Item1)
-                output += Project.Features[(int)(Math.Sqrt(val) - 1)].Name + "-";
-            return output.Substring(0, output.Length - 1);
         }
 
         private void BtnMakeCycleFile_Click(object sender, EventArgs e)

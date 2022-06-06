@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PassFailUtility));
             this.HistPlot = new ScottPlot.FormsPlot();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.BtnIgnoreFeature = new System.Windows.Forms.Button();
             this.LabelUnselectedCount = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.LabelNullExcludeCount = new System.Windows.Forms.Label();
@@ -46,6 +45,9 @@
             this.label6 = new System.Windows.Forms.Label();
             this.BtnConfirm = new System.Windows.Forms.Button();
             this.PiePlot = new ScottPlot.FormsPlot();
+            this.label8 = new System.Windows.Forms.Label();
+            this.TxtCriteriaString = new System.Windows.Forms.TextBox();
+            this.BtnIgnoreFeature = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,7 +56,7 @@
             this.HistPlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.HistPlot.Location = new System.Drawing.Point(3, 3);
             this.HistPlot.Name = "HistPlot";
-            this.tableLayoutPanel.SetRowSpan(this.HistPlot, 9);
+            this.tableLayoutPanel.SetRowSpan(this.HistPlot, 11);
             this.HistPlot.Size = new System.Drawing.Size(485, 455);
             this.HistPlot.TabIndex = 0;
             // 
@@ -64,7 +66,7 @@
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel.Controls.Add(this.BtnIgnoreFeature, 1, 7);
+            this.tableLayoutPanel.Controls.Add(this.BtnIgnoreFeature, 1, 9);
             this.tableLayoutPanel.Controls.Add(this.LabelUnselectedCount, 2, 3);
             this.tableLayoutPanel.Controls.Add(this.label7, 0, 3);
             this.tableLayoutPanel.Controls.Add(this.HistPlot, 0, 0);
@@ -78,12 +80,14 @@
             this.tableLayoutPanel.Controls.Add(this.label4, 1, 5);
             this.tableLayoutPanel.Controls.Add(this.label5, 1, 0);
             this.tableLayoutPanel.Controls.Add(this.label6, 2, 0);
-            this.tableLayoutPanel.Controls.Add(this.BtnConfirm, 1, 8);
+            this.tableLayoutPanel.Controls.Add(this.BtnConfirm, 1, 10);
             this.tableLayoutPanel.Controls.Add(this.PiePlot, 1, 6);
+            this.tableLayoutPanel.Controls.Add(this.label8, 1, 7);
+            this.tableLayoutPanel.Controls.Add(this.TxtCriteriaString, 1, 8);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 9;
+            this.tableLayoutPanel.RowCount = 11;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -93,22 +97,10 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.Size = new System.Drawing.Size(659, 461);
             this.tableLayoutPanel.TabIndex = 1;
-            // 
-            // BtnIgnoreFeature
-            // 
-            this.BtnIgnoreFeature.BackColor = System.Drawing.Color.LightCoral;
-            this.tableLayoutPanel.SetColumnSpan(this.BtnIgnoreFeature, 2);
-            this.BtnIgnoreFeature.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnIgnoreFeature.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnIgnoreFeature.Location = new System.Drawing.Point(494, 406);
-            this.BtnIgnoreFeature.Name = "BtnIgnoreFeature";
-            this.BtnIgnoreFeature.Size = new System.Drawing.Size(162, 23);
-            this.BtnIgnoreFeature.TabIndex = 15;
-            this.BtnIgnoreFeature.Text = "Ignore Feature";
-            this.BtnIgnoreFeature.UseVisualStyleBackColor = false;
-            this.BtnIgnoreFeature.Click += new System.EventHandler(this.BtnIgnoreFeature_Click);
             // 
             // LabelUnselectedCount
             // 
@@ -286,8 +278,44 @@
             this.PiePlot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PiePlot.Location = new System.Drawing.Point(494, 107);
             this.PiePlot.Name = "PiePlot";
-            this.PiePlot.Size = new System.Drawing.Size(162, 293);
+            this.PiePlot.Size = new System.Drawing.Size(162, 254);
             this.PiePlot.TabIndex = 12;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.tableLayoutPanel.SetColumnSpan(this.label8, 2);
+            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label8.Location = new System.Drawing.Point(494, 364);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(162, 13);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Criteria String";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // TxtCriteriaString
+            // 
+            this.tableLayoutPanel.SetColumnSpan(this.TxtCriteriaString, 2);
+            this.TxtCriteriaString.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TxtCriteriaString.Location = new System.Drawing.Point(494, 380);
+            this.TxtCriteriaString.Name = "TxtCriteriaString";
+            this.TxtCriteriaString.Size = new System.Drawing.Size(162, 20);
+            this.TxtCriteriaString.TabIndex = 17;
+            this.TxtCriteriaString.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // BtnIgnoreFeature
+            // 
+            this.BtnIgnoreFeature.BackColor = System.Drawing.Color.LightCoral;
+            this.tableLayoutPanel.SetColumnSpan(this.BtnIgnoreFeature, 2);
+            this.BtnIgnoreFeature.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnIgnoreFeature.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnIgnoreFeature.Location = new System.Drawing.Point(494, 406);
+            this.BtnIgnoreFeature.Name = "BtnIgnoreFeature";
+            this.BtnIgnoreFeature.Size = new System.Drawing.Size(162, 23);
+            this.BtnIgnoreFeature.TabIndex = 15;
+            this.BtnIgnoreFeature.Text = "Ignore Feature";
+            this.BtnIgnoreFeature.UseVisualStyleBackColor = false;
+            this.BtnIgnoreFeature.Click += new System.EventHandler(this.BtnIgnoreFeature_Click);
             // 
             // PassFailUtility
             // 
@@ -324,6 +352,8 @@
         private ScottPlot.FormsPlot PiePlot;
         private System.Windows.Forms.Label LabelUnselectedCount;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox TxtCriteriaString;
         private System.Windows.Forms.Button BtnIgnoreFeature;
     }
 }

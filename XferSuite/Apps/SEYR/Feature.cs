@@ -43,9 +43,32 @@ namespace XferSuite.Apps.SEYR
         public double Limit { get; set; } = -10; // Added by XferSuite
         [XmlElement("Ignore")]
         public bool Ignore { get; set; } = false; // Added by XferSuite
-        internal int ID { get; set; }
+        [XmlElement("CriteriaString")]
+        public string CriteriaString { get; set; } = string.Empty; // Added by XferSuite
         internal DataEntry[] Data { get; set; }
         internal double[] HistData { get; set; }
+        internal string RedundancyGroup
+        {
+            get
+            {
+                string[] vals = CriteriaString.Split('_');
+                if (vals.Length == 2)
+                    return vals[0];
+                else
+                    return string.Empty;
+            }
+        }
+        internal string NeedOneGroup
+        {
+            get
+            {
+                string[] vals = CriteriaString.Split('_');
+                if (vals.Length == 2)
+                    return vals[1];
+                else
+                    return CriteriaString;
+            }
+        }
 
         public Rectangle GetGeometry()
         {
