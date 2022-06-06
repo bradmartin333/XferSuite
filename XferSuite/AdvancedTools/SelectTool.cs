@@ -38,43 +38,22 @@ namespace XferSuite.AdvancedTools
             try
             {
                 AdvancedForm form = (AdvancedForm)ListBox.SelectedIndices[0];
-                Form tool = new Form();
                 switch (form)
                 {
                     case AdvancedForm.dataFilter:
-                        if (Application.OpenForms.OfType<DataFilter>().Any())
-                            Application.OpenForms.OfType<DataFilter>().First().BringToFront();
-                        else
-                            tool = new DataFilter();
-                        Close();
+                        ShowToolWindow<DataFilter>();
                         break;
                     case AdvancedForm.stampSEYR:
-                        if (Application.OpenForms.OfType<StampSEYR>().Any())
-                            Application.OpenForms.OfType<StampSEYR>().First().BringToFront();
-                        else
-                            tool = new StampSEYR();
-                        Close();
+                        ShowToolWindow<StampSEYR>();
                         break;
                     case AdvancedForm.mapFlip:
-                        if (Application.OpenForms.OfType<MapFlip>().Any())
-                            Application.OpenForms.OfType<MapFlip>().First().BringToFront();
-                        else
-                            tool = new MapFlip();
-                        Close();
+                        ShowToolWindow<MapFlip>();
                         break;
                     case AdvancedForm.tenZoneCal:
-                        if (Application.OpenForms.OfType<CalGenerator>().Any())
-                            Application.OpenForms.OfType<CalGenerator>().First().BringToFront();
-                        else
-                            tool = new CalGenerator();
-                        Close();
+                        ShowToolWindow<CalGenerator>();
                         break;
                     case AdvancedForm.uTPlogParser:
-                        if (Application.OpenForms.OfType<uTP.PrintLogParser>().Any())
-                            Application.OpenForms.OfType<uTP.PrintLogParser>().First().BringToFront();
-                        else
-                            tool = new uTP.PrintLogParser();
-                        Close();
+                        ShowToolWindow<uTP.PrintLogParser>();
                         break;
                     // Create a form in the AdvancedTools folder and add a case above this comment
                     // for the newly added enum field and copy the above examples to launch the new form
@@ -82,9 +61,7 @@ namespace XferSuite.AdvancedTools
                         MessageBox.Show("Invalid Selection", "XferSuite Advanced Tools");
                         return;
                 }
-                tool.Activated += Tool_Activated;
-                tool.Show();
-                MainMenu.Settings.PropertyGrid.SelectedObject = form;
+                Close();
             }
             catch (Exception)
             {
@@ -96,6 +73,21 @@ namespace XferSuite.AdvancedTools
         {
             if (!MainMenu.Settings.IsDisposed) // Prevents error on app close
                 MainMenu.Settings.PropertyGrid.SelectedObject = sender;
+        }
+
+        private void ShowToolWindow<TWindow>() where TWindow : Form, new()
+        {
+            var openForm = Application.OpenForms.OfType<TWindow>().FirstOrDefault();
+            if (openForm != null)
+                openForm.BringToFront();
+            else
+            {
+                Form tool = new TWindow();
+                MainMenu.Settings.PropertyGrid.SelectedObject = tool;
+                tool.Activated += Tool_Activated;
+                tool.Show();
+            }
+            Close();
         }
 
         /// <summary>
