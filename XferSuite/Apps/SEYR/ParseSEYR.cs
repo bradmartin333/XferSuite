@@ -253,7 +253,7 @@ namespace XferSuite.Apps.SEYR
                     {
                         DataEntry[] entries = tile.ToArray();
                         (int, Color, string, bool) match = FindMatchingCriteria(entries, matchedCriteria.Count);
-                        if (!matchedCriteria.Select(x => x.Item1).ToList().Contains(match.Item1))
+                        if (!string.IsNullOrEmpty(match.Item3) && !matchedCriteria.Select(x => x.Item1).ToList().Contains(match.Item1))
                             matchedCriteria.Add(match);
                         sheet.Insert(entries[0], match.Item1, match.Item2, match.Item4);
                     }
@@ -281,7 +281,7 @@ namespace XferSuite.Apps.SEYR
                     if (needOneEntries.Where(x => x.State).Any())
                     {
                         passingID += (i + 1) * (i + 1);
-                        passingNames += $"{needOneGroups[i].Key}\t";
+                        passingNames += $"{needOneGroups[i].Key} ";
                     }
                     else
                         pass = false;

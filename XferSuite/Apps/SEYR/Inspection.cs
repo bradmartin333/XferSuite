@@ -8,7 +8,7 @@ namespace XferSuite.Apps.SEYR
         private bool Loading = false;
         private DataEntry _DataEntry;
 
-        public Inspection(RegionBrowser regionBrowser)
+        public Inspection()
         {
             InitializeComponent();
             FormClosing += Inspection_FormClosing;
@@ -30,13 +30,13 @@ namespace XferSuite.Apps.SEYR
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
         }
 
-        public void Set(DataEntry d)
+        public void Set(DataEntry d, bool pass)
         {
             Loading = true;
             PBX.BackgroundImage = d.Image;
             Text = $"{d} {d.X}, {d.Y}";
             LblInfo.Text = d.Location();
-            CBX.Checked = d.State;
+            CBX.Checked = pass;
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
             _DataEntry = d;
             Show();

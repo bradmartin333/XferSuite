@@ -24,7 +24,7 @@ namespace XferSuite.Apps.SEYR
             Data = data;
             Sheets = sheets;
             Criteria = criteria;
-            Inspection = new Inspection(this);
+            Inspection = new Inspection();
             SetupTLP();
             Show();
         }
@@ -142,10 +142,13 @@ namespace XferSuite.Apps.SEYR
                     PictureBox thisPBX = GetActivePictureBox();
                     DataSheet thisSheet = GetActiveSheet();
                     HighightPoint(location, thisPBX);
-                    DataEntry data = thisSheet.GetLocation(location);
-                    DataEntry[] matches = Data.Where(x => x.ImageMatch(data)).Where(x => x.Image != null).ToArray();
-                    Text = data.Location();
-                    if (matches.Any()) Inspection.Set(matches[0]);
+                    (int, DataEntry, Color, bool) match = thisSheet.GetLocation(location);
+                    if (match.Item2 != null)
+                    {
+                        DataEntry[] matches = Data.Where(x => x.ImageMatch(match.Item2)).Where(x => x.Image != null).ToArray();
+                        Text = match.Item2.Location();
+                        if (matches.Any()) Inspection.Set(matches[0], match.Item4);
+                    }
                     break;
                 case MouseButtons.Right:
                     ContextMenuStrip.Tag = ((PictureBox)sender).Tag;

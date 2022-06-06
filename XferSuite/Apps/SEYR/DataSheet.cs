@@ -43,6 +43,7 @@ namespace XferSuite.Apps.SEYR
             for (int i = 0; i < bitmap.Width; i++)
                 for (int j = 0; j < bitmap.Height; j++)
                 {
+                    if (Data[j, i].Item2 == null) continue;
                     total++;
                     Color c = Data[j, i].Item3;
                     if (showPF) 
@@ -90,7 +91,7 @@ namespace XferSuite.Apps.SEYR
                     if (!Data[j, i].Item4)
                     {
                         idx++;
-                        sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true)));
+                        sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true).Item2));
                     }
                 }
             }
@@ -104,13 +105,13 @@ namespace XferSuite.Apps.SEYR
                    $"{(d.C - 1) * StampGrid.Height * ImageGrid.Height + (d.SC - 1) * StampGrid.Height + d.TC}";
         }
 
-        public DataEntry GetLocation(Point p_in, bool cycle = false)
+        public (int, DataEntry, Color, bool) GetLocation(Point p_in, bool cycle = false)
         {
             int bmpX = p_in.X;
             int bmpY = p_in.Y;
             if (!cycle && FlipX) bmpX = Render.Width - bmpX - 1;
             if (!cycle && FlipY) bmpY = Render.Height - bmpY - 1;
-            return Data[bmpY, bmpX].Item2;
+            return Data[bmpY, bmpX];
         }
     }
 }
