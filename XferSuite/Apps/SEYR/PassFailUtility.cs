@@ -83,6 +83,7 @@ namespace XferSuite.Apps.SEYR
             ViewDataAnnotation.Shadow = false;
             HistPlot.MouseWheel += Control_MouseWheel;
             HistPlot.Configuration.DoubleClickBenchmark = false;
+            HistPlot.Configuration.EnablePlotObjectEditor = true;
             HistPlot.MouseUp += Control_MouseUp;
 
             HSpan hSpan = HistPlot.Plot.AddHorizontalSpan(
@@ -193,6 +194,7 @@ namespace XferSuite.Apps.SEYR
             pie.OutlineSize = 2;
             pie.SliceFillColors = new Color[] { Color.LightGreen, Color.LightCoral };
             PiePlot.Configuration.DoubleClickBenchmark = false;
+            PiePlot.Configuration.EnablePlotObjectEditor = true;
             PiePlot.Plot.XAxis.LockLimits();
             PiePlot.Plot.YAxis.LockLimits();
             PiePlot.Refresh();
