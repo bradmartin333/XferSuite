@@ -234,7 +234,6 @@
             this.olv.DataSource = null;
             this.olv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.olv.FullRowSelect = true;
-            this.olv.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.olv.HideSelection = false;
             this.olv.Location = new System.Drawing.Point(3, 32);
             this.olv.Name = "olv";
