@@ -9,7 +9,7 @@ namespace XferSuite
     public partial class MainMenu : Form
     {
         public static int MajorVersion = 3;
-        public static int MinorVerson = 18;
+        public static int MinorVerson = 19;
         public static readonly Settings Settings = new Settings();
 
         public MainMenu()
