@@ -135,10 +135,7 @@ namespace XferSuite.Apps.InlinePositions
             Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
-           // HELP WANTED
-           // Replace homemade vector plotting
-           // with Scottplot vector plotting
-           PlotModel vectorPlot = new PlotModel() { TitleFontSize = 15 };
+            PlotModel vectorPlot = new PlotModel() { TitleFontSize = 15 };
 
             // Hacky, but fast way of selecting all by default
             List<int> loopSet = new List<int>();

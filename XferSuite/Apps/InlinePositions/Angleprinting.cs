@@ -58,9 +58,6 @@ namespace XferSuite.Apps.InlinePositions
             Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_Raw);
             _Data = _splitData.Item2; // We don't want any data for missing devices
 
-            // HELP WANTED
-            // This could be a lot more efficent
-
             string[] indices = Metro.prints(_Raw); // Get all prints in RR RC R C format
             int printIdx = 1;
             int posIdx = 0;
