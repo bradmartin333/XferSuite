@@ -47,11 +47,8 @@ namespace XferSuite.AdvancedTools
         {
             try
             {
-                string clipText = Clipboard.GetText();
-
-                if (_Delimeter == "") DetermineDelimeter(clipText);
-
-                string[] clipLines = clipText.Split('\n');
+                string[] clipLines = Clipboard.GetText().Split('\n');
+                if (_Delimeter == "") DetectDelimiter(clipLines, new char[] { '\t', '|', ',', ':', ';' });
 
                 bool validArr = true;
                 List<string[]> arrBuilder = new List<string[]>();
@@ -81,20 +78,37 @@ namespace XferSuite.AdvancedTools
             }
         }
 
-        // HELP WANTED
-        // This function could be a lot smarter
-        private void DetermineDelimeter(string clipText)
+        /// <summary>
+        /// Analyze the given lines of text and try to determine the correct delimiter used. If multiple
+        /// candidate delimiters are found, the highest frequency delimiter will be returned.
+        /// </summary>
+        /// <param name="lines">Lines to inspect</param>
+        /// <param name="delimiters">Delimiters to search for</param>
+        /// <returns>The most probable delimiter by usage, or null if none found.</returns>
+        /// https://stackoverflow.com/questions/761932/how-should-i-detect-which-delimiter-is-used-in-a-text-file
+        private void DetectDelimiter(IEnumerable<string> lines, IEnumerable<char> delimiters)
         {
-            char[] delims = new char[] { ' ', ',', '\t', '|' };
-            int[] count = new int[delims.Length];
-            for (int i = 0; i < delims.Length; i++)
-            {
-                char[] arr = clipText.ToCharArray();
-                foreach (char c in arr)
-                    if (c == delims[i]) count[i]++;
-            }
-            _Delimeter = delims[count.ToList().IndexOf(count.Max())].ToString();
+            Dictionary<char, int> delimFrequency = new Dictionary<char, int>();
+
+            // Setup our frequency tracker for given delimiters
+            delimiters.ToList().ForEach(
+                curDelim => delimFrequency.Add(curDelim, 0));
+
+            // Get a total sum of all occurrences of each delimiter in the given lines
+            delimFrequency.ToList().ForEach(
+                curDelim => delimFrequency[curDelim.Key] = lines.Sum(line => line.Count(p => p == curDelim.Key)));
+
+            // Find delimiters that have a frequency evenly divisible by the number of lines
+            // (correct & consistent usage) and order them by largest frequency
+            var possibleDelimiters = delimFrequency
+                              .Where(f => f.Value > 0 && f.Value % lines.Count() == 0)
+                              .OrderByDescending(f => f.Value)
+                              .ToList();
+
+            // If more than one possible delimiter found, select the most used one
+            if (possibleDelimiters.Any()) _Delimeter = possibleDelimiters.First().Key.ToString();
         }
+
 
         private void HorizFlip()
         {
