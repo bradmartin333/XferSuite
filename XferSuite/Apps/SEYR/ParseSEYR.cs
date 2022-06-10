@@ -58,6 +58,7 @@ namespace XferSuite.Apps.SEYR
         public ParseSEYR(string path)
         {
             InitializeComponent();
+
             using (ZipArchive archive = ZipFile.OpenRead(path))
             {
                 ExtractFile(ProjectPath, archive);
@@ -69,9 +70,18 @@ namespace XferSuite.Apps.SEYR
                 ForceClose = true;
                 return;
             }
+
             ValidateRegions();
             RescoreAllData();
             InitFeatureInfo();
+
+            FormClosing += ParseSEYR_FormClosing;
+        }
+
+        private void ParseSEYR_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            File.Delete(ProjectPath);
+            File.Delete(ReportPath);
         }
 
         private void ParseSEYR_Load(object sender, EventArgs e)
