@@ -337,6 +337,7 @@ namespace XferSuite.Apps.XYZplotter
             FormsPlot formsPlot = Plots[plotIdx];
             formsPlot.Plot.Clear();
             ClearAxisLabels(formsPlot.Plot);
+            formsPlot.Name = ((Scan)olv.SelectedObjects[plotIdx]).Name;
 
             try
             {
@@ -662,16 +663,34 @@ namespace XferSuite.Apps.XYZplotter
 
         private void ButtonExportSelected_Click(object sender, EventArgs e)
         {
+            bool singlePlot = olv.SelectedObjects.Count == 1;
+            bool saveImage = ModifierKeys == Keys.Shift;
+
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.RestoreDirectory = true;
                 saveFileDialog.Title = "Export Selected Scans";
                 saveFileDialog.DefaultExt = ".txt";
                 saveFileDialog.Filter = "Text file (*.txt)|*.txt";
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)               
+
+                if (singlePlot) saveFileDialog.FileName = ((Scan)olv.SelectedObjects[0]).Name.ToString();
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
                     using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName))
                         for (int i = olv.SelectedObjects.Count - 1; i >= 0; i--)
                             sw.Write(((Scan)olv.SelectedObjects[i]).ToString());
+                    if (singlePlot && saveImage)
+                    {
+                        Bitmap bmp = Plots[0].Plot.GetBitmap();
+                        Bitmap bg = new Bitmap(bmp.Width, bmp.Height);
+                        using (Graphics g = Graphics.FromImage(bg))
+                        {
+                            g.Clear(SystemColors.Control);
+                            g.DrawImage(bmp, 0, 0);
+                        }
+                        bg.Save(saveFileDialog.FileName.Replace(".txt", ".png"));
+                    }
+                } 
             }
         }
     }
