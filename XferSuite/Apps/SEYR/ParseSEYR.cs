@@ -79,8 +79,9 @@ namespace XferSuite.Apps.SEYR
             RescoreAllData();
             InitFeatureInfo();
 
-            OLV.DoubleClick += OLV_DoubleClick;
-
+            FeatureOLV.DoubleClick += OLV_DoubleClick;
+            CriteriaOLV.DoubleClick += CriteriaOLV_DoubleClick;
+            CriteriaOLV.FormatRow += CriteriaOLV_FormatRow;
             FormClosing += ParseSEYR_FormClosing;
         }
 
@@ -202,11 +203,11 @@ namespace XferSuite.Apps.SEYR
 
         private void OLV_DoubleClick(object sender, EventArgs e)
         {
-            if (OLV.SelectedObject != null)
+            if (FeatureOLV.SelectedObject != null)
             {
                 LabelLoading.Visible = true;
                 Application.DoEvents();
-                Feature feature = ((Feature)OLV.SelectedObject);
+                Feature feature = ((Feature)FeatureOLV.SelectedObject);
                 using (PassFailUtility pf = new PassFailUtility(Data, feature))
                 {
                     LabelLoading.Visible = false;
@@ -225,14 +226,36 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private void CriteriaOLV_DoubleClick(object sender, EventArgs e)
+        {
+            if (CriteriaOLV.SelectedObject == null) return;
+            Criteria criteria = (Criteria)CriteriaOLV.SelectedObject;
+            using (ColorDialog colorDialog = new ColorDialog() { AllowFullOpen = true, AnyColor = true, Color = criteria.Color })
+            {
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    criteria.Color = colorDialog.Color;
+                    CriteriaOLV.RebuildColumns();
+                    CriteriaOLV.DeselectAll();
+                }
+            }
+        }
+
+        private void CriteriaOLV_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
+        {
+            Color c = ((Criteria)e.Model).Color;
+            e.Item.BackColor = c;
+            e.Item.ForeColor = (((0.299 * c.R) + (0.587 * c.G) + (0.114 * c.B)) / 255) > 0.5 ? Color.Black : Color.White;
+        }
+
         private void BtnCombineSelected_Click(object sender, EventArgs e)
         {
-            if (OLV.SelectedObjects.Count > 1)
+            if (FeatureOLV.SelectedObjects.Count > 1)
                 using (Utility.PromptForInput prompt = new Utility.PromptForInput("Enter criteria string"))
                 {
                     if (prompt.ShowDialog() == DialogResult.OK)
                     {
-                        foreach (Feature item in OLV.SelectedObjects)
+                        foreach (Feature item in FeatureOLV.SelectedObjects)
                             item.CriteriaString = prompt.Control.Text;
                         InitFeatureInfo();
                     }
@@ -241,7 +264,7 @@ namespace XferSuite.Apps.SEYR
 
         private void InitFeatureInfo()
         {
-            OLV.Objects = Project.Features;
+            FeatureOLV.Objects = Project.Features;
         }
 
         private void BtnPlot_Click(object sender, EventArgs e)
@@ -250,6 +273,7 @@ namespace XferSuite.Apps.SEYR
             Application.DoEvents();
 
             if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
+            if (Application.OpenForms.OfType<Inspection>().Any()) Application.OpenForms.OfType<Inspection>().First().Close();
 
             if (!MakeSheets()) return;
 
@@ -266,18 +290,29 @@ namespace XferSuite.Apps.SEYR
                     {
                         DataEntry[] entries = tile.ToArray();
                         Criteria criterion = new Criteria(entries);
+
+                        if (CriteriaOLV.Objects != null) // Allow user override
+                        {
+                            Criteria[] matches = ((List<Criteria>)CriteriaOLV.Objects).Where(x => x.LegendEntry == criterion.LegendEntry).ToArray();
+                            if (matches.Any())
+                            {
+                                criterion.Override = true;
+                                criterion.Pass = matches[0].Pass;
+                                criterion.Color = matches[0].Color;
+                            }
+                        }
+
                         criterion.TryAppend(ref criteria);
                         sheet.Insert(entries, criterion);
                     }
                 }
             }
 
-            PBXLegend.BackgroundImage = MakeLegend(criteria);
-            RegionBrowser = new RegionBrowser(Data, Sheets, criteria);
+            CriteriaOLV.Objects = criteria;
             BtnMakeCycleFile.Enabled = true;
             CbxTogglePF.Enabled = true;
-
             LabelLoading.Visible = false;
+            RegionBrowser = new RegionBrowser(Data, Sheets, criteria, CbxTogglePF.Checked);
         }
 
         private bool MakeSheets()
@@ -298,35 +333,6 @@ namespace XferSuite.Apps.SEYR
                     _FlipX, _FlipY));
 
             return true;
-        }
-
-        private Bitmap MakeLegend(List<Criteria> criteria)
-        {
-            if (criteria.Count == 0) return null;
-            Font font = new Font("Segoe", 16);
-            SizeF strSize = SizeF.Empty;
-            Bitmap bmp = new Bitmap(1, 1);
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                foreach (var criterion in criteria)
-                {
-                    SizeF critSize = g.MeasureString(criterion.LegendEntry, font);
-                    if (critSize.Width > strSize.Width) strSize = critSize;
-                }
-            }
-            strSize = new SizeF(strSize.Width, strSize.Height * 0.9f);
-            bmp = new Bitmap((int)strSize.Width, (int)(strSize.Height * criteria.Count));
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                for (int i = 0; i < criteria.Count; i++)
-                {
-                    Color c = criteria[i].Color;
-                    g.FillRectangle(new SolidBrush(c), 0, i * strSize.Height, strSize.Width, strSize.Height);
-                    SolidBrush contrastBrush = new SolidBrush((((0.299 * c.R) + (0.587 * c.G) + (0.114 * c.B)) / 255) > 0.5 ? Color.Black : Color.White);
-                    g.DrawString(criteria[i].LegendEntry, font, contrastBrush, new PointF(0, i * strSize.Height));
-                }
-            }
-            return bmp;
         }
 
         private void CbxTogglePF_CheckedChanged(object sender, EventArgs e)

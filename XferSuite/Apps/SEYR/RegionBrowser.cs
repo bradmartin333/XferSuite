@@ -18,7 +18,7 @@ namespace XferSuite.Apps.SEYR
         private readonly Inspection Inspection;
         private bool LastPF = false;
 
-        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria)
+        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, bool showPF)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
@@ -26,7 +26,7 @@ namespace XferSuite.Apps.SEYR
             Sheets = sheets;
             Criteria = criteria;
             Inspection = new Inspection();
-            SetupTLP();
+            SetupTLP(showPF);
             Show();
         }
 
@@ -36,7 +36,7 @@ namespace XferSuite.Apps.SEYR
             Inspection.Close();
         }
 
-        private void SetupTLP(bool showPF = false)
+        private void SetupTLP(bool showPF)
         {
             LastPF = showPF;
             TLP = new TableLayoutPanel() { Dock = DockStyle.Fill, };

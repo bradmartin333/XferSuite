@@ -10,6 +10,7 @@ namespace XferSuite.Apps.SEYR
         public int ID { get; set; } = 0;
         public string LegendEntry { get; set; } = "Null";
         public bool Pass { get; set; } = true;
+        public bool Override { get; set; } = false;
 
         public Criteria(DataEntry[] data)
         {
@@ -39,11 +40,11 @@ namespace XferSuite.Apps.SEYR
             var match = criteria.Where(x => x.ID == ID).ToArray();
             if (!match.Any())
             {
-                Color = Palette.GetColor(criteria.Count + 1);
+                if (!Override) Color = Palette.GetColor(criteria.Count + 1);
                 criteria.Add(this);
             }
             else
-                Color = match[0].Color;
+                if (!Override) Color = match[0].Color;
         }
     }
 }
