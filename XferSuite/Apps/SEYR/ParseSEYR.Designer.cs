@@ -73,7 +73,7 @@
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TLP.Size = new System.Drawing.Size(302, 408);
+            this.TLP.Size = new System.Drawing.Size(334, 411);
             this.TLP.TabIndex = 1;
             // 
             // BtnSave
@@ -83,9 +83,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSave.BackColor = System.Drawing.Color.White;
             this.BtnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnSave.Location = new System.Drawing.Point(154, 163);
+            this.BtnSave.Location = new System.Drawing.Point(170, 164);
             this.BtnSave.Name = "BtnSave";
-            this.BtnSave.Size = new System.Drawing.Size(145, 23);
+            this.BtnSave.Size = new System.Drawing.Size(161, 23);
             this.BtnSave.TabIndex = 7;
             this.BtnSave.Text = "Make SEYRUP";
             this.BtnSave.UseVisualStyleBackColor = false;
@@ -99,9 +99,9 @@
             this.BtnMakeCycleFile.BackColor = System.Drawing.Color.White;
             this.BtnMakeCycleFile.Enabled = false;
             this.BtnMakeCycleFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnMakeCycleFile.Location = new System.Drawing.Point(154, 192);
+            this.BtnMakeCycleFile.Location = new System.Drawing.Point(170, 193);
             this.BtnMakeCycleFile.Name = "BtnMakeCycleFile";
-            this.BtnMakeCycleFile.Size = new System.Drawing.Size(145, 23);
+            this.BtnMakeCycleFile.Size = new System.Drawing.Size(161, 23);
             this.BtnMakeCycleFile.TabIndex = 5;
             this.BtnMakeCycleFile.Text = "Make Cycle File";
             this.BtnMakeCycleFile.UseVisualStyleBackColor = false;
@@ -115,9 +115,9 @@
             this.LabelLoading.AutoSize = true;
             this.LabelLoading.BackColor = System.Drawing.Color.Bisque;
             this.TLP.SetColumnSpan(this.LabelLoading, 2);
-            this.LabelLoading.Location = new System.Drawing.Point(3, 140);
+            this.LabelLoading.Location = new System.Drawing.Point(3, 141);
             this.LabelLoading.Name = "LabelLoading";
-            this.LabelLoading.Size = new System.Drawing.Size(296, 20);
+            this.LabelLoading.Size = new System.Drawing.Size(328, 20);
             this.LabelLoading.TabIndex = 6;
             this.LabelLoading.Text = "Loading...";
             this.LabelLoading.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -148,7 +148,7 @@
             this.FeatureOLV.Location = new System.Drawing.Point(3, 3);
             this.FeatureOLV.Name = "FeatureOLV";
             this.FeatureOLV.ShowGroups = false;
-            this.FeatureOLV.Size = new System.Drawing.Size(296, 134);
+            this.FeatureOLV.Size = new System.Drawing.Size(328, 135);
             this.FeatureOLV.TabIndex = 8;
             this.FeatureOLV.UseCompatibleStateImageBehavior = false;
             this.FeatureOLV.View = System.Windows.Forms.View.Details;
@@ -185,12 +185,12 @@
             this.BtnPlot.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnPlot.BackColor = System.Drawing.Color.White;
+            this.BtnPlot.BackColor = System.Drawing.Color.LightBlue;
             this.TLP.SetColumnSpan(this.BtnPlot, 2);
             this.BtnPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnPlot.Location = new System.Drawing.Point(3, 221);
+            this.BtnPlot.Location = new System.Drawing.Point(3, 222);
             this.BtnPlot.Name = "BtnPlot";
-            this.BtnPlot.Size = new System.Drawing.Size(296, 44);
+            this.BtnPlot.Size = new System.Drawing.Size(328, 44);
             this.BtnPlot.TabIndex = 3;
             this.BtnPlot.Text = "Plot";
             this.BtnPlot.UseVisualStyleBackColor = false;
@@ -207,9 +207,9 @@
             this.CbxTogglePF.Enabled = false;
             this.CbxTogglePF.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.CbxTogglePF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CbxTogglePF.Location = new System.Drawing.Point(3, 192);
+            this.CbxTogglePF.Location = new System.Drawing.Point(3, 193);
             this.CbxTogglePF.Name = "CbxTogglePF";
-            this.CbxTogglePF.Size = new System.Drawing.Size(145, 23);
+            this.CbxTogglePF.Size = new System.Drawing.Size(161, 23);
             this.CbxTogglePF.TabIndex = 9;
             this.CbxTogglePF.Text = "Toggle Pass Fail";
             this.CbxTogglePF.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -223,9 +223,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnCombineSelected.BackColor = System.Drawing.Color.White;
             this.BtnCombineSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnCombineSelected.Location = new System.Drawing.Point(3, 163);
+            this.BtnCombineSelected.Location = new System.Drawing.Point(3, 164);
             this.BtnCombineSelected.Name = "BtnCombineSelected";
-            this.BtnCombineSelected.Size = new System.Drawing.Size(145, 23);
+            this.BtnCombineSelected.Size = new System.Drawing.Size(161, 23);
             this.BtnCombineSelected.TabIndex = 11;
             this.BtnCombineSelected.Text = "Combine Selected";
             this.BtnCombineSelected.UseVisualStyleBackColor = false;
@@ -251,10 +251,10 @@
             this.CriteriaOLV.FullRowSelect = true;
             this.CriteriaOLV.HasCollapsibleGroups = false;
             this.CriteriaOLV.HideSelection = false;
-            this.CriteriaOLV.Location = new System.Drawing.Point(3, 271);
+            this.CriteriaOLV.Location = new System.Drawing.Point(3, 272);
             this.CriteriaOLV.Name = "CriteriaOLV";
             this.CriteriaOLV.ShowGroups = false;
-            this.CriteriaOLV.Size = new System.Drawing.Size(296, 134);
+            this.CriteriaOLV.Size = new System.Drawing.Size(328, 136);
             this.CriteriaOLV.TabIndex = 12;
             this.CriteriaOLV.UseCompatibleStateImageBehavior = false;
             this.CriteriaOLV.View = System.Windows.Forms.View.Details;
@@ -284,10 +284,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(302, 408);
+            this.ClientSize = new System.Drawing.Size(334, 411);
             this.Controls.Add(this.TLP);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(315, 150);
+            this.MinimumSize = new System.Drawing.Size(350, 450);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
             this.Load += new System.EventHandler(this.ParseSEYR_Load);

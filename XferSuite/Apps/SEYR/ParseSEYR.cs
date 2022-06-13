@@ -53,8 +53,8 @@ namespace XferSuite.Apps.SEYR
         }
 
         private readonly bool ForceClose;
-        private readonly string ProjectPath = $@"{Path.GetTempPath()}\project.seyr";
-        private readonly string ReportPath = $@"{Path.GetTempPath()}\SEYRreport.txt";
+        private readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
+        private readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
 
         public static Project Project { get; set; } = null;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();

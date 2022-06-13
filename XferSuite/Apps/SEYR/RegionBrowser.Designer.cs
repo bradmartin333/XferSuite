@@ -52,7 +52,7 @@
             this.renderToolStripMenuItem,
             this.makeClickableToolStripMenuItem});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(203, 114);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(203, 92);
             // 
             // ToolStripMenuItemCopyImage
             // 
@@ -96,14 +96,14 @@
             // RenderAllToolStripMenuItem
             // 
             this.RenderAllToolStripMenuItem.Name = "RenderAllToolStripMenuItem";
-            this.RenderAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.RenderAllToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.RenderAllToolStripMenuItem.Text = "All";
             this.RenderAllToolStripMenuItem.Click += new System.EventHandler(this.RenderAllToolStripMenuItem_Click);
             // 
             // RenderSelectedToolStripMenuItem
             // 
             this.RenderSelectedToolStripMenuItem.Name = "RenderSelectedToolStripMenuItem";
-            this.RenderSelectedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.RenderSelectedToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.RenderSelectedToolStripMenuItem.Text = "Selected";
             this.RenderSelectedToolStripMenuItem.Click += new System.EventHandler(this.RenderSelectedToolStripMenuItem_Click);
             // 
@@ -119,14 +119,14 @@
             // ClickableAllToolStripMenuItem1
             // 
             this.ClickableAllToolStripMenuItem1.Name = "ClickableAllToolStripMenuItem1";
-            this.ClickableAllToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.ClickableAllToolStripMenuItem1.Size = new System.Drawing.Size(118, 22);
             this.ClickableAllToolStripMenuItem1.Text = "All";
             this.ClickableAllToolStripMenuItem1.Click += new System.EventHandler(this.ClickableAllToolStripMenuItem1_Click);
             // 
             // ClickableSelectedToolStripMenuItem1
             // 
             this.ClickableSelectedToolStripMenuItem1.Name = "ClickableSelectedToolStripMenuItem1";
-            this.ClickableSelectedToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.ClickableSelectedToolStripMenuItem1.Size = new System.Drawing.Size(118, 22);
             this.ClickableSelectedToolStripMenuItem1.Text = "Selected";
             this.ClickableSelectedToolStripMenuItem1.Click += new System.EventHandler(this.ClickableSelectedToolStripMenuItem1_Click);
             // 

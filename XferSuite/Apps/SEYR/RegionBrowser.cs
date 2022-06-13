@@ -136,10 +136,10 @@ namespace XferSuite.Apps.SEYR
 
         private void PictureBox_MouseUp(object sender, MouseEventArgs e)
         {
+            ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
                     Point location = StretchMousePos(e.Location);
                     PictureBox thisPBX = GetActivePictureBox();
                     DataSheet thisSheet = GetActiveSheet();
@@ -156,8 +156,12 @@ namespace XferSuite.Apps.SEYR
                     }
                     break;
                 case MouseButtons.Right:
-                    ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
                     ContextMenuStrip.Show(((PictureBox)sender).PointToScreen(e.Location));
+                    break;
+                case MouseButtons.Middle:
+                    string path = $@"{System.IO.Path.GetTempPath()}RBimg.png";
+                    GetActiveBitmap().Save(path);
+                    System.Diagnostics.Process.Start(path);
                     break;
                 default:
                     break;
