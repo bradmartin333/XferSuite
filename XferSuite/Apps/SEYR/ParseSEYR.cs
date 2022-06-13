@@ -26,7 +26,7 @@ namespace XferSuite.Apps.SEYR
         [Category("User Parameters")]
         public bool FlipY { get => _FlipY; set => _FlipY = value; }
 
-        public enum Palletes { Category20, ColorblindFriendly, Microcharts}
+        public enum Palletes { Category20, ColorblindFriendly, Microcharts, OneHalf }
         [Category("User Parameters")]
         public Palletes Palette {
             get => (Palletes)Enum.Parse(typeof(Palletes), Criteria.Palette.Name);
@@ -42,6 +42,9 @@ namespace XferSuite.Apps.SEYR
                         break;
                     case Palletes.Microcharts:
                         Criteria.Palette = ScottPlot.Drawing.Palette.Microcharts;
+                        break;
+                    case Palletes.OneHalf:
+                        Criteria.Palette = ScottPlot.Drawing.Palette.OneHalf;
                         break;
                 }
             }

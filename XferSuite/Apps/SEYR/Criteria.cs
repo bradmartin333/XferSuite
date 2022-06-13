@@ -5,7 +5,7 @@ namespace XferSuite.Apps.SEYR
 {
     public class Criteria
     {
-        public static ScottPlot.Drawing.Palette Palette = ScottPlot.Palette.ColorblindFriendly;
+        public static ScottPlot.Drawing.Palette Palette = ScottPlot.Palette.OneHalf;
         public System.Drawing.Color Color { get; set; }
         public int ID { get; set; } = 0;
         public string LegendEntry { get; set; } = "Null";
