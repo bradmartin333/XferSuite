@@ -22,7 +22,8 @@ namespace XferSuite.AdvancedTools
             REPLACE, REPLACEEX, 
             IF, IFEX,
             NOT, NOTEX,
-            EVAL, OPER
+            EVAL, OPER,
+            LAST, FIRST, BETWEEN,
         }
         enum Delimeter { Tab, Space, Comma, Semicolon }
         enum Evaluators { GR, LS, GREQ, LSEQ, EQ, NEQ }
@@ -87,7 +88,7 @@ namespace XferSuite.AdvancedTools
             }
 
             string[] commands = Enum.GetNames(typeof(Commands));
-            string msg = RTB.Text.Replace("\n", "");
+            string msg = RTB.Text.Replace("\n", "").Replace("row", "").Replace("col", "").Replace("(", "").Replace(")", "");
             string[] cols = msg.Split(' ');
             
             List<CommandProcessor> commandProcessors = new List<CommandProcessor>();
@@ -188,6 +189,22 @@ namespace XferSuite.AdvancedTools
                         RTB.Text += "Selected oper column is not a number column\n";
                     else
                         EvaluateOper(OcolNum, Oenum, Ocrit);
+                    break;
+                case Commands.LAST:
+                    if (Data.Count > 0) Data = new List<(int, string[])>() { Data.Last() };
+                    break;
+                case Commands.FIRST:
+                    if (Data.Count > 0) Data = new List<(int, string[])>() { Data.First() };
+                    break;
+                case Commands.BETWEEN:
+                    int a = 1;
+                    int b = Data.Count - 2;
+                    if (cp.Args.Count > 0) int.TryParse(cp.Args[0], out a);
+                    if (cp.Args.Count > 1) int.TryParse(cp.Args[1], out b);
+                    if (a + b > Data.Count)
+                        RTB.Text += "Desired range larger than available dataset\n";
+                    else
+                        Data = Data.Skip(a).Take(b).ToList();
                     break;
                 default:
                     break;
