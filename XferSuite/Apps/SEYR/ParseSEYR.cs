@@ -57,6 +57,7 @@ namespace XferSuite.Apps.SEYR
         public static Project Project { get; set; } = null;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
         private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
+        private RegionBrowser RegionBrowser { get; set; } = null;
 
         public ParseSEYR(string path)
         {
@@ -77,6 +78,8 @@ namespace XferSuite.Apps.SEYR
             ValidateRegions();
             RescoreAllData();
             InitFeatureInfo();
+
+            OLV.DoubleClick += OLV_DoubleClick;
 
             FormClosing += ParseSEYR_FormClosing;
         }
@@ -197,35 +200,34 @@ namespace XferSuite.Apps.SEYR
 
         #endregion
 
-        private void BtnRescore_Click(object sender, EventArgs e)
+        private void OLV_DoubleClick(object sender, EventArgs e)
         {
-            if (ComboFeatures.SelectedIndex == -1) return;
-            LabelLoading.Visible = true;
-            Application.DoEvents();
-            Feature feature = Project.Features.Where(x => x.Name == ComboFeatures.Text).First();
-            using (PassFailUtility pf = new PassFailUtility(Data, feature))
+            if (OLV.SelectedObject != null)
             {
-                LabelLoading.Visible = false;
+                LabelLoading.Visible = true;
                 Application.DoEvents();
-                DialogResult result = pf.ShowDialog();
-                if (result == DialogResult.OK)
+                Feature feature = ((Feature)OLV.SelectedObject);
+                using (PassFailUtility pf = new PassFailUtility(Data, feature))
                 {
-                    feature.PassThreshold = pf.PassThreshold;
-                    feature.Limit = pf.Limit;
-                    RescoreAllData();
-                    InitFeatureInfo();
+                    LabelLoading.Visible = false;
+                    Application.DoEvents();
+                    DialogResult result = pf.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        feature.PassThreshold = pf.PassThreshold;
+                        feature.Limit = pf.Limit;
+                        RescoreAllData();
+                        InitFeatureInfo();
+                    }
+                    else if (result == DialogResult.Ignore)
+                        feature.Ignore = !feature.Ignore;
                 }
-                else if (result == DialogResult.Ignore)
-                    feature.Ignore = !feature.Ignore;
             }
-            ComboFeatures.Text = feature.Name;
         }
 
         private void InitFeatureInfo()
         {
-            ComboFeatures.Items.Clear();
-            for (int i = 0; i < Project.Features.Count; i++)
-                ComboFeatures.Items.Add(Project.Features[i].Name);
+            OLV.Objects = Project.Features;
         }
 
         private void BtnPlot_Click(object sender, EventArgs e)
@@ -234,7 +236,6 @@ namespace XferSuite.Apps.SEYR
             Application.DoEvents();
 
             if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
-            if (Application.OpenForms.OfType<LegendView>().Any()) Application.OpenForms.OfType<LegendView>().First().Close();
 
             if (!MakeSheets()) return;
 
@@ -257,9 +258,10 @@ namespace XferSuite.Apps.SEYR
                 }
             }
 
-            RegionBrowser rb = new RegionBrowser(Data, Sheets, criteria);
-            LegendView lv = new LegendView(MakeLegend(criteria), rb);
+            PBXLegend.BackgroundImage = MakeLegend(criteria);
+            RegionBrowser = new RegionBrowser(Data, Sheets, criteria);
             BtnMakeCycleFile.Enabled = true;
+            CbxTogglePF.Enabled = true;
 
             LabelLoading.Visible = false;
         }
@@ -311,6 +313,11 @@ namespace XferSuite.Apps.SEYR
                 }
             }
             return bmp;
+        }
+
+        private void CbxTogglePF_CheckedChanged(object sender, EventArgs e)
+        {
+            RegionBrowser.TogglePF(CbxTogglePF.Checked);
         }
 
         private void BtnMakeCycleFile_Click(object sender, EventArgs e)

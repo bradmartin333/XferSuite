@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PassFailUtility));
             this.HistPlot = new ScottPlot.FormsPlot();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnIgnoreFeature = new System.Windows.Forms.Button();
             this.LabelUnselectedCount = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.LabelNullExcludeCount = new System.Windows.Forms.Label();
@@ -47,7 +48,6 @@
             this.PiePlot = new ScottPlot.FormsPlot();
             this.label8 = new System.Windows.Forms.Label();
             this.TxtCriteriaString = new System.Windows.Forms.TextBox();
-            this.BtnIgnoreFeature = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,6 +101,20 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.Size = new System.Drawing.Size(659, 461);
             this.tableLayoutPanel.TabIndex = 1;
+            // 
+            // BtnIgnoreFeature
+            // 
+            this.BtnIgnoreFeature.BackColor = System.Drawing.Color.LightCoral;
+            this.tableLayoutPanel.SetColumnSpan(this.BtnIgnoreFeature, 2);
+            this.BtnIgnoreFeature.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnIgnoreFeature.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnIgnoreFeature.Location = new System.Drawing.Point(494, 406);
+            this.BtnIgnoreFeature.Name = "BtnIgnoreFeature";
+            this.BtnIgnoreFeature.Size = new System.Drawing.Size(162, 23);
+            this.BtnIgnoreFeature.TabIndex = 15;
+            this.BtnIgnoreFeature.Text = "Ignore Feature";
+            this.BtnIgnoreFeature.UseVisualStyleBackColor = false;
+            this.BtnIgnoreFeature.Click += new System.EventHandler(this.BtnIgnoreFeature_Click);
             // 
             // LabelUnselectedCount
             // 
@@ -303,22 +317,9 @@
             this.TxtCriteriaString.TabIndex = 17;
             this.TxtCriteriaString.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // BtnIgnoreFeature
-            // 
-            this.BtnIgnoreFeature.BackColor = System.Drawing.Color.LightCoral;
-            this.tableLayoutPanel.SetColumnSpan(this.BtnIgnoreFeature, 2);
-            this.BtnIgnoreFeature.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnIgnoreFeature.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnIgnoreFeature.Location = new System.Drawing.Point(494, 406);
-            this.BtnIgnoreFeature.Name = "BtnIgnoreFeature";
-            this.BtnIgnoreFeature.Size = new System.Drawing.Size(162, 23);
-            this.BtnIgnoreFeature.TabIndex = 15;
-            this.BtnIgnoreFeature.Text = "Ignore Feature";
-            this.BtnIgnoreFeature.UseVisualStyleBackColor = false;
-            this.BtnIgnoreFeature.Click += new System.EventHandler(this.BtnIgnoreFeature_Click);
-            // 
             // PassFailUtility
             // 
+            this.AcceptButton = this.BtnConfirm;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
