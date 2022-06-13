@@ -16,6 +16,7 @@ namespace XferSuite.Apps.SEYR
         private TableLayoutPanel TLP;
         private List<PictureBox> PictureBoxes;
         private readonly Inspection Inspection;
+        private bool LastPF = false;
 
         public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria)
         {
@@ -37,6 +38,7 @@ namespace XferSuite.Apps.SEYR
 
         private void SetupTLP(bool showPF = false)
         {
+            LastPF = showPF;
             TLP = new TableLayoutPanel() { Dock = DockStyle.Fill, };
             Controls.Add(TLP);
 
@@ -180,22 +182,30 @@ namespace XferSuite.Apps.SEYR
             Clipboard.SetImage(GetActiveBitmap());
         }
 
-        private void RenderSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PictureBox pictureBox = GetActivePictureBox();
-            Bitmap newimg = new Bitmap(pictureBox.Width, pictureBox.Height);
-            using (Graphics g = Graphics.FromImage(newimg))
-            {
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                g.DrawImage(pictureBox.BackgroundImage, new Rectangle(Point.Empty, newimg.Size));
-            }
-            pictureBox.BackgroundImage = newimg;
-        }
-
         private void ToolStripMenuCopyCSV_Click(object sender, EventArgs e)
         {
             string data = GetActiveSheet().GetCSV(Criteria);
             Clipboard.SetText(data + '\n' + string.Join("\n", Criteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray()));
+        }
+
+        private void RenderAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBoxes.ForEach(p => RenderPictureBox(p));
+        }
+
+        private void RenderSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RenderPictureBox(GetActivePictureBox());
+        }
+
+        private void ClickableAllToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            PictureBoxes.ForEach(p => p.BackgroundImage = Sheets.Where(s => s.ID == ((int, int))p.Tag).First().GetBitmap(LastPF).Item1);
+        }
+
+        private void ClickableSelectedToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            GetActivePictureBox().BackgroundImage = GetActiveSheet().GetBitmap(LastPF).Item1;
         }
 
         private void HighightPoint(Point location, PictureBox pictureBox)
@@ -237,6 +247,17 @@ namespace XferSuite.Apps.SEYR
             return new Point(
                 (int)Math.Floor(img.Width * p.X / (double)pbx.Width),
                 (int)Math.Floor(img.Height * p.Y / (double)pbx.Height));
+        }
+
+        private void RenderPictureBox(PictureBox pictureBox)
+        {
+            Bitmap newimg = new Bitmap(pictureBox.Width, pictureBox.Height);
+            using (Graphics g = Graphics.FromImage(newimg))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.DrawImage(pictureBox.BackgroundImage, new Rectangle(Point.Empty, newimg.Size));
+            }
+            pictureBox.BackgroundImage = newimg;
         }
 
         #endregion
