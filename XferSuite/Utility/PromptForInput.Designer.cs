@@ -68,6 +68,7 @@
             // 
             // btnContinue
             // 
+            this.btnContinue.BackColor = System.Drawing.Color.LightGreen;
             this.btnContinue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnContinue.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LimeGreen;
             this.btnContinue.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightGreen;
@@ -77,11 +78,12 @@
             this.btnContinue.Size = new System.Drawing.Size(301, 28);
             this.btnContinue.TabIndex = 1;
             this.btnContinue.Text = "Continue";
-            this.btnContinue.UseVisualStyleBackColor = true;
+            this.btnContinue.UseVisualStyleBackColor = false;
             this.btnContinue.Click += new System.EventHandler(this.BtnContinue_Click);
             // 
             // PromptForInput
             // 
+            this.AcceptButton = this.btnContinue;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(327, 123);

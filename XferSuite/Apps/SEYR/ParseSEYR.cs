@@ -225,6 +225,20 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private void BtnCombineSelected_Click(object sender, EventArgs e)
+        {
+            if (OLV.SelectedObjects.Count > 1)
+                using (Utility.PromptForInput prompt = new Utility.PromptForInput("Enter criteria string"))
+                {
+                    if (prompt.ShowDialog() == DialogResult.OK)
+                    {
+                        foreach (Feature item in OLV.SelectedObjects)
+                            item.CriteriaString = prompt.Control.Text;
+                        InitFeatureInfo();
+                    }
+                }
+        }
+
         private void InitFeatureInfo()
         {
             OLV.Objects = Project.Features;

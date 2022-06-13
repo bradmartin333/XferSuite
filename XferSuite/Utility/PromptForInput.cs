@@ -27,7 +27,6 @@ namespace XferSuite.Utility
             else
                 Control = new NumericUpDown() { TextAlign = HorizontalAlignment.Center, Maximum = max, DecimalPlaces = 3 };
             Control.Dock = DockStyle.Fill;
-            Control.KeyDown += Control_KeyDown;
             Shown += PromptForInput_Shown;
             tableLayoutPanel.Controls.Add(Control, 1, 2);
         }
@@ -41,11 +40,6 @@ namespace XferSuite.Utility
                 ((NumericUpDown)Control).Select();
                 ((NumericUpDown)Control).Select(0, Control.Text.Length);
             }
-        }
-
-        private void Control_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter) Proceed();
         }
 
         private void BtnContinue_Click(object sender, System.EventArgs e)

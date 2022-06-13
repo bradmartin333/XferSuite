@@ -41,6 +41,7 @@
             this.BtnPlot = new System.Windows.Forms.Button();
             this.CbxTogglePF = new System.Windows.Forms.CheckBox();
             this.PBXLegend = new System.Windows.Forms.PictureBox();
+            this.BtnCombineSelected = new System.Windows.Forms.Button();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OLV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PBXLegend)).BeginInit();
@@ -51,24 +52,25 @@
             this.TLP.ColumnCount = 2;
             this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.00001F));
             this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.99999F));
-            this.TLP.Controls.Add(this.BtnSave, 0, 2);
+            this.TLP.Controls.Add(this.BtnCombineSelected, 0, 2);
+            this.TLP.Controls.Add(this.BtnSave, 1, 2);
             this.TLP.Controls.Add(this.BtnMakeCycleFile, 1, 3);
             this.TLP.Controls.Add(this.LabelLoading, 0, 1);
             this.TLP.Controls.Add(this.OLV, 0, 0);
-            this.TLP.Controls.Add(this.BtnPlot, 1, 2);
             this.TLP.Controls.Add(this.CbxTogglePF, 0, 3);
-            this.TLP.Controls.Add(this.PBXLegend, 0, 4);
+            this.TLP.Controls.Add(this.PBXLegend, 0, 5);
+            this.TLP.Controls.Add(this.BtnPlot, 0, 4);
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TLP.Location = new System.Drawing.Point(0, 0);
             this.TLP.Name = "TLP";
-            this.TLP.RowCount = 5;
+            this.TLP.RowCount = 6;
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.TLP.Size = new System.Drawing.Size(299, 383);
+            this.TLP.Size = new System.Drawing.Size(302, 408);
             this.TLP.TabIndex = 1;
             // 
             // BtnSave
@@ -78,9 +80,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSave.BackColor = System.Drawing.Color.White;
             this.BtnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnSave.Location = new System.Drawing.Point(3, 175);
+            this.BtnSave.Location = new System.Drawing.Point(154, 163);
             this.BtnSave.Name = "BtnSave";
-            this.BtnSave.Size = new System.Drawing.Size(143, 23);
+            this.BtnSave.Size = new System.Drawing.Size(145, 23);
             this.BtnSave.TabIndex = 7;
             this.BtnSave.Text = "Make SEYRUP";
             this.BtnSave.UseVisualStyleBackColor = false;
@@ -94,9 +96,9 @@
             this.BtnMakeCycleFile.BackColor = System.Drawing.Color.White;
             this.BtnMakeCycleFile.Enabled = false;
             this.BtnMakeCycleFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnMakeCycleFile.Location = new System.Drawing.Point(152, 204);
+            this.BtnMakeCycleFile.Location = new System.Drawing.Point(154, 192);
             this.BtnMakeCycleFile.Name = "BtnMakeCycleFile";
-            this.BtnMakeCycleFile.Size = new System.Drawing.Size(144, 23);
+            this.BtnMakeCycleFile.Size = new System.Drawing.Size(145, 23);
             this.BtnMakeCycleFile.TabIndex = 5;
             this.BtnMakeCycleFile.Text = "Make Cycle File";
             this.BtnMakeCycleFile.UseVisualStyleBackColor = false;
@@ -110,9 +112,9 @@
             this.LabelLoading.AutoSize = true;
             this.LabelLoading.BackColor = System.Drawing.Color.Bisque;
             this.TLP.SetColumnSpan(this.LabelLoading, 2);
-            this.LabelLoading.Location = new System.Drawing.Point(3, 152);
+            this.LabelLoading.Location = new System.Drawing.Point(3, 140);
             this.LabelLoading.Name = "LabelLoading";
-            this.LabelLoading.Size = new System.Drawing.Size(293, 20);
+            this.LabelLoading.Size = new System.Drawing.Size(296, 20);
             this.LabelLoading.TabIndex = 6;
             this.LabelLoading.Text = "Loading...";
             this.LabelLoading.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -143,7 +145,7 @@
             this.OLV.Location = new System.Drawing.Point(3, 3);
             this.OLV.Name = "OLV";
             this.OLV.ShowGroups = false;
-            this.OLV.Size = new System.Drawing.Size(293, 146);
+            this.OLV.Size = new System.Drawing.Size(296, 134);
             this.OLV.TabIndex = 8;
             this.OLV.UseCompatibleStateImageBehavior = false;
             this.OLV.View = System.Windows.Forms.View.Details;
@@ -181,10 +183,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnPlot.BackColor = System.Drawing.Color.White;
+            this.TLP.SetColumnSpan(this.BtnPlot, 2);
             this.BtnPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnPlot.Location = new System.Drawing.Point(152, 175);
+            this.BtnPlot.Location = new System.Drawing.Point(3, 221);
             this.BtnPlot.Name = "BtnPlot";
-            this.BtnPlot.Size = new System.Drawing.Size(144, 23);
+            this.BtnPlot.Size = new System.Drawing.Size(296, 44);
             this.BtnPlot.TabIndex = 3;
             this.BtnPlot.Text = "Plot";
             this.BtnPlot.UseVisualStyleBackColor = false;
@@ -201,9 +204,9 @@
             this.CbxTogglePF.Enabled = false;
             this.CbxTogglePF.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.CbxTogglePF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CbxTogglePF.Location = new System.Drawing.Point(3, 204);
+            this.CbxTogglePF.Location = new System.Drawing.Point(3, 192);
             this.CbxTogglePF.Name = "CbxTogglePF";
-            this.CbxTogglePF.Size = new System.Drawing.Size(143, 23);
+            this.CbxTogglePF.Size = new System.Drawing.Size(145, 23);
             this.CbxTogglePF.TabIndex = 9;
             this.CbxTogglePF.Text = "Toggle Pass Fail";
             this.CbxTogglePF.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -217,17 +220,32 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PBXLegend.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.TLP.SetColumnSpan(this.PBXLegend, 2);
-            this.PBXLegend.Location = new System.Drawing.Point(3, 233);
+            this.PBXLegend.Location = new System.Drawing.Point(3, 271);
             this.PBXLegend.Name = "PBXLegend";
-            this.PBXLegend.Size = new System.Drawing.Size(293, 147);
+            this.PBXLegend.Size = new System.Drawing.Size(296, 134);
             this.PBXLegend.TabIndex = 10;
             this.PBXLegend.TabStop = false;
+            // 
+            // BtnCombineSelected
+            // 
+            this.BtnCombineSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnCombineSelected.BackColor = System.Drawing.Color.White;
+            this.BtnCombineSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnCombineSelected.Location = new System.Drawing.Point(3, 163);
+            this.BtnCombineSelected.Name = "BtnCombineSelected";
+            this.BtnCombineSelected.Size = new System.Drawing.Size(145, 23);
+            this.BtnCombineSelected.TabIndex = 11;
+            this.BtnCombineSelected.Text = "Combine Selected";
+            this.BtnCombineSelected.UseVisualStyleBackColor = false;
+            this.BtnCombineSelected.Click += new System.EventHandler(this.BtnCombineSelected_Click);
             // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(299, 383);
+            this.ClientSize = new System.Drawing.Size(302, 408);
             this.Controls.Add(this.TLP);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(315, 150);
@@ -255,5 +273,6 @@
         private BrightIdeasSoftware.OLVColumn olvImage;
         private System.Windows.Forms.CheckBox CbxTogglePF;
         private System.Windows.Forms.PictureBox PBXLegend;
+        private System.Windows.Forms.Button BtnCombineSelected;
     }
 }
