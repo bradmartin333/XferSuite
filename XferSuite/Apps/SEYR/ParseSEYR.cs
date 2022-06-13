@@ -273,6 +273,11 @@ namespace XferSuite.Apps.SEYR
             FeatureOLV.Objects = Project.Features;
         }
 
+        private void BtnResetCriteria_Click(object sender, EventArgs e)
+        {
+            CriteriaOLV.ClearObjects();
+        }
+
         #endregion
 
         #region Plotting

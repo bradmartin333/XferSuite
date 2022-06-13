@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParseSEYR));
             this.TLP = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnCombineSelected = new System.Windows.Forms.Button();
             this.BtnSave = new System.Windows.Forms.Button();
             this.BtnMakeCycleFile = new System.Windows.Forms.Button();
             this.LabelLoading = new System.Windows.Forms.Label();
@@ -38,13 +39,13 @@
             this.featureOlvName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.featureOlvCriteria = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.featureOlvImage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.BtnPlot = new System.Windows.Forms.Button();
             this.CbxTogglePF = new System.Windows.Forms.CheckBox();
-            this.BtnCombineSelected = new System.Windows.Forms.Button();
+            this.BtnPlot = new System.Windows.Forms.Button();
             this.CriteriaOLV = new BrightIdeasSoftware.ObjectListView();
             this.criteriaOlvPass = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.criteriaOlvName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.criteriaOlvID = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.BtnResetCriteria = new System.Windows.Forms.Button();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).BeginInit();
@@ -55,6 +56,7 @@
             this.TLP.ColumnCount = 2;
             this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.00001F));
             this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.99999F));
+            this.TLP.Controls.Add(this.BtnResetCriteria, 0, 6);
             this.TLP.Controls.Add(this.BtnCombineSelected, 0, 2);
             this.TLP.Controls.Add(this.BtnSave, 1, 2);
             this.TLP.Controls.Add(this.BtnMakeCycleFile, 1, 3);
@@ -66,15 +68,31 @@
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TLP.Location = new System.Drawing.Point(0, 0);
             this.TLP.Name = "TLP";
-            this.TLP.RowCount = 6;
+            this.TLP.RowCount = 7;
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.Size = new System.Drawing.Size(334, 411);
             this.TLP.TabIndex = 1;
+            // 
+            // BtnCombineSelected
+            // 
+            this.BtnCombineSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnCombineSelected.BackColor = System.Drawing.Color.White;
+            this.BtnCombineSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnCombineSelected.Location = new System.Drawing.Point(3, 150);
+            this.BtnCombineSelected.Name = "BtnCombineSelected";
+            this.BtnCombineSelected.Size = new System.Drawing.Size(161, 23);
+            this.BtnCombineSelected.TabIndex = 11;
+            this.BtnCombineSelected.Text = "Combine Selected";
+            this.BtnCombineSelected.UseVisualStyleBackColor = false;
+            this.BtnCombineSelected.Click += new System.EventHandler(this.BtnCombineSelected_Click);
             // 
             // BtnSave
             // 
@@ -83,7 +101,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSave.BackColor = System.Drawing.Color.White;
             this.BtnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnSave.Location = new System.Drawing.Point(170, 164);
+            this.BtnSave.Location = new System.Drawing.Point(170, 150);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(161, 23);
             this.BtnSave.TabIndex = 7;
@@ -99,7 +117,7 @@
             this.BtnMakeCycleFile.BackColor = System.Drawing.Color.White;
             this.BtnMakeCycleFile.Enabled = false;
             this.BtnMakeCycleFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnMakeCycleFile.Location = new System.Drawing.Point(170, 193);
+            this.BtnMakeCycleFile.Location = new System.Drawing.Point(170, 179);
             this.BtnMakeCycleFile.Name = "BtnMakeCycleFile";
             this.BtnMakeCycleFile.Size = new System.Drawing.Size(161, 23);
             this.BtnMakeCycleFile.TabIndex = 5;
@@ -115,7 +133,7 @@
             this.LabelLoading.AutoSize = true;
             this.LabelLoading.BackColor = System.Drawing.Color.Bisque;
             this.TLP.SetColumnSpan(this.LabelLoading, 2);
-            this.LabelLoading.Location = new System.Drawing.Point(3, 141);
+            this.LabelLoading.Location = new System.Drawing.Point(3, 127);
             this.LabelLoading.Name = "LabelLoading";
             this.LabelLoading.Size = new System.Drawing.Size(328, 20);
             this.LabelLoading.TabIndex = 6;
@@ -148,7 +166,7 @@
             this.FeatureOLV.Location = new System.Drawing.Point(3, 3);
             this.FeatureOLV.Name = "FeatureOLV";
             this.FeatureOLV.ShowGroups = false;
-            this.FeatureOLV.Size = new System.Drawing.Size(328, 135);
+            this.FeatureOLV.Size = new System.Drawing.Size(328, 121);
             this.FeatureOLV.TabIndex = 8;
             this.FeatureOLV.UseCompatibleStateImageBehavior = false;
             this.FeatureOLV.View = System.Windows.Forms.View.Details;
@@ -180,22 +198,6 @@
             this.featureOlvImage.Text = "Image";
             this.featureOlvImage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // BtnPlot
-            // 
-            this.BtnPlot.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnPlot.BackColor = System.Drawing.Color.LightBlue;
-            this.TLP.SetColumnSpan(this.BtnPlot, 2);
-            this.BtnPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnPlot.Location = new System.Drawing.Point(3, 222);
-            this.BtnPlot.Name = "BtnPlot";
-            this.BtnPlot.Size = new System.Drawing.Size(328, 44);
-            this.BtnPlot.TabIndex = 3;
-            this.BtnPlot.Text = "Plot";
-            this.BtnPlot.UseVisualStyleBackColor = false;
-            this.BtnPlot.Click += new System.EventHandler(this.BtnPlot_Click);
-            // 
             // CbxTogglePF
             // 
             this.CbxTogglePF.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -207,7 +209,7 @@
             this.CbxTogglePF.Enabled = false;
             this.CbxTogglePF.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.CbxTogglePF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CbxTogglePF.Location = new System.Drawing.Point(3, 193);
+            this.CbxTogglePF.Location = new System.Drawing.Point(3, 179);
             this.CbxTogglePF.Name = "CbxTogglePF";
             this.CbxTogglePF.Size = new System.Drawing.Size(161, 23);
             this.CbxTogglePF.TabIndex = 9;
@@ -216,20 +218,21 @@
             this.CbxTogglePF.UseVisualStyleBackColor = false;
             this.CbxTogglePF.CheckedChanged += new System.EventHandler(this.CbxTogglePF_CheckedChanged);
             // 
-            // BtnCombineSelected
+            // BtnPlot
             // 
-            this.BtnCombineSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.BtnPlot.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnCombineSelected.BackColor = System.Drawing.Color.White;
-            this.BtnCombineSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnCombineSelected.Location = new System.Drawing.Point(3, 164);
-            this.BtnCombineSelected.Name = "BtnCombineSelected";
-            this.BtnCombineSelected.Size = new System.Drawing.Size(161, 23);
-            this.BtnCombineSelected.TabIndex = 11;
-            this.BtnCombineSelected.Text = "Combine Selected";
-            this.BtnCombineSelected.UseVisualStyleBackColor = false;
-            this.BtnCombineSelected.Click += new System.EventHandler(this.BtnCombineSelected_Click);
+            this.BtnPlot.BackColor = System.Drawing.Color.LightBlue;
+            this.TLP.SetColumnSpan(this.BtnPlot, 2);
+            this.BtnPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnPlot.Location = new System.Drawing.Point(3, 208);
+            this.BtnPlot.Name = "BtnPlot";
+            this.BtnPlot.Size = new System.Drawing.Size(328, 44);
+            this.BtnPlot.TabIndex = 3;
+            this.BtnPlot.Text = "Plot";
+            this.BtnPlot.UseVisualStyleBackColor = false;
+            this.BtnPlot.Click += new System.EventHandler(this.BtnPlot_Click);
             // 
             // CriteriaOLV
             // 
@@ -251,10 +254,10 @@
             this.CriteriaOLV.FullRowSelect = true;
             this.CriteriaOLV.HasCollapsibleGroups = false;
             this.CriteriaOLV.HideSelection = false;
-            this.CriteriaOLV.Location = new System.Drawing.Point(3, 272);
+            this.CriteriaOLV.Location = new System.Drawing.Point(3, 258);
             this.CriteriaOLV.Name = "CriteriaOLV";
             this.CriteriaOLV.ShowGroups = false;
-            this.CriteriaOLV.Size = new System.Drawing.Size(328, 136);
+            this.CriteriaOLV.Size = new System.Drawing.Size(328, 121);
             this.CriteriaOLV.TabIndex = 12;
             this.CriteriaOLV.UseCompatibleStateImageBehavior = false;
             this.CriteriaOLV.View = System.Windows.Forms.View.Details;
@@ -279,6 +282,22 @@
             this.criteriaOlvID.AspectToStringFormat = "{0}";
             this.criteriaOlvID.Text = "ID";
             this.criteriaOlvID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // BtnResetCriteria
+            // 
+            this.BtnResetCriteria.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnResetCriteria.BackColor = System.Drawing.Color.White;
+            this.TLP.SetColumnSpan(this.BtnResetCriteria, 2);
+            this.BtnResetCriteria.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnResetCriteria.Location = new System.Drawing.Point(3, 385);
+            this.BtnResetCriteria.Name = "BtnResetCriteria";
+            this.BtnResetCriteria.Size = new System.Drawing.Size(328, 23);
+            this.BtnResetCriteria.TabIndex = 13;
+            this.BtnResetCriteria.Text = "Reset Criteria";
+            this.BtnResetCriteria.UseVisualStyleBackColor = false;
+            this.BtnResetCriteria.Click += new System.EventHandler(this.BtnResetCriteria_Click);
             // 
             // ParseSEYR
             // 
@@ -316,5 +335,6 @@
         private BrightIdeasSoftware.OLVColumn criteriaOlvPass;
         private BrightIdeasSoftware.OLVColumn criteriaOlvName;
         private BrightIdeasSoftware.OLVColumn criteriaOlvID;
+        private System.Windows.Forms.Button BtnResetCriteria;
     }
 }
