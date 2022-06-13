@@ -13,6 +13,8 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class ParseSEYR : Form
     {
+        #region Globals and Setup
+
         public enum Delimeter { Tab, Comma, Space }
         private Delimeter _CycleFileDelimeter = Delimeter.Tab;
         [Category("User Parameters")]
@@ -95,6 +97,8 @@ namespace XferSuite.Apps.SEYR
         {
             if (ForceClose) Close();
         }
+
+        #endregion
 
         #region Load Data
 
@@ -201,6 +205,8 @@ namespace XferSuite.Apps.SEYR
 
         #endregion
 
+        #region OLV Logic
+
         private void OLV_DoubleClick(object sender, EventArgs e)
         {
             if (FeatureOLV.SelectedObject != null)
@@ -266,6 +272,10 @@ namespace XferSuite.Apps.SEYR
         {
             FeatureOLV.Objects = Project.Features;
         }
+
+        #endregion
+
+        #region Plotting
 
         private void BtnPlot_Click(object sender, EventArgs e)
         {
@@ -340,6 +350,10 @@ namespace XferSuite.Apps.SEYR
             RegionBrowser.TogglePF(CbxTogglePF.Checked);
         }
 
+        #endregion
+
+        #region Cycle File
+
         private void BtnMakeCycleFile_Click(object sender, EventArgs e)
         {
             LabelLoading.Visible = true;
@@ -385,6 +399,8 @@ namespace XferSuite.Apps.SEYR
                     break;
             }
         }
+
+        #endregion
 
         #region Save Session
 
