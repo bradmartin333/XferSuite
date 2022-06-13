@@ -142,7 +142,7 @@ namespace XferSuite.AdvancedTools
                                 val = Data[d].MesaDebris;
                                 break;
                             case 3:
-                                val = Data[d].PostDebris * 100 + Data[d].MesaDebris;
+                                val = (Data[d].PostDebris * 100) + Data[d].MesaDebris;
                                 break;
                             default:
                                 break;

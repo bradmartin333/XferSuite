@@ -109,7 +109,6 @@ namespace XferSuite.AdvancedTools
             if (possibleDelimiters.Any()) _Delimeter = possibleDelimiters.First().Key.ToString();
         }
 
-
         private void HorizFlip()
         {
             UpdateColors(new int[] { 1, 0, 3, 2 });
