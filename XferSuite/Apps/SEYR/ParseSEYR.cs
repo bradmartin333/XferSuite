@@ -53,6 +53,7 @@ namespace XferSuite.Apps.SEYR
         }
 
         private readonly bool ForceClose;
+        private readonly string FileName;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
 
@@ -64,6 +65,9 @@ namespace XferSuite.Apps.SEYR
         public ParseSEYR(string path)
         {
             InitializeComponent();
+            FileInfo userPath = new FileInfo(path);
+            FileName = userPath.Name.Replace(userPath.Extension, "");
+            Text = FileName;
 
             using (ZipArchive archive = ZipFile.OpenRead(path))
             {
@@ -327,7 +331,7 @@ namespace XferSuite.Apps.SEYR
             BtnMakeCycleFile.Enabled = true;
             CbxTogglePF.Enabled = true;
             LabelLoading.Visible = false;
-            RegionBrowser = new RegionBrowser(Data, Sheets, criteria, CbxTogglePF.Checked);
+            RegionBrowser = new RegionBrowser(Data, Sheets, criteria, CbxTogglePF.Checked) { Text = FileName };
         }
 
         private bool MakeSheets()
