@@ -149,18 +149,6 @@
         3OQVJcvtj2Cegz3U8kPf6fwD8uw0x9wLHecAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="btnRotateImage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFcSURBVEhLtda9SsRAGIXhxIiBLSzESkREFou9ELESsRAr
-        K0sLL8BuCysLCwtra/EaxFIsxEJERCzEQqxErETfA5uQzHwxE5k98DD7M/lmMzObJGlID1s4xR0+8YMP
-        3OAky7JV2km0ZnfUKlPYwxtUsM0DNjGBxqjjNhZwNXrf1RmmYUYdvhH6q5tcYwZerM6uJ2juXyqfWS6g
-        aa7F6iiv0PrMokye54tpmg55WSy8ax+1WJ0uYZ5uJX1oh7nHfmEeZdwOovUYoC1z8KaNMzygLVP7skIH
-        LqEt63CPfcafW7dLVOgetUFYK01htByhNgDWEC3abe4AO4iWsQ8w1inSIuui5w4QbZE34BaPtk2D/mj/
-        zTK8/Q/vUtElOu0Bv/CQVoXc4uJd7EJzi3dYRQvm5To0VsGqxhtOaKyihXM03jJDYxV+hJ4+omxJ3be1
-        BnowOOaxZYW25bElSX4BVFvTva4xxM0AAAAASUVORK5CYII=
-</value>
-  </data>
   <data name="btnSaveFrame.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8

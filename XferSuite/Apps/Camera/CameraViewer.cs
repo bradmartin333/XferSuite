@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using static XferSuite.Apps.Camera.CameraLayout;
 
 namespace XferSuite.Apps.Camera
 {
@@ -27,7 +28,8 @@ namespace XferSuite.Apps.Camera
         // UI Elements
         private Size LastSize = Size.Empty;
         private Color Color = Color.LawnGreen;
-        private int Rotation = 0;
+        private RotateFlipTypeSubset RotateFlipType = RotateFlipTypeSubset.RotateNoneFlipNone;
+
 
         public CameraViewer()
         {
@@ -38,7 +40,8 @@ namespace XferSuite.Apps.Camera
             ListBox.Items.AddRange(VideoDevices.Select(x => x.Name).ToArray());
             ResizeEnd += CameraViewer_WindowChanged;
             LocationChanged += CameraViewer_WindowChanged;
-
+            ToolStripComboBoxRotateFlip.Items.AddRange(Enum.GetNames(typeof(RotateFlipTypeSubset)));
+            ToolStripComboBoxRotateFlip.SelectedIndexChanged += ToolStripComboBoxRotateFlip_SelectedIndexChanged;
             CameraLayout = new CameraLayout();
             Deserialize(MemoryPath);
         }
@@ -97,20 +100,8 @@ namespace XferSuite.Apps.Camera
 
         private Size RotateImage(ref Bitmap bitmap)
         {
-            switch (Rotation % 4)
-            {
-                case 1:
-                    bitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                    break;
-                case 2:
-                    bitmap.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                    break;
-                case 3:
-                    bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                    break;
-                default:
-                    break;
-            }
+            Enum.TryParse(RotateFlipType.ToString(), out RotateFlipType rotateFlipType);
+            bitmap.RotateFlip(rotateFlipType);
             return bitmap.Size;
         }
 
@@ -154,9 +145,10 @@ namespace XferSuite.Apps.Camera
             }
         }
 
-        private void BtnRotateImage_Click(object sender, EventArgs e)
+
+        private void ToolStripComboBoxRotateFlip_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Rotation++;
+            Enum.TryParse(ToolStripComboBoxRotateFlip.Text, out RotateFlipType);
             UpdateSessionMemory();
         }
 
@@ -197,7 +189,7 @@ namespace XferSuite.Apps.Camera
                 CameraLayout.ShowListView = btnToggleListView.Checked;
                 CameraLayout.ShowCrosshair = btnToggleCrosshair.Checked;
                 CameraLayout.CrosshairColor = Color;
-                CameraLayout.Rotation = Rotation;
+                CameraLayout.RotateFlipType = RotateFlipType;
             }
             
             Serialize(CameraLayout, MemoryPath);
@@ -256,7 +248,8 @@ namespace XferSuite.Apps.Camera
             DesktopLocation = CameraLayout.WindowLocation;
 
             // Restore Options
-            Rotation = CameraLayout.Rotation;
+            RotateFlipType = CameraLayout.RotateFlipType;
+            ToolStripComboBoxRotateFlip.Text = RotateFlipType.ToString();
             Color = CameraLayout.CrosshairColor;
             if (!CameraLayout.ShowListView) btnToggleListView.PerformClick();
             if (CameraLayout.ShowCrosshair) btnToggleCrosshair.PerformClick();
