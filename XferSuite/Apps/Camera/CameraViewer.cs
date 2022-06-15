@@ -30,7 +30,6 @@ namespace XferSuite.Apps.Camera
         private Color Color = Color.LawnGreen;
         private RotateFlipTypeSubset RotateFlipType = RotateFlipTypeSubset.RotateNoneFlipNone;
 
-
         public CameraViewer()
         {
             InitializeComponent();
@@ -144,7 +143,6 @@ namespace XferSuite.Apps.Camera
                 DrawCrosshair();
             }
         }
-
 
         private void ToolStripComboBoxRotateFlip_SelectedIndexChanged(object sender, EventArgs e)
         {
