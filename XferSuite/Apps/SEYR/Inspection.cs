@@ -42,6 +42,7 @@ namespace XferSuite.Apps.SEYR
             PBX.BackColor = criteria.Color;
             CycleImages();
             Show();
+            BringToFront();
             Loading = false;
         }
 
