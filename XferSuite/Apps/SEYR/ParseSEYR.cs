@@ -15,6 +15,10 @@ namespace XferSuite.Apps.SEYR
     {
         #region Globals and Setup
 
+        private int _DefaultPlotSize = 700;
+        [Category("User Parameters")]
+        public int DefaultPlotSize { get => _DefaultPlotSize; set => _DefaultPlotSize = value; }
+
         public enum Delimeter { Tab, Comma, Space }
         private Delimeter _CycleFileDelimeter = Delimeter.Tab;
         [Category("User Parameters")]
@@ -348,9 +352,20 @@ namespace XferSuite.Apps.SEYR
             MakeCycleFileToolStripMenuItem.Enabled = true;
             TogglePassFailToolStripMenuItem.Enabled = true;
             LoadingToolStripMenuItem.Visible = false;
-            RegionBrowser = new RegionBrowser(
-                Data, Sheets, criteria, TogglePassFailToolStripMenuItem.Checked)
-            { Text = FileName };
+
+            var dataX = Data.Select(x => x.X);
+            var dataY = Data.Select(y => y.Y);
+            double rangeX = dataX.Max() - dataX.Min();
+            double rangeY = dataY.Max() - dataY.Min();
+            Size defaultSize = new Size(_DefaultPlotSize, _DefaultPlotSize);
+            Size scaledSize = defaultSize;
+            if (rangeX < rangeY)
+                scaledSize = new Size((int)(defaultSize.Width * (rangeX / rangeY)), defaultSize.Height);
+            else if (rangeY < rangeX)
+                scaledSize = new Size(defaultSize.Width, (int)(defaultSize.Height * (rangeY / rangeX)));
+
+            RegionBrowser = new RegionBrowser(Data, Sheets, criteria, TogglePassFailToolStripMenuItem.Checked)
+                { Text = FileName, Size = scaledSize };
         }
 
         private bool MakeSheets()
