@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParseSEYR));
             this.TLP = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnResetCriteria = new System.Windows.Forms.Button();
             this.BtnCombineSelected = new System.Windows.Forms.Button();
             this.BtnSave = new System.Windows.Forms.Button();
             this.BtnMakeCycleFile = new System.Windows.Forms.Button();
@@ -45,7 +46,6 @@
             this.criteriaOlvPass = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.criteriaOlvName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.criteriaOlvID = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.BtnResetCriteria = new System.Windows.Forms.Button();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).BeginInit();
@@ -79,6 +79,22 @@
             this.TLP.Size = new System.Drawing.Size(334, 411);
             this.TLP.TabIndex = 1;
             // 
+            // BtnResetCriteria
+            // 
+            this.BtnResetCriteria.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnResetCriteria.BackColor = System.Drawing.Color.White;
+            this.TLP.SetColumnSpan(this.BtnResetCriteria, 2);
+            this.BtnResetCriteria.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnResetCriteria.Location = new System.Drawing.Point(3, 385);
+            this.BtnResetCriteria.Name = "BtnResetCriteria";
+            this.BtnResetCriteria.Size = new System.Drawing.Size(328, 23);
+            this.BtnResetCriteria.TabIndex = 13;
+            this.BtnResetCriteria.Text = "Reset Criteria";
+            this.BtnResetCriteria.UseVisualStyleBackColor = false;
+            this.BtnResetCriteria.Click += new System.EventHandler(this.BtnResetCriteria_Click);
+            // 
             // BtnCombineSelected
             // 
             this.BtnCombineSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -105,7 +121,7 @@
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(161, 23);
             this.BtnSave.TabIndex = 7;
-            this.BtnSave.Text = "Make SEYRUP";
+            this.BtnSave.Text = "Save As New SEYRUP";
             this.BtnSave.UseVisualStyleBackColor = false;
             this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
@@ -282,22 +298,6 @@
             this.criteriaOlvID.AspectToStringFormat = "{0}";
             this.criteriaOlvID.Text = "ID";
             this.criteriaOlvID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // BtnResetCriteria
-            // 
-            this.BtnResetCriteria.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnResetCriteria.BackColor = System.Drawing.Color.White;
-            this.TLP.SetColumnSpan(this.BtnResetCriteria, 2);
-            this.BtnResetCriteria.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnResetCriteria.Location = new System.Drawing.Point(3, 385);
-            this.BtnResetCriteria.Name = "BtnResetCriteria";
-            this.BtnResetCriteria.Size = new System.Drawing.Size(328, 23);
-            this.BtnResetCriteria.TabIndex = 13;
-            this.BtnResetCriteria.Text = "Reset Criteria";
-            this.BtnResetCriteria.UseVisualStyleBackColor = false;
-            this.BtnResetCriteria.Click += new System.EventHandler(this.BtnResetCriteria_Click);
             // 
             // ParseSEYR
             // 

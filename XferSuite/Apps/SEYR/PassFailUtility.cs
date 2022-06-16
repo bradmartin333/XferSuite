@@ -28,7 +28,7 @@ namespace XferSuite.Apps.SEYR
             InitializeComponent();
             Data = data;
             Feature = feature;
-            Text = $"Editing {feature.Name}";
+            Text = $"Editing \"{feature.Name}\"";
             PassThreshold = feature.PassThreshold;
             Limit = feature.Limit;
             TxtCriteriaString.Text = feature.CriteriaString;
