@@ -45,7 +45,6 @@
             this.ToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveAsNewSEYRUPToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.TogglePassFailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MakeCycleFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ResetCriteiraGroupingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ResetCriteriaPlotSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GroupFeaturesIntoCriteriaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -222,7 +221,6 @@
             this.ToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SaveAsNewSEYRUPToolStripMenuItem1,
             this.TogglePassFailToolStripMenuItem,
-            this.MakeCycleFileToolStripMenuItem,
             this.ResetCriteiraGroupingsToolStripMenuItem,
             this.ResetCriteriaPlotSettingsToolStripMenuItem,
             this.GroupFeaturesIntoCriteriaToolStripMenuItem});
@@ -244,13 +242,6 @@
             this.TogglePassFailToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.TogglePassFailToolStripMenuItem.Text = "Toggle Pass Fail";
             this.TogglePassFailToolStripMenuItem.Click += new System.EventHandler(this.TogglePassFailToolStripMenuItem_Click);
-            // 
-            // MakeCycleFileToolStripMenuItem
-            // 
-            this.MakeCycleFileToolStripMenuItem.Name = "MakeCycleFileToolStripMenuItem";
-            this.MakeCycleFileToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.MakeCycleFileToolStripMenuItem.Text = "Make Cycle File";
-            this.MakeCycleFileToolStripMenuItem.Click += new System.EventHandler(this.MakeCycleFileToolStripMenuItem_Click);
             // 
             // ResetCriteiraGroupingsToolStripMenuItem
             // 
@@ -332,7 +323,6 @@
         private System.Windows.Forms.ToolStripMenuItem ToolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SaveAsNewSEYRUPToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem TogglePassFailToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem MakeCycleFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ResetCriteiraGroupingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ResetCriteriaPlotSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem PlotToolStripMenuItem;

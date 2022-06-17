@@ -18,8 +18,9 @@ namespace XferSuite.Apps.SEYR
         private readonly Inspection Inspection;
         private bool LastPF = false;
         private readonly string FileName;
+        private readonly ParseSEYR.Delimeter CycleFileDelimeter;
 
-        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, bool showPF, string fileName)
+        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, bool showPF, string fileName, ParseSEYR.Delimeter delimeter)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
@@ -32,6 +33,7 @@ namespace XferSuite.Apps.SEYR
             Text = FileName;
             SetupTLP(showPF);
             Show();
+            CycleFileDelimeter = delimeter;
         }
 
         private void RegionBrowser_KeyDown(object sender, KeyEventArgs e)
@@ -147,6 +149,11 @@ namespace XferSuite.Apps.SEYR
 
         #region PictureBox Methods
 
+        private void OpenImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenImage();
+        }
+
         private void PictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             ContextMenuStrip.Tag = ((PictureBox)sender).Tag;
@@ -172,13 +179,18 @@ namespace XferSuite.Apps.SEYR
                     ContextMenuStrip.Show(((PictureBox)sender).PointToScreen(e.Location));
                     break;
                 case MouseButtons.Middle:
-                    string path = $@"{System.IO.Path.GetTempPath()}RBimg.png";
-                    GetActiveBitmap().Save(path);
-                    System.Diagnostics.Process.Start(path);
+                    OpenImage();
                     break;
                 default:
                     break;
             }
+        }
+
+        private void OpenImage()
+        {
+            string path = $@"{System.IO.Path.GetTempPath()}RBimg.png";
+            GetActiveBitmap().Save(path);
+            System.Diagnostics.Process.Start(path);
         }
 
         private void CopyEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -275,6 +287,66 @@ namespace XferSuite.Apps.SEYR
                 g.DrawImage(pictureBox.BackgroundImage, new Rectangle(Point.Empty, newimg.Size));
             }
             pictureBox.BackgroundImage = newimg;
+        }
+
+        #endregion
+
+        #region Cycle File
+
+        private void MakeCycleFileSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MakeCycleFile(new List<DataSheet>() { GetActiveSheet() });
+        }
+
+        private void MakeCycleFileAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MakeCycleFile(Sheets);
+        }
+
+        private void MakeCycleFile(List<DataSheet> sheets)
+        {
+            Form form = new Form() 
+            { 
+                Text = "Cycle File", 
+                Size = new Size(800,500),
+            };
+            RichTextBox rtb = new RichTextBox()
+            {
+                Dock = DockStyle.Fill,
+                Text = MakeCycleFileHeader(),
+            };
+            form.Controls.Add(rtb);
+            int idx = 0;
+            foreach (DataSheet sheet in sheets)
+            {
+                string lines = sheet.CreateCycleFile(ref idx);
+                ApplyDelimeter(ref lines);
+                rtb.Text += lines;
+            }
+            form.Show();
+        }
+
+        private string MakeCycleFileHeader()
+        {
+            string output = "UniqueID, Pick.WaferID, Pick.RegionRow, Pick.RegionColumn, Pick.Row, Pick.Column, Pick.Index, Place.WaferID, Place.RegionRow, Place.RegionColumn, Place.Row, Place.Column\n";
+            ApplyDelimeter(ref output);
+            return output;
+        }
+
+        private void ApplyDelimeter(ref string txt)
+        {
+            switch (CycleFileDelimeter)
+            {
+                case ParseSEYR.Delimeter.Tab:
+                    txt = txt.Replace(", ", "\t");
+                    break;
+                case ParseSEYR.Delimeter.Space:
+                    txt = txt.Replace(", ", " ");
+                    break;
+                case ParseSEYR.Delimeter.Comma:
+                default:
+                    break;
+            }
         }
 
         #endregion

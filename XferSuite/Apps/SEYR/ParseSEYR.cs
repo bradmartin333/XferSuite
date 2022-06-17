@@ -377,7 +377,6 @@ namespace XferSuite.Apps.SEYR
             }
 
             CriteriaOLV.Objects = criteria;
-            MakeCycleFileToolStripMenuItem.Enabled = true;
             TogglePassFailToolStripMenuItem.Enabled = true;
             LoadingToolStripMenuItem.Visible = false;
 
@@ -392,7 +391,8 @@ namespace XferSuite.Apps.SEYR
             else if (rangeY < rangeX)
                 scaledSize = new Size(defaultSize.Width, (int)(defaultSize.Height * (rangeY / rangeX)));
 
-            RegionBrowser = new RegionBrowser(Data, Sheets, criteria, TogglePassFailToolStripMenuItem.Checked, FileName) { Size = scaledSize };
+            RegionBrowser = new RegionBrowser(
+                Data, Sheets, criteria, TogglePassFailToolStripMenuItem.Checked, FileName, _CycleFileDelimeter) { Size = scaledSize };
         }
 
         private bool MakeSheets()
@@ -418,57 +418,6 @@ namespace XferSuite.Apps.SEYR
         private void TogglePassFailToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RegionBrowser.TogglePF(TogglePassFailToolStripMenuItem.Checked);
-        }
-
-        #endregion
-
-        #region Cycle File
-
-        private void MakeCycleFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LoadingToolStripMenuItem.Visible = true;
-            Application.DoEvents();
-
-            Form form = new Form() { Text = "Cycle File" };
-            RichTextBox rtb = new RichTextBox()
-            {
-                Dock = DockStyle.Fill,
-                Text = MakeCycleFileHeader(),
-            };
-            form.Controls.Add(rtb);
-            int idx = 0;
-            foreach (DataSheet sheet in Sheets)
-            {
-                string lines = sheet.CreateCycleFile(ref idx);
-                ApplyDelimeter(ref lines);
-                rtb.Text += lines;
-            }
-            form.Show();
-
-            LoadingToolStripMenuItem.Visible = false;
-        }
-
-        private string MakeCycleFileHeader()
-        {
-            string output = "UniqueID, Pick.WaferID, Pick.RegionRow, Pick.RegionColumn, Pick.Row, Pick.Column, Pick.Index, Place.WaferID, Place.RegionRow, Place.RegionColumn, Place.Row, Place.Column\n";
-            ApplyDelimeter(ref output);
-            return output;
-        }
-
-        private void ApplyDelimeter(ref string txt)
-        {
-            switch (_CycleFileDelimeter)
-            {
-                case Delimeter.Tab:
-                    txt = txt.Replace(", ", "\t");
-                    break;
-                case Delimeter.Space:
-                    txt = txt.Replace(", ", " ");
-                    break;
-                case Delimeter.Comma:
-                default:
-                    break;
-            }
         }
 
         #endregion
