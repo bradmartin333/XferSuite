@@ -27,7 +27,7 @@ namespace XferSuite.Apps.SEYR
                     {
                         ID += (i + 1) * (i + 1);
                         if (LegendEntry == "Null") LegendEntry = string.Empty;
-                        LegendEntry += $"{group.Key}{needOneGroups[i].Key} ";
+                        LegendEntry += $"{(string.IsNullOrEmpty(group.Key) ? "" : $"{group.Key}_")}{needOneGroups[i].Key} ";
                     }
                     else
                         Pass = false;
