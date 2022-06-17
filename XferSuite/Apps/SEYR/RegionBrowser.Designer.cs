@@ -45,6 +45,8 @@
             this.makeCycleFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MakeCycleFileAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MakeCycleFileSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,9 +64,12 @@
             // 
             // OpenImageToolStripMenuItem
             // 
+            this.OpenImageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.OpenEntireWindowToolStripMenuItem,
+            this.OpenSelectedRegionToolStripMenuItem});
             this.OpenImageToolStripMenuItem.Name = "OpenImageToolStripMenuItem";
             this.OpenImageToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.OpenImageToolStripMenuItem.Text = "Open Image (Middle Click)";
+            this.OpenImageToolStripMenuItem.Text = "Open Image";
             this.OpenImageToolStripMenuItem.Click += new System.EventHandler(this.OpenImageToolStripMenuItem_Click);
             // 
             // ToolStripMenuItemCopyImage
@@ -79,14 +84,14 @@
             // CopyEntireWindowToolStripMenuItem
             // 
             this.CopyEntireWindowToolStripMenuItem.Name = "CopyEntireWindowToolStripMenuItem";
-            this.CopyEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.CopyEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.CopyEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.CopyEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.CopyEntireWindowToolStripMenuItem_Click);
             // 
             // CopySelectedRegionToolStripMenuItem
             // 
             this.CopySelectedRegionToolStripMenuItem.Name = "CopySelectedRegionToolStripMenuItem";
-            this.CopySelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.CopySelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.CopySelectedRegionToolStripMenuItem.Text = "Selected Region";
             this.CopySelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.CopySelectedRegionToolStripMenuItem_Click);
             // 
@@ -166,6 +171,20 @@
             this.MakeCycleFileSelectedToolStripMenuItem.Text = "Selected";
             this.MakeCycleFileSelectedToolStripMenuItem.Click += new System.EventHandler(this.MakeCycleFileSelectedToolStripMenuItem_Click);
             // 
+            // OpenEntireWindowToolStripMenuItem
+            // 
+            this.OpenEntireWindowToolStripMenuItem.Name = "OpenEntireWindowToolStripMenuItem";
+            this.OpenEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OpenEntireWindowToolStripMenuItem.Text = "Entire Window";
+            this.OpenEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.OpenEntireWindowToolStripMenuItem_Click);
+            // 
+            // OpenSelectedRegionToolStripMenuItem
+            // 
+            this.OpenSelectedRegionToolStripMenuItem.Name = "OpenSelectedRegionToolStripMenuItem";
+            this.OpenSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OpenSelectedRegionToolStripMenuItem.Text = "Selected Region";
+            this.OpenSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.OpenSelectedRegionToolStripMenuItem_Click);
+            // 
             // RegionBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -198,5 +217,7 @@
         private System.Windows.Forms.ToolStripMenuItem makeCycleFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MakeCycleFileAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MakeCycleFileSelectedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem OpenEntireWindowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem OpenSelectedRegionToolStripMenuItem;
     }
 }

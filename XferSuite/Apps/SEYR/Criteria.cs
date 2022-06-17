@@ -16,9 +16,10 @@ namespace XferSuite.Apps.SEYR
         {
             data = data.Where(x => !x.Feature.Ignore).ToArray();
             var redundantGroups = data.GroupBy(x => x.Feature.RedundancyGroup);
+            bool pass = false;
             foreach (var group in redundantGroups)
             {
-                Pass = true;
+                bool innerPass = true;
                 var needOneGroups = group.ToArray().GroupBy(x => x.Feature.NeedOneGroup).ToArray();
                 for (int i = 0; i < needOneGroups.Length; i++)
                 {
@@ -30,9 +31,11 @@ namespace XferSuite.Apps.SEYR
                         LegendEntry += $"{(string.IsNullOrEmpty(group.Key) ? "" : $"{group.Key}_")}{needOneGroups[i].Key} ";
                     }
                     else
-                        Pass = false;
+                        innerPass = false;
                 }
+                if (innerPass) pass = true;
             }
+            Pass = pass;
         }
 
         public void TryAppend(ref List<Criteria> criteria)

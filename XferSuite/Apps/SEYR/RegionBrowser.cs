@@ -190,20 +190,36 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void OpenImage()
+        private void OpenImage(bool entireImage = false)
         {
             string path = $@"{System.IO.Path.GetTempPath()}RBimg.png";
-            GetActiveBitmap().Save(path);
+            if (entireImage)
+                GetEntireBitmap().Save(path);
+            else
+                GetActiveBitmap().Save(path);
             System.Diagnostics.Process.Start(path);
+        }
+
+        private void OpenEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenImage(true);
+        }
+
+        private void OpenSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenImage();
+        }
+
+        private Bitmap GetEntireBitmap()
+        {
+            Bitmap bmp = new Bitmap(TLP.Width, TLP.Height);
+            TLP.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
+            return bmp;
         }
 
         private void CopyEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Bitmap bmp = new Bitmap(TLP.Width, TLP.Height))
-            {
-                TLP.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                Clipboard.SetImage(bmp);
-            }
+            Clipboard.SetImage(GetEntireBitmap());
         }
 
         private void CopySelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
