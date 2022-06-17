@@ -20,16 +20,15 @@ namespace XferSuite.Apps.SEYR
         {
             InitializeComponent();
             ImageGroups = imageGroups;
-            Name = name;
             BaseFeatureName = baseFeatureName;
             NumberImagesInScroller = numberImagesInScroller;
             Score = score;
-            Location = Point.Empty;
 
             ComboFeatureSelector.Items.AddRange(ImageGroups.Select(x => x.Key).ToArray());
-            ComboFeatureSelector.SelectedIndex = 0;
+            ComboFeatureSelector.Text = name;
             LoadFeatureData();
 
+            Location = Point.Empty;
             PBX.MouseUp += PBX_MouseUp;
             Timer.Start();
             Show();
