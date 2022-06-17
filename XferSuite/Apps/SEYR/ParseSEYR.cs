@@ -392,8 +392,7 @@ namespace XferSuite.Apps.SEYR
             else if (rangeY < rangeX)
                 scaledSize = new Size(defaultSize.Width, (int)(defaultSize.Height * (rangeY / rangeX)));
 
-            RegionBrowser = new RegionBrowser(Data, Sheets, criteria, TogglePassFailToolStripMenuItem.Checked)
-                { Text = FileName, Size = scaledSize };
+            RegionBrowser = new RegionBrowser(Data, Sheets, criteria, TogglePassFailToolStripMenuItem.Checked, FileName) { Size = scaledSize };
         }
 
         private bool MakeSheets()

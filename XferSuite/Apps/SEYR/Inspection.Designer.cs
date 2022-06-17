@@ -103,6 +103,7 @@
             this.ClientSize = new System.Drawing.Size(484, 461);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "Inspection";
             this.Text = "Inspection";
             this.tableLayoutPanel1.ResumeLayout(false);

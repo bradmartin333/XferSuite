@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace XferSuite.Apps.SEYR
@@ -8,11 +10,23 @@ namespace XferSuite.Apps.SEYR
         private bool Loading = false;
         private DataEntry[] Data;
         private int IDX = 0;
+        private readonly string FileName;
 
-        public Inspection()
+        public Inspection(string fileName)
         {
             InitializeComponent();
+            FileName = fileName;
+            KeyDown += Inspection_KeyDown;
             FormClosing += Inspection_FormClosing;
+        }
+
+        private void Inspection_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F)
+            {
+                IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == FileName);
+                if (matches.Any()) matches.First().BringToFront();
+            }
         }
 
         private void Inspection_FormClosing(object sender, FormClosingEventArgs e)
@@ -48,6 +62,7 @@ namespace XferSuite.Apps.SEYR
 
         private void CycleImages()
         {
+            if (IDX > Data.Length - 1) IDX = 0; // Simple error prevention
             PBX.BackgroundImage = Data[IDX].Image;
             Text = $"{Data[IDX]} {Data[IDX].X}, {Data[IDX].Y}";
             LblInfo.Text = Data[IDX].Location();

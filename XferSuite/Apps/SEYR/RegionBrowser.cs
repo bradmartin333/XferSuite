@@ -17,17 +17,30 @@ namespace XferSuite.Apps.SEYR
         private List<PictureBox> PictureBoxes;
         private readonly Inspection Inspection;
         private bool LastPF = false;
+        private readonly string FileName;
 
-        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, bool showPF)
+        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, bool showPF, string fileName)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
             Data = data;
             Sheets = sheets;
             Criteria = criteria;
-            Inspection = new Inspection();
+            KeyDown += RegionBrowser_KeyDown;
+            FileName = fileName;
+            Inspection = new Inspection(FileName);
+            Text = FileName;
             SetupTLP(showPF);
             Show();
+        }
+
+        private void RegionBrowser_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F)
+            {
+                IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == FileName);
+                if (matches.Any()) matches.First().BringToFront();
+            }
         }
 
         private void RegionBrowser_FormClosing(object sender, FormClosingEventArgs e)
