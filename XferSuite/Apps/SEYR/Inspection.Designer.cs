@@ -52,7 +52,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(399, 406);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(484, 461);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // PBX
@@ -61,7 +61,7 @@
             this.PBX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PBX.Location = new System.Drawing.Point(3, 3);
             this.PBX.Name = "PBX";
-            this.PBX.Size = new System.Drawing.Size(393, 338);
+            this.PBX.Size = new System.Drawing.Size(478, 393);
             this.PBX.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PBX.TabIndex = 0;
             this.PBX.TabStop = false;
@@ -71,10 +71,10 @@
             // 
             this.LblInfo.AutoSize = true;
             this.LblInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LblInfo.Location = new System.Drawing.Point(3, 344);
+            this.LblInfo.Location = new System.Drawing.Point(3, 399);
             this.LblInfo.Name = "LblInfo";
             this.LblInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.LblInfo.Size = new System.Drawing.Size(393, 33);
+            this.LblInfo.Size = new System.Drawing.Size(478, 33);
             this.LblInfo.TabIndex = 1;
             this.LblInfo.Text = "N/A";
             this.LblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -87,9 +87,9 @@
             this.CBX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CBX.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.CBX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CBX.Location = new System.Drawing.Point(3, 380);
+            this.CBX.Location = new System.Drawing.Point(3, 435);
             this.CBX.Name = "CBX";
-            this.CBX.Size = new System.Drawing.Size(393, 23);
+            this.CBX.Size = new System.Drawing.Size(478, 23);
             this.CBX.TabIndex = 2;
             this.CBX.Text = "Fail";
             this.CBX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -100,7 +100,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(399, 406);
+            this.ClientSize = new System.Drawing.Size(484, 461);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Inspection";

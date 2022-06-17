@@ -22,8 +22,9 @@ namespace XferSuite.Apps.SEYR
         private Annotation ViewDataAnnotation;
         private bool HSpanChanging = false;
         private bool LoadingImages = false;
+        private int NumberImagesInScroller = 25;
 
-        public PassFailUtility(List<DataEntry> data, Feature feature)
+        public PassFailUtility(List<DataEntry> data, Feature feature, int numberImagesInScroller)
         {
             InitializeComponent();
             Data = data;
@@ -32,6 +33,7 @@ namespace XferSuite.Apps.SEYR
             PassThreshold = feature.PassThreshold;
             Limit = feature.Limit;
             TxtCriteriaString.Text = feature.CriteriaString;
+            NumberImagesInScroller = numberImagesInScroller;
 
             (NullExclude, NullInclude) = feature.GetNullData();
             LabelNullExcludeCount.Text = NullExclude.ToString();
@@ -117,22 +119,14 @@ namespace XferSuite.Apps.SEYR
             Cursor = Cursors.WaitCursor;
             if (LoadingImages) return;
             LoadingImages = true;
-            List<Bitmap> bitmaps = new List<Bitmap>();
-            List<string> info = new List<string>();
-            DataEntry[] entries = Data.Where(d => Math.Abs(d.Score - x) <= 2 && d.FeatureName == Feature.Name).ToArray();
-            foreach (DataEntry entry in entries)
-            {
-                if (bitmaps.Count > 25) break;
-                if (entry.Image != null)
-                {
-                    bitmaps.Add(entry.Image);
-                    info.Add(entry.Location());
-                }
-            }   
-            if (bitmaps.Count > 0)
+            string[] locations = Data.Where(d => Math.Abs(d.Score - x) <= 1 && d.FeatureName == Feature.Name).Select(e => e.Location()).ToArray();
+            DataEntry[] imageEntries = Data.Where(d => d.Feature.SaveImage && locations.Contains(d.Location())).ToArray();
+            if (imageEntries.Length > 0)
             {
                 CloseImageScroller();
-                _ = new ImageScroller(bitmaps, info) { Text = $"First 25 images with score = {x}±2" };
+                IEnumerable<IGrouping<string, DataEntry>> imageGroups = imageEntries.GroupBy(e => e.FeatureName);
+                string initialFeature = Feature.SaveImage ? Feature.Name : imageGroups.First().Key;
+                _ = new ImageScroller(imageGroups, initialFeature, Feature.Name, NumberImagesInScroller, x);
             }
             Cursor = Cursors.Default;
             LoadingImages = false;

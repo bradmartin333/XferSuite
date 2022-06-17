@@ -15,25 +15,53 @@ namespace XferSuite.Apps.SEYR
     {
         #region Globals and Setup
 
+        private int _NumberImagesInScroller = 25;
+        [
+            Category("User Parameters"),
+            Description("The more images loaded when clicking a histogram bar, the longer the form will take to load"),
+            DisplayName("# Images in Scroller")
+        ]
+        public int NumberImagesInScroller { get => _NumberImagesInScroller; set => _NumberImagesInScroller = value; }
+
         private int _DefaultPlotSize = 700;
-        [Category("User Parameters")]
+        [
+            Category("User Parameters"),
+            Description("Autoscaling will be applied to this starting X by Y square dimension"),
+            DisplayName("Default Plot Window Size")
+        ]
         public int DefaultPlotSize { get => _DefaultPlotSize; set => _DefaultPlotSize = value; }
 
         public enum Delimeter { Tab, Comma, Space }
         private Delimeter _CycleFileDelimeter = Delimeter.Tab;
-        [Category("User Parameters")]
+        [
+            Category("User Parameters"),
+            Description("Tabs are excel friendly, but some tools take comma separated values"),
+            DisplayName("Cycle File Delimeter")
+        ]
         public Delimeter CycleFileDelimeter { get => _CycleFileDelimeter; set => _CycleFileDelimeter = value; }
 
         private bool _FlipX = false;
-        [Category("User Parameters")]
+        [
+            Category("User Parameters"),
+            Description("Invert the X direction in the plot window"),
+            DisplayName("Flip X")
+        ]
         public bool FlipX { get => _FlipX; set => _FlipX = value; }
 
         private bool _FlipY = true;
-        [Category("User Parameters")]
+        [
+            Category("User Parameters"),
+            Description("Invert the Y direction in the plot window"),
+            DisplayName("Flip Y")
+        ]
         public bool FlipY { get => _FlipY; set => _FlipY = value; }
 
         public enum Palletes { Category20, ColorblindFriendly, Microcharts, OneHalf }
-        [Category("User Parameters")]
+        [
+            Category("User Parameters"),
+            Description("There are currently 4 available palletes"),
+            DisplayName("Plot Window Pallete")
+        ]
         public Palletes Palette {
             get => (Palletes)Enum.Parse(typeof(Palletes), Criteria.Palette.Name);
             set
@@ -235,7 +263,7 @@ namespace XferSuite.Apps.SEYR
                 LoadingToolStripMenuItem.Visible = true;
                 Application.DoEvents();
                 Feature feature = ((Feature)FeatureOLV.SelectedObject);
-                using (PassFailUtility pf = new PassFailUtility(Data, feature))
+                using (PassFailUtility pf = new PassFailUtility(Data, feature, NumberImagesInScroller))
                 {
                     LoadingToolStripMenuItem.Visible = false;
                     Application.DoEvents();
