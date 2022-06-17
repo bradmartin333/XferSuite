@@ -7,6 +7,8 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class ImageScroller : Form
     {
+        public static string LastSelectedFeatureName = string.Empty;
+
         private readonly IEnumerable<IGrouping<string, DataEntry>> ImageGroups;
         private readonly string BaseFeatureName;
         private readonly int NumberImagesInScroller;
@@ -25,7 +27,10 @@ namespace XferSuite.Apps.SEYR
             Score = score;
 
             ComboFeatureSelector.Items.AddRange(ImageGroups.Select(x => x.Key).ToArray());
-            ComboFeatureSelector.Text = name;
+            if (ComboFeatureSelector.Items.Contains(LastSelectedFeatureName))
+                ComboFeatureSelector.Text = LastSelectedFeatureName;
+            else
+                ComboFeatureSelector.Text = name;
             LoadFeatureData();
 
             Location = Point.Empty;
@@ -55,6 +60,7 @@ namespace XferSuite.Apps.SEYR
         {
             if (!Timer.Enabled) return;
             Timer.Stop();
+            LastSelectedFeatureName = ComboFeatureSelector.Text;
             LoadFeatureData();
             Timer.Start();
         }

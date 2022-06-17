@@ -195,14 +195,10 @@ namespace XferSuite.Apps.SEYR
 
         private void CopyEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Rectangle bounds = Bounds;
-            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+            using (Bitmap bmp = new Bitmap(TLP.Width, TLP.Height))
             {
-                using (Graphics g = Graphics.FromImage(bitmap))
-                {
-                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
-                }
-                Clipboard.SetImage(bitmap);
+                TLP.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
+                Clipboard.SetImage(bmp);
             }
         }
 

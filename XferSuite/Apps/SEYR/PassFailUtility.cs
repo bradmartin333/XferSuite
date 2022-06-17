@@ -10,19 +10,19 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class PassFailUtility : Form
     {
-        private readonly List<DataEntry> Data;
         public double PassThreshold;
         public double Limit;
+        private readonly List<DataEntry> Data;
+        private readonly int NullExclude;
+        private readonly int NullInclude;
+        private readonly int NumberImagesInScroller = 25;
         private readonly Feature Feature;
         private double[] HistData { get => Feature.HistData; }
         private bool FlipScore { get => Feature.FlipScore; }
-        private readonly int NullExclude;
-        private readonly int NullInclude;
         private BarPlot BarPlot;
         private Annotation ViewDataAnnotation;
         private bool HSpanChanging = false;
         private bool LoadingImages = false;
-        private int NumberImagesInScroller = 25;
 
         public PassFailUtility(List<DataEntry> data, Feature feature, int numberImagesInScroller)
         {
@@ -51,6 +51,7 @@ namespace XferSuite.Apps.SEYR
 
         private void PassFailUtility_FormClosing(object sender, FormClosingEventArgs e)
         {
+            ImageScroller.LastSelectedFeatureName = string.Empty;
             CloseImageScroller();
         }
 
