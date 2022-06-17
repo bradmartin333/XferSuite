@@ -84,6 +84,14 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private Font _YieldFont = new Font("Segoe", 10.0f);
+        [
+            Category("User Parameters"),
+            Description("Yield % font in the  plot window"),
+            DisplayName("Yield Font")
+        ]
+        public Font YieldFont { get => _YieldFont; set => _YieldFont = value; }
+
         private readonly bool ForceClose;
         private readonly string FileName;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
@@ -392,7 +400,7 @@ namespace XferSuite.Apps.SEYR
                 scaledSize = new Size(defaultSize.Width, (int)(defaultSize.Height * (rangeY / rangeX)));
 
             RegionBrowser = new RegionBrowser(
-                Data, Sheets, criteria, TogglePassFailToolStripMenuItem.Checked, FileName, _CycleFileDelimeter) { Size = scaledSize };
+                Data, Sheets, criteria, TogglePassFailToolStripMenuItem.Checked, FileName, _CycleFileDelimeter, _YieldFont) { Size = scaledSize };
         }
 
         private bool MakeSheets()

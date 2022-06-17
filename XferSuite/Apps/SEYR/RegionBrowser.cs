@@ -9,6 +9,7 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class RegionBrowser : Form
     {
+        private static Font YieldFont;
         private readonly List<DataEntry> Data;
         private readonly List<DataSheet> Sheets;
         private readonly List<Criteria> Criteria;
@@ -20,7 +21,7 @@ namespace XferSuite.Apps.SEYR
         private readonly string FileName;
         private readonly ParseSEYR.Delimeter CycleFileDelimeter;
 
-        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, bool showPF, string fileName, ParseSEYR.Delimeter delimeter)
+        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
@@ -34,6 +35,7 @@ namespace XferSuite.Apps.SEYR
             SetupTLP(showPF);
             Show();
             CycleFileDelimeter = delimeter;
+            YieldFont = yieldFont;
         }
 
         private void RegionBrowser_KeyDown(object sender, KeyEventArgs e)
@@ -95,7 +97,7 @@ namespace XferSuite.Apps.SEYR
                         PictureBox pictureBox = TLPPictureBox(sheet.ID);
                         PictureBoxes.Add(pictureBox);
                         pictureBox.BackgroundImage = bmpInfo.Item1;
-                        if (showPF) TLP.Controls.Add(TLPLabel(bmpInfo.Item2), i + 2, j * 2);
+                        if (showPF) TLP.Controls.Add(TLPLabel($"┏   {bmpInfo.Item2}   ┓", true), i + 2, j * 2);
                         TLP.Controls.Add(pictureBox, i + 2, (j * 2) + 1);
                     }  
                 }
@@ -116,15 +118,17 @@ namespace XferSuite.Apps.SEYR
             TLP.SetColumnSpan(RClabel, ArraySize.Height);
         }
 
-        private Label TLPLabel(string txt)
+        private Label TLPLabel(string txt, bool percentage = false)
         {
-            return new Label()
+            Label lbl = new Label()
             {
                 Text = txt,
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
                 AutoSize = true,
             };
+            if (percentage) lbl.Font = YieldFont;
+            return lbl;
         }
 
         private PictureBox TLPPictureBox((int, int) ID)
