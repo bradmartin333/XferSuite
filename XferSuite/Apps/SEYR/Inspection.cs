@@ -35,7 +35,7 @@ namespace XferSuite.Apps.SEYR
         public void Set(DataEntry[] d, Criteria criteria)
         {
             Loading = true;
-            IDX = 0;
+            //IDX = 0; // Reset to starting feature
             Data = d;
             CBX.Checked = criteria.Pass;
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
