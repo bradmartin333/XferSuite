@@ -20,13 +20,20 @@ namespace XferSuite.Apps.SEYR
             FormClosing += Inspection_FormClosing;
         }
 
+        private void BtnParserMenu_Click(object sender, EventArgs e)
+        {
+            BringMenuToFront();
+        }
+
         private void Inspection_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F)
-            {
-                IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == FileName);
-                if (matches.Any()) matches.First().BringToFront();
-            }
+            if (e.KeyCode == Keys.F) BringMenuToFront();
+        }
+
+        private void BringMenuToFront()
+        {
+            IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == FileName);
+            if (matches.Any()) matches.First().BringToFront();
         }
 
         private void Inspection_FormClosing(object sender, FormClosingEventArgs e)
