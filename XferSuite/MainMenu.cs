@@ -9,7 +9,7 @@ namespace XferSuite
     public partial class MainMenu : Form
     {
         public static int MajorVersion = 3;
-        public static int MinorVerson = 20;
+        public static int MinorVerson = 21;
         public static readonly Settings Settings = new Settings();
 
         public MainMenu()
@@ -18,10 +18,7 @@ namespace XferSuite
             Text = string.Format("XferSuite v{0}.{1}", MajorVersion, MinorVerson);
             foreach (Button b in tableLayoutPanel.Controls.OfType<Button>())
             {
-                ToolTip tip = new ToolTip
-                {
-                    InitialDelay = 0
-                };
+                ToolTip tip = new ToolTip { InitialDelay = 0 };
                 tip.SetToolTip(b, b.AccessibleName);
             }
         }
