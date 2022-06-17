@@ -41,40 +41,39 @@
             this.criteriaOlvID = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.MenuStrip = new System.Windows.Forms.MenuStrip();
-            this.ToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SaveAsNewSEYRUPToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.TogglePassFailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ResetCriteiraGroupingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ResetCriteriaPlotSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.GroupFeaturesIntoCriteriaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.PlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.LoadingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnPlot = new System.Windows.Forms.Button();
+            this.BtnSaveAs = new System.Windows.Forms.Button();
+            this.CbxPassFail = new System.Windows.Forms.CheckBox();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).BeginInit();
-            this.MenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // TLP
             // 
-            this.TLP.ColumnCount = 1;
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.TLP.Controls.Add(this.FeatureOLV, 0, 2);
-            this.TLP.Controls.Add(this.CriteriaOLV, 0, 5);
-            this.TLP.Controls.Add(this.label1, 0, 1);
-            this.TLP.Controls.Add(this.label2, 0, 4);
+            this.TLP.ColumnCount = 2;
+            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
+            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.TLP.Controls.Add(this.FeatureOLV, 0, 4);
+            this.TLP.Controls.Add(this.CriteriaOLV, 0, 7);
+            this.TLP.Controls.Add(this.label1, 0, 3);
+            this.TLP.Controls.Add(this.label2, 0, 6);
+            this.TLP.Controls.Add(this.BtnPlot, 0, 0);
+            this.TLP.Controls.Add(this.BtnSaveAs, 1, 1);
+            this.TLP.Controls.Add(this.CbxPassFail, 0, 1);
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TLP.Location = new System.Drawing.Point(0, 24);
+            this.TLP.Location = new System.Drawing.Point(0, 0);
             this.TLP.Name = "TLP";
-            this.TLP.RowCount = 6;
+            this.TLP.RowCount = 8;
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TLP.Size = new System.Drawing.Size(334, 387);
+            this.TLP.Size = new System.Drawing.Size(334, 411);
             this.TLP.TabIndex = 1;
             // 
             // FeatureOLV
@@ -95,14 +94,15 @@
             this.featureOlvName,
             this.featureOlvCriteria,
             this.featureOlvImage});
+            this.TLP.SetColumnSpan(this.FeatureOLV, 2);
             this.FeatureOLV.Cursor = System.Windows.Forms.Cursors.Default;
             this.FeatureOLV.FullRowSelect = true;
             this.FeatureOLV.HasCollapsibleGroups = false;
             this.FeatureOLV.HideSelection = false;
-            this.FeatureOLV.Location = new System.Drawing.Point(3, 33);
+            this.FeatureOLV.Location = new System.Drawing.Point(3, 91);
             this.FeatureOLV.Name = "FeatureOLV";
             this.FeatureOLV.ShowGroups = false;
-            this.FeatureOLV.Size = new System.Drawing.Size(328, 157);
+            this.FeatureOLV.Size = new System.Drawing.Size(328, 140);
             this.FeatureOLV.TabIndex = 8;
             this.FeatureOLV.UseCompatibleStateImageBehavior = false;
             this.FeatureOLV.View = System.Windows.Forms.View.Details;
@@ -149,14 +149,15 @@
             this.criteriaOlvPass,
             this.criteriaOlvName,
             this.criteriaOlvID});
+            this.TLP.SetColumnSpan(this.CriteriaOLV, 2);
             this.CriteriaOLV.Cursor = System.Windows.Forms.Cursors.Default;
             this.CriteriaOLV.FullRowSelect = true;
             this.CriteriaOLV.HasCollapsibleGroups = false;
             this.CriteriaOLV.HideSelection = false;
-            this.CriteriaOLV.Location = new System.Drawing.Point(3, 226);
+            this.CriteriaOLV.Location = new System.Drawing.Point(3, 267);
             this.CriteriaOLV.Name = "CriteriaOLV";
             this.CriteriaOLV.ShowGroups = false;
-            this.CriteriaOLV.Size = new System.Drawing.Size(328, 158);
+            this.CriteriaOLV.Size = new System.Drawing.Size(328, 141);
             this.CriteriaOLV.TabIndex = 12;
             this.CriteriaOLV.UseCompatibleStateImageBehavior = false;
             this.CriteriaOLV.View = System.Windows.Forms.View.Details;
@@ -185,8 +186,9 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.TLP.SetColumnSpan(this.label1, 2);
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 10);
+            this.label1.Location = new System.Drawing.Point(3, 68);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(328, 20);
             this.label1.TabIndex = 13;
@@ -196,93 +198,65 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.TLP.SetColumnSpan(this.label2, 2);
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 203);
+            this.label2.Location = new System.Drawing.Point(3, 244);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(328, 20);
             this.label2.TabIndex = 14;
             this.label2.Text = "Plotted Criteria";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // MenuStrip
+            // BtnPlot
             // 
-            this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolsToolStripMenuItem,
-            this.PlotToolStripMenuItem,
-            this.LoadingToolStripMenuItem});
-            this.MenuStrip.Location = new System.Drawing.Point(0, 0);
-            this.MenuStrip.Name = "MenuStrip";
-            this.MenuStrip.Size = new System.Drawing.Size(334, 24);
-            this.MenuStrip.TabIndex = 2;
-            this.MenuStrip.Text = "menuStrip1";
+            this.BtnPlot.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnPlot.BackColor = System.Drawing.Color.LightBlue;
+            this.TLP.SetColumnSpan(this.BtnPlot, 2);
+            this.BtnPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnPlot.Location = new System.Drawing.Point(3, 3);
+            this.BtnPlot.Name = "BtnPlot";
+            this.BtnPlot.Size = new System.Drawing.Size(328, 23);
+            this.BtnPlot.TabIndex = 15;
+            this.BtnPlot.Text = "Plot";
+            this.BtnPlot.UseVisualStyleBackColor = false;
+            this.BtnPlot.Click += new System.EventHandler(this.BtnPlot_Click);
             // 
-            // ToolsToolStripMenuItem
+            // BtnSaveAs
             // 
-            this.ToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.SaveAsNewSEYRUPToolStripMenuItem1,
-            this.TogglePassFailToolStripMenuItem,
-            this.ResetCriteiraGroupingsToolStripMenuItem,
-            this.ResetCriteriaPlotSettingsToolStripMenuItem,
-            this.GroupFeaturesIntoCriteriaToolStripMenuItem});
-            this.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem";
-            this.ToolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
-            this.ToolsToolStripMenuItem.Text = "Tools";
+            this.BtnSaveAs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSaveAs.BackColor = System.Drawing.Color.White;
+            this.BtnSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnSaveAs.Location = new System.Drawing.Point(253, 32);
+            this.BtnSaveAs.Name = "BtnSaveAs";
+            this.BtnSaveAs.Size = new System.Drawing.Size(78, 23);
+            this.BtnSaveAs.TabIndex = 16;
+            this.BtnSaveAs.Text = "Save As";
+            this.BtnSaveAs.UseVisualStyleBackColor = false;
+            this.BtnSaveAs.Click += new System.EventHandler(this.BtnSaveAs_Click);
             // 
-            // SaveAsNewSEYRUPToolStripMenuItem1
+            // CbxPassFail
             // 
-            this.SaveAsNewSEYRUPToolStripMenuItem1.Name = "SaveAsNewSEYRUPToolStripMenuItem1";
-            this.SaveAsNewSEYRUPToolStripMenuItem1.Size = new System.Drawing.Size(237, 22);
-            this.SaveAsNewSEYRUPToolStripMenuItem1.Text = "Save As New SEYRUP";
-            this.SaveAsNewSEYRUPToolStripMenuItem1.Click += new System.EventHandler(this.SaveAsNewSEYRUPToolStripMenuItem1_Click);
-            // 
-            // TogglePassFailToolStripMenuItem
-            // 
-            this.TogglePassFailToolStripMenuItem.CheckOnClick = true;
-            this.TogglePassFailToolStripMenuItem.Name = "TogglePassFailToolStripMenuItem";
-            this.TogglePassFailToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.TogglePassFailToolStripMenuItem.Text = "Toggle Pass Fail";
-            this.TogglePassFailToolStripMenuItem.Click += new System.EventHandler(this.TogglePassFailToolStripMenuItem_Click);
-            // 
-            // ResetCriteiraGroupingsToolStripMenuItem
-            // 
-            this.ResetCriteiraGroupingsToolStripMenuItem.Name = "ResetCriteiraGroupingsToolStripMenuItem";
-            this.ResetCriteiraGroupingsToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.ResetCriteiraGroupingsToolStripMenuItem.Text = "Reset Criteira Groupings";
-            this.ResetCriteiraGroupingsToolStripMenuItem.Click += new System.EventHandler(this.ResetCriteiraGroupingsToolStripMenuItem_Click);
-            // 
-            // ResetCriteriaPlotSettingsToolStripMenuItem
-            // 
-            this.ResetCriteriaPlotSettingsToolStripMenuItem.Name = "ResetCriteriaPlotSettingsToolStripMenuItem";
-            this.ResetCriteriaPlotSettingsToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.ResetCriteriaPlotSettingsToolStripMenuItem.Text = "Reset Criteria Plot Settings";
-            this.ResetCriteriaPlotSettingsToolStripMenuItem.Click += new System.EventHandler(this.ResetCriteriaPlotSettingsToolStripMenuItem_Click);
-            // 
-            // GroupFeaturesIntoCriteriaToolStripMenuItem
-            // 
-            this.GroupFeaturesIntoCriteriaToolStripMenuItem.Name = "GroupFeaturesIntoCriteriaToolStripMenuItem";
-            this.GroupFeaturesIntoCriteriaToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.GroupFeaturesIntoCriteriaToolStripMenuItem.Text = "Group Features Into Criteria (g)";
-            this.GroupFeaturesIntoCriteriaToolStripMenuItem.Click += new System.EventHandler(this.GroupFeaturesIntoCriteriaToolStripMenuItem_Click);
-            // 
-            // PlotToolStripMenuItem
-            // 
-            this.PlotToolStripMenuItem.AutoSize = false;
-            this.PlotToolStripMenuItem.BackColor = System.Drawing.Color.LightBlue;
-            this.PlotToolStripMenuItem.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.PlotToolStripMenuItem.Name = "PlotToolStripMenuItem";
-            this.PlotToolStripMenuItem.Size = new System.Drawing.Size(175, 20);
-            this.PlotToolStripMenuItem.Text = "Plot";
-            this.PlotToolStripMenuItem.Click += new System.EventHandler(this.PlotToolStripMenuItem_Click);
-            // 
-            // LoadingToolStripMenuItem
-            // 
-            this.LoadingToolStripMenuItem.AutoSize = false;
-            this.LoadingToolStripMenuItem.BackColor = System.Drawing.Color.Bisque;
-            this.LoadingToolStripMenuItem.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.LoadingToolStripMenuItem.Name = "LoadingToolStripMenuItem";
-            this.LoadingToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
-            this.LoadingToolStripMenuItem.Text = "Loading...";
-            this.LoadingToolStripMenuItem.Visible = false;
+            this.CbxPassFail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.CbxPassFail.Appearance = System.Windows.Forms.Appearance.Button;
+            this.CbxPassFail.AutoSize = true;
+            this.CbxPassFail.BackColor = System.Drawing.Color.White;
+            this.CbxPassFail.Enabled = false;
+            this.CbxPassFail.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
+            this.CbxPassFail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CbxPassFail.Location = new System.Drawing.Point(3, 32);
+            this.CbxPassFail.Name = "CbxPassFail";
+            this.CbxPassFail.Size = new System.Drawing.Size(244, 23);
+            this.CbxPassFail.TabIndex = 17;
+            this.CbxPassFail.Text = "Toggle Pass Fail";
+            this.CbxPassFail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.CbxPassFail.UseVisualStyleBackColor = false;
+            this.CbxPassFail.CheckedChanged += new System.EventHandler(this.CbxPassFail_CheckedChanged);
             // 
             // ParseSEYR
             // 
@@ -290,9 +264,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 411);
             this.Controls.Add(this.TLP);
-            this.Controls.Add(this.MenuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.MenuStrip;
             this.MinimumSize = new System.Drawing.Size(350, 450);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
@@ -301,10 +273,7 @@
             this.TLP.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).EndInit();
-            this.MenuStrip.ResumeLayout(false);
-            this.MenuStrip.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -319,16 +288,10 @@
         private BrightIdeasSoftware.OLVColumn criteriaOlvPass;
         private BrightIdeasSoftware.OLVColumn criteriaOlvName;
         private BrightIdeasSoftware.OLVColumn criteriaOlvID;
-        private System.Windows.Forms.MenuStrip MenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem ToolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem SaveAsNewSEYRUPToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem TogglePassFailToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ResetCriteiraGroupingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ResetCriteriaPlotSettingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem PlotToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem LoadingToolStripMenuItem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ToolStripMenuItem GroupFeaturesIntoCriteriaToolStripMenuItem;
+        private System.Windows.Forms.Button BtnPlot;
+        private System.Windows.Forms.Button BtnSaveAs;
+        private System.Windows.Forms.CheckBox CbxPassFail;
     }
 }

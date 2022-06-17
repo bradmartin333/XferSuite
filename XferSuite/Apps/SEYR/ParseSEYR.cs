@@ -143,6 +143,13 @@ namespace XferSuite.Apps.SEYR
             if (ForceClose) Close();
         }
 
+        private void ToggleInfo(string info, Color color)
+        {
+            BtnPlot.Text = info;
+            BtnPlot.BackColor = color;
+            Application.DoEvents();
+        }
+
         #endregion
 
         #region Load Data
@@ -248,6 +255,11 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        #endregion
+
+        #region OLV Logic
+
+        // TODO ADD TO OLV CONTEXT MENU
         private void ResetCriteiraGroupingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Feature feature in Project.Features)
@@ -255,25 +267,23 @@ namespace XferSuite.Apps.SEYR
             InitFeatureInfo();
         }
 
+        // TODO ADD TO OLV CONTEXT MENU
         private void ResetCriteriaPlotSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CriteriaOLV.ClearObjects();
         }
 
-        #endregion
-
-        #region OLV Logic
-
+        // TODO ADD TO OLV CONTEXT MENU
         private void FeatureOLV_DoubleClick(object sender, EventArgs e)
         {
             if (FeatureOLV.SelectedObject != null)
             {
-                LoadingToolStripMenuItem.Visible = true;
+                ToggleInfo("Loading...", Color.Bisque);
                 Application.DoEvents();
                 Feature feature = ((Feature)FeatureOLV.SelectedObject);
                 using (PassFailUtility pf = new PassFailUtility(Data, feature, NumberImagesInScroller))
                 {
-                    LoadingToolStripMenuItem.Visible = false;
+                    ToggleInfo("Plot", Color.LightBlue);
                     Application.DoEvents();
                     DialogResult result = pf.ShowDialog();
                     if (result == DialogResult.OK)
@@ -289,29 +299,26 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void GroupFeaturesIntoCriteriaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GroupFeatures();
-        }
-
+        // TODO ADD TO OLV CONTEXT MENU
         private void FeatureOLV_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.G && FeatureOLV.SelectedObjects.Count > 1) GroupFeatures();
+            if (e.KeyCode == Keys.G && FeatureOLV.SelectedObjects.Count > 1) GroupFeatures(ModifierKeys == Keys.Shift);
         }
 
-        private void GroupFeatures()
+        private void GroupFeatures(bool redundantGroup = false)
         {
-            using (Utility.PromptForInput prompt = new Utility.PromptForInput("Enter criteria string"))
+            using (Utility.PromptForInput prompt = new Utility.PromptForInput($"Enter {(redundantGroup ? "redundant group " : "")}criteria string"))
             {
                 if (prompt.ShowDialog() == DialogResult.OK)
                 {
                     foreach (Feature item in FeatureOLV.SelectedObjects)
-                        item.CriteriaString = prompt.Control.Text;
+                        item.CriteriaString = redundantGroup ? $"{prompt.Control.Text}_{item.CriteriaString}" : prompt.Control.Text;
                     InitFeatureInfo();
                 }
             }
         }
 
+        // TODO ADD TO OLV CONTEXT MENU
         private void CriteriaOLV_DoubleClick(object sender, EventArgs e)
         {
             if (CriteriaOLV.SelectedObject == null) return;
@@ -343,11 +350,9 @@ namespace XferSuite.Apps.SEYR
 
         #region Plotting
 
-        private void PlotToolStripMenuItem_Click(object sender, EventArgs e)
+        private void BtnPlot_Click(object sender, EventArgs e)
         {
-            LoadingToolStripMenuItem.Visible = true;
-            Application.DoEvents();
-
+            ToggleInfo("Loading...", Color.Bisque);
             if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
             if (Application.OpenForms.OfType<Inspection>().Any()) Application.OpenForms.OfType<Inspection>().First().Close();
 
@@ -385,8 +390,8 @@ namespace XferSuite.Apps.SEYR
             }
 
             CriteriaOLV.Objects = criteria;
-            TogglePassFailToolStripMenuItem.Enabled = true;
-            LoadingToolStripMenuItem.Visible = false;
+            CbxPassFail.Enabled = true;
+            ToggleInfo("Plot", Color.LightBlue);
 
             var dataX = Data.Select(x => x.X);
             var dataY = Data.Select(y => y.Y);
@@ -400,7 +405,8 @@ namespace XferSuite.Apps.SEYR
                 scaledSize = new Size(defaultSize.Width, (int)(defaultSize.Height * (rangeY / rangeX)));
 
             RegionBrowser = new RegionBrowser(
-                Data, Sheets, criteria, TogglePassFailToolStripMenuItem.Checked, FileName, _CycleFileDelimeter, _YieldFont) { Size = scaledSize };
+                Data, Sheets, criteria, CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont)
+            { Size = scaledSize };
         }
 
         private bool MakeSheets()
@@ -414,25 +420,27 @@ namespace XferSuite.Apps.SEYR
             }
             foreach ((int, int) region in regions)
                 Sheets.Add(new DataSheet(
-                    region, 
-                    new Size(Data.Select(x => x.R).Max(), Data.Select(x => x.C).Max()), 
-                    new Size(Data.Select(x => x.SR).Max(), Data.Select(x => x.SC).Max()), 
-                    new Size(Data.Select(x => x.TR).Max(), Data.Select(x => x.TC).Max()), 
+                    region,
+                    new Size(Data.Select(x => x.R).Max(), Data.Select(x => x.C).Max()),
+                    new Size(Data.Select(x => x.SR).Max(), Data.Select(x => x.SC).Max()),
+                    new Size(Data.Select(x => x.TR).Max(), Data.Select(x => x.TC).Max()),
                     _FlipX, _FlipY));
 
             return true;
         }
 
-        private void TogglePassFailToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CbxPassFail_CheckedChanged(object sender, EventArgs e)
         {
-            RegionBrowser.TogglePF(TogglePassFailToolStripMenuItem.Checked);
+            if (RegionBrowser.Visible) ToggleInfo("Loading...", Color.Bisque);
+            RegionBrowser.TogglePF(CbxPassFail.Checked);
+            ToggleInfo("Plot", Color.LightBlue);
         }
 
         #endregion
 
         #region Save Session
 
-        private void SaveAsNewSEYRUPToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void BtnSaveAs_Click(object sender, EventArgs e)
         {
             SaveFileDialog svd = new SaveFileDialog
             {
@@ -442,8 +450,7 @@ namespace XferSuite.Apps.SEYR
             if (svd.ShowDialog() == DialogResult.OK)
             {
                 if (File.Exists(svd.FileName)) File.Delete(svd.FileName);
-                LoadingToolStripMenuItem.Text = "Saving...";
-                LoadingToolStripMenuItem.Visible = true;
+                ToggleInfo("Saving...", Color.Bisque);
                 Application.DoEvents();
                 SaveProject();
                 SaveReport();
@@ -452,8 +459,7 @@ namespace XferSuite.Apps.SEYR
                     zip.CreateEntryFromFile(ReportPath, Path.GetFileName(ReportPath));
                     zip.CreateEntryFromFile(ProjectPath, Path.GetFileName(ProjectPath));
                 }
-                LoadingToolStripMenuItem.Visible = false;
-                LoadingToolStripMenuItem.Text = "Loading...";
+                ToggleInfo("Plot", Color.LightBlue);
             }
         }
 
