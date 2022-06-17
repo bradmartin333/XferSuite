@@ -127,8 +127,12 @@ namespace XferSuite.Apps.SEYR
 
             FeatureOLV.DoubleClick += FeatureOLV_DoubleClick;
             FeatureOLV.KeyDown += FeatureOLV_KeyDown;
+            FeatureOLV.CellRightClick += FeatureOLV_CellRightClick;
             CriteriaOLV.DoubleClick += CriteriaOLV_DoubleClick;
             CriteriaOLV.FormatRow += CriteriaOLV_FormatRow;
+            CriteriaOLV.CellRightClick += CriteriaOLV_CellRightClick;
+            CriteriaOLV.SelectedBackColor = Color.White;
+            CriteriaOLV.SelectedForeColor = Color.Magenta;
             FormClosing += ParseSEYR_FormClosing;
         }
 
@@ -259,79 +263,58 @@ namespace XferSuite.Apps.SEYR
 
         #region OLV Logic
 
-        // TODO ADD TO OLV CONTEXT MENU
-        private void ResetCriteiraGroupingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FeatureOLV_CellRightClick(object sender, BrightIdeasSoftware.CellRightClickEventArgs e)
         {
-            foreach (Feature feature in Project.Features)
-                feature.CriteriaString = System.Text.RegularExpressions.Regex.Replace(feature.Name, @"\d", "");
-            InitFeatureInfo();
+            FeatureEditToolStripMenuItem.Visible = FeatureOLV.SelectedObjects.Count == 1;
+            e.MenuStrip = FeatureMenuStrip;
         }
 
-        // TODO ADD TO OLV CONTEXT MENU
-        private void ResetCriteriaPlotSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CriteriaOLV_CellRightClick(object sender, BrightIdeasSoftware.CellRightClickEventArgs e)
         {
-            CriteriaOLV.ClearObjects();
+            e.MenuStrip = CriteriaMenuStrip;
         }
 
-        // TODO ADD TO OLV CONTEXT MENU
         private void FeatureOLV_DoubleClick(object sender, EventArgs e)
         {
-            if (FeatureOLV.SelectedObject != null)
-            {
-                ToggleInfo("Loading...", Color.Bisque);
-                Application.DoEvents();
-                Feature feature = ((Feature)FeatureOLV.SelectedObject);
-                using (PassFailUtility pf = new PassFailUtility(Data, feature, NumberImagesInScroller))
-                {
-                    ToggleInfo("Plot", Color.LightBlue);
-                    Application.DoEvents();
-                    DialogResult result = pf.ShowDialog();
-                    if (result == DialogResult.OK)
-                    {
-                        feature.PassThreshold = pf.PassThreshold;
-                        feature.Limit = pf.Limit;
-                        RescoreAllData();
-                        InitFeatureInfo();
-                    }
-                    else if (result == DialogResult.Ignore)
-                        feature.Ignore = !feature.Ignore;
-                }
-            }
+            if (FeatureOLV.SelectedObject != null) EditFeature((Feature)FeatureOLV.SelectedObject);
         }
 
-        // TODO ADD TO OLV CONTEXT MENU
+        private void FeatureEditToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (FeatureOLV.SelectedObject != null) EditFeature((Feature)FeatureOLV.SelectedObject);
+        }
+
         private void FeatureOLV_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.G && FeatureOLV.SelectedObjects.Count > 1) GroupFeatures(ModifierKeys == Keys.Shift);
         }
 
-        private void GroupFeatures(bool redundantGroup = false)
+        private void FeatureGroupNeedOneToolStripMenuItem_Click(object sender, EventArgs e) => GroupFeatures(false);
+
+        private void FeatureGroupRedundantToolStripMenuItem_Click(object sender, EventArgs e) => GroupFeatures(true);
+
+        private void FeatureResetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Utility.PromptForInput prompt = new Utility.PromptForInput($"Enter {(redundantGroup ? "redundant group " : "")}criteria string"))
-            {
-                if (prompt.ShowDialog() == DialogResult.OK)
-                {
-                    foreach (Feature item in FeatureOLV.SelectedObjects)
-                        item.CriteriaString = redundantGroup ? $"{prompt.Control.Text}_{item.CriteriaString}" : prompt.Control.Text;
-                    InitFeatureInfo();
-                }
-            }
+            foreach (Feature feature in FeatureOLV.SelectedObjects)
+                feature.CriteriaString = System.Text.RegularExpressions.Regex.Replace(feature.Name, @"\d", "");
+            InitFeatureInfo();
         }
 
-        // TODO ADD TO OLV CONTEXT MENU
         private void CriteriaOLV_DoubleClick(object sender, EventArgs e)
         {
             if (CriteriaOLV.SelectedObject == null) return;
-            Criteria criteria = (Criteria)CriteriaOLV.SelectedObject;
-            using (ColorDialog colorDialog = new ColorDialog() { AllowFullOpen = true, AnyColor = true, Color = criteria.Color })
-            {
-                if (colorDialog.ShowDialog() == DialogResult.OK)
-                {
-                    criteria.Color = colorDialog.Color;
-                    CriteriaOLV.RebuildColumns();
-                    CriteriaOLV.DeselectAll();
-                }
-            }
+            EditCriteriaColor(new List<Criteria>() { (Criteria)CriteriaOLV.SelectedObject });
+        }
+
+        private void CriteriaEditColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<Criteria> criteria = GetSelectedCriteria();
+            if (criteria.Count > 0) EditCriteriaColor(criteria);
+        }
+
+        private void CriteriaResetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CriteriaOLV.RemoveObjects(CriteriaOLV.SelectedObjects);
         }
 
         private void CriteriaOLV_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
@@ -346,6 +329,82 @@ namespace XferSuite.Apps.SEYR
             FeatureOLV.Objects = Project.Features;
         }
 
+        private List<Criteria> GetAllCriteria()
+        {
+            List<Criteria> criteria = new List<Criteria>();
+            if (CriteriaOLV.Objects == null) return criteria;
+            foreach (Criteria criterion in CriteriaOLV.Objects)
+                criteria.Add(criterion);
+            return criteria;
+        }
+
+        private List<Criteria> GetSelectedCriteria()
+        {
+            List<Criteria> criteria = new List<Criteria>();
+            foreach (Criteria criterion in CriteriaOLV.SelectedObjects)
+                criteria.Add(criterion);
+            return criteria;
+        }
+
+        #endregion
+
+        #region OLV Object Manipulation
+
+        private void EditFeature(Feature feature)
+        {
+            ToggleInfo("Loading...", Color.Bisque);
+            Application.DoEvents();
+            using (PassFailUtility pf = new PassFailUtility(Data, feature, NumberImagesInScroller))
+            {
+                ToggleInfo("Plot", Color.LightBlue);
+                Application.DoEvents();
+                DialogResult result = pf.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    feature.PassThreshold = pf.PassThreshold;
+                    feature.Limit = pf.Limit;
+                    RescoreAllData();
+                    InitFeatureInfo();
+                }
+                else if (result == DialogResult.Ignore)
+                    feature.Ignore = !feature.Ignore;
+            }
+        }
+
+        private void GroupFeatures(bool redundantGroup)
+        {
+            using (Utility.PromptForInput prompt = new Utility.PromptForInput($"Enter {(redundantGroup ? "redundant group " : "")}criteria string"))
+            {
+                if (prompt.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (Feature item in FeatureOLV.SelectedObjects)
+                    {
+                        if (redundantGroup) 
+                            item.CriteriaString = $"{prompt.Control.Text}_{item.NeedOneGroup}";
+                        else
+                            item.CriteriaString = $"{(string.IsNullOrEmpty(item.RedundancyGroup) ? "" : $"{item.RedundancyGroup}_")}{prompt.Control.Text}";
+                    }
+                    InitFeatureInfo();
+                }
+            }
+        }
+
+        private void EditCriteriaColor(List<Criteria> criteria)
+        {
+            Color c = Color.Black;
+            if (criteria.Count == 1) c = criteria[0].Color;
+            using (ColorDialog colorDialog = new ColorDialog() { AllowFullOpen = true, AnyColor = true, Color = c })
+            {
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (Criteria criterion in criteria)
+                        criterion.Color = colorDialog.Color;
+                    CriteriaOLV.RebuildColumns();
+                    CriteriaOLV.DeselectAll();
+                }
+            }
+        }
+
         #endregion
 
         #region Plotting
@@ -358,6 +417,7 @@ namespace XferSuite.Apps.SEYR
 
             if (!MakeSheets()) return;
 
+            List<Criteria> matchCriteira = GetAllCriteria();
             List<Criteria> criteria = new List<Criteria>();
             foreach (DataSheet sheet in Sheets)
             {
@@ -374,7 +434,7 @@ namespace XferSuite.Apps.SEYR
 
                         if (CriteriaOLV.Objects != null) // Allow user override
                         {
-                            Criteria[] matches = ((List<Criteria>)CriteriaOLV.Objects).Where(x => x.LegendEntry == criterion.LegendEntry).ToArray();
+                            Criteria[] matches = matchCriteira.Where(x => x.LegendEntry == criterion.LegendEntry).ToArray();
                             if (matches.Any())
                             {
                                 criterion.Override = true;

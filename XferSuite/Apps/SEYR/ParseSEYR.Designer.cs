@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParseSEYR));
             this.TLP = new System.Windows.Forms.TableLayoutPanel();
             this.FeatureOLV = new BrightIdeasSoftware.ObjectListView();
@@ -44,9 +45,20 @@
             this.BtnPlot = new System.Windows.Forms.Button();
             this.BtnSaveAs = new System.Windows.Forms.Button();
             this.CbxPassFail = new System.Windows.Forms.CheckBox();
+            this.FeatureMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.FeatureEditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FeatureGroupNeedOneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FeatureGroupRedundantToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FeatureResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CriteriaMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.CriteriaEditColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CriteriaResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).BeginInit();
+            this.FeatureMenuStrip.SuspendLayout();
+            this.CriteriaMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // TLP
@@ -258,6 +270,76 @@
             this.CbxPassFail.UseVisualStyleBackColor = false;
             this.CbxPassFail.CheckedChanged += new System.EventHandler(this.CbxPassFail_CheckedChanged);
             // 
+            // FeatureMenuStrip
+            // 
+            this.FeatureMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FeatureEditToolStripMenuItem,
+            this.groupToolStripMenuItem,
+            this.FeatureResetToolStripMenuItem});
+            this.FeatureMenuStrip.Name = "FeatureMenuStrip";
+            this.FeatureMenuStrip.ShowImageMargin = false;
+            this.FeatureMenuStrip.Size = new System.Drawing.Size(156, 92);
+            // 
+            // FeatureEditToolStripMenuItem
+            // 
+            this.FeatureEditToolStripMenuItem.Name = "FeatureEditToolStripMenuItem";
+            this.FeatureEditToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.FeatureEditToolStripMenuItem.Text = "Edit";
+            this.FeatureEditToolStripMenuItem.Click += new System.EventHandler(this.FeatureEditToolStripMenuItem_Click);
+            // 
+            // groupToolStripMenuItem
+            // 
+            this.groupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FeatureGroupNeedOneToolStripMenuItem,
+            this.FeatureGroupRedundantToolStripMenuItem});
+            this.groupToolStripMenuItem.Name = "groupToolStripMenuItem";
+            this.groupToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.groupToolStripMenuItem.Text = "Group";
+            // 
+            // FeatureGroupNeedOneToolStripMenuItem
+            // 
+            this.FeatureGroupNeedOneToolStripMenuItem.Name = "FeatureGroupNeedOneToolStripMenuItem";
+            this.FeatureGroupNeedOneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.FeatureGroupNeedOneToolStripMenuItem.Text = "Need One";
+            this.FeatureGroupNeedOneToolStripMenuItem.Click += new System.EventHandler(this.FeatureGroupNeedOneToolStripMenuItem_Click);
+            // 
+            // FeatureGroupRedundantToolStripMenuItem
+            // 
+            this.FeatureGroupRedundantToolStripMenuItem.Name = "FeatureGroupRedundantToolStripMenuItem";
+            this.FeatureGroupRedundantToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.FeatureGroupRedundantToolStripMenuItem.Text = "Redundant";
+            this.FeatureGroupRedundantToolStripMenuItem.Click += new System.EventHandler(this.FeatureGroupRedundantToolStripMenuItem_Click);
+            // 
+            // FeatureResetToolStripMenuItem
+            // 
+            this.FeatureResetToolStripMenuItem.Name = "FeatureResetToolStripMenuItem";
+            this.FeatureResetToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.FeatureResetToolStripMenuItem.Text = "Reset";
+            this.FeatureResetToolStripMenuItem.Click += new System.EventHandler(this.FeatureResetToolStripMenuItem_Click);
+            // 
+            // CriteriaMenuStrip
+            // 
+            this.CriteriaMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CriteriaEditColorToolStripMenuItem,
+            this.CriteriaResetToolStripMenuItem});
+            this.CriteriaMenuStrip.Name = "CriteriaMenuStrip";
+            this.CriteriaMenuStrip.ShowImageMargin = false;
+            this.CriteriaMenuStrip.Size = new System.Drawing.Size(102, 48);
+            // 
+            // CriteriaEditColorToolStripMenuItem
+            // 
+            this.CriteriaEditColorToolStripMenuItem.Name = "CriteriaEditColorToolStripMenuItem";
+            this.CriteriaEditColorToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.CriteriaEditColorToolStripMenuItem.Text = "Edit Color";
+            this.CriteriaEditColorToolStripMenuItem.Click += new System.EventHandler(this.CriteriaEditColorToolStripMenuItem_Click);
+            // 
+            // CriteriaResetToolStripMenuItem
+            // 
+            this.CriteriaResetToolStripMenuItem.Name = "CriteriaResetToolStripMenuItem";
+            this.CriteriaResetToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.CriteriaResetToolStripMenuItem.Text = "Reset";
+            this.CriteriaResetToolStripMenuItem.Click += new System.EventHandler(this.CriteriaResetToolStripMenuItem_Click);
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -273,6 +355,8 @@
             this.TLP.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).EndInit();
+            this.FeatureMenuStrip.ResumeLayout(false);
+            this.CriteriaMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -293,5 +377,14 @@
         private System.Windows.Forms.Button BtnPlot;
         private System.Windows.Forms.Button BtnSaveAs;
         private System.Windows.Forms.CheckBox CbxPassFail;
+        private System.Windows.Forms.ContextMenuStrip FeatureMenuStrip;
+        private System.Windows.Forms.ContextMenuStrip CriteriaMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem FeatureResetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CriteriaResetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem FeatureEditToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CriteriaEditColorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem groupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem FeatureGroupNeedOneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem FeatureGroupRedundantToolStripMenuItem;
     }
 }
