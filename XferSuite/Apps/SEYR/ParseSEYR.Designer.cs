@@ -277,13 +277,12 @@
             this.groupToolStripMenuItem,
             this.FeatureResetToolStripMenuItem});
             this.FeatureMenuStrip.Name = "FeatureMenuStrip";
-            this.FeatureMenuStrip.ShowImageMargin = false;
-            this.FeatureMenuStrip.Size = new System.Drawing.Size(156, 92);
+            this.FeatureMenuStrip.Size = new System.Drawing.Size(108, 70);
             // 
             // FeatureEditToolStripMenuItem
             // 
             this.FeatureEditToolStripMenuItem.Name = "FeatureEditToolStripMenuItem";
-            this.FeatureEditToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.FeatureEditToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.FeatureEditToolStripMenuItem.Text = "Edit";
             this.FeatureEditToolStripMenuItem.Click += new System.EventHandler(this.FeatureEditToolStripMenuItem_Click);
             // 
@@ -293,27 +292,27 @@
             this.FeatureGroupNeedOneToolStripMenuItem,
             this.FeatureGroupRedundantToolStripMenuItem});
             this.groupToolStripMenuItem.Name = "groupToolStripMenuItem";
-            this.groupToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.groupToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.groupToolStripMenuItem.Text = "Group";
             // 
             // FeatureGroupNeedOneToolStripMenuItem
             // 
             this.FeatureGroupNeedOneToolStripMenuItem.Name = "FeatureGroupNeedOneToolStripMenuItem";
-            this.FeatureGroupNeedOneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.FeatureGroupNeedOneToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.FeatureGroupNeedOneToolStripMenuItem.Text = "Need One";
             this.FeatureGroupNeedOneToolStripMenuItem.Click += new System.EventHandler(this.FeatureGroupNeedOneToolStripMenuItem_Click);
             // 
             // FeatureGroupRedundantToolStripMenuItem
             // 
             this.FeatureGroupRedundantToolStripMenuItem.Name = "FeatureGroupRedundantToolStripMenuItem";
-            this.FeatureGroupRedundantToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.FeatureGroupRedundantToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.FeatureGroupRedundantToolStripMenuItem.Text = "Redundant";
             this.FeatureGroupRedundantToolStripMenuItem.Click += new System.EventHandler(this.FeatureGroupRedundantToolStripMenuItem_Click);
             // 
             // FeatureResetToolStripMenuItem
             // 
             this.FeatureResetToolStripMenuItem.Name = "FeatureResetToolStripMenuItem";
-            this.FeatureResetToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.FeatureResetToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.FeatureResetToolStripMenuItem.Text = "Reset";
             this.FeatureResetToolStripMenuItem.Click += new System.EventHandler(this.FeatureResetToolStripMenuItem_Click);
             // 
@@ -323,20 +322,19 @@
             this.CriteriaEditColorToolStripMenuItem,
             this.CriteriaResetToolStripMenuItem});
             this.CriteriaMenuStrip.Name = "CriteriaMenuStrip";
-            this.CriteriaMenuStrip.ShowImageMargin = false;
-            this.CriteriaMenuStrip.Size = new System.Drawing.Size(102, 48);
+            this.CriteriaMenuStrip.Size = new System.Drawing.Size(181, 70);
             // 
             // CriteriaEditColorToolStripMenuItem
             // 
             this.CriteriaEditColorToolStripMenuItem.Name = "CriteriaEditColorToolStripMenuItem";
-            this.CriteriaEditColorToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.CriteriaEditColorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.CriteriaEditColorToolStripMenuItem.Text = "Edit Color";
             this.CriteriaEditColorToolStripMenuItem.Click += new System.EventHandler(this.CriteriaEditColorToolStripMenuItem_Click);
             // 
             // CriteriaResetToolStripMenuItem
             // 
             this.CriteriaResetToolStripMenuItem.Name = "CriteriaResetToolStripMenuItem";
-            this.CriteriaResetToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.CriteriaResetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.CriteriaResetToolStripMenuItem.Text = "Reset";
             this.CriteriaResetToolStripMenuItem.Click += new System.EventHandler(this.CriteriaResetToolStripMenuItem_Click);
             // 

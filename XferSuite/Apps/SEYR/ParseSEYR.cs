@@ -266,12 +266,12 @@ namespace XferSuite.Apps.SEYR
         private void FeatureOLV_CellRightClick(object sender, BrightIdeasSoftware.CellRightClickEventArgs e)
         {
             FeatureEditToolStripMenuItem.Visible = FeatureOLV.SelectedObjects.Count == 1;
-            e.MenuStrip = FeatureMenuStrip;
+            if (FeatureOLV.SelectedObjects.Count > 0) e.MenuStrip = FeatureMenuStrip;
         }
 
         private void CriteriaOLV_CellRightClick(object sender, BrightIdeasSoftware.CellRightClickEventArgs e)
         {
-            e.MenuStrip = CriteriaMenuStrip;
+            if (CriteriaOLV.SelectedObjects.Count > 0) e.MenuStrip = CriteriaMenuStrip;
         }
 
         private void FeatureOLV_DoubleClick(object sender, EventArgs e)
