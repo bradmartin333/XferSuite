@@ -120,8 +120,9 @@ namespace XferSuite.Apps.SEYR
             Cursor = Cursors.WaitCursor;
             if (LoadingImages) return;
             LoadingImages = true;
-            string[] locations = Data.Where(d => Math.Abs(d.Score - x) <= 1 && d.FeatureName == Feature.Name).Select(e => e.Location()).ToArray();
-            DataEntry[] imageEntries = Data.Where(d => d.Feature.SaveImage && locations.Contains(d.Location())).ToArray();
+            string[] locations = Data.Where(d => Math.Abs(d.Score - x) <= 1 && d.FeatureName == Feature.Name).Select(e => e.Location()).Distinct().ToArray();
+            HashSet<string> locationsHashSet = new HashSet<string>(locations);
+            DataEntry[] imageEntries = Data.Where(d => d.Feature.SaveImage).Where(d => locationsHashSet.Contains(d.Location())).ToArray();
             if (imageEntries.Length > 0)
             {
                 CloseImageScroller();

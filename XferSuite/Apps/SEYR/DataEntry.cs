@@ -55,7 +55,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        public DataEntry(string data, bool swap)
+        public DataEntry(string data)
         {
             string[] cols = data.Split('\t');
             try
@@ -63,10 +63,10 @@ namespace XferSuite.Apps.SEYR
                 ImageNumber = int.Parse(cols[0]);
                 X = double.Parse(cols[1]);
                 Y = double.Parse(cols[2]);
-                RR = int.Parse(cols[swap ? 5 : 3]);
-                RC = int.Parse(cols[swap ? 6 : 4]);
-                R = int.Parse(cols[swap ? 3 : 5]);
-                C = int.Parse(cols[swap ? 4 : 6]);
+                RR = int.Parse(cols[3]);
+                RC = int.Parse(cols[4]);
+                R = int.Parse(cols[5]);
+                C = int.Parse(cols[6]);
                 SR = int.Parse(cols[7]);
                 SC = int.Parse(cols[8]);
                 TR = int.Parse(cols[9]);
@@ -75,7 +75,7 @@ namespace XferSuite.Apps.SEYR
                 Score = float.Parse(cols[12]);
                 State = bool.Parse(cols[13]);
                 ImageData = cols[14];
-                Raw = swap ? $"{ImageNumber}\t{X}\t{Y}\t{RR}\t{RC}\t{R}\t{C}\t{SR}\t{SC}\t{TR}\t{TC}\t{FeatureName}\t{Score}\t{State}\t{ImageData}" : data;
+                Raw = data;
                 Complete = true;
             }
             catch (Exception)

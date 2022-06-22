@@ -54,6 +54,7 @@
             this.CriteriaMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CriteriaEditColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CriteriaResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DataLoadingWorker = new System.ComponentModel.BackgroundWorker();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).BeginInit();
@@ -322,21 +323,25 @@
             this.CriteriaEditColorToolStripMenuItem,
             this.CriteriaResetToolStripMenuItem});
             this.CriteriaMenuStrip.Name = "CriteriaMenuStrip";
-            this.CriteriaMenuStrip.Size = new System.Drawing.Size(181, 70);
+            this.CriteriaMenuStrip.Size = new System.Drawing.Size(127, 48);
             // 
             // CriteriaEditColorToolStripMenuItem
             // 
             this.CriteriaEditColorToolStripMenuItem.Name = "CriteriaEditColorToolStripMenuItem";
-            this.CriteriaEditColorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CriteriaEditColorToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.CriteriaEditColorToolStripMenuItem.Text = "Edit Color";
             this.CriteriaEditColorToolStripMenuItem.Click += new System.EventHandler(this.CriteriaEditColorToolStripMenuItem_Click);
             // 
             // CriteriaResetToolStripMenuItem
             // 
             this.CriteriaResetToolStripMenuItem.Name = "CriteriaResetToolStripMenuItem";
-            this.CriteriaResetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CriteriaResetToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.CriteriaResetToolStripMenuItem.Text = "Reset";
             this.CriteriaResetToolStripMenuItem.Click += new System.EventHandler(this.CriteriaResetToolStripMenuItem_Click);
+            // 
+            // DataLoadingWorker
+            // 
+            this.DataLoadingWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DataLoadingWorker_DoWork);
             // 
             // ParseSEYR
             // 
@@ -348,7 +353,6 @@
             this.MinimumSize = new System.Drawing.Size(350, 450);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
-            this.Load += new System.EventHandler(this.ParseSEYR_Load);
             this.TLP.ResumeLayout(false);
             this.TLP.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).EndInit();
@@ -384,5 +388,6 @@
         private System.Windows.Forms.ToolStripMenuItem groupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FeatureGroupNeedOneToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FeatureGroupRedundantToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker DataLoadingWorker;
     }
 }

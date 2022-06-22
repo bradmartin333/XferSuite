@@ -92,7 +92,6 @@ namespace XferSuite.Apps.SEYR
         ]
         public Font YieldFont { get => _YieldFont; set => _YieldFont = value; }
 
-        private readonly bool ForceClose;
         private readonly string FileName;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
@@ -114,16 +113,10 @@ namespace XferSuite.Apps.SEYR
                 ExtractFile(ProjectPath, archive);
                 ExtractFile(ReportPath, archive);
             }
-            LoadProject();
-            if (!LoadData())
-            {
-                ForceClose = true;
-                return;
-            }
 
-            ValidateRegions();
-            RescoreAllData();
-            InitFeatureInfo();
+            ToggleInfo("Loading...", Color.Bisque, false);
+            LoadProject();
+            DataLoadingWorker.RunWorkerAsync();
 
             FeatureOLV.DoubleClick += FeatureOLV_DoubleClick;
             FeatureOLV.KeyDown += FeatureOLV_KeyDown;
@@ -134,6 +127,7 @@ namespace XferSuite.Apps.SEYR
             CriteriaOLV.SelectedBackColor = Color.White;
             CriteriaOLV.SelectedForeColor = Color.Magenta;
             FormClosing += ParseSEYR_FormClosing;
+            DataLoadingWorker.RunWorkerCompleted += DataLoadingWorker_RunWorkerCompleted;
         }
 
         private void ParseSEYR_FormClosing(object sender, FormClosingEventArgs e)
@@ -142,15 +136,11 @@ namespace XferSuite.Apps.SEYR
             File.Delete(ReportPath);
         }
 
-        private void ParseSEYR_Load(object sender, EventArgs e)
-        {
-            if (ForceClose) Close();
-        }
-
-        private void ToggleInfo(string info, Color color)
+        private void ToggleInfo(string info, Color color, bool enabled = true)
         {
             BtnPlot.Text = info;
             BtnPlot.BackColor = color;
+            TLP.Enabled = enabled;
             Application.DoEvents();
         }
 
@@ -184,24 +174,24 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private bool LoadData(bool swap = false)
+        private void DataLoadingWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             Data.Clear();
-            string[] lines = File.ReadAllLines(ReportPath);
-            DataEntry.Header = lines[0];
-            for (int i = 1; i < lines.Length; i++)
+            using (var sr = new StreamReader(ReportPath))
             {
-                DataEntry dataEntry = new DataEntry(lines[i], swap);
-                if (!dataEntry.Complete) break;
-                if (dataEntry.HasValidPosition()) Data.Add(dataEntry);
+                DataEntry.Header = sr.ReadLine();
+                while (sr.Peek() >= 0)
+                {
+                    string line = sr.ReadLine();
+                    DataEntry dataEntry = new DataEntry(line);
+                    if (!dataEntry.Complete) break;
+                    if (dataEntry.HasValidPosition()) Data.Add(dataEntry);
+                }
             }
+        }
 
-            if (Data.Count == 0)
-            {
-                MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
-                return false;
-            }
-
+        private void DataLoadingWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
             foreach (Feature feature in Project.Features)
             {
                 feature.Data = Data.Where(x => x.FeatureName == feature.Name).ToArray();
@@ -229,24 +219,16 @@ namespace XferSuite.Apps.SEYR
                 feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
             }
 
-            return true;
-        }
-
-        private void ValidateRegions()
-        {
-            int maxRR = Data.Select(x => x.RR).Max();
-            int maxR = Data.Select(x => x.R).Max();
-            if (maxR == 1 && maxRR > 1)
+            if (Data.Count == 0)
             {
-                DialogResult result = MessageBox.Show(
-                    "The RR/RC indices outrank the R/C indices, which will cause rendering issues. Would you like to swap RR with R and RC with C?",
-                    "Parse SEYR", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    LoadProject();
-                    LoadData(true);
-                }
+                MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
+                Close();
+                return;
             }
+
+            RescoreAllData();
+            InitFeatureInfo();
+            ToggleInfo("Plot", Color.LightBlue);
         }
 
         private void RescoreAllData()
