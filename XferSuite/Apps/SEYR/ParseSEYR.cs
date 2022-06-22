@@ -192,6 +192,7 @@ namespace XferSuite.Apps.SEYR
             for (int i = 1; i < lines.Length; i++)
             {
                 DataEntry dataEntry = new DataEntry(lines[i], swap);
+                if (!dataEntry.Complete) break;
                 if (dataEntry.HasValidPosition()) Data.Add(dataEntry);
             }
 
