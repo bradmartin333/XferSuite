@@ -99,6 +99,7 @@ namespace XferSuite.Apps.SEYR
         public static Project Project { get; set; } = null;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
         private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
+        private List<Criteria> PlottedCriteria { get; set; } = new List<Criteria>();
         private RegionBrowser RegionBrowser { get; set; } = null;
 
         public ParseSEYR(string path)
@@ -114,10 +115,6 @@ namespace XferSuite.Apps.SEYR
                 ExtractFile(ReportPath, archive);
             }
 
-            ToggleInfo("Loading...", Color.Bisque, false);
-            LoadProject();
-            DataLoadingWorker.RunWorkerAsync();
-
             FeatureOLV.DoubleClick += FeatureOLV_DoubleClick;
             FeatureOLV.KeyDown += FeatureOLV_KeyDown;
             FeatureOLV.CellRightClick += FeatureOLV_CellRightClick;
@@ -128,6 +125,14 @@ namespace XferSuite.Apps.SEYR
             CriteriaOLV.SelectedForeColor = Color.Magenta;
             FormClosing += ParseSEYR_FormClosing;
             DataLoadingWorker.RunWorkerCompleted += DataLoadingWorker_RunWorkerCompleted;
+            PlotWorker.RunWorkerCompleted += PlotWorker_RunWorkerCompleted;
+        }
+
+        private void ParseSEYR_Load(object sender, EventArgs e)
+        {
+            ToggleInfo("Loading...", Color.Bisque);
+            LoadProject();
+            DataLoadingWorker.RunWorkerAsync();
         }
 
         private void ParseSEYR_FormClosing(object sender, FormClosingEventArgs e)
@@ -136,11 +141,11 @@ namespace XferSuite.Apps.SEYR
             File.Delete(ReportPath);
         }
 
-        private void ToggleInfo(string info, Color color, bool enabled = true)
+        private void ToggleInfo(string info, Color color)
         {
             BtnPlot.Text = info;
             BtnPlot.BackColor = color;
-            TLP.Enabled = enabled;
+            TLP.Enabled = info == "Plot";
             Application.DoEvents();
         }
 
@@ -217,6 +222,7 @@ namespace XferSuite.Apps.SEYR
                 }
                 feature.PassThreshold = feature.PassThreshold == -10 ? (feature.MaxScore + feature.MinScore) / 2.0 : feature.PassThreshold;
                 feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
+                feature.Ignore = feature.Name.ToLower() == "img";
             }
 
             if (Data.Count == 0)
@@ -238,7 +244,7 @@ namespace XferSuite.Apps.SEYR
                 foreach (DataEntry entry in feature.Data)
                     entry.State = feature.GenerateState(entry.Score);
                 if (string.IsNullOrEmpty(feature.CriteriaString))
-                    feature.CriteriaString = System.Text.RegularExpressions.Regex.Replace(feature.Name, @"\d", "");
+                    feature.CriteriaString = MakeDefaultCriteriaString(feature.Name);
             }
         }
 
@@ -279,7 +285,7 @@ namespace XferSuite.Apps.SEYR
         private void FeatureResetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Feature feature in FeatureOLV.SelectedObjects)
-                feature.CriteriaString = System.Text.RegularExpressions.Regex.Replace(feature.Name, @"\d", "");
+                feature.CriteriaString = MakeDefaultCriteriaString(feature.Name);
             InitFeatureInfo();
         }
 
@@ -328,6 +334,8 @@ namespace XferSuite.Apps.SEYR
                 criteria.Add(criterion);
             return criteria;
         }
+
+        private string MakeDefaultCriteriaString(string input) => System.Text.RegularExpressions.Regex.Replace(input, @"\d", "").ToLower();
 
         #endregion
 
@@ -392,9 +400,8 @@ namespace XferSuite.Apps.SEYR
 
         #region Plotting
 
-        private void BtnPlot_Click(object sender, EventArgs e)
+        private void PlotWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            ToggleInfo("Loading...", Color.Bisque);
             if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
             if (Application.OpenForms.OfType<Inspection>().Any()) Application.OpenForms.OfType<Inspection>().First().Close();
 
@@ -434,9 +441,21 @@ namespace XferSuite.Apps.SEYR
 
             CriteriaOLV.Objects = criteria;
             CbxPassFail.Enabled = true;
-            ToggleInfo("Plot", Color.LightBlue);
+            PlottedCriteria = criteria;
+            
+        }
 
-            RegionBrowser = new RegionBrowser(Data, Sheets, criteria, CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _DefaultPlotSize);
+        private void PlotWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria,
+                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _DefaultPlotSize, Project);
+            ToggleInfo("Plot", Color.LightBlue);
+        }
+
+        private void BtnPlot_Click(object sender, EventArgs e)
+        {
+            ToggleInfo("Loading...", Color.Bisque);
+            PlotWorker.RunWorkerAsync();
         }
 
         private bool MakeSheets()

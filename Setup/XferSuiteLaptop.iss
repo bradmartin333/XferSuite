@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "XferSuite"
-#define MyAppVersion "3.16"
+#define MyAppVersion "3.22"
 #define MyAppPublisher "bradmartin333"
 #define MyAppURL "https://github.com/bradmartin333/XferSuite"
 #define MyAppExeName "XferSuite.exe"
@@ -36,33 +36,33 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\Accord.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\Accord.Video.DirectShow.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\Accord.Video.DirectShow.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\Accord.Video.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\Accord.Video.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\Accord.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\FSharp.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\FSharp.Core.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\MathNet.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ObjectListView.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ObjectListView.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.WindowsForms.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.WindowsForms.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\OxyPlot.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ScottPlot.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ScottPlot.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\ScottPlot.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\System.Drawing.Common.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\System.ValueTuple.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\System.ValueTuple.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferHelper.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferHelper.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferSuite.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Repos\XferSuite\XferSuite\bin\Release\XferSuite.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\Accord.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\Accord.Video.DirectShow.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\Accord.Video.DirectShow.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\Accord.Video.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\Accord.Video.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\Accord.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\FSharp.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\FSharp.Core.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\MathNet.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\ObjectListView.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\ObjectListView.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\OxyPlot.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\OxyPlot.WindowsForms.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\OxyPlot.WindowsForms.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\OxyPlot.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\ScottPlot.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\ScottPlot.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\ScottPlot.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\System.Drawing.Common.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\System.ValueTuple.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\System.ValueTuple.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\XferHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\XferHelper.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\XferHelper.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\XferSuite.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Repos\XferSuite\XferSuite\bin\x64\Release\XferSuite.pdb"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

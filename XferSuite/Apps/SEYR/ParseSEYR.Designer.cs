@@ -55,6 +55,7 @@
             this.CriteriaEditColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CriteriaResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DataLoadingWorker = new System.ComponentModel.BackgroundWorker();
+            this.PlotWorker = new System.ComponentModel.BackgroundWorker();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).BeginInit();
@@ -343,6 +344,10 @@
             // 
             this.DataLoadingWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DataLoadingWorker_DoWork);
             // 
+            // PlotWorker
+            // 
+            this.PlotWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.PlotWorker_DoWork);
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -353,6 +358,7 @@
             this.MinimumSize = new System.Drawing.Size(350, 450);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
+            this.Load += new System.EventHandler(this.ParseSEYR_Load);
             this.TLP.ResumeLayout(false);
             this.TLP.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).EndInit();
@@ -389,5 +395,6 @@
         private System.Windows.Forms.ToolStripMenuItem FeatureGroupNeedOneToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FeatureGroupRedundantToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker DataLoadingWorker;
+        private System.ComponentModel.BackgroundWorker PlotWorker;
     }
 }

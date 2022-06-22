@@ -20,9 +20,10 @@ namespace XferSuite.Apps.SEYR
         private bool LastPF = false;
         private readonly string FileName;
         private readonly ParseSEYR.Delimeter CycleFileDelimeter;
+        private readonly Project Project;
 
         public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, 
-            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, int defaultPlotSize)
+            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, int defaultPlotSize, Project project)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
@@ -36,6 +37,7 @@ namespace XferSuite.Apps.SEYR
             CycleFileDelimeter = delimeter;
             YieldFont = yieldFont;
             DefaultPlotSize = defaultPlotSize;
+            Project = project;
             SetupTLP(showPF);
             Show();
         }
@@ -142,8 +144,8 @@ namespace XferSuite.Apps.SEYR
 
         private void SetSize(Size imageSize, int rowRange, int colRange)
         {
-            double rangeX = imageSize.Width * colRange;
-            double rangeY = imageSize.Height * rowRange;
+            double rangeX = imageSize.Width * colRange * Project.PitchX;
+            double rangeY = imageSize.Height * rowRange * Project.PitchY;
             Size defaultSize = new Size(DefaultPlotSize, DefaultPlotSize);
             Size scaledSize = defaultSize;
             if (rangeX < rangeY)
