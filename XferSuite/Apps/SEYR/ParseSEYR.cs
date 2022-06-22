@@ -454,20 +454,7 @@ namespace XferSuite.Apps.SEYR
             CbxPassFail.Enabled = true;
             ToggleInfo("Plot", Color.LightBlue);
 
-            var dataX = Data.Select(x => x.X);
-            var dataY = Data.Select(y => y.Y);
-            double rangeX = dataX.Max() - dataX.Min();
-            double rangeY = dataY.Max() - dataY.Min();
-            Size defaultSize = new Size(_DefaultPlotSize, _DefaultPlotSize);
-            Size scaledSize = defaultSize;
-            if (rangeX < rangeY)
-                scaledSize = new Size((int)(defaultSize.Width * (rangeX / rangeY)), defaultSize.Height);
-            else if (rangeY < rangeX)
-                scaledSize = new Size(defaultSize.Width, (int)(defaultSize.Height * (rangeY / rangeX)));
-
-            RegionBrowser = new RegionBrowser(
-                Data, Sheets, criteria, CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont)
-            { Size = scaledSize };
+            RegionBrowser = new RegionBrowser(Data, Sheets, criteria, CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _DefaultPlotSize);
         }
 
         private bool MakeSheets()

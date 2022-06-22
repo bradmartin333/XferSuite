@@ -10,6 +10,7 @@ namespace XferSuite.Apps.SEYR
     public partial class RegionBrowser : Form
     {
         private static Font YieldFont;
+        private static int DefaultPlotSize;
         private readonly List<DataEntry> Data;
         private readonly List<DataSheet> Sheets;
         private readonly List<Criteria> Criteria;
@@ -20,7 +21,8 @@ namespace XferSuite.Apps.SEYR
         private readonly string FileName;
         private readonly ParseSEYR.Delimeter CycleFileDelimeter;
 
-        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont)
+        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, 
+            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, int defaultPlotSize)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
@@ -31,10 +33,11 @@ namespace XferSuite.Apps.SEYR
             FileName = fileName;
             Inspection = new Inspection(FileName);
             Text = FileName;
-            SetupTLP(showPF);
-            Show();
             CycleFileDelimeter = delimeter;
             YieldFont = yieldFont;
+            DefaultPlotSize = defaultPlotSize;
+            SetupTLP(showPF);
+            Show();
         }
 
         private void RegionBrowser_KeyDown(object sender, KeyEventArgs e)
@@ -86,6 +89,8 @@ namespace XferSuite.Apps.SEYR
             int rowIdx = 0;
             int colIdx = 0;
 
+            Size imageSize = Size.Empty;
+
             for (int i = colMin; i <= colMax; i++)
             {
                 TLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, wid)); // This column
@@ -106,6 +111,7 @@ namespace XferSuite.Apps.SEYR
                         PictureBox pictureBox = TLPPictureBox(sheet.ID);
                         PictureBoxes.Add(pictureBox);
                         pictureBox.BackgroundImage = bmpInfo.Item1;
+                        if (imageSize.IsEmpty) imageSize = bmpInfo.Item1.Size;
                         Point thisCell = new Point(i - colMin + 2, (-2 * (j - rowMin - rowRange)) - 2);
                         if (showPF) 
                             TLP.Controls.Add(TLPLabel($"┏   {bmpInfo.Item2}   ┓", true), thisCell.X, thisCell.Y);
@@ -130,6 +136,21 @@ namespace XferSuite.Apps.SEYR
             Label RClabel = TLPLabel("RC");
             TLP.Controls.Add(RClabel, 2, TLP.RowCount);
             TLP.SetColumnSpan(RClabel, colRange);
+
+            SetSize(imageSize, rowRange, colRange);
+        }
+
+        private void SetSize(Size imageSize, int rowRange, int colRange)
+        {
+            double rangeX = imageSize.Width * colRange;
+            double rangeY = imageSize.Height * rowRange;
+            Size defaultSize = new Size(DefaultPlotSize, DefaultPlotSize);
+            Size scaledSize = defaultSize;
+            if (rangeX < rangeY)
+                scaledSize = new Size((int)(defaultSize.Width * (rangeX / rangeY)), defaultSize.Height);
+            else if (rangeY < rangeX)
+                scaledSize = new Size(defaultSize.Width, (int)(defaultSize.Height * (rangeY / rangeX)));
+            Size = scaledSize;
         }
 
         private Label TLPLabel(string txt, bool percentage = false)
