@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegionBrowser));
             this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.OpenImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCopyImage = new System.Windows.Forms.ToolStripMenuItem();
             this.CopyEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CopySelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,8 +47,7 @@
             this.makeCycleFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MakeCycleFileAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MakeCycleFileSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.OpenEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.OpenSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.IgnoreSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,9 +59,10 @@
             this.ToolStripMenuItemCopyCSV,
             this.renderToolStripMenuItem,
             this.makeClickableToolStripMenuItem,
-            this.makeCycleFileToolStripMenuItem});
+            this.makeCycleFileToolStripMenuItem,
+            this.IgnoreSelectedRegionToolStripMenuItem});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(224, 158);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(224, 180);
             // 
             // OpenImageToolStripMenuItem
             // 
@@ -71,6 +73,20 @@
             this.OpenImageToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
             this.OpenImageToolStripMenuItem.Text = "Open Image";
             this.OpenImageToolStripMenuItem.Click += new System.EventHandler(this.OpenImageToolStripMenuItem_Click);
+            // 
+            // OpenEntireWindowToolStripMenuItem
+            // 
+            this.OpenEntireWindowToolStripMenuItem.Name = "OpenEntireWindowToolStripMenuItem";
+            this.OpenEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.OpenEntireWindowToolStripMenuItem.Text = "Entire Window";
+            this.OpenEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.OpenEntireWindowToolStripMenuItem_Click);
+            // 
+            // OpenSelectedRegionToolStripMenuItem
+            // 
+            this.OpenSelectedRegionToolStripMenuItem.Name = "OpenSelectedRegionToolStripMenuItem";
+            this.OpenSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.OpenSelectedRegionToolStripMenuItem.Text = "Selected Region";
+            this.OpenSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.OpenSelectedRegionToolStripMenuItem_Click);
             // 
             // ToolStripMenuItemCopyImage
             // 
@@ -84,14 +100,14 @@
             // CopyEntireWindowToolStripMenuItem
             // 
             this.CopyEntireWindowToolStripMenuItem.Name = "CopyEntireWindowToolStripMenuItem";
-            this.CopyEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CopyEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.CopyEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.CopyEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.CopyEntireWindowToolStripMenuItem_Click);
             // 
             // CopySelectedRegionToolStripMenuItem
             // 
             this.CopySelectedRegionToolStripMenuItem.Name = "CopySelectedRegionToolStripMenuItem";
-            this.CopySelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CopySelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.CopySelectedRegionToolStripMenuItem.Text = "Selected Region";
             this.CopySelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.CopySelectedRegionToolStripMenuItem_Click);
             // 
@@ -171,19 +187,12 @@
             this.MakeCycleFileSelectedToolStripMenuItem.Text = "Selected";
             this.MakeCycleFileSelectedToolStripMenuItem.Click += new System.EventHandler(this.MakeCycleFileSelectedToolStripMenuItem_Click);
             // 
-            // OpenEntireWindowToolStripMenuItem
+            // IgnoreSelectedRegionToolStripMenuItem
             // 
-            this.OpenEntireWindowToolStripMenuItem.Name = "OpenEntireWindowToolStripMenuItem";
-            this.OpenEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.OpenEntireWindowToolStripMenuItem.Text = "Entire Window";
-            this.OpenEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.OpenEntireWindowToolStripMenuItem_Click);
-            // 
-            // OpenSelectedRegionToolStripMenuItem
-            // 
-            this.OpenSelectedRegionToolStripMenuItem.Name = "OpenSelectedRegionToolStripMenuItem";
-            this.OpenSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.OpenSelectedRegionToolStripMenuItem.Text = "Selected Region";
-            this.OpenSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.OpenSelectedRegionToolStripMenuItem_Click);
+            this.IgnoreSelectedRegionToolStripMenuItem.Name = "IgnoreSelectedRegionToolStripMenuItem";
+            this.IgnoreSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.IgnoreSelectedRegionToolStripMenuItem.Text = "Ignore Selected Region";
+            this.IgnoreSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.IgnoreSelectedRegionToolStripMenuItem_Click);
             // 
             // RegionBrowser
             // 
@@ -219,5 +228,6 @@
         private System.Windows.Forms.ToolStripMenuItem MakeCycleFileSelectedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenEntireWindowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenSelectedRegionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem IgnoreSelectedRegionToolStripMenuItem;
     }
 }

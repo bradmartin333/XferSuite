@@ -11,6 +11,7 @@ namespace XferSuite.Apps.SEYR
         public Size StampGrid { get; set; }
         public Size ImageGrid { get; set; }
         public Size DataSize { get; set; }
+        public bool Ignore { get; set; } = false;
         private (DataEntry[], Criteria)[,] Data { get; set; }
         private Bitmap Render;
         private readonly bool FlipX = false;

@@ -13,7 +13,6 @@ namespace XferSuite.Apps.SEYR
         private readonly List<DataEntry> Data;
         private readonly List<DataSheet> Sheets;
         private readonly List<Criteria> Criteria;
-        private Size ArraySize;
         private TableLayoutPanel TLP;
         private List<PictureBox> PictureBoxes;
         private readonly Inspection Inspection;
@@ -61,35 +60,45 @@ namespace XferSuite.Apps.SEYR
 
             PictureBoxes = new List<PictureBox>();
 
-            var IDs = Sheets.Select(s => s.ID).ToList();
+            var IDs = Sheets.Where(x => !x.Ignore).Select(s => s.ID).ToList();
             var RRs = IDs.Select(id => id.Item1).Distinct();
             var RCs = IDs.Select(id => id.Item2).Distinct();
-            ArraySize = new Size(RRs.Max(), RCs.Max());
 
-            int hgt = (int)Math.Floor(100 / (double)RRs.Count());
-            int wid = (int)Math.Floor(100 / (double)RCs.Count());
+            int rowMin = RRs.Min();
+            int rowMax = RRs.Max();
+            int rowRange = rowMax - rowMin + 1;
+
+            int colMin = RCs.Min();
+            int colMax = RCs.Max();
+            int colRange = colMax - colMin + 1;
+
+            int hgt = (int)Math.Floor(100 / (double)rowRange);
+            int wid = (int)Math.Floor(100 / (double)colRange);
 
             TLP.ColumnStyles.Clear();
             TLP.RowStyles.Clear();
-            TLP.ColumnCount = ArraySize.Height + 2;
-            TLP.RowCount = (ArraySize.Width * 2) + 2;
+            TLP.ColumnCount = colRange + 2;
+            TLP.RowCount = (rowRange * 2) + 2;
 
-            TLP.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            TLP.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            TLP.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // "RC"
+            TLP.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // RC val
 
-            for (int i = 0; i < ArraySize.Height; i++)
+            int rowIdx = 0;
+            int colIdx = 0;
+
+            for (int i = colMin; i <= colMax; i++)
             {
-                TLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, wid));
-                for (int j = 0; j < ArraySize.Width; j++)
+                TLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, wid)); // This column
+                for (int j = rowMin; j <= rowMax; j++)
                 {
-                    if (i == 0)
+                    if (i == colMin) // New Row
                     {
                         TLP.RowStyles.Add(new RowStyle(SizeType.AutoSize));
                         TLP.RowStyles.Add(new RowStyle(SizeType.Percent, hgt));
-                        TLP.Controls.Add(TLPLabel((j + 1).ToString()), 1, TLP.RowCount - 2 - (j * 2) - 1);
+                        TLP.Controls.Add(TLPLabel(j.ToString()), 1, TLP.RowCount - 2 - ((j - rowMin) * 2) - 1);
                     }
                     
-                    DataSheet[] sheets = Sheets.Where(s => s.ID == (ArraySize.Width - j, i + 1)).ToArray();
+                    DataSheet[] sheets = Sheets.Where(s => s.ID == (j, i) && !s.Ignore).ToArray();
                     if (sheets.Any())
                     {
                         DataSheet sheet = sheets.First();
@@ -97,16 +106,21 @@ namespace XferSuite.Apps.SEYR
                         PictureBox pictureBox = TLPPictureBox(sheet.ID);
                         PictureBoxes.Add(pictureBox);
                         pictureBox.BackgroundImage = bmpInfo.Item1;
-                        if (showPF) TLP.Controls.Add(TLPLabel($"┏   {bmpInfo.Item2}   ┓", true), i + 2, j * 2);
-                        TLP.Controls.Add(pictureBox, i + 2, (j * 2) + 1);
-                    }  
+                        Point thisCell = new Point(i - colMin + 2, (-2 * (j - rowMin - rowRange)) - 2);
+                        if (showPF) 
+                            TLP.Controls.Add(TLPLabel($"┏   {bmpInfo.Item2}   ┓", true), thisCell.X, thisCell.Y);
+                        TLP.Controls.Add(pictureBox, thisCell.X, thisCell.Y + 1);
+                    }
+
+                    rowIdx++;
                 }
+                colIdx++;
             }
 
             TLP.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             TLP.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-            for (int i = 1; i < ArraySize.Height + 1; i++)
+            for (int i = 1; i < colRange + 1; i++)
                 TLP.Controls.Add(TLPLabel(i.ToString()), i + 1, TLP.RowCount - 1);
 
             Label RRlabel = TLPLabel("RR");
@@ -115,7 +129,7 @@ namespace XferSuite.Apps.SEYR
 
             Label RClabel = TLPLabel("RC");
             TLP.Controls.Add(RClabel, 2, TLP.RowCount);
-            TLP.SetColumnSpan(RClabel, ArraySize.Height);
+            TLP.SetColumnSpan(RClabel, colRange);
         }
 
         private Label TLPLabel(string txt, bool percentage = false)
@@ -251,6 +265,13 @@ namespace XferSuite.Apps.SEYR
         private void ClickableSelectedToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             GetActivePictureBox().BackgroundImage = GetActiveSheet().GetBitmap(LastPF).Item1;
+        }
+
+        private void IgnoreSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GetActiveSheet().Ignore = true;
+            Controls.Remove(TLP);
+            SetupTLP(LastPF);
         }
 
         private void HighightPoint(Point location, PictureBox pictureBox)
