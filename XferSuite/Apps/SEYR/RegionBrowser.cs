@@ -116,7 +116,7 @@ namespace XferSuite.Apps.SEYR
                         if (imageSize.IsEmpty) imageSize = bmpInfo.Item1.Size;
                         Point thisCell = new Point(i - colMin + 2, (-2 * (j - rowMin - rowRange)) - 2);
                         if (showPF) 
-                            TLP.Controls.Add(TLPLabel($"┏   {bmpInfo.Item2}   ┓", true), thisCell.X, thisCell.Y);
+                            TLP.Controls.Add(TLPLabel($"┏ {bmpInfo.Item2} ┓", true), thisCell.X, thisCell.Y);
                         TLP.Controls.Add(pictureBox, thisCell.X, thisCell.Y + 1);
                     }
 
