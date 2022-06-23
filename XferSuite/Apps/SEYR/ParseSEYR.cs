@@ -402,11 +402,6 @@ namespace XferSuite.Apps.SEYR
 
         private void PlotWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
-            if (Application.OpenForms.OfType<Inspection>().Any()) Application.OpenForms.OfType<Inspection>().First().Close();
-
-            if (!MakeSheets()) return;
-
             List<Criteria> matchCriteira = GetAllCriteria();
             List<Criteria> criteria = new List<Criteria>();
             foreach (DataSheet sheet in Sheets)
@@ -438,15 +433,13 @@ namespace XferSuite.Apps.SEYR
                     }
                 }
             }
-
-            CriteriaOLV.Objects = criteria;
-            CbxPassFail.Enabled = true;
             PlottedCriteria = criteria;
-            
         }
 
         private void PlotWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            CriteriaOLV.Objects = PlottedCriteria;
+            CbxPassFail.Enabled = true;
             RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria,
                 CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _DefaultPlotSize, Project);
             ToggleInfo("Plot", Color.LightBlue);
@@ -454,6 +447,9 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnPlot_Click(object sender, EventArgs e)
         {
+            if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
+            if (Application.OpenForms.OfType<Inspection>().Any()) Application.OpenForms.OfType<Inspection>().First().Close();
+            if (!MakeSheets()) return;
             ToggleInfo("Loading...", Color.Bisque);
             PlotWorker.RunWorkerAsync();
         }
