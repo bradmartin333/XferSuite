@@ -13,18 +13,24 @@ namespace XferSuite.Apps.SEYR
         private readonly string BaseFeatureName;
         private readonly int NumberImagesInScroller;
         private readonly double Score;
+        private readonly bool DrawFeatures;
+        private readonly float PenSize;
+        private readonly Rectangle FeatureRectangle;
 
         private int IDX = 0;
         private Bitmap[] Bitmaps;
         private string[] Info;
 
-        public ImageScroller(IEnumerable<IGrouping<string, DataEntry>> imageGroups, string name, string baseFeatureName, int numberImagesInScroller, double score)
+        public ImageScroller(IEnumerable<IGrouping<string, DataEntry>> imageGroups, string name, Feature feature, int numberImagesInScroller, double score, float penSize, bool drawFeatures)
         {
             InitializeComponent();
             ImageGroups = imageGroups;
-            BaseFeatureName = baseFeatureName;
+            BaseFeatureName = feature.Name;
             NumberImagesInScroller = numberImagesInScroller;
             Score = score;
+            DrawFeatures = drawFeatures;
+            PenSize = penSize;
+            FeatureRectangle = feature.GetGeometry();
 
             ComboFeatureSelector.Items.AddRange(ImageGroups.Select(x => x.Key).ToArray());
             if (ComboFeatureSelector.Items.Contains(LastSelectedFeatureName))
@@ -49,7 +55,11 @@ namespace XferSuite.Apps.SEYR
         {
             if (Bitmaps.Any() && Info.Any())
             {
-                PBX.BackgroundImage = Bitmaps[IDX];
+                Bitmap bitmap = Bitmaps[IDX];
+                if (DrawFeatures)
+                    using (Graphics g = Graphics.FromImage(bitmap))
+                        g.DrawRectangle(new Pen(Brushes.HotPink, PenSize), FeatureRectangle);
+                PBX.BackgroundImage = bitmap;
                 LblInfo.Text = Info[IDX];
                 IDX++;
                 if (IDX > Bitmaps.Length - 1) IDX = 0;

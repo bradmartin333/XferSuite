@@ -345,7 +345,7 @@ namespace XferSuite.Apps.SEYR
         {
             ToggleInfo("Loading...", Color.Bisque);
             Application.DoEvents();
-            using (PassFailUtility pf = new PassFailUtility(Data, feature, NumberImagesInScroller))
+            using (PassFailUtility pf = new PassFailUtility(Data, feature, NumberImagesInScroller, Project.ScaledPixelsPerMicron))
             {
                 ToggleInfo("Plot", Color.LightBlue);
                 Application.DoEvents();

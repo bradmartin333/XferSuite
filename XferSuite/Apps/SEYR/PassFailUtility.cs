@@ -16,6 +16,7 @@ namespace XferSuite.Apps.SEYR
         private readonly int NullExclude;
         private readonly int NullInclude;
         private readonly int NumberImagesInScroller = 25;
+        private readonly float PenSize;
         private readonly Feature Feature;
         private double[] HistData { get => Feature.HistData; }
         private bool FlipScore { get => Feature.FlipScore; }
@@ -24,7 +25,7 @@ namespace XferSuite.Apps.SEYR
         private bool HSpanChanging = false;
         private bool LoadingImages = false;
 
-        public PassFailUtility(List<DataEntry> data, Feature feature, int numberImagesInScroller)
+        public PassFailUtility(List<DataEntry> data, Feature feature, int numberImagesInScroller, float penSize)
         {
             InitializeComponent();
             Data = data;
@@ -34,6 +35,7 @@ namespace XferSuite.Apps.SEYR
             Limit = feature.Limit;
             TxtCriteriaString.Text = feature.CriteriaString;
             NumberImagesInScroller = numberImagesInScroller;
+            PenSize = penSize;
 
             (NullExclude, NullInclude) = feature.GetNullData();
             LabelNullExcludeCount.Text = NullExclude.ToString();
@@ -127,13 +129,16 @@ namespace XferSuite.Apps.SEYR
             LoadingImages = true;
             string[] locations = Data.Where(d => Math.Abs(d.Score - x) <= 1 && d.FeatureName == Feature.Name).Select(e => e.Location()).Distinct().ToArray();
             HashSet<string> locationsHashSet = new HashSet<string>(locations);
-            DataEntry[] imageEntries = Data.Where(d => d.Feature.SaveImage).Where(d => locationsHashSet.Contains(d.Location())).ToArray();
-            if (imageEntries.Length > 0)
+            DataEntry[] imageEntriesRaw = Data.Where(d => d.Feature.SaveImage).ToArray();
+            if (imageEntriesRaw.Length > 0)
             {
+                string[] imageFeatures = imageEntriesRaw.Select(d => d.Feature.CriteriaString).Distinct().ToArray();
+                bool drawFeatures = imageFeatures.Length == 1 && imageFeatures[0] == "img";
+                DataEntry[] imageEntries = imageEntriesRaw.Where(d => locationsHashSet.Contains(d.Location())).ToArray();
                 CloseImageScroller();
                 IEnumerable<IGrouping<string, DataEntry>> imageGroups = imageEntries.GroupBy(e => e.FeatureName);
                 string initialFeature = Feature.SaveImage ? Feature.Name : imageGroups.First().Key;
-                _ = new ImageScroller(imageGroups, initialFeature, Feature.Name, NumberImagesInScroller, x);
+                _ = new ImageScroller(imageGroups, initialFeature, Feature, NumberImagesInScroller, x, PenSize, drawFeatures);
             }
             Cursor = Cursors.Default;
             LoadingImages = false;
