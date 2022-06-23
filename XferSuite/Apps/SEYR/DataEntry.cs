@@ -43,6 +43,7 @@ namespace XferSuite.Apps.SEYR
                     {
                         for (int i = 0; i < rect.Width; i++)
                         {
+                            if (idx >= data.Length) break; // Hack for protection against corrupted files
                             byte val = data[idx];
                             bitmap.SetPixel(i, j, Color.FromArgb(val, val, val));
                             idx++;

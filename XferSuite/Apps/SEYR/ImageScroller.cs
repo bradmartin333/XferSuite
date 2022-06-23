@@ -30,7 +30,14 @@ namespace XferSuite.Apps.SEYR
             Score = score;
             DrawFeatures = drawFeatures;
             PenSize = penSize;
-            FeatureRectangle = feature.GetGeometry();
+            
+            if (DrawFeatures)
+            {
+                Rectangle thisFeatureRect = feature.GetGeometry();
+                Rectangle imgFeatureRext = imageGroups.First().ToArray().First().Feature.GetGeometry();
+                FeatureRectangle = new Rectangle(thisFeatureRect.X - imgFeatureRext.X, thisFeatureRect.Y - imgFeatureRext.Y,
+                    thisFeatureRect.Width, thisFeatureRect.Height);
+            }
 
             ComboFeatureSelector.Items.AddRange(ImageGroups.Select(x => x.Key).ToArray());
             if (ComboFeatureSelector.Items.Contains(LastSelectedFeatureName))
