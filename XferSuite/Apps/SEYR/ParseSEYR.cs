@@ -100,6 +100,14 @@ namespace XferSuite.Apps.SEYR
         ]
         public Font YieldFont { get => _YieldFont; set => _YieldFont = value; }
 
+        private bool _ShowYieldBrackets = false;
+        [
+            Category("User Parameters"),
+            Description("Looks like ┏ XX.X% ┓"),
+            DisplayName("Show Yield Brackets")
+        ]
+        public bool ShowYieldBrackets { get => _ShowYieldBrackets; set => _ShowYieldBrackets = value; }
+
         private readonly string FileName;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
         private readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
@@ -449,7 +457,7 @@ namespace XferSuite.Apps.SEYR
             CriteriaOLV.Objects = PlottedCriteria;
             CbxPassFail.Enabled = true;
             RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria,
-                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _DefaultPlotSize, Project);
+                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _ShowYieldBrackets, _DefaultPlotSize, Project);
             ToggleInfo("Plot", Color.LightBlue);
         }
 

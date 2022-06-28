@@ -10,6 +10,7 @@ namespace XferSuite.Apps.SEYR
     public partial class RegionBrowser : Form
     {
         private static Font YieldFont;
+        private static bool YieldBrackets;
         private static int DefaultPlotSize;
         private readonly List<DataEntry> Data;
         private readonly List<DataSheet> Sheets;
@@ -23,7 +24,7 @@ namespace XferSuite.Apps.SEYR
         private readonly Project Project;
 
         public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, 
-            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, int defaultPlotSize, Project project)
+            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, bool yieldBrackets, int defaultPlotSize, Project project)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
@@ -36,6 +37,7 @@ namespace XferSuite.Apps.SEYR
             Text = FileName;
             CycleFileDelimeter = delimeter;
             YieldFont = yieldFont;
+            YieldBrackets = yieldBrackets;
             DefaultPlotSize = defaultPlotSize;
             Project = project;
             SetupTLP(showPF);
@@ -116,7 +118,7 @@ namespace XferSuite.Apps.SEYR
                         if (imageSize.IsEmpty) imageSize = bmpInfo.Item1.Size;
                         Point thisCell = new Point(i - colMin + 2, (-2 * (j - rowMin - rowRange)) - 2);
                         if (showPF) 
-                            TLP.Controls.Add(TLPLabel($"┏ {bmpInfo.Item2} ┓", true), thisCell.X, thisCell.Y);
+                            TLP.Controls.Add(TLPLabel($"{(YieldBrackets ? "┏ " : "")}{bmpInfo.Item2}{(YieldBrackets ? " ┓" : "")}", true), thisCell.X, thisCell.Y);
                         TLP.Controls.Add(pictureBox, thisCell.X, thisCell.Y + 1);
                     }
 
