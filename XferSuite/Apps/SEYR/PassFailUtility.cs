@@ -136,9 +136,12 @@ namespace XferSuite.Apps.SEYR
                 bool drawFeatures = imageFeatures.Length == 1 && imageFeatures[0] == "img";
                 DataEntry[] imageEntries = imageEntriesRaw.Where(d => locationsHashSet.Contains(d.Location())).ToArray();
                 CloseImageScroller();
-                IEnumerable<IGrouping<string, DataEntry>> imageGroups = imageEntries.GroupBy(e => e.FeatureName);
-                string initialFeature = Feature.SaveImage ? Feature.Name : imageGroups.First().Key;
-                _ = new ImageScroller(imageGroups, initialFeature, Feature, NumberImagesInScroller, x, PenSize, drawFeatures);
+                if (imageEntries.Any())
+                {
+                    IEnumerable<IGrouping<string, DataEntry>> imageGroups = imageEntries.GroupBy(e => e.FeatureName);
+                    string initialFeature = Feature.SaveImage ? Feature.Name : imageGroups.First().Key;
+                    _ = new ImageScroller(imageGroups, initialFeature, Feature, NumberImagesInScroller, x, PenSize, drawFeatures);
+                }
             }
             Cursor = Cursors.Default;
             LoadingImages = false;

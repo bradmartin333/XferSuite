@@ -93,7 +93,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private Font _YieldFont = new Font("Segoe", 10.0f);
+        private Font _YieldFont = new Font("Segoe UI", 10.0f);
         [
             Category("User Parameters"),
             Description("Yield % font in the  plot window"),
@@ -242,7 +242,6 @@ namespace XferSuite.Apps.SEYR
                 {
                     NormalDistribution normal = new NormalDistribution();
                     normal.Fit(feature.HistData);
-                    System.Diagnostics.Debug.WriteLine($"{feature.Name}\t{normal}");
                     double wid = normal.StandardDeviation * 3;
                     feature.Limit = normal.Mean + ((feature.FlipScore ? -1 : 1) * wid);
                     feature.PassThreshold = normal.Mean - ((feature.FlipScore ? -1 : 1) * wid);

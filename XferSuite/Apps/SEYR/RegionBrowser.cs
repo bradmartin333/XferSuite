@@ -384,6 +384,7 @@ namespace XferSuite.Apps.SEYR
                 string lines = sheet.CreateCycleFile(ref idx);
                 ApplyDelimeter(ref lines);
                 rtb.Text += lines;
+                Clipboard.SetText(lines);
             }
             form.Show();
         }
