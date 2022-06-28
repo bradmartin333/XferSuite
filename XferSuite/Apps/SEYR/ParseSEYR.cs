@@ -478,7 +478,18 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnPlot_Click(object sender, EventArgs e)
         {
-            if (Application.OpenForms.OfType<RegionBrowser>().Any()) Application.OpenForms.OfType<RegionBrowser>().First().Close();
+            bool bringRBtoFront = ModifierKeys == Keys.Shift;
+            if (Application.OpenForms.OfType<RegionBrowser>().Any())
+            {
+                RegionBrowser rb = Application.OpenForms.OfType<RegionBrowser>().First();
+                if (bringRBtoFront)
+                {
+                    rb.BringToFront();
+                    return;
+                }
+                else
+                    rb.Close();
+            }
             if (Application.OpenForms.OfType<Inspection>().Any()) Application.OpenForms.OfType<Inspection>().First().Close();
             if (!MakeSheets()) return;
             ToggleInfo("Loading...", Color.Bisque);
