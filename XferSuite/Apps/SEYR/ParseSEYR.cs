@@ -56,6 +56,14 @@ namespace XferSuite.Apps.SEYR
         ]
         public bool FlipY { get => _FlipY; set => _FlipY = value; }
 
+        private bool _SplitB = false;
+        [
+            Category("User Parameters"),
+            Description("IRREVERSIBLY create more plotted regions. Need to close and reopen .SEYRUP file to reset."),
+            DisplayName("Split B Grid")
+        ]
+        public bool SplitB { get => _SplitB; set => _SplitB = value; }
+
         public enum Palletes { Category20, ColorblindFriendly, Microcharts, OneHalf }
         [
             Category("User Parameters"),
@@ -457,6 +465,19 @@ namespace XferSuite.Apps.SEYR
         private bool MakeSheets()
         {
             Sheets.Clear();
+
+            if (_SplitB)
+            {
+                Size bGrid = new Size(Data.Select(x => x.R).Max(), Data.Select(x => x.C).Max());
+                foreach (DataEntry item in Data)
+                {
+                    item.RR = ((item.RR - 1) * bGrid.Width) + item.R;
+                    item.RC = ((item.RC - 1) * bGrid.Height) + item.C;
+                    item.R = 1;
+                    item.C = 1;
+                }
+            }
+
             (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
             if (regions.Length == 0 || (regions.Length == 1 && regions[0] == (0, 0)))
             {
