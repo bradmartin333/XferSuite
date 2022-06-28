@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Accord.Statistics.Distributions.Univariate;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -236,8 +237,22 @@ namespace XferSuite.Apps.SEYR
                         System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
                     }
                 }
-                feature.PassThreshold = feature.PassThreshold == -10 ? (feature.MaxScore + feature.MinScore) / 2.0 : feature.PassThreshold;
-                feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
+
+                if (feature.HistData.Length > 5) // Need some data to match to normal distribution
+                {
+                    NormalDistribution normal = new NormalDistribution();
+                    normal.Fit(feature.HistData);
+                    System.Diagnostics.Debug.WriteLine($"{feature.Name}\t{normal}");
+                    double wid = normal.StandardDeviation * 3;
+                    feature.Limit = normal.Mean + ((feature.FlipScore ? -1 : 1) * wid);
+                    feature.PassThreshold = normal.Mean - ((feature.FlipScore ? -1 : 1) * wid);
+                }
+                else
+                {
+                    feature.PassThreshold = feature.PassThreshold == -10 ? (feature.MaxScore + feature.MinScore) / 2.0 : feature.PassThreshold;
+                    feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
+                }
+
                 feature.Ignore = feature.Name.ToLower() == "img";
             }
 
