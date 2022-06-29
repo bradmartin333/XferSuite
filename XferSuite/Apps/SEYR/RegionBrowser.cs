@@ -64,6 +64,7 @@ namespace XferSuite.Apps.SEYR
         private void SetupTLP(bool showPF)
         {
             LastPF = showPF;
+            MakeCycleFileToolStripMenuItem.Enabled = showPF;
             TLP = new TableLayoutPanel() { Dock = DockStyle.Fill, };
             Controls.Add(TLP);
 
@@ -370,26 +371,15 @@ namespace XferSuite.Apps.SEYR
 
         private void MakeCycleFile(List<DataSheet> sheets)
         {
-            Form form = new Form() 
-            { 
-                Text = "Cycle File", 
-                Size = new Size(800,500),
-            };
-            RichTextBox rtb = new RichTextBox()
-            {
-                Dock = DockStyle.Fill,
-                Text = MakeCycleFileHeader(),
-            };
-            form.Controls.Add(rtb);
             int idx = 0;
+            string file = string.Empty;
             foreach (DataSheet sheet in sheets)
             {
                 string lines = sheet.CreateCycleFile(ref idx);
                 ApplyDelimeter(ref lines);
-                rtb.Text += lines;
-                Clipboard.SetText(lines);
+                file += lines;
             }
-            form.Show();
+            _ = new CycleFileViewer(MakeCycleFileHeader(), file);
         }
 
         private string MakeCycleFileHeader()

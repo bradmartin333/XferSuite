@@ -201,6 +201,12 @@
       <DependentUpon>PrintLogParser.cs</DependentUpon>
     </Compile>
     <Compile Include="Apps\SEYR\Criteria.cs" />
+    <Compile Include="Apps\SEYR\CycleFileViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Apps\SEYR\CycleFileViewer.Designer.cs">
+      <DependentUpon>CycleFileViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Apps\SEYR\DataEntry.cs" />
     <Compile Include="Apps\SEYR\DataSheet.cs" />
     <Compile Include="Apps\SEYR\Feature.cs" />
@@ -310,6 +316,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AdvancedTools\uTP\PrintLogParser.resx">
       <DependentUpon>PrintLogParser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Apps\SEYR\CycleFileViewer.resx">
+      <DependentUpon>CycleFileViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\SEYR\ImageScroller.resx">
       <DependentUpon>ImageScroller.cs</DependentUpon>

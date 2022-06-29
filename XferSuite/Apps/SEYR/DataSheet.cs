@@ -16,6 +16,8 @@ namespace XferSuite.Apps.SEYR
         private Bitmap Render;
         private readonly bool FlipX = false;
         private readonly bool FlipY = false;
+        private const string PassColor = "ff008000";
+        private const string FailColor = "ffb22222";
 
         public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, bool flipX, bool flipY)
         {
@@ -46,16 +48,14 @@ namespace XferSuite.Apps.SEYR
                 {
                     if (Data[j, i].Item2 == null) continue;
                     total++;
-                    Color c = Data[j, i].Item2.Color;
+                    string c = Data[j, i].Item2.Color.Name;
                     if (showPF) 
                     {
-                        c = Data[j, i].Item2.Pass ? Color.Green : Color.Firebrick;
-                        if (c == Color.Green) 
+                        c = Data[j, i].Item2.Pass ? PassColor : FailColor;
+                        if (c == PassColor) 
                             pass++;
-                        bitmap.SetPixel(i, j, c);
-                    } 
-                    else
-                        bitmap.SetPixel(i, j, c);
+                    }
+                    bitmap.SetPixel(i, j, Color.FromArgb(int.Parse(c, System.Globalization.NumberStyles.HexNumber)));
                 }
             if (FlipX) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipX);
             if (FlipY) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
@@ -69,24 +69,33 @@ namespace XferSuite.Apps.SEYR
             StringBuilder sb = new StringBuilder();
             for (int j = 0; j < Render.Height; j++)
             {
-                bool hasData = showPF;
                 for (int i = 0; i < Render.Width; i++)
                 {
                     if (showPF)
-                        sb.Append($"{(Render.GetPixel(i, j).Name == "ff008000" ? "1" : "0")}\t");
+                    {
+                        switch (Render.GetPixel(i, j).Name)
+                        {
+                            case PassColor:
+                                sb.Append($"1\t");
+                                break;
+                            case FailColor:
+                                sb.Append($"0\t");
+                                break;
+                            default:
+                                sb.Append($" \t");
+                                break;
+                        }
+                    }
                     else
                     {
                         var criterion = criteria.Where(x => x.Color == Render.GetPixel(i, j));
                         if (criterion.Any())
-                        {
-                            hasData = true;
                             sb.Append($"{criterion.First().ID}\t");
-                        }
-                        else if (Data[i, j].Item1 != null)
-                            sb.Append($"0\t");
+                        else
+                            sb.Append($" \t");
                     }
                 }
-                if (hasData) sb.AppendLine();
+                sb.AppendLine();
             }
             return sb.ToString();
         }
@@ -94,11 +103,11 @@ namespace XferSuite.Apps.SEYR
         public string CreateCycleFile(ref int idx)
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < DataSize.Width; i++)
+            for (int j = 0; j < Render.Height; j++)
             {
-                for (int j = 0; j < DataSize.Height; j++)
+                for (int i = 0; i < Render.Width; i++)
                 {
-                    if (Data[j, i].Item1 != null && !Data[j, i].Item2.Pass)
+                    if (Render.GetPixel(i, j).Name == FailColor)
                     {
                         idx++;
                         sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true).Item1[0]));
