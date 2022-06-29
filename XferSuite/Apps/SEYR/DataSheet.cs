@@ -68,12 +68,8 @@ namespace XferSuite.Apps.SEYR
         {
             int[,] output = new int[DataSize.Width, DataSize.Height];
             for (int i = 0; i < DataSize.Width; i++)
-            {
-                for (int j = DataSize.Height - 1; j >= 0;  j--)
-                {
-                    output[i, j] = Data[i, j].Item2.ID;
-                }
-            }
+                for (int j = 0; j < DataSize.Height; j++)
+                    output[FlipX ? i : DataSize.Width - i - 1, FlipY ? j : DataSize.Height - j - 1] = Data[i, j].Item2.ID;
             return output;
         }
 
