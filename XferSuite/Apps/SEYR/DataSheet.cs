@@ -64,6 +64,19 @@ namespace XferSuite.Apps.SEYR
             return (bitmap, percentage);
         }
 
+        public int[,] GetData()
+        {
+            int[,] output = new int[DataSize.Width, DataSize.Height];
+            for (int i = 0; i < DataSize.Width; i++)
+            {
+                for (int j = DataSize.Height - 1; j >= 0;  j--)
+                {
+                    output[i, j] = Data[i, j].Item2.ID;
+                }
+            }
+            return output;
+        }
+
         public string GetCSV(List<Criteria> criteria, bool showPF)
         {
             StringBuilder sb = new StringBuilder();

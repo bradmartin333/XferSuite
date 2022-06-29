@@ -412,8 +412,7 @@ namespace XferSuite.Apps.SEYR
 
         #region Excel Export
 
-        private string outputFile = @"C:\Users\brad.martin\Desktop\output.xlsx";
-        private string bufferPath = $@"{Path.GetTempPath()}SEYRtoExcel";
+        private string outputFile = @"C:\Users\delta\Desktop\output.xlsx";
 
         private void ExportAllRegionsToExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -431,16 +430,11 @@ namespace XferSuite.Apps.SEYR
                 if (i != Sheets.Count - 1) ws = wb.Sheets.Add();
                 ws.Name = Sheets[i].ID.ToString();
 
-                string[] lines = Sheets[i].GetCSV(Criteria, LastPF).Split('\n');
-                for (int j = 0; j < lines.Length; j++)
-                {
-                    string[] cols = lines[j].Split('\t');
-                    for (int k = 0; k < cols.Length; k++)
-                    {
-                        Excel.Range currentRange = (Excel.Range)ws.Cells[j + 1, k+1];
-                        currentRange.Value = cols[k];
-                    }
-                }
+                int[,] data = Sheets[i].GetData();
+                var startCell = ws.Cells[1, 1];
+                var endCell = ws.Cells[data.GetLength(0), data.GetLength(1)];
+                var writeRange = ws.Range[startCell, endCell];
+                writeRange.Value = data;
 
                 if (!LastPF)
                 {
@@ -450,7 +444,7 @@ namespace XferSuite.Apps.SEYR
                         string[] footerCols = footerLines[j].Split('\t');
                         for (int k = 0; k < footerCols.Length; k++)
                         {
-                            Excel.Range currentRange = (Excel.Range)ws.Cells[lines.Length + 2 + j, k + 1];
+                            Excel.Range currentRange = (Excel.Range)ws.Cells[data.GetLength(1) + 2 + j, k + 1];
                             currentRange.Value = footerCols[k];
                         }
                     }
@@ -458,7 +452,7 @@ namespace XferSuite.Apps.SEYR
 
                 Excel.Range used = ws.UsedRange;
                 used.EntireColumn.ColumnWidth = 5;
-                used.Cells.HorizontalAlignment = HorizontalAlignment.Center;
+                used.Cells.HorizontalAlignment = HorizontalAlignment.Center; // not working?
                 Excel.ColorScale cs = used.Cells.FormatConditions.AddColorScale(3);
                 cs.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
                 cs.ColorScaleCriteria[1].FormatColor.Color = 0x001403FC;  // Blue
@@ -467,8 +461,6 @@ namespace XferSuite.Apps.SEYR
                 cs.ColorScaleCriteria[2].FormatColor.Color = 0x00FC0303;  // Red
                 cs.ColorScaleCriteria[3].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
                 cs.ColorScaleCriteria[3].FormatColor.Color = 0x0003FC1C;  // Green
-
-                if (i == Sheets.Count - 2) break;
             }
 
             if (File.Exists(outputFile)) File.Delete(outputFile);
