@@ -87,11 +87,18 @@ namespace XferSuite.Apps.SEYR
             IEnumerable<IGrouping<string, DataEntry>> group = ImageGroups.Where(x => x.Key == ComboFeatureSelector.Text);
             if (!group.Any()) return;
             var g = group.First();
-            int interval = (int)(g.ToArray().Length / (double)(NumberImagesInScroller - 1));
-            IEnumerable<DataEntry> data = g.Where((x, i) => i % interval == 0);
+            int len = g.ToArray().Length;
+            IEnumerable<DataEntry> data;
+            if (len <= NumberImagesInScroller)
+                data = group.First().Take(NumberImagesInScroller);
+            else
+            {
+                int interval = (int)(len / (double)(NumberImagesInScroller - 1));
+                data = g.Where((x, i) => i % interval == 0);
+            }
             Bitmaps = data.Select(x => x.Image).ToArray();
             Info = data.Select(x => x.Location()).ToArray();
-            Text = $"First {Bitmaps.Length} images with \"{BaseFeatureName}\" score = {Score}";
+            Text = $"{Bitmaps.Length} images with \"{BaseFeatureName}\" score = {Score}";
             IDX = 0;
         }
     }
