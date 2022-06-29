@@ -93,13 +93,21 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private Font _YieldFont = new Font("Segoe UI", 10.0f);
+        private Font _YieldFont = new Font("Segoe UI", 10.0f, FontStyle.Bold);
         [
             Category("User Parameters"),
-            Description("Yield % font in the  plot window"),
+            Description("Yield % font in the plot window"),
             DisplayName("Yield Font")
         ]
         public Font YieldFont { get => _YieldFont; set => _YieldFont = value; }
+
+        private Font _RCFont = new Font("Segoe UI", 12.0f);
+        [
+            Category("User Parameters"),
+            Description("Row and column font in the plot window"),
+            DisplayName("RC Font")
+        ]
+        public Font RCFont { get => _RCFont; set => _RCFont = value; }
 
         private bool _ShowYieldBrackets = false;
         [
@@ -471,7 +479,7 @@ namespace XferSuite.Apps.SEYR
             CriteriaOLV.Objects = PlottedCriteria;
             CbxPassFail.Enabled = true;
             RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria,
-                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _ShowYieldBrackets, _DefaultPlotSize, Project);
+                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _RCFont, _ShowYieldBrackets, _DefaultPlotSize, Project);
             ToggleInfo("Plot", Color.LightBlue);
         }
 

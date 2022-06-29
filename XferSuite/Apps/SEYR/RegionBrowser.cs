@@ -10,6 +10,7 @@ namespace XferSuite.Apps.SEYR
     public partial class RegionBrowser : Form
     {
         private static Font YieldFont;
+        private static Font RCFont;
         private static bool YieldBrackets;
         private static int DefaultPlotSize;
         private readonly List<DataEntry> Data;
@@ -24,7 +25,7 @@ namespace XferSuite.Apps.SEYR
         private readonly Project Project;
 
         public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, 
-            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, bool yieldBrackets, int defaultPlotSize, Project project)
+            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, Font rcFont, bool yieldBrackets, int defaultPlotSize, Project project)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
@@ -37,6 +38,7 @@ namespace XferSuite.Apps.SEYR
             Text = FileName;
             CycleFileDelimeter = delimeter;
             YieldFont = yieldFont;
+            RCFont = rcFont;
             YieldBrackets = yieldBrackets;
             DefaultPlotSize = defaultPlotSize;
             Project = project;
@@ -166,7 +168,7 @@ namespace XferSuite.Apps.SEYR
                 TextAlign = ContentAlignment.MiddleCenter,
                 AutoSize = true,
             };
-            if (percentage) lbl.Font = YieldFont;
+            lbl.Font = percentage ? YieldFont : RCFont;
             return lbl;
         }
 
