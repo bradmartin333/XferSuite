@@ -64,22 +64,27 @@ namespace XferSuite.Apps.SEYR
             return (bitmap, percentage);
         }
 
-        public string GetCSV(List<Criteria> criteria)
+        public string GetCSV(List<Criteria> criteria, bool showPF)
         {
             StringBuilder sb = new StringBuilder();
             for (int j = 0; j < Render.Height; j++)
             {
-                bool hasData = false;
+                bool hasData = showPF;
                 for (int i = 0; i < Render.Width; i++)
                 {
-                    var criterion = criteria.Where(x => x.Color == Render.GetPixel(i, j));
-                    if (criterion.Any())
+                    if (showPF)
+                        sb.Append($"{(Render.GetPixel(i, j).Name == "ff008000" ? "1" : "0")}\t");
+                    else
                     {
-                        hasData = true;
-                        sb.Append($"{criterion.First().ID}\t");
+                        var criterion = criteria.Where(x => x.Color == Render.GetPixel(i, j));
+                        if (criterion.Any())
+                        {
+                            hasData = true;
+                            sb.Append($"{criterion.First().ID}\t");
+                        }
+                        else if (Data[i, j].Item1 != null)
+                            sb.Append($"0\t");
                     }
-                    else if (Data[i,j].Item1 != null)
-                        sb.Append($"0\t");
                 }
                 if (hasData) sb.AppendLine();
             }

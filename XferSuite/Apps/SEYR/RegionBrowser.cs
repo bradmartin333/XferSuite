@@ -270,8 +270,9 @@ namespace XferSuite.Apps.SEYR
 
         private void ToolStripMenuCopyCSV_Click(object sender, EventArgs e)
         {
-            string data = GetActiveSheet().GetCSV(Criteria);
-            Clipboard.SetText(data + '\n' + string.Join("\n", Criteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray()));
+            string data = GetActiveSheet().GetCSV(Criteria, LastPF);
+            string footer = LastPF ? "\n" : ('\n' + string.Join("\n", Criteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray()));
+            Clipboard.SetText(data + footer);
         }
 
         private void RenderAllToolStripMenuItem_Click(object sender, EventArgs e)
