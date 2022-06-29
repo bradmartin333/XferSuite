@@ -412,25 +412,42 @@ namespace XferSuite.Apps.SEYR
 
         #region Excel Export
 
-        private string outputFile = @"C:\Users\delta\Desktop\output.xlsx";
-
-        private void ExportAllRegionsToExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenExcelSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            testExcel(outputFile);
+            OpenInExcel(new List<DataSheet>() { GetActiveSheet() });
         }
 
-        private void testExcel(string path)
+        private void OpenExcelEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            OpenInExcel(Sheets);
+        }
+
+        private void OpenInExcel(List<DataSheet> sheets)
+        {
+            string path = $@"{Path.GetTempPath()}SEYR_{Text}.xlsx";
+
+            if (File.Exists(path) && IsFileLocked(path))
+            {
+                MessageBox.Show($"{path} is in use.\nClose Excel and try again.", "SEYR Open in Excel");
+                return;
+            }
+
+            Cursor = Cursors.WaitCursor;
+            Application.DoEvents();
+
             Excel._Application xl = new Excel.Application();
             Excel._Workbook wb = xl.Workbooks.Add(Type.Missing);
             Excel._Worksheet ws = wb.Sheets[1];
-           
-            for (int i = Sheets.Count - 1; i >= 0; i--)
-            {
-                if (i != Sheets.Count - 1) ws = wb.Sheets.Add();
-                ws.Name = Sheets[i].ID.ToString();
 
-                int[,] data = Sheets[i].GetData();
+            DataSheet[] sheetsCopy = (DataSheet[])sheets.ToArray().Clone();
+            sheetsCopy = sheetsCopy.OrderBy(x => x.ID.Item1).ThenBy(x => x.ID.Item2).ToArray();
+
+            for (int i = sheetsCopy.Length - 1; i >= 0; i--)
+            {
+                if (i != sheetsCopy.Length - 1) ws = wb.Sheets.Add();
+                ws.Name = sheetsCopy[i].ID.ToString();
+
+                object[,] data = sheetsCopy[i].GetData(LastPF);
                 var startCell = ws.Cells[1, 1];
                 var endCell = ws.Cells[data.GetLength(0), data.GetLength(1)];
                 var writeRange = ws.Range[startCell, endCell];
@@ -438,21 +455,18 @@ namespace XferSuite.Apps.SEYR
 
                 if (!LastPF)
                 {
-                    string[] footerLines = Criteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray();
-                    for (int j = 0; j < footerLines.Length; j++)
+                    int[] IDs = Criteria.Select(x => x.ID).ToArray();
+                    string[] legendStrings = Criteria.Select(x => x.LegendEntry).ToArray();
+                    for (int j = 0; j < Criteria.Count; j++)
                     {
-                        string[] footerCols = footerLines[j].Split('\t');
-                        for (int k = 0; k < footerCols.Length; k++)
-                        {
-                            Excel.Range currentRange = (Excel.Range)ws.Cells[data.GetLength(1) + 2 + j, k + 1];
-                            currentRange.Value = footerCols[k];
-                        }
+                        ((Excel.Range)ws.Cells[data.GetLength(0) + 2 + j, 1]).Value = IDs[j];
+                        ((Excel.Range)ws.Cells[data.GetLength(0) + 2 + j, 2]).Value = legendStrings[j];
                     }
                 }
 
                 Excel.Range used = ws.UsedRange;
                 used.EntireColumn.ColumnWidth = 5;
-                used.Cells.HorizontalAlignment = HorizontalAlignment.Center; // not working?
+                used.Style.HorizontalAlignment = HorizontalAlignment.Center;
                 Excel.ColorScale cs = used.Cells.FormatConditions.AddColorScale(3);
                 cs.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
                 cs.ColorScaleCriteria[1].FormatColor.Color = 0x001403FC;  // Blue
@@ -463,11 +477,30 @@ namespace XferSuite.Apps.SEYR
                 cs.ColorScaleCriteria[3].FormatColor.Color = 0x0003FC1C;  // Green
             }
 
-            if (File.Exists(outputFile)) File.Delete(outputFile);
-            wb.SaveAs(outputFile, 51, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            if (File.Exists(path)) File.Delete(path);
+            wb.SaveAs(path, 51, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
             wb.Close(true, Type.Missing, Type.Missing);
-            Process.Start(outputFile);
             xl.Quit();
+
+            Cursor = Cursors.Default;
+            Process.Start(path);
+        }
+
+        protected virtual bool IsFileLocked(string path)
+        {
+            FileInfo file = new FileInfo(path);
+            try
+            {
+                using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    stream.Close();
+                }
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            return false;
         }
 
         #endregion

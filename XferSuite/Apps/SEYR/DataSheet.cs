@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -64,12 +65,13 @@ namespace XferSuite.Apps.SEYR
             return (bitmap, percentage);
         }
 
-        public int[,] GetData()
+        public object[,] GetData(bool showPF)
         {
-            int[,] output = new int[DataSize.Width, DataSize.Height];
+            object[,] output = new object[DataSize.Width, DataSize.Height];
             for (int i = 0; i < DataSize.Width; i++)
                 for (int j = 0; j < DataSize.Height; j++)
-                    output[FlipX ? i : DataSize.Width - i - 1, FlipY ? j : DataSize.Height - j - 1] = Data[i, j].Item2.ID;
+                    output[FlipY ? DataSize.Width - i - 1 : i, FlipX ? DataSize.Height - j - 1 : j] = ((Data[i, j].Item1 == null) ? 
+                        " " : (object)(showPF ? Convert.ToInt32(Data[i, j].Item2.Pass) : Data[i, j].Item2.ID));
             return output;
         }
 
