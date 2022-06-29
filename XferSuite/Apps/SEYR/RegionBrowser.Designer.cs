@@ -48,6 +48,7 @@
             this.MakeCycleFileAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MakeCycleFileSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.IgnoreSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExportAllRegionsToExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,9 +62,10 @@
             this.renderToolStripMenuItem,
             this.makeClickableToolStripMenuItem,
             this.MakeCycleFileToolStripMenuItem,
-            this.IgnoreSelectedRegionToolStripMenuItem});
+            this.IgnoreSelectedRegionToolStripMenuItem,
+            this.ExportAllRegionsToExcelToolStripMenuItem});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(224, 180);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(224, 202);
             // 
             // OpenImageToolStripMenuItem
             // 
@@ -131,14 +133,14 @@
             // RenderAllToolStripMenuItem
             // 
             this.RenderAllToolStripMenuItem.Name = "RenderAllToolStripMenuItem";
-            this.RenderAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.RenderAllToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.RenderAllToolStripMenuItem.Text = "Entire Window";
             this.RenderAllToolStripMenuItem.Click += new System.EventHandler(this.RenderAllToolStripMenuItem_Click);
             // 
             // RenderSelectedToolStripMenuItem
             // 
             this.RenderSelectedToolStripMenuItem.Name = "RenderSelectedToolStripMenuItem";
-            this.RenderSelectedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.RenderSelectedToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.RenderSelectedToolStripMenuItem.Text = "Selected Region";
             this.RenderSelectedToolStripMenuItem.Click += new System.EventHandler(this.RenderSelectedToolStripMenuItem_Click);
             // 
@@ -177,14 +179,14 @@
             // MakeCycleFileAllToolStripMenuItem
             // 
             this.MakeCycleFileAllToolStripMenuItem.Name = "MakeCycleFileAllToolStripMenuItem";
-            this.MakeCycleFileAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.MakeCycleFileAllToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.MakeCycleFileAllToolStripMenuItem.Text = "Entire Window";
             this.MakeCycleFileAllToolStripMenuItem.Click += new System.EventHandler(this.MakeCycleFileAllToolStripMenuItem_Click);
             // 
             // MakeCycleFileSelectedToolStripMenuItem
             // 
             this.MakeCycleFileSelectedToolStripMenuItem.Name = "MakeCycleFileSelectedToolStripMenuItem";
-            this.MakeCycleFileSelectedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.MakeCycleFileSelectedToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.MakeCycleFileSelectedToolStripMenuItem.Text = "Selected Region";
             this.MakeCycleFileSelectedToolStripMenuItem.Click += new System.EventHandler(this.MakeCycleFileSelectedToolStripMenuItem_Click);
             // 
@@ -194,6 +196,13 @@
             this.IgnoreSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
             this.IgnoreSelectedRegionToolStripMenuItem.Text = "Ignore Selected Region";
             this.IgnoreSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.IgnoreSelectedRegionToolStripMenuItem_Click);
+            // 
+            // ExportAllRegionsToExcelToolStripMenuItem
+            // 
+            this.ExportAllRegionsToExcelToolStripMenuItem.Name = "ExportAllRegionsToExcelToolStripMenuItem";
+            this.ExportAllRegionsToExcelToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.ExportAllRegionsToExcelToolStripMenuItem.Text = "Export All Regions to Excel";
+            this.ExportAllRegionsToExcelToolStripMenuItem.Click += new System.EventHandler(this.ExportAllRegionsToExcelToolStripMenuItem_Click);
             // 
             // RegionBrowser
             // 
@@ -230,5 +239,6 @@
         private System.Windows.Forms.ToolStripMenuItem OpenEntireWindowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenSelectedRegionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem IgnoreSelectedRegionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExportAllRegionsToExcelToolStripMenuItem;
     }
 }

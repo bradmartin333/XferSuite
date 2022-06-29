@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace XferSuite.Apps.SEYR
 {
@@ -402,6 +404,53 @@ namespace XferSuite.Apps.SEYR
                 case ParseSEYR.Delimeter.Comma:
                 default:
                     break;
+            }
+        }
+
+        #endregion
+
+        #region Excel Export
+
+        private FileInfo outputFile = new FileInfo(@"C:\Users\brad.martin\Desktop\output.xlsx");
+
+        private void ExportAllRegionsToExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            testExcel();
+        }
+
+        private void testExcel()
+        {
+            string path = $@"{Path.GetTempPath()}SEYRtoExcel.csv";
+            Excel.Application xl = new Excel.Application();
+
+            if (File.Exists(outputFile.FullName)) File.Delete(outputFile.FullName);
+
+            foreach (DataSheet sheet in Sheets)
+            {
+                using (StreamWriter sw = new StreamWriter(path, false))
+                {
+                    string[] lines = sheet.GetCSV(Criteria, LastPF).Replace('\t', ',').Split('\n');
+                    foreach (string line in lines)
+                        sw.Write(line);
+                    sw.Write(LastPF ? "\n" : ("\n\n" + string.Join("\n", Criteria.Select(x => $"{x.ID},{x.LegendEntry}").ToArray())));
+                }
+                Excel.Workbook wb = xl.Workbooks.Open(path);
+                Excel.Worksheet ws = (Excel.Worksheet)wb.Worksheets.get_Item(1);
+                Excel.Range used = ws.UsedRange;
+                used.EntireColumn.ColumnWidth = 5;
+                used.Cells.HorizontalAlignment = HorizontalAlignment.Center;
+                Excel.ColorScale cs = used.Cells.FormatConditions.AddColorScale(3);
+                cs.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
+                cs.ColorScaleCriteria[1].FormatColor.Color = 0x001403FC;  // Blue
+                cs.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValuePercentile;
+                cs.ColorScaleCriteria[2].Value = 50;
+                cs.ColorScaleCriteria[2].FormatColor.Color = 0x00FC0303;  // Red
+                cs.ColorScaleCriteria[3].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
+                cs.ColorScaleCriteria[3].FormatColor.Color = 0x0003FC1C;  // Green
+                wb.SaveAs(outputFile, 51);
+                wb.Close();
+                xl.Quit();
+                break;
             }
         }
 
