@@ -16,46 +16,91 @@ namespace XferSuite.Apps.SEYR
     {
         #region Globals and Setup
 
-        private int _NumberImagesInScroller = 25;
+        private int _NumberImagesInScroller = Properties.Settings.Default.SEYR_Num_Scroller_Images;
         [
             Category("User Parameters"),
             Description("The more images loaded when clicking a histogram bar, the longer the form will take to load"),
             DisplayName("# Images in Scroller")
         ]
-        public int NumberImagesInScroller { get => _NumberImagesInScroller; set => _NumberImagesInScroller = value; }
+        public int NumberImagesInScroller 
+        { 
+            get => _NumberImagesInScroller; 
+            set
+            {
+                _NumberImagesInScroller = value;
+                Properties.Settings.Default.SEYR_Num_Scroller_Images = _NumberImagesInScroller;
+                Properties.Settings.Default.Save();
+            }
+        }
 
-        private int _DefaultPlotSize = 800;
+        private int _PlotSize = Properties.Settings.Default.SEYR_Plot_Size;
         [
             Category("User Parameters"),
             Description("Autoscaling will be applied to this starting X by Y square dimension"),
             DisplayName("Default Plot Window Size")
         ]
-        public int DefaultPlotSize { get => _DefaultPlotSize; set => _DefaultPlotSize = value; }
+        public int PlotSize 
+        { 
+            get => _PlotSize; 
+            set
+            {
+                _PlotSize = value;
+                Properties.Settings.Default.SEYR_Plot_Size = _PlotSize;
+                Properties.Settings.Default.Save();
+            }
+        }
 
         public enum Delimeter { Tab, Comma, Space }
-        private Delimeter _CycleFileDelimeter = Delimeter.Tab;
+        private Delimeter _CycleFileDelimeter = (Delimeter)Properties.Settings.Default.SEYR_Delimeter;
         [
             Category("User Parameters"),
             Description("Tabs are excel friendly, but some tools take comma separated values"),
             DisplayName("Cycle File Delimeter")
         ]
-        public Delimeter CycleFileDelimeter { get => _CycleFileDelimeter; set => _CycleFileDelimeter = value; }
+        public Delimeter CycleFileDelimeter 
+        { 
+            get => _CycleFileDelimeter; 
+            set
+            {
+                _CycleFileDelimeter = value;
+                Properties.Settings.Default.SEYR_Delimeter = (int)_CycleFileDelimeter;
+                Properties.Settings.Default.Save();
+            }
+        }
 
-        private bool _FlipX = false;
+        private bool _FlipX = Properties.Settings.Default.SEYR_Flip_X;
         [
             Category("User Parameters"),
             Description("Invert the X direction in the plot window"),
             DisplayName("Flip X")
         ]
-        public bool FlipX { get => _FlipX; set => _FlipX = value; }
+        public bool FlipX 
+        { 
+            get => _FlipX; 
+            set
+            {
+                _FlipX = value;
+                Properties.Settings.Default.SEYR_Flip_X = _FlipX;
+                Properties.Settings.Default.Save();
+            } 
+        }
 
-        private bool _FlipY = true;
+        private bool _FlipY = Properties.Settings.Default.SEYR_Flip_Y;
         [
             Category("User Parameters"),
             Description("Invert the Y direction in the plot window"),
             DisplayName("Flip Y")
         ]
-        public bool FlipY { get => _FlipY; set => _FlipY = value; }
+        public bool FlipY
+        {
+            get => _FlipY;
+            set
+            {
+                _FlipY = value;
+                Properties.Settings.Default.SEYR_Flip_Y = _FlipY;
+                Properties.Settings.Default.Save();
+            }
+        }
 
         private bool _SplitB = false;
         [
@@ -93,29 +138,56 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private Font _YieldFont = new Font("Segoe UI", 10.0f, FontStyle.Bold);
+        private Font _YieldFont = Properties.Settings.Default.SEYR_Yield_Font;
         [
             Category("User Parameters"),
             Description("Yield % font in the plot window"),
             DisplayName("Yield Font")
         ]
-        public Font YieldFont { get => _YieldFont; set => _YieldFont = value; }
+        public Font YieldFont 
+        { 
+            get => _YieldFont; 
+            set
+            {
+                _YieldFont = value;
+                Properties.Settings.Default.SEYR_Yield_Font = _YieldFont;
+                Properties.Settings.Default.Save();
+            }
+        }
 
-        private Font _RCFont = new Font("Segoe UI", 12.0f);
+        private Font _RCFont = Properties.Settings.Default.SEYR_RC_Font;
         [
             Category("User Parameters"),
             Description("Row and column font in the plot window"),
             DisplayName("RC Font")
         ]
-        public Font RCFont { get => _RCFont; set => _RCFont = value; }
+        public Font RCFont 
+        { 
+            get => _RCFont; 
+            set
+            {
+                _RCFont = value;
+                Properties.Settings.Default.SEYR_RC_Font = _RCFont;
+                Properties.Settings.Default.Save();
+            }
+        }
 
-        private bool _ShowYieldBrackets = false;
+        private bool _ShowYieldBrackets = Properties.Settings.Default.SEYR_Show_Brackets;
         [
             Category("User Parameters"),
             Description("Looks like ┏ XX.X% ┓"),
             DisplayName("Show Yield Brackets")
         ]
-        public bool ShowYieldBrackets { get => _ShowYieldBrackets; set => _ShowYieldBrackets = value; }
+        public bool ShowYieldBrackets 
+        { 
+            get => _ShowYieldBrackets; 
+            set
+            {
+                _ShowYieldBrackets = value;
+                Properties.Settings.Default.SEYR_Show_Brackets = _ShowYieldBrackets;
+                Properties.Settings.Default.Save();
+            }
+        }
 
         private readonly string FileName;
         private readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
@@ -479,7 +551,7 @@ namespace XferSuite.Apps.SEYR
             CriteriaOLV.Objects = PlottedCriteria;
             CbxPassFail.Enabled = true;
             RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria,
-                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _RCFont, _ShowYieldBrackets, _DefaultPlotSize, Project);
+                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _RCFont, _ShowYieldBrackets, _PlotSize, Project);
             ToggleInfo("Plot", Color.LightBlue);
         }
 
