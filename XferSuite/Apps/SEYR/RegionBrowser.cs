@@ -26,6 +26,7 @@ namespace XferSuite.Apps.SEYR
         private readonly string FileName;
         private readonly ParseSEYR.Delimeter CycleFileDelimeter;
         private readonly Project Project;
+        private Size CellSize;
 
         public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, 
             bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, Font rcFont, bool yieldBrackets, int defaultPlotSize, Project project)
@@ -85,8 +86,9 @@ namespace XferSuite.Apps.SEYR
             int colMax = RCs.Max();
             int colRange = colMax - colMin + 1;
 
-            int hgt = (int)Math.Floor(100 / (double)rowRange);
-            int wid = (int)Math.Floor(100 / (double)colRange);
+            CellSize = new Size(
+                (int)Math.Floor(100 / (double)rowRange), 
+                (int)Math.Floor(100 / (double)colRange));
 
             TLP.ColumnStyles.Clear();
             TLP.RowStyles.Clear();
@@ -103,13 +105,13 @@ namespace XferSuite.Apps.SEYR
 
             for (int i = colMin; i <= colMax; i++)
             {
-                TLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, wid)); // This column
+                TLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, CellSize.Width)); // This column
                 for (int j = rowMin; j <= rowMax; j++)
                 {
                     if (i == colMin) // New Row
                     {
                         TLP.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                        TLP.RowStyles.Add(new RowStyle(SizeType.Percent, hgt));
+                        TLP.RowStyles.Add(new RowStyle(SizeType.Percent, CellSize.Height));
                         TLP.Controls.Add(TLPLabel(j.ToString()), 1, TLP.RowCount - 2 - ((j - rowMin) * 2) - 1);
                     }
                     
@@ -186,6 +188,8 @@ namespace XferSuite.Apps.SEYR
                 Tag = ID,
                 Cursor = Cursors.Cross,
             };
+            pictureBox.MouseLeave += PictureBox_MouseLeave;
+            pictureBox.MouseWheel += PictureBox_MouseWheel;
             pictureBox.MouseUp += PictureBox_MouseUp;
             return pictureBox;
         }
@@ -201,6 +205,27 @@ namespace XferSuite.Apps.SEYR
         private void OpenImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenImage();
+        }
+
+        private void PictureBox_MouseLeave(object sender, EventArgs e)
+        {
+            PictureBox pbx = ((PictureBox)sender);
+            TableLayoutPanelCellPosition tlpPosition = TLP.GetCellPosition(pbx);
+            TLP.ColumnStyles[tlpPosition.Column].Width = CellSize.Width;
+            TLP.RowStyles[tlpPosition.Row].Height = CellSize.Height;
+        }
+
+        private void PictureBox_MouseWheel(object sender, MouseEventArgs e)
+        {
+            PictureBox pbx = ((PictureBox)sender);
+            TableLayoutPanelCellPosition tlpPosition = TLP.GetCellPosition(pbx);
+            float newWid = (float)(TLP.ColumnStyles[tlpPosition.Column].Width + (e.Delta / TLP.ColumnCount));
+            float newHgt = (float)(TLP.RowStyles[tlpPosition.Row].Height + (e.Delta / TLP.RowCount));
+            if (newWid >= CellSize.Width && newHgt >= CellSize.Height)
+            {
+                TLP.ColumnStyles[tlpPosition.Column].Width = newWid;
+                TLP.RowStyles[tlpPosition.Row].Height = newHgt;
+            }
         }
 
         private void PictureBox_MouseUp(object sender, MouseEventArgs e)

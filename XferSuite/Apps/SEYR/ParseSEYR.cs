@@ -24,7 +24,7 @@ namespace XferSuite.Apps.SEYR
         ]
         public int NumberImagesInScroller { get => _NumberImagesInScroller; set => _NumberImagesInScroller = value; }
 
-        private int _DefaultPlotSize = 700;
+        private int _DefaultPlotSize = 800;
         [
             Category("User Parameters"),
             Description("Autoscaling will be applied to this starting X by Y square dimension"),
