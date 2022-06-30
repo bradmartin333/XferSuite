@@ -516,6 +516,7 @@ namespace XferSuite.Apps.SEYR
                     item.RC = ((item.RC - 1) * bGrid.Height) + item.C;
                     item.R = 1;
                     item.C = 1;
+                    item.UpdateRaw();
                 }
             }
 

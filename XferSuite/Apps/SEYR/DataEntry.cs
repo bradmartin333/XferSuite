@@ -85,6 +85,8 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        public void UpdateRaw() => Raw = $"{ImageNumber}\t{X}\t{Y}\t{RR}\t{RC}\t{R}\t{C}\t{SR}\t{SC}\t{TR}\t{TC}\t{FeatureName}\t{Score}\t{State}\t{ImageData}";
+
         public static byte[] Decompress(string compressed)
         {
             byte[] data = Convert.FromBase64String(compressed);
