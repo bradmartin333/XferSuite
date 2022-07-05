@@ -108,6 +108,7 @@ namespace XferSuite.Apps.SEYR
 
         private void Control_MouseUp(object sender, MouseEventArgs e)
         {
+            if (LoadingImages) return;
             ScottPlot.FormsPlot p = (ScottPlot.FormsPlot)sender;
             (double mX, _) = p.GetMouseCoordinates();
             int x = (int)Math.Floor(mX);

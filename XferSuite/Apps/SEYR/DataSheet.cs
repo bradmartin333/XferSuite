@@ -75,6 +75,15 @@ namespace XferSuite.Apps.SEYR
             return output;
         }
 
+        public DataEntry[] GetEntries()
+        {
+            List<DataEntry> entries = new List<DataEntry>();
+            for (int i = 0; i < DataSize.Width; i++)
+                for (int j = 0; j < DataSize.Height; j++)
+                    Data[i, j].Item1.ToList().ForEach(x => entries.Add(x));
+            return entries.ToArray();
+        }
+
         public string GetCSV(List<Criteria> criteria, bool showPF)
         {
             StringBuilder sb = new StringBuilder();

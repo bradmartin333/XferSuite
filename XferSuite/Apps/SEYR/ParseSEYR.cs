@@ -190,14 +190,15 @@ namespace XferSuite.Apps.SEYR
         }
 
         private readonly string FileName;
-        private readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
-        private readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
+        public readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
+        public readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
 
         public static Project Project { get; set; } = null;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
         private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
         private List<Criteria> PlottedCriteria { get; set; } = new List<Criteria>();
         private RegionBrowser RegionBrowser { get; set; } = null;
+        private int RMax, CMax, SRMax, SCMax, TRMax, TCMax = 0;
 
         public ParseSEYR(string path)
         {
@@ -227,7 +228,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseSEYR_Load(object sender, EventArgs e)
         {
-            ToggleInfo("Loading...", Color.Bisque);
+            ToggleInfo("Loading File...", Color.Bisque);
             LoadProject();
             DataLoadingWorker.RunWorkerAsync();
         }
@@ -279,6 +280,12 @@ namespace XferSuite.Apps.SEYR
         private void DataLoadingWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             Data.Clear();
+            RMax = 0;
+            CMax = 0;
+            SRMax = 0;
+            SCMax = 0;
+            TRMax = 0;
+            TCMax = 0;
             using (var sr = new StreamReader(ReportPath))
             {
                 DataEntry.Header = sr.ReadLine();
@@ -288,12 +295,19 @@ namespace XferSuite.Apps.SEYR
                     DataEntry dataEntry = new DataEntry(line);
                     if (!dataEntry.Complete) break;
                     if (dataEntry.HasValidPosition()) Data.Add(dataEntry);
+                    if (dataEntry.R > RMax) RMax = dataEntry.R;
+                    if (dataEntry.C > CMax) CMax = dataEntry.C;
+                    if (dataEntry.SR > SRMax) SRMax = dataEntry.SR;
+                    if (dataEntry.SC > SCMax) SCMax = dataEntry.SC;
+                    if (dataEntry.TR > TRMax) TRMax = dataEntry.TR;
+                    if (dataEntry.TC > TCMax) TCMax = dataEntry.TC;
                 }
             }
         }
 
         private void DataLoadingWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            ToggleInfo("Analyzing Distributions...", Color.Bisque);
             foreach (Feature feature in Project.Features)
             {
                 feature.Data = Data.Where(x => x.FeatureName == feature.Name).ToArray();
@@ -349,6 +363,7 @@ namespace XferSuite.Apps.SEYR
 
         private void RescoreAllData()
         {
+            ToggleInfo("Fitting Data...", Color.Bisque);
             foreach (Feature feature in Project.Features)
             {
                 foreach (DataEntry entry in feature.Data)
@@ -454,11 +469,9 @@ namespace XferSuite.Apps.SEYR
         private void EditFeature(Feature feature)
         {
             ToggleInfo("Loading...", Color.Bisque);
-            Application.DoEvents();
             using (PassFailUtility pf = new PassFailUtility(Data, feature, NumberImagesInScroller, Project.ScaledPixelsPerMicron))
             {
                 ToggleInfo("Plot", Color.LightBlue);
-                Application.DoEvents();
                 DialogResult result = pf.ShowDialog();
                 if (result == DialogResult.OK)
                 {
@@ -550,7 +563,7 @@ namespace XferSuite.Apps.SEYR
         {
             CriteriaOLV.Objects = PlottedCriteria;
             CbxPassFail.Enabled = true;
-            RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria,
+            RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria, this,
                 CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _RCFont, _ShowYieldBrackets, _PlotSize, Project);
             ToggleInfo("Plot", Color.LightBlue);
         }
@@ -570,6 +583,7 @@ namespace XferSuite.Apps.SEYR
                     rb.Close();
             }
             if (Application.OpenForms.OfType<Inspection>().Any()) Application.OpenForms.OfType<Inspection>().First().Close();
+            ToggleInfo("Making Sheets...", Color.Bisque);
             if (!MakeSheets()) return;
             ToggleInfo("Loading...", Color.Bisque);
             PlotWorker.RunWorkerAsync();
@@ -578,18 +592,20 @@ namespace XferSuite.Apps.SEYR
         private bool MakeSheets()
         {
             Sheets.Clear();
+            Size aGrid = new Size(RMax, CMax);
 
             if (_SplitB)
             {
-                Size bGrid = new Size(Data.Select(x => x.R).Max(), Data.Select(x => x.C).Max());
                 foreach (DataEntry item in Data)
                 {
-                    item.RR = ((item.RR - 1) * bGrid.Width) + item.R;
-                    item.RC = ((item.RC - 1) * bGrid.Height) + item.C;
+                    item.RR = ((item.RR - 1) * aGrid.Width) + item.R;
+                    item.RC = ((item.RC - 1) * aGrid.Height) + item.C;
                     item.R = 1;
                     item.C = 1;
                     item.UpdateRaw();
                 }
+                aGrid = new Size(1, 1);
+                _SplitB = false;
             }
 
             (int, int)[] regions = Data.Select(x => (x.RR, x.RC)).Distinct().OrderBy(x => x.RR).OrderBy(x => x.RC).ToArray();
@@ -601,9 +617,9 @@ namespace XferSuite.Apps.SEYR
             foreach ((int, int) region in regions)
                 Sheets.Add(new DataSheet(
                     region,
-                    new Size(Data.Select(x => x.R).Max(), Data.Select(x => x.C).Max()),
-                    new Size(Data.Select(x => x.SR).Max(), Data.Select(x => x.SC).Max()),
-                    new Size(Data.Select(x => x.TR).Max(), Data.Select(x => x.TC).Max()),
+                    aGrid,
+                    new Size(SRMax, SCMax),
+                    new Size(TRMax, TCMax),
                     _FlipX, _FlipY));
 
             return true;
@@ -629,18 +645,22 @@ namespace XferSuite.Apps.SEYR
             };
             if (svd.ShowDialog() == DialogResult.OK)
             {
-                if (File.Exists(svd.FileName)) File.Delete(svd.FileName);
-                ToggleInfo("Saving...", Color.Bisque);
-                Application.DoEvents();
                 SaveProject();
                 SaveReport();
-                using (ZipArchive zip = ZipFile.Open(svd.FileName, ZipArchiveMode.Create))
-                {
-                    zip.CreateEntryFromFile(ReportPath, Path.GetFileName(ReportPath));
-                    zip.CreateEntryFromFile(ProjectPath, Path.GetFileName(ProjectPath));
-                }
-                ToggleInfo("Plot", Color.LightBlue);
+                ExportSEYRUP(ReportPath, ProjectPath, svd.FileName);
             }
+        }
+
+        public void ExportSEYRUP(string reportPath, string projectPath, string exportPath)
+        {
+            ToggleInfo("Saving...", Color.Bisque);
+            if (File.Exists(exportPath)) File.Delete(exportPath);
+            using (ZipArchive zip = ZipFile.Open(exportPath, ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(reportPath, Path.GetFileName(ReportPath));
+                zip.CreateEntryFromFile(projectPath, Path.GetFileName(ProjectPath));
+            }
+            ToggleInfo("Plot", Color.LightBlue);
         }
 
         private void SaveProject()
