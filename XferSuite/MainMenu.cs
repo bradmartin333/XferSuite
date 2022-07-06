@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,7 +9,7 @@ namespace XferSuite
     public partial class MainMenu : Form
     {
         public static int MajorVersion = 3;
-        public static int MinorVerson = 30;
+        public static int MinorVerson = 31;
         public static readonly Settings Settings = new Settings();
 
         public MainMenu()
