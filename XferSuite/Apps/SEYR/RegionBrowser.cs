@@ -570,5 +570,10 @@ namespace XferSuite.Apps.SEYR
         }
 
         #endregion
+
+        private void ExportSelectedCompositeImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GetActiveSheet().MakeComposite().Save(@"C:\Users\brad.martin\Desktop\test.png");
+        }
     }
 }

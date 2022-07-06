@@ -18,8 +18,8 @@ namespace XferSuite.Apps.SEYR
         private readonly int SigFigs;
         private readonly bool FlipX = false;
         private readonly bool FlipY = false;
-        private const string PassColor = "ff008000";
-        private const string FailColor = "ffb22222";
+        private readonly Color PassColor = Color.LawnGreen;
+        private readonly Color FailColor = Color.Firebrick;
 
         public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, int sigFigs, bool flipX, bool flipY)
         {
@@ -51,20 +51,58 @@ namespace XferSuite.Apps.SEYR
                 {
                     if (Data[j, i].Item2 == null) continue;
                     total++;
-                    string c = Data[j, i].Item2.Color.Name;
+                    Color c = Data[j, i].Item2.Color;
                     if (showPF) 
                     {
                         c = Data[j, i].Item2.Pass ? PassColor : FailColor;
                         if (c == PassColor) 
                             pass++;
                     }
-                    bitmap.SetPixel(i, j, Color.FromArgb(int.Parse(c, System.Globalization.NumberStyles.HexNumber)));
+                    bitmap.SetPixel(i, j, c);
                 }
             if (FlipX) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipX);
             if (FlipY) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             Render = bitmap;
             string percentage = $"{Math.Round(pass / total, SigFigs) * 100}%";
             return (bitmap, percentage);
+        }
+
+        public Bitmap MakeComposite()
+        {
+            Feature[] features = ParseSEYR.Project.Features.Where(x => x.SaveImage).ToArray();
+            if (features.Count() == 1)
+            {
+                Feature feature = features[0];
+                DataEntry[] entries = Data[0, 0].Item1.Where(x => x.FeatureName == feature.Name).ToArray();
+                if (entries.Any())
+                {
+                    DataEntry entry = entries[0];
+                    Size size = entry.Image.Size;
+                    Bitmap bitmap = new Bitmap(DataSize.Height * size.Width, DataSize.Width * size.Height);
+                    for (int i = 0; i < DataSize.Height; i++)
+                        for (int j = 0; j < DataSize.Width; j++)
+                            DrawTile(i, j, feature.Name, ref bitmap);          
+                    return bitmap;
+                }
+                else
+                    return new Bitmap(1, 1);
+            }
+            else
+                return new Bitmap(1, 1);
+        }
+
+        private void DrawTile(int i, int j, string name, ref Bitmap bmp)
+        {
+            if (Data[j, i].Item2 != null)
+            {
+                Bitmap tile = Data[j, i].Item1.Where(x => x.FeatureName == name).First().Image;
+                int xLocation = i * tile.Width;
+                if (FlipX) xLocation = bmp.Width - xLocation;
+                int yLocation = j * tile.Height;
+                if (FlipY) yLocation = bmp.Height - yLocation;
+                using (Graphics g = Graphics.FromImage(bmp))
+                    g.DrawImage(tile, new Rectangle(xLocation, yLocation, tile.Width, tile.Height));
+            }  
         }
 
         public object[,] GetData(bool showPF)
@@ -95,18 +133,13 @@ namespace XferSuite.Apps.SEYR
                 {
                     if (showPF)
                     {
-                        switch (Render.GetPixel(i, j).Name)
-                        {
-                            case PassColor:
-                                sb.Append($"1\t");
-                                break;
-                            case FailColor:
-                                sb.Append($"0\t");
-                                break;
-                            default:
-                                sb.Append($" \t");
-                                break;
-                        }
+                        Color c = Render.GetPixel(i, j);
+                        if (c == PassColor)
+                            sb.Append($"1\t");
+                        else if (c == FailColor)
+                            sb.Append($"0\t");
+                        else
+                            sb.Append($" \t");
                     }
                     else
                     {
@@ -129,7 +162,7 @@ namespace XferSuite.Apps.SEYR
             {
                 for (int i = 0; i < Render.Width; i++)
                 {
-                    if (Render.GetPixel(i, j).Name == FailColor)
+                    if (Render.GetPixel(i, j) == FailColor)
                     {
                         idx++;
                         sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true).Item1[0]));
