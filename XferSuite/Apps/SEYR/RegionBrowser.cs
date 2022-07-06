@@ -533,17 +533,18 @@ namespace XferSuite.Apps.SEYR
         #endregion
 
         #region SEYRUP Export
+
         private void ExportSEYRUPSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExporSEYRUP(new List<DataSheet>() { GetActiveSheet() });
+            ExportSEYRUP(new List<DataSheet>() { GetActiveSheet() });
         }
 
         private void ExportSEYRUPEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExporSEYRUP(Sheets);
+            ExportSEYRUP(Sheets);
         }
 
-        private void ExporSEYRUP(List<DataSheet> sheets)
+        private void ExportSEYRUP(List<DataSheet> sheets)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog
             {
@@ -571,9 +572,48 @@ namespace XferSuite.Apps.SEYR
 
         #endregion
 
-        private void ExportSelectedCompositeImageToolStripMenuItem_Click(object sender, EventArgs e)
+        #region Export Composite
+
+        private void ExportCompositeSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GetActiveSheet().MakeComposite().Save(@"C:\Users\brad.martin\Desktop\test.png");
+            ExportComposite(new List<DataSheet>() { GetActiveSheet() });
         }
+
+        private void ExportCompositeEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportComposite(Sheets);
+        }
+
+        private void ExportComposite(List<DataSheet> sheets)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog
+            {
+                Description = "Choose a directory for the composite images to be exported to",
+                ShowNewFolderButton = true,
+                SelectedPath = ParseSEYR.ActiveDirectory,
+            };
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                Size emptySize = new Size(1, 1);
+                string failMsg = string.Empty;
+                for (int i = 0; i < sheets.Count; i++)
+                {
+                    ParseSEYR.ToggleInfo($"Exporting images {i + 1}/{sheets.Count} ...", Color.Bisque);
+                    Bitmap bmp = sheets[i].MakeComposite();
+                    if (bmp.Size == emptySize)
+                        failMsg += $"{sheets[i].ID}\n";
+                    else
+                        bmp.Save(fbd.SelectedPath + $@"\{sheets[i].ID}.png");
+                }
+                ParseSEYR.ToggleInfo("Plot", Color.LightBlue);
+                if (!string.IsNullOrEmpty(failMsg))
+                {
+                    failMsg = "These regions could not be exported:\n" + failMsg;
+                    MessageBox.Show(failMsg, "SEYR Export Composite");
+                }
+            }
+        }
+
+        #endregion
     }
 }
