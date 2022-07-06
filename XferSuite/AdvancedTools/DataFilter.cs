@@ -322,6 +322,8 @@ namespace XferSuite.AdvancedTools
             List<(int, string[])> data = DataSubset.Count == 0 ? new List<(int, string[])>(Data) : DataSubset;
             try
             {
+                bool any = vals[0] == "ANY";
+
                 string rep = string.Empty;
                 if (vals[1] != "NULL") rep = vals[1];
 
@@ -368,7 +370,12 @@ namespace XferSuite.AdvancedTools
                         }
                         else
                         {
-                            if (row.Item2[colNum].Contains(vals[0]))
+                            if (any)
+                            {
+                                row.Item2[colNum] = rep;
+                                num++;
+                            }
+                            else if (row.Item2[colNum].Contains(vals[0]))
                             {
                                 row.Item2[colNum] = row.Item2[colNum].Replace(vals[0], rep);
                                 num++;

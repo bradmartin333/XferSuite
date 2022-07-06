@@ -16,7 +16,7 @@ namespace XferSuite
         public MainMenu()
         {
             InitializeComponent();
-            Activated += Form_Activated;
+            Activated += Form_Activated; // Functions to deselect active form
             Text = string.Format("XferSuite v{0}.{1}", MajorVersion, MinorVerson);
             foreach (Button b in tableLayoutPanel.Controls.OfType<Button>())
             {
@@ -82,7 +82,7 @@ namespace XferSuite
                 case 2:
                     using (new Utility.HourGlass())
                     {
-                        form = new Apps.SEYR.ParseSEYR(path, _AutomaticRescoreSEYR);
+                        form = new Apps.SEYR.ParseSEYR(path);
                     }
                     break;
                 case 3:
@@ -184,14 +184,5 @@ namespace XferSuite
         {
             Settings.CheckForUpdates();
         }
-
-        private bool _AutomaticRescoreSEYR = true;
-        [
-            Category("User Parameters"),
-            Description("Upon opening a SEYRUP file, the scores are usually fitted automatically. " +
-            "Disabling this allows for the raw/exported values to be preserved."),
-            DisplayName("Automatic SEYR Rescoring")
-        ]
-        public bool AutomaticRescoreSEYR { get => _AutomaticRescoreSEYR; set => _AutomaticRescoreSEYR = value; }
     }
 }
