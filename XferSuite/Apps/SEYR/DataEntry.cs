@@ -77,7 +77,7 @@ namespace XferSuite.Apps.SEYR
                 State = bool.Parse(cols[13]);
                 ImageData = cols[14];
                 Raw = data;
-                Complete = true;
+                Complete = RR != 0 && RC != 0 && R != 0 && C != 0 && TR != 0 && TC != 0;
             }
             catch (Exception)
             {
@@ -85,7 +85,19 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        public void UpdateRaw() => Raw = $"{ImageNumber}\t{X}\t{Y}\t{RR}\t{RC}\t{R}\t{C}\t{SR}\t{SC}\t{TR}\t{TC}\t{FeatureName}\t{Score}\t{State}\t{ImageData}";
+        public int GetDimension(int i)
+        {
+            switch (i)
+            {
+                case 0: return R;
+                case 1: return C;
+                case 2: return SR;
+                case 3: return SC;
+                case 4: return TR;
+                case 5: return TC;
+                default: return 0;
+            }
+        }
 
         public static byte[] Decompress(string compressed)
         {
@@ -103,14 +115,7 @@ namespace XferSuite.Apps.SEYR
 
         public override string ToString() => $"({FeatureName} {Score})";
 
-        public bool HasValidPosition()
-        {
-            return RR != 0 && RC != 0 && R != 0 && C != 0 && TR != 0 && TC != 0;
-        }
+        public void UpdateRaw() => Raw = $"{ImageNumber}\t{X}\t{Y}\t{RR}\t{RC}\t{R}\t{C}\t{SR}\t{SC}\t{TR}\t{TC}\t{FeatureName}\t{Score}\t{State}\t{ImageData}";
 
-        public bool ImageMatch(DataEntry d)
-        {
-            return d.RR == RR && d.RC == RC && d.R == R && d.C == C && d.SR == SR && d.SC == SC && d.TR == TR && d.TC == TC;
-        }
     }
 }

@@ -14,7 +14,7 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class ParseSEYR : Form
     {
-        #region Globals and Setup
+        #region User Parameters
 
         private int _NumberImagesInScroller = Properties.Settings.Default.SEYR_Num_Scroller_Images;
         [
@@ -189,6 +189,10 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        #endregion
+
+        #region  Globals and Setup
+
         private readonly string FileName;
         public readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
         public readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
@@ -198,7 +202,7 @@ namespace XferSuite.Apps.SEYR
         private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
         private List<Criteria> PlottedCriteria { get; set; } = new List<Criteria>();
         private RegionBrowser RegionBrowser { get; set; } = null;
-        private int RMax, CMax, SRMax, SCMax, TRMax, TCMax = 0;
+        private int[] GridDims = new int[6]; // RMax, CMax, SRMax, SCMax, TRMax, TCMax
 
         public ParseSEYR(string path)
         {
@@ -280,12 +284,7 @@ namespace XferSuite.Apps.SEYR
         private void DataLoadingWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             Data.Clear();
-            RMax = 0;
-            CMax = 0;
-            SRMax = 0;
-            SCMax = 0;
-            TRMax = 0;
-            TCMax = 0;
+            GridDims = new int[6];
             using (var sr = new StreamReader(ReportPath))
             {
                 DataEntry.Header = sr.ReadLine();
@@ -294,23 +293,34 @@ namespace XferSuite.Apps.SEYR
                     string line = sr.ReadLine();
                     DataEntry dataEntry = new DataEntry(line);
                     if (!dataEntry.Complete) break;
-                    if (dataEntry.HasValidPosition()) Data.Add(dataEntry);
-                    if (dataEntry.R > RMax) RMax = dataEntry.R;
-                    if (dataEntry.C > CMax) CMax = dataEntry.C;
-                    if (dataEntry.SR > SRMax) SRMax = dataEntry.SR;
-                    if (dataEntry.SC > SCMax) SCMax = dataEntry.SC;
-                    if (dataEntry.TR > TRMax) TRMax = dataEntry.TR;
-                    if (dataEntry.TC > TCMax) TCMax = dataEntry.TC;
+                    Data.Add(dataEntry);
+
+                    // For sizing data sheets
+                    for (int i = 0; i < GridDims.Length; i++)
+                    {
+                        int dim = dataEntry.GetDimension(i);
+                        if (dim > GridDims[i]) GridDims[i] = dim;
+                    }
                 }
             }
         }
 
         private void DataLoadingWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            ToggleInfo("Analyzing Distributions...", Color.Bisque);
-            foreach (Feature feature in Project.Features)
+            if (Data.Count == 0)
             {
-                feature.Data = Data.Where(x => x.FeatureName == feature.Name).ToArray();
+                MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
+                Close();
+                return;
+            }
+
+            ToggleInfo("Analyzing Distributions...", Color.Bisque);
+
+            IEnumerable<IGrouping<string, DataEntry>> groups = Data.GroupBy(x => x.FeatureName);
+            foreach (IGrouping<string, DataEntry> group in groups)
+            {
+                Feature feature = Project.Features.Where(x => x.Name == group.Key).First();
+                feature.Data = group.ToArray();
                 feature.HistData = feature.Data.Select(x => (double)x.Score).Where(x => x > 0).ToArray();
                 if (feature.HistData.Length == 0)
                 {
@@ -349,16 +359,8 @@ namespace XferSuite.Apps.SEYR
                 feature.Ignore = feature.Name.ToLower() == "img";
             }
 
-            if (Data.Count == 0)
-            {
-                MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
-                Close();
-                return;
-            }
-
             RescoreAllData();
             InitFeatureInfo();
-            ToggleInfo("Plot", Color.LightBlue);
         }
 
         private void RescoreAllData()
@@ -441,6 +443,7 @@ namespace XferSuite.Apps.SEYR
         private void InitFeatureInfo()
         {
             FeatureOLV.Objects = Project.Features;
+            ToggleInfo("Plot", Color.LightBlue);
         }
 
         private List<Criteria> GetAllCriteria()
@@ -468,7 +471,7 @@ namespace XferSuite.Apps.SEYR
 
         private void EditFeature(Feature feature)
         {
-            ToggleInfo("Loading...", Color.Bisque);
+            ToggleInfo("Loading Feature...", Color.Bisque);
             using (PassFailUtility pf = new PassFailUtility(Data, feature, NumberImagesInScroller, Project.ScaledPixelsPerMicron))
             {
                 ToggleInfo("Plot", Color.LightBlue);
@@ -585,14 +588,14 @@ namespace XferSuite.Apps.SEYR
             if (Application.OpenForms.OfType<Inspection>().Any()) Application.OpenForms.OfType<Inspection>().First().Close();
             ToggleInfo("Making Sheets...", Color.Bisque);
             if (!MakeSheets()) return;
-            ToggleInfo("Loading...", Color.Bisque);
+            ToggleInfo("Plotting...", Color.Bisque);
             PlotWorker.RunWorkerAsync();
         }
 
         private bool MakeSheets()
         {
             Sheets.Clear();
-            Size aGrid = new Size(RMax, CMax);
+            Size aGrid = new Size(GridDims[0], GridDims[1]);
 
             if (_SplitB)
             {
@@ -604,7 +607,9 @@ namespace XferSuite.Apps.SEYR
                     item.C = 1;
                     item.UpdateRaw();
                 }
-                aGrid = new Size(1, 1);
+                GridDims[0] = 1;
+                GridDims[1] = 1;
+                aGrid = new Size(GridDims[0], GridDims[1]);
                 _SplitB = false;
             }
 
@@ -618,8 +623,8 @@ namespace XferSuite.Apps.SEYR
                 Sheets.Add(new DataSheet(
                     region,
                     aGrid,
-                    new Size(SRMax, SCMax),
-                    new Size(TRMax, TCMax),
+                    new Size(GridDims[2], GridDims[3]),
+                    new Size(GridDims[4], GridDims[5]),
                     _FlipX, _FlipY));
 
             return true;
@@ -627,7 +632,8 @@ namespace XferSuite.Apps.SEYR
 
         private void CbxPassFail_CheckedChanged(object sender, EventArgs e)
         {
-            if (RegionBrowser.Visible) ToggleInfo("Loading...", Color.Bisque);
+            if (RegionBrowser.Visible) 
+                ToggleInfo("Toggling Pass Fail...", Color.Bisque);
             RegionBrowser.TogglePF(CbxPassFail.Checked);
             ToggleInfo("Plot", Color.LightBlue);
         }
