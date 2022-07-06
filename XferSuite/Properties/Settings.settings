@@ -26,5 +26,8 @@
     <Setting Name="SEYR_Num_Scroller_Images" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">25</Value>
     </Setting>
+    <Setting Name="SEYR_Percentage_Sig_Figs" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

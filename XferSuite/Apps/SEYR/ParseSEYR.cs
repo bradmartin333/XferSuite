@@ -33,6 +33,23 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private int _PercentageSigFigs = Properties.Settings.Default.SEYR_Percentage_Sig_Figs;
+        [
+            Category("User Parameters"),
+            Description("Control number of decimal places in the Pass/Fail plot"),
+            DisplayName("Significant Figures")
+        ]
+        public int PercentageSigFigs
+        {
+            get => _PercentageSigFigs;
+            set
+            {
+                _PercentageSigFigs = value;
+                Properties.Settings.Default.SEYR_Percentage_Sig_Figs = _PercentageSigFigs;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         private int _PlotSize = Properties.Settings.Default.SEYR_Plot_Size;
         [
             Category("User Parameters"),
@@ -634,7 +651,7 @@ namespace XferSuite.Apps.SEYR
                     aGrid,
                     new Size(GridDims[2], GridDims[3]),
                     new Size(GridDims[4], GridDims[5]),
-                    _FlipX, _FlipY));
+                    _PercentageSigFigs, _FlipX, _FlipY));
 
             return true;
         }

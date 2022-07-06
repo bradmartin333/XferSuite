@@ -15,18 +15,20 @@ namespace XferSuite.Apps.SEYR
         public bool Ignore { get; set; } = false;
         private (DataEntry[], Criteria)[,] Data { get; set; }
         private Bitmap Render;
+        private readonly int SigFigs;
         private readonly bool FlipX = false;
         private readonly bool FlipY = false;
         private const string PassColor = "ff008000";
         private const string FailColor = "ffb22222";
 
-        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, bool flipX, bool flipY)
+        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, int sigFigs, bool flipX, bool flipY)
         {
             ID = region;
             StampGrid = stampGrid;
             ImageGrid = imageGrid;
             DataSize = new Size(regionGrid.Width * stampGrid.Width * imageGrid.Width, regionGrid.Height * stampGrid.Height * imageGrid.Height);
             Data = new (DataEntry[], Criteria)[DataSize.Width, DataSize.Height];
+            SigFigs = sigFigs;
             FlipX = flipX;
             FlipY = flipY;
         }
@@ -61,7 +63,7 @@ namespace XferSuite.Apps.SEYR
             if (FlipX) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipX);
             if (FlipY) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             Render = bitmap;
-            string percentage = (pass / total).ToString("P");
+            string percentage = $"{Math.Round(pass / total, SigFigs) * 100}%";
             return (bitmap, percentage);
         }
 

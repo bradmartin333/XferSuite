@@ -118,5 +118,17 @@ namespace XferSuite.Properties {
                 this["SEYR_Num_Scroller_Images"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int SEYR_Percentage_Sig_Figs {
+            get {
+                return ((int)(this["SEYR_Percentage_Sig_Figs"]));
+            }
+            set {
+                this["SEYR_Percentage_Sig_Figs"] = value;
+            }
+        }
     }
 }
