@@ -532,27 +532,43 @@ namespace XferSuite.Apps.SEYR
 
         #endregion
 
-        private void ExportRegionAsSEYRUPToolStripMenuItem_Click(object sender, EventArgs e)
+        #region SEYRUP Export
+        private void ExportSEYRUPSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DataSheet sheet = GetActiveSheet();
-            SaveFileDialog svd = new SaveFileDialog
+            ExporSEYRUP(new List<DataSheet>() { GetActiveSheet() });
+        }
+
+        private void ExportSEYRUPEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExporSEYRUP(Sheets);
+        }
+
+        private void ExporSEYRUP(List<DataSheet> sheets)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog
             {
-                Filter = "SEYRUP file(*.seyrup)| *.seyrup",
-                Title = "Save SEYRUP File",
-                FileName = sheet.ID.ToString(),
+                Description = "Choose a directory for the SEYRUP files to be exported to",
+                ShowNewFolderButton = true,
+                SelectedPath = ParseSEYR.ActiveDirectory,
             };
-            if (svd.ShowDialog() == DialogResult.OK)
+            if (fbd.ShowDialog() == DialogResult.OK)
             {
-                DataEntry[] data = sheet.GetEntries();
-                string reportPath = ParseSEYR.ReportPath.Replace(".txt", $"{sheet.ID}.txt");
-                using (StreamWriter stream = new StreamWriter(reportPath))
+                for (int i = 0; i < sheets.Count; i++)
                 {
-                    stream.WriteLine(DataEntry.Header);
-                    foreach (DataEntry d in data)
-                        stream.WriteLine(d.Raw);
+                    ParseSEYR.ToggleInfo($"Saving Files {i}/{sheets.Count}...", Color.Bisque);
+                    DataEntry[] data = sheets[i].GetEntries();
+                    string reportPath = ParseSEYR.ReportPath.Replace(".txt", $"{sheets[i].ID}.txt");
+                    using (StreamWriter stream = new StreamWriter(reportPath))
+                    {
+                        stream.WriteLine(DataEntry.Header);
+                        foreach (DataEntry d in data)
+                            stream.WriteLine(d.Raw);
+                    }
+                    ParseSEYR.ExportSEYRUP(reportPath, ParseSEYR.ProjectPath, fbd.SelectedPath + $@"\{sheets[i].ID}.seyrup");
                 }
-                ParseSEYR.ExportSEYRUP(reportPath, ParseSEYR.ProjectPath, svd.FileName);
             }
         }
+
+        #endregion
     }
 }

@@ -50,8 +50,10 @@
             this.MakeCycleFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MakeCycleFileAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MakeCycleFileSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportSEYRUPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExportSEYRUPEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExportSEYRUPSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.IgnoreSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ExportRegionAsSEYRUPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,8 +68,8 @@
             this.renderToolStripMenuItem,
             this.makeClickableToolStripMenuItem,
             this.MakeCycleFileToolStripMenuItem,
-            this.IgnoreSelectedRegionToolStripMenuItem,
-            this.ExportRegionAsSEYRUPToolStripMenuItem});
+            this.exportSEYRUPToolStripMenuItem,
+            this.IgnoreSelectedRegionToolStripMenuItem});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
             this.ContextMenuStrip.Size = new System.Drawing.Size(224, 224);
             // 
@@ -84,14 +86,14 @@
             // OpenEntireWindowToolStripMenuItem
             // 
             this.OpenEntireWindowToolStripMenuItem.Name = "OpenEntireWindowToolStripMenuItem";
-            this.OpenEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.OpenEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.OpenEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.OpenEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.OpenEntireWindowToolStripMenuItem_Click);
             // 
             // OpenSelectedRegionToolStripMenuItem
             // 
             this.OpenSelectedRegionToolStripMenuItem.Name = "OpenSelectedRegionToolStripMenuItem";
-            this.OpenSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.OpenSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.OpenSelectedRegionToolStripMenuItem.Text = "Selected Region";
             this.OpenSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.OpenSelectedRegionToolStripMenuItem_Click);
             // 
@@ -217,19 +219,35 @@
             this.MakeCycleFileSelectedToolStripMenuItem.Text = "Selected Region";
             this.MakeCycleFileSelectedToolStripMenuItem.Click += new System.EventHandler(this.MakeCycleFileSelectedToolStripMenuItem_Click);
             // 
+            // exportSEYRUPToolStripMenuItem
+            // 
+            this.exportSEYRUPToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ExportSEYRUPEntireWindowToolStripMenuItem,
+            this.ExportSEYRUPSelectedRegionToolStripMenuItem});
+            this.exportSEYRUPToolStripMenuItem.Name = "exportSEYRUPToolStripMenuItem";
+            this.exportSEYRUPToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.exportSEYRUPToolStripMenuItem.Text = "Export SEYRUP";
+            // 
+            // ExportSEYRUPEntireWindowToolStripMenuItem
+            // 
+            this.ExportSEYRUPEntireWindowToolStripMenuItem.Name = "ExportSEYRUPEntireWindowToolStripMenuItem";
+            this.ExportSEYRUPEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.ExportSEYRUPEntireWindowToolStripMenuItem.Text = "Entire Window";
+            this.ExportSEYRUPEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.ExportSEYRUPEntireWindowToolStripMenuItem_Click);
+            // 
+            // ExportSEYRUPSelectedRegionToolStripMenuItem
+            // 
+            this.ExportSEYRUPSelectedRegionToolStripMenuItem.Name = "ExportSEYRUPSelectedRegionToolStripMenuItem";
+            this.ExportSEYRUPSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.ExportSEYRUPSelectedRegionToolStripMenuItem.Text = "Selected Region";
+            this.ExportSEYRUPSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.ExportSEYRUPSelectedRegionToolStripMenuItem_Click);
+            // 
             // IgnoreSelectedRegionToolStripMenuItem
             // 
             this.IgnoreSelectedRegionToolStripMenuItem.Name = "IgnoreSelectedRegionToolStripMenuItem";
             this.IgnoreSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
             this.IgnoreSelectedRegionToolStripMenuItem.Text = "Ignore Selected Region";
             this.IgnoreSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.IgnoreSelectedRegionToolStripMenuItem_Click);
-            // 
-            // ExportRegionAsSEYRUPToolStripMenuItem
-            // 
-            this.ExportRegionAsSEYRUPToolStripMenuItem.Name = "ExportRegionAsSEYRUPToolStripMenuItem";
-            this.ExportRegionAsSEYRUPToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.ExportRegionAsSEYRUPToolStripMenuItem.Text = "Export Region as SEYRUP";
-            this.ExportRegionAsSEYRUPToolStripMenuItem.Click += new System.EventHandler(this.ExportRegionAsSEYRUPToolStripMenuItem_Click);
             // 
             // RegionBrowser
             // 
@@ -269,6 +287,8 @@
         private System.Windows.Forms.ToolStripMenuItem openInExcelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenExcelEntireWindowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenExcelSelectedRegionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ExportRegionAsSEYRUPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportSEYRUPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExportSEYRUPEntireWindowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExportSEYRUPSelectedRegionToolStripMenuItem;
     }
 }

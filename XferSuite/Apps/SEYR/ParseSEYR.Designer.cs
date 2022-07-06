@@ -56,6 +56,7 @@
             this.CriteriaResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DataLoadingWorker = new System.ComponentModel.BackgroundWorker();
             this.PlotWorker = new System.ComponentModel.BackgroundWorker();
+            this.SaveWorker = new System.ComponentModel.BackgroundWorker();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).BeginInit();
@@ -348,6 +349,10 @@
             // 
             this.PlotWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.PlotWorker_DoWork);
             // 
+            // SaveWorker
+            // 
+            this.SaveWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.SaveWorker_DoWork);
+            // 
             // ParseSEYR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -396,5 +401,6 @@
         private System.Windows.Forms.ToolStripMenuItem FeatureGroupRedundantToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker DataLoadingWorker;
         private System.ComponentModel.BackgroundWorker PlotWorker;
+        private System.ComponentModel.BackgroundWorker SaveWorker;
     }
 }

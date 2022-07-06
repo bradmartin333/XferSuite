@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -15,6 +16,7 @@ namespace XferSuite
         public MainMenu()
         {
             InitializeComponent();
+            Activated += Form_Activated;
             Text = string.Format("XferSuite v{0}.{1}", MajorVersion, MinorVerson);
             foreach (Button b in tableLayoutPanel.Controls.OfType<Button>())
             {
@@ -80,7 +82,7 @@ namespace XferSuite
                 case 2:
                     using (new Utility.HourGlass())
                     {
-                        form = new Apps.SEYR.ParseSEYR(path);
+                        form = new Apps.SEYR.ParseSEYR(path, _AutomaticRescoreSEYR);
                     }
                     break;
                 case 3:
@@ -182,5 +184,14 @@ namespace XferSuite
         {
             Settings.CheckForUpdates();
         }
+
+        private bool _AutomaticRescoreSEYR = true;
+        [
+            Category("User Parameters"),
+            Description("Upon opening a SEYRUP file, the scores are usually fitted automatically. " +
+            "Disabling this allows for the raw/exported values to be preserved."),
+            DisplayName("Automatic SEYR Rescoring")
+        ]
+        public bool AutomaticRescoreSEYR { get => _AutomaticRescoreSEYR; set => _AutomaticRescoreSEYR = value; }
     }
 }

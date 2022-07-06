@@ -193,7 +193,9 @@ namespace XferSuite.Apps.SEYR
 
         #region  Globals and Setup
 
+        private readonly bool AutomaticRescore;
         private readonly string FileName;
+        public readonly string ActiveDirectory;
         public readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
         public readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
 
@@ -204,10 +206,12 @@ namespace XferSuite.Apps.SEYR
         private RegionBrowser RegionBrowser { get; set; } = null;
         private int[] GridDims = new int[6]; // RMax, CMax, SRMax, SCMax, TRMax, TCMax
 
-        public ParseSEYR(string path)
+        public ParseSEYR(string path, bool automaticRescore)
         {
             InitializeComponent();
             FileInfo userPath = new FileInfo(path);
+            ActiveDirectory = userPath.DirectoryName;
+            AutomaticRescore = automaticRescore;
             FileName = userPath.Name.Replace(userPath.Extension, "");
             Text = FileName;
 
@@ -228,6 +232,7 @@ namespace XferSuite.Apps.SEYR
             FormClosing += ParseSEYR_FormClosing;
             DataLoadingWorker.RunWorkerCompleted += DataLoadingWorker_RunWorkerCompleted;
             PlotWorker.RunWorkerCompleted += PlotWorker_RunWorkerCompleted;
+            SaveWorker.RunWorkerCompleted += SaveWorker_RunWorkerCompleted;
         }
 
         private void ParseSEYR_Load(object sender, EventArgs e)
@@ -243,7 +248,7 @@ namespace XferSuite.Apps.SEYR
             File.Delete(ReportPath);
         }
 
-        private void ToggleInfo(string info, Color color)
+        public void ToggleInfo(string info, Color color)
         {
             BtnPlot.Text = info;
             BtnPlot.BackColor = color;
@@ -316,50 +321,54 @@ namespace XferSuite.Apps.SEYR
 
             ToggleInfo("Analyzing Distributions...", Color.Bisque);
 
-            IEnumerable<IGrouping<string, DataEntry>> groups = Data.GroupBy(x => x.FeatureName);
-            foreach (IGrouping<string, DataEntry> group in groups)
+            if (AutomaticRescore)
             {
-                Feature feature = Project.Features.Where(x => x.Name == group.Key).First();
-                feature.Data = group.ToArray();
-                feature.HistData = feature.Data.Select(x => (double)x.Score).Where(x => x > 0).ToArray();
-                if (feature.HistData.Length == 0)
+                IEnumerable<IGrouping<string, DataEntry>> groups = Data.GroupBy(x => x.FeatureName);
+                foreach (IGrouping<string, DataEntry> group in groups)
                 {
-                    feature.HistData = new double[] { 0 };
-                    System.Diagnostics.Debug.WriteLine($"{feature.Name} is empty");
-                }
-                else if (feature.MinScore == float.MaxValue || feature.MaxScore == float.MinValue || feature.MinScore == feature.MaxScore)
-                {
+                    Feature feature = Project.Features.Where(x => x.Name == group.Key).First();
+                    feature.Data = group.ToArray();
+                    feature.HistData = feature.Data.Select(x => (double)x.Score).Where(x => x > 0).ToArray();
                     if (feature.HistData.Length == 0)
                     {
                         feature.HistData = new double[] { 0 };
-                        System.Diagnostics.Debug.WriteLine($"{feature.Name} has no valid data");
+                        System.Diagnostics.Debug.WriteLine($"{feature.Name} is empty");
+                    }
+                    else if (feature.MinScore == float.MaxValue || feature.MaxScore == float.MinValue || feature.MinScore == feature.MaxScore)
+                    {
+                        if (feature.HistData.Length == 0)
+                        {
+                            feature.HistData = new double[] { 0 };
+                            System.Diagnostics.Debug.WriteLine($"{feature.Name} has no valid data");
+                        }
+                        else
+                        {
+                            feature.MinScore = (float)feature.HistData.Min();
+                            feature.MaxScore = (float)feature.HistData.Max();
+                            System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
+                        }
+                    }
+
+                    if (feature.HistData.Length > 5) // Need some data to match to normal distribution
+                    {
+                        NormalDistribution normal = new NormalDistribution();
+                        normal.Fit(feature.HistData);
+                        double wid = normal.StandardDeviation * 3;
+                        feature.Limit = normal.Mean + ((feature.FlipScore ? -1 : 1) * wid);
+                        feature.PassThreshold = normal.Mean - ((feature.FlipScore ? -1 : 1) * wid);
                     }
                     else
                     {
-                        feature.MinScore = (float)feature.HistData.Min();
-                        feature.MaxScore = (float)feature.HistData.Max();
-                        System.Diagnostics.Debug.WriteLine($"{feature.Name} min/max updated");
+                        feature.PassThreshold = feature.PassThreshold == -10 ? (feature.MaxScore + feature.MinScore) / 2.0 : feature.PassThreshold;
+                        feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
                     }
+
+                    feature.Ignore = feature.Name.ToLower() == "img";
                 }
 
-                if (feature.HistData.Length > 5) // Need some data to match to normal distribution
-                {
-                    NormalDistribution normal = new NormalDistribution();
-                    normal.Fit(feature.HistData);
-                    double wid = normal.StandardDeviation * 3;
-                    feature.Limit = normal.Mean + ((feature.FlipScore ? -1 : 1) * wid);
-                    feature.PassThreshold = normal.Mean - ((feature.FlipScore ? -1 : 1) * wid);
-                }
-                else
-                {
-                    feature.PassThreshold = feature.PassThreshold == -10 ? (feature.MaxScore + feature.MinScore) / 2.0 : feature.PassThreshold;
-                    feature.Limit = feature.Limit == -10 ? (feature.FlipScore ? feature.HistData.Min() : feature.HistData.Max()) : feature.Limit;
-                }
-
-                feature.Ignore = feature.Name.ToLower() == "img";
+                RescoreAllData();
             }
-
-            RescoreAllData();
+            
             InitFeatureInfo();
         }
 
@@ -642,6 +651,8 @@ namespace XferSuite.Apps.SEYR
 
         #region Save Session
 
+        private string ExportPath;
+
         private void BtnSaveAs_Click(object sender, EventArgs e)
         {
             SaveFileDialog svd = new SaveFileDialog
@@ -651,15 +662,16 @@ namespace XferSuite.Apps.SEYR
             };
             if (svd.ShowDialog() == DialogResult.OK)
             {
+                ExportPath = svd.FileName;
+                ToggleInfo("Saving Files...", Color.Bisque);
                 SaveProject();
-                SaveReport();
-                ExportSEYRUP(ReportPath, ProjectPath, svd.FileName);
+                SaveWorker.RunWorkerAsync();
             }
         }
 
         public void ExportSEYRUP(string reportPath, string projectPath, string exportPath)
         {
-            ToggleInfo("Saving...", Color.Bisque);
+            ToggleInfo("Compressing...", Color.Bisque);
             if (File.Exists(exportPath)) File.Delete(exportPath);
             using (ZipArchive zip = ZipFile.Open(exportPath, ZipArchiveMode.Create))
             {
@@ -678,7 +690,7 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void SaveReport()
+        private void SaveWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             using (StreamWriter stream = new StreamWriter(ReportPath))
             {
@@ -686,6 +698,10 @@ namespace XferSuite.Apps.SEYR
                 foreach (DataEntry entry in Data)
                     stream.WriteLine(entry.Raw);
             }
+        }
+        private void SaveWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ExportSEYRUP(ReportPath, ProjectPath, ExportPath);
         }
 
         #endregion
