@@ -555,7 +555,7 @@ namespace XferSuite.Apps.SEYR
             {
                 for (int i = 0; i < sheets.Count; i++)
                 {
-                    ParseSEYR.ToggleInfo($"Saving Files {i}/{sheets.Count}...", Color.Bisque);
+                    ParseSEYR.ToggleInfo($"Saving Files {i + 1}/{sheets.Count} ...", Color.Bisque);
                     DataEntry[] data = sheets[i].GetEntries();
                     string reportPath = ParseSEYR.ReportPath.Replace(".txt", $"{sheets[i].ID}.txt");
                     using (StreamWriter stream = new StreamWriter(reportPath))
