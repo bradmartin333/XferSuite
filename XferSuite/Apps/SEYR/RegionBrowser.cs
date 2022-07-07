@@ -70,8 +70,6 @@ namespace XferSuite.Apps.SEYR
         private void SetupTLP(bool showPF)
         {
             LastPF = showPF;
-            CopyDataRowsToolStripMenuItem.Enabled = showPF;
-            MakeCycleFileToolStripMenuItem.Enabled = showPF;
             TLP = new TableLayoutPanel() { Dock = DockStyle.Fill, };
             Controls.Add(TLP);
 
@@ -642,13 +640,10 @@ namespace XferSuite.Apps.SEYR
         {
             using (new Utility.HourGlass(false))
             {
-                string data = string.Empty;
+                string data = "ImageNumber, X, Y, RR, RC, R, C, SR, SC, TR, TC, State, ID, Legend\n";
                 foreach (DataSheet sheet in sheets)
-                {
-                    string lines = sheet.GetDataRows();
-                    ApplyDelimeter(ref lines);
-                    data += lines;
-                }
+                    data += sheet.GetDataRows();
+                ApplyDelimeter(ref data);
                 Clipboard.SetText(data);
             }
         }

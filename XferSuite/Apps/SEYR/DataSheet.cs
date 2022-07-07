@@ -124,7 +124,8 @@ namespace XferSuite.Apps.SEYR
             List<DataEntry> entries = new List<DataEntry>();
             for (int i = 0; i < DataSize.Width; i++)
                 for (int j = 0; j < DataSize.Height; j++)
-                    Data[i, j].Item1.ToList().ForEach(x => entries.Add(x));
+                    if (Data[i, j].Item1 != null)
+                        Data[i, j].Item1.ToList().ForEach(x => entries.Add(x));
             return entries.ToArray();
         }
 
@@ -161,27 +162,33 @@ namespace XferSuite.Apps.SEYR
 
         public string GetDataRows()
         {
-            StringBuilder sb = new StringBuilder("ImageNumber, X, Y, RR, RC, R, C, SR, SC, TR, TC, State\n");
-            for (int j = 0; j < Render.Height; j++)
-                for (int i = 0; i < Render.Width; i++)
-                    sb.AppendLine($"{GetLocation(new Point(i, j), true).Item1[0].DataRow()}\t{(Render.GetPixel(i, j).ToArgb() == PassColor.ToArgb() ? "Pass" : "Fail")}");
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < DataSize.Width; i++)
+                for (int j = 0; j < DataSize.Height; j++)
+                    if (Data[i, j].Item1 != null)
+                    {
+                        (DataEntry[], Criteria) rowObject = GetLocation(new Point(i, j), true);
+                        sb.AppendLine($"{GetLocation(new Point(i, j), true).Item1[0].DataRow()}, " +
+                            $"{(rowObject.Item2.Pass ? "Pass" : "Fail")}, " +
+                            $"{rowObject.Item2.ID}, {rowObject.Item2.LegendEntry}");
+                    }         
             return sb.ToString();
         }
 
         public string CreateCycleFile(ref int idx)
         {
             StringBuilder sb = new StringBuilder();
-            for (int j = 0; j < Render.Height; j++)
-            {
-                for (int i = 0; i < Render.Width; i++)
-                {
-                    if (Render.GetPixel(i, j).ToArgb() == FailColor.ToArgb())
+            for (int i = 0; i < DataSize.Width; i++)
+                for (int j = 0; j < DataSize.Height; j++)
+                    if (Data[i, j].Item1 != null)
                     {
-                        idx++;
-                        sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true).Item1[0]));
-                    }
-                }
-            }
+                        (DataEntry[], Criteria) rowObject = GetLocation(new Point(i, j), true);
+                        if (!rowObject.Item2.Pass)
+                        {
+                            idx++;
+                            sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true).Item1[0]));
+                        }
+                    }                   
             return sb.ToString();
         }
 
