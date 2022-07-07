@@ -18,7 +18,7 @@ namespace XferSuite.Apps.SEYR
         private readonly int SigFigs;
         private readonly bool FlipX = false;
         private readonly bool FlipY = false;
-        private readonly Color PassColor = Color.LawnGreen;
+        private readonly Color PassColor = Color.Green;
         private readonly Color FailColor = Color.Firebrick;
 
         public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, int sigFigs, bool flipX, bool flipY)
@@ -134,9 +134,9 @@ namespace XferSuite.Apps.SEYR
                     if (showPF)
                     {
                         Color c = Render.GetPixel(i, j);
-                        if (c == PassColor)
+                        if (c.ToArgb() == PassColor.ToArgb())
                             sb.Append($"1\t");
-                        else if (c == FailColor)
+                        else if (c.ToArgb() == FailColor.ToArgb())
                             sb.Append($"0\t");
                         else
                             sb.Append($" \t");
