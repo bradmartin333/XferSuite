@@ -206,6 +206,46 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private int _ExcelLeftStart = Properties.Settings.Default.SEYR_Excel_Left_Start;
+        [
+            Category("User Parameters"),
+            Description("Column number (starting from 1) for start cell when exporting to Excel"),
+            DisplayName("Excel Left Start")
+        ]
+        public int ExcelLeftStart
+        {
+            get => _ExcelLeftStart;
+            set
+            {
+                if (value > 0)
+                {
+                    _ExcelLeftStart = value;
+                    Properties.Settings.Default.SEYR_Excel_Left_Start = _ExcelLeftStart;
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+
+        private int _ExcelTopStart = Properties.Settings.Default.SEYR_Excel_Top_Start;
+        [
+            Category("User Parameters"),
+            Description("Row number (starting from 1) for start cell when exporting to Excel"),
+            DisplayName("Excel Top Start")
+        ]
+        public int ExcelTopStart
+        {
+            get => _ExcelTopStart;
+            set
+            {
+                if (value > 0)
+                {
+                    _ExcelTopStart = value;
+                    Properties.Settings.Default.SEYR_Excel_Top_Start = _ExcelTopStart;
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+
         #endregion
 
         #region  Globals and Setup
@@ -587,7 +627,8 @@ namespace XferSuite.Apps.SEYR
             CriteriaOLV.Objects = PlottedCriteria;
             CbxPassFail.Enabled = true;
             RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria, this,
-                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _RCFont, _ShowYieldBrackets, _PlotSize, Project);
+                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _RCFont, _ShowYieldBrackets, _PlotSize, Project,
+                new Point(_ExcelLeftStart, _ExcelTopStart));
             ToggleInfo("Plot", Color.LightBlue);
         }
 

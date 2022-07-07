@@ -9,6 +9,7 @@ namespace XferSuite.Apps.SEYR
     public class DataSheet
     {      
         public (int, int) ID { get; set; }
+        public Point PointID { get => new Point(ID.Item1, ID.Item2); }
         public Size StampGrid { get; set; }
         public Size ImageGrid { get; set; }
         public Size DataSize { get; set; }

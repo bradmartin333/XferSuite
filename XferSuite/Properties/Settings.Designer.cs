@@ -130,5 +130,29 @@ namespace XferSuite.Properties {
                 this["SEYR_Percentage_Sig_Figs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("13")]
+        public int SEYR_Excel_Left_Start {
+            get {
+                return ((int)(this["SEYR_Excel_Left_Start"]));
+            }
+            set {
+                this["SEYR_Excel_Left_Start"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int SEYR_Excel_Top_Start {
+            get {
+                return ((int)(this["SEYR_Excel_Top_Start"]));
+            }
+            set {
+                this["SEYR_Excel_Top_Start"] = value;
+            }
+        }
     }
 }

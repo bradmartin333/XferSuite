@@ -28,9 +28,11 @@ namespace XferSuite.Apps.SEYR
         private readonly ParseSEYR.Delimeter CycleFileDelimeter;
         private readonly Project Project;
         private Size CellSize;
+        private Point ExcelStart;
 
         public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, ParseSEYR parseSEYR, 
-            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, Font rcFont, bool yieldBrackets, int defaultPlotSize, Project project)
+            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, Font rcFont, bool yieldBrackets, int defaultPlotSize, Project project,
+            Point excelStart)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
@@ -48,6 +50,7 @@ namespace XferSuite.Apps.SEYR
             YieldBrackets = yieldBrackets;
             DefaultPlotSize = defaultPlotSize;
             Project = project;
+            ExcelStart = excelStart;
             SetupTLP(showPF);
             Show();
         }
@@ -480,11 +483,12 @@ namespace XferSuite.Apps.SEYR
                 for (int i = sheetsCopy.Length - 1; i >= 0; i--)
                 {
                     if (i != sheetsCopy.Length - 1) ws = wb.Sheets.Add();
-                    ws.Name = sheetsCopy[i].ID.ToString();
+                    Point pointID = sheetsCopy[i].PointID;
+                    ws.Name = $"C{pointID.Y}R{pointID.X}";
 
                     object[,] data = sheetsCopy[i].GetData(LastPF);
-                    var startCell = ws.Cells[1, 1];
-                    var endCell = ws.Cells[data.GetLength(0), data.GetLength(1)];
+                    var startCell = ws.Cells[ExcelStart.Y, ExcelStart.X];
+                    var endCell = ws.Cells[data.GetLength(0) + ExcelStart.Y - 1, data.GetLength(1) + ExcelStart.X - 1];
                     var writeRange = ws.Range[startCell, endCell];
                     writeRange.Value = data;
 
@@ -494,14 +498,13 @@ namespace XferSuite.Apps.SEYR
                         string[] legendStrings = Criteria.Select(x => x.LegendEntry).ToArray();
                         for (int j = 0; j < Criteria.Count; j++)
                         {
-                            ((Excel.Range)ws.Cells[data.GetLength(0) + 2 + j, 1]).Value = IDs[j];
-                            ((Excel.Range)ws.Cells[data.GetLength(0) + 2 + j, 2]).Value = legendStrings[j];
+                            ((Excel.Range)ws.Cells[data.GetLength(0) + 1 + j + ExcelStart.Y, ExcelStart.X]).Value = IDs[j];
+                            ((Excel.Range)ws.Cells[data.GetLength(0) + 1 + j + ExcelStart.Y, 1 + ExcelStart.X]).Value = legendStrings[j];
                         }
                     }
 
                     Excel.Range used = ws.UsedRange;
                     used.EntireColumn.ColumnWidth = 5;
-                    used.Style.HorizontalAlignment = HorizontalAlignment.Center;
                     Excel.ColorScale cs = used.Cells.FormatConditions.AddColorScale(3);
                     cs.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
                     cs.ColorScaleCriteria[1].FormatColor.Color = 0x001403FC;  // Blue
