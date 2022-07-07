@@ -68,19 +68,20 @@ namespace XferSuite.Apps.SEYR
         }
 
         public enum Delimeter { Tab, Comma, Space }
-        private Delimeter _CycleFileDelimeter = (Delimeter)Properties.Settings.Default.SEYR_Delimeter;
+        private Delimeter _FileDelimeter = (Delimeter)Properties.Settings.Default.SEYR_Delimeter;
         [
             Category("User Parameters"),
-            Description("Tabs are excel friendly, but some tools take comma separated values"),
-            DisplayName("Cycle File Delimeter")
+            Description("Tabs are excel friendly, but some tools take comma separated values. " +
+            "This is used when generating Data Rows or a Repair Cycle File."),
+            DisplayName("Delimeter")
         ]
-        public Delimeter CycleFileDelimeter 
+        public Delimeter FileDelimeter 
         { 
-            get => _CycleFileDelimeter; 
+            get => _FileDelimeter; 
             set
             {
-                _CycleFileDelimeter = value;
-                Properties.Settings.Default.SEYR_Delimeter = (int)_CycleFileDelimeter;
+                _FileDelimeter = value;
+                Properties.Settings.Default.SEYR_Delimeter = (int)_FileDelimeter;
                 Properties.Settings.Default.Save();
             }
         }
@@ -122,7 +123,10 @@ namespace XferSuite.Apps.SEYR
         private bool _SplitB = false;
         [
             Category("User Parameters"),
-            Description("IRREVERSIBLY create more plotted regions. Need to close and reopen .SEYRUP file to reset."),
+            Description("Irreversibly and uncontrollable creates more plotted regions. " +
+            "Might cause the software to stall if not an appropriate application of the feature. " +
+            "Need to close and reopen .SEYRUP file to reset. " +
+            "Toggles itself off after use as it greatly increases processing time."),
             DisplayName("Split B Grid")
         ]
         public bool SplitB { get => _SplitB; set => _SplitB = value; }
@@ -631,7 +635,7 @@ namespace XferSuite.Apps.SEYR
             CriteriaOLV.Objects = PlottedCriteria;
             CbxPassFail.Enabled = true;
             RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria, this,
-                CbxPassFail.Checked, FileName, _CycleFileDelimeter, _YieldFont, _RCFont, _ShowYieldBrackets, _PlotSize, Project,
+                CbxPassFail.Checked, FileName, _FileDelimeter, _YieldFont, _RCFont, _ShowYieldBrackets, _PlotSize, Project,
                 new Point(_ExcelLeftStart, _ExcelTopStart));
             ToggleInfo("Plot", Color.LightBlue);
         }

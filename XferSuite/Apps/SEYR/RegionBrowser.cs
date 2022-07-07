@@ -25,7 +25,7 @@ namespace XferSuite.Apps.SEYR
         private readonly Inspection Inspection;
         private bool LastPF = false;
         private readonly string FileName;
-        private readonly ParseSEYR.Delimeter CycleFileDelimeter;
+        private readonly ParseSEYR.Delimeter FileDelimeter;
         private readonly Project Project;
         private Size CellSize;
         private Point ExcelStart;
@@ -44,7 +44,7 @@ namespace XferSuite.Apps.SEYR
             FileName = fileName;
             Inspection = new Inspection(FileName);
             Text = FileName;
-            CycleFileDelimeter = delimeter;
+            FileDelimeter = delimeter;
             YieldFont = yieldFont;
             RCFont = rcFont;
             YieldBrackets = yieldBrackets;
@@ -433,7 +433,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ApplyDelimeter(ref string txt)
         {
-            switch (CycleFileDelimeter)
+            switch (FileDelimeter)
             {
                 case ParseSEYR.Delimeter.Tab:
                     txt = txt.Replace(", ", "\t");
