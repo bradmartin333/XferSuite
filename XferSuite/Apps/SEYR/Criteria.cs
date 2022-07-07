@@ -36,6 +36,7 @@ namespace XferSuite.Apps.SEYR
                 if (innerPass) pass = true;
             }
             Pass = pass;
+            LegendEntry = LegendEntry.TrimEnd(new char[] { ' ' });
         }
 
         public void TryAppend(ref List<Criteria> criteria)

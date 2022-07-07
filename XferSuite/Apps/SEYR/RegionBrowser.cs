@@ -643,9 +643,12 @@ namespace XferSuite.Apps.SEYR
         {
             using (new Utility.HourGlass(false))
             {
-                string data = "ImageNumber, X, Y, RR, RC, R, C, SR, SC, TileR, TileC, CycleR, CycleC, State, ID, Legend\n";
+                string data = "ImageNumber, X, Y, RR, RC, R, C, SR, SC, TileR, TileC, CycleR, CycleC, State, ID, Legend";
+                List<string> names = Criteria.OrderByDescending(x => x.ID).First().LegendEntry.Split(' ').ToList();
+                names.ForEach(x => data += $", {x}");
+                data += '\n';
                 foreach (DataSheet sheet in sheets)
-                    data += sheet.GetDataRows();
+                    data += sheet.GetDataRows(names);
                 ApplyDelimeter(ref data);
                 Clipboard.SetText(data);
             }

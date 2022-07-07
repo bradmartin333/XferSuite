@@ -531,7 +531,7 @@ namespace XferSuite.Apps.SEYR
             return criteria;
         }
 
-        private string MakeDefaultCriteriaString(string input) => System.Text.RegularExpressions.Regex.Replace(input, @"\d", "").ToLower();
+        private string MakeDefaultCriteriaString(string input) => System.Text.RegularExpressions.Regex.Replace(input, @"\d", "").Replace(" ","-").Replace("_","-").ToLower();
 
         #endregion
 

@@ -168,7 +168,7 @@ namespace XferSuite.Apps.SEYR
             return sb.ToString();
         }
 
-        public string GetDataRows()
+        public string GetDataRows(List<string> names)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < DataSize.Width; i++)
@@ -176,10 +176,17 @@ namespace XferSuite.Apps.SEYR
                     if (Data[i, j].Item1 != null)
                     {
                         (DataEntry[], Criteria) rowObject = GetLocation(new Point(i, j), true);
+                        if (rowObject.Item1 == null) continue;
                         DataEntry d = rowObject.Item1[0];
-                        sb.AppendLine($"{d.DataRow()}, " + CreateCycleRC(d) + ", " +
+                        string legend = rowObject.Item2.LegendEntry;
+                        string line = $"{d.DataRow()}, " + CreateCycleRC(d) + ", " +
                             $"{(rowObject.Item2.Pass ? "Pass" : "Fail")}, " +
-                            $"{rowObject.Item2.ID}, {rowObject.Item2.LegendEntry}");
+                            $"{rowObject.Item2.ID}, {legend}";
+
+                        foreach (string name in names)
+                            line += $", {Convert.ToInt32(legend.Contains(name.TrimEnd(new char[] {' '})))}";
+
+                        sb.AppendLine(line);
                     }         
             return sb.ToString();
         }
@@ -192,10 +199,11 @@ namespace XferSuite.Apps.SEYR
                     if (Data[i, j].Item1 != null)
                     {
                         (DataEntry[], Criteria) rowObject = GetLocation(new Point(i, j), true);
+                        if (rowObject.Item1 == null) continue;
                         if (!rowObject.Item2.Pass)
                         {
                             idx++;
-                            sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true).Item1[0]));
+                            sb.AppendLine(CreateCycleFileEntry(idx, rowObject.Item1[0]));
                         }
                     }                   
             return sb.ToString();
