@@ -53,10 +53,13 @@
             this.exportSEYRUPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExportSEYRUPEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExportSEYRUPSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.IgnoreSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportCompositeImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExportCompositeEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExportCompositeSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.IgnoreSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyDataRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CopyDataRowsEntireWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CopyDataRowsSelectedRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,6 +71,7 @@
             this.ToolStripMenuItemCopyImage,
             this.openInExcelToolStripMenuItem,
             this.ToolStripMenuItemCopyCSV,
+            this.copyDataRowsToolStripMenuItem,
             this.renderToolStripMenuItem,
             this.makeClickableToolStripMenuItem,
             this.MakeCycleFileToolStripMenuItem,
@@ -75,7 +79,7 @@
             this.exportCompositeImageToolStripMenuItem,
             this.IgnoreSelectedRegionToolStripMenuItem});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(224, 246);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(224, 268);
             // 
             // OpenImageToolStripMenuItem
             // 
@@ -90,14 +94,14 @@
             // OpenEntireWindowToolStripMenuItem
             // 
             this.OpenEntireWindowToolStripMenuItem.Name = "OpenEntireWindowToolStripMenuItem";
-            this.OpenEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OpenEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.OpenEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.OpenEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.OpenEntireWindowToolStripMenuItem_Click);
             // 
             // OpenSelectedRegionToolStripMenuItem
             // 
             this.OpenSelectedRegionToolStripMenuItem.Name = "OpenSelectedRegionToolStripMenuItem";
-            this.OpenSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OpenSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.OpenSelectedRegionToolStripMenuItem.Text = "Selected Region";
             this.OpenSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.OpenSelectedRegionToolStripMenuItem_Click);
             // 
@@ -136,14 +140,14 @@
             // OpenExcelEntireWindowToolStripMenuItem
             // 
             this.OpenExcelEntireWindowToolStripMenuItem.Name = "OpenExcelEntireWindowToolStripMenuItem";
-            this.OpenExcelEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.OpenExcelEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.OpenExcelEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.OpenExcelEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.OpenExcelEntireWindowToolStripMenuItem_Click);
             // 
             // OpenExcelSelectedRegionToolStripMenuItem
             // 
             this.OpenExcelSelectedRegionToolStripMenuItem.Name = "OpenExcelSelectedRegionToolStripMenuItem";
-            this.OpenExcelSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.OpenExcelSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.OpenExcelSelectedRegionToolStripMenuItem.Text = "Selected Region";
             this.OpenExcelSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.OpenExcelSelectedRegionToolStripMenuItem_Click);
             // 
@@ -235,23 +239,16 @@
             // ExportSEYRUPEntireWindowToolStripMenuItem
             // 
             this.ExportSEYRUPEntireWindowToolStripMenuItem.Name = "ExportSEYRUPEntireWindowToolStripMenuItem";
-            this.ExportSEYRUPEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExportSEYRUPEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.ExportSEYRUPEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.ExportSEYRUPEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.ExportSEYRUPEntireWindowToolStripMenuItem_Click);
             // 
             // ExportSEYRUPSelectedRegionToolStripMenuItem
             // 
             this.ExportSEYRUPSelectedRegionToolStripMenuItem.Name = "ExportSEYRUPSelectedRegionToolStripMenuItem";
-            this.ExportSEYRUPSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExportSEYRUPSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.ExportSEYRUPSelectedRegionToolStripMenuItem.Text = "Selected Region";
             this.ExportSEYRUPSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.ExportSEYRUPSelectedRegionToolStripMenuItem_Click);
-            // 
-            // IgnoreSelectedRegionToolStripMenuItem
-            // 
-            this.IgnoreSelectedRegionToolStripMenuItem.Name = "IgnoreSelectedRegionToolStripMenuItem";
-            this.IgnoreSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.IgnoreSelectedRegionToolStripMenuItem.Text = "Ignore Selected Region";
-            this.IgnoreSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.IgnoreSelectedRegionToolStripMenuItem_Click);
             // 
             // exportCompositeImageToolStripMenuItem
             // 
@@ -265,16 +262,46 @@
             // ExportCompositeEntireWindowToolStripMenuItem
             // 
             this.ExportCompositeEntireWindowToolStripMenuItem.Name = "ExportCompositeEntireWindowToolStripMenuItem";
-            this.ExportCompositeEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExportCompositeEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.ExportCompositeEntireWindowToolStripMenuItem.Text = "Entire Window";
             this.ExportCompositeEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.ExportCompositeEntireWindowToolStripMenuItem_Click);
             // 
             // ExportCompositeSelectedRegionToolStripMenuItem
             // 
             this.ExportCompositeSelectedRegionToolStripMenuItem.Name = "ExportCompositeSelectedRegionToolStripMenuItem";
-            this.ExportCompositeSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExportCompositeSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.ExportCompositeSelectedRegionToolStripMenuItem.Text = "Selected Region";
             this.ExportCompositeSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.ExportCompositeSelectedRegionToolStripMenuItem_Click);
+            // 
+            // IgnoreSelectedRegionToolStripMenuItem
+            // 
+            this.IgnoreSelectedRegionToolStripMenuItem.Name = "IgnoreSelectedRegionToolStripMenuItem";
+            this.IgnoreSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.IgnoreSelectedRegionToolStripMenuItem.Text = "Ignore Selected Region";
+            this.IgnoreSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.IgnoreSelectedRegionToolStripMenuItem_Click);
+            // 
+            // copyDataRowsToolStripMenuItem
+            // 
+            this.copyDataRowsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CopyDataRowsEntireWindowToolStripMenuItem,
+            this.CopyDataRowsSelectedRegionToolStripMenuItem});
+            this.copyDataRowsToolStripMenuItem.Name = "copyDataRowsToolStripMenuItem";
+            this.copyDataRowsToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.copyDataRowsToolStripMenuItem.Text = "Copy Data Rows";
+            // 
+            // CopyDataRowsEntireWindowToolStripMenuItem
+            // 
+            this.CopyDataRowsEntireWindowToolStripMenuItem.Name = "CopyDataRowsEntireWindowToolStripMenuItem";
+            this.CopyDataRowsEntireWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CopyDataRowsEntireWindowToolStripMenuItem.Text = "Entire Window";
+            this.CopyDataRowsEntireWindowToolStripMenuItem.Click += new System.EventHandler(this.CopyDataRowsEntireWindowToolStripMenuItem_Click);
+            // 
+            // CopyDataRowsSelectedRegionToolStripMenuItem
+            // 
+            this.CopyDataRowsSelectedRegionToolStripMenuItem.Name = "CopyDataRowsSelectedRegionToolStripMenuItem";
+            this.CopyDataRowsSelectedRegionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CopyDataRowsSelectedRegionToolStripMenuItem.Text = "Selected Region";
+            this.CopyDataRowsSelectedRegionToolStripMenuItem.Click += new System.EventHandler(this.CopyDataRowsSelectedRegionToolStripMenuItem_Click);
             // 
             // RegionBrowser
             // 
@@ -320,5 +347,8 @@
         private System.Windows.Forms.ToolStripMenuItem exportCompositeImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExportCompositeEntireWindowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExportCompositeSelectedRegionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyDataRowsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CopyDataRowsEntireWindowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CopyDataRowsSelectedRegionToolStripMenuItem;
     }
 }

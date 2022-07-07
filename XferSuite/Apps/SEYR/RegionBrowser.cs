@@ -615,5 +615,19 @@ namespace XferSuite.Apps.SEYR
         }
 
         #endregion
+
+        #region Copy Data Rows
+
+        private void CopyDataRowsEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CopyDataRowsSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
     }
 }
