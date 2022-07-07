@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -70,6 +71,7 @@ namespace XferSuite.Apps.SEYR
         private void SetupTLP(bool showPF)
         {
             LastPF = showPF;
+            CopyDataRowsToolStripMenuItem.Enabled = showPF;
             MakeCycleFileToolStripMenuItem.Enabled = showPF;
             TLP = new TableLayoutPanel() { Dock = DockStyle.Fill, };
             Controls.Add(TLP);
@@ -204,11 +206,6 @@ namespace XferSuite.Apps.SEYR
 
         #region PictureBox Methods
 
-        private void OpenImageToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenImage();
-        }
-
         private void PictureBox_MouseLeave(object sender, EventArgs e)
         {
             PictureBox pbx = ((PictureBox)sender);
@@ -262,16 +259,6 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private void OpenImage(bool entireImage = false)
-        {
-            string path = $@"{System.IO.Path.GetTempPath()}RBimg.png";
-            if (entireImage)
-                GetEntireBitmap().Save(path);
-            else
-                GetActiveBitmap().Save(path);
-            System.Diagnostics.Process.Start(path);
-        }
-
         private void OpenEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenImage(true);
@@ -280,6 +267,16 @@ namespace XferSuite.Apps.SEYR
         private void OpenSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenImage();
+        }
+
+        private void OpenImage(bool entireImage = false)
+        {
+            string path = $@"{Path.GetTempPath()}RBimg.png";
+            if (entireImage)
+                GetEntireBitmap().Save(path);
+            else
+                GetActiveBitmap().Save(path);
+            Process.Start(path);
         }
 
         private Bitmap GetEntireBitmap()
@@ -291,46 +288,58 @@ namespace XferSuite.Apps.SEYR
 
         private void CopyEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetImage(GetEntireBitmap());
+            using (new Utility.HourGlass(false))
+                Clipboard.SetImage(GetEntireBitmap());
         }
 
         private void CopySelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetImage(GetActiveBitmap());
+            using (new Utility.HourGlass(false))
+                Clipboard.SetImage(GetActiveBitmap());
         }
 
         private void ToolStripMenuCopyCSV_Click(object sender, EventArgs e)
         {
-            string data = GetActiveSheet().GetCSV(Criteria, LastPF);
-            string footer = LastPF ? "\n" : ('\n' + string.Join("\n", Criteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray()));
-            Clipboard.SetText(data + footer);
+            using (new Utility.HourGlass(false))
+            {
+                string data = GetActiveSheet().GetCSV(Criteria, LastPF);
+                string footer = LastPF ? "\n" : ('\n' + string.Join("\n", Criteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray()));
+                Clipboard.SetText(data + footer);
+            }
         }
 
         private void RenderAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PictureBoxes.ForEach(p => RenderPictureBox(p));
+            using (new Utility.HourGlass(false))
+                PictureBoxes.ForEach(p => RenderPictureBox(p));
         }
 
         private void RenderSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RenderPictureBox(GetActivePictureBox());
+            using (new Utility.HourGlass(false))
+                RenderPictureBox(GetActivePictureBox());
         }
 
         private void ClickableAllToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            PictureBoxes.ForEach(p => p.BackgroundImage = Sheets.Where(s => s.ID == ((int, int))p.Tag).First().GetBitmap(LastPF).Item1);
+            using (new Utility.HourGlass(false))
+                PictureBoxes.ForEach(p => p.BackgroundImage = Sheets.Where(s => s.ID == ((int, int))p.Tag).First().GetBitmap(LastPF).Item1);
         }
 
         private void ClickableSelectedToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            GetActivePictureBox().BackgroundImage = GetActiveSheet().GetBitmap(LastPF).Item1;
+            using (new Utility.HourGlass(false))
+                GetActivePictureBox().BackgroundImage = GetActiveSheet().GetBitmap(LastPF).Item1;
         }
 
         private void IgnoreSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GetActiveSheet().Ignore = true;
-            Controls.Remove(TLP);
-            SetupTLP(LastPF);
+            using (new Utility.HourGlass(false))
+            {
+                GetActiveSheet().Ignore = true;
+                Controls.Remove(TLP);
+                SetupTLP(LastPF);
+            }
         }
 
         private void HighightPoint(Point location, PictureBox pictureBox)
@@ -401,15 +410,18 @@ namespace XferSuite.Apps.SEYR
 
         private void MakeCycleFile(List<DataSheet> sheets)
         {
-            int idx = 0;
-            string file = string.Empty;
-            foreach (DataSheet sheet in sheets)
+            using (new Utility.HourGlass(false))
             {
-                string lines = sheet.CreateCycleFile(ref idx);
-                ApplyDelimeter(ref lines);
-                file += lines;
+                int idx = 0;
+                string file = string.Empty;
+                foreach (DataSheet sheet in sheets)
+                {
+                    string lines = sheet.CreateCycleFile(ref idx);
+                    ApplyDelimeter(ref lines);
+                    file += lines;
+                }
+                _ = new CycleFileViewer(MakeCycleFileHeader(), file);
             }
-            _ = new CycleFileViewer(MakeCycleFileHeader(), file);
         }
 
         private string MakeCycleFileHeader()
@@ -459,57 +471,56 @@ namespace XferSuite.Apps.SEYR
                 return;
             }
 
-            Cursor = Cursors.WaitCursor;
-            Application.DoEvents();
-
-            Excel._Application xl = new Excel.Application();
-            Excel._Workbook wb = xl.Workbooks.Add(Type.Missing);
-            Excel._Worksheet ws = wb.Sheets[1];
-
-            DataSheet[] sheetsCopy = (DataSheet[])sheets.ToArray().Clone();
-            sheetsCopy = sheetsCopy.OrderBy(x => x.ID.Item1).ThenBy(x => x.ID.Item2).ToArray();
-
-            for (int i = sheetsCopy.Length - 1; i >= 0; i--)
+            using (new Utility.HourGlass(false))
             {
-                if (i != sheetsCopy.Length - 1) ws = wb.Sheets.Add();
-                ws.Name = sheetsCopy[i].ID.ToString();
+                Excel._Application xl = new Excel.Application();
+                Excel._Workbook wb = xl.Workbooks.Add(Type.Missing);
+                Excel._Worksheet ws = wb.Sheets[1];
 
-                object[,] data = sheetsCopy[i].GetData(LastPF);
-                var startCell = ws.Cells[1, 1];
-                var endCell = ws.Cells[data.GetLength(0), data.GetLength(1)];
-                var writeRange = ws.Range[startCell, endCell];
-                writeRange.Value = data;
+                DataSheet[] sheetsCopy = (DataSheet[])sheets.ToArray().Clone();
+                sheetsCopy = sheetsCopy.OrderBy(x => x.ID.Item1).ThenBy(x => x.ID.Item2).ToArray();
 
-                if (!LastPF)
+                for (int i = sheetsCopy.Length - 1; i >= 0; i--)
                 {
-                    int[] IDs = Criteria.Select(x => x.ID).ToArray();
-                    string[] legendStrings = Criteria.Select(x => x.LegendEntry).ToArray();
-                    for (int j = 0; j < Criteria.Count; j++)
+                    if (i != sheetsCopy.Length - 1) ws = wb.Sheets.Add();
+                    ws.Name = sheetsCopy[i].ID.ToString();
+
+                    object[,] data = sheetsCopy[i].GetData(LastPF);
+                    var startCell = ws.Cells[1, 1];
+                    var endCell = ws.Cells[data.GetLength(0), data.GetLength(1)];
+                    var writeRange = ws.Range[startCell, endCell];
+                    writeRange.Value = data;
+
+                    if (!LastPF)
                     {
-                        ((Excel.Range)ws.Cells[data.GetLength(0) + 2 + j, 1]).Value = IDs[j];
-                        ((Excel.Range)ws.Cells[data.GetLength(0) + 2 + j, 2]).Value = legendStrings[j];
+                        int[] IDs = Criteria.Select(x => x.ID).ToArray();
+                        string[] legendStrings = Criteria.Select(x => x.LegendEntry).ToArray();
+                        for (int j = 0; j < Criteria.Count; j++)
+                        {
+                            ((Excel.Range)ws.Cells[data.GetLength(0) + 2 + j, 1]).Value = IDs[j];
+                            ((Excel.Range)ws.Cells[data.GetLength(0) + 2 + j, 2]).Value = legendStrings[j];
+                        }
                     }
+
+                    Excel.Range used = ws.UsedRange;
+                    used.EntireColumn.ColumnWidth = 5;
+                    used.Style.HorizontalAlignment = HorizontalAlignment.Center;
+                    Excel.ColorScale cs = used.Cells.FormatConditions.AddColorScale(3);
+                    cs.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
+                    cs.ColorScaleCriteria[1].FormatColor.Color = 0x001403FC;  // Blue
+                    cs.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValuePercentile;
+                    cs.ColorScaleCriteria[2].Value = 50;
+                    cs.ColorScaleCriteria[2].FormatColor.Color = 0x00FC0303;  // Red
+                    cs.ColorScaleCriteria[3].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
+                    cs.ColorScaleCriteria[3].FormatColor.Color = 0x0003FC1C;  // Green
                 }
 
-                Excel.Range used = ws.UsedRange;
-                used.EntireColumn.ColumnWidth = 5;
-                used.Style.HorizontalAlignment = HorizontalAlignment.Center;
-                Excel.ColorScale cs = used.Cells.FormatConditions.AddColorScale(3);
-                cs.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
-                cs.ColorScaleCriteria[1].FormatColor.Color = 0x001403FC;  // Blue
-                cs.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValuePercentile;
-                cs.ColorScaleCriteria[2].Value = 50;
-                cs.ColorScaleCriteria[2].FormatColor.Color = 0x00FC0303;  // Red
-                cs.ColorScaleCriteria[3].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
-                cs.ColorScaleCriteria[3].FormatColor.Color = 0x0003FC1C;  // Green
+                if (File.Exists(path)) File.Delete(path);
+                wb.SaveAs(path, 51, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                wb.Close(true, Type.Missing, Type.Missing);
+                xl.Quit();
             }
 
-            if (File.Exists(path)) File.Delete(path);
-            wb.SaveAs(path, 51, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-            wb.Close(true, Type.Missing, Type.Missing);
-            xl.Quit();
-
-            Cursor = Cursors.Default;
             Process.Start(path);
         }
 
@@ -618,14 +629,29 @@ namespace XferSuite.Apps.SEYR
 
         #region Copy Data Rows
 
-        private void CopyDataRowsEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void CopyDataRowsSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            CopyDataRows(new List<DataSheet>() { GetActiveSheet() });
+        }
 
+        private void CopyDataRowsEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CopyDataRows(Sheets);
+        }
+
+        private void CopyDataRows(List<DataSheet> sheets)
+        {
+            using (new Utility.HourGlass(false))
+            {
+                string data = string.Empty;
+                foreach (DataSheet sheet in sheets)
+                {
+                    string lines = sheet.GetDataRows();
+                    ApplyDelimeter(ref lines);
+                    data += lines;
+                }
+                Clipboard.SetText(data);
+            }
         }
 
         #endregion

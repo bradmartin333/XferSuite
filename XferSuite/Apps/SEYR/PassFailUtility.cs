@@ -125,27 +125,28 @@ namespace XferSuite.Apps.SEYR
 
         private void ShowImages(int x)
         {
-            Cursor = Cursors.WaitCursor;
-            if (LoadingImages) return;
-            LoadingImages = true;
-            string[] locations = Data.Where(d => Math.Abs(d.Score - x) <= 1 && d.FeatureName == Feature.Name).Select(e => e.Location()).Distinct().ToArray();
-            HashSet<string> locationsHashSet = new HashSet<string>(locations);
-            DataEntry[] imageEntriesRaw = Data.Where(d => d.Feature.SaveImage).ToArray();
-            if (imageEntriesRaw.Length > 0)
+            using (new Utility.HourGlass(false))
             {
-                string[] imageFeatures = imageEntriesRaw.Select(d => d.Feature.CriteriaString).Distinct().ToArray();
-                bool drawFeatures = imageFeatures.Length == 1 && imageFeatures[0] == "img";
-                DataEntry[] imageEntries = imageEntriesRaw.Where(d => locationsHashSet.Contains(d.Location())).ToArray();
-                CloseImageScroller();
-                if (imageEntries.Any())
+                if (LoadingImages) return;
+                LoadingImages = true;
+                string[] locations = Data.Where(d => Math.Abs(d.Score - x) <= 1 && d.FeatureName == Feature.Name).Select(e => e.Location()).Distinct().ToArray();
+                HashSet<string> locationsHashSet = new HashSet<string>(locations);
+                DataEntry[] imageEntriesRaw = Data.Where(d => d.Feature.SaveImage).ToArray();
+                if (imageEntriesRaw.Length > 0)
                 {
-                    IEnumerable<IGrouping<string, DataEntry>> imageGroups = imageEntries.GroupBy(e => e.FeatureName);
-                    string initialFeature = Feature.SaveImage ? Feature.Name : imageGroups.First().Key;
-                    _ = new ImageScroller(imageGroups, initialFeature, Feature, NumberImagesInScroller, x, PenSize, drawFeatures);
+                    string[] imageFeatures = imageEntriesRaw.Select(d => d.Feature.CriteriaString).Distinct().ToArray();
+                    bool drawFeatures = imageFeatures.Length == 1 && imageFeatures[0] == "img";
+                    DataEntry[] imageEntries = imageEntriesRaw.Where(d => locationsHashSet.Contains(d.Location())).ToArray();
+                    CloseImageScroller();
+                    if (imageEntries.Any())
+                    {
+                        IEnumerable<IGrouping<string, DataEntry>> imageGroups = imageEntries.GroupBy(e => e.FeatureName);
+                        string initialFeature = Feature.SaveImage ? Feature.Name : imageGroups.First().Key;
+                        _ = new ImageScroller(imageGroups, initialFeature, Feature, NumberImagesInScroller, x, PenSize, drawFeatures);
+                    }
                 }
+                LoadingImages = false;
             }
-            Cursor = Cursors.Default;
-            LoadingImages = false;
         }
 
         private void Control_MouseWheel(object sender, MouseEventArgs e)

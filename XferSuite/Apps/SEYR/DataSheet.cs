@@ -54,9 +54,13 @@ namespace XferSuite.Apps.SEYR
                     Color c = Data[j, i].Item2.Color;
                     if (showPF) 
                     {
-                        c = Data[j, i].Item2.Pass ? PassColor : FailColor;
-                        if (c == PassColor) 
+                        if (Data[j, i].Item2.Pass)
+                        {
                             pass++;
+                            c = PassColor;
+                        }
+                        else
+                            c = FailColor;     
                     }
                     bitmap.SetPixel(i, j, c);
                 }
@@ -110,8 +114,8 @@ namespace XferSuite.Apps.SEYR
             object[,] output = new object[DataSize.Width, DataSize.Height];
             for (int i = 0; i < DataSize.Width; i++)
                 for (int j = 0; j < DataSize.Height; j++)
-                    output[FlipY ? DataSize.Width - i - 1 : i, FlipX ? DataSize.Height - j - 1 : j] = ((Data[i, j].Item1 == null) ? 
-                        " " : (object)(showPF ? Convert.ToInt32(Data[i, j].Item2.Pass) : Data[i, j].Item2.ID));
+                    output[FlipY ? DataSize.Width - i - 1 : i, FlipX ? DataSize.Height - j - 1 : j] = (Data[i, j].Item1 == null) ? 
+                        " " : (object)(showPF ? Convert.ToInt32(Data[i, j].Item2.Pass) : Data[i, j].Item2.ID);
             return output;
         }
 
@@ -155,6 +159,15 @@ namespace XferSuite.Apps.SEYR
             return sb.ToString();
         }
 
+        public string GetDataRows()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < Render.Height; j++)
+                for (int i = 0; i < Render.Width; i++)
+                    sb.AppendLine($"{GetLocation(new Point(i, j), true).Item1[0].Location()}\t{(Render.GetPixel(i, j).ToArgb() == PassColor.ToArgb() ? "Pass" : "Fail")}");
+            return sb.ToString();
+        }
+
         public string CreateCycleFile(ref int idx)
         {
             StringBuilder sb = new StringBuilder();
@@ -162,7 +175,7 @@ namespace XferSuite.Apps.SEYR
             {
                 for (int i = 0; i < Render.Width; i++)
                 {
-                    if (Render.GetPixel(i, j) == FailColor)
+                    if (Render.GetPixel(i, j).ToArgb() == FailColor.ToArgb())
                     {
                         idx++;
                         sb.AppendLine(CreateCycleFileEntry(idx, GetLocation(new Point(i, j), true).Item1[0]));
@@ -189,7 +202,7 @@ namespace XferSuite.Apps.SEYR
                 if (!cycle && FlipY) bmpY = Render.Height - bmpY - 1;
                 return Data[bmpY, bmpX];
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return (null, null);
             }
