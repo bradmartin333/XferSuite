@@ -15,7 +15,6 @@ namespace XferSuite
         public MainMenu()
         {
             InitializeComponent();
-            Activated += Form_Activated; // Functions to deselect active form
             Text = string.Format("XferSuite v{0}.{1}", MajorVersion, MinorVerson);
             foreach (Button b in tableLayoutPanel.Controls.OfType<Button>())
             {

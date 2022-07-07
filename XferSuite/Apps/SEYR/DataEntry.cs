@@ -113,6 +113,8 @@ namespace XferSuite.Apps.SEYR
 
         public string Location() => $"RR {RR}, RC {RC}, R {R}, C {C}, SR {SR}, SC {SC}, TR {TR}, TC {TC}";
 
+        public string DataRow() => $"{ImageNumber}, {X}, {Y}, {RR}, {RC}, {R}, {C}, {SR}, {SC}, {TR}, {TC}";
+
         public override string ToString() => $"({FeatureName} {Score})";
 
         public void UpdateRaw() => Raw = $"{ImageNumber}\t{X}\t{Y}\t{RR}\t{RC}\t{R}\t{C}\t{SR}\t{SC}\t{TR}\t{TC}\t{FeatureName}\t{Score}\t{State}\t{ImageData}";

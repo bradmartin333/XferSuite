@@ -161,10 +161,10 @@ namespace XferSuite.Apps.SEYR
 
         public string GetDataRows()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder("ImageNumber, X, Y, RR, RC, R, C, SR, SC, TR, TC, State\n");
             for (int j = 0; j < Render.Height; j++)
                 for (int i = 0; i < Render.Width; i++)
-                    sb.AppendLine($"{GetLocation(new Point(i, j), true).Item1[0].Location()}\t{(Render.GetPixel(i, j).ToArgb() == PassColor.ToArgb() ? "Pass" : "Fail")}");
+                    sb.AppendLine($"{GetLocation(new Point(i, j), true).Item1[0].DataRow()}\t{(Render.GetPixel(i, j).ToArgb() == PassColor.ToArgb() ? "Pass" : "Fail")}");
             return sb.ToString();
         }
 
