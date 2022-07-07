@@ -83,11 +83,18 @@ namespace XferSuite.Apps.SEYR
                 {
                     DataEntry entry = entries[0];
                     Size size = entry.Image.Size;
-                    Bitmap bitmap = new Bitmap(DataSize.Height * size.Width, DataSize.Width * size.Height);
-                    for (int i = 0; i < DataSize.Height; i++)
-                        for (int j = 0; j < DataSize.Width; j++)
-                            DrawTile(i, j, feature.Name, ref bitmap);          
-                    return bitmap;
+                    try
+                    {
+                        Bitmap bitmap = new Bitmap(DataSize.Height * size.Width, DataSize.Width * size.Height);
+                        for (int i = 0; i < DataSize.Height; i++)
+                            for (int j = 0; j < DataSize.Width; j++)
+                                DrawTile(i, j, feature.Name, ref bitmap);
+                        return bitmap;
+                    }
+                    catch (Exception)
+                    {
+                        return new Bitmap(1, 1);
+                    }
                 }
                 else
                     return new Bitmap(1, 1);
