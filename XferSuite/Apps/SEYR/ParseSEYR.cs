@@ -255,6 +255,7 @@ namespace XferSuite.Apps.SEYR
         public readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
         public readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
 
+        public static int LongestFeatureName = 0;
         public static Project Project { get; set; } = null;
         private List<DataEntry> Data { get; set; } = new List<DataEntry>();
         private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
@@ -426,8 +427,11 @@ namespace XferSuite.Apps.SEYR
         private void RescoreAllData()
         {
             ToggleInfo("Fitting Data...", Color.Bisque);
+            LongestFeatureName = 0;
             foreach (Feature feature in Project.Features)
             {
+                if (feature.Name.Length > LongestFeatureName)
+                    LongestFeatureName = feature.Name.Length;
                 foreach (DataEntry entry in feature.Data)
                     entry.State = feature.GenerateState(entry.Score);
                 if (string.IsNullOrEmpty(feature.CriteriaString))

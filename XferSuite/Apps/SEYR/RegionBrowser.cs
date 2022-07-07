@@ -237,15 +237,15 @@ namespace XferSuite.Apps.SEYR
                     PictureBox thisPBX = GetActivePictureBox();
                     DataSheet thisSheet = GetActiveSheet();
                     HighightPoint(location, thisPBX);
-                    (DataEntry[] match, Criteria criterion) = thisSheet.GetLocation(location);
-                    if (match != null)
+                    (DataEntry[] all, Criteria criterion) = thisSheet.GetLocation(location);
+                    if (all != null)
                     {
-                        DataEntry[] matches = match.Where(x => x.Image != null).ToArray();
+                        DataEntry[] matches = all.Where(x => x.Image != null).ToArray();
                         if (matches.Any())
-                            Inspection.Set(matches, criterion);
+                            Inspection.Set(all, matches, criterion);
                         else
                             Inspection.Hide();
-                        Text = match[0].Location();
+                        Text = all[0].Location();
                     }
                     break;
                 case MouseButtons.Right:

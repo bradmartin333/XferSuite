@@ -8,7 +8,8 @@ namespace XferSuite.Apps.SEYR
     public partial class Inspection : Form
     {
         private bool Loading = false;
-        private DataEntry[] Data;
+        private DataEntry[] AllData;
+        private DataEntry[] Matches;
         private int IDX = 0;
         private readonly string FileName;
 
@@ -48,16 +49,18 @@ namespace XferSuite.Apps.SEYR
         private void CBX_CheckedChanged(object sender, EventArgs e)
         {
             if (Loading) return;
-            foreach (DataEntry entry in Data)
+            foreach (DataEntry entry in Matches)
                 entry.State = CBX.Checked;
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
         }
 
-        public void Set(DataEntry[] d, Criteria criteria)
+        public void Set(DataEntry[] all, DataEntry[] matches, Criteria criteria)
         {
             Loading = true;
             //IDX = 0; // Reset to starting feature
-            Data = d;
+            AllData = all;
+            UpdateAllData();
+            Matches = matches;
             CBX.Checked = criteria.Pass;
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
             PBX.BackColor = criteria.Color;
@@ -69,17 +72,39 @@ namespace XferSuite.Apps.SEYR
 
         private void CycleImages()
         {
-            if (IDX > Data.Length - 1) IDX = 0; // Simple error prevention
-            PBX.BackgroundImage = Data[IDX].Image;
-            Text = $"{Data[IDX]} {Data[IDX].X}, {Data[IDX].Y}";
-            LblInfo.Text = Data[IDX].Location();
+            if (IDX > Matches.Length - 1) IDX = 0; // Simple error prevention
+            PBX.BackgroundImage = Matches[IDX].Image;
+            Text = $"{Matches[IDX]} {Matches[IDX].X}, {Matches[IDX].Y}";
+            LblInfo.Text = Matches[IDX].Location();
         }
 
         private void PBX_Click(object sender, EventArgs e)
         {
             IDX++;
-            if (IDX > Data.Length - 1) IDX = 0;
+            if (IDX > Matches.Length - 1) IDX = 0;
             CycleImages();
+        }
+
+        private void BtnShowData_Click(object sender, EventArgs e)
+        {
+            if (RTB.Visible)
+            {
+                RTB.Visible = false;
+                BtnViewDistribution.Text = "Show Data";
+            }
+            else
+            {
+                RTB.Visible = true;
+                BtnViewDistribution.Text = "Hide Data";
+            }
+        }
+
+        private void UpdateAllData()
+        {
+            string data = string.Empty;
+            foreach (DataEntry entry in AllData)
+                data += $"{entry.PrettyString()}\n";
+            RTB.Text = data;
         }
     }
 }
