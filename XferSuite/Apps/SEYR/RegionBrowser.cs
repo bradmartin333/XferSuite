@@ -643,7 +643,7 @@ namespace XferSuite.Apps.SEYR
         {
             using (new Utility.HourGlass(false))
             {
-                string data = "ImageNumber, X, Y, RR, RC, R, C, SR, SC, TR, TC, State, ID, Legend\n";
+                string data = "ImageNumber, X, Y, RR, RC, R, C, SR, SC, TileR, TileC, CycleR, CycleC, State, ID, Legend\n";
                 foreach (DataSheet sheet in sheets)
                     data += sheet.GetDataRows();
                 ApplyDelimeter(ref data);

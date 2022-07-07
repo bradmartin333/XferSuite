@@ -176,7 +176,8 @@ namespace XferSuite.Apps.SEYR
                     if (Data[i, j].Item1 != null)
                     {
                         (DataEntry[], Criteria) rowObject = GetLocation(new Point(i, j), true);
-                        sb.AppendLine($"{GetLocation(new Point(i, j), true).Item1[0].DataRow()}, " +
+                        DataEntry d = rowObject.Item1[0];
+                        sb.AppendLine($"{d.DataRow()}, " + CreateCycleRC(d) + ", " +
                             $"{(rowObject.Item2.Pass ? "Pass" : "Fail")}, " +
                             $"{rowObject.Item2.ID}, {rowObject.Item2.LegendEntry}");
                     }         
@@ -202,8 +203,12 @@ namespace XferSuite.Apps.SEYR
 
         private string CreateCycleFileEntry(int idx, DataEntry d)
         {
-            return $"{idx}, AB1234, 1, 1, 1, 1, {idx}, YZ9876, {d.RR}, {d.RC}, " +
-                   $"{(d.R - 1) * StampGrid.Width * ImageGrid.Width + (d.SR - 1) * StampGrid.Width + d.TR}, " +
+            return $"{idx}, AB1234, 1, 1, 1, 1, {idx}, YZ9876, {d.RR}, {d.RC}, " + CreateCycleRC(d);
+        }
+
+        private string CreateCycleRC(DataEntry d)
+        {
+            return $"{(d.R - 1) * StampGrid.Width * ImageGrid.Width + (d.SR - 1) * StampGrid.Width + d.TR}, " +
                    $"{(d.C - 1) * StampGrid.Height * ImageGrid.Height + (d.SC - 1) * StampGrid.Height + d.TC}";
         }
 
