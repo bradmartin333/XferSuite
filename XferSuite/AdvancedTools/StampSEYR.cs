@@ -57,6 +57,7 @@ namespace XferSuite.AdvancedTools
                 MessageBox.Show("This file is not currently supported by this feature", "XferSuite Advanced Tools");
                 return;
             }
+            MaxPostCount = 1;
             Counts = new int[3];
             for (int i = 1; i < lines.Length; i++)
             {

@@ -20,6 +20,8 @@ namespace XferSuite.Apps.SEYR
         private TableLayoutPanel TLP;
         private List<PictureBox> PictureBoxes;
         private bool LastPF = false;
+        private Point LastClick = NullClick;
+        private static Point NullClick = new Point(-1, -1);
 
         public RegionBrowser(ParseSEYR parseSEYR)
         {
@@ -37,10 +39,30 @@ namespace XferSuite.Apps.SEYR
 
         private void RegionBrowser_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F)
+            switch (e.KeyCode)
             {
-                IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == Text);
-                if (matches.Any()) matches.First().BringToFront();
+                case Keys.Up:
+                case Keys.W:
+                    ShiftInspection(new Point(0, 1));
+                    break;
+                case Keys.Left:
+                case Keys.A:
+                    ShiftInspection(new Point(-1, 0));
+                    break;
+                case Keys.Down:
+                case Keys.S:
+                    ShiftInspection(new Point(0, -1));
+                    break;
+                case Keys.Right:
+                case Keys.D:
+                    ShiftInspection(new Point(0, 1));
+                    break;
+                case Keys.F:
+                    IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == Text);
+                    if (matches.Any()) matches.First().BringToFront();
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -215,19 +237,7 @@ namespace XferSuite.Apps.SEYR
             {
                 case MouseButtons.Left:
                     Point location = StretchMousePos(e.Location);
-                    PictureBox thisPBX = GetActivePictureBox();
-                    DataSheet thisSheet = GetActiveSheet();
-                    HighightPoint(location, thisPBX);
-                    (DataEntry[] all, Criteria criterion) = thisSheet.GetLocation(location);
-                    if (all != null)
-                    {
-                        DataEntry[] matches = all.Where(x => x.Image != null).ToArray();
-                        if (matches.Any())
-                            Inspection.Set(all, matches, criterion);
-                        else
-                            Inspection.Hide();
-                        Text = all[0].Location();
-                    }
+                    OpenInspection(location);
                     break;
                 case MouseButtons.Right:
                     ContextMenuStrip.Show(((PictureBox)sender).PointToScreen(e.Location));
@@ -238,6 +248,31 @@ namespace XferSuite.Apps.SEYR
                 default:
                     break;
             }
+        }
+
+        private void ShiftInspection(Point shift)
+        {
+
+        }
+
+        private void OpenInspection(Point p)
+        {
+            PictureBox thisPBX = GetActivePictureBox();
+            DataSheet thisSheet = GetActiveSheet();
+            HighightPoint(p, thisPBX);
+            (DataEntry[] all, Criteria criterion) = thisSheet.GetLocation(p);
+            if (all != null)
+            {
+                DataEntry[] matches = all.Where(x => x.Image != null).ToArray();
+                if (matches.Any())
+                    Inspection.Set(all, matches, criterion);
+                else
+                    Inspection.Hide();
+                Text = all[0].Location();
+                LastClick = p;
+            }
+            else
+                LastClick = NullClick;
         }
 
         private void OpenEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
