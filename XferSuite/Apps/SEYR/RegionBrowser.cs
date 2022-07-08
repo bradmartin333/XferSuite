@@ -29,8 +29,8 @@ namespace XferSuite.Apps.SEYR
             Project = ParseSEYR.Project;
             PS = parseSEYR;
             ExcelStart = new Point(PS.ExcelLeftStart, PS.ExcelTopStart);
-            Inspection = new Inspection(PS.FileName);
-            Text = PS.FileName;
+            Text = ParseSEYR.FileName;
+            Inspection = new Inspection(Text);
             SetupTLP(PS.CbxPassFail.Checked);
             Show();
         }
@@ -39,7 +39,7 @@ namespace XferSuite.Apps.SEYR
         {
             if (e.KeyCode == Keys.F)
             {
-                IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == PS.FileName);
+                IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == Text);
                 if (matches.Any()) matches.First().BringToFront();
             }
         }

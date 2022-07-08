@@ -194,6 +194,7 @@ namespace XferSuite.Apps.SEYR
 
         public string CreateCycleFile(ref int idx)
         {
+            string repairWafer = ParseSEYR.FileName + "_Repair";
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < DataSize.Width; i++)
                 for (int j = 0; j < DataSize.Height; j++)
@@ -204,15 +205,15 @@ namespace XferSuite.Apps.SEYR
                         if (!rowObject.Item2.Pass)
                         {
                             idx++;
-                            sb.AppendLine(CreateCycleFileEntry(idx, rowObject.Item1[0]));
+                            sb.AppendLine(CreateCycleFileEntry(repairWafer, idx, rowObject.Item1[0]));
                         }
                     }                   
             return sb.ToString();
         }
 
-        private string CreateCycleFileEntry(int idx, DataEntry d)
+        private string CreateCycleFileEntry(string repairWafer, int idx, DataEntry d)
         {
-            return $"{idx}, AB1234, 1, 1, 1, 1, {idx}, YZ9876, {d.RR}, {d.RC}, " + CreateCycleRC(d);
+            return $"{idx}, {repairWafer}, 1, 1, 1, 1, {idx}, YZ9876, {d.RR}, {d.RC}, " + CreateCycleRC(d);
         }
 
         private string CreateCycleRC(DataEntry d)

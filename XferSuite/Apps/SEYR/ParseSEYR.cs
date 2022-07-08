@@ -294,7 +294,7 @@ namespace XferSuite.Apps.SEYR
 
         #region  Globals and Setup
 
-        public readonly string FileName;
+        public static string FileName;
         public readonly string ActiveDirectory;
         public readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
         public readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
