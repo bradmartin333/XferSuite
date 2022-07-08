@@ -43,7 +43,7 @@ namespace XferSuite.Apps.SEYR
             {
                 case Keys.Up:
                 case Keys.W:
-                    ShiftInspection(new Point(0, 1));
+                    ShiftInspection(new Point(0, -1));
                     break;
                 case Keys.Left:
                 case Keys.A:
@@ -51,11 +51,11 @@ namespace XferSuite.Apps.SEYR
                     break;
                 case Keys.Down:
                 case Keys.S:
-                    ShiftInspection(new Point(0, -1));
+                    ShiftInspection(new Point(0, 1));
                     break;
                 case Keys.Right:
                 case Keys.D:
-                    ShiftInspection(new Point(0, 1));
+                    ShiftInspection(new Point(1, 0));
                     break;
                 case Keys.F:
                     IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == Text);
@@ -252,7 +252,9 @@ namespace XferSuite.Apps.SEYR
 
         private void ShiftInspection(Point shift)
         {
-
+            if (LastClick == NullClick) return;
+            Point p = new Point(LastClick.X + shift.X, LastClick.Y + shift.Y);
+            OpenInspection(p);
         }
 
         private void OpenInspection(Point p)
@@ -270,9 +272,8 @@ namespace XferSuite.Apps.SEYR
                     Inspection.Hide();
                 Text = all[0].Location();
                 LastClick = p;
+                Focus();
             }
-            else
-                LastClick = NullClick;
         }
 
         private void OpenEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
