@@ -154,5 +154,29 @@ namespace XferSuite.Properties {
                 this["SEYR_Excel_Top_Start"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SEYR_Composite_X_Margin {
+            get {
+                return ((int)(this["SEYR_Composite_X_Margin"]));
+            }
+            set {
+                this["SEYR_Composite_X_Margin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SEYR_Composite_Y_Margin {
+            get {
+                return ((int)(this["SEYR_Composite_Y_Margin"]));
+            }
+            set {
+                this["SEYR_Composite_Y_Margin"] = value;
+            }
+        }
     }
 }

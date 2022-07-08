@@ -12,17 +12,8 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class RegionBrowser : Form
     {
-        private readonly Font YieldFont;
-        private readonly Font RCFont;
-        private readonly bool YieldBrackets;
-        private readonly int PlotSize;
-        private readonly List<DataEntry> Data;
-        private readonly List<DataSheet> Sheets;
-        private readonly List<Criteria> Criteria;
-        private readonly ParseSEYR ParseSEYR;
+        private readonly ParseSEYR PS;
         private readonly Inspection Inspection;
-        private readonly string FileName;
-        private readonly ParseSEYR.Delimeter FileDelimeter;
         private readonly Project Project;
         private Size CellSize;
         private Point ExcelStart;
@@ -36,20 +27,11 @@ namespace XferSuite.Apps.SEYR
             FormClosing += RegionBrowser_FormClosing;
             KeyDown += RegionBrowser_KeyDown;
             Project = ParseSEYR.Project;
-            ParseSEYR = parseSEYR;
-            Data = ParseSEYR.Data;
-            Sheets = ParseSEYR.Sheets;
-            Criteria = ParseSEYR.PlottedCriteria;
-            FileName = ParseSEYR.FileName;
-            FileDelimeter = ParseSEYR.FileDelimeter;
-            YieldFont = ParseSEYR.YieldFont;
-            RCFont = ParseSEYR.RCFont;
-            YieldBrackets = ParseSEYR.ShowYieldBrackets;
-            PlotSize = ParseSEYR.PlotSize;
-            ExcelStart = new Point(ParseSEYR.ExcelLeftStart, ParseSEYR.ExcelTopStart);
-            Inspection = new Inspection(FileName);
-            Text = FileName;
-            SetupTLP(ParseSEYR.CbxPassFail.Checked);
+            PS = parseSEYR;
+            ExcelStart = new Point(PS.ExcelLeftStart, PS.ExcelTopStart);
+            Inspection = new Inspection(PS.FileName);
+            Text = PS.FileName;
+            SetupTLP(PS.CbxPassFail.Checked);
             Show();
         }
 
@@ -57,14 +39,14 @@ namespace XferSuite.Apps.SEYR
         {
             if (e.KeyCode == Keys.F)
             {
-                IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == FileName);
+                IEnumerable<ParseSEYR> matches = Application.OpenForms.OfType<ParseSEYR>().Where(x => x.Text == PS.FileName);
                 if (matches.Any()) matches.First().BringToFront();
             }
         }
 
         private void RegionBrowser_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Data.Where(x => x.Form != null).ToList().ForEach(x => x.Form.Close());
+            PS.Data.Where(x => x.Form != null).ToList().ForEach(x => x.Form.Close());
             Inspection.Close();
         }
 
@@ -76,7 +58,7 @@ namespace XferSuite.Apps.SEYR
 
             PictureBoxes = new List<PictureBox>();
 
-            var IDs = Sheets.Where(x => !x.Ignore).Select(s => s.ID).ToList();
+            var IDs = PS.Sheets.Where(x => !x.Ignore).Select(s => s.ID).ToList();
             var RRs = IDs.Select(id => id.Item1).Distinct();
             var RCs = IDs.Select(id => id.Item2).Distinct();
 
@@ -117,7 +99,7 @@ namespace XferSuite.Apps.SEYR
                         TLP.Controls.Add(TLPLabel(j.ToString()), 1, TLP.RowCount - 2 - ((j - rowMin) * 2) - 1);
                     }
                     
-                    DataSheet[] sheets = Sheets.Where(s => s.ID == (j, i) && !s.Ignore).ToArray();
+                    DataSheet[] sheets = PS.Sheets.Where(s => s.ID == (j, i) && !s.Ignore).ToArray();
                     if (sheets.Any())
                     {
                         DataSheet sheet = sheets.First();
@@ -128,7 +110,8 @@ namespace XferSuite.Apps.SEYR
                         if (imageSize.IsEmpty) imageSize = bmpInfo.Item1.Size;
                         Point thisCell = new Point(i - colMin + 2, (-2 * (j - rowMin - rowRange)) - 2);
                         if (showPF) 
-                            TLP.Controls.Add(TLPLabel($"{(YieldBrackets ? "┏ " : "")}{bmpInfo.Item2}{(YieldBrackets ? " ┓" : "")}", true), thisCell.X, thisCell.Y);
+                            TLP.Controls.Add(TLPLabel($"{(PS.ShowYieldBrackets ? "┏ " : "")}{bmpInfo.Item2}{(PS.ShowYieldBrackets ? " ┓" : "")}", true), 
+                                thisCell.X, thisCell.Y);
                         TLP.Controls.Add(pictureBox, thisCell.X, thisCell.Y + 1);
                     }
 
@@ -158,7 +141,7 @@ namespace XferSuite.Apps.SEYR
         {
             double rangeX = imageSize.Width * colRange * Project.PitchX;
             double rangeY = imageSize.Height * rowRange * Project.PitchY;
-            Size defaultSize = new Size(PlotSize, PlotSize);
+            Size defaultSize = new Size(PS.PlotSize, PS.PlotSize);
             Size scaledSize = defaultSize;
             if (rangeX < rangeY)
                 scaledSize = new Size((int)(defaultSize.Width * (rangeX / rangeY)), defaultSize.Height);
@@ -176,7 +159,7 @@ namespace XferSuite.Apps.SEYR
                 TextAlign = ContentAlignment.MiddleCenter,
                 AutoSize = true,
             };
-            lbl.Font = percentage ? YieldFont : RCFont;
+            lbl.Font = percentage ? PS.YieldFont : PS.RCFont;
             return lbl;
         }
 
@@ -300,8 +283,8 @@ namespace XferSuite.Apps.SEYR
         {
             using (new Utility.HourGlass(false))
             {
-                string data = GetActiveSheet().GetCSV(Criteria, LastPF);
-                string footer = LastPF ? "\n" : ('\n' + string.Join("\n", Criteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray()));
+                string data = GetActiveSheet().GetCSV(PS.PlottedCriteria, LastPF);
+                string footer = LastPF ? "\n" : ('\n' + string.Join("\n", PS.PlottedCriteria.Select(x => $"{x.ID}\t{x.LegendEntry}").ToArray()));
                 Clipboard.SetText(data + footer);
             }
         }
@@ -321,7 +304,7 @@ namespace XferSuite.Apps.SEYR
         private void ClickableAllToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             using (new Utility.HourGlass(false))
-                PictureBoxes.ForEach(p => p.BackgroundImage = Sheets.Where(s => s.ID == ((int, int))p.Tag).First().GetBitmap(LastPF).Item1);
+                PictureBoxes.ForEach(p => p.BackgroundImage = PS.Sheets.Where(s => s.ID == ((int, int))p.Tag).First().GetBitmap(LastPF).Item1);
         }
 
         private void ClickableSelectedToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -368,7 +351,7 @@ namespace XferSuite.Apps.SEYR
 
         private DataSheet GetActiveSheet()
         {
-            return Sheets.Where(x => x.ID == ((int, int))ContextMenuStrip.Tag).First();
+            return PS.Sheets.Where(x => x.ID == ((int, int))ContextMenuStrip.Tag).First();
         }
 
         private Point StretchMousePos(Point p)
@@ -403,7 +386,7 @@ namespace XferSuite.Apps.SEYR
 
         private void MakeCycleFileAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MakeCycleFile(Sheets);
+            MakeCycleFile(PS.Sheets);
         }
 
         private void MakeCycleFile(List<DataSheet> sheets)
@@ -431,7 +414,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ApplyDelimeter(ref string txt)
         {
-            switch (FileDelimeter)
+            switch (PS.FileDelimeter)
             {
                 case ParseSEYR.Delimeter.Tab:
                     txt = txt.Replace(", ", "\t");
@@ -456,7 +439,7 @@ namespace XferSuite.Apps.SEYR
 
         private void OpenExcelEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenInExcel(Sheets);
+            OpenInExcel(PS.Sheets);
         }
 
         private void OpenInExcel(List<DataSheet> sheets)
@@ -492,9 +475,9 @@ namespace XferSuite.Apps.SEYR
 
                     if (!LastPF)
                     {
-                        int[] IDs = Criteria.Select(x => x.ID).ToArray();
-                        string[] legendStrings = Criteria.Select(x => x.LegendEntry).ToArray();
-                        for (int j = 0; j < Criteria.Count; j++)
+                        int[] IDs = PS.PlottedCriteria.Select(x => x.ID).ToArray();
+                        string[] legendStrings = PS.PlottedCriteria.Select(x => x.LegendEntry).ToArray();
+                        for (int j = 0; j < PS.PlottedCriteria.Count; j++)
                         {
                             ((Excel.Range)ws.Cells[data.GetLength(0) + 1 + j + ExcelStart.Y, ExcelStart.X]).Value = IDs[j];
                             ((Excel.Range)ws.Cells[data.GetLength(0) + 1 + j + ExcelStart.Y, 1 + ExcelStart.X]).Value = legendStrings[j];
@@ -550,7 +533,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ExportSEYRUPEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportSEYRUP(Sheets);
+            ExportSEYRUP(PS.Sheets);
         }
 
         private void ExportSEYRUP(List<DataSheet> sheets)
@@ -559,22 +542,22 @@ namespace XferSuite.Apps.SEYR
             {
                 Description = "Choose a directory for the SEYRUP files to be exported to",
                 ShowNewFolderButton = true,
-                SelectedPath = ParseSEYR.ActiveDirectory,
+                SelectedPath = PS.ActiveDirectory,
             };
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 for (int i = 0; i < sheets.Count; i++)
                 {
-                    ParseSEYR.ToggleInfo($"Saving Files {i + 1}/{sheets.Count} ...", Color.Bisque);
+                    PS.ToggleInfo($"Saving Files {i + 1}/{sheets.Count} ...", Color.Bisque);
                     DataEntry[] data = sheets[i].GetEntries();
-                    string reportPath = ParseSEYR.ReportPath.Replace(".txt", $"{sheets[i].ID}.txt");
+                    string reportPath = PS.ReportPath.Replace(".txt", $"{sheets[i].ID}.txt");
                     using (StreamWriter stream = new StreamWriter(reportPath))
                     {
                         stream.WriteLine(DataEntry.Header);
                         foreach (DataEntry d in data)
                             stream.WriteLine(d.Raw);
                     }
-                    ParseSEYR.ExportSEYRUP(reportPath, ParseSEYR.ProjectPath, fbd.SelectedPath + $@"\{sheets[i].ID}.seyrup");
+                    PS.ExportSEYRUP(reportPath, PS.ProjectPath, fbd.SelectedPath + $@"\{sheets[i].ID}.seyrup");
                 }
             }
         }
@@ -590,7 +573,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ExportCompositeEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportComposite(Sheets);
+            ExportComposite(PS.Sheets);
         }
 
         private void ExportComposite(List<DataSheet> sheets)
@@ -599,22 +582,23 @@ namespace XferSuite.Apps.SEYR
             {
                 Description = "Choose a directory for the composite images to be exported to",
                 ShowNewFolderButton = true,
-                SelectedPath = ParseSEYR.ActiveDirectory,
+                SelectedPath = PS.ActiveDirectory,
             };
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 Size emptySize = new Size(1, 1);
+                Size margin = new Size(PS.CompositeXMargin, PS.CompositeYMargin);
                 string failMsg = string.Empty;
                 for (int i = 0; i < sheets.Count; i++)
                 {
-                    ParseSEYR.ToggleInfo($"Exporting images {i + 1}/{sheets.Count} ...", Color.Bisque);
-                    Bitmap bmp = sheets[i].MakeComposite();
+                    PS.ToggleInfo($"Exporting images {i + 1}/{sheets.Count} ...", Color.Bisque);
+                    Bitmap bmp = sheets[i].MakeComposite(margin);
                     if (bmp.Size == emptySize)
                         failMsg += $"{sheets[i].ID}\n";
                     else
                         bmp.Save(fbd.SelectedPath + $@"\{sheets[i].ID}.png");
                 }
-                ParseSEYR.ToggleInfo("Plot", Color.LightBlue);
+                PS.ToggleInfo("Plot", Color.LightBlue);
                 if (!string.IsNullOrEmpty(failMsg))
                 {
                     failMsg = "These regions could not be exported:\n" + failMsg;
@@ -634,7 +618,7 @@ namespace XferSuite.Apps.SEYR
 
         private void CopyDataRowsEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CopyDataRows(Sheets);
+            CopyDataRows(PS.Sheets);
         }
 
         private void CopyDataRows(List<DataSheet> sheets)
@@ -642,7 +626,7 @@ namespace XferSuite.Apps.SEYR
             using (new Utility.HourGlass(false))
             {
                 string data = "ImageNumber, X, Y, RR, RC, R, C, SR, SC, TileR, TileC, CycleR, CycleC, State, ID, Legend";
-                List<string> names = Criteria.OrderByDescending(x => x.ID).First().LegendEntry.Split(' ').ToList();
+                List<string> names = PS.PlottedCriteria.OrderByDescending(x => x.ID).First().LegendEntry.Split(' ').ToList();
                 names.ForEach(x => data += $", {x}");
                 data += '\n';
                 foreach (DataSheet sheet in sheets)

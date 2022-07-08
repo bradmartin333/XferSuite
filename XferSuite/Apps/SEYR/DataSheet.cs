@@ -72,7 +72,7 @@ namespace XferSuite.Apps.SEYR
             return (bitmap, percentage);
         }
 
-        public Bitmap MakeComposite()
+        public Bitmap MakeComposite(Size margin)
         {
             Feature[] features = ParseSEYR.Project.Features.Where(x => x.SaveImage).ToArray();
             if (features.Count() == 1)
@@ -82,13 +82,14 @@ namespace XferSuite.Apps.SEYR
                 if (entries.Any())
                 {
                     DataEntry entry = entries[0];
-                    Size size = entry.Image.Size;
+                    Size imageSize = entry.Image.Size;
+                    Size size = new Size(imageSize.Width + margin.Width, imageSize.Height + margin.Height);
                     try
                     {
                         Bitmap bitmap = new Bitmap(DataSize.Height * size.Width, DataSize.Width * size.Height);
                         for (int i = 0; i < DataSize.Height; i++)
                             for (int j = 0; j < DataSize.Width; j++)
-                                DrawTile(i, j, feature.Name, ref bitmap);
+                                DrawTile(i, j, feature.Name, size, ref bitmap);
                         return bitmap;
                     }
                     catch (Exception)
@@ -103,15 +104,15 @@ namespace XferSuite.Apps.SEYR
                 return new Bitmap(1, 1);
         }
 
-        private void DrawTile(int i, int j, string name, ref Bitmap bmp)
+        private void DrawTile(int i, int j, string name, Size size, ref Bitmap bmp)
         {
             if (Data[j, i].Item2 != null)
             {
                 Bitmap tile = Data[j, i].Item1.Where(x => x.FeatureName == name).First().Image;
-                int xLocation = i * tile.Width;
-                if (FlipX) xLocation = bmp.Width - xLocation - tile.Width;
-                int yLocation = j * tile.Height;
-                if (FlipY) yLocation = bmp.Height - yLocation - tile.Height;
+                int xLocation = i * size.Width;
+                if (FlipX) xLocation = bmp.Width - xLocation - size.Width;
+                int yLocation = j * size.Height;
+                if (FlipY) yLocation = bmp.Height - yLocation - size.Height;
                 using (Graphics g = Graphics.FromImage(bmp))
                     g.DrawImage(tile, new Rectangle(xLocation, yLocation, tile.Width, tile.Height));
             }  

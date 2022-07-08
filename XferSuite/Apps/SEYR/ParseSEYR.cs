@@ -250,6 +250,46 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private int _CompositeXMargin = Properties.Settings.Default.SEYR_Composite_X_Margin;
+        [
+            Category("User Parameters"),
+            Description("Number of X pixels to pad each tile's bitmap with"),
+            DisplayName("Composite X Margin")
+        ]
+        public int CompositeXMargin
+        {
+            get => _CompositeXMargin;
+            set
+            {
+                if (value >= 0)
+                {
+                    _CompositeXMargin = value;
+                    Properties.Settings.Default.SEYR_Composite_X_Margin = _CompositeXMargin;
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+
+        private int _CompositeYMargin = Properties.Settings.Default.SEYR_Composite_Y_Margin;
+        [
+            Category("User Parameters"),
+            Description("Number of Y pixels to pad each tile's bitmap with"),
+            DisplayName("Composite Y Margin")
+        ]
+        public int CompositeYMargin
+        {
+            get => _CompositeYMargin;
+            set
+            {
+                if (value >= 0)
+                {
+                    _CompositeYMargin = value;
+                    Properties.Settings.Default.SEYR_Composite_Y_Margin = _CompositeYMargin;
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+
         #endregion
 
         #region  Globals and Setup
