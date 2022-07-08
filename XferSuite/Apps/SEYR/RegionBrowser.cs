@@ -12,46 +12,44 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class RegionBrowser : Form
     {
-        private static Font YieldFont;
-        private static Font RCFont;
-        private static bool YieldBrackets;
-        private static int DefaultPlotSize;
+        private readonly Font YieldFont;
+        private readonly Font RCFont;
+        private readonly bool YieldBrackets;
+        private readonly int PlotSize;
         private readonly List<DataEntry> Data;
         private readonly List<DataSheet> Sheets;
         private readonly List<Criteria> Criteria;
         private readonly ParseSEYR ParseSEYR;
-        private TableLayoutPanel TLP;
-        private List<PictureBox> PictureBoxes;
         private readonly Inspection Inspection;
-        private bool LastPF = false;
         private readonly string FileName;
         private readonly ParseSEYR.Delimeter FileDelimeter;
         private readonly Project Project;
         private Size CellSize;
         private Point ExcelStart;
+        private TableLayoutPanel TLP;
+        private List<PictureBox> PictureBoxes;
+        private bool LastPF = false;
 
-        public RegionBrowser(List<DataEntry> data, List<DataSheet> sheets, List<Criteria> criteria, ParseSEYR parseSEYR, 
-            bool showPF, string fileName, ParseSEYR.Delimeter delimeter, Font yieldFont, Font rcFont, bool yieldBrackets, int defaultPlotSize, Project project,
-            Point excelStart)
+        public RegionBrowser(ParseSEYR parseSEYR)
         {
             InitializeComponent();
             FormClosing += RegionBrowser_FormClosing;
-            Data = data;
-            Sheets = sheets;
-            Criteria = criteria;
-            ParseSEYR = parseSEYR;
             KeyDown += RegionBrowser_KeyDown;
-            FileName = fileName;
+            Project = ParseSEYR.Project;
+            ParseSEYR = parseSEYR;
+            Data = ParseSEYR.Data;
+            Sheets = ParseSEYR.Sheets;
+            Criteria = ParseSEYR.PlottedCriteria;
+            FileName = ParseSEYR.FileName;
+            FileDelimeter = ParseSEYR.FileDelimeter;
+            YieldFont = ParseSEYR.YieldFont;
+            RCFont = ParseSEYR.RCFont;
+            YieldBrackets = ParseSEYR.ShowYieldBrackets;
+            PlotSize = ParseSEYR.PlotSize;
+            ExcelStart = new Point(ParseSEYR.ExcelLeftStart, ParseSEYR.ExcelTopStart);
             Inspection = new Inspection(FileName);
             Text = FileName;
-            FileDelimeter = delimeter;
-            YieldFont = yieldFont;
-            RCFont = rcFont;
-            YieldBrackets = yieldBrackets;
-            DefaultPlotSize = defaultPlotSize;
-            Project = project;
-            ExcelStart = excelStart;
-            SetupTLP(showPF);
+            SetupTLP(ParseSEYR.CbxPassFail.Checked);
             Show();
         }
 
@@ -160,7 +158,7 @@ namespace XferSuite.Apps.SEYR
         {
             double rangeX = imageSize.Width * colRange * Project.PitchX;
             double rangeY = imageSize.Height * rowRange * Project.PitchY;
-            Size defaultSize = new Size(DefaultPlotSize, DefaultPlotSize);
+            Size defaultSize = new Size(PlotSize, PlotSize);
             Size scaledSize = defaultSize;
             if (rangeX < rangeY)
                 scaledSize = new Size((int)(defaultSize.Width * (rangeX / rangeY)), defaultSize.Height);

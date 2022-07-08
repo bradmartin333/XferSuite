@@ -254,16 +254,16 @@ namespace XferSuite.Apps.SEYR
 
         #region  Globals and Setup
 
-        private readonly string FileName;
+        public readonly string FileName;
         public readonly string ActiveDirectory;
         public readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
         public readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
 
         public static int LongestFeatureName = 0;
         public static Project Project { get; set; } = null;
-        private List<DataEntry> Data { get; set; } = new List<DataEntry>();
-        private List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
-        private List<Criteria> PlottedCriteria { get; set; } = new List<Criteria>();
+        public List<DataEntry> Data { get; set; } = new List<DataEntry>();
+        public List<DataSheet> Sheets { get; set; } = new List<DataSheet>();
+        public List<Criteria> PlottedCriteria { get; set; } = new List<Criteria>();
         private RegionBrowser RegionBrowser { get; set; } = null;
         private int[] GridDims = new int[6]; // RMax, CMax, SRMax, SCMax, TRMax, TCMax
 
@@ -634,9 +634,7 @@ namespace XferSuite.Apps.SEYR
         {
             CriteriaOLV.Objects = PlottedCriteria;
             CbxPassFail.Enabled = true;
-            RegionBrowser = new RegionBrowser(Data, Sheets, PlottedCriteria, this,
-                CbxPassFail.Checked, FileName, _FileDelimeter, _YieldFont, _RCFont, _ShowYieldBrackets, _PlotSize, Project,
-                new Point(_ExcelLeftStart, _ExcelTopStart));
+            RegionBrowser = new RegionBrowser(this);
             ToggleInfo("Plot", Color.LightBlue);
         }
 

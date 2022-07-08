@@ -389,7 +389,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button BtnPlot;
         private System.Windows.Forms.Button BtnSaveAs;
-        private System.Windows.Forms.CheckBox CbxPassFail;
         private System.Windows.Forms.ContextMenuStrip FeatureMenuStrip;
         private System.Windows.Forms.ContextMenuStrip CriteriaMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem FeatureResetToolStripMenuItem;
@@ -402,5 +401,6 @@
         private System.ComponentModel.BackgroundWorker DataLoadingWorker;
         private System.ComponentModel.BackgroundWorker PlotWorker;
         private System.ComponentModel.BackgroundWorker SaveWorker;
+        public System.Windows.Forms.CheckBox CbxPassFail;
     }
 }
