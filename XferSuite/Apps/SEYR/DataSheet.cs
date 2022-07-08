@@ -109,9 +109,9 @@ namespace XferSuite.Apps.SEYR
             {
                 Bitmap tile = Data[j, i].Item1.Where(x => x.FeatureName == name).First().Image;
                 int xLocation = i * tile.Width;
-                if (FlipX) xLocation = bmp.Width - xLocation;
+                if (FlipX) xLocation = bmp.Width - xLocation - tile.Width;
                 int yLocation = j * tile.Height;
-                if (FlipY) yLocation = bmp.Height - yLocation;
+                if (FlipY) yLocation = bmp.Height - yLocation - tile.Height;
                 using (Graphics g = Graphics.FromImage(bmp))
                     g.DrawImage(tile, new Rectangle(xLocation, yLocation, tile.Width, tile.Height));
             }  
