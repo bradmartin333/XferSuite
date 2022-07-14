@@ -453,9 +453,7 @@ namespace XferSuite.Apps.SEYR
         {
             Data.Clear();
             GridDims = new int[6];
-
             (int, int) lastAgrid = (-1, -1);
-
             using (var sr = new StreamReader(ReportPath))
             {
                 DataEntry.Header = sr.ReadLine();
@@ -464,28 +462,41 @@ namespace XferSuite.Apps.SEYR
                     string line = sr.ReadLine();
                     DataEntry dataEntry = new DataEntry(line);
                     if (!dataEntry.Complete) break;
-                    Data.Add(dataEntry);
-
-                    if (lastAgrid == (-1, -1)) 
-                        lastAgrid = (dataEntry.RC, dataEntry.RR);
-                    else
-
-
-                    // For sizing data sheets
-                    for (int i = 0; i < GridDims.Length; i++)
+                    
+                    if (SplitFile)
                     {
-                        int dim = dataEntry.GetDimension(i);
-                        if (dim > GridDims[i]) GridDims[i] = dim;
+                        (int, int) thisA = (dataEntry.RC, dataEntry.RR);
+                        if (lastAgrid == (-1, -1))
+                            lastAgrid = thisA;
+                        else if (lastAgrid != thisA)
+                        {
+                            SaveSplitFile(thisA.ToString());
+                            lastAgrid = thisA;
+                        }
                     }
+                    else // For sizing data sheets
+                    {
+                        for (int i = 0; i < GridDims.Length; i++)
+                        {
+                            int dim = dataEntry.GetDimension(i);
+                            if (dim > GridDims[i]) GridDims[i] = dim;
+                        }
+                    }
+
+                    Data.Add(dataEntry);
                 }
             }
+            if (Data.Count > 0 && SplitFile) SaveSplitFile(lastAgrid.ToString());
         }
 
         private void DataLoadingWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (Data.Count == 0)
             {
-                MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
+                if (SplitFile)
+                    MessageBox.Show("SEYRUP file splitting complete.", "SEYR");
+                else
+                    MessageBox.Show("Data does not meet XferSuite requirements.", "SEYR");
                 Close();
                 return;
             }
@@ -871,14 +882,14 @@ namespace XferSuite.Apps.SEYR
 
         public void ExportSEYRUP(string reportPath, string projectPath, string exportPath)
         {
-            ToggleInfo("Compressing...", Color.Bisque);
+            if (!SplitFile) ToggleInfo("Compressing...", Color.Bisque);
             if (File.Exists(exportPath)) File.Delete(exportPath);
             using (ZipArchive zip = ZipFile.Open(exportPath, ZipArchiveMode.Create))
             {
                 zip.CreateEntryFromFile(reportPath, Path.GetFileName(ReportPath));
                 zip.CreateEntryFromFile(projectPath, Path.GetFileName(ProjectPath));
             }
-            ToggleInfo("Plot", Color.LightBlue);
+            if (!SplitFile) ToggleInfo("Plot", Color.LightBlue);
         }
 
         private void SaveProject()
@@ -902,6 +913,21 @@ namespace XferSuite.Apps.SEYR
         private void SaveWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             ExportSEYRUP(ReportPath, ProjectPath, ExportPath);
+        }
+
+        private void SaveSplitFile(string ID)
+        {
+            string reportPath = $@"{Path.GetTempPath()}SEYRreport_split.txt";
+            string exportPath = ActiveDirectory + $@"\{Text}_{ID}.seyrup";
+            using (StreamWriter stream = new StreamWriter(reportPath))
+            {
+                stream.WriteLine(DataEntry.Header);
+                foreach (DataEntry d in Data)
+                    stream.WriteLine(d.Raw);
+            }
+            ExportSEYRUP(reportPath, ProjectPath, exportPath);
+            Data.Clear();
+            File.Delete(reportPath);
         }
 
         #endregion
