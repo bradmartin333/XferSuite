@@ -691,5 +691,24 @@ namespace XferSuite.Apps.SEYR
         }
 
         #endregion
+
+        #region Inspection Routine
+
+        private void LaunchInspectionSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LaunchInspection(new List<DataSheet>() { GetActiveSheet() });
+        }
+
+        private void LaunchInspectionEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LaunchInspection(PS.Sheets);
+        }
+
+        private void LaunchInspection(List<DataSheet> sheets)
+        {
+            _ = new InspectionRoutine();
+        }
+
+        #endregion
     }
 }
