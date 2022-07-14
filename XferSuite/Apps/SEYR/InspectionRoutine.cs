@@ -111,7 +111,10 @@ namespace XferSuite.Apps.SEYR
                 if (!string.IsNullOrEmpty(FailReasons[DataIndex]))
                     TextBoxName.Text = FailReasons[DataIndex];
                 else
+                {
                     ListBoxNames.SelectedIndex = 0;
+                    Application.DoEvents(); // Selected index visually refreshed immediately
+                }
                 TextBoxName.Focus();
                 TextBoxName.SelectAll();
             }
