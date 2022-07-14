@@ -75,6 +75,11 @@ namespace XferSuite.Apps.SEYR
         public Bitmap MakeComposite(Size margin)
         {
             Feature[] features = ParseSEYR.Project.Features.Where(x => x.SaveImage).ToArray();
+            if (features.Count() > 1)
+            {
+                Feature[] specificImage = features.Where(x => x.CriteriaString == "img").ToArray();
+                if (specificImage.Length == 1) features = specificImage;
+            }
             if (features.Count() == 1)
             {
                 Feature feature = features[0];

@@ -632,7 +632,19 @@ namespace XferSuite.Apps.SEYR
                     if (bmp.Size == emptySize)
                         failMsg += $"{sheets[i].ID}\n";
                     else
-                        bmp.Save(fbd.SelectedPath + $@"\{sheets[i].ID}.png");
+                    {
+                        string path = fbd.SelectedPath + $@"\{Text}_{sheets[i].ID}.png";
+                        int idx = 2;
+                        while (File.Exists(path))
+                        {
+                            if (idx > 2)
+                                path = path.Replace($"_{idx - 1}.png", $"_{idx}.png");
+                            else
+                                path = path.Replace(".png", $"_{idx}.png");
+                            idx++;
+                        }
+                        bmp.Save(path);
+                    }
                 }
                 PS.ToggleInfo("Plot", Color.LightBlue);
                 if (!string.IsNullOrEmpty(failMsg))
