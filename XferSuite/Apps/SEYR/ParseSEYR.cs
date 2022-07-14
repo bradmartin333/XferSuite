@@ -343,8 +343,8 @@ namespace XferSuite.Apps.SEYR
         private long _LargeFileSize = Properties.Settings.Default.SEYR_Large_File_Size;
         [
             Category("User Parameters"),
-            Description("SEYRUP file size in megabytes to be considered a large file for splitting"),
-            DisplayName("Large File Size")
+            Description("SEYRUP file size to be considered for splitting"),
+            DisplayName("Large File Size (MB)")
         ]
         public long LargeFileSize
         {
