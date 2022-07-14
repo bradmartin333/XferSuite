@@ -33,23 +33,6 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        private int _PercentageSigFigs = Properties.Settings.Default.SEYR_Percentage_Sig_Figs;
-        [
-            Category("User Parameters"),
-            Description("Control number of decimal places in the Pass/Fail plot"),
-            DisplayName("Significant Figures")
-        ]
-        public int PercentageSigFigs
-        {
-            get => _PercentageSigFigs;
-            set
-            {
-                _PercentageSigFigs = value;
-                Properties.Settings.Default.SEYR_Percentage_Sig_Figs = _PercentageSigFigs;
-                Properties.Settings.Default.Save();
-            }
-        }
-
         private int _PlotSize = Properties.Settings.Default.SEYR_Plot_Size;
         [
             Category("User Parameters"),
@@ -226,6 +209,23 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private int _PercentageSigFigs = Properties.Settings.Default.SEYR_Percentage_Sig_Figs;
+        [
+            Category("User Parameters"),
+            Description("Control number of decimal places in the Pass/Fail plot"),
+            DisplayName("Significant Figures")
+        ]
+        public int PercentageSigFigs
+        {
+            get => _PercentageSigFigs;
+            set
+            {
+                _PercentageSigFigs = value;
+                Properties.Settings.Default.SEYR_Percentage_Sig_Figs = _PercentageSigFigs;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         private bool _ShowYieldBrackets = Properties.Settings.Default.SEYR_Show_Brackets;
         [
             Category("User Parameters"),
@@ -239,6 +239,23 @@ namespace XferSuite.Apps.SEYR
             {
                 _ShowYieldBrackets = value;
                 Properties.Settings.Default.SEYR_Show_Brackets = _ShowYieldBrackets;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool _ShowPFData = Properties.Settings.Default.SEYR_Show_PF_Data;
+        [
+            Category("User Parameters"),
+            Description("Show the # passing / # total above the percentage in the Pass/Fail plot"),
+            DisplayName("Show Pass Fail Data")
+        ]
+        public bool ShowPFData
+        {
+            get => _ShowPFData;
+            set
+            {
+                _ShowPFData = value;
+                Properties.Settings.Default.SEYR_Show_PF_Data = _ShowPFData;
                 Properties.Settings.Default.Save();
             }
         }
@@ -849,11 +866,10 @@ namespace XferSuite.Apps.SEYR
             }
             foreach ((int, int) region in regions)
                 Sheets.Add(new DataSheet(
-                    region,
-                    aGrid,
+                    region, aGrid,
                     new Size(GridDims[2], GridDims[3]),
                     new Size(GridDims[4], GridDims[5]),
-                    _PercentageSigFigs, _FlipX, _FlipY));
+                    _FlipX, _FlipY));
 
             return true;
         }

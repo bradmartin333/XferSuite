@@ -16,20 +16,18 @@ namespace XferSuite.Apps.SEYR
         public bool Ignore { get; set; } = false;
         private (DataEntry[], Criteria)[,] Data { get; set; }
         private Bitmap Render;
-        private readonly int SigFigs;
         private readonly bool FlipX = false;
         private readonly bool FlipY = false;
         private readonly Color PassColor = Color.Green;
         private readonly Color FailColor = Color.Firebrick;
 
-        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, int sigFigs, bool flipX, bool flipY)
+        public DataSheet((int, int) region, Size regionGrid, Size stampGrid, Size imageGrid, bool flipX, bool flipY)
         {
             ID = region;
             StampGrid = stampGrid;
             ImageGrid = imageGrid;
             DataSize = new Size(regionGrid.Width * stampGrid.Width * imageGrid.Width, regionGrid.Height * stampGrid.Height * imageGrid.Height);
             Data = new (DataEntry[], Criteria)[DataSize.Width, DataSize.Height];
-            SigFigs = sigFigs;
             FlipX = flipX;
             FlipY = flipY;
         }
@@ -41,9 +39,9 @@ namespace XferSuite.Apps.SEYR
             Data[i, j] = (e, c);
         }
 
-        public (Bitmap, string) GetBitmap(bool showPF)
+        public (Bitmap, double, double) GetBitmap(bool showPF)
         {
-            if (DataSize.Height <= 1 || DataSize.Width <= 1) return (new Bitmap(1, 1), 0.ToString("P"));
+            if (DataSize.Height <= 1 || DataSize.Width <= 1) return (new Bitmap(1, 1), 0, 0);
             Bitmap bitmap = new Bitmap(DataSize.Height, DataSize.Width);
             double pass = 0;
             double total = 0;
@@ -68,8 +66,7 @@ namespace XferSuite.Apps.SEYR
             if (FlipX) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipX);
             if (FlipY) bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             Render = bitmap;
-            string percentage = $"{Math.Round(pass / total, SigFigs) * 100}%";
-            return (bitmap, percentage);
+            return (bitmap, pass, total);
         }
 
         public Bitmap MakeComposite(Size margin)

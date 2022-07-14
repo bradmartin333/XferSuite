@@ -190,5 +190,17 @@ namespace XferSuite.Properties {
                 this["SEYR_Large_File_Size"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SEYR_Show_PF_Data {
+            get {
+                return ((bool)(this["SEYR_Show_PF_Data"]));
+            }
+            set {
+                this["SEYR_Show_PF_Data"] = value;
+            }
+        }
     }
 }

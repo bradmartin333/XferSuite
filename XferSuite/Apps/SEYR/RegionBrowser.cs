@@ -131,9 +131,15 @@ namespace XferSuite.Apps.SEYR
                         pictureBox.BackgroundImage = bmpInfo.Item1;
                         if (imageSize.IsEmpty) imageSize = bmpInfo.Item1.Size;
                         Point thisCell = new Point(i - colMin + 2, (-2 * (j - rowMin - rowRange)) - 2);
-                        if (showPF) 
-                            TLP.Controls.Add(TLPLabel($"{(PS.ShowYieldBrackets ? "┏ " : "")}{bmpInfo.Item2}{(PS.ShowYieldBrackets ? " ┓" : "")}", true), 
+                        if (showPF)
+                        {
+                            string percentage = $"{Math.Round(bmpInfo.Item2 / bmpInfo.Item3, PS.PercentageSigFigs) * 100}%";
+                            TLP.Controls.Add(
+                                TLPLabel($"{(PS.ShowPFData ? $"{bmpInfo.Item2}/{bmpInfo.Item3}\n" : "")}" +
+                                $"{(PS.ShowYieldBrackets ? "┏ " : "")}" +
+                                $"{percentage}{(PS.ShowYieldBrackets ? " ┓" : "")}", true),
                                 thisCell.X, thisCell.Y);
+                        }
                         TLP.Controls.Add(pictureBox, thisCell.X, thisCell.Y + 1);
                     }
 
