@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "XferSuite"
-#define MyAppVersion "3.33"
+#define MyAppVersion "4.1"
 #define MyAppPublisher "bradmartin333"
 #define MyAppURL "https://github.com/bradmartin333/XferSuite"
 #define MyAppExeName "XferSuite.exe"
