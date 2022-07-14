@@ -323,6 +323,23 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private long _LargeFileSize = Properties.Settings.Default.SEYR_Large_File_Size;
+        [
+            Category("User Parameters"),
+            Description("SEYRUP file size in megabytes to be considered a large file for splitting"),
+            DisplayName("Large File Size")
+        ]
+        public long LargeFileSize
+        {
+            get => _LargeFileSize;
+            set
+            {
+                _LargeFileSize = value;
+                Properties.Settings.Default.SEYR_Large_File_Size = _LargeFileSize;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         #endregion
 
         #region  Globals and Setup
@@ -339,11 +356,13 @@ namespace XferSuite.Apps.SEYR
         public List<Criteria> PlottedCriteria { get; set; } = new List<Criteria>();
         private RegionBrowser RegionBrowser { get; set; } = null;
         private int[] GridDims = new int[6]; // RMax, CMax, SRMax, SCMax, TRMax, TCMax
+        private bool SplitFile = false;
 
         public ParseSEYR(string path)
         {
             InitializeComponent();
             FileInfo userPath = new FileInfo(path);
+            CheckLargeFile(userPath);
             ActiveDirectory = userPath.DirectoryName;
             FileName = userPath.Name.Replace(userPath.Extension, "");
             Text = FileName;
@@ -370,9 +389,20 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseSEYR_Load(object sender, EventArgs e)
         {
+            
             ToggleInfo("Loading File...", Color.Bisque);
             LoadProject();
             DataLoadingWorker.RunWorkerAsync();
+        }
+
+        private void CheckLargeFile(FileInfo fileInfo)
+        {
+            if (fileInfo.Length > _LargeFileSize * 1e6)
+            {
+                DialogResult result = MessageBox.Show("This is a large SEYRUP file, would you like to split it up into smaller files within the host directory?", 
+                    "SEYR Parsing", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes) SplitFile = true;
+            }
         }
 
         private void ParseSEYR_FormClosing(object sender, FormClosingEventArgs e)
@@ -423,6 +453,9 @@ namespace XferSuite.Apps.SEYR
         {
             Data.Clear();
             GridDims = new int[6];
+
+            (int, int) lastAgrid = (-1, -1);
+
             using (var sr = new StreamReader(ReportPath))
             {
                 DataEntry.Header = sr.ReadLine();
@@ -432,6 +465,11 @@ namespace XferSuite.Apps.SEYR
                     DataEntry dataEntry = new DataEntry(line);
                     if (!dataEntry.Complete) break;
                     Data.Add(dataEntry);
+
+                    if (lastAgrid == (-1, -1)) 
+                        lastAgrid = (dataEntry.RC, dataEntry.RR);
+                    else
+
 
                     // For sizing data sheets
                     for (int i = 0; i < GridDims.Length; i++)

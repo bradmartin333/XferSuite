@@ -41,5 +41,8 @@
     <Setting Name="SEYR_Composite_Y_Margin" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="SEYR_Large_File_Size" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

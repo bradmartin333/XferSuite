@@ -178,5 +178,17 @@ namespace XferSuite.Properties {
                 this["SEYR_Composite_Y_Margin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public long SEYR_Large_File_Size {
+            get {
+                return ((long)(this["SEYR_Large_File_Size"]));
+            }
+            set {
+                this["SEYR_Large_File_Size"] = value;
+            }
+        }
     }
 }
