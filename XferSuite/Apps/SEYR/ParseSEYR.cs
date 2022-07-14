@@ -407,8 +407,12 @@ namespace XferSuite.Apps.SEYR
 
         private void ParseSEYR_FormClosing(object sender, FormClosingEventArgs e)
         {
-            File.Delete(ProjectPath);
-            File.Delete(ReportPath);
+            try  // Exception on close during loading
+            {
+                File.Delete(ProjectPath);
+                File.Delete(ReportPath);
+            }
+            catch (Exception) { }
         }
 
         public void ToggleInfo(string info, Color color)
@@ -632,8 +636,12 @@ namespace XferSuite.Apps.SEYR
 
         private void InitFeatureInfo()
         {
-            FeatureOLV.Objects = Project.Features;
-            ToggleInfo("Plot", Color.LightBlue);
+            try // Exception on close during loading
+            {
+                FeatureOLV.Objects = Project.Features;
+                ToggleInfo("Plot", Color.LightBlue);
+            }
+            catch (Exception) { }
         }
 
         private List<Criteria> GetAllCriteria()
