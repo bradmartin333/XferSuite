@@ -171,7 +171,7 @@ namespace XferSuite.Apps.SEYR
             return sb.ToString();
         }
 
-        public string GetDataRows(List<string> names)
+        public string GetDataRows(List<string> names, bool failOnly = false)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < DataSize.Width; i++)
@@ -179,6 +179,7 @@ namespace XferSuite.Apps.SEYR
                     if (Data[i, j].Item1 != null)
                     {
                         (DataEntry[], Criteria) rowObject = GetLocation(new Point(i, j), true);
+                        if (failOnly && rowObject.Item2.Pass) continue;
                         if (rowObject.Item1 == null) continue;
                         DataEntry d = rowObject.Item1[0];
                         string legend = rowObject.Item2.LegendEntry;

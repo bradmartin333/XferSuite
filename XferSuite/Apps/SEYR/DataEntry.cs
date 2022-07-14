@@ -26,7 +26,6 @@ namespace XferSuite.Apps.SEYR
         public Feature Feature { get => ParseSEYR.Project.Features.Where(x => x.Name == FeatureName).First(); }
         public float Score { get; set; }
         public bool State { get; set; }
-        public Form Form { get; set; } = null;
         public string ImageData { get; set; }
         public bool Complete { get; set; } = false; // Flag for finding imporperly formatted data
         public Bitmap Image

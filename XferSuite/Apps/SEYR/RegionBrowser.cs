@@ -68,7 +68,6 @@ namespace XferSuite.Apps.SEYR
 
         private void RegionBrowser_FormClosing(object sender, FormClosingEventArgs e)
         {
-            PS.Data.Where(x => x.Form != null).ToList().ForEach(x => x.Form.Close());
             Inspection.Close();
         }
 
@@ -663,7 +662,7 @@ namespace XferSuite.Apps.SEYR
 
         #endregion
 
-        #region Copy Data Rows
+        #region Data Rows
 
         private void CopyDataRowsSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -680,7 +679,7 @@ namespace XferSuite.Apps.SEYR
             using (new Utility.HourGlass(false))
             {
                 string data = "ImageNumber, X, Y, RR, RC, R, C, SR, SC, TileR, TileC, CycleR, CycleC, State, ID, Legend";
-                List<string> names = PS.PlottedCriteria.OrderByDescending(x => x.ID).First().LegendEntry.Split(' ').ToList();
+                List<string> names = ActiveCriteriaNames();
                 names.ForEach(x => data += $", {x}");
                 data += '\n';
                 foreach (DataSheet sheet in sheets)
@@ -690,23 +689,14 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
-        #endregion
-
-        #region Inspection Routine
-
-        private void LaunchInspectionSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void BtnInspectionRoutineToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LaunchInspection(new List<DataSheet>() { GetActiveSheet() });
+            _ = new InspectionRoutine(GetActiveSheet(), ActiveCriteriaNames());
         }
 
-        private void LaunchInspectionEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        private List<string> ActiveCriteriaNames()
         {
-            LaunchInspection(PS.Sheets);
-        }
-
-        private void LaunchInspection(List<DataSheet> sheets)
-        {
-            _ = new InspectionRoutine();
+            return PS.PlottedCriteria.OrderByDescending(x => x.ID).First().LegendEntry.Split(' ').ToList();
         }
 
         #endregion
