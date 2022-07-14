@@ -120,10 +120,43 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private bool _TransposeA = false;
+        [
+            Category("User Parameters"),
+            Description("Transposes X and Y A grid values. " +
+            "Might cause the software to stall if not an appropriate application of the feature. " +
+            "Need to close and reopen .SEYRUP file to reset. " +
+            "Toggles itself off after use as it greatly increases processing time."),
+            DisplayName("Transpose A Grid")
+        ]
+        public bool TransposeA { get => _TransposeA; set => _TransposeA = value; }
+
+        private bool _FlipAX = false;
+        [
+            Category("User Parameters"),
+            Description("Flips X direction of A grid values. " +
+            "Might cause the software to stall if not an appropriate application of the feature. " +
+            "Need to close and reopen .SEYRUP file to reset. " +
+            "Toggles itself off after use as it greatly increases processing time."),
+            DisplayName("Flip AX Grid")
+        ]
+        public bool FlipAX { get => _FlipAX; set => _FlipAX = value; }
+
+        private bool _FlipAY = false;
+        [
+            Category("User Parameters"),
+            Description("Flips Y direction of A grid values. " +
+            "Might cause the software to stall if not an appropriate application of the feature. " +
+            "Need to close and reopen .SEYRUP file to reset. " +
+            "Toggles itself off after use as it greatly increases processing time."),
+            DisplayName("Flip AY Grid")
+        ]
+        public bool FlipAY { get => _FlipAY; set => _FlipAY = value; }
+
         private bool _SplitB = false;
         [
             Category("User Parameters"),
-            Description("Irreversibly and uncontrollable creates more plotted regions. " +
+            Description("Irreversibly and uncontrollably creates more plotted regions. " +
             "Might cause the software to stall if not an appropriate application of the feature. " +
             "Need to close and reopen .SEYRUP file to reset. " +
             "Toggles itself off after use as it greatly increases processing time."),
@@ -703,6 +736,37 @@ namespace XferSuite.Apps.SEYR
         {
             Sheets.Clear();
             Size aGrid = new Size(GridDims[0], GridDims[1]);
+
+            if (_TransposeA)
+            {
+                foreach (DataEntry item in Data)
+                {
+                    (item.RC, item.RR) = (item.RR, item.RC);
+                    item.UpdateRaw();
+                }
+                aGrid = new Size(GridDims[1], GridDims[0]);
+                _TransposeA = false;
+            }
+
+            if (_FlipAX)
+            {
+                foreach (DataEntry item in Data)
+                {
+                    item.RC = aGrid.Width - item.RC + 1;
+                    item.UpdateRaw();
+                }
+                _FlipAX = false;
+            }
+
+            if (_FlipAY)
+            {
+                foreach (DataEntry item in Data)
+                {
+                    item.RR = aGrid.Height - item.RR + 1;
+                    item.UpdateRaw();
+                }
+                _FlipAY = false;
+            }
 
             if (_SplitB)
             {
