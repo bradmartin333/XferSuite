@@ -358,6 +358,11 @@ namespace XferSuite.Apps.SEYR
         {
             using (new Utility.HourGlass(false))
             {
+                if (PS.Sheets.Where(x => !x.Ignore).Count() == 1)
+                {
+                    MessageBox.Show("Need at least one shown region.", "Parse SEYR");
+                    return;
+                }
                 GetActiveSheet().Ignore = true;
                 Controls.Remove(TLP);
                 SetupTLP(LastPF);
@@ -678,10 +683,7 @@ namespace XferSuite.Apps.SEYR
         {
             using (new Utility.HourGlass(false))
             {
-                string data = "ImageNumber, X, Y, RR, RC, R, C, SR, SC, TileR, TileC, CycleR, CycleC, State, ID, Legend";
-                List<string> names = ActiveCriteriaNames();
-                names.ForEach(x => data += $", {x}");
-                data += '\n';
+                (string data, List<string> names) = SetUpDataRows();
                 foreach (DataSheet sheet in sheets)
                     data += sheet.GetDataRows(names);
                 ApplyDelimeter(ref data);
@@ -691,12 +693,24 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnInspectionRoutineToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _ = new InspectionRoutine(GetActiveSheet(), ActiveCriteriaNames());
+            using (InspectionRoutine IR = new InspectionRoutine(GetActiveSheet(), SetUpDataRows()))
+            {
+                DialogResult result = IR.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    string data = IR.Output;
+                    ApplyDelimeter(ref data);
+                    Clipboard.SetText(data);
+                }
+            }
         }
 
-        private List<string> ActiveCriteriaNames()
+        private (string, List<string>) SetUpDataRows()
         {
-            return PS.PlottedCriteria.OrderByDescending(x => x.ID).First().LegendEntry.Split(' ').ToList();
+            string data = "ImageNumber, X, Y, RR, RC, R, C, SR, SC, TileR, TileC, CycleR, CycleC, State, ID, Legend";
+            List<string> names = PS.PlottedCriteria.OrderByDescending(x => x.ID).First().LegendEntry.Split(' ').ToList();
+            names.ForEach(x => data += $", {x}");
+            return (data + "\n", names);
         }
 
         #endregion

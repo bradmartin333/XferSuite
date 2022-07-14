@@ -35,7 +35,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.BtnPrevious = new System.Windows.Forms.Button();
             this.BtnNext = new System.Windows.Forms.Button();
-            this.BtnCopy = new System.Windows.Forms.Button();
+            this.BtnDone = new System.Windows.Forms.Button();
             this.PBX = new System.Windows.Forms.PictureBox();
             this.TLP.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -65,10 +65,13 @@
             // 
             this.ListBoxNames.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListBoxNames.FormattingEnabled = true;
+            this.ListBoxNames.Items.AddRange(new object[] {
+            "null"});
             this.ListBoxNames.Location = new System.Drawing.Point(423, 3);
             this.ListBoxNames.Name = "ListBoxNames";
             this.ListBoxNames.Size = new System.Drawing.Size(221, 373);
             this.ListBoxNames.TabIndex = 3;
+            this.ListBoxNames.SelectedIndexChanged += new System.EventHandler(this.ListBoxNames_SelectedIndexChanged);
             // 
             // TextBoxName
             // 
@@ -77,6 +80,9 @@
             this.TextBoxName.Name = "TextBoxName";
             this.TextBoxName.Size = new System.Drawing.Size(221, 20);
             this.TextBoxName.TabIndex = 4;
+            this.TextBoxName.Text = "null";
+            this.TextBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TextBoxName.TextChanged += new System.EventHandler(this.TextBoxName_TextChanged);
             // 
             // flowLayoutPanel1
             // 
@@ -84,7 +90,7 @@
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.BtnPrevious);
             this.flowLayoutPanel1.Controls.Add(this.BtnNext);
-            this.flowLayoutPanel1.Controls.Add(this.BtnCopy);
+            this.flowLayoutPanel1.Controls.Add(this.BtnDone);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(437, 408);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(193, 29);
@@ -118,18 +124,18 @@
             this.BtnNext.UseVisualStyleBackColor = true;
             this.BtnNext.Click += new System.EventHandler(this.BtnNext_Click);
             // 
-            // BtnCopy
+            // BtnDone
             // 
-            this.BtnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnCopy.BackColor = System.Drawing.Color.White;
-            this.BtnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnCopy.Location = new System.Drawing.Point(115, 3);
-            this.BtnCopy.Name = "BtnCopy";
-            this.BtnCopy.Size = new System.Drawing.Size(75, 23);
-            this.BtnCopy.TabIndex = 2;
-            this.BtnCopy.Text = "Copy Data";
-            this.BtnCopy.UseVisualStyleBackColor = false;
-            this.BtnCopy.Click += new System.EventHandler(this.BtnCopy_Click);
+            this.BtnDone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnDone.BackColor = System.Drawing.Color.White;
+            this.BtnDone.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnDone.Location = new System.Drawing.Point(115, 3);
+            this.BtnDone.Name = "BtnDone";
+            this.BtnDone.Size = new System.Drawing.Size(75, 23);
+            this.BtnDone.TabIndex = 2;
+            this.BtnDone.Text = "Done";
+            this.BtnDone.UseVisualStyleBackColor = false;
+            this.BtnDone.Click += new System.EventHandler(this.BtnDone_Click);
             // 
             // PBX
             // 
@@ -167,7 +173,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button BtnPrevious;
         private System.Windows.Forms.Button BtnNext;
-        private System.Windows.Forms.Button BtnCopy;
+        private System.Windows.Forms.Button BtnDone;
         private System.Windows.Forms.PictureBox PBX;
     }
 }
