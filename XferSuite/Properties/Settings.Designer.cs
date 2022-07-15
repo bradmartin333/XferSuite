@@ -181,7 +181,7 @@ namespace XferSuite.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
         public long SEYR_Large_File_Size {
             get {
                 return ((long)(this["SEYR_Large_File_Size"]));

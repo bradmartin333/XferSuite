@@ -498,6 +498,7 @@ namespace XferSuite.Apps.SEYR
             Data.Clear();
             GridDims = new int[6];
             (int, int) lastAgrid = (-1, -1);
+            string splitDir = $@"\{DateTime.Now:ddMMMyyyy-HH-mm-ss}\";
             using (var sr = new StreamReader(ReportPath))
             {
                 DataEntry.Header = sr.ReadLine();
@@ -514,7 +515,7 @@ namespace XferSuite.Apps.SEYR
                             lastAgrid = thisA;
                         else if (lastAgrid != thisA)
                         {
-                            SaveSplitFile(thisA.ToString());
+                            SaveSplitFile(lastAgrid.ToString(), splitDir);
                             lastAgrid = thisA;
                         }
                     }
@@ -530,7 +531,7 @@ namespace XferSuite.Apps.SEYR
                     Data.Add(dataEntry);
                 }
             }
-            if (Data.Count > 0 && SplitFile) SaveSplitFile(lastAgrid.ToString());
+            if (Data.Count > 0 && SplitFile) SaveSplitFile(lastAgrid.ToString(), splitDir);
         }
 
         private void DataLoadingWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -975,10 +976,12 @@ namespace XferSuite.Apps.SEYR
             ExportSEYRUP(ReportPath, ProjectPath, ExportPath);
         }
 
-        private void SaveSplitFile(string ID)
+        private void SaveSplitFile(string ID, string splitDir)
         {
             string reportPath = $@"{Path.GetTempPath()}SEYRreport_split.txt";
-            string exportPath = ActiveDirectory + $@"\{Text}_{ID}.seyrup";
+            string exportDir = ActiveDirectory + splitDir;
+            if (!Directory.Exists(exportDir)) Directory.CreateDirectory(exportDir);
+            string exportPath = $"{exportDir}{Text}_{ID}.seyrup";
             using (StreamWriter stream = new StreamWriter(reportPath))
             {
                 stream.WriteLine(DataEntry.Header);

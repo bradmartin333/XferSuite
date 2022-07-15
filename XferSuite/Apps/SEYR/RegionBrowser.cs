@@ -150,7 +150,7 @@ namespace XferSuite.Apps.SEYR
             TLP.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             TLP.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-            for (int i = 1; i < colRange + 1; i++)
+            for (int i = colMin; i <= colMax; i++)
                 TLP.Controls.Add(TLPLabel(i.ToString()), i + 1, TLP.RowCount - 1);
 
             Label RRlabel = TLPLabel("RR");
