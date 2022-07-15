@@ -14,7 +14,14 @@ namespace XferSuite.Apps.SEYR
         private readonly DataEntry[] Entries;
         private readonly string[] DataRows;
         private readonly string[] FailReasons;
+        private readonly List<FailReason> FailReasonStructs = new List<FailReason>() { new FailReason() { Index = 1, Message = "null" } };
         private int DataIndex = -1;
+
+        private struct FailReason
+        {
+            public int Index;
+            public string Message;
+        }
 
         public InspectionRoutine(DataSheet sheet, (string, List<string>) info)
         {
@@ -23,13 +30,25 @@ namespace XferSuite.Apps.SEYR
             Entries = sheet.GetEntries();
             Header = info.Item1.Replace("\n", ", FailReason\n");
             DataRows = sheet.GetDataRows(info.Item2, true).Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            FailReasons = new string[DataRows.Length];
+            FailReasons = Enumerable.Repeat("null", DataRows.Length).ToArray();
             TextBoxName.Click += TextBoxName_Click;
             Text = $"Inspecting fails in region {ID}";
+            OLV.Objects = FailReasonStructs;
+            Shown += InspectionRoutine_Shown;
             Next(false);
         }
 
+        private void InspectionRoutine_Shown(object sender, EventArgs e)
+        {
+            SelectText();
+        }
+
         private void TextBoxName_Click(object sender, EventArgs e)
+        {
+            SelectText();
+        }
+
+        private void SelectText()
         {
             TextBoxName.Focus();
             TextBoxName.SelectAll();
@@ -40,16 +59,52 @@ namespace XferSuite.Apps.SEYR
             switch (keyData)
             {
                 case Keys.Up:
-                    if (ListBoxNames.SelectedIndex > -1) ListBoxNames.SelectedIndex--;
+                    if (OLV.SelectedIndex > -1) OLV.SelectedIndex--;
                     return true;
                 case Keys.Left:
                     Previous();
                     return true;
                 case Keys.Down:
-                    if (ListBoxNames.SelectedIndex < ListBoxNames.Items.Count - 1) ListBoxNames.SelectedIndex++;
+                    if (OLV.SelectedIndex < OLV.Items.Count - 1) OLV.SelectedIndex++;
                     return true;
                 case Keys.Right:
                     Next();
+                    return true;
+                case Keys.D1:
+                case Keys.NumPad1:
+                    SelectIndex(1);
+                    return true;
+                case Keys.D2:
+                case Keys.NumPad2:
+                    SelectIndex(2);
+                    return true;
+                case Keys.D3:
+                case Keys.NumPad3:
+                    SelectIndex(3);
+                    return true;
+                case Keys.D4:
+                case Keys.NumPad4:
+                    SelectIndex(4);
+                    return true;
+                case Keys.D5:
+                case Keys.NumPad5:
+                    SelectIndex(5);
+                    return true;
+                case Keys.D6:
+                case Keys.NumPad6:
+                    SelectIndex(6);
+                    return true;
+                case Keys.D7:
+                case Keys.NumPad7:
+                    SelectIndex(7);
+                    return true;
+                case Keys.D8:
+                case Keys.NumPad8:
+                    SelectIndex(8);
+                    return true;
+                case Keys.D9:
+                case Keys.NumPad9:
+                    SelectIndex(9);
                     return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
@@ -97,10 +152,12 @@ namespace XferSuite.Apps.SEYR
 
         private void AddName()
         {
-            if (!ListBoxNames.Items.Contains(TextBoxName.Text))
+            FailReason failReason = new FailReason() { Index = OLV.Items.Count + 1, Message = TextBoxName.Text };
+            if (!FailReasonStructs.Where(x => x.Message == failReason.Message).Any())
             {
-                ListBoxNames.Items.Add(TextBoxName.Text);
-                ListBoxNames.SelectedIndex = ListBoxNames.Items.Count - 1;
+                FailReasonStructs.Add(failReason);
+                OLV.Objects = FailReasonStructs;
+                OLV.SelectedIndex = OLV.Items.Count - 1;
             }
         }
 
@@ -119,21 +176,23 @@ namespace XferSuite.Apps.SEYR
                 DataEntry entry = matches.First();
                 PBX.BackgroundImage = entry.Image;
                 LabelCounter.Text = $"{DataIndex + 1} / {DataRows.Length}";
-                if (!string.IsNullOrEmpty(FailReasons[DataIndex]))
-                    TextBoxName.Text = FailReasons[DataIndex];
-                else
-                {
-                    ListBoxNames.SelectedIndex = 0;
-                    Application.DoEvents(); // Selected index visually refreshed immediately
-                }
-                TextBoxName.Focus();
-                TextBoxName.SelectAll();
+                OLV.SelectedIndex = FailReasonStructs.IndexOf(FailReasonStructs.Where(x => x.Message == FailReasons[DataIndex]).First());
+                SelectText();
             }
         }
 
-        private void ListBoxNames_SelectedIndexChanged(object sender, EventArgs e)
+        private void SelectIndex(int idx)
         {
-            if (ListBoxNames.SelectedItem != null) TextBoxName.Text = ListBoxNames.SelectedItem.ToString();
+            if (idx > OLV.Items.Count) return;
+            OLV.SelectedIndex = idx - 1;
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(250);
+            Next();
+        }
+
+        private void OLV_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (OLV.SelectedItem != null) TextBoxName.Text = ((FailReason)OLV.SelectedObject).Message;
         }
 
         private void TextBoxName_TextChanged(object sender, EventArgs e)
@@ -143,7 +202,6 @@ namespace XferSuite.Apps.SEYR
 
         private void BtnDone_Click(object sender, EventArgs e)
         {
-            UpdateReason();
             StringBuilder sb = new StringBuilder(Header);
             for (int i = 0; i < DataRows.Length; i++)
                 sb.AppendLine(DataRows[i].Replace("\r", $", {FailReasons[i]}"));
