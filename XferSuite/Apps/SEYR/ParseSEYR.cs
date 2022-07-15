@@ -375,6 +375,7 @@ namespace XferSuite.Apps.SEYR
         private RegionBrowser RegionBrowser { get; set; } = null;
         private int[] GridDims = new int[6]; // RMax, CMax, SRMax, SCMax, TRMax, TCMax
         private bool SplitFile = false;
+        private readonly bool HasSavedCriteria = false;
 
         public ParseSEYR(string path)
         {
@@ -389,6 +390,7 @@ namespace XferSuite.Apps.SEYR
             {
                 ExtractFile(ProjectPath, archive);
                 ExtractFile(ReportPath, archive);
+                HasSavedCriteria = ExtractFile(CriteriaPath, archive);
             }
 
             FeatureOLV.DoubleClick += FeatureOLV_DoubleClick;
@@ -410,6 +412,7 @@ namespace XferSuite.Apps.SEYR
             
             ToggleInfo("Loading File...", Color.Bisque);
             LoadProject();
+            if (HasSavedCriteria) LoadCriteria();
             DataLoadingWorker.RunWorkerAsync();
         }
 
@@ -461,6 +464,25 @@ namespace XferSuite.Apps.SEYR
                 try
                 {
                     Project = (Project)x.Deserialize(stream);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Corrupt SEYR Project. Loading default project.\n\n{ex}", "SEYR");
+                    Project = new Project();
+                    return;
+                }
+            }
+        }
+
+        private void LoadCriteria()
+        {
+            using (StreamReader stream = new StreamReader(CriteriaPath))
+            {
+                XmlSerializer x = new XmlSerializer(typeof(List<Criteria>));
+                try
+                {
+                    CriteriaOLV.Objects = (List<Criteria>)x.Deserialize(stream);
+                    CriteriaOLV.RebuildColumns();
                 }
                 catch (Exception ex)
                 {
@@ -930,6 +952,8 @@ namespace XferSuite.Apps.SEYR
 
         private void SaveCriteria()
         {
+            foreach (Criteria criteria in PlottedCriteria)
+                criteria.Override = true;
             using (StreamWriter stream = new StreamWriter(CriteriaPath))
             {
                 XmlSerializer x = new XmlSerializer(typeof(List<Criteria>));
