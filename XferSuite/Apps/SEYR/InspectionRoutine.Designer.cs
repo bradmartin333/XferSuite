@@ -36,22 +36,25 @@
             this.BtnNext = new System.Windows.Forms.Button();
             this.BtnDone = new System.Windows.Forms.Button();
             this.PBX = new System.Windows.Forms.PictureBox();
+            this.LabelCounter = new System.Windows.Forms.Label();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PBX)).BeginInit();
             this.SuspendLayout();
             // 
             // TLP
             // 
-            this.TLP.ColumnCount = 3;
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64F));
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18F));
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18F));
+            this.TLP.ColumnCount = 4;
+            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
+            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21F));
+            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.TLP.Controls.Add(this.BtnPrevious, 1, 2);
+            this.TLP.Controls.Add(this.BtnNext, 3, 2);
             this.TLP.Controls.Add(this.ListBoxNames, 1, 0);
-            this.TLP.Controls.Add(this.BtnNext, 2, 2);
             this.TLP.Controls.Add(this.TextBoxName, 1, 1);
             this.TLP.Controls.Add(this.BtnDone, 1, 3);
             this.TLP.Controls.Add(this.PBX, 0, 0);
-            this.TLP.Controls.Add(this.BtnPrevious, 1, 2);
+            this.TLP.Controls.Add(this.LabelCounter, 2, 2);
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TLP.Location = new System.Drawing.Point(0, 0);
             this.TLP.Name = "TLP";
@@ -65,24 +68,24 @@
             // 
             // ListBoxNames
             // 
-            this.TLP.SetColumnSpan(this.ListBoxNames, 2);
+            this.TLP.SetColumnSpan(this.ListBoxNames, 3);
             this.ListBoxNames.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListBoxNames.FormattingEnabled = true;
             this.ListBoxNames.Items.AddRange(new object[] {
             "null"});
-            this.ListBoxNames.Location = new System.Drawing.Point(417, 3);
+            this.ListBoxNames.Location = new System.Drawing.Point(423, 3);
             this.ListBoxNames.Name = "ListBoxNames";
-            this.ListBoxNames.Size = new System.Drawing.Size(227, 350);
+            this.ListBoxNames.Size = new System.Drawing.Size(221, 346);
             this.ListBoxNames.TabIndex = 3;
             this.ListBoxNames.SelectedIndexChanged += new System.EventHandler(this.ListBoxNames_SelectedIndexChanged);
             // 
             // TextBoxName
             // 
-            this.TLP.SetColumnSpan(this.TextBoxName, 2);
+            this.TLP.SetColumnSpan(this.TextBoxName, 3);
             this.TextBoxName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TextBoxName.Location = new System.Drawing.Point(417, 359);
+            this.TextBoxName.Location = new System.Drawing.Point(423, 355);
             this.TextBoxName.Name = "TextBoxName";
-            this.TextBoxName.Size = new System.Drawing.Size(227, 20);
+            this.TextBoxName.Size = new System.Drawing.Size(221, 20);
             this.TextBoxName.TabIndex = 4;
             this.TextBoxName.Text = "null";
             this.TextBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -95,9 +98,9 @@
             this.BtnPrevious.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnPrevious.FlatAppearance.BorderSize = 0;
             this.BtnPrevious.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnPrevious.Location = new System.Drawing.Point(417, 385);
+            this.BtnPrevious.Location = new System.Drawing.Point(423, 381);
             this.BtnPrevious.Name = "BtnPrevious";
-            this.BtnPrevious.Size = new System.Drawing.Size(110, 23);
+            this.BtnPrevious.Size = new System.Drawing.Size(39, 23);
             this.BtnPrevious.TabIndex = 0;
             this.BtnPrevious.UseVisualStyleBackColor = true;
             this.BtnPrevious.Click += new System.EventHandler(this.BtnPrevious_Click);
@@ -109,9 +112,9 @@
             this.BtnNext.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnNext.FlatAppearance.BorderSize = 0;
             this.BtnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnNext.Location = new System.Drawing.Point(533, 385);
+            this.BtnNext.Location = new System.Drawing.Point(603, 381);
             this.BtnNext.Name = "BtnNext";
-            this.BtnNext.Size = new System.Drawing.Size(111, 23);
+            this.BtnNext.Size = new System.Drawing.Size(41, 23);
             this.BtnNext.TabIndex = 1;
             this.BtnNext.UseVisualStyleBackColor = true;
             this.BtnNext.Click += new System.EventHandler(this.BtnNext_Click);
@@ -119,12 +122,13 @@
             // BtnDone
             // 
             this.BtnDone.BackColor = System.Drawing.Color.White;
-            this.TLP.SetColumnSpan(this.BtnDone, 2);
+            this.TLP.SetColumnSpan(this.BtnDone, 3);
             this.BtnDone.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnDone.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnDone.Location = new System.Drawing.Point(417, 414);
+            this.BtnDone.Location = new System.Drawing.Point(423, 414);
+            this.BtnDone.Margin = new System.Windows.Forms.Padding(3, 7, 3, 3);
             this.BtnDone.Name = "BtnDone";
-            this.BtnDone.Size = new System.Drawing.Size(227, 23);
+            this.BtnDone.Size = new System.Drawing.Size(221, 23);
             this.BtnDone.TabIndex = 2;
             this.BtnDone.Text = "Close and Copy";
             this.BtnDone.UseVisualStyleBackColor = false;
@@ -137,9 +141,20 @@
             this.PBX.Location = new System.Drawing.Point(3, 3);
             this.PBX.Name = "PBX";
             this.TLP.SetRowSpan(this.PBX, 4);
-            this.PBX.Size = new System.Drawing.Size(408, 434);
+            this.PBX.Size = new System.Drawing.Size(414, 434);
             this.PBX.TabIndex = 6;
             this.PBX.TabStop = false;
+            // 
+            // LabelCounter
+            // 
+            this.LabelCounter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LabelCounter.Location = new System.Drawing.Point(468, 378);
+            this.LabelCounter.Name = "LabelCounter";
+            this.LabelCounter.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.LabelCounter.Size = new System.Drawing.Size(129, 29);
+            this.LabelCounter.TabIndex = 7;
+            this.LabelCounter.Text = "N/A";
+            this.LabelCounter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // InspectionRoutine
             // 
@@ -166,5 +181,6 @@
         private System.Windows.Forms.Button BtnNext;
         private System.Windows.Forms.Button BtnDone;
         private System.Windows.Forms.PictureBox PBX;
+        private System.Windows.Forms.Label LabelCounter;
     }
 }

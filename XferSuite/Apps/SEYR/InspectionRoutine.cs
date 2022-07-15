@@ -25,6 +25,7 @@ namespace XferSuite.Apps.SEYR
             DataRows = sheet.GetDataRows(info.Item2, true).Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             FailReasons = new string[DataRows.Length];
             TextBoxName.Click += TextBoxName_Click;
+            Text = $"Inspecting fails in region {ID}";
             Next(false);
         }
 
@@ -66,7 +67,12 @@ namespace XferSuite.Apps.SEYR
 
         private void Previous()
         {
-            if (DataIndex == 0) return;
+            if (DataIndex == 0)
+            {
+                LabelCounter.BackColor = System.Drawing.Color.Gold;
+                return;
+            }
+            LabelCounter.BackColor = System.Drawing.SystemColors.Control;
             AddName();
             DataIndex--;
             ShowData();
@@ -74,7 +80,12 @@ namespace XferSuite.Apps.SEYR
 
         private void Next(bool userClick = true)
         {
-            if (DataIndex > DataRows.Length - 2) return;
+            if (DataIndex > DataRows.Length - 2)
+            {
+                LabelCounter.BackColor = System.Drawing.Color.LightGreen;
+                return;
+            }
+            LabelCounter.BackColor = System.Drawing.SystemColors.Control;
             if (userClick)
             {
                 UpdateReason();
@@ -107,7 +118,7 @@ namespace XferSuite.Apps.SEYR
             {
                 DataEntry entry = matches.First();
                 PBX.BackgroundImage = entry.Image;
-                Text = $"Inspecting fail {DataIndex + 1} of {DataRows.Length} in region {ID}";
+                LabelCounter.Text = $"{DataIndex + 1} / {DataRows.Length}";
                 if (!string.IsNullOrEmpty(FailReasons[DataIndex]))
                     TextBoxName.Text = FailReasons[DataIndex];
                 else
