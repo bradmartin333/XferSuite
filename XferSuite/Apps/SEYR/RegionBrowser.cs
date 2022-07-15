@@ -277,7 +277,7 @@ namespace XferSuite.Apps.SEYR
                     Inspection.Hide();
                 Text = all[0].Location();
                 LastClick = p;
-                Focus();
+                if (WindowState != FormWindowState.Maximized) Focus();
             }
         }
 
