@@ -444,7 +444,7 @@ namespace XferSuite.Apps.SEYR
                 foreach (DataSheet sheet in sheets)
                 {
                     string lines = sheet.CreateCycleFile(ref idx);
-                    ApplyDelimeter(ref lines);
+                    ParseSEYR.ApplyDelimeter(ref lines);
                     file += lines;
                 }
                 _ = new CycleFileViewer(MakeCycleFileHeader(), file);
@@ -454,24 +454,8 @@ namespace XferSuite.Apps.SEYR
         private string MakeCycleFileHeader()
         {
             string output = "UniqueID, Pick.WaferID, Pick.RegionRow, Pick.RegionColumn, Pick.Row, Pick.Column, Pick.Index, Place.WaferID, Place.RegionRow, Place.RegionColumn, Place.Row, Place.Column\n";
-            ApplyDelimeter(ref output);
+            ParseSEYR.ApplyDelimeter(ref output);
             return output;
-        }
-
-        private void ApplyDelimeter(ref string txt)
-        {
-            switch (PS.FileDelimeter)
-            {
-                case ParseSEYR.Delimeter.Tab:
-                    txt = txt.Replace(", ", "\t");
-                    break;
-                case ParseSEYR.Delimeter.Space:
-                    txt = txt.Replace(", ", " ");
-                    break;
-                case ParseSEYR.Delimeter.Comma:
-                default:
-                    break;
-            }
         }
 
         #endregion
@@ -686,7 +670,7 @@ namespace XferSuite.Apps.SEYR
                 (string data, List<string> names) = SetUpDataRows();
                 foreach (DataSheet sheet in sheets)
                     data += sheet.GetDataRows(names);
-                ApplyDelimeter(ref data);
+                ParseSEYR.ApplyDelimeter(ref data);
                 Clipboard.SetText(data);
             }
         }
@@ -696,12 +680,6 @@ namespace XferSuite.Apps.SEYR
             using (InspectionRoutine IR = new InspectionRoutine(GetActiveSheet(), SetUpDataRows()))
             {
                 DialogResult result = IR.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    string data = IR.Output;
-                    ApplyDelimeter(ref data);
-                    Clipboard.SetText(data);
-                }
             }
         }
 

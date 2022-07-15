@@ -8,7 +8,6 @@ namespace XferSuite.Apps.SEYR
 {
     public partial class InspectionRoutine : Form
     {
-        public string Output;
         private readonly string Header;
         private readonly string ID;
         private readonly DataEntry[] Entries;
@@ -200,14 +199,14 @@ namespace XferSuite.Apps.SEYR
             UpdateReason();
         }
 
-        private void BtnDone_Click(object sender, EventArgs e)
+        private void BtnCopy_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder(Header);
             for (int i = 0; i < DataRows.Length; i++)
                 sb.AppendLine(DataRows[i].Replace("\r", $", {FailReasons[i]}"));
-            Output = sb.ToString();
-            DialogResult = DialogResult.OK;
-            Close();
+            string data = sb.ToString();
+            ParseSEYR.ApplyDelimeter(ref data);
+            Clipboard.SetText(data);
         }
 
         private void UpdateReason() => FailReasons[DataIndex] = TextBoxName.Text;

@@ -51,7 +51,7 @@ namespace XferSuite.Apps.SEYR
         }
 
         public enum Delimeter { Tab, Comma, Space }
-        private Delimeter _FileDelimeter = (Delimeter)Properties.Settings.Default.SEYR_Delimeter;
+        private static Delimeter _FileDelimeter = (Delimeter)Properties.Settings.Default.SEYR_Delimeter;
         [
             Category("User Parameters"),
             Description("Tabs are excel friendly, but some tools take comma separated values. " +
@@ -994,5 +994,21 @@ namespace XferSuite.Apps.SEYR
         }
 
         #endregion
+
+        public static void ApplyDelimeter(ref string txt)
+        {
+            switch (_FileDelimeter)
+            {
+                case Delimeter.Tab:
+                    txt = txt.Replace(", ", "\t");
+                    break;
+                case Delimeter.Space:
+                    txt = txt.Replace(", ", " ");
+                    break;
+                case Delimeter.Comma:
+                default:
+                    break;
+            }
+        }
     }
 }
