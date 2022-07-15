@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System;
 using System.Text;
+using System.IO;
 
 namespace XferSuite.Apps.SEYR
 {
     public partial class InspectionRoutine : Form
     {
+        private static FailReason NullFailReason = new FailReason() { Index = 1, Message = "null" };
+        private static List<FailReason> FailReasonStructs = new List<FailReason>() { NullFailReason };
         private readonly string Header;
         private readonly string ID;
         private readonly DataEntry[] Entries;
         private readonly string[] DataRows;
         private readonly string[] FailReasons;
-        private readonly List<FailReason> FailReasonStructs = new List<FailReason>() { new FailReason() { Index = 1, Message = "null" } };
         private int DataIndex = -1;
-
+        
         private struct FailReason
         {
             public int Index;
@@ -121,7 +123,7 @@ namespace XferSuite.Apps.SEYR
 
         private void Previous()
         {
-            if (DataIndex == 0)
+            if (DataIndex <= 0)
             {
                 LabelCounter.BackColor = System.Drawing.Color.Gold;
                 return;
@@ -210,5 +212,58 @@ namespace XferSuite.Apps.SEYR
         }
 
         private void UpdateReason() => FailReasons[DataIndex] = TextBoxName.Text;
+
+        private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path = MainMenu.OpenFile("Open a Inspection Routine Fail Reason list", "txt file(*.txt) | *.txt");
+            if (string.IsNullOrEmpty(path)) return;
+            string[] lines = System.IO.File.ReadAllLines(path);
+            List<FailReason> imports = new List<FailReason>();
+            lines.ToList().ForEach(x => imports.Add(TxtToFailReason(x)));
+            FailReasonStructs = (List<FailReason>)imports.Distinct().ToList();
+            OLV.Objects = FailReasonStructs;
+        }
+
+        private FailReason TxtToFailReason(string x)
+        {
+            string[] cols = x.Split('\t');
+            if (cols.Length != 2) return NullFailReason;
+            try
+            {
+                FailReason failReason = new FailReason()
+                {
+                    Index = int.Parse(cols[0]),
+                    Message = cols[1],
+                };
+                return failReason;
+            }
+            catch (Exception)
+            {
+                return NullFailReason;
+            }
+        }
+
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog svd = new SaveFileDialog
+            {
+                Filter = "txt file(*.txt) | *.txt",
+                Title = "Save a Inspection Routine Fail Reason list",
+            };
+            if (svd.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamWriter stream = new StreamWriter(svd.FileName, false))
+                {
+                    foreach (FailReason failReason in FailReasonStructs)
+                        stream.WriteLine($"{failReason.Index}\t{failReason.Message}");
+                }
+            }
+        }
+
+        private void ClearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FailReasonStructs = new List<FailReason>() { NullFailReason };
+            OLV.Objects = FailReasonStructs;
+        }
     }
 }
