@@ -365,6 +365,7 @@ namespace XferSuite.Apps.SEYR
         public readonly string ActiveDirectory;
         public readonly string ProjectPath = $@"{Path.GetTempPath()}project.seyr";
         public readonly string ReportPath = $@"{Path.GetTempPath()}SEYRreport.txt";
+        public readonly string CriteriaPath = $@"{Path.GetTempPath()}SEYRcriteria.txt";
 
         public static int LongestFeatureName = 0;
         public static Project Project { get; set; } = null;
@@ -906,12 +907,14 @@ namespace XferSuite.Apps.SEYR
 
         public void ExportSEYRUP(string reportPath, string projectPath, string exportPath)
         {
+            SaveCriteria();
             if (!SplitFile) ToggleInfo("Compressing...", Color.Bisque);
             if (File.Exists(exportPath)) File.Delete(exportPath);
             using (ZipArchive zip = ZipFile.Open(exportPath, ZipArchiveMode.Create))
             {
                 zip.CreateEntryFromFile(reportPath, Path.GetFileName(ReportPath));
                 zip.CreateEntryFromFile(projectPath, Path.GetFileName(ProjectPath));
+                zip.CreateEntryFromFile(CriteriaPath, Path.GetFileName(CriteriaPath));
             }
             if (!SplitFile) ToggleInfo("Plot", Color.LightBlue);
         }
@@ -922,6 +925,15 @@ namespace XferSuite.Apps.SEYR
             {
                 XmlSerializer x = new XmlSerializer(typeof(Project));
                 x.Serialize(stream, Project);
+            }
+        }
+
+        private void SaveCriteria()
+        {
+            using (StreamWriter stream = new StreamWriter(CriteriaPath))
+            {
+                XmlSerializer x = new XmlSerializer(typeof(List<Criteria>));
+                x.Serialize(stream, PlottedCriteria);
             }
         }
 

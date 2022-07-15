@@ -1,16 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace XferSuite.Apps.SEYR
 {
+    [Serializable()]
     public class Criteria
     {
-        public static ScottPlot.Drawing.Palette Palette = ScottPlot.Palette.OneHalf;
+        [XmlElement("Color")]
         public System.Drawing.Color Color { get; set; }
+        [XmlElement("ID")]
         public int ID { get; set; } = 0;
+        [XmlElement("LegendEntry")]
         public string LegendEntry { get; set; } = "Null";
+        [XmlElement("Pass")]
         public bool Pass { get; set; } = true;
+
+        public static ScottPlot.Drawing.Palette Palette = ScottPlot.Palette.OneHalf;
         public bool Override { get; set; } = false;
+
+        public Criteria() { }
 
         public Criteria(DataEntry[] data)
         {
