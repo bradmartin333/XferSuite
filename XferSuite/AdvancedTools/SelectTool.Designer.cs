@@ -43,20 +43,23 @@
             this.tableLayoutPanel.Controls.Add(this.BtnOpen, 0, 1);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 2;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.Size = new System.Drawing.Size(280, 119);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(373, 169);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // ListBox
             // 
             this.ListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListBox.FormattingEnabled = true;
-            this.ListBox.Location = new System.Drawing.Point(3, 3);
+            this.ListBox.ItemHeight = 16;
+            this.ListBox.Location = new System.Drawing.Point(4, 4);
+            this.ListBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ListBox.Name = "ListBox";
-            this.ListBox.Size = new System.Drawing.Size(274, 82);
+            this.ListBox.Size = new System.Drawing.Size(365, 119);
             this.ListBox.TabIndex = 0;
             // 
             // BtnOpen
@@ -65,9 +68,10 @@
             this.BtnOpen.BackColor = System.Drawing.Color.White;
             this.BtnOpen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnOpen.Location = new System.Drawing.Point(3, 91);
+            this.BtnOpen.Location = new System.Drawing.Point(4, 131);
+            this.BtnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.BtnOpen.Name = "BtnOpen";
-            this.BtnOpen.Size = new System.Drawing.Size(274, 25);
+            this.BtnOpen.Size = new System.Drawing.Size(365, 34);
             this.BtnOpen.TabIndex = 1;
             this.BtnOpen.Text = "Open";
             this.BtnOpen.UseVisualStyleBackColor = false;
@@ -75,12 +79,13 @@
             // 
             // SelectTool
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(280, 119);
+            this.ClientSize = new System.Drawing.Size(373, 169);
             this.Controls.Add(this.tableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "SelectTool";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Advanced Tools";

@@ -24,6 +24,8 @@ namespace XferSuite.AdvancedTools
             tenZoneCal,
             [Description("uTP Log Parser")]
             uTPlogParser,
+            [Description("Swap AB Grid")]
+            swapABGrid,
         }
 
         public SelectTool()
@@ -54,6 +56,9 @@ namespace XferSuite.AdvancedTools
                         break;
                     case AdvancedForm.uTPlogParser:
                         ShowToolWindow<uTP.PrintLogParser>();
+                        break;
+                    case AdvancedForm.swapABGrid:
+                        ShowToolWindow<SwapABGrid>();
                         break;
                     // Create a form in the AdvancedTools folder and add a case above this comment
                     // for the newly added enum field and copy the above examples to launch the new form
