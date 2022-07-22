@@ -96,7 +96,6 @@
             this.LblInfo.Name = "LblInfo";
             this.LblInfo.Size = new System.Drawing.Size(301, 83);
             this.LblInfo.TabIndex = 2;
-            this.LblInfo.Text = "N/A";
             this.LblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SwapABGrid
