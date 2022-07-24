@@ -23,6 +23,7 @@ namespace XferSuite.AdvancedTools
         {
             InitializeComponent();
             FormClosing += SwapABGrid_FormClosing;
+            DataLoadingWorker.DoWork += DataLoadingWorker_DoWork;
             DataLoadingWorker.RunWorkerCompleted += DataLoadingWorker_RunWorkerCompleted;
         }
 
@@ -53,6 +54,8 @@ namespace XferSuite.AdvancedTools
                     zip.CreateEntryFromFile(ProjectPath, Path.GetFileName(ProjectPath));
                     if (HasCriteria) zip.CreateEntryFromFile(CriteriaPath, Path.GetFileName(CriteriaPath));
                 }
+                ToggleInfo("Done", Color.LightBlue);
+                System.Threading.Thread.Sleep(250);
                 Close();
             }
         }
@@ -61,7 +64,6 @@ namespace XferSuite.AdvancedTools
         {
             LblInfo.Text = info;
             LblInfo.BackColor = color;
-            BtnSaveSEYRUP.Enabled = info == "Done";
             Application.DoEvents();
         }
         private void SwapABGrid_FormClosing(object sender, FormClosingEventArgs e)
@@ -97,15 +99,21 @@ namespace XferSuite.AdvancedTools
         {
             try
             {
-                using (StreamWriter stream = new StreamWriter(ReportPath))
+                using (StreamWriter sw = new StreamWriter(SwappedReportPath, false))
                 {
                     using (var sr = new StreamReader(ReportPath))
                     {
+                        sw.WriteLine(sr.ReadLine());
                         while (sr.Peek() >= 0)
                         {
                             string[] cols = sr.ReadLine().Split('\t');
-                            // validate and swap info here
-                            stream.WriteLine(string.Join("\t", cols));
+                            string rr = cols[3];
+                            string rc = cols[4];
+                            cols[3] = cols[5];
+                            cols[4] = cols[6];
+                            cols[5] = rr;
+                            cols[6] = rc;
+                            sw.WriteLine(string.Join("\t", cols));
                         }
                     }
                 }
@@ -120,7 +128,8 @@ namespace XferSuite.AdvancedTools
 
         private void DataLoadingWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            ToggleInfo("Done", Color.LightGreen);
+            ToggleInfo("Ready to Save", Color.LightGreen);
+            BtnSaveSEYRUP.Enabled = true;
         }
 
         private bool ExtractFile(string path, ZipArchive archive)

@@ -46,13 +46,13 @@
             this.tableLayoutPanel1.Controls.Add(this.LblInfo, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(309, 250);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(233, 210);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // BtnOpenSEYRUP
@@ -61,10 +61,9 @@
             this.BtnOpenSEYRUP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnOpenSEYRUP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnOpenSEYRUP.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnOpenSEYRUP.Location = new System.Drawing.Point(4, 4);
-            this.BtnOpenSEYRUP.Margin = new System.Windows.Forms.Padding(4);
+            this.BtnOpenSEYRUP.Location = new System.Drawing.Point(3, 3);
             this.BtnOpenSEYRUP.Name = "BtnOpenSEYRUP";
-            this.BtnOpenSEYRUP.Size = new System.Drawing.Size(301, 75);
+            this.BtnOpenSEYRUP.Size = new System.Drawing.Size(227, 64);
             this.BtnOpenSEYRUP.TabIndex = 0;
             this.BtnOpenSEYRUP.Text = "Open SEYRUP";
             this.BtnOpenSEYRUP.UseVisualStyleBackColor = false;
@@ -72,15 +71,15 @@
             // 
             // BtnSaveSEYRUP
             // 
-            this.BtnSaveSEYRUP.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.BtnSaveSEYRUP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BtnSaveSEYRUP.Enabled = false;
+            this.BtnSaveSEYRUP.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGreen;
+            this.BtnSaveSEYRUP.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Honeydew;
             this.BtnSaveSEYRUP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnSaveSEYRUP.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnSaveSEYRUP.Location = new System.Drawing.Point(4, 170);
-            this.BtnSaveSEYRUP.Margin = new System.Windows.Forms.Padding(4);
+            this.BtnSaveSEYRUP.Location = new System.Drawing.Point(3, 143);
             this.BtnSaveSEYRUP.Name = "BtnSaveSEYRUP";
-            this.BtnSaveSEYRUP.Size = new System.Drawing.Size(301, 76);
+            this.BtnSaveSEYRUP.Size = new System.Drawing.Size(227, 64);
             this.BtnSaveSEYRUP.TabIndex = 1;
             this.BtnSaveSEYRUP.Text = "Save SEYRUP";
             this.BtnSaveSEYRUP.UseVisualStyleBackColor = false;
@@ -91,25 +90,24 @@
             this.LblInfo.AutoSize = true;
             this.LblInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LblInfo.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblInfo.Location = new System.Drawing.Point(4, 83);
-            this.LblInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LblInfo.Location = new System.Drawing.Point(3, 70);
             this.LblInfo.Name = "LblInfo";
-            this.LblInfo.Size = new System.Drawing.Size(301, 83);
+            this.LblInfo.Size = new System.Drawing.Size(227, 70);
             this.LblInfo.TabIndex = 2;
             this.LblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SwapABGrid
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(309, 250);
+            this.ClientSize = new System.Drawing.Size(233, 210);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(327, 297);
+            this.MaximumSize = new System.Drawing.Size(249, 249);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(327, 297);
+            this.MinimumSize = new System.Drawing.Size(249, 249);
             this.Name = "SwapABGrid";
             this.Text = "Swap AB Grid";
             this.tableLayoutPanel1.ResumeLayout(false);
