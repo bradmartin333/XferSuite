@@ -176,6 +176,12 @@
     <Compile Include="AdvancedTools\StampSEYR.Designer.cs">
       <DependentUpon>StampSEYR.cs</DependentUpon>
     </Compile>
+    <Compile Include="AdvancedTools\SwapABGrid.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedTools\SwapABGrid.Designer.cs">
+      <DependentUpon>SwapABGrid.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdvancedTools\uTP\PrintInfo.cs" />
     <Compile Include="Apps\Camera\CameraLayout.cs" />
     <Compile Include="Apps\Camera\CameraViewer.cs">
@@ -312,6 +318,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AdvancedTools\StampSEYR.resx">
       <DependentUpon>StampSEYR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdvancedTools\SwapABGrid.resx">
+      <DependentUpon>SwapABGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Apps\Camera\CameraViewer.resx">
       <DependentUpon>CameraViewer.cs</DependentUpon>

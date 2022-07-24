@@ -328,7 +328,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip ContextMenuStrip;
+        private new System.Windows.Forms.ContextMenuStrip ContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCopyImage;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCopyCSV;
         private System.Windows.Forms.ToolStripMenuItem CopyEntireWindowToolStripMenuItem;
