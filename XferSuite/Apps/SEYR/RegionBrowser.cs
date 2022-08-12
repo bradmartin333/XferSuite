@@ -432,7 +432,7 @@ namespace XferSuite.Apps.SEYR
 
         private void MakeCycleFileAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MakeCycleFile(PS.Sheets);
+            MakeCycleFile(PS.Sheets.Where(x => !x.Ignore).ToList());
         }
 
         private void MakeCycleFile(List<DataSheet> sheets)
@@ -469,7 +469,7 @@ namespace XferSuite.Apps.SEYR
 
         private void OpenExcelEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenInExcel(PS.Sheets);
+            OpenInExcel(PS.Sheets.Where(x => !x.Ignore).ToList());
         }
 
         private void OpenInExcel(List<DataSheet> sheets)
@@ -563,7 +563,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ExportSEYRUPEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportSEYRUP(PS.Sheets);
+            ExportSEYRUP(PS.Sheets.Where(x => !x.Ignore).ToList());
         }
 
         private void ExportSEYRUP(List<DataSheet> sheets)
@@ -603,7 +603,7 @@ namespace XferSuite.Apps.SEYR
 
         private void ExportCompositeEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportComposite(PS.Sheets);
+            ExportComposite(PS.Sheets.Where(x => !x.Ignore).ToList());
         }
 
         private void ExportComposite(List<DataSheet> sheets)
@@ -660,7 +660,7 @@ namespace XferSuite.Apps.SEYR
 
         private void CopyDataRowsEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CopyDataRows(PS.Sheets);
+            CopyDataRows(PS.Sheets.Where(x => !x.Ignore).ToList());
         }
 
         private void CopyDataRows(List<DataSheet> sheets)
