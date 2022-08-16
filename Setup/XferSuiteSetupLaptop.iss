@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "XferSuite"
-#define MyAppVersion "4.3"
+#define MyAppVersion "4.4"
 #define MyAppPublisher "bradmartin333"
 #define MyAppURL "https://github.com/bradmartin333/XferSuite"
 #define MyAppExeName "XferSuite.exe"
@@ -51,6 +51,8 @@ Source: "C:\Users\bmartin\source\repos\XferSuite\XferSuite\bin\x64\Release\Accor
 Source: "C:\Users\bmartin\source\repos\XferSuite\XferSuite\bin\x64\Release\Accord.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\bmartin\source\repos\XferSuite\XferSuite\bin\x64\Release\FSharp.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\bmartin\source\repos\XferSuite\XferSuite\bin\x64\Release\FSharp.Core.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\bmartin\source\repos\XferSuite\XferSuite\bin\x64\Release\GridMaker.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\bmartin\source\repos\XferSuite\XferSuite\bin\x64\Release\GridMaker.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\bmartin\source\repos\XferSuite\XferSuite\bin\x64\Release\MathNet.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\bmartin\source\repos\XferSuite\XferSuite\bin\x64\Release\ObjectListView.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\bmartin\source\repos\XferSuite\XferSuite\bin\x64\Release\ObjectListView.xml"; DestDir: "{app}"; Flags: ignoreversion

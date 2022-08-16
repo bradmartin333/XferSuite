@@ -51,6 +51,8 @@ Source: "S:\XferSuite\XferSuite\bin\x64\Release\Accord.Video.xml"; DestDir: "{ap
 Source: "S:\XferSuite\XferSuite\bin\x64\Release\Accord.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\x64\Release\FSharp.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\x64\Release\FSharp.Core.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "S:\XferSuite\XferSuite\bin\x64\Release\GridMaker.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "S:\XferSuite\XferSuite\bin\x64\Release\GridMaker.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\x64\Release\MathNet.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\x64\Release\ObjectListView.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "S:\XferSuite\XferSuite\bin\x64\Release\ObjectListView.xml"; DestDir: "{app}"; Flags: ignoreversion
