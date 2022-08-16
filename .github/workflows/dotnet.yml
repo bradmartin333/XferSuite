@@ -6,15 +6,16 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: x64
       - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1.0.5
-      - name: Setup VSTest
-        uses: darenm/Setup-VSTest@v1
+        uses: NuGet/setup-nuget@v1
+        with:
+          nuget-version: '5.x'
       - name: Restore Packages
         run: nuget restore ./XferSuite.sln
       - name: Build Solution
-        run: |
-          msbuild.exe ./XferSuite.sln /p:platform="x64" /p:configuration="Release"
+        run: msbuild XferSuite\XferSuite.csproj -property:Configuration="Release"
