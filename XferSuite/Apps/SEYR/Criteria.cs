@@ -31,8 +31,6 @@ namespace XferSuite.Apps.SEYR
         [XmlElement("Override")]
         public bool Override { get; set; } = false;
 
-        public static ScottPlot.Drawing.Palette Palette = ScottPlot.Palette.OneHalf;
-
         public Criteria() { }
 
         public Criteria(DataEntry[] data)
@@ -62,12 +60,12 @@ namespace XferSuite.Apps.SEYR
             LegendEntry = LegendEntry.TrimEnd(new char[] { ' ' });
         }
 
-        public void TryAppend(ref List<Criteria> criteria)
+        public void TryAppend(ref List<Criteria> criteria, Utility.PaletteHost.Palettes palette)
         {
             var match = criteria.Where(x => x.ID == ID).ToArray();
             if (!match.Any())
             {
-                if (!Override) Color = Palette.GetColor(criteria.Count + 1);
+                if (!Override) Color = Utility.PaletteHost.GetColor(palette, criteria.Count + 1);
                 criteria.Add(this);
             }
             else

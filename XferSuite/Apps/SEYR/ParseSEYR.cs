@@ -9,6 +9,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using XferSuite.Utility;
 
 namespace XferSuite.Apps.SEYR
 {
@@ -147,31 +148,21 @@ namespace XferSuite.Apps.SEYR
         ]
         public bool SplitB { get => _SplitB; set => _SplitB = value; }
 
-        public enum Palletes { Category20, ColorblindFriendly, Microcharts, OneHalf }
+        private PaletteHost.Palettes _Palette = (PaletteHost.Palettes)Properties.Settings.Default.SEYR_Palette;
         [
             Category("User Parameters"),
-            Description("There are currently 4 available palletes"),
-            DisplayName("Plot Window Pallete")
+            Description("Choose from ScottPlot palettes"),
+            DisplayName("Plot Window Palette")
         ]
-        public Palletes Palette {
-            get => (Palletes)Enum.Parse(typeof(Palletes), Criteria.Palette.Name);
+        public PaletteHost.Palettes Palette 
+        { 
+            get => _Palette;
             set
             {
-                switch (value)
-                {
-                    case Palletes.Category20:
-                        Criteria.Palette = ScottPlot.Drawing.Palette.Category20;
-                        break;
-                    case Palletes.ColorblindFriendly:
-                        Criteria.Palette = ScottPlot.Drawing.Palette.ColorblindFriendly;
-                        break;
-                    case Palletes.Microcharts:
-                        Criteria.Palette = ScottPlot.Drawing.Palette.Microcharts;
-                        break;
-                    case Palletes.OneHalf:
-                        Criteria.Palette = ScottPlot.Drawing.Palette.OneHalf;
-                        break;
-                }
+                _Palette = value;
+                Properties.Settings.Default.SEYR_Palette = (int)_Palette;
+                Properties.Settings.Default.Save();
+                CriteriaOLV.ClearObjects();
             }
         }
 
@@ -729,7 +720,7 @@ namespace XferSuite.Apps.SEYR
 
         private void GroupFeatures(bool redundantGroup)
         {
-            using (Utility.PromptForInput prompt = new Utility.PromptForInput($"Enter {(redundantGroup ? "redundant group " : "")}criteria string"))
+            using (PromptForInput prompt = new PromptForInput($"Enter {(redundantGroup ? "redundant group " : "")}criteria string"))
             {
                 if (prompt.ShowDialog() == DialogResult.OK)
                 {
@@ -793,7 +784,7 @@ namespace XferSuite.Apps.SEYR
                             }
                         }
 
-                        criterion.TryAppend(ref criteria);
+                        criterion.TryAppend(ref criteria, _Palette);
                         sheet.Insert(entries, criterion);
                     }
                 }
