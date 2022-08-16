@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GridMaker;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace XferSuite.AdvancedTools
         // Add enum for form as well as a human readable decription
         enum AdvancedForm
         {
+            [Description("GridMaker")]
+            gridMaker,
             [Description("Data Filtering")]
             dataFilter,
             [Description("Stamp SEYR Parser")]
@@ -42,6 +45,12 @@ namespace XferSuite.AdvancedTools
                 AdvancedForm form = (AdvancedForm)ListBox.SelectedIndices[0];
                 switch (form)
                 {
+                    case AdvancedForm.gridMaker:
+                        using (Composer composer = new Composer())
+                        {
+                            composer.ShowDialog();
+                        }
+                        return;
                     case AdvancedForm.dataFilter:
                         ShowToolWindow<DataFilter>();
                         break;
@@ -113,8 +122,8 @@ namespace XferSuite.AdvancedTools
             {
                 var field = type.GetField(name);
                 var fds = field.GetCustomAttributes(typeof(DescriptionAttribute), true);
-                foreach (DescriptionAttribute fd in fds)
-                    descs.Add(fd.Description);
+                descs.AddRange(from DescriptionAttribute fd in fds
+                               select fd.Description);
             }
             return descs.ToArray();
         }
