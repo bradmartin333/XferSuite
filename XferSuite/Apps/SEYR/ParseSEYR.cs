@@ -388,6 +388,7 @@ namespace XferSuite.Apps.SEYR
             FeatureOLV.KeyDown += FeatureOLV_KeyDown;
             FeatureOLV.CellRightClick += FeatureOLV_CellRightClick;
             CriteriaOLV.DoubleClick += CriteriaOLV_DoubleClick;
+            CriteriaOLV.KeyDown += CriteriaOLV_KeyDown;
             CriteriaOLV.FormatRow += CriteriaOLV_FormatRow;
             CriteriaOLV.CellRightClick += CriteriaOLV_CellRightClick;
             CriteriaOLV.SelectedBackColor = Color.White;
@@ -634,7 +635,18 @@ namespace XferSuite.Apps.SEYR
 
         private void FeatureOLV_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.G && FeatureOLV.SelectedObjects.Count > 1) GroupFeatures(ModifierKeys == Keys.Shift);
+            if (e.KeyCode == Keys.G && FeatureOLV.SelectedObjects.Count > 1)
+                GroupFeatures(ModifierKeys == Keys.Shift);
+            if (e.KeyCode == Keys.A)
+            {
+                if (ModifierKeys == (Keys.Control | Keys.Shift)) FeatureOLV.CheckAll();
+                // Ctrl + A already selects all
+            }
+            if (e.KeyCode == Keys.D)
+            {
+                if (ModifierKeys == (Keys.Control | Keys.Shift)) FeatureOLV.UncheckAll();
+                else if (ModifierKeys == (Keys.Control)) FeatureOLV.DeselectAll();
+            }
         }
 
         private void FeatureGroupNeedOneToolStripMenuItem_Click(object sender, EventArgs e) => GroupFeatures(false);
@@ -658,6 +670,20 @@ namespace XferSuite.Apps.SEYR
         {
             List<Criteria> criteria = GetSelectedCriteria();
             if (criteria.Count > 0) EditCriteriaColor(criteria);
+        }
+
+        private void CriteriaOLV_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A)
+            {
+                if (ModifierKeys == (Keys.Control | Keys.Shift)) CriteriaOLV.CheckAll();
+                // Ctrl + A already selects all
+            }
+            if (e.KeyCode == Keys.D)
+            {
+                if (ModifierKeys == (Keys.Control | Keys.Shift)) CriteriaOLV.UncheckAll();
+                else if (ModifierKeys == (Keys.Control)) CriteriaOLV.DeselectAll();
+            }
         }
 
         private void CriteriaResetToolStripMenuItem_Click(object sender, EventArgs e)
