@@ -135,8 +135,7 @@ namespace XferSuite.Apps.SEYR
             List<DataEntry> entries = new List<DataEntry>();
             for (int i = 0; i < DataSize.Width; i++)
                 for (int j = 0; j < DataSize.Height; j++)
-                    if (Data[i, j].Item1 != null)
-                        Data[i, j].Item1.ToList().ForEach(x => entries.Add(x));
+                    Data[i, j].Item1?.ToList().ForEach(x => entries.Add(x));
             return entries.ToArray();
         }
 
@@ -178,7 +177,7 @@ namespace XferSuite.Apps.SEYR
                 for (int j = 0; j < DataSize.Height; j++)
                     if (Data[i, j].Item1 != null)
                     {
-                        (DataEntry[], Criteria) rowObject = GetLocation(new Point(i, j), true);
+                        (DataEntry[], Criteria) rowObject = GetLocation(new Point(j, i), true);
                         if (failOnly && rowObject.Item2.Pass) continue;
                         if (rowObject.Item1 == null) continue;
                         DataEntry d = rowObject.Item1[0];
@@ -203,7 +202,7 @@ namespace XferSuite.Apps.SEYR
                 for (int j = 0; j < DataSize.Height; j++)
                     if (Data[i, j].Item1 != null)
                     {
-                        (DataEntry[], Criteria) rowObject = GetLocation(new Point(i, j), true);
+                        (DataEntry[], Criteria) rowObject = GetLocation(new Point(j, i), true);
                         if (rowObject.Item1 == null) continue;
                         if (!rowObject.Item2.Pass)
                         {
@@ -227,6 +226,12 @@ namespace XferSuite.Apps.SEYR
 
         public (DataEntry[], Criteria) GetLocation(Point p_in, bool cycle = false)
         {
+            // 15NOV2022
+            // Issue #246 shows that the Data[,] index can be flipped incorrecty and not always fail.
+            // Fix is to swap i,j when calling this function during iteration of DataSize.
+            // Using mouse click hander point works fine using x,y.
+            // One has to be swapped and because the click handler is already a Point,
+            // it is easier to just swap i,j type calls to be j,i.
             try
             {
                 int bmpX = p_in.X;
