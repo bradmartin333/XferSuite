@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -385,7 +386,17 @@ namespace XferSuite.Apps.SEYR
 
         private Bitmap GetActiveBitmap()
         {
-            return (Bitmap)GetActivePictureBox().BackgroundImage;
+            PictureBox active = GetActivePictureBox();
+            int col = TLP.GetColumn(active);
+            int row = TLP.GetRow(active);
+            var cellStart = TLP.GetControlFromPosition(col, row - Convert.ToInt32(LastPF)).Bounds;
+            var cellEnd = TLP.GetControlFromPosition(col, row).Bounds;
+            Rectangle rect = new Rectangle(cellStart.Location, new Size(cellEnd.Right - cellStart.X, cellEnd.Bottom - cellStart.Y));
+            using (var image = new Bitmap(TLP.Width + 1, TLP.Height + 1))
+            {
+                TLP.DrawToBitmap(image, new Rectangle(Point.Empty, TLP.Size));
+                return image.Clone(rect, PixelFormat.Format32bppArgb);
+            }
         }
 
         private PictureBox GetActivePictureBox()
