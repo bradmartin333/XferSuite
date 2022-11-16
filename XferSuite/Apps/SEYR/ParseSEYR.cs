@@ -607,12 +607,18 @@ namespace XferSuite.Apps.SEYR
 
         private void FeatureOLV_CellRightClick(object sender, BrightIdeasSoftware.CellRightClickEventArgs e)
         {
-            FeatureEditToolStripMenuItem.Visible = FeatureOLV.SelectedObjects.Count == 1;
+            bool showSingleItemOptions = FeatureOLV.SelectedObjects.Count == 1;
+            FeatureEditToolStripMenuItem.Visible = showSingleItemOptions;
+            FeatureSelectAllButThisToolStripMenuItem.Visible = showSingleItemOptions;
+            FeatureSelectOnlyThisToolStripMenuItem.Visible = showSingleItemOptions;
             if (FeatureOLV.SelectedObjects.Count > 0) e.MenuStrip = FeatureMenuStrip;
         }
 
         private void CriteriaOLV_CellRightClick(object sender, BrightIdeasSoftware.CellRightClickEventArgs e)
         {
+            bool showSingleItemOptions = CriteriaOLV.SelectedObjects.Count == 1;
+            CriteriaSelectAllButThisToolStripMenuItem.Visible = showSingleItemOptions;
+            CriteriaSelectOnlyThisToolStripMenuItem.Visible = showSingleItemOptions;
             if (CriteriaOLV.SelectedObjects.Count > 0) e.MenuStrip = CriteriaMenuStrip;
         }
 
@@ -657,6 +663,34 @@ namespace XferSuite.Apps.SEYR
         private void CriteriaResetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CriteriaOLV.RemoveObjects(CriteriaOLV.SelectedObjects);
+        }
+
+        private void FeatureSelectOnlyThisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Feature feature in FeatureOLV.Objects)
+                feature.Ignore = feature == FeatureOLV.SelectedObject;
+            FeatureOLV.Refresh();
+        }
+
+        private void FeatureSelectAllButThisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Feature feature in FeatureOLV.Objects)
+                feature.Ignore = feature != FeatureOLV.SelectedObject;
+            FeatureOLV.Refresh();
+        }
+
+        private void CriteriaSelectOnlyThisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Criteria criteria in CriteriaOLV.Objects)
+                criteria.Pass = criteria == CriteriaOLV.SelectedObject;
+            CriteriaOLV.Refresh();
+        }
+
+        private void CriteriaSelectAllButThisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Criteria criteria in CriteriaOLV.Objects)
+                criteria.Pass = criteria != CriteriaOLV.SelectedObject;
+            CriteriaOLV.Refresh();
         }
 
         private void CriteriaOLV_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)

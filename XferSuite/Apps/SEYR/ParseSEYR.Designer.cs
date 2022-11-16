@@ -57,6 +57,10 @@
             this.DataLoadingWorker = new System.ComponentModel.BackgroundWorker();
             this.PlotWorker = new System.ComponentModel.BackgroundWorker();
             this.SaveWorker = new System.ComponentModel.BackgroundWorker();
+            this.FeatureSelectOnlyThisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FeatureSelectAllButThisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CriteriaSelectOnlyThisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CriteriaSelectAllButThisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FeatureOLV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CriteriaOLV)).BeginInit();
@@ -78,17 +82,18 @@
             this.TLP.Controls.Add(this.CbxPassFail, 0, 1);
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TLP.Location = new System.Drawing.Point(0, 0);
+            this.TLP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.TLP.Name = "TLP";
             this.TLP.RowCount = 8;
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TLP.Size = new System.Drawing.Size(334, 411);
+            this.TLP.Size = new System.Drawing.Size(445, 506);
             this.TLP.TabIndex = 1;
             // 
             // FeatureOLV
@@ -114,10 +119,11 @@
             this.FeatureOLV.FullRowSelect = true;
             this.FeatureOLV.HasCollapsibleGroups = false;
             this.FeatureOLV.HideSelection = false;
-            this.FeatureOLV.Location = new System.Drawing.Point(3, 91);
+            this.FeatureOLV.Location = new System.Drawing.Point(4, 117);
+            this.FeatureOLV.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.FeatureOLV.Name = "FeatureOLV";
             this.FeatureOLV.ShowGroups = false;
-            this.FeatureOLV.Size = new System.Drawing.Size(328, 140);
+            this.FeatureOLV.Size = new System.Drawing.Size(437, 170);
             this.FeatureOLV.TabIndex = 8;
             this.FeatureOLV.UseCompatibleStateImageBehavior = false;
             this.FeatureOLV.View = System.Windows.Forms.View.Details;
@@ -169,10 +175,11 @@
             this.CriteriaOLV.FullRowSelect = true;
             this.CriteriaOLV.HasCollapsibleGroups = false;
             this.CriteriaOLV.HideSelection = false;
-            this.CriteriaOLV.Location = new System.Drawing.Point(3, 267);
+            this.CriteriaOLV.Location = new System.Drawing.Point(4, 332);
+            this.CriteriaOLV.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CriteriaOLV.Name = "CriteriaOLV";
             this.CriteriaOLV.ShowGroups = false;
-            this.CriteriaOLV.Size = new System.Drawing.Size(328, 141);
+            this.CriteriaOLV.Size = new System.Drawing.Size(437, 170);
             this.CriteriaOLV.TabIndex = 12;
             this.CriteriaOLV.UseCompatibleStateImageBehavior = false;
             this.CriteriaOLV.View = System.Windows.Forms.View.Details;
@@ -203,9 +210,10 @@
             this.label1.AutoSize = true;
             this.TLP.SetColumnSpan(this.label1, 2);
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 68);
+            this.label1.Location = new System.Drawing.Point(4, 88);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(328, 20);
+            this.label1.Size = new System.Drawing.Size(437, 25);
             this.label1.TabIndex = 13;
             this.label1.Text = "Feature Manager";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -215,9 +223,10 @@
             this.label2.AutoSize = true;
             this.TLP.SetColumnSpan(this.label2, 2);
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 244);
+            this.label2.Location = new System.Drawing.Point(4, 303);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(328, 20);
+            this.label2.Size = new System.Drawing.Size(437, 25);
             this.label2.TabIndex = 14;
             this.label2.Text = "Plotted Criteria";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -230,9 +239,10 @@
             this.BtnPlot.BackColor = System.Drawing.Color.LightBlue;
             this.TLP.SetColumnSpan(this.BtnPlot, 2);
             this.BtnPlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnPlot.Location = new System.Drawing.Point(3, 3);
+            this.BtnPlot.Location = new System.Drawing.Point(4, 4);
+            this.BtnPlot.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.BtnPlot.Name = "BtnPlot";
-            this.BtnPlot.Size = new System.Drawing.Size(328, 23);
+            this.BtnPlot.Size = new System.Drawing.Size(437, 28);
             this.BtnPlot.TabIndex = 15;
             this.BtnPlot.Text = "Plot";
             this.BtnPlot.UseVisualStyleBackColor = false;
@@ -245,9 +255,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSaveAs.BackColor = System.Drawing.Color.White;
             this.BtnSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnSaveAs.Location = new System.Drawing.Point(253, 32);
+            this.BtnSaveAs.Location = new System.Drawing.Point(337, 40);
+            this.BtnSaveAs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.BtnSaveAs.Name = "BtnSaveAs";
-            this.BtnSaveAs.Size = new System.Drawing.Size(78, 23);
+            this.BtnSaveAs.Size = new System.Drawing.Size(104, 32);
             this.BtnSaveAs.TabIndex = 16;
             this.BtnSaveAs.Text = "Save As";
             this.BtnSaveAs.UseVisualStyleBackColor = false;
@@ -264,9 +275,10 @@
             this.CbxPassFail.Enabled = false;
             this.CbxPassFail.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
             this.CbxPassFail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CbxPassFail.Location = new System.Drawing.Point(3, 32);
+            this.CbxPassFail.Location = new System.Drawing.Point(4, 40);
+            this.CbxPassFail.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CbxPassFail.Name = "CbxPassFail";
-            this.CbxPassFail.Size = new System.Drawing.Size(244, 23);
+            this.CbxPassFail.Size = new System.Drawing.Size(325, 32);
             this.CbxPassFail.TabIndex = 17;
             this.CbxPassFail.Text = "Toggle Pass Fail";
             this.CbxPassFail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -275,17 +287,20 @@
             // 
             // FeatureMenuStrip
             // 
+            this.FeatureMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.FeatureMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FeatureEditToolStripMenuItem,
             this.groupToolStripMenuItem,
-            this.FeatureResetToolStripMenuItem});
+            this.FeatureResetToolStripMenuItem,
+            this.FeatureSelectOnlyThisToolStripMenuItem,
+            this.FeatureSelectAllButThisToolStripMenuItem});
             this.FeatureMenuStrip.Name = "FeatureMenuStrip";
-            this.FeatureMenuStrip.Size = new System.Drawing.Size(108, 70);
+            this.FeatureMenuStrip.Size = new System.Drawing.Size(197, 124);
             // 
             // FeatureEditToolStripMenuItem
             // 
             this.FeatureEditToolStripMenuItem.Name = "FeatureEditToolStripMenuItem";
-            this.FeatureEditToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.FeatureEditToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
             this.FeatureEditToolStripMenuItem.Text = "Edit";
             this.FeatureEditToolStripMenuItem.Click += new System.EventHandler(this.FeatureEditToolStripMenuItem_Click);
             // 
@@ -295,49 +310,52 @@
             this.FeatureGroupNeedOneToolStripMenuItem,
             this.FeatureGroupRedundantToolStripMenuItem});
             this.groupToolStripMenuItem.Name = "groupToolStripMenuItem";
-            this.groupToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.groupToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
             this.groupToolStripMenuItem.Text = "Group";
             // 
             // FeatureGroupNeedOneToolStripMenuItem
             // 
             this.FeatureGroupNeedOneToolStripMenuItem.Name = "FeatureGroupNeedOneToolStripMenuItem";
-            this.FeatureGroupNeedOneToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.FeatureGroupNeedOneToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.FeatureGroupNeedOneToolStripMenuItem.Text = "Need One";
             this.FeatureGroupNeedOneToolStripMenuItem.Click += new System.EventHandler(this.FeatureGroupNeedOneToolStripMenuItem_Click);
             // 
             // FeatureGroupRedundantToolStripMenuItem
             // 
             this.FeatureGroupRedundantToolStripMenuItem.Name = "FeatureGroupRedundantToolStripMenuItem";
-            this.FeatureGroupRedundantToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.FeatureGroupRedundantToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.FeatureGroupRedundantToolStripMenuItem.Text = "Redundant";
             this.FeatureGroupRedundantToolStripMenuItem.Click += new System.EventHandler(this.FeatureGroupRedundantToolStripMenuItem_Click);
             // 
             // FeatureResetToolStripMenuItem
             // 
             this.FeatureResetToolStripMenuItem.Name = "FeatureResetToolStripMenuItem";
-            this.FeatureResetToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.FeatureResetToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
             this.FeatureResetToolStripMenuItem.Text = "Reset";
             this.FeatureResetToolStripMenuItem.Click += new System.EventHandler(this.FeatureResetToolStripMenuItem_Click);
             // 
             // CriteriaMenuStrip
             // 
+            this.CriteriaMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.CriteriaMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CriteriaEditColorToolStripMenuItem,
-            this.CriteriaResetToolStripMenuItem});
+            this.CriteriaResetToolStripMenuItem,
+            this.CriteriaSelectOnlyThisToolStripMenuItem,
+            this.CriteriaSelectAllButThisToolStripMenuItem});
             this.CriteriaMenuStrip.Name = "CriteriaMenuStrip";
-            this.CriteriaMenuStrip.Size = new System.Drawing.Size(127, 48);
+            this.CriteriaMenuStrip.Size = new System.Drawing.Size(211, 128);
             // 
             // CriteriaEditColorToolStripMenuItem
             // 
             this.CriteriaEditColorToolStripMenuItem.Name = "CriteriaEditColorToolStripMenuItem";
-            this.CriteriaEditColorToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.CriteriaEditColorToolStripMenuItem.Size = new System.Drawing.Size(196, 24);
             this.CriteriaEditColorToolStripMenuItem.Text = "Edit Color";
             this.CriteriaEditColorToolStripMenuItem.Click += new System.EventHandler(this.CriteriaEditColorToolStripMenuItem_Click);
             // 
             // CriteriaResetToolStripMenuItem
             // 
             this.CriteriaResetToolStripMenuItem.Name = "CriteriaResetToolStripMenuItem";
-            this.CriteriaResetToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.CriteriaResetToolStripMenuItem.Size = new System.Drawing.Size(196, 24);
             this.CriteriaResetToolStripMenuItem.Text = "Reset";
             this.CriteriaResetToolStripMenuItem.Click += new System.EventHandler(this.CriteriaResetToolStripMenuItem_Click);
             // 
@@ -353,14 +371,43 @@
             // 
             this.SaveWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.SaveWorker_DoWork);
             // 
+            // FeatureSelectOnlyThisToolStripMenuItem
+            // 
+            this.FeatureSelectOnlyThisToolStripMenuItem.Name = "FeatureSelectOnlyThisToolStripMenuItem";
+            this.FeatureSelectOnlyThisToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.FeatureSelectOnlyThisToolStripMenuItem.Text = "Select Only This";
+            this.FeatureSelectOnlyThisToolStripMenuItem.Click += new System.EventHandler(this.FeatureSelectOnlyThisToolStripMenuItem_Click);
+            // 
+            // FeatureSelectAllButThisToolStripMenuItem
+            // 
+            this.FeatureSelectAllButThisToolStripMenuItem.Name = "FeatureSelectAllButThisToolStripMenuItem";
+            this.FeatureSelectAllButThisToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.FeatureSelectAllButThisToolStripMenuItem.Text = "Select All But This";
+            this.FeatureSelectAllButThisToolStripMenuItem.Click += new System.EventHandler(this.FeatureSelectAllButThisToolStripMenuItem_Click);
+            // 
+            // CriteriaSelectOnlyThisToolStripMenuItem
+            // 
+            this.CriteriaSelectOnlyThisToolStripMenuItem.Name = "CriteriaSelectOnlyThisToolStripMenuItem";
+            this.CriteriaSelectOnlyThisToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.CriteriaSelectOnlyThisToolStripMenuItem.Text = "Select Only This";
+            this.CriteriaSelectOnlyThisToolStripMenuItem.Click += new System.EventHandler(this.CriteriaSelectOnlyThisToolStripMenuItem_Click);
+            // 
+            // CriteriaSelectAllButThisToolStripMenuItem
+            // 
+            this.CriteriaSelectAllButThisToolStripMenuItem.Name = "CriteriaSelectAllButThisToolStripMenuItem";
+            this.CriteriaSelectAllButThisToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.CriteriaSelectAllButThisToolStripMenuItem.Text = "Select All But This";
+            this.CriteriaSelectAllButThisToolStripMenuItem.Click += new System.EventHandler(this.CriteriaSelectAllButThisToolStripMenuItem_Click);
+            // 
             // ParseSEYR
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 411);
+            this.ClientSize = new System.Drawing.Size(445, 506);
             this.Controls.Add(this.TLP);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(350, 450);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(461, 543);
             this.Name = "ParseSEYR";
             this.Text = "Parse SEYR";
             this.Load += new System.EventHandler(this.ParseSEYR_Load);
@@ -402,5 +449,9 @@
         private System.ComponentModel.BackgroundWorker PlotWorker;
         private System.ComponentModel.BackgroundWorker SaveWorker;
         public System.Windows.Forms.CheckBox CbxPassFail;
+        private System.Windows.Forms.ToolStripMenuItem FeatureSelectOnlyThisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem FeatureSelectAllButThisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CriteriaSelectOnlyThisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CriteriaSelectAllButThisToolStripMenuItem;
     }
 }
