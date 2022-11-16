@@ -24,6 +24,7 @@ namespace XferSuite.Apps.SEYR
         private Annotation ViewDataAnnotation;
         private bool HSpanChanging = false;
         private bool LoadingImages = false;
+        private Point ClickPoint = Point.Empty;
 
         public PassFailUtility(List<DataEntry> data, Feature feature, int numberImagesInScroller, float penSize)
         {
@@ -94,6 +95,7 @@ namespace XferSuite.Apps.SEYR
             HistPlot.MouseWheel += Control_MouseWheel;
             HistPlot.Configuration.DoubleClickBenchmark = false;
             HistPlot.Configuration.EnablePlotObjectEditor = true;
+            HistPlot.MouseDown += HistPlot_MouseDown;
             HistPlot.MouseUp += Control_MouseUp;
 
             HSpan hSpan = HistPlot.Plot.AddHorizontalSpan(
@@ -106,9 +108,14 @@ namespace XferSuite.Apps.SEYR
             HistPlot.Refresh();
         }
 
+        private void HistPlot_MouseDown(object sender, MouseEventArgs e)
+        {
+            ClickPoint = e.Location;
+        }
+
         private void Control_MouseUp(object sender, MouseEventArgs e)
         {
-            if (LoadingImages) return;
+            if (LoadingImages || e.Location != ClickPoint) return;
             ScottPlot.FormsPlot p = (ScottPlot.FormsPlot)sender;
             (double mX, _) = p.GetMouseCoordinates();
             int x = (int)Math.Floor(mX);
