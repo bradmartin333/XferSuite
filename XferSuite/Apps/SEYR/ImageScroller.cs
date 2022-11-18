@@ -9,6 +9,7 @@ namespace XferSuite.Apps.SEYR
     {
         public static string LastSelectedFeatureName = string.Empty;
 
+        private static Point LastLocation = new Point(-1, -1);
         private readonly IEnumerable<IGrouping<string, DataEntry>> ImageGroups;
         private readonly string BaseFeatureName;
         private readonly int NumberImagesInScroller;
@@ -49,8 +50,17 @@ namespace XferSuite.Apps.SEYR
             Location = Point.Empty;
             PBX.MouseUp += PBX_MouseUp;
             Timer.Start();
+
+            if (LastLocation != new Point(-1, -1)) Location = LastLocation;
             Show();
+            WindowState = FormWindowState.Normal;
             BringToFront();
+            LocationChanged += ImageScroller_LocationChanged;
+        }
+
+        private void ImageScroller_LocationChanged(object sender, System.EventArgs e)
+        {
+            if (WindowState == FormWindowState.Normal) LastLocation = Location;
         }
 
         private void PBX_MouseUp(object sender, MouseEventArgs e)

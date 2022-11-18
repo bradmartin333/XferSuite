@@ -645,7 +645,7 @@ namespace XferSuite.Apps.SEYR
             if (e.KeyCode == Keys.D)
             {
                 if (ModifierKeys == (Keys.Control | Keys.Shift)) FeatureOLV.UncheckAll();
-                else if (ModifierKeys == (Keys.Control)) FeatureOLV.DeselectAll();
+                else if (ModifierKeys == Keys.Control) FeatureOLV.DeselectAll();
             }
         }
 
@@ -682,7 +682,7 @@ namespace XferSuite.Apps.SEYR
             if (e.KeyCode == Keys.D)
             {
                 if (ModifierKeys == (Keys.Control | Keys.Shift)) CriteriaOLV.UncheckAll();
-                else if (ModifierKeys == (Keys.Control)) CriteriaOLV.DeselectAll();
+                else if (ModifierKeys == Keys.Control) CriteriaOLV.DeselectAll();
             }
         }
 
