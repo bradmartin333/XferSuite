@@ -50,7 +50,11 @@ namespace XferSuite.Apps.SEYR
         {
             if (Loading) return;
             foreach (DataEntry entry in Matches)
+            {
                 entry.State = CBX.Checked;
+                foreach (DataEntry locationMatch in AllData.Where(x => x.X == entry.X && x.Y == entry.Y))
+                    locationMatch.State= CBX.Checked;
+            }
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
         }
 
