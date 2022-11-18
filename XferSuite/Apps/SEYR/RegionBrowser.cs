@@ -686,6 +686,28 @@ namespace XferSuite.Apps.SEYR
             }
         }
 
+        private void CopyYieldTableSelectedRegionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CopyYieldTable(new List<DataSheet>() { GetActiveSheet() });
+        }
+
+        private void CopyYieldTableEntireWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CopyYieldTable(PS.Sheets.Where(x => !x.Ignore).ToList());
+        }
+
+        private void CopyYieldTable(List<DataSheet> sheets)
+        {
+            using (new Utility.HourGlass(false))
+            {
+                string output = "R, C, RR, RC, Yield%, #Units\n";
+                foreach (DataSheet sheet in sheets)
+                    output += sheet.GetRegionYieldString(PS.PercentageSigFigs);
+                ParseSEYR.ApplyDelimeter(ref output);
+                Clipboard.SetText(output);
+            }
+        }
+
         private void BtnInspectionRoutineToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (InspectionRoutine IR = new InspectionRoutine(GetActiveSheet(), SetUpDataRows()))

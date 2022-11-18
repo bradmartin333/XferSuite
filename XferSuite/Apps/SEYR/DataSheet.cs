@@ -69,6 +69,33 @@ namespace XferSuite.Apps.SEYR
             return (bitmap, pass, total);
         }
 
+        private (double, double) GetYieldData()
+        {
+            double pass = 0;
+            double total = 0;
+            for (int i = 0; i < DataSize.Height; i++)
+                for (int j = 0; j < DataSize.Width; j++)
+                {
+                    if (Data[j, i].Item2 == null) continue;
+                    total++;
+                    if (Data[j, i].Item2.Pass) pass++;
+                }
+            return (pass, total);
+        }
+
+        public string GetRegionYieldString(int sigFigs)
+        {
+            var d = Data[0, 0];
+            if (d.Item1 != null && d.Item1.Length > 0)
+            {
+                DataEntry e = d.Item1[0];
+                (double pass, double total) = GetYieldData();
+                double percentage = Math.Round(pass / total, sigFigs) * 100;
+                return $"{e.R}, {e.C}, {e.RR}, {e.RC}, {percentage}, {total}\n";
+            }
+            else return $"ERR {ID}";
+        }
+
         public Bitmap MakeComposite(Size margin)
         {
             Feature[] features = ParseSEYR.Project.Features.Where(x => x.SaveImage).ToArray();
