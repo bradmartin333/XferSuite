@@ -133,11 +133,11 @@ namespace XferSuite.Apps.SEYR
                         Point thisCell = new Point(i - colMin + 2, (-2 * (j - rowMin - rowRange)) - 2);
                         if (showPF)
                         {
-                            string percentage = $"{Math.Round(bmpInfo.Item2 / bmpInfo.Item3, PS.PercentageSigFigs) * 100}%";
+                            double percentage = Math.Round(bmpInfo.Item2 / bmpInfo.Item3, PS.PercentageSigFigs) * 100;
                             TLP.Controls.Add(
                                 TLPLabel($"{(PS.ShowPFData ? $"{bmpInfo.Item2}/{bmpInfo.Item3}\n" : "")}" +
                                 $"{(PS.ShowYieldBrackets ? "┏ " : "")}" +
-                                $"{percentage}{(PS.ShowYieldBrackets ? " ┓" : "")}", true),
+                                $"{percentage:0.00}%{(PS.ShowYieldBrackets ? " ┓" : "")}", true),
                                 thisCell.X, thisCell.Y);
                         }
                         TLP.Controls.Add(pictureBox, thisCell.X, thisCell.Y + 1);
@@ -700,9 +700,17 @@ namespace XferSuite.Apps.SEYR
         {
             using (new Utility.HourGlass(false))
             {
-                string output = "R, C, RR, RC, Yield%, #Units\n";
+                string output = "R, C, RR, RC, Yield%, #Units, Passing Criteria\n";
                 foreach (DataSheet sheet in sheets)
+                {
                     output += sheet.GetRegionYieldString(PS.PercentageSigFigs);
+
+                    // Added for issue #250
+                    foreach (Criteria c in PS.PlottedCriteria.Where(x => x.Pass))
+                        output += $", {c.LegendEntry} ({c.ID})";
+
+                    output += "\n";
+                }
                 ParseSEYR.ApplyDelimeter(ref output);
                 Clipboard.SetText(output);
             }
