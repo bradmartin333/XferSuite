@@ -635,8 +635,8 @@ namespace XferSuite.Apps.SEYR
 
         private void FeatureOLV_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.G && FeatureOLV.SelectedObjects.Count > 1)
-                GroupFeatures(ModifierKeys == Keys.Shift);
+            e.Handled = true;
+            e.SuppressKeyPress = true;
             if (e.KeyCode == Keys.A)
             {
                 if (ModifierKeys == (Keys.Control | Keys.Shift)) FeatureOLV.CheckAll();
@@ -674,6 +674,8 @@ namespace XferSuite.Apps.SEYR
 
         private void CriteriaOLV_KeyDown(object sender, KeyEventArgs e)
         {
+            e.Handled = true;
+            e.SuppressKeyPress = true;
             if (e.KeyCode == Keys.A)
             {
                 if (ModifierKeys == (Keys.Control | Keys.Shift)) CriteriaOLV.CheckAll();
