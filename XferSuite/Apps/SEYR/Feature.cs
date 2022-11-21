@@ -37,14 +37,22 @@ namespace XferSuite.Apps.SEYR
         private float _MaxScore = float.MinValue;
         [XmlElement("MaxScore")]
         public float MaxScore { get => _MaxScore; set => _MaxScore = value; }
-        [XmlElement("PassThreshold")]
-        public double PassThreshold { get; set; } = -10; // Added by XferSuite
-        [XmlElement("Limit")]
-        public double Limit { get; set; } = -10; // Added by XferSuite
-        [XmlElement("Ignore")]
-        public bool Ignore { get; set; } = false; // Added by XferSuite
-        [XmlElement("CriteriaString")]
-        public string CriteriaString { get; set; } = string.Empty; // Added by XferSuite
+
+        [XmlElement("PassThreshold")] // Added by XferSuite
+        public double PassThreshold { get; set; } = -10;
+        [XmlElement("Limit")] // Added by XferSuite
+        public double Limit { get; set; } = -10;
+        [XmlElement("Ignore")] // Added by XferSuite
+        public bool Ignore { get; set; } = false;
+
+        private string _CriteriaString = string.Empty;
+        [XmlElement("CriteriaString")]  // Added by XferSuite
+        public string CriteriaString
+        {
+            get => _CriteriaString.Replace(" ", "`");
+            set { _CriteriaString = value; }
+        }
+
         internal DataEntry[] Data { get; set; }
         internal double[] HistData { get; set; }
         internal string RedundancyGroup
