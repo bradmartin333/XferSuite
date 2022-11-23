@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -56,6 +57,7 @@ namespace XferSuite.Apps.SEYR
                     locationMatch.State= CBX.Checked;
             }
             CBX.Text = CBX.Checked ? "Pass" : "Fail";
+            UpdateAllData();
         }
 
         public void Set(DataEntry[] all, DataEntry[] matches, Criteria criteria)
@@ -105,10 +107,18 @@ namespace XferSuite.Apps.SEYR
 
         private void UpdateAllData()
         {
-            string data = string.Empty;
+            RTB.Clear();
             foreach (DataEntry entry in AllData)
-                data += $"{entry.PrettyString()}\n";
-            RTB.Text = data;
+                AppendText($"{entry.PrettyString()}\n", entry.State ? Color.Black : Color.Firebrick);
+        }
+
+        public void AppendText(string text, Color color)
+        {
+            RTB.SelectionStart = RTB.TextLength;
+            RTB.SelectionLength = 0;
+            RTB.SelectionColor = color;
+            RTB.AppendText(text);
+            RTB.SelectionColor = RTB.ForeColor;
         }
     }
 }
