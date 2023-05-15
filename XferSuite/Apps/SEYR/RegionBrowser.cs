@@ -134,10 +134,11 @@ namespace XferSuite.Apps.SEYR
                         if (showPF)
                         {
                             double percentage = Math.Round(bmpInfo.Item2 / bmpInfo.Item3, PS.PercentageSigFigs) * 100;
+                            int numDecimalPlaces = Math.Max(0, PS.PercentageSigFigs - (int)(percentage / 10 + 1));
                             TLP.Controls.Add(
                                 TLPLabel($"{(PS.ShowPFData ? $"{bmpInfo.Item2}/{bmpInfo.Item3}\n" : "")}" +
                                 $"{(PS.ShowYieldBrackets ? "┏ " : "")}" +
-                                $"{percentage:0.00}%{(PS.ShowYieldBrackets ? " ┓" : "")}", true),
+                                $"{string.Format($"{{0:F{numDecimalPlaces}}}", percentage)}%{(PS.ShowYieldBrackets ? " ┓" : "")}", true),
                                 thisCell.X, thisCell.Y);
                         }
                         TLP.Controls.Add(pictureBox, thisCell.X, thisCell.Y + 1);

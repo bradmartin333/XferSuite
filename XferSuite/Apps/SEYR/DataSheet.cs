@@ -91,7 +91,8 @@ namespace XferSuite.Apps.SEYR
                 DataEntry e = d.Item1[0];
                 (double pass, double total) = GetYieldData();
                 double percentage = Math.Round(pass / total, sigFigs) * 100;
-                return $"{e.R}, {e.C}, {e.RR}, {e.RC}, {percentage:0.00}, {total}";
+                int numDecimalPlaces = Math.Max(0, sigFigs - (int)(percentage / 10 + 1));
+                return $"{e.R}, {e.C}, {e.RR}, {e.RC}, {string.Format($"{{0:F{numDecimalPlaces}}}", percentage)}, {total}";
             }
             else return $"ERR {ID}";
         }
