@@ -51,17 +51,34 @@ namespace XferSuite.Apps.InlinePositions
             }
         }
 
-        private float _Threshold = 10F;
+        private float _ThresholdX = 10F;
         [
             Category("User Parameters"),
-            Description("Positions with placement error greater than this micron value will be filtered out of the plotted data")
+            Description("Positions with placement error greater than this micron value in the X direction will be filtered out of the plotted data"),
+            DisplayName("Threshold X")
         ]
-        public float Threshold
+        public float ThresholdX
         {
-            get => _Threshold;
+            get => _ThresholdX;
             set
             {
-                _Threshold = value;
+                _ThresholdX = value;
+                MakePlots();
+            }
+        }
+
+        private float _ThresholdY = 10F;
+        [
+            Category("User Parameters"),
+            Description("Positions with placement error greater than this micron value in the Y direction will be filtered out of the plotted data"),
+            DisplayName("Threshold Y")
+        ]
+        public float ThresholdY
+        {
+            get => _ThresholdY;
+            set
+            {
+                _ThresholdY = value;
                 MakePlots();
             }
         }
@@ -140,7 +157,7 @@ namespace XferSuite.Apps.InlinePositions
 
         private void MakePlots()
         {
-            Metro.rescore(_Data, Threshold);
+            Metro.rescore(_Data, ThresholdX, ThresholdY);
             makeScatterPlot();
             makeErrorScatterPlot();
             makeHistograms();
@@ -263,15 +280,15 @@ namespace XferSuite.Apps.InlinePositions
             {
                 Position = AxisPosition.Bottom,
                 Title = "X Error Distance (microns)",
-                Minimum = -Threshold,
-                Maximum = Threshold
+                Minimum = -ThresholdX,
+                Maximum = ThresholdX
             };
             LinearAxis myXaxis2 = new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
                 Title = "Y Error Distance (microns)",
-                Minimum = -Threshold,
-                Maximum = Threshold
+                Minimum = -ThresholdY,
+                Maximum = ThresholdY
             };
             LinearAxis myYaxis1 = new LinearAxis()
             {

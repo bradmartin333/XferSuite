@@ -31,17 +31,34 @@ namespace XferSuite.Apps.InlinePositions
             }
         }
 
-        private float _Threshold = 1.5F;
+        private float _ThresholdX = 1.5F;
         [
             Category("User Parameters"),
-            Description("Positions with placement error greater than this micron value will be filtered out of the plotted data")
+            Description("Positions with placement error greater than this micron value in the X direction will be filtered out of the plotted data"),
+            DisplayName("Threshold X")
         ]
-        public float Threshold
+        public float ThresholdX
         {
-            get => _Threshold;
+            get => _ThresholdX;
             set
             {
-                _Threshold = value;
+                _ThresholdX = value;
+                MakePlot();
+            }
+        }
+
+        private float _ThresholdY = 1.5F;
+        [
+            Category("User Parameters"),
+            Description("Positions with placement error greater than this micron value in the Y direction will be filtered out of the plotted data"),
+            DisplayName("Threshold Y")
+        ]
+        public float ThresholdY
+        {
+            get => _ThresholdY;
+            set
+            {
+                _ThresholdY = value;
                 MakePlot();
             }
         }
@@ -91,7 +108,7 @@ namespace XferSuite.Apps.InlinePositions
 
         private void MakePlot()
         {
-            Metro.rescore(_Data, Threshold);
+            Metro.rescore(_Data, ThresholdX, ThresholdY);
             Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_Data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 

@@ -196,10 +196,10 @@ module Metro =
         |> fun x -> x * 3.0
 
     /// <summary>Update PASS or FAIL state of position array based on new threshold</summary>
-    let rescore (data: Position []) (threshold: float) =
+    let rescore (data: Position []) (thresholdX: float) (thresholdY: float) =
         for x in data do
-            if (Math.Abs(x.XE) > threshold / 1e3
-                || Math.Abs(x.YE) > threshold / 1e3) then
+            if (Math.Abs(x.XE) > thresholdX / 1e3
+                || Math.Abs(x.YE) > thresholdY / 1e3) then
                 x.Aln <- " FAIL "
             else
                 x.Aln <- " PASS "
