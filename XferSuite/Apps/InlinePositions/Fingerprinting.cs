@@ -104,6 +104,20 @@ namespace XferSuite.Apps.InlinePositions
             }
         }
 
+        private bool _RemoveMedianError = false;
+        [
+            Category("User Parameters"),
+        ]
+        public bool RemoveMedianError
+        {
+            get => _RemoveMedianError;
+            set
+            {
+                _RemoveMedianError = value;
+                MakePlot();
+            }
+        }
+
         public Fingerprinting(Metro.Position[] data)
         {
             InitializeComponent();
@@ -176,10 +190,12 @@ namespace XferSuite.Apps.InlinePositions
                 foreach (int idx in loopSet)
                 {
                     Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
+                    double xErrorMedian = Metro.xErrorMedian(printData);
+                    double yErrorMedian = Metro.yErrorMedian(printData);
                     double[] normError = Metro.normErrorRange(printData);
                     for (int i = 0; i < printData.Length; i++)
                     {
-                        vectorPlot.Series.Add(PlotVector(printData[i], normError, normError[i], idx));
+                        vectorPlot.Series.Add(PlotVector(printData[i], normError, normError[i], xErrorMedian, yErrorMedian, idx));
                     }
                 }
             }
@@ -194,10 +210,12 @@ namespace XferSuite.Apps.InlinePositions
                 }
                 foreach (int idx in loopSet)
                 {
+                    double xErrorMedian = Metro.xErrorMedian(printData[idx]);
+                    double yErrorMedian = Metro.yErrorMedian(printData[idx]);
                     for (int i = 0; i < printData[idx].Length; i++)
                     {
                         vectorPlot.Series.Add(PlotVector(printData[idx][i], 
-                            new double[] { _EntropyLowerBound, _EntropyUpperBound }, printEntropy[idx], idx));
+                            new double[] { _EntropyLowerBound, _EntropyUpperBound }, printEntropy[idx], xErrorMedian, yErrorMedian, idx));
                     }
                 }
             }
@@ -229,10 +247,17 @@ namespace XferSuite.Apps.InlinePositions
             plot.Model = vectorPlot;
         }
 
-        private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal, int idx)
+        private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal, double xErrorMedian, double yErrorMedian, int idx)
         {
             var fromP = new DataPoint(vector.X, vector.Y);
-            var toP = new DataPoint(vector.X + vector.XE, vector.Y + vector.YE);
+            double toX = vector.X + vector.XE;
+            double toY = vector.Y + vector.YE;
+            if (RemoveMedianError)
+            {
+                toX -= xErrorMedian;
+                toY -= yErrorMedian;
+            }
+            var toP = new DataPoint(toX, toY);
 
             var dx = fromP.X - toP.X;
             var dy = fromP.Y - toP.Y;

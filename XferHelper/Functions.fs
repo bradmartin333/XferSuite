@@ -183,6 +183,16 @@ module Metro =
 
     let yError (data: Position []) = data |> Array.map (fun x -> x.YE * 1e3)
 
+    let xErrorMedian (data: Position []) =
+        data
+        |> Array.map (fun x -> x.XE)
+        |> Statistics.Median
+
+    let yErrorMedian (data: Position []) =
+        data
+        |> Array.map (fun x -> x.YE)
+        |> Statistics.Median
+
     let x3Sig (data: Position []) =
         data
         |> Array.map (fun x -> x.XE * 1e3)
