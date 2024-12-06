@@ -108,7 +108,7 @@ namespace XferSuite.Apps.InlinePositions
 
         private void MakePlot()
         {
-            Metro.rescore(_Data, ThresholdX, ThresholdY);
+            Metro.rescore(_Data, ThresholdX, ThresholdY, 0, 0);
             Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_Data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 

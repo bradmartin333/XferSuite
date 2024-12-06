@@ -157,7 +157,7 @@ namespace XferSuite.Apps.InlinePositions
 
         private void MakePlots()
         {
-            Metro.rescore(_Data, ThresholdX, ThresholdY);
+            Metro.rescore(_Data, ThresholdX, ThresholdY, 0, 0);
             makeScatterPlot();
             makeErrorScatterPlot();
             makeHistograms();

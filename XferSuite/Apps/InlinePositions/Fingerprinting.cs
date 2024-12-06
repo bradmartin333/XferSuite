@@ -162,7 +162,15 @@ namespace XferSuite.Apps.InlinePositions
 
         private void MakePlot()
         {
-            Metro.rescore(_data, ThresholdX, ThresholdY);
+            double xErrorMedian = 0;
+            double yErrorMedian = 0;
+            if (RemoveMedianError)
+            {
+                xErrorMedian = Metro.xErrorMedian(_data);
+                yErrorMedian = Metro.yErrorMedian(_data);
+            }
+
+            Metro.rescore(_data, ThresholdX, ThresholdY, xErrorMedian, yErrorMedian);
             Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
@@ -190,8 +198,6 @@ namespace XferSuite.Apps.InlinePositions
                 foreach (int idx in loopSet)
                 {
                     Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
-                    double xErrorMedian = Metro.xErrorMedian(printData);
-                    double yErrorMedian = Metro.yErrorMedian(printData);
                     double[] normError = Metro.normErrorRange(printData);
                     for (int i = 0; i < printData.Length; i++)
                     {
@@ -210,8 +216,6 @@ namespace XferSuite.Apps.InlinePositions
                 }
                 foreach (int idx in loopSet)
                 {
-                    double xErrorMedian = Metro.xErrorMedian(printData[idx]);
-                    double yErrorMedian = Metro.yErrorMedian(printData[idx]);
                     for (int i = 0; i < printData[idx].Length; i++)
                     {
                         vectorPlot.Series.Add(PlotVector(printData[idx][i], 
@@ -250,14 +254,7 @@ namespace XferSuite.Apps.InlinePositions
         private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal, double xErrorMedian, double yErrorMedian, int idx)
         {
             var fromP = new DataPoint(vector.X, vector.Y);
-            double toX = vector.X + vector.XE;
-            double toY = vector.Y + vector.YE;
-            if (RemoveMedianError)
-            {
-                toX -= xErrorMedian;
-                toY -= yErrorMedian;
-            }
-            var toP = new DataPoint(toX, toY);
+            var toP = new DataPoint(vector.X + vector.XE - xErrorMedian, vector.Y + vector.YE - yErrorMedian);
 
             double radius = (vector.XE + vector.YE) * VectorMagnitude / 100;
             double angle = Math.Atan2(toP.Y - fromP.Y, toP.X - fromP.X);
