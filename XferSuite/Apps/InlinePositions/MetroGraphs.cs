@@ -125,9 +125,16 @@ namespace XferSuite.Apps.InlinePositions
         public MetroGraphs(string path)
         {
             InitializeComponent();
+            ResizeEnd += MetroGraphs_ResizeEnd;
+
             _Path = path;
             _Raw = Metro.data(_Path);
             _ = InitializeData();
+        }
+
+        private void MetroGraphs_ResizeEnd(object sender, EventArgs e)
+        {
+            makeScatterPlot();
         }
 
         private bool InitializeData()
@@ -221,6 +228,36 @@ namespace XferSuite.Apps.InlinePositions
                 IsPanEnabled = true,
                 Title = "Y Position (mm)"
             };
+
+            var xPositions = Metro.xPos(_Data);
+            var yPositions = Metro.yPos(_Data);
+            var xMin = xPositions.Min() - 1;
+            var xMax = xPositions.Max() + 1;
+            var yMin = yPositions.Min() - 1;
+            var yMax = yPositions.Max() + 1;
+
+            double plotAspectRatio = (double)scatterPlot.Width / scatterPlot.Height;
+            double dataAspectRatio = (xMax - xMin) / (yMax - yMin);
+
+            if (dataAspectRatio > plotAspectRatio)
+            {
+                double adjustedHeight = (xMax - xMin) / plotAspectRatio;
+                double yMid = (yMax + yMin) / 2;
+                yMin = yMid - adjustedHeight / 2;
+                yMax = yMid + adjustedHeight / 2;
+            }
+            else
+            {
+                double adjustedWidth = (yMax - yMin) * plotAspectRatio;
+                double xMid = (xMax + xMin) / 2;
+                xMin = xMid - adjustedWidth / 2;
+                xMax = xMid + adjustedWidth / 2;
+            }
+
+            myXaxis.Minimum = xMin;
+            myXaxis.Maximum = xMax;
+            myYaxis.Minimum = yMin;
+            myYaxis.Maximum = yMax;
 
             scatter.Axes.Add(myXaxis);
             scatter.Axes.Add(myYaxis);
