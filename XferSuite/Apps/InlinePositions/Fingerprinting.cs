@@ -259,21 +259,17 @@ namespace XferSuite.Apps.InlinePositions
             }
             var toP = new DataPoint(toX, toY);
 
-            var dx = fromP.X - toP.X;
-            var dy = fromP.Y - toP.Y;
-
-            var norm = Math.Sqrt((dx * dx) + (dy * dy));
-
-            var udx = dx / norm;
-            var udy = dy / norm;
-
-            var ax = (udx * Math.Sqrt(3) / 2) - (udy * 1 / 2);
-            var ay = (udx * 1 / 2) + (udy * Math.Sqrt(3) / 2);
-            var bx = (udx * Math.Sqrt(3) / 2) + (udy * 1 / 2);
-            var by = (-udx * 1 / 2) + (udy * Math.Sqrt(3) / 2);
-
-            DataPoint arrowheadA = new DataPoint(toP.X + (Math.Abs(toP.X - fromP.X) * ax * VectorMagnitude), toP.Y + (Math.Abs(toP.Y - fromP.Y) * ay * VectorMagnitude));
-            DataPoint arrowheadB = new DataPoint(toP.X + (Math.Abs(toP.X - fromP.X) * bx * VectorMagnitude), toP.Y + (Math.Abs(toP.Y - fromP.Y) * by * VectorMagnitude));
+            double radius = (vector.XE + vector.YE) * VectorMagnitude / 100;
+            double angle = Math.Atan2(toP.Y - fromP.Y, toP.X - fromP.X);
+            double arrowheadAngle = 150 * Math.PI / 180;
+            DataPoint arrowheadA = new DataPoint(
+                toP.X + radius * Math.Cos(angle - arrowheadAngle),
+                toP.Y + radius * Math.Sin(angle - arrowheadAngle)
+            );
+            DataPoint arrowheadB = new DataPoint(
+                toP.X + radius * Math.Cos(angle + arrowheadAngle),
+                toP.Y + radius * Math.Sin(angle + arrowheadAngle)
+            );
 
             Color color = Lux2Color((colorVal - colorRangeVals.Max()) / (colorRangeVals.Max() - colorRangeVals.Min()));
             LineSeries post = new LineSeries() { Color = OxyColor.FromRgb(color.R, color.G, color.B), LineStyle = LineStyle.Solid, StrokeThickness = 0.5 };
@@ -283,8 +279,8 @@ namespace XferSuite.Apps.InlinePositions
             post.Points.Add(fromP);
             post.Points.Add(toP);
             post.Points.Add(arrowheadA);
-            post.Points.Add(toP);
             post.Points.Add(arrowheadB);
+            post.Points.Add(toP);
 
             return post;
         }
