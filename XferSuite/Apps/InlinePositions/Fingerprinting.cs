@@ -121,6 +121,8 @@ namespace XferSuite.Apps.InlinePositions
         public Fingerprinting(Metro.Position[] data)
         {
             InitializeComponent();
+            ResizeEnd += Fingerprinting_ResizeEnd;
+
             _raw = data;
             Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_raw);
             _data = _splitData.Item2;
@@ -140,6 +142,11 @@ namespace XferSuite.Apps.InlinePositions
                 posIdx += 1;
             }
 
+            MakePlot();
+        }
+
+        private void Fingerprinting_ResizeEnd(object sender, EventArgs e)
+        {
             MakePlot();
         }
 
@@ -245,6 +252,36 @@ namespace XferSuite.Apps.InlinePositions
                 IsPanEnabled = true,
                 Title = "Y Position (mm)"
             };
+
+            var xPositions = Metro.xPos(_data);
+            var yPositions = Metro.yPos(_data);
+            var xMin = xPositions.Min() - 1;
+            var xMax = xPositions.Max() + 1;
+            var yMin = yPositions.Min() - 1;
+            var yMax = yPositions.Max() + 1;
+
+            double plotAspectRatio = (double)plot.Width / plot.Height;
+            double dataAspectRatio = (xMax - xMin) / (yMax - yMin);
+
+            if (dataAspectRatio > plotAspectRatio)
+            {
+                double adjustedHeight = (xMax - xMin) / plotAspectRatio;
+                double yMid = (yMax + yMin) / 2;
+                yMin = yMid - adjustedHeight / 2;
+                yMax = yMid + adjustedHeight / 2;
+            }
+            else
+            {
+                double adjustedWidth = (yMax - yMin) * plotAspectRatio;
+                double xMid = (xMax + xMin) / 2;
+                xMin = xMid - adjustedWidth / 2;
+                xMax = xMid + adjustedWidth / 2;
+            }
+
+            myXaxis.Minimum = xMin;
+            myXaxis.Maximum = xMax;
+            myYaxis.Minimum = yMin;
+            myYaxis.Maximum = yMax;
 
             vectorPlot.Axes.Add(myXaxis);
             vectorPlot.Axes.Add(myYaxis);
