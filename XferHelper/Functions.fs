@@ -214,14 +214,14 @@ module Metro =
             else
                 x.Aln <- " PASS "
 
-    let normErrorRange (data: Position []) =
+    let normErrorRange (data: Position []) (offsetX : float) (offsetY : float) =
         data
-        |> Array.map (fun x -> (x.XE ** 2. + x.YE ** 2.) ** 0.5)
+        |> Array.map (fun x -> ((x.XE - offsetX) ** 2. + (x.YE - offsetY) ** 2.) ** 0.5)
 
     ///<returns>Contrived entropy value from position array</returns>
-    let nextMagnitudeEntropy (data: Position []) =
+    let nextMagnitudeEntropy (data: Position [])  (offsetX : float) (offsetY : float) =
         data
-        |> normErrorRange
+        |> fun d -> normErrorRange d offsetX offsetY
         |> Statistics.Entropy
         |> fun x -> x ** 10.
 

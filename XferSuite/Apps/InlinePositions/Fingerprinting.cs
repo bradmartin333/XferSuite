@@ -205,7 +205,7 @@ namespace XferSuite.Apps.InlinePositions
                 foreach (int idx in loopSet)
                 {
                     Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
-                    double[] normError = Metro.normErrorRange(printData);
+                    double[] normError = Metro.normErrorRange(printData, xErrorMedian, yErrorMedian);
                     for (int i = 0; i < printData.Length; i++)
                     {
                         vectorPlot.Series.Add(PlotVector(printData[i], normError, normError[i], xErrorMedian, yErrorMedian, idx));
@@ -219,7 +219,7 @@ namespace XferSuite.Apps.InlinePositions
                 foreach (int idx in loopSet)
                 {
                     printData[idx] = Metro.getPrint(_prints[idx], plotData);
-                    printEntropy[idx] = Metro.nextMagnitudeEntropy(printData[idx]) / 1e10;
+                    printEntropy[idx] = Metro.nextMagnitudeEntropy(printData[idx], xErrorMedian, yErrorMedian) / 1e10;
                 }
                 foreach (int idx in loopSet)
                 {
