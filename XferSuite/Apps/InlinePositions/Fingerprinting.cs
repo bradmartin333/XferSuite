@@ -314,7 +314,7 @@ namespace XferSuite.Apps.InlinePositions
                 PrintList.Items[idx].ToString() + Environment.NewLine +
                 "Error: (" + vector.XE + ", " + vector.YE + ")" + Environment.NewLine +
                 "Color Value: " + Math.Round(colorVal, 6).ToString();
-            post.StrokeThickness = Math.Max(1, VectorMagnitude / 100);
+            post.StrokeThickness = 2;
             post.Points.Add(fromP);
             post.Points.Add(toP);
             post.Points.Add(arrowheadA);
