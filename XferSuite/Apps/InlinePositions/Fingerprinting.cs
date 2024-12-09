@@ -255,33 +255,33 @@ namespace XferSuite.Apps.InlinePositions
 
             var xPositions = Metro.xPos(_data);
             var yPositions = Metro.yPos(_data);
-            var xMin = xPositions.Min() - 1;
-            var xMax = xPositions.Max() + 1;
-            var yMin = yPositions.Min() - 1;
-            var yMax = yPositions.Max() + 1;
+                var xMin = xPositions.Min() - 1;
+                var xMax = xPositions.Max() + 1;
+                var yMin = yPositions.Min() - 1;
+                var yMax = yPositions.Max() + 1;
 
-            double plotAspectRatio = (double)plot.Width / plot.Height;
-            double dataAspectRatio = (xMax - xMin) / (yMax - yMin);
+                double plotAspectRatio = (double)plot.Width / plot.Height;
+                double dataAspectRatio = (xMax - xMin) / (yMax - yMin);
 
-            if (dataAspectRatio > plotAspectRatio)
-            {
-                double adjustedHeight = (xMax - xMin) / plotAspectRatio;
-                double yMid = (yMax + yMin) / 2;
-                yMin = yMid - adjustedHeight / 2;
-                yMax = yMid + adjustedHeight / 2;
-            }
-            else
-            {
-                double adjustedWidth = (yMax - yMin) * plotAspectRatio;
-                double xMid = (xMax + xMin) / 2;
-                xMin = xMid - adjustedWidth / 2;
-                xMax = xMid + adjustedWidth / 2;
-            }
+                if (dataAspectRatio > plotAspectRatio)
+                {
+                    double adjustedHeight = (xMax - xMin) / plotAspectRatio;
+                    double yMid = (yMax + yMin) / 2;
+                    yMin = yMid - adjustedHeight / 2;
+                    yMax = yMid + adjustedHeight / 2;
+                }
+                else
+                {
+                    double adjustedWidth = (yMax - yMin) * plotAspectRatio;
+                    double xMid = (xMax + xMin) / 2;
+                    xMin = xMid - adjustedWidth / 2;
+                    xMax = xMid + adjustedWidth / 2;
+                }
 
-            myXaxis.Minimum = xMin;
-            myXaxis.Maximum = xMax;
-            myYaxis.Minimum = yMin;
-            myYaxis.Maximum = yMax;
+                myXaxis.Minimum = xMin;
+                myXaxis.Maximum = xMax;
+                myYaxis.Minimum = yMin;
+                myYaxis.Maximum = yMax;
 
             vectorPlot.Axes.Add(myXaxis);
             vectorPlot.Axes.Add(myYaxis);
@@ -290,10 +290,13 @@ namespace XferSuite.Apps.InlinePositions
 
         private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal, double xErrorMedian, double yErrorMedian, int idx)
         {
-            var fromP = new DataPoint(vector.X, vector.Y);
-            var toP = new DataPoint(vector.X + vector.XE - xErrorMedian, vector.Y + vector.YE - yErrorMedian);
+            double adjusted_xe = (vector.XE + xErrorMedian) * VectorMagnitude;
+            double adjusted_ye = (vector.YE + yErrorMedian) * VectorMagnitude;
 
-            double radius = (vector.XE + vector.YE) * VectorMagnitude / 100;
+            var fromP = new DataPoint(vector.X, vector.Y);
+            var toP = new DataPoint(vector.X + adjusted_xe, vector.Y + adjusted_ye);
+
+            double radius = Math.Max(adjusted_xe, adjusted_ye) / 3;
             double angle = Math.Atan2(toP.Y - fromP.Y, toP.X - fromP.X);
             double arrowheadAngle = 150 * Math.PI / 180;
             DataPoint arrowheadA = new DataPoint(
@@ -308,8 +311,10 @@ namespace XferSuite.Apps.InlinePositions
             Color color = Lux2Color((colorVal - colorRangeVals.Max()) / (colorRangeVals.Max() - colorRangeVals.Min()));
             LineSeries post = new LineSeries() { Color = OxyColor.FromRgb(color.R, color.G, color.B), LineStyle = LineStyle.Solid, StrokeThickness = 0.5 };
             post.TrackerFormatString = post.TrackerFormatString + Environment.NewLine + 
-                PrintList.Items[idx].ToString() + Environment.NewLine + 
+                PrintList.Items[idx].ToString() + Environment.NewLine +
+                "Error: (" + vector.XE + ", " + vector.YE + ")" + Environment.NewLine +
                 "Color Value: " + Math.Round(colorVal, 6).ToString();
+            post.StrokeThickness = Math.Max(1, VectorMagnitude / 100);
             post.Points.Add(fromP);
             post.Points.Add(toP);
             post.Points.Add(arrowheadA);
