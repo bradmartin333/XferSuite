@@ -290,8 +290,8 @@ namespace XferSuite.Apps.InlinePositions
 
         private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal, double xErrorMedian, double yErrorMedian, int idx)
         {
-            double adjusted_xe = (vector.XE + xErrorMedian) * VectorMagnitude;
-            double adjusted_ye = (vector.YE + yErrorMedian) * VectorMagnitude;
+            double adjusted_xe = (vector.XE - xErrorMedian) * VectorMagnitude;
+            double adjusted_ye = (vector.YE - yErrorMedian) * VectorMagnitude;
 
             var fromP = new DataPoint(vector.X, vector.Y);
             var toP = new DataPoint(vector.X + adjusted_xe, vector.Y + adjusted_ye);
