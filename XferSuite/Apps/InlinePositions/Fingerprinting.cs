@@ -296,7 +296,7 @@ namespace XferSuite.Apps.InlinePositions
             var fromP = new DataPoint(vector.X, vector.Y);
             var toP = new DataPoint(vector.X + adjusted_xe, vector.Y + adjusted_ye);
 
-            double radius = Math.Max(adjusted_xe, adjusted_ye) / 3;
+            double radius = Math.Max(Math.Abs(adjusted_xe), Math.Abs(adjusted_ye)) / 3;
             double angle = Math.Atan2(toP.Y - fromP.Y, toP.X - fromP.X);
             double arrowheadAngle = 150 * Math.PI / 180;
             DataPoint arrowheadA = new DataPoint(
