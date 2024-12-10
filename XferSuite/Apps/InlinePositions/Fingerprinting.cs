@@ -104,9 +104,25 @@ namespace XferSuite.Apps.InlinePositions
             }
         }
 
+        private bool _RemoveMedianError = false;
+        [
+            Category("User Parameters"),
+        ]
+        public bool RemoveMedianError
+        {
+            get => _RemoveMedianError;
+            set
+            {
+                _RemoveMedianError = value;
+                MakePlot();
+            }
+        }
+
         public Fingerprinting(Metro.Position[] data)
         {
             InitializeComponent();
+            ResizeEnd += Fingerprinting_ResizeEnd;
+
             _raw = data;
             Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_raw);
             _data = _splitData.Item2;
@@ -129,6 +145,11 @@ namespace XferSuite.Apps.InlinePositions
             MakePlot();
         }
 
+        private void Fingerprinting_ResizeEnd(object sender, EventArgs e)
+        {
+            MakePlot();
+        }
+
         private Metro.Position[] _raw; // Gets split into data and missing
         private Metro.Position[] _data; // Gets split into pass and fail
         private bool _PlotAll = true; // On by default
@@ -148,7 +169,15 @@ namespace XferSuite.Apps.InlinePositions
 
         private void MakePlot()
         {
-            Metro.rescore(_data, ThresholdX, ThresholdY);
+            double xErrorMedian = 0;
+            double yErrorMedian = 0;
+            if (RemoveMedianError)
+            {
+                xErrorMedian = Metro.xErrorMedian(_data);
+                yErrorMedian = Metro.yErrorMedian(_data);
+            }
+
+            Metro.rescore(_data, ThresholdX, ThresholdY, xErrorMedian, yErrorMedian);
             Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
@@ -176,10 +205,10 @@ namespace XferSuite.Apps.InlinePositions
                 foreach (int idx in loopSet)
                 {
                     Metro.Position[] printData = Metro.getPrint(_prints[idx], plotData);
-                    double[] normError = Metro.normErrorRange(printData);
+                    double[] normError = Metro.normErrorRange(printData, xErrorMedian, yErrorMedian);
                     for (int i = 0; i < printData.Length; i++)
                     {
-                        vectorPlot.Series.Add(PlotVector(printData[i], normError, normError[i], idx));
+                        vectorPlot.Series.Add(PlotVector(printData[i], normError, normError[i], xErrorMedian, yErrorMedian, idx));
                     }
                 }
             }
@@ -190,14 +219,14 @@ namespace XferSuite.Apps.InlinePositions
                 foreach (int idx in loopSet)
                 {
                     printData[idx] = Metro.getPrint(_prints[idx], plotData);
-                    printEntropy[idx] = Metro.nextMagnitudeEntropy(printData[idx]) / 1e10;
+                    printEntropy[idx] = Metro.nextMagnitudeEntropy(printData[idx], xErrorMedian, yErrorMedian) / 1e10;
                 }
                 foreach (int idx in loopSet)
                 {
                     for (int i = 0; i < printData[idx].Length; i++)
                     {
                         vectorPlot.Series.Add(PlotVector(printData[idx][i], 
-                            new double[] { _EntropyLowerBound, _EntropyUpperBound }, printEntropy[idx], idx));
+                            new double[] { _EntropyLowerBound, _EntropyUpperBound }, printEntropy[idx], xErrorMedian, yErrorMedian, idx));
                     }
                 }
             }
@@ -224,42 +253,73 @@ namespace XferSuite.Apps.InlinePositions
                 Title = "Y Position (mm)"
             };
 
+            var xPositions = Metro.xPos(_data);
+            var yPositions = Metro.yPos(_data);
+                var xMin = xPositions.Min() - 1;
+                var xMax = xPositions.Max() + 1;
+                var yMin = yPositions.Min() - 1;
+                var yMax = yPositions.Max() + 1;
+
+                double plotAspectRatio = (double)plot.Width / plot.Height;
+                double dataAspectRatio = (xMax - xMin) / (yMax - yMin);
+
+                if (dataAspectRatio > plotAspectRatio)
+                {
+                    double adjustedHeight = (xMax - xMin) / plotAspectRatio;
+                    double yMid = (yMax + yMin) / 2;
+                    yMin = yMid - adjustedHeight / 2;
+                    yMax = yMid + adjustedHeight / 2;
+                }
+                else
+                {
+                    double adjustedWidth = (yMax - yMin) * plotAspectRatio;
+                    double xMid = (xMax + xMin) / 2;
+                    xMin = xMid - adjustedWidth / 2;
+                    xMax = xMid + adjustedWidth / 2;
+                }
+
+                myXaxis.Minimum = xMin;
+                myXaxis.Maximum = xMax;
+                myYaxis.Minimum = yMin;
+                myYaxis.Maximum = yMax;
+
             vectorPlot.Axes.Add(myXaxis);
             vectorPlot.Axes.Add(myYaxis);
             plot.Model = vectorPlot;
         }
 
-        private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal, int idx)
+        private LineSeries PlotVector(Metro.Position vector, double[] colorRangeVals, double colorVal, double xErrorMedian, double yErrorMedian, int idx)
         {
+            double adjusted_xe = (vector.XE - xErrorMedian) * VectorMagnitude;
+            double adjusted_ye = (vector.YE - yErrorMedian) * VectorMagnitude;
+
             var fromP = new DataPoint(vector.X, vector.Y);
-            var toP = new DataPoint(vector.X + vector.XE, vector.Y + vector.YE);
+            var toP = new DataPoint(vector.X + adjusted_xe, vector.Y + adjusted_ye);
 
-            var dx = fromP.X - toP.X;
-            var dy = fromP.Y - toP.Y;
-
-            var norm = Math.Sqrt((dx * dx) + (dy * dy));
-
-            var udx = dx / norm;
-            var udy = dy / norm;
-
-            var ax = (udx * Math.Sqrt(3) / 2) - (udy * 1 / 2);
-            var ay = (udx * 1 / 2) + (udy * Math.Sqrt(3) / 2);
-            var bx = (udx * Math.Sqrt(3) / 2) + (udy * 1 / 2);
-            var by = (-udx * 1 / 2) + (udy * Math.Sqrt(3) / 2);
-
-            DataPoint arrowheadA = new DataPoint(toP.X + (Math.Abs(toP.X - fromP.X) * ax * VectorMagnitude), toP.Y + (Math.Abs(toP.Y - fromP.Y) * ay * VectorMagnitude));
-            DataPoint arrowheadB = new DataPoint(toP.X + (Math.Abs(toP.X - fromP.X) * bx * VectorMagnitude), toP.Y + (Math.Abs(toP.Y - fromP.Y) * by * VectorMagnitude));
+            double radius = Math.Max(Math.Abs(adjusted_xe), Math.Abs(adjusted_ye)) / 3;
+            double angle = Math.Atan2(toP.Y - fromP.Y, toP.X - fromP.X);
+            double arrowheadAngle = 150 * Math.PI / 180;
+            DataPoint arrowheadA = new DataPoint(
+                toP.X + radius * Math.Cos(angle - arrowheadAngle),
+                toP.Y + radius * Math.Sin(angle - arrowheadAngle)
+            );
+            DataPoint arrowheadB = new DataPoint(
+                toP.X + radius * Math.Cos(angle + arrowheadAngle),
+                toP.Y + radius * Math.Sin(angle + arrowheadAngle)
+            );
 
             Color color = Lux2Color((colorVal - colorRangeVals.Max()) / (colorRangeVals.Max() - colorRangeVals.Min()));
             LineSeries post = new LineSeries() { Color = OxyColor.FromRgb(color.R, color.G, color.B), LineStyle = LineStyle.Solid, StrokeThickness = 0.5 };
             post.TrackerFormatString = post.TrackerFormatString + Environment.NewLine + 
-                PrintList.Items[idx].ToString() + Environment.NewLine + 
+                PrintList.Items[idx].ToString() + Environment.NewLine +
+                "Error: (" + vector.XE + ", " + vector.YE + ")" + Environment.NewLine +
                 "Color Value: " + Math.Round(colorVal, 6).ToString();
+            post.StrokeThickness = 2;
             post.Points.Add(fromP);
             post.Points.Add(toP);
             post.Points.Add(arrowheadA);
-            post.Points.Add(toP);
             post.Points.Add(arrowheadB);
+            post.Points.Add(toP);
 
             return post;
         }

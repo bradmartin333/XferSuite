@@ -183,6 +183,16 @@ module Metro =
 
     let yError (data: Position []) = data |> Array.map (fun x -> x.YE * 1e3)
 
+    let xErrorMedian (data: Position []) =
+        data
+        |> Array.map (fun x -> x.XE)
+        |> Statistics.Median
+
+    let yErrorMedian (data: Position []) =
+        data
+        |> Array.map (fun x -> x.YE)
+        |> Statistics.Median
+
     let x3Sig (data: Position []) =
         data
         |> Array.map (fun x -> x.XE * 1e3)
@@ -196,22 +206,22 @@ module Metro =
         |> fun x -> x * 3.0
 
     /// <summary>Update PASS or FAIL state of position array based on new threshold</summary>
-    let rescore (data: Position []) (thresholdX: float) (thresholdY: float) =
+    let rescore (data: Position []) (thresholdX: float) (thresholdY: float) (offsetX : float) (offsetY : float) =
         for x in data do
-            if (Math.Abs(x.XE) > thresholdX / 1e3
-                || Math.Abs(x.YE) > thresholdY / 1e3) then
+            if (Math.Abs(x.XE - offsetX) > thresholdX / 1e3
+                || Math.Abs(x.YE - offsetY) > thresholdY / 1e3) then
                 x.Aln <- " FAIL "
             else
                 x.Aln <- " PASS "
 
-    let normErrorRange (data: Position []) =
+    let normErrorRange (data: Position []) (offsetX : float) (offsetY : float) =
         data
-        |> Array.map (fun x -> (x.XE ** 2. + x.YE ** 2.) ** 0.5)
+        |> Array.map (fun x -> ((x.XE - offsetX) ** 2. + (x.YE - offsetY) ** 2.) ** 0.5)
 
     ///<returns>Contrived entropy value from position array</returns>
-    let nextMagnitudeEntropy (data: Position []) =
+    let nextMagnitudeEntropy (data: Position [])  (offsetX : float) (offsetY : float) =
         data
-        |> normErrorRange
+        |> fun d -> normErrorRange d offsetX offsetY
         |> Statistics.Entropy
         |> fun x -> x ** 10.
 

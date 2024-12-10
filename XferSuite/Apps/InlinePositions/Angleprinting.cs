@@ -16,7 +16,7 @@ namespace XferSuite.Apps.InlinePositions
     // Combine this class with Fingerprinting
     public partial class Angleprinting : Form
     {
-        private float _PointMagnitude = 200F;
+        private float _PointMagnitude = 2F;
         [
             Category("User Parameters"),
             Description("Value to multiply angle error by")
@@ -71,6 +71,8 @@ namespace XferSuite.Apps.InlinePositions
         public Angleprinting(Metro.Position[] data)
         {
             InitializeComponent();
+            ResizeEnd += Angleprinting_ResizeEnd;
+
             _Raw = data;
             Tuple<Metro.Position[], Metro.Position[]> _splitData = Metro.missingData(_Raw);
             _Data = _splitData.Item2; // We don't want any data for missing devices
@@ -94,6 +96,11 @@ namespace XferSuite.Apps.InlinePositions
             MakePlot();
         }
 
+        private void Angleprinting_ResizeEnd(object sender, EventArgs e)
+        {
+            MakePlot();
+        }
+
         private void PrintList_SelectedIndexChanged(object sender, EventArgs e)
         {
             _PlotAll = false;
@@ -108,7 +115,7 @@ namespace XferSuite.Apps.InlinePositions
 
         private void MakePlot()
         {
-            Metro.rescore(_Data, ThresholdX, ThresholdY);
+            Metro.rescore(_Data, ThresholdX, ThresholdY, 0, 0);
             Tuple<Metro.Position[], Metro.Position[]> _scoredData = Metro.failData(_Data);
             Metro.Position[] plotData = _scoredData.Item2; // Passing positions
 
@@ -152,6 +159,36 @@ namespace XferSuite.Apps.InlinePositions
                 IsPanEnabled = true,
                 Title = "Y Position (mm)"
             };
+
+            var xPositions = Metro.xPos(_Data);
+            var yPositions = Metro.yPos(_Data);
+            var xMin = xPositions.Min() - 1;
+            var xMax = xPositions.Max() + 1;
+            var yMin = yPositions.Min() - 1;
+            var yMax = yPositions.Max() + 1;
+
+            double plotAspectRatio = (double)plot.Width / plot.Height;
+            double dataAspectRatio = (xMax - xMin) / (yMax - yMin);
+
+            if (dataAspectRatio > plotAspectRatio)
+            {
+                double adjustedHeight = (xMax - xMin) / plotAspectRatio;
+                double yMid = (yMax + yMin) / 2;
+                yMin = yMid - adjustedHeight / 2;
+                yMax = yMid + adjustedHeight / 2;
+            }
+            else
+            {
+                double adjustedWidth = (yMax - yMin) * plotAspectRatio;
+                double xMid = (xMax + xMin) / 2;
+                xMin = xMid - adjustedWidth / 2;
+                xMax = xMid + adjustedWidth / 2;
+            }
+
+            myXaxis.Minimum = xMin;
+            myXaxis.Maximum = xMax;
+            myYaxis.Minimum = yMin;
+            myYaxis.Maximum = yMax;
 
             anglePlot.Axes.Add(myXaxis);
             anglePlot.Axes.Add(myYaxis);
